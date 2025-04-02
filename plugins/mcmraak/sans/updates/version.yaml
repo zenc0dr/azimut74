@@ -1,0 +1,48 @@
+1.0.1:
+    - 'Initialize plugin.'
+    - create_cache_storage.php
+1.0.2:
+    - 'Created table mcmraak_sans_countries'
+    - builder_table_create_mcmraak_sans_countries.php
+1.0.3:
+    - 'Created table mcmraak_sans_resorts'
+    - builder_table_create_mcmraak_sans_resorts.php
+1.0.4:
+    - 'Created table mcmraak_sans_hotels'
+    - builder_table_create_mcmraak_sans_hotels.php
+1.0.5:
+    - 'Created table mcmraak_sans_hotel_categories'
+    - builder_table_create_mcmraak_sans_hotel_categories.php
+1.0.6:
+    - 'Created table mcmraak_sans_meals'
+    - builder_table_create_mcmraak_sans_meals.php
+1.0.7:
+    - 'Created table mcmraak_sans_hotel_profile'
+    - builder_table_create_mcmraak_sans_hotel_profile.php
+1.0.8:
+    - 'Created table mcmraak_sans_groups'
+    - builder_table_create_mcmraak_sans_groups.php
+1.0.9:
+    - 'Created table mcmraak_sans_roots'
+    - builder_table_create_mcmraak_sans_roots.php
+1.0.10:
+    - 'Created table mcmraak_sans_roots_groups'
+    - builder_table_create_mcmraak_sans_roots_groups.php
+1.0.11:
+    - 'Created table mcmraak_sans_pages'
+    - builder_table_create_mcmraak_sans_pages.php
+1.0.12:
+    - 'Created table mcmraak_sans_wrap_types'
+    - builder_table_create_mcmraak_sans_wrap_types.php
+1.0.13:
+    - 'Created table mcmraak_sans_wraps'
+    - builder_table_create_mcmraak_sans_wraps.php
+1.0.14:
+    - 'Created table mcmraak_sans_reviews'
+    - builder_table_create_mcmraak_sans_reviews.php
+1.0.15:
+    - 'Created table mcmraak_sans_booking'
+    - builder_table_create_mcmraak_sans_booking.php
+1.0.16:
+    - 'Created table mcmraak_sans_articles'
+    - builder_table_create_mcmraak_sans_articles.php

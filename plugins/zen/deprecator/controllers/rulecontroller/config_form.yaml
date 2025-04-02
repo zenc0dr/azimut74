@@ -1,0 +1,16 @@
+name: RuleController
+modelClass: Zen\Deprecator\Models\Rule
+form: $/zen/deprecator/models/rule/fields.yaml
+defaultRedirect: zen/deprecator/rulecontroller
+create:
+    title: 'Создать правило'
+    redirect: 'zen/deprecator/rulecontroller/update/:id'
+    redirectClose: zen/deprecator/rulecontroller
+    flashSave: 'Правило создано'
+update:
+    title: 'Обновить правило'
+    redirect: zen/deprecator/rulecontroller
+    redirectClose: zen/deprecator/rulecontroller
+    flashSave: 'Правило обновлено'
+    flashDelete: 'Правило удалено'
+preview: {  }

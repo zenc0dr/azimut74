@@ -1,0 +1,113 @@
+fields:
+    active:
+        label: 'Страница активна'
+        span: full
+        default: 1
+        type: switch
+    name:
+        label: Заголовок
+        span: auto
+        required: 1
+        type: text
+    slug:
+        label: 'Секция в url (slug)'
+        span: auto
+        required: 1
+        preset:
+            field: name
+            type: slug
+        type: text
+    parent_id:
+        label: 'Родительский пункт'
+        showSearch: true
+        span: auto
+        type: dropdown
+    section1:
+        label: 'Боковое меню'
+        span: full
+        type: section
+    label:
+        label: 'Отображение в боковом меню'
+        span: auto
+        type: text
+        comment: 'Если не заполнено берётся из заголовка'
+    pageblock_id:
+        label: 'Группирующий блок'
+        showSearch: true
+        span: auto
+        type: dropdown
+tabs:
+    fields:
+        preview_image:
+            label: Превью
+            mode: image
+            imageWidth: '200'
+            imageHeight: '200'
+            useCaption: true
+            thumbOptions:
+                mode: crop
+                extension: auto
+            span: full
+            type: fileupload
+            tab: Основное
+        text:
+            label: 'Текстовый блок'
+            size: huge
+            span: full
+            type: richeditor
+            tab: Основное
+        seo_text:
+            label: 'SEO - Текст'
+            size: huge
+            span: full
+            type: richeditor
+            tab: Основное
+        preset:
+            label: 'Пресет виджета'
+            span: full
+            type: text
+            tab: Пресет
+        hint1:
+            span: full
+            path: $/zen/dolphin/docs/widget_preset.htm
+            type: hint
+            tab: Пресет
+        meta_title:
+            label: title
+            span: full
+            type: text
+            tab: SEO
+        meta_description:
+            label: description
+            span: full
+            size: small
+            type: textarea
+            tab: SEO
+        page_groups:
+            label: 'Группы страницы'
+            span: auto
+            type: checkboxlist
+            tab: Группы
+        group_sort_order:
+            label: 'Порядок в группе'
+            span: auto
+            type: number
+            tab: Группы
+        gallery_id:
+            label: Галерея
+            showSearch: true
+            span: auto
+            type: dropdown
+            tab: Модули
+        feature_id:
+            label: 'Блок "Фишки"'
+            showSearch: true
+            span: auto
+            type: dropdown
+            tab: Модули
+        review_id:
+            label: 'Блок отзывов'
+            showSearch: true
+            span: auto
+            type: dropdown
+            tab: Модули

@@ -1,0 +1,27 @@
+description = "Временный каталог (категории)"
+
+[viewBag]
+==
+{% for category in om_request.category.sortedCategories() if category.active == '1' %}
+
+	{% if category.images is empty %}
+	{% set image_url = '/themes/azimut-tur/assets/img/no_image.png' %}
+	{% else %}
+	{% set image_url = category.images|first %}
+	{% set image_url = image_url.path %}
+	{% endif %}
+			
+	<div class="col-25 col-s-33 col-xs-50 col-xxs-100">
+		<a href="/{{ om_request.category.slug }}/{{ category.slug }}{% if category.frame_link %}{{category.frame_link}}{% endif %}">
+			<div class="tourItem">
+			
+				<div class="tourImg" style="background-image: url({{ image_url }});"></div>
+				
+				<div class="tourCard">
+					<div class="tourName"><span>{{ category.name|mutator }}</span></div>
+				</div>
+		
+			</div>
+		</a>
+	</div>
+{% endfor %}

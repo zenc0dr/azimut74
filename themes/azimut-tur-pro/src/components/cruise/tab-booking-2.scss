@@ -1,0 +1,117 @@
+.booking-header {
+		// .booking-header__header
+		&__header {
+         position: sticky;
+         position: -webkit-sticky;
+         z-index: 0;
+         border: 1px solid #dcdcdc;
+         border-radius: 4px 4px 0 0;
+         background-color: #eef1f3;
+         left: 0;
+         right: 0;
+         top: 79px;
+         z-index: 10;
+         font-size: fs('s');
+		}
+		// .booking-header__header-left
+		&__header-left {
+         width: auto;
+         flex-shrink: 0;
+         border: none;
+         display: flex;
+         background: #f1f1f1;
+         padding: 7px 15px;
+         border-radius: 3px;
+		}
+      // .booking-header__header-right
+      &__header-right {
+         border: none;
+         width: 100%;
+         color: color('red-200');
+         font-weight: bold;
+         text-align: right;
+         padding: 7px 15px;
+      }
+		// .booking-header__status
+		&__status {
+         display: flex;
+         align-items: flex-start;
+         margin-right: 20px;
+		}
+		// .booking-header__status-form
+		&__status-form {
+         display: inline-block;
+         padding: 6px 26px;
+         margin-right: 8px;
+         border: 2px solid #acacac;
+         border-radius: 2px;
+         margin-bottom: -3px;
+         &.is-actual {
+            background-color: #9bdbae;
+         }
+         &.on-request {
+            background-color: #f9f9d4;
+         }
+         &.is-selected {
+            background-color: color('red-100');
+         }
+		}
+		// .booking-header__status-text
+		&__status-text {
+		}
+		// .booking-header__info
+}
+
+
+.booking-info {
+   margin-right: 20px;
+   
+   // .booking-info__text
+   &__text {
+      display: none;
+      position: absolute;
+      background: color('primary-100');
+      border: 1px solid #b9b9b9;
+      padding: 20px;
+      width: 400px;
+      margin-left: -200px;
+      box-shadow: 0px 9px 7px 0px #00000024;
+      &.active {
+         display: flex;
+      }
+   }
+}
+
+
+// .booking-table
+
+.booking-table {
+   width: 100%;
+   border: 1px solid color('gray-100');
+   border-top: none;
+   border-collapse: collapse;
+   // .booking-table__top
+   &__top {
+      border-bottom: 1px solid #dcdcdc;
+      background-color: #eef1f3;
+
+      // .booking-table__top th.bex-rooms-col
+      th.bex-rooms-col {
+         width: 40%;
+         text-align: left;
+         padding: 10px 20px;
+      }
+   }
+
+   tr { 
+      th {
+         font-size: fs('def');
+         text-align: center;
+         padding: 10px 0;
+         &:nth-of-type(3) {
+            background-color: #f9f9f9;
+         }
+      }
+   }
+
+}

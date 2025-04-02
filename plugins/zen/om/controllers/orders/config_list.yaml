@@ -1,0 +1,13 @@
+title: 'zen.om::lang.orders.title'
+modelClass: Zen\Om\Models\Order
+list: $/zen/om/models/order/columns.yaml
+recordUrl: 'zen/om/orders/update/:id'
+noRecordsMessage: 'backend::lang.list.no_records'
+recordsPerPage: '30'
+showSetup: true
+showCheckboxes: true
+toolbar:
+    buttons: list_toolbar
+    search:
+        prompt: 'backend::lang.list.search_prompt'
+filter: config_filter.yaml

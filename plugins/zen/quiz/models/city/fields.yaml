@@ -1,0 +1,13 @@
+fields:
+    active:
+        label: Активность
+        span: full
+        type: switch
+    name:
+        label: Название
+        span: auto
+        type: text
+    sort_order:
+        label: Порядок
+        span: auto
+        type: number

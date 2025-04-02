@@ -1,0 +1,18 @@
+title = "Теплоходы"
+url = "/ships"
+layout = "layout"
+is_hidden = 0
+robot_index = "index"
+robot_follow = "follow"
+contentType = "html"
+force_show = 0
+==
+<?php
+function onStart()
+{
+    # prok
+    Mcmraak\Rivercrs\Classes\Prok::init($this);
+}
+?>
+==
+{{ prok.ships|raw }}

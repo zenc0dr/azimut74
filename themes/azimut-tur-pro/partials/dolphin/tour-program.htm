@@ -1,0 +1,29 @@
+description = "Программа тура"
+
+[viewBag]
+==
+{% if Dolphin.tour_program %}
+<div class="info-block">
+    <div class="info-block__title">
+        Программа тура
+    </div>
+    <div class="info-block__html tabs-vertical">
+        {% for item in Dolphin.tour_program %}
+
+        <div class="info-block__html__block tab-item open {{ (loop.first == false) ? 'close-mobile' : '' }}">
+            <div class="info-block__html__block__title tab-name ">
+                {{ item.title }}
+                <div class="tab-arrow-content">
+                    <i class="tab-arrow-content__text"></i>
+                    <i class="bi bi-chevron-down"></i>
+                </div>
+
+            </div>
+            <div class="info-block__html__block__text tab-content tab-content__user-select">
+                {{ item.text|raw }}
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+</div>
+{% endif %}

@@ -1,0 +1,21 @@
+fields:
+    security_token:
+        label: 'Ключ доступа а API'
+        span: full
+        type: text
+    php_path:
+        label: 'Путь до интерпритатора php'
+        span: left
+        default: php
+        type: text
+        comment: 'ex: php7.4 (jino),  /opt/alt/php74/usr/bin/php (smartape)'
+    size_limit:
+        label: 'Максимальный размер хранилища бекапов (мб)'
+        default: 0
+        span: right
+        type: number
+    time_interval:
+        label: 'Пауза между запросами (сек.) (на создание бекапа)'
+        default: 0
+        span: right
+        type: number

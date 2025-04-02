@@ -1,0 +1,10 @@
+name: Reviews
+form: $/mcmraak/sans/models/review/fields.yaml
+modelClass: Mcmraak\Sans\Models\Review
+defaultRedirect: mcmraak/sans/reviews
+create:
+    redirect: 'mcmraak/sans/reviews/update/:id'
+    redirectClose: mcmraak/sans/reviews
+update:
+    redirect: mcmraak/sans/reviews
+    redirectClose: mcmraak/sans/reviews

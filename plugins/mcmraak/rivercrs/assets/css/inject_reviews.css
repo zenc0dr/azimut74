@@ -1,0 +1,180 @@
+.inject-reviews-title {
+    font-family: OpenSansBold, sans-serif;
+    text-align: center;
+    font-size: 16px;
+    text-transform: uppercase;
+    padding: 10px;
+}
+
+.inject-reviews-subtitle {
+    text-align: center;
+    background: #3e9def;
+    color: #fff;
+    padding: 3px 0;
+}
+
+.inject-reviews-review {
+    display: flex;
+    flex-direction: column;
+}
+
+.inject-review-header {
+    display: flex;
+    background: #fff;
+    padding: 5px;
+    border-radius: 35px;
+    margin: 5px 10px;
+}
+
+.inject-review-logo {
+    width: 60px;
+    height: 60px;
+    background-size: cover;
+    background-position: center;
+    border-radius: 30px;
+}
+
+.inject-review-name {
+    font-family: OpenSansBold, sans-serif;
+    display: flex;
+    align-items: center;
+    padding: 0 16px;
+}
+
+.inject-review-date {
+    display: flex;
+    align-items: center;
+    flex: 1 1 0;
+    font-size: 14px;
+    color: #cc3a29;
+}
+
+.inject-review-text {
+    margin: 10px 51px;
+    /* background: #fff; */
+    padding: 10px 30px;
+    font-size: 15px;
+    max-height: 174px;
+    overflow-y: auto;
+}
+
+.inject-review-text::-webkit-scrollbar {
+    width: 12px;
+}
+
+.inject-review-text::-webkit-scrollbar-thumb {
+    border-width: 1px;
+    background-color: #adbcc7;
+    border-radius: 5px;
+}
+
+.inject-review-text::-webkit-scrollbar-thumb:hover {
+    border-width: 1px;
+    background-color: #adbcc7;
+}
+
+.inject-review-text::-webkit-scrollbar-track {
+    border-width: 0;
+    background: #d2e1ed;
+    border-radius: 5px;
+}
+
+.swiper-container {
+    height: 300px;
+}
+
+/* Блоки с клиентами */
+.inject-clients {
+}
+
+.inject-clients-title {
+    font-family: OpenSansBold, sans-serif;
+    padding: 7px 20px;
+    font-size: 20px;
+    text-transform: uppercase;
+    color: #1b70bb;
+}
+
+.inject-clients-subtitle {
+    padding: 5px 15px;
+    text-align: center;
+    margin-bottom: 10px;
+    font-size: 20px;
+}
+
+.inject-clients-blocks {
+    display: flex;
+    padding: 10px;
+}
+
+.inject-clients-block {
+    flex: 1 1 0;
+    margin: 10px;
+    background: #fff;
+}
+
+.inject-clients-picture {
+}
+
+.inject-clients-text {
+    margin-top: 10px;
+    padding: 0px 15px;
+    padding-bottom: 12px;
+}
+
+.inject-clients-button {
+    display: flex;
+    justify-content: flex-end;
+    padding: 10px;
+}
+
+@media (max-width: 600px) {
+    .inject-clients-blocks {
+        margin-left: -33px;
+        margin-right: -33px;
+    }
+
+    .inject-clients-block {
+        margin: 3px;
+    }
+
+    .inject-reviews-title {
+        font-size: 3.7vw;
+    }
+
+    .inject-review-name {
+        font-size: 3vw;
+    }
+
+    .inject-review-date {
+        font-size: 2vw;
+    }
+
+    .inject-clients-title {
+        font-size: 3.7vw;
+    }
+
+    .inject-review-text {
+        max-height: 170px;
+        padding: 0;
+        margin: 8px;
+    }
+
+    .inject-clients-button {
+        justify-content: center;
+    }
+
+    .inject-clients-subtitle {
+        font-size: 3.5vw;
+    }
+
+    .inject-clients-text {
+        font-size: 3vw;
+        padding: 0 6px;
+        padding-bottom: 6px;
+    }
+
+    .swiper-button-prev, .swiper-button-next {
+        display: none;
+    }
+}

@@ -1,0 +1,45 @@
+@import "@components/sliders/slider-thumbs";
+@import 'swiper/css/bundle';
+
+.tinybox-gallery {
+    &__previews {
+        > div {
+            margin-bottom: 18px;
+            > div {
+                display: flex;
+                flex-direction: column;
+                justify-content: flex-end;
+                align-items: center;
+                cursor: pointer;
+                background-position: center;
+                background-size: cover;
+                height: 12vw;
+                border-radius: 5px;
+                transition: 200ms;
+                overflow: hidden;
+                &:hover {
+                    transform: scale(1.1);
+                }
+                .caption {
+                    width: 100%;
+                    background: #00000030;
+                    text-align: center;
+                    color: #fff;
+                    padding: 3px;
+                }
+            }
+        }
+    }
+}
+
+@media (max-width: 767px) {
+    .tinybox-gallery {
+        &__previews {
+            > div {
+                > div {
+                    height: 28vw;
+                }
+            }
+        }
+    }
+}

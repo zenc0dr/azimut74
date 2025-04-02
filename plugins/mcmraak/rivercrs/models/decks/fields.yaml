@@ -1,0 +1,12 @@
+fields:
+    name:
+        label: 'Название палубы'
+        span: auto
+        oc.commentPosition: ''
+        type: text
+    parent_id:
+        label: 'Переадресация на родителя'
+        showSearch: true
+        span: auto
+        type: dropdown
+        comment: 'Внимание! Переадресацию можно указать только один раз (сделайте бекап)'

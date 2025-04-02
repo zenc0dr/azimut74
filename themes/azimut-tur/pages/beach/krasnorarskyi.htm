@@ -1,0 +1,27 @@
+title = "Краснодарский край"
+url = "/beach/krasnorarskyi"
+layout = "general"
+description = "Краснодарский край"
+meta_title = "Краснодарский край"
+is_hidden = 0
+robot_index = "index"
+robot_follow = "follow"
+contentType = "html"
+==
+{% put slider %}
+	{% partial 'header/sliderbeach' %}
+{% endput %}
+
+<section class="beach">
+					
+	<div class="headText">
+		<span>{{ this.page.title }}</span>
+	</div>
+
+	<div class="pageData">
+		<div class="data">
+			{% component 'contenteditor' file="beach/krasnorarskyi" %}
+		</div>
+	</div>
+
+</section>

@@ -1,0 +1,22 @@
+plugin:
+    name: 'zen.actions::lang.plugin.name'
+    description: 'Пользовательские скрипты'
+    author: 'Alexander Ablizin'
+    icon: oc-icon-play-circle
+    homepage: ''
+navigation:
+    actions-main:
+        label: Actions
+        url: zen/actions/actions
+        icon: icon-play-circle
+        permissions:
+            - zen.actions.main
+        sideMenu:
+            actions-actions:
+                label: Actions
+                url: zen/actions/actions
+                icon: icon-play-circle
+permissions:
+    zen.actions.main:
+        tab: 'Actions - Пользовательские скрипты'
+        label: 'Глобальный доступ'

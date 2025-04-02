@@ -1,0 +1,28 @@
+<style>
+    #action-run {
+        margin-bottom: 50px;
+    }
+    .actions-output {
+
+    }
+    .actions-output iframe {
+        width: 100%;
+        min-height: 50px;
+        border: 1px solid #34495e;
+    }
+</style>
+<div class="actions-output">
+    <div id="action-run" action-id="{{ id }}" class="oc-icon-play-circle btn btn-primary">Запустить</div>
+    <iframe id="action-frame" src="" onload="resizeIframe(this)"></iframe>
+</div>
+<script>
+    function resizeIframe(obj) {
+        obj.style.height = (obj.contentWindow.document.body.scrollHeight + 10) + 'px';
+    }
+
+    $(document).on('click', '#action-run', function () {
+        $('#action-frame').removeAttr('style')
+        const id = $(this).attr('action-id')
+        $('#action-frame').attr('src', "/zen/actions/"+id)
+    })
+</script>

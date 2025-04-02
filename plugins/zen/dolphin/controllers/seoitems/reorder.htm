@@ -1,0 +1,9 @@
+<?php Block::put('breadcrumb') ?>
+<ul>
+    <li><a href="<?= Backend::url('zen/dolphin/exlists') ?>">База данных</a></li>
+    <li><a href="<?= Backend::url('zen/dolphin/seoitems') ?>">SEO Меню</a></li>
+    <li>Последовательность пунктов меню</li>
+</ul>
+<?php Block::endPut() ?>
+
+<?= $this->reorderRender() ?>

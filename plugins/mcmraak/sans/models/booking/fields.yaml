@@ -1,0 +1,9 @@
+fields:
+    active:
+        label: Обработано
+        span: auto
+        type: switch
+    id:
+        span: full
+        path: $/mcmraak/sans/controllers/bookings/info.php
+        type: partial

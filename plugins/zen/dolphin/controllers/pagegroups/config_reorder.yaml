@@ -1,0 +1,4 @@
+title: PageGroups
+modelClass: Zen\Dolphin\Models\PageGroup
+toolbar:
+    buttons: reorder_toolbar

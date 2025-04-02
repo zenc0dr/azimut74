@@ -1,0 +1,178 @@
+title = "Речные круизы по России"
+url = "/russia-river-cruises/:slug?"
+layout = "general"
+description = "Речные круизы по России"
+meta_title = "Речные круизы по России"
+is_hidden = 0
+robot_index = "index"
+robot_follow = "follow"
+contentType = "html"
+force_show = 0
+
+[Selector]
+ion = 0
+jquery = 0
+
+[Block]
+
+[Block Block2]
+
+[Block Block4]
+
+[Widget]
+outer_result_container = 0
+==
+<?php
+use \Mcmraak\Rivercrs\Models\Cruises;
+use \Mcmraak\Rivercrs\Models\Transit;
+use \Mcmraak\Rivercrs\Models\Reference;
+use \Mcmraak\Rivercrs\Models\Motorships;
+
+function onInit()
+{
+    $filterpreset = get('filter');
+    
+    if($filterpreset){
+    $filterpreset = explode('-', $filterpreset );
+        $this['filterpreset'] = [
+                'town' =>  (isset($filterpreset[0])) ? intval($filterpreset[0]) : 0,
+                'dest' => (isset($filterpreset[1])) ? intval($filterpreset[1]) : 0,
+                'date_1' => (isset($filterpreset[2])) ? $filterpreset[2] : "",
+                'date_2' => (isset($filterpreset[3])) ? $filterpreset[3] : "",
+                'days' => (isset($filterpreset[4])) ? intval($filterpreset[4]) : 0,
+                'ship' => (isset($filterpreset[5])) ? intval($filterpreset[5]) : 0,
+            ];
+    } 
+    $slug = $this->param('slug');
+    if(!$slug) $slug = 'river-cruises';
+    if(Cruises::where('slug', $slug)->count())
+    {
+        $this['cruise'] = Cruises::where('slug', $slug)->first();
+    }
+    elseif (Transit::where('slug', $slug)->count())
+    {
+        $this['transit_exist'] = true;
+        $this['cruise'] = Transit::where('slug', $slug)->first();
+    }
+    else
+    {
+        return \Response::make($this->controller->run('404'), 404);
+    }
+    
+    $this['cruises'] = Cruises::where('active', 1)->orderBy('sort_order')->get();
+    $this['references'] = Reference::orderBy('order')->get();
+    $this['motorships'] = Motorships::cleanNames();
+}
+?>
+==
+<style>
+	.pagination-wrap {
+		font-size: 12px;
+	}
+</style>
+<filter-options
+town="{{ (filterpreset.town) ?: cruise.town1 }}"
+dest="{{ (filterpreset.dest) ?: cruise.town2 }}"
+date-1="{{ (filterpreset.date_1) ?: cruise.date1|date('d.m.Y') }}"
+date-2="{{ (filterpreset.date_2) ?: (cruise.date2)?cruise.date2|date('d.m.Y'):'' }}"
+days="{{ (filterpreset.days) ?: cruise.days }}"
+ship="{{ (filterpreset.ship) ?: cruise.ship_id }}"
+>
+</filter-options>
+
+{% put slider %}
+	{% partial 'header/slidercruises' %}
+{% endput %}
+
+<section class="cruises">
+
+	{#<i class="fa fa-calendar" aria-hidden="true"></i>#}
+	
+
+	<div class="cruiseBene"></div>
+	
+	{% partial 'rivercrs/landing' %}
+
+	<div class="cruiseData">
+		<div class="c-r">
+			<div class="col-25 col-s-100 as-s">
+				{% partial 'rivercrs/leftmenu' %}
+			</div>
+
+			<div class="col-75 col-s-100 as-s">
+				<div class="rightBlock">
+                    {% component 'Block' %}
+					<h1 class="cruise-h1">{{ cruise.h1|mutator }}</h1>
+                    {# component 'Selector' #}
+                    {% component 'Widget' %}
+                    {% component 'Block2' %}              
+				</div>
+			</div>
+		</div>
+
+	</div>
+	
+	{#{% for tag in cruise.seo_articles %}
+		<a class="crbtn" href="#{{ tag.seo_hash }}">{{ tag.seo_title }}</a>
+    {% endfor %}#}
+    
+    <div class="cruiseHead zen-mt-40">
+		<div class="c-r">
+			<div class="col-30 col-xs-100">
+				<div class="cruiseImage">
+				    {% set image = cruise.images|first %}
+					<img src="{{ image.path|resize(400) }}" {% if image.title %}alt="{{ image.title|mutator }}"{% endif %}>
+				</div>
+				<div class="socialWrap">
+					{% partial 'template/socialbuttons' %}
+				</div>
+			</div>
+			<div class="col-70 col-xs-100">
+				<div class="cruiseInfo">
+                    {#{% partial 'template/socialbuttons' %}#}
+					<div class="cruiseExcerpt normalText">
+						{{ cruise.text|raw|mutator }}
+					</div>
+					
+					{% if cruise.seo_articles %}
+					<div class="cruiseButtons">
+                        {% for tag in cruise.seo_articles %}
+                        	{% if tag.seo_hash %}
+							<a class="crbtn" href="#{{ tag.seo_hash }}">{{ tag.seo_title|mutator }}</a>
+							{% endif %}
+                        {% endfor %}
+					</div>
+					{% endif %}
+
+				</div>
+			</div>
+		</div>
+	</div>
+
+	<div class="cruiseArticles">
+
+		<div class="col-100">
+    		{% for article in cruise.seo_articles %}
+    		
+    			<div class="crArticle" id="{{ article.seo_hash }}">
+    				<div class="data">
+    				    <h2>{{ article.seo_title|mutator }}</h2>
+    					{{ article.seo_text|raw|mutator }}
+    				</div>
+    			</div>
+    			{% component 'Block4' %}
+    		{% endfor %}
+		</div>
+
+	</div>
+
+	{% partial 'rivercrs/relinks' %}
+
+</section>
+
+{#{% partial 'rivercrs/modals' %}#}
+
+
+{# put additional_scripts #}
+
+{# endput #}

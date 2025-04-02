@@ -1,0 +1,1 @@
+$template['hotels'] = $input['hotels'];

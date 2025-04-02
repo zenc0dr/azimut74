@@ -1,0 +1,16 @@
+description = "Dolphin - Стартовая страница"
+
+[viewBag]
+[Greeter]
+==
+{# Вставка в слот встречающего баннера #}
+{% put banner_integration %}
+<div id="dolphin-ext-widget-app"></div>
+{% endput %}
+<meta id="dolphin-preset" content="{{ Dolphin.preset }}">
+{% partial 'dolphin/popular-directions' %}
+{% partial 'dolphin/schedule-table' %}
+<section class="wrapper-block-style">
+   <section class="container">{% partial 'dolphin/dolphin-reviews' class='mb-3 mb-xl-5 ' data=Dolphin.reviews_json %}</section>
+   <section>{% partial 'dolphin/tinybox-gallery' data=Dolphin.tinybox_gallery %}</section>
+</section>

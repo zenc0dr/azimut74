@@ -1,0 +1,13 @@
+<section class="result-menu__category c-primary-200 rounded me-0 me-lg-4 mb-2 mb-sm-4 {{ class }}">
+    <div class="result-menu__category-title bg-blue-100 c-primary-100 p-2 p-xl-3 w-100 d-flex justify-content-between align-items-center mb-1 rounded-top">
+        <span class="fs-h3 fw-bolder">{{ menu.title }}</span>
+        <i class="bi bi-chevron-down"></i>
+    </div>
+    <div class="result-menu__items bg-primary-100 p-2 p-xl-3 rounded-bottom open">
+        {% for item in menu.items %}
+        <a class="result-menu__item fs-s fs-xl-def c-gray-300 fw-bolder text-decoration-none mb-3 d-flex" href="{{ item.url }}">
+            {{ item.title }}
+        </a>
+        {% endfor %}
+    </div>
+</section>

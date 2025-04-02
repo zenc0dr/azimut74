@@ -1,0 +1,4 @@
+title: Booking
+modelClass: Mcmraak\Rivercrs\Models\Booking
+toolbar:
+    buttons: reorder_toolbar

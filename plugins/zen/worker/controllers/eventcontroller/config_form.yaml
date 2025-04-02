@@ -1,0 +1,10 @@
+name: EventController
+form: $/zen/worker/models/event/fields.yaml
+modelClass: Zen\Worker\Models\Event
+defaultRedirect: zen/worker/eventcontroller
+create:
+    redirect: 'zen/worker/eventcontroller/update/:id'
+    redirectClose: zen/worker/eventcontroller
+update:
+    redirect: zen/worker/eventcontroller
+    redirectClose: zen/worker/eventcontroller

@@ -1,0 +1,26 @@
+<style>
+    .modal-dialog {
+        width: 80%;
+    }
+</style>
+<div class="modal-header">
+    <button id="closeModal" type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+    <h4 class="modal-title">Дамп от: {{ dump.time|date('d.m.Y H:i:s') }}</h4>
+    <ul>
+        <li><strong>Ключ дампа:</strong> {{ dump.key }}</li>
+        <li><strong>Имя файла:</strong> {{ filename }}</li>
+        <li><strong>Размер файла:</strong> {{ dump.file_size }}</li>
+    </ul>
+
+    {% if dump.value %}
+    <div class="cabox-dump">
+        {{ dump.value|raw }}
+    </div>
+    {% endif %}
+
+    {% if dump.image_url %}
+    <div class="cabox-dump image">
+        <img src="{{ dump.image_url }}">
+    </div>
+    {% endif %}
+</div>

@@ -1,0 +1,34 @@
+fields:
+    image:
+        label: Изображение
+        oc.commentPosition: ''
+        mode: image
+        span: full
+        type: mediafinder
+    sltop:
+        label: 'Побочный текст (верх)'
+        size: ''
+        oc.commentPosition: ''
+        span: auto
+        type: richeditor
+    slmain:
+        label: 'Главный текст (название слайда)'
+        oc.commentPosition: ''
+        span: auto
+        type: text
+    link:
+        label: Страница
+        oc.commentPosition: ''
+        span: auto
+        type: dropdown
+    price:
+        label: Цена
+        size: ''
+        oc.commentPosition: ''
+        span: auto
+        type: richeditor
+    order:
+        label: Порядок
+        oc.commentPosition: ''
+        span: auto
+        type: number

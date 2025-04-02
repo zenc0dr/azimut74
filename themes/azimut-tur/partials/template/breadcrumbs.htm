@@ -1,0 +1,23 @@
+description = "Хлебные крошки на страницах"
+
+[viewBag]
+==
+<div class="c">
+
+	<div class="breadcrumbs">
+		<div class="crumb">
+			<a href="/">Главная</a>
+		</div>
+		<div class="crumb active">
+			<span><i class="fa fa-angle-right" aria-hidden="true"></i></span>
+			<span>
+				{% if ship.name %}
+					{{ ship.name|mutator }}
+				{% elseif this.page.title %}
+					{{ this.page.title|mutator }}
+				{% endif %}
+			</span>
+		</div>
+	</div>
+
+</div>

@@ -1,0 +1,6 @@
+<script src="/plugins/zen/dolphin/assets/js/axios.min.js"></script>
+<script>
+    axios.post('/zen/dolphin/api/{{ source }}').then(function (response) {
+        console.log(response.data);
+    })
+</script>

@@ -1,0 +1,48 @@
+description = "Шаблон для печати"
+==
+<?php
+function onInit()
+{
+    $this['print_css'] = mix('css/print.css', 'themes/azimut-tur-pro/assets');
+}
+?>
+==
+<!DOCTYPE html>
+<html lang="ru">
+
+<head>
+   <meta charset="UTF-8">
+   <meta name="viewport" content="width=device-width, initial-scale=1.0">
+   <meta http-equiv="X-UA-Compatible" content="ie=edge">
+   <link rel="shortcut icon" href="{{'assets/images/favicon/favicon.ico'|theme }}" type="image/x-icon">
+   {% partial 'seo/meta' %}
+   <link rel="stylesheet" href="{{ print_css }}">
+   {% placeholder page_style %}
+   {% styles %}
+</head>
+
+<body>
+   <div class="container">
+   <header class="header">
+      <div class="header-logo"><img src="/themes/azimut-tur-pro/assets/images/logo.png" alt="azimut"></div>
+      <div class="header-slogan">Круизы, отдых на море, экскурсионные и школьные туры от организатора</div>
+      <div class="header-contacts">
+         <div class="header-number">Номер в реестре Ростуризма РТО 021653</div>
+         <div class="header-phone">тел.: 8 (8452) 255-996</div>
+         <div class="header-address">Саратов, ул. П.Н.Яблочкова, д.13 (Пн-Пт: 10:00 - 19:00, Сб: 11:00 - 15:00)</div>
+         <div class="header-email">e-mail: <span>azimut.operator@yandex.ru</span> (экскурсионные туры),</div>
+         <div class="header-email padding-left"><span>azimut-kruiz@yandex.ru</span> (остальные направления)</div>
+        <div class="header-site">сайт: <span>азимут-тур.рф</span></div>
+      </div>
+   </header>
+
+   <main>
+      {% page %}
+   </main>
+   <!--<footer class="footer">
+      <div class="footer-coopyright">© 2012-2022 Турагентство "Азимут-тур"</div>
+   </footer>-->
+   </div>
+</body>
+
+</html>

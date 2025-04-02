@@ -1,0 +1,4 @@
+title: Hservices
+modelClass: Zen\Dolphin\Models\Hservice
+toolbar:
+    buttons: reorder_toolbar

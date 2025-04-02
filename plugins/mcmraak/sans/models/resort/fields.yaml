@@ -1,0 +1,21 @@
+fields:
+    name_block:
+        label: 'Блокировка названия'
+        span: full
+        type: switch
+    name:
+        label: Название
+        oc.commentPosition: ''
+        span: auto
+        type: text
+    group_id:
+        label: 'Группа курортов'
+        span: auto
+        oc.commentPosition: ''
+        type: dropdown
+    sort_order:
+        label: Порядок
+        span: auto
+        oc.commentPosition: ''
+        default: '0'
+        type: number

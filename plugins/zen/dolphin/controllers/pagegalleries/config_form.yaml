@@ -1,0 +1,15 @@
+name: Галерея
+modelClass: Zen\Dolphin\Models\PageGallery
+form: $/zen/dolphin/models/pagegallery/fields.yaml
+defaultRedirect: zen/dolphin/pagegalleries
+create:
+    title: 'Создать галерею'
+    redirect: 'zen/dolphin/pagegalleries/update/:id'
+    redirectClose: zen/dolphin/pagegalleries
+    flashSave: 'Галерея создана'
+update:
+    title: 'Изменить галерею'
+    redirect: zen/dolphin/pagegalleries
+    redirectClose: zen/dolphin/pagegalleries
+    flashSave: 'Галерея сохранена'
+    flashDelete: 'Галерея удалена'

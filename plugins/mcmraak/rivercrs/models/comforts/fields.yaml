@@ -1,0 +1,6 @@
+fields:
+    name:
+        label: Название
+        span: auto
+        oc.commentPosition: ''
+        type: text

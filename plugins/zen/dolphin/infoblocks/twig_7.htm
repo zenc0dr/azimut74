@@ -1,0 +1,9 @@
+<div class="data conditions">
+    <h2>Условия тура</h2>
+    {% for item in conditions %}
+    <div>
+        <div><b>{{ item.name }}:</b></div>
+        <div>{{ item.text|raw }}</div>
+    </div>
+    {% endfor %}
+</div>

@@ -1,0 +1,148 @@
+<div class="tab-container {{ class }}" tab="{{ tab }}">
+    <div class="tabs-vertical open no-border no-padding">
+        <div class="ship-name-tab mb-3">
+            <h2 class="fs-h3 fs-xl-h2">{{ RiverCRS.ship_name }}</h2>
+            {% if RiverCRS.ship_status %}
+                    <a tabindex="0"
+                        class="ship-type text-decoration-none premium d-block bg-gold-200 px-2 px-xxl-3  ms-2 py-2 py-xxl-2 c-primary-100 rounded-pill fw-bolder d-flex align-items-center justify-content-center"
+                        role="button" data-bs-toggle="popover" data-bs-trigger="focus" data-bs-placement="bottom"
+                        data-bs-content="{{ RiverCRS.ship_status_desc }}">{{ RiverCRS.ship_status }}
+                    </a>
+            {% endif %}
+        </div>
+
+        {% partial 'sliders/slider-thumbs' images=RiverCRS.ship_images sliderClass='slider_1' class='mb-4'  %}
+
+        {% if RiverCRS.ship_video %}
+        <div class="tab-item open">
+            <div class="tab-name mb-3">
+                <h2>Видео</h2>
+                <i class="bi bi-chevron-down"/></i>
+            </div>
+            <div class="tab-content">
+                <iframe loading="lazy" src="{{ RiverCRS.ship_video }}" frameborder="0" allowfullscreen=""></iframe>
+            </div>
+        </div>
+        {% endif %}
+
+        {% if RiverCRS.ship_desc %}
+        <div class="tab-item open close-mobile">
+            <div class="tab-name mb-3">
+                <h2>Описание теплохода</h2>
+                <i class="bi bi-chevron-down"/></i>
+            </div>
+            <div class="tab-content">
+                <div class="wrapper-tab-content">
+                    {{ RiverCRS.ship_desc|raw }}
+                </div>
+            </div>
+        </div>
+        {% endif %}
+
+        <div class="tab-item open close-mobile">
+            <div class="tab-name mb-3">
+                <h2>Технические характеристики</h2>
+                <i class="bi bi-chevron-down"/></i>
+            </div>
+            <div class="tab-content">
+                <div class="wrapper-tab-content">
+                    <ul>
+                        {% for item in RiverCRS.ship_techs %}
+                            <li>{{ item.name }} — {{ item.value }}</li>
+                        {% endfor %}
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+        <div class="tab-item open close-mobile">
+            <div class="tab-name mb-3">
+                <h2>На борту теплохода</h2>
+                <i class="bi bi-chevron-down"/></i>
+            </div>
+            <div class="tab-content">
+                <div class="wrapper-tab-content">
+                    <ul>
+                        {% for item in RiverCRS.ship_onboards %}
+                            <li>{{ item }}</li>
+                        {% endfor %}
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+        {% if RiverCRS.ship_scheme %}
+        <div class="tab-item open">
+            <div class="tab-name mb-3">
+                <h2>Схема теплохода</h2>
+                <i class="bi bi-chevron-down"/></i>
+            </div>
+            <div class="tab-content">
+
+                <a fancybox class="ship-scheme" data-fancybox="image" href="{{ RiverCRS.ship_scheme }}">
+                    <img src="{{ RiverCRS.ship_scheme }}" alt="схема теплохода - {{ RiverCRS.ship_name }}">
+                </a>
+            </div>
+        </div>
+        {% endif %}
+
+        <div class="tab-item ship-cabins-tab open">
+            <div class="tab-name mb-3">
+                <h2>Каюты теплохода</h2>
+                <i class="bi bi-chevron-down"/></i>
+            </div>
+            {% for record in RiverCRS.ship_cabins %}
+            <div class="tab-content mb-4">
+                <div class="tab-item open close-mobile route-tab">
+                    <div class="tab-name route-title">
+                        <h2>{{ record.deck.name }}</h2>
+                        <i class="bi bi-chevron-down"/></i>
+                    </div>
+                    <div class="tab-content">
+                        {% for cabin in record.cabins %}
+                        <div class="wrapper-tab-content cabin-wrapper">
+                            <div class="cabin-left-content">
+                                <div class="cabin-name">Категория: {{ cabin.category }} - {{ cabin.placeName }}</div>
+                                {% partial 'sliders/slider-thumbs' images=cabin.images_arr sliderClass='slider_2' %}
+                            </div>
+                            <div class="cabin-right-content">
+                                <div class="cabin-name">Категория: {{ cabin.category }} - {{ cabin.placeName }}</div>
+                                <div class="cabin-parametrs">
+                                    <ul>
+                                        <li>
+                                            <strong>Комфорт:</strong>
+                                            {{ cabin.comfort.name }}
+                                        </li>
+                                        <li>
+                                            <strong>Расположение кровати:</strong>
+                                            {{ cabin.bed.name }}
+                                        </li>
+                                        {% if cabin.rooms_count %}
+                                        <li>
+                                            <strong>Количество комнат:</strong>
+                                            {{ cabin.rooms_count }}
+                                        </li>
+                                        {% endif %}
+                                        {% if cabin.space %}
+                                            <li><strong>Площадь каюты в м2:</strong> {{ cabin.space }}</li>
+                                        {% endif %}
+                                    </ul>
+                                </div>
+                                <div class="cabin-description">
+                                    <div class="title-desc-cabin">Описание:</div>
+                                    В каюте имеются: {% for e in cabin.incabin_list %}
+                                        {{ e.name }}
+                                        {% if loop.last != true %},{% else %};{% endif %}
+                                    {% endfor %}
+                                    {{ cabin.desc|raw }}
+                                </div>
+                            </div>
+                        </div>
+                        {% endfor %}
+                    </div>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+</div>

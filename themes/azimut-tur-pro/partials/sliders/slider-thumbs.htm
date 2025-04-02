@@ -1,0 +1,47 @@
+{% if slider_class == null %}
+	{% set slider_class = 'slider_one' %}
+{% endif %}
+{% set slider_class = slider_class ~ random('abcdefjiklmnoprstxyz') ~ random('abcdefjiklmnoprstxyz') ~ random(1,10000) %}
+
+<section swiper="{{slider_class}}" class="slider-thumbs {{slider_class}} {{class}}"  style="--swiper-navigation-color: #fff; --swiper-pagination-color: #fff">
+	<div  class="swiper-container shipSlide">
+		<div class="swiper-wrapper">
+			{% for image in images %}
+            {% if image is iterable %}
+                <a class="swiper-slide fancybox ship-img-slide"
+                   data-fancybox="gallery-{{slider_class}}"
+                   data-caption="{{ image.title }}"
+                   href="{{ image.src }}">
+                    <img src="{{ image.src }}" />
+                </a>
+            {% else %}
+				<a class="swiper-slide fancybox ship-img-slide"
+                   data-fancybox="gallery-{{slider_class}}"
+                   data-caption="Заголовок картинки"
+                   href="{{ image }}">
+					<img src="{{ image }}"/>
+				</a>
+            {% endif %}
+			{% endfor %}
+		</div>
+		<div class="swiper-button-next"></div>
+		<div class="swiper-button-prev"></div>
+	</div>
+	<div thumbsslider="" class="swiper-container thumbSlider" vertical={{(isVerticalThumb) ? true : false }}>
+		<div class="swiper-wrapper">
+			{% for image in images %}
+            {% if image is iterable %}
+                <div class="swiper-slide ship-img-slide">
+                    <img src="{{ image.src }}"/>
+                </div>
+            {% else %}
+				<div class="swiper-slide ship-img-slide">
+					<img src="{{ image }}"/>
+				</div>
+            {% endif %}
+			{% endfor %}
+		</div>
+				<div class="swiper-button-next"></div>
+				<div class="swiper-button-prev"></div>
+	</div>
+</section>

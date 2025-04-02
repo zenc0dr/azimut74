@@ -1,0 +1,18 @@
+fields:
+    name:
+        label: 'zen.om::lang.deliveries.name'
+        oc.commentPosition: ''
+        span: full
+        type: text
+    desc:
+        label: 'zen.om::lang.plugin.desc'
+        span: full
+        size: large
+        oc.commentPosition: ''
+        type: richeditor
+    sort_order:
+        label: 'zen.om::lang.plugin.sort_order'
+        span: auto
+        oc.commentPosition: ''
+        default: '0'
+        type: number

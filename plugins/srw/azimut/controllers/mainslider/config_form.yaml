@@ -1,0 +1,10 @@
+name: MainSlider
+form: $/srw/azimut/models/mainslider/fields.yaml
+modelClass: Srw\Azimut\Models\MainSlider
+defaultRedirect: srw/azimut/mainslider
+create:
+    redirect: 'srw/azimut/mainslider/update/:id'
+    redirectClose: srw/azimut/mainslider
+update:
+    redirect: srw/azimut/mainslider
+    redirectClose: srw/azimut/mainslider

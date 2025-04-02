@@ -1,0 +1,15 @@
+title: storages
+modelClass: Zen\Cabox\Models\Storage
+list: $/zen/cabox/models/storage/columns.yaml
+recordUrl: 'zen/cabox/storages/update/:id'
+noRecordsMessage: 'backend::lang.list.no_records'
+recordsPerPage: 20
+showSetup: true
+showCheckboxes: true
+defaultSort:
+    column: id
+    direction: asc
+toolbar:
+    buttons: list_toolbar
+    search:
+        prompt: 'backend::lang.list.search_prompt'

@@ -1,0 +1,42 @@
+{% if showcase %}
+<section class="banner">
+    <div class="banner__wrapper" style="background-image: url({{ showcase.banner_image.path }});">
+        <div class="banner__blackout" style="opacity:{{ showcase.opacity_value }};background-color:{{ showcase.color }}"></div>
+    </div>
+    <div class="banner__content d-flex flex-column">
+        <div class="container d-flex flex-column align-items-start justify-content-center">
+            <div class="banner__title w-100">
+                <span class="hh1 fs-h3 fs-lg-h1  fs-xl-h0 c-primary-100">
+                    {{ showcase.title|raw }}
+                </span>
+            </div>
+            <div class="banner__description">
+                <div class="fs-def fs-sm-h3 banner__text mb-5">
+                    {{ showcase.description|raw }}
+                </div>
+                <div class="banner__lists d-flex row fs-s fs-lg-h3">
+                    {% for advantage in showcase.advantages %}
+                    <div class="banner__list-item col-12 col-sm-6 col-lg-4 mb-3 mb-sm-4 mb-lg-0">
+                    {% if advantage.advantage_marker %}
+                        <div class="banner__list-item__marked">
+                            <div class="item__mark">
+                                <i class="bi bi-check-circle"></i>
+                            </div>
+                            <div class="item__text">
+                                {{ advantage.advantage_html|raw }}
+                            </div>
+                        </div>
+                    {% else %}
+                        {{ advantage.advantage_html|raw }}
+                    {% endif %}
+                    </div>
+                    {% endfor %}
+                </div>
+            </div>
+        </div>
+        <div class="banner__integration">
+            {% placeholder banner_integration %}
+        </div>
+    </div>
+</section>
+{% endif %}

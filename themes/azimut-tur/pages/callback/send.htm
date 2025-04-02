@@ -1,0 +1,143 @@
+title = "Обработчик заявок"
+url = "/callback/send"
+description = "Обработчик заявок"
+is_hidden = 0
+robot_index = "index"
+robot_follow = "follow"
+contentType = "html"
+==
+<?php
+function onStart(){
+
+	# Localization
+	App::setLocale('ru');
+
+	# Время повторной отправки в секундах
+	$repiatTime = 1;
+
+	$name = trim(e(post('name')));
+	$phone = trim(preg_replace("/\D/", "", trim(post('phone'))));
+	$email = trim(post('email'));
+	/*$theme  = trim(e(post('theme')));*/
+	/*$date = post('date');*/
+	/*$time = post('time');*/
+	/*$address = trim(e(post('address')));*/
+	$message = trim(e(post('message')));
+	$ide = trim(post('ide'));
+	$tour = trim(post('tour'));
+
+	$validator = Validator::make(
+            [
+            '<span style="text-transform: capitalize;">Ваше</span>_имя' => $name,
+            'Электронная_почта' => $email,
+            '<span style="text-transform: capitalize;">Ваш</span>_телефон' => $phone,
+            ],
+            [
+            '<span style="text-transform: capitalize;">Ваше</span>_имя' => 'required|min:2|max:100',
+            'Электронная_почта' => 'min:3|max:999',
+            '<span style="text-transform: capitalize;">Ваш</span>_телефон' => 'required|min:6|max:11',
+            ]
+        );
+
+	if ($validator->fails())
+    {
+    	$this['alerts'] = $validator->messages()->all();
+    } else {
+
+    	if( Session::get('repeat')!="" && time() < Session::get('repeat') )
+    	{
+    		$timeDiff = Session::get('repeat') - time();
+    		$this['alerts'] = ['Следующий вопрос можно задать через'.$timeDiff.' сек.'];
+    	}
+		else
+		{
+    		Srw\Azimut\Models\Callme::insert([
+    			'name' => $name,
+    			'email' => $email,
+    			'phone' => $phone,
+    			/*'address' => $address,
+    			'date' => $date,*/
+    			/*'time' => $time,*/
+    			'message' => $message,
+    			'ide' => $ide,
+    			'tour' => $tour,
+    		]);
+    		Session::put('repeat', time() + $repiatTime);
+
+    	}
+    	$mail = ['azimut-kruiz@yandex.ru', 'n7y8syq29p529db9foxuyg8vtwqvizk6@hook.integromat.com'];
+
+	    $body ='
+	     	<table style="width: 100%;">
+	         	<tbody>
+	             	<tr style="background-color: #f8f8f8;">
+	                 	<td style="padding: 10px; border: #c0c0c0 1px solid; color: #000;"><b>Имя:</b></td><td style="color: #000;padding: 10px; border: #c0c0c0 1px solid;">'.$name.'</td>
+	             	</tr>
+	             	<tr style="background-color: #f8f8f8;">
+	                 	<td style="padding: 10px; border: #c0c0c0 1px solid; color: #000;"><b>Телефон:</b></td><td style="color: #000;padding: 10px; border: #c0c0c0 1px solid;">'.$phone.'</td>
+	             	</tr>
+	             	<tr style="background-color: #f8f8f8;">
+	                 	<td style="padding: 10px; border: #c0c0c0 1px solid; color: #000;"><b>Электронная почта:</b></td><td style="color: #000;padding: 10px; border: #c0c0c0 1px solid;">'.$email.'
+	                 	</td>
+	             	</tr>
+	             	<tr style="background-color: #f8f8f8;">
+	                 	<td style="padding: 10px; border: #c0c0c0 1px solid; color: #000;"><b>Вопросы и пожелания:</b></td><td style="color: #000;padding: 10px; border: #c0c0c0 1px solid;">'.$message.'
+	                 	</td>
+	             	</tr>
+	             	<tr style="background-color: #f8f8f8;">
+	                 	<td style="padding: 10px; border: #c0c0c0 1px solid; color: #000;"><b>Заказан тур:</b></td><td style="color: #000;padding: 10px; border: #c0c0c0 1px solid;">'.$tour.'
+	                 	</td>
+	             	</tr>
+	             	<tr style="background-color: #f8f8f8;">
+	                 	<td style="padding: 10px; border: #c0c0c0 1px solid; color: #000;"><b>Форма:</b></td><td style="color: #000;padding: 10px; border: #c0c0c0 1px solid;">'.$ide.'
+	                 	</td>
+	             	</tr>
+	         	</tbody>
+	     	</table>
+		     ';
+
+		// Заказ звонка || Подбор тура
+
+        # Mail::send('empty',['html' => $body], function($message) use ($mail) {
+        #     $message->to($mail);
+        # });
+
+		$subject = 'Форма заявки';
+		if($ide == 'Заказ звонка') $subject = 'Заявка на обратный звонок';
+		if($ide == 'Подбор тура') $subject = 'Заявка на подбор тура';
+
+		$raw = [
+			'html' => $body,
+			'text' => '',
+		];
+
+		Mail::raw($raw, function($message) use ($subject, $mail) {
+			$message->subject($subject);
+			$message->to($mail);
+		});
+    }
+
+}
+?>
+==
+{% if alerts %}
+	{% for alert in alerts %}
+	  <div class="error">{{ alert|raw }}</div>
+	{% endfor %}
+{% else %}
+	<script>
+		$('.order').val('');
+		$('.check').removeClass('checked');
+		/*$(document).ready(function(){*/
+			$('.modalDone').show();
+			$('.modalDone').parent().addClass('blued');
+			$('.modalContent').hide();
+			setTimeout(function(){
+				$.magnificPopup.close();
+				$('.modalDone').hide();
+				$('.modalContent').show();
+				$('.modalDone').parent().removeClass('blued');
+			}, 3000);
+		/*});*/
+	</script>
+{% endif %}

@@ -1,0 +1,27 @@
+title = "Паломнические туры"
+url = "/extours/pilgrim"
+layout = "general"
+description = "Паломнические туры"
+meta_title = "Паломнические туры"
+is_hidden = 0
+robot_index = "index"
+robot_follow = "follow"
+contentType = "html"
+==
+{% put slider %}
+	{% partial 'header/sliderextours' %}
+{% endput %}
+
+<section class="extours">
+					
+	<div class="headText">
+		<span>{{ this.page.title }}</span>
+	</div>
+
+	<div class="pageData">
+		<div class="data">
+			{% component 'contenteditor' file="extours/pilgrim" %}
+		</div>
+	</div>
+
+</section>

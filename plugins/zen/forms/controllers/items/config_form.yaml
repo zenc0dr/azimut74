@@ -1,0 +1,10 @@
+name: Items
+form: $/zen/forms/models/item/fields.yaml
+modelClass: Zen\Forms\Models\Item
+defaultRedirect: zen/forms/items
+create:
+    redirect: 'zen/forms/items/update/:id'
+    redirectClose: zen/forms/items
+update:
+    redirect: zen/forms/items
+    redirectClose: zen/forms/items

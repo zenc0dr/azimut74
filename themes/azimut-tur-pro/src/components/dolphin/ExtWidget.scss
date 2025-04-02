@@ -1,0 +1,15 @@
+@import "./dolphin-widget"; // Общие правила для всех типов виджетов
+@import 'ext-results'; // Стили для результатов поиска присутствуют везде где есть виджет
+.input-block__group {
+    display: flex;
+    flex: 1 0 0;
+    &.dates {
+        min-width: 260px;
+    }
+}
+.expand-widget {
+    display: flex;
+    padding: 7px;
+    background-color: #ffffffba;
+    justify-content: center;
+}

@@ -1,0 +1,10 @@
+name: Extours
+form: $/zen/dolphin/models/extour/fields.yaml
+modelClass: Zen\Dolphin\Models\Extour
+defaultRedirect: zen/dolphin/extours
+create:
+    redirect: 'zen/dolphin/extours/update/:id'
+    redirectClose: zen/dolphin/extours
+update:
+    redirect: zen/dolphin/extours
+    redirectClose: zen/dolphin/extours

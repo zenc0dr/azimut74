@@ -1,0 +1,15 @@
+fields:
+    name_block:
+        label: Блокировка
+        span: full
+        type: switch
+    name:
+        label: 'Название страны'
+        span: auto
+        oc.commentPosition: ''
+        type: text
+    sort_order:
+        label: Порядок
+        span: auto
+        oc.commentPosition: ''
+        type: number

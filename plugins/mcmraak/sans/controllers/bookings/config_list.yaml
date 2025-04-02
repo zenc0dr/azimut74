@@ -1,0 +1,12 @@
+list: $/mcmraak/sans/models/booking/columns.yaml
+modelClass: Mcmraak\Sans\Models\Booking
+title: Bookings
+noRecordsMessage: 'backend::lang.list.no_records'
+showSetup: true
+showCheckboxes: true
+recordsPerPage: 20
+toolbar:
+    buttons: list_toolbar
+    search:
+        prompt: 'backend::lang.list.search_prompt'
+recordUrl: 'mcmraak/sans/bookings/update/:id'

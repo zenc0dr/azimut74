@@ -1,0 +1,25 @@
+columns:
+    id:
+        label: id
+        type: number
+        sortable: true
+    name:
+        label: 'Название города'
+        type: text
+        searchable: true
+        sortable: true
+    soft_id:
+        label: Связь
+        type: text
+        relation: soft
+        valueFrom: name
+    alt_name:
+        label: 'Альтернативное имя'
+        type: text
+    eds_name:
+        label: Источник
+        type: text
+        sortable: false
+    active:
+        label: Активен
+        type: partial

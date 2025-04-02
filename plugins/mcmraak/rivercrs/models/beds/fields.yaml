@@ -1,0 +1,5 @@
+fields:
+    name:
+        label: 'Название расположения кровати'
+        span: auto
+        type: text

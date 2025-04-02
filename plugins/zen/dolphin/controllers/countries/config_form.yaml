@@ -1,0 +1,10 @@
+name: Countries
+form: $/zen/dolphin/models/country/fields.yaml
+modelClass: Zen\Dolphin\Models\Country
+defaultRedirect: zen/dolphin/countries
+create:
+    redirect: 'zen/dolphin/countries/update/:id'
+    redirectClose: zen/dolphin/countries
+update:
+    redirect: zen/dolphin/countries
+    redirectClose: zen/dolphin/countries

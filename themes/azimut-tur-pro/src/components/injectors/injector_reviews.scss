@@ -1,0 +1,243 @@
+.inject-reviews {
+    position: relative;
+    max-width: 100%;
+    display: none;
+}
+
+.inject-reviews-title {
+    text-align: center;
+    text-transform: uppercase;
+    padding: 10px;
+    @include m('600px') {
+        font-size: 3.7vw;
+    }
+}
+
+.inject-reviews-subtitle {
+    text-align: center;
+    background: #3e9def;
+    color: color('primary-100');
+    padding: 3px 0;
+}
+
+.inject-reviews-review {
+    display: flex;
+    flex-direction: column;
+}
+
+.inject-review-header {
+    display: flex;
+    background: color('primary-100');
+    padding: 5px;
+    border-radius: 35px;
+    margin: 5px 10px;
+}
+
+.inject-review-logo {
+    width: 60px;
+    height: 60px;
+    background-size: cover;
+    background-position: center;
+    border-radius: 30px;
+}
+
+.inject-review-name {
+    display: flex;
+    align-items: center;
+    padding: 0 16px;
+    @include m('600px') {
+        font-size: 3vw;
+    }
+}
+
+.inject-review-date {
+    display: flex;
+    align-items: center;
+    flex: 1 1 0;
+    font-size: 14px;
+    color: color('red-200');
+    @include m('600px') {
+        font-size: 2vw;
+    }
+}
+
+.inject-review-text {
+    margin: 10px 51px;
+    padding: 10px 30px;
+    font-size: 15px;
+    max-height: 174px;
+    overflow-y: auto;
+    @include m('600px') {
+ max-height: 170px;
+        padding: 0;
+        margin: 8px;
+    }
+}
+
+.inject-review-text::-webkit-scrollbar {
+    width: 12px;
+}
+
+.inject-review-text::-webkit-scrollbar-thumb {
+    border-width: 1px;
+    background-color: #adbcc7;
+    border-radius: 5px;
+}
+
+.inject-review-text::-webkit-scrollbar-thumb:hover {
+    border-width: 1px;
+    background-color: #adbcc7;
+}
+
+.inject-review-text::-webkit-scrollbar-track {
+    border-width: 0;
+    background: #d2e1ed;
+    border-radius: 5px;
+}
+
+.swiper-container {
+    height: 300px;
+}
+
+
+/* Блоки с клиентами */
+
+.inject-clients {}
+
+.inject-clients-title {
+    padding: 7px 20px;
+    font-weight: bold;
+    font-size: rem(24);
+    text-transform: uppercase;
+    color: color('blue-100');
+    @include m('xl') {
+        font-size: rem(20);
+        text-align: center;
+    }
+    @include m('sm') {
+        font-size: rem(18);
+    }
+    @include m('425px') {
+        font-size: rem(16);
+    }
+}
+
+.inject-clients-subtitle {
+    margin-top: 20px;
+    padding: 5px 15px;
+    text-align: center;
+    margin-bottom: 10px;
+    font-size: rem(20);
+    @include m('md') {
+        font-size: rem(16);
+    }
+    @include m('600px') {
+         font-size: 3.5vw;
+    }
+}
+
+.inject-clients-blocks {
+    display: flex;
+    padding: 10px;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    @include m('xl') {
+        flex-direction: row;
+    }
+    @include m('600px') {
+        padding: 0;
+    }
+}
+
+.inject-clients-block {
+    display: flex;
+    width: calc(33% - 18px);
+    flex-direction: column;
+    margin: 10px;
+    border-radius: 4px;
+    background: color('primary-100');
+    @include m('xl') {
+        flex-direction: row;
+        width: 100%;
+    
+    }
+    @include m('600px') {
+        margin: 0;
+        margin-bottom: 10px;
+    }
+    @include m('sm') {
+        //flex-direction: column;
+    }
+}
+
+.inject-clients-picture {
+    object-fit: cover;
+    width: 100%;
+    border-radius: 4px 4px 0 0;
+    @include m('xl') {
+        border-radius: 4px 0 0 4px;
+        width: 30%;
+    }
+    @include m('600px') {
+        width: 30%;
+        border-radius: 4px 4px 0 0;
+    }
+}
+
+.inject-clients-text {
+    margin-top: 10px;
+    padding: 0px 15px;
+    padding-bottom: 12px;
+    @include m('xl') {
+        margin-top: 0;
+        padding: 15px;
+    }
+    @include m('md') {
+        font-size: rem(14)
+    }
+    @include m('sm') {
+        font-size: rem(14);
+        padding: 10px;
+    }
+    @include m('340px') {
+        font-size: rem(12);
+    }
+}
+
+.inject-clients-button {
+    display: flex;
+    justify-content: center;
+    padding: 10px;
+    button {
+        @include clear-button();
+        border-radius: 4px;
+        padding: 14px 8px;
+        font-weight: bold;
+        background-color: color('red-200');
+        color: color('primary-100');
+        text-transform: uppercase;
+        font-size: rem(24);
+        @include m('md') {
+            font-size: rem(22);
+        }
+        @include m('sm') {
+            font-size: rem(20);
+        }
+        @include m('425px') {
+            font-size: rem(18);
+        }
+        @include m('340px') {
+            font-size: rem(15);
+        }
+    }
+    @include m('600px') {
+        justify-content: center;
+    }
+}
+
+.injector-body .swiper-button-prev,
+.injector-body .swiper-button-next {
+    @include m('600px') {
+        display: none;
+    }
+}

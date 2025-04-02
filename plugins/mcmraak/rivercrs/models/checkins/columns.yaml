@@ -1,0 +1,41 @@
+columns:
+    id:
+        label: id
+        type: number
+        sortable: true
+        width: 10px
+    active:
+        label: Активность
+        type: partial
+    motorship_id:
+        label: Теплоход
+        type: text
+        sortable: false
+        relation: motorship
+        width: 10px
+        valueFrom: name
+    date:
+        label: 'Дата отправления'
+        type: datetime
+        width: 10px
+        format: 'd.m.Y H:i'
+    dateb:
+        label: 'Дата прибытия'
+        type: datetime
+        width: 10px
+        format: 'd.m.Y H:i'
+    days:
+        label: Продолжительность
+        type: number
+        width: 10px
+    waybill:
+        label: Маршрут
+        type: partial
+        valueFrom: id
+    eds_name:
+        label: Источник
+        type: text
+        sortable: false
+    eds_id:
+        label: 'id источника'
+        type: text

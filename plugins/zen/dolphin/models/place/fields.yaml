@@ -1,0 +1,15 @@
+fields:
+    name:
+        label: 'Название достопримечательности'
+        span: auto
+        type: text
+    geo_code:
+        label: Гео-объект
+        showSearch: true
+        span: auto
+        type: dropdown
+    sort_order:
+        label: Порядок
+        span: auto
+        default: '0'
+        type: number

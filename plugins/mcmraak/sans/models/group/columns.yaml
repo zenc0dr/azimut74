@@ -1,0 +1,28 @@
+columns:
+    id:
+        label: id
+        type: number
+        sortable: true
+    name:
+        label: 'Название группы'
+        type: text
+        searchable: true
+        sortable: true
+    slug:
+        label: Ссылка
+        type: text
+        searchable: true
+        sortable: true
+    parent_id:
+        label: 'Родительская группа'
+        type: number
+        relation: parent
+        valueFrom: name
+    resorts_count:
+        label: 'Курортов привязано'
+        type: partial
+        path: $/mcmraak/sans/controllers/groups/resorts_count.php
+    default_resort_id:
+        label: 'Курорт по умолчанию'
+        type: partial
+        path: $/mcmraak/sans/controllers/groups/default_resort.php

@@ -1,0 +1,49 @@
+# Коды внешних источников данных
+ВодоходЪ - waterway
+ВолгаВолга - volga
+Гама - gama
+Гермес - germes
+
+Для комплексного хранения информации о внешних источниках
+используются поля:
+waterway_id, volga_id, gama_id, germes_id
+
+Для уникального хранения
+
+eds_code - Код источника
+eds_id - Идентификатор в системе источника
+
+
+# Парсеры кэша
+
+/rivercrs/api/v2/cache/{ метод вывода }/{ метод пармера }
+
+Водоходъ - Теплоходы [ /rivercrs/api/v2/cache/debug/waterway-motorships ]
+Водоходъ - Круизы [ /rivercrs/api/v2/cache/debug/waterway-cruises ]
+Водоходъ - Цены на круизы [ /rivercrs/api/v2/cache/debug/waterway-prices/6555 ]
+Водоходъ - Расписание круиза [ /rivercrs/api/v2/cache/debug/waterway-route/6555 ]
+
+ВолгаWolga - База данных [ /rivercrs/api/v2/cache/debug/volgawolga-database ]
+
+Гама - Информация о круизах [ /rivercrs/api/v2/cache/debug/gama-cruises ]
+Гама - Справочник городов [ /rivercrs/api/v2/cache/debug/gama-towns ]
+Гама - Справочник категорий кают [ /rivercrs/api/v2/cache/debug/gama-cabins ]
+Гама - Маршруты всех теплоходов [ /rivercrs/api/v2/cache/debug/gama-paths ]
+Гама - Справочник стран [ /rivercrs/api/v2/cache/debug/gama-countries ]
+Гама - Информация о круизе [ /rivercrs/api/v2/cache/debug/gama-cruise/11788 ]
+Гама - Справочник теплоходов [ /rivercrs/api/v2/cache/debug/gama-ships ]
+Гама - Информация о палубе [ /rivercrs/api/v2/cache/debug/gama-deck/15 ]
+
+
+# Гермес - описание: (http://8ber.ru/s/aro)
+Гермес - Справочник теплоходов [ /rivercrs/api/v2/cache/debug/germes-ships ]
+Гермес - Справочник городов отправления [ /rivercrs/api/v2/cache/debug/germes-sity ]
+Гермес - Справочник туров (круизов) [ /rivercrs/api/v2/cache/debug/germes-cruises ]
+Гермес - Справочник категорий кают [ /rivercrs/api/v2/cache/debug/germes-cabins ]
+Гермес - Справочник кают тура со статусами и ценами [ /rivercrs/api/v2/cache/debug/germes-status/12278 ]
+Гермес - Список городов следования в туре [ /rivercrs/api/v2/cache/debug/germes-trace/12278 ]
+Гермес - Список экскурсий в туре по городам следования [ /rivercrs/api/v2/cache/debug/germes-excursion/12278 ]
+
+# Вызов любого метода для отладки
+
+/rivercrs/debug/{Class}@{Method}

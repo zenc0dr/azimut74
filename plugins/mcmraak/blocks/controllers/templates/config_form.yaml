@@ -1,0 +1,10 @@
+name: Templates
+form: $/mcmraak/blocks/models/template/fields.yaml
+modelClass: Mcmraak\Blocks\Models\Template
+defaultRedirect: mcmraak/blocks/templates
+create:
+    redirect: 'mcmraak/blocks/templates/update/:id'
+    redirectClose: mcmraak/blocks/templates
+update:
+    redirect: mcmraak/blocks/templates
+    redirectClose: mcmraak/blocks/templates

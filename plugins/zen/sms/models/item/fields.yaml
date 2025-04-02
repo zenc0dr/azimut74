@@ -1,0 +1,14 @@
+fields:
+    phone:
+        label: 'Номер телефона'
+        span: auto
+        type: text
+    profile_id:
+        label: Профиль
+        span: auto
+        type: dropdown
+    text:
+        label: 'Текст sms'
+        size: large
+        span: full
+        type: textarea

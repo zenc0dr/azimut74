@@ -1,0 +1,4 @@
+title: Transit
+modelClass: Mcmraak\Rivercrs\Models\Transit
+toolbar:
+    buttons: reorder_toolbar

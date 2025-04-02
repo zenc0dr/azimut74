@@ -1,0 +1,38 @@
+1.0.1:
+    - 'Initialize plugin.'
+1.0.2:
+    - 'Created table zen_grouptours_tours'
+    - builder_table_create_zen_grouptours_tours.php
+1.0.3:
+    - 'Created table zen_grouptours_tags'
+    - builder_table_create_zen_grouptours_tags.php
+1.0.4:
+    - zen_grouptours_tours_tags_pivot
+    - builder_table_create_zen_grouptours_tours_tags.php
+1.0.5:
+    - 'Created table zen_grouptours_pages'
+    - builder_table_create_zen_grouptours_pages.php
+1.0.6:
+    - 'Created table zen_grouptours_reviews'
+    - builder_table_create_zen_grouptours_reviews.php
+1.0.7:
+    - 'Updated table zen_grouptours_pages'
+    - builder_table_update_zen_grouptours_pages.php
+1.0.8:
+    - Galleries
+    - builder_table_create_zen_group_tours_page_galleries.php
+1.0.9:
+    - Features
+    - builder_table_create_zen_group_tours_features.php
+1.0.10:
+    - 'Created table zen_grouptours_orders'
+    - builder_table_create_zen_grouptours_orders.php
+1.0.11:
+    - 'Updated table zen_grouptours_tours'
+    - builder_table_update_zen_grouptours_tours.php
+1.0.12:
+    - 'Created table zen_grouptours_files'
+    - builder_table_create_zen_grouptours_files.php
+1.0.13:
+    - 'Updated table zen_grouptours_pages'
+    - builder_table_update_zen_grouptours_pages_2.php

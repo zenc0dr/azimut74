@@ -1,0 +1,46 @@
+fields:
+    name:
+        label: 'Название блока отзывов'
+        span: full
+        type: text
+    data:
+        label: Отзывы
+        prompt: 'Добавить отзыв'
+        style: default
+        span: full
+        type: repeater
+        form:
+            fields:
+                avatar:
+                    label: Аватар
+                    mode: image
+                    span: auto
+                    type: mediafinder
+                image:
+                    label: Изображение
+                    mode: file
+                    span: auto
+                    type: mediafinder
+                name:
+                    label: 'Имя клиента'
+                    span: auto
+                    type: text
+                link:
+                    label: 'Ссылка на источник'
+                    span: auto
+                    type: text
+                date_time:
+                    label: 'Дата и время отзыва'
+                    mode: datetime
+                    span: auto
+                    type: datepicker
+                stars:
+                    label: 'Оценка (Количество звёзд)'
+                    span: auto
+                    default: '5'
+                    type: number
+                text:
+                    label: 'Текст отзыва'
+                    size: large
+                    span: full
+                    type: textarea

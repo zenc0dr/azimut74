@@ -1,0 +1,97 @@
+description = "SEO"
+
+[viewBag]
+==
+<?php
+use \Mcmraak\Rivercrs\Models\Cruises;
+use \Mcmraak\Rivercrs\Models\Transit;
+use \Mcmraak\Rivercrs\Models\Reference;
+use \Mcmraak\Rivercrs\Models\Motorships;
+use \Mcmraak\Rivercrs\Models\Checkins;
+use \Mcmraak\Rivercrs\Models\Review;
+
+use \Zen\Om\Models\Item;
+use \Zen\Om\Models\Category;
+
+function onInit()
+{
+ 	$this['frame'] = Cruises::where('slug', $slug)->first();
+}
+?>
+==
+{# Title #}
+{% if octositeTitle %}
+    <title>{{ octositeTitle|mutator }}</title>
+{% elseif SeoStaticPage.seo_title %}
+    <title>{{ SeoStaticPage.seo_title|mutator }}</title>
+{% elseif om_request.item %}
+	{% set item = om_request.item %}
+	<title>{{ item.seo_title|mutator }}</title>
+{% elseif om_request.category %}
+	{% set category = om_request.category %}
+	<title>{{ category.seo_title|mutator }}</title>
+{% elseif frame.metatitle %}
+	<title>{{ frame.metatitle|mutator }}</title>
+{% elseif ship.metatitle %}
+	<title>{{ ship.metatitle|mutator }}</title>
+{% elseif reference.metatitle %}
+	<title>{{ reference.metatitle|mutator }}</title>
+{% elseif reviewsSwitcher %}
+	<title>{{ this.page.meta_title|mutator }}</title>
+{% elseif cruise.metatitle %}
+	<title>{{ cruise.metatitle|mutator }}</title>
+{% elseif this.page.meta_title %}
+    <title>{{ this.page.meta_title|mutator }}</title>
+{% elseif this.page.title %}
+    <title>{{ this.page.title|mutator }}</title>
+{% endif %}
+
+{# Description #}
+{% if octositeDescription %}
+    <meta name="description" content="{{ octositeDescription|mutator }}">
+{% elseif SeoStaticPage.seo_description %}
+    <meta name="description" content="{{ SeoStaticPage.seo_description|mutator }}">
+{% elseif om_request.item %}
+	{% set item = om_request.item %}
+	<meta name="description" content="{{ item.seo_description|mutator }}">
+{% elseif om_request.category %}
+	{% set category = om_request.category %}
+	<meta name="description" content="{{ category.seo_description|mutator }}">
+{% elseif frame.metadesc %}
+	<meta name="description" content="{{ frame.metadesc|mutator }}">
+{% elseif ship.metadesc %}
+	<meta name="description" content="{{ ship.metadesc|mutator }}">
+{% elseif reference.metadesc %}
+	<meta name="description" content="{{ reference.metadesc|mutator }}">
+{% elseif reviewsSwitcher %}
+	<meta name="description" content="{{ this.page.meta_description|mutator }}">
+{% elseif cruise.metadesc %}
+	<meta name="description" content="{{ cruise.metadesc|mutator }}">
+{% elseif this.page.meta_description %}
+    <meta name="description" content="{{ this.page.meta_description|mutator }}">
+{% endif %}
+
+{# Keywords #}
+{% if octositeKeywords %}
+    <meta name="keywords" content="{{ octositeKeywords|mutator }}">
+{% elseif SeoStaticPage.seo_keywords %}
+    <meta name="keywords" content="{{ SeoStaticPage.seo_keywords|mutator }}">
+{% elseif om_request.item %}
+	{% set item = om_request.item %}
+	<meta name="keywords" content="{{ item.seo_keywords|mutator }}">
+{% elseif om_request.category %}
+	{% set category = om_request.category %}
+	<meta name="keywords" content="{{ category.seo_keywords|mutator }}">
+{% elseif frame.metakey %}
+	<meta name="keywords" content="{{ frame.metakey|mutator }}">
+{% elseif ship.metakey %}
+	<meta name="keywords" content="{{ ship.metakey|mutator }}">
+{% elseif reference.metakey %}
+	<meta name="keywords" content="{{ reference.metakey|mutator }}">
+{% elseif reviewsSwitcher %}
+	<meta name="keywords" content="{{ this.page.seo_keywords|mutator }}">
+{% elseif cruise.metakey %}
+	<meta name="keywords" content="{{ cruise.metakey|mutator }}">
+{% elseif this.page.seo_keywords %}
+    <meta name="keywords" content="{{ this.page.seo_keywords|mutator }}">
+{% endif %}

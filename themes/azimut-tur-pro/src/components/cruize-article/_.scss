@@ -1,0 +1,42 @@
+.cruize-article {
+    font-size: fs('def');
+    background-color: rgba(color('blue-200'),.2);
+}    
+
+
+.cruize-article p,
+.cruize-article ul li,
+.cruize-article a {
+    font-size: fs('def');
+    @include m('md') {
+        text-align: left!important;
+    }
+    @include m('xxl') {
+        font-size: fs('s');
+    }
+}
+
+.cruize-article h2 {
+    font-size: fs('h2');
+    margin-bottom: 1rem;
+    font-weight: bold;
+    @include m('md') {
+        text-align: left!important;
+    }
+}
+
+.cruize-article h1 {
+    font-size: fs('h1');
+    font-weight: bold;
+    @include m('md') {
+        text-align: left!important;
+    }
+}
+
+.cruize-article h3 {
+    font-size: fs('h3');
+    font-weight: bold;
+    @include m('md') {
+        text-align: left!important;
+    }
+}

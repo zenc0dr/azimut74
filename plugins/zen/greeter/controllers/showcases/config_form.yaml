@@ -1,0 +1,16 @@
+name: Showcases
+modelClass: Zen\Greeter\Models\Showcase
+form: $/zen/greeter/models/showcase/fields.yaml
+defaultRedirect: zen/greeter/showcases
+create:
+    title: Баннер
+    redirect: 'zen/greeter/showcases/update/:id'
+    redirectClose: zen/greeter/showcases
+    flashSave: 'Баннер сохранён'
+update:
+    title: 'Обновить банер'
+    redirect: zen/greeter/showcases
+    redirectClose: zen/greeter/showcases
+    flashSave: 'Баннер сохранён'
+    flashDelete: 'Баннер удалён'
+preview: {  }

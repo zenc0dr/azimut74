@@ -1,0 +1,19 @@
+columns:
+    id:
+        label: id
+        type: number
+        sortable: true
+    name:
+        label: Название
+        type: text
+        searchable: true
+        sortable: true
+    code:
+        label: 'Код потока'
+        type: text
+        searchable: true
+        sortable: true
+    active:
+        label: Активен
+        type: partial
+        sortable: true

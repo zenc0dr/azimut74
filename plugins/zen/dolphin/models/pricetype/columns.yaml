@@ -1,0 +1,19 @@
+columns:
+    id:
+        label: id
+        type: number
+        sortable: true
+    name:
+        label: Название
+        type: text
+        searchable: true
+        sortable: true
+    code:
+        label: 'Код (сокращение)'
+        type: text
+        searchable: true
+        sortable: true
+    sort_order:
+        label: Порядок
+        type: number
+        sortable: true

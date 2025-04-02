@@ -1,0 +1,10 @@
+name: Brands
+form: $/srw/catalog/models/brands/fields.yaml
+modelClass: Srw\Catalog\Models\Brands
+defaultRedirect: srw/catalog/brands
+create:
+    redirect: 'srw/catalog/brands/update/:id'
+    redirectClose: srw/catalog/brands
+update:
+    redirect: srw/catalog/brands
+    redirectClose: srw/catalog/brands

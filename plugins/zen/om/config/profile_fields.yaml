@@ -1,0 +1,14 @@
+profile[phone]:
+    label: 'zen.om::lang.user.phone'
+    tab: 'zen.om::lang.user.profile'
+profile[address]:
+    label: 'zen.om::lang.user.address'
+    tab: 'zen.om::lang.user.profile'
+profile[postal_code]:
+    label: 'zen.om::lang.user.postal_code'
+    tab: 'zen.om::lang.user.profile'
+profile[description]:
+    label: 'zen.om::lang.user.description'
+    tab: 'zen.om::lang.user.profile'
+    type: richeditor
+    size: large

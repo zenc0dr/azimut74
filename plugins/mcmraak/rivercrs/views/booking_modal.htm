@@ -1,0 +1,291 @@
+<button title="Close (Esc)" type="button" class="mfp-close">×</button>
+
+<div class="shipBlock">
+
+    <div class="shipBlockTop">
+        <div class="shipImage">
+            <img src="{{ checkin.motorship.images|first.path|resize(300) }}" alt="">
+        </div>
+        <div class="shipInfo">
+            <div class="shipName">
+                <span>{{ checkin.motorship.alt_name|mutator }}</span>
+            </div>
+            <div class="shipDepartures">
+                <div class="shipDeparture">
+                    <div><span>Отправление:</span></div>
+                    <div>
+                        <span>{{ checkin.date|date('d.m.Y') }}</span>
+                        {% set ch_time = checkin.date|date('H:i') %}
+                        {% set ch_time = (ch_time=='00:00')?'':ch_time %}
+                        <span>&nbsp;({{ weekdays[checkin.date|date('w')] }}) {{ ch_time }}</span>
+                    </div>
+                </div>
+                <div class="shipDeparture">
+                    <div><span>Прибытие:</span></div>
+                    <div>
+                        <span>{{ checkin.dateb|date('d.m.Y') }}</span>
+                        {% set ch_time = checkin.dateb|date('H:i') %}
+                        {% set ch_time = (ch_time=='00:00')?'':ch_time %}
+                        <span>&nbsp;({{ weekdays[checkin.dateb|date('w')] }}) {{ ch_time }}</span>
+                    </div>
+                </div>
+                <div class="shipDeparture">
+                    <div><span>Дней:</span></div>
+                    <div>
+                        <span>{{ checkin.days|mutator }}</span>
+                    </div>
+                </div>
+                <div class="msk-time">
+                    <span>Время московское</span>
+                </div>
+            </div>
+            <div class="shipRouteBlock">
+                <div><span>Маршрут:</span></div>
+                <div class="shipRoute">
+                    {{ checkin.getWaybill('-')|raw|mutator }}
+                </div>
+            </div>
+            <div class="shipBlockGraphic">
+                <button checkin-id="{{ checkin.id }}" class="gbtn mbtn" href="#modalGraphicTop">График движения</button>
+            </div>
+        </div>
+    </div>
+
+    <div class="shipBlockBottom">
+        <div><span>Стоимость путевок в каютах различной категории в рублях на 1 чел:</span></div>
+        <div class="shipPricing">
+            <table>
+                <tbody>
+                <tr>
+                    {% for price in checkin.getPrice %}
+                        <td cabin-id="{{ price.cabin_id }}" href="#modalCabinTop">
+                            {{ price.cabin_name|mutator }}
+                        </td>
+                    {% endfor %}
+                </tr>
+                <tr>
+                    {% for price in checkin.getPrice %}
+                        {% if price.price_b != 0 %}
+                            <td>
+                                <span><del>{{ price.price_a }}</del></span><br>
+                                <span style="color:red">{{ price.price_b }}</span>
+                            </td>
+                        {% else %}
+                            <td>
+                                {{ price.price_a|mutator }}
+                            </td>
+                        {% endif %}
+                    {% endfor %}
+                </tr>
+                </tbody>
+            </table>
+        </div>
+        {% if checkin.hot %}
+        <div class="shipButtonBlock">
+            <div class="hotOffer">{{ checkin.hot|raw|mutator }}</div>
+        </div>
+        {% endif %}
+    </div>
+
+    <div class="shipButtonBlock shipToggleBlock">
+        <div class="shitButtonAnnotation">
+            <span class="hidden">Стоимость путевок в каютах различной категории в рублях на 1 чел</span>
+        </div>
+
+        <div class="shipButtonToggle">
+            <button class="tbtn">
+                <span class="active">Свернуть</span>
+                <span>Развернуть</span>
+                <i class="fa fa-arrow-up active" aria-hidden="true"></i>
+                <i class="fa fa-arrow-down" aria-hidden="true"></i>
+            </button>
+        </div>
+
+    </div>
+
+</div>
+
+<div class="bookingHeading">
+    <span>Заявка на бронирование круиза</span>
+</div>
+
+<div class="bookingBlock">
+    <div class="bookingBlockTop">
+        <div class="shipName">
+            <span>{{ checkin.motorship.alt_name|mutator }}</span>
+        </div>
+        <div class="shipArrivalLine">
+            <div class="arrivalItem">
+                <span>Отправление:</span>
+                <span class="bold">{{ checkin.date|date('d.m.Y') }}</span>
+                {% set ch_time = checkin.date|date('H:i') %}
+                {% set ch_time = (ch_time=='00:00')?'':ch_time %}
+                <span>({{ weekdays[checkin.date|date('w')] }}) {{ ch_time }}</span>
+            </div>
+            <div class="arrivalItem">
+                <span>Прибытие:</span>
+                <span class="bold">{{ checkin.dateb|date('d.m.Y') }}</span>
+                {% set ch_time = checkin.dateb|date('H:i') %}
+                {% set ch_time = (ch_time=='00:00')?'':ch_time %}
+                <span>({{ weekdays[checkin.dateb|date('w')] }}) {{ ch_time }}</span>
+            </div>
+            <div class="arrivalItem offset-15 offset-xs-none">
+                <span>Рейс:</span>
+                <span class="bold">{{ checkin.getWaybillShort('-')|raw }}</span>
+            </div>
+        </div>
+    </div>
+
+    <div class="bookingBlockBottom">
+
+        <div class="bookingCategoryLine">
+
+            <div class="catLineItem">
+                <div>
+                    <span>Категория каюты</span>
+                </div>
+                <div>
+                    <select booking-name="cabin" name="bookingcabin" class="orderBook">
+                        {% for price in checkin.getPrice %}
+                            <option value="{{ price.cabin_id }}">{{ price.cabin_name|mutator }}</option>
+                        {% endfor %}
+                    </select>
+                    <button class="catAddBtn">
+                        + Добавить категорию каюты
+                    </button>
+                </div>
+
+            </div>
+
+            <div class="catLineItem">
+                <div>
+                    <span>Количество кают</span>
+                </div>
+                <div>
+                    <button class="countBtn countMinus">
+                        <i class="fa fa-minus" aria-hidden="true"></i>
+                    </button>
+                    <input booking-name="cabincount" class="countInput orderBook" type="text" value="1" min="1">
+                    <button class="countBtn countPlus">
+                        <i class="fa fa-plus" aria-hidden="true"></i>
+                    </button>
+                </div>
+            </div>
+
+            <span class="book-close"><svg version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px"
+                                          viewBox="0 0 139.4 139.4"a xml:space="preserve">
+<g>
+	<path d="M69.7,0C31.3,0,0,31.3,0,69.7c0,38.4,31.3,69.7,69.7,69.7c38.4,0,69.7-31.3,69.7-69.7C139.4,31.3,108.1,0,69.7,0L69.7,0z
+		 M69.7,127.4c-31.8,0-57.7-25.9-57.7-57.8c0-31.8,25.9-57.7,57.7-57.7c31.8,0,57.8,25.9,57.8,57.7
+		C127.4,101.5,101.5,127.4,69.7,127.4L69.7,127.4z M69.7,127.4"/>
+	<path d="M96.7,42.7c-2.3-2.3-6.1-2.3-8.4,0L69.7,61.3L51.2,42.7c-2.3-2.3-6.1-2.3-8.4,0c-2.3,2.3-2.3,6.1,0,8.4l18.5,18.5
+		L42.7,88.2c-2.3,2.3-2.3,6.1,0,8.4c1.2,1.2,2.7,1.7,4.2,1.7c1.5,0,3.1-0.6,4.2-1.7l18.5-18.5l18.5,18.5c1.2,1.2,2.7,1.7,4.2,1.7
+		c1.5,0,3.1-0.6,4.2-1.7c2.3-2.3,2.3-6.1,0-8.4L78.1,69.7l18.5-18.5C99,48.8,99,45.1,96.7,42.7L96.7,42.7z M96.7,42.7"/>
+</g>
+</svg></span>
+
+        </div>
+
+        <div class="bookingDataLine">
+            <input booking-name="checkin_id" type="hidden" value="{{ checkin.id }}">
+            <div class="dataLineHeading">
+                <span>Данные о пассажирах</span>
+            </div>
+            <div class="dataLineForm">
+                <div class="dataLineLeft">
+                    <div class="dLine">
+                        <div>
+                            <span>Имя</span>
+                        </div>
+                        <div>
+                            <input booking-name="name" class="order orderBook" type="text" placeholder="Ваше имя">
+                        </div>
+                    </div>
+                    <div class="dLine">
+                        <div>
+                            <span>Телефон</span>
+                        </div>
+                        <div>
+                            <input booking-name="phone" class="order phone orderBook" type="text" placeholder="Ваш телефон">
+                        </div>
+                    </div>
+                    <div class="dLine">
+                        <div>
+                            <span>E-mail</span>
+                        </div>
+                        <div>
+                            <input booking-name="email" class="order orderBook" type="text" placeholder="Ваш e-mail">
+                        </div>
+                    </div>
+                </div>
+                <div class="dataLineRight">
+                    <div>
+                        <textarea booking-name="desc" class="order orderBook" placeholder="Дополнительная информация"></textarea>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="bookingHumanLine">
+            <div class="catLineItem humanLineItem no-padl">
+                <div>
+                    <span>Количество человек</span>
+                </div>
+                <div>
+                    <button class="countBtn countMinus">
+                        <i class="fa fa-minus" aria-hidden="true"></i>
+                    </button>
+                    <input booking-name="peoples" class="countInput orderBook" type="text" value="1" min="1">
+                    <button class="countBtn countPlus">
+                        <i class="fa fa-plus" aria-hidden="true"></i>
+                    </button>
+                </div>
+            </div>
+            <!-- <div class="offerItem">
+                <span class="check" id="#OfferCheck"><i class="fa fa-check" aria-hidden="true"></i></span>
+                <span>Я принимаю <a class="offerLink" href="">договор оферты</a></span>
+            </div> -->
+        </div>
+
+        <!-- <div class="bookingAnnoLine">
+            <span>Мы гарантируем конфиденциальность введенныых данных, мы не используем ваши данные для навязчивых рассылок, заказ ни к чему вас не обязывает</span>
+        </div> -->
+
+        <div class="offerItem">
+            <span class="check" id="#OfferCheck"><i class="fa fa-check" aria-hidden="true"></i></span>
+            <span>Я принимаю <a class="offerLink" href="#modalOffer">договор оферты</a></span>
+        </div>
+
+        <div id="BookingSend" class="bookingButton checkButton disabled">
+            <button class="hbtn">
+                Бронировать
+            </button>
+        </div>
+
+    </div>
+</div>
+<div class="bookingAnnoLine pb-0">
+    <span>Мы гарантируем конфиденциальность введенных данных, мы не используем Ваши данные для навязчивых рассылок, заказ ни к чему Вас не обязывает.</span>
+</div>
+<div class="bookingAnnoLine p-0">
+	<span><span class="t_red">*</span> Поля, отмеченные звездочкой, обязательны для заполнения.</span>
+</div>
+<script>
+	$(document).ready(function(){
+		$('.bookSelect').selectize({
+		    sortField: 'text'
+		});
+		$('#modalBooking .phone').inputmask('+7(999)999-99-99', { showMaskOnHover: false });
+	});
+</script>
+
+{# Дополнительное модальное окно #}
+
+<topmodal>
+	<div class="modalSecond">
+		<div class="modalLine">
+			<div class="close">×</div>
+    		<modalbody></modalbody>
+		</div>
+	</div>
+</topmodal>

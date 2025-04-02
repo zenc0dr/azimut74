@@ -1,0 +1,23 @@
+description = "Хлебные крошки в карточке"
+
+[viewBag]
+==
+<div class="c">
+
+	<div class="breadcrumbs">
+		<div class="crumb">
+			<a href="/">Главная</a>
+		</div>
+		<div class="crumb">
+			<span><i class="fa fa-angle-right" aria-hidden="true"></i></span>
+			<a href="/tours">Горящие туры</a>
+		</div>
+		{% for e in catalogBreadcrumbs %}
+	        <div class="crumb active">
+				<span><i class="fa fa-angle-right" aria-hidden="true"></i></span>
+				<span>{{ e.name|mutator }}</span>
+			</div>
+	    {% endfor %}
+	</div>
+
+</div>

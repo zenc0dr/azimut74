@@ -1,0 +1,12 @@
+title: 'zen.om::lang.payments.title'
+modelClass: Zen\Om\Models\Payment
+list: $/zen/om/models/payment/columns.yaml
+recordUrl: 'zen/om/payments/update/:id'
+noRecordsMessage: 'backend::lang.list.no_records'
+recordsPerPage: '30'
+showSetup: true
+showCheckboxes: true
+toolbar:
+    buttons: list_toolbar
+    search:
+        prompt: 'backend::lang.list.search_prompt'

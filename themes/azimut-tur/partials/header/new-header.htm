@@ -1,0 +1,39 @@
+description = "Шапка из новой темы"
+
+[viewBag]
+==
+<?php
+function onStart()
+{
+
+    $this['header_css'] = mix('css/pluggable-header.css', 'themes/azimut-tur-pro/assets');
+    $this['header_js'] = mix('js/pluggable-header.js', 'themes/azimut-tur-pro/assets');
+    $this['path_manifest_js'] = mix('js/manifest.js', 'themes/azimut-tur-pro/assets');
+    $this['path_vendor_js'] = mix('js/vendor.js', 'themes/azimut-tur-pro/assets');
+
+
+    require_once base_path('themes/azimut-tur-pro/scripts/topmenu_json_output.php');
+    $theme = \Cms\Classes\Theme::load('azimut-tur-pro');
+
+    $menus = \RainLab\Pages\Classes\Menu::listInTheme($theme, true);
+    $top_menu_obj = $menus['top-menu.yaml'];
+    $this['top_menu_obj'] = $top_menu_obj->items;
+    $this['top_menu_json'] = menuToJson($top_menu_obj->items);
+}
+?>
+==
+<link rel="stylesheet" href="{{ header_css }}">
+<meta name="top-menu" content="{{ top_menu_json }}" />
+{% put additional_scripts %}
+    <script src="{{ path_manifest_js }}"></script>
+    <script src="{{ path_vendor_js }}"></script>
+    <script src="{{ header_js }}"></script>
+{% endput %}
+{% partial 'header/header-info' %}
+<div class="header__top-menu bg-blue-300">
+    <div class="container header__container">
+        <div id="top-menu-app"></div>
+    </div>
+</div>
+<div id="call-back-app"></div>
+<div id="widget-history"></div>

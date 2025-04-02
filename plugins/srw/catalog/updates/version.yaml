@@ -1,0 +1,35 @@
+1.0.1:
+    - 'Initialize plugin.'
+1.0.2:
+    - 'Created table srw_catalog_categorys'
+    - builder_table_create_srw_catalog_categorys.php
+1.0.4:
+    - 'Created table srw_catalog_items'
+    - builder_table_create_srw_catalog_items.php
+1.0.5:
+    - 'Created table srw_catalog_tops'
+    - builder_table_create_srw_catalog_tops.php
+1.0.6:
+    - 'Created table srw_catalog_brands'
+    - builder_table_create_srw_catalog_brands.php
+1.0.7:
+    - 'Created table srw_catalog_settings'
+    - builder_table_create_srw_catalog_settings.php
+1.0.8:
+    - 'Created table srw_catalog_cart'
+    - builder_table_create_srw_catalog_cart.php
+1.0.9:
+    - 'Created table srw_catalog_orders'
+    - builder_table_create_srw_catalog_orders.php
+1.0.10:
+    - 'Created table srw_catalog_orderitems'
+    - builder_table_create_srw_catalog_orderitems.php
+1.0.11:
+    - 'Updated table srw_catalog_items'
+    - builder_table_update_srw_catalog_items.php
+1.0.12:
+    - 'Updated table srw_catalog_items'
+    - builder_table_update_srw_catalog_items_2.php
+1.0.13:
+    - 'Updated table srw_catalog_items'
+    - builder_table_update_srw_catalog_items3.php

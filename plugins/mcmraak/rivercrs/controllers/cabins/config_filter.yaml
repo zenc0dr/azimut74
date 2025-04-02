@@ -1,0 +1,14 @@
+# ===================================
+# Filter Scope Definitions
+# ===================================
+
+scopes:
+    category:
+        # Filter name
+        label: Теплоходы
+        # Model Class name
+        modelClass: Mcmraak\Rivercrs\Models\Motorships
+        # Model attribute to display for the name
+        nameFrom: name
+        # Apply query scope
+        scope: FilterMotorships

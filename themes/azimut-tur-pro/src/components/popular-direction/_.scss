@@ -1,0 +1,104 @@
+.popular-direction {
+
+      //.popylar-direction__wrapper
+      &__wrapper {
+
+      }
+		// .popular-direction__title
+		&__title {
+		}
+		// .popular-direction__item
+		&__item {
+         display: flex;
+         justify-content: space-between;
+         height: 240px;
+         @include m('xl') {
+            height: 200px;
+         }
+         @include m('lg') {
+            flex-direction: column;
+            height: auto;
+         }
+		}
+		// .popular-direction__image
+		&__image {
+         width: 45%;
+         flex-shrink: 0;
+         position: relative;
+         border-radius: 4px 0 0 4px;
+         @include m('xl') {
+            width: 40%;
+         }
+         @include m('lg') {
+            width: 100%;
+            border-radius: 4px 4px 0 0;
+            height: 250px;
+         }
+         @include m('sm') {
+            height: 200px;
+         }
+         img {
+            object-fit: cover;
+            height: 100%;
+            width: 100%;
+            border-radius: 4px 0 0 4px;
+            @include m('lg') {
+               border-radius: 4px 4px 0 0;
+            }
+         }
+		}
+		// .popular-direction__info
+		&__info {
+         border-radius: 0 4px 4px 0;
+         background-color: color('gray-100');
+         display: flex;
+         flex-direction: column;
+         justify-content: space-between;
+         position: relative;
+         width: 100%;
+         @include m('lg') {
+            border-radius: 0 0 4px 4px;
+            min-height: 150px;
+         }
+         @include m('sm') {
+            min-height: 160px;
+         }
+         &:after {
+            content: '';
+            position: absolute;
+            left: -13px;
+            top: 63px;
+            border-top: 13px solid transparent;
+            border-bottom: 13px solid transparent;
+            border-right: 13px solid color('gray-100');
+            @include m('lg') {
+               display: none;
+            }
+         }
+		}
+}
+.popylar-direction {
+		// .popylar-direction__items
+		&__items {
+		}
+		// .popylar-direction__top-text
+		&__top-text {
+		}
+		// .popylar-direction__middle-text
+		&__middle-text {
+		}
+		// .popylar-direction__links
+		&__links {
+         min-height: 40%;
+         display: flex;
+         flex-direction: column;
+         justify-content: flex-end;
+		}
+		// .popylar-direction__link
+		&__link {
+         display: flex;
+         &:not(:last-child) {
+            margin-bottom: 10px;
+         }
+		}
+}

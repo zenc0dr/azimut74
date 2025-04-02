@@ -1,0 +1,24 @@
+columns:
+    id:
+        label: id
+        type: number
+        sortable: true
+    name:
+        label: Имя
+        type: text
+        searchable: true
+        sortable: true
+    code:
+        label: Код
+        type: text
+        searchable: true
+        sortable: true
+    path:
+        label: Путь
+        type: text
+        searchable: true
+        sortable: true
+    time:
+        label: 'Время жизни'
+        type: text
+        sortable: true

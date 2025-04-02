@@ -1,0 +1,65 @@
+fields:
+    menu:
+        label: 'Показывать в меню'
+        span: auto
+        default: 1
+        type: switch
+tabs:
+    fields:
+        name:
+            label: 'Название (отображается в меню)'
+            oc.commentPosition: ''
+            span: auto
+            type: text
+            tab: Описание
+        slug:
+            label: Ссылка
+            span: auto
+            oc.commentPosition: ''
+            preset:
+                field: name
+                type: slug
+            type: text
+            tab: Описание
+        link:
+            label: 'Ссылка редиректа (если тут указана ссылка, то пункт меню будет содержать именно её)'
+            span: full
+            placeholder: ''
+            type: text
+            comment: 'URL от корня сайта вида: /slug/slug или внешняя каноническая, вида http://site.ru/slug/slug'
+            tab: Описание
+        text:
+            label: 'Текст статьи'
+            size: giant
+            oc.commentPosition: ''
+            span: full
+            type: richeditor
+            tab: Описание
+        order:
+            label: Порядок
+            oc.commentPosition: ''
+            span: full
+            default: '0'
+            type: number
+            tab: Описание
+        metatitle:
+            label: title
+            size: small
+            oc.commentPosition: ''
+            span: full
+            type: textarea
+            tab: Метатеги
+        metadesc:
+            label: description
+            size: small
+            oc.commentPosition: ''
+            span: full
+            type: textarea
+            tab: Метатеги
+        metakey:
+            label: keywords
+            size: small
+            oc.commentPosition: ''
+            span: full
+            type: textarea
+            tab: Метатеги

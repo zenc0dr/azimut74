@@ -1,0 +1,35 @@
+<section class="popular-direction {{ class }}">
+   <div class="container">
+      <div class="popylar-direction__wrapper bg-primary-100 rounded px-2 px-sm-3 px-xl-4 px-xxl-5 pt-4">
+      <div class="popular-direction__title fs-h3 fs-sm-h1 text-uppercase fw-bolder mb-3 mb-sm-5 text-center">
+         Популярные направления
+      </div>
+      <div class="popylar-direction__items row">
+         {% for item in directions %}
+         <div class="popular-direction__item col-12 col-lg-6 mb-4">
+            <div class="popular-direction__image">
+               <img src="{{ item.image|media }}" alt="direction-name">
+            </div>
+            <div class="popular-direction__info p-2 p-sm-3">
+               <div class="popylar-direction__top-text c-blue-100 fw-bolder fs-lg-s fs-xl-def">{{ item.category|mutator }}</div>
+               <div class="popylar-direction__middle-text  fs-s fs-lg-s fs-xl-def fs-xxl-h3  fw-bolder">{{ item.name|mutator }}</div>
+               <div class="popylar-direction__links fs-s">
+                   {#  Тут выходит кусок html не обязательно это список, это может быть что угодно
+                   <div class="popylar-direction__link">
+                       <i class="bi bi-box-arrow-up-left me-1 fs-ss c-blue-200"></i>
+                       <a href="#" class="c-primary-200 fs-ss fs-xl-def ">По России с выездом из Саратова и др.городов</a>
+                   </div>
+                   <div class="popylar-direction__link">
+                       <i class="bi bi-box-arrow-up-left me-1 fs-ss c-blue-200"></i>
+                       <a href="#" class="c-primary-200 fs-ss fs-xl-def">Заграничные Экскурсионные Туры</a>
+                   </div>
+                   #}
+                   {{ item.desc|raw|mutator }}
+               </div>
+            </div>
+         </div>
+         {% endfor %}
+      </div>
+      </div>
+   </div>
+</section>

@@ -1,0 +1,4 @@
+title: Reviews
+modelClass: Mcmraak\Rivercrs\Models\Review
+toolbar:
+    buttons: reorder_toolbar

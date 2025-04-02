@@ -1,0 +1,30 @@
+plugin:
+    name: 'srw.catalog::lang.plugin.name'
+    description: 'srw.catalog::lang.plugin.description'
+    author: Srw
+    icon: oc-icon-caret-up
+    homepage: ''
+navigation:
+    catalog-icon:
+        label: 'Горящие туры'
+        url: srw/catalog/items
+        icon: icon-send
+        permissions:
+            - srw.catalog.items
+        sideMenu:
+            catalog-items:
+                label: Туры
+                url: srw/catalog/items
+                icon: icon-send-o
+                permissions:
+                    - srw.catalog.items
+permissions:
+    srw.catalog.categorys:
+        tab: 'Горящие туры'
+        label: 'srw.catalog::lang.permissions.categorys'
+    srw.catalog.items:
+        tab: 'Горящие туры'
+        label: 'srw.catalog::lang.permissions.items'
+    srw.catalog.tops:
+        tab: 'Горящие туры'
+        label: 'srw.catalog::lang.plugin.tops'

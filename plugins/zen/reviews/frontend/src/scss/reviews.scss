@@ -1,0 +1,505 @@
+@import "!common/_";
+//Переменные цветов
+$reviews-bg-color: #f8fcff;
+$reviews-main-color: #e0292c;
+$reviews-second-color: #e0e0e0;
+
+@keyframes fade-in-show {
+    from {
+        transform: scale(0.8);
+        opacity: 0;
+    }
+}
+
+.reviews-wrapper {
+    .container {
+        padding: 2rem 1.4rem;
+        background-color: $reviews-bg-color;
+        max-width: 800px;
+
+        @include m('460px') {
+            padding: 1.8rem 1rem;
+        }
+    }
+
+
+    .reviews-success {
+        font-size: 26px;
+        font-weight: bold;
+        height: 80vh;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        flex-direction: column;
+
+        // Альтернативное окно
+        .reviews-thanks {
+            font-size: 15px;
+            text-align: center;
+
+            img {
+                width: 200px;
+                margin-bottom: 20px;
+            }
+            span {
+                font-size: 30px;
+                color: #1e88e5;
+            }
+            a {
+                color: #2f2f2f;
+                text-decoration: underline;
+            }
+        }
+
+        &__main-link {
+            margin-top: 30px;
+            font-size: 20px;
+            a {
+                color: #1981d8;
+            }
+        }
+
+        &__text {
+            font-size: 20px;
+            text-align: center;
+        }
+
+        &__phone {
+            display: flex;
+            align-items: center;
+            margin-top: 10px;
+            animation: fade-in-show 300ms;
+
+            input {
+                margin-left: 4px;
+                border: 1px solid #c3c3c3;
+                font-weight: bold;
+                width: 172px;
+                border-radius: 9px;
+                padding: 5px;
+                font-size: 30px;
+                text-align: center;
+            }
+        }
+        &__get-reward {
+            font-size: 17px;
+            background: #1a81db;
+            color: #fff;
+            padding: 15px;
+            border-radius: 6px;
+            cursor: pointer;
+            margin-top: 20px;
+            animation: fade-in-show 300ms;
+            transition: 200ms;
+            user-select: none;
+            &:active {
+                transform: scale(0.9);
+            }
+        }
+
+        &__email {
+            display: flex;
+            align-items: center;
+            margin-top: 20px;
+
+            input {
+                margin-left: 4px;
+                border: 1px solid #c3c3c3;
+                width: 350px;
+                border-radius: 9px;
+                font-size: 20px;
+                padding: 0px 6px;
+            }
+        }
+    }
+
+    .reviews-form {
+        &.process {
+            filter: blur(2px)
+        }
+
+        &__title {
+            font-size: rem(22px);
+            font-weight: bold;
+            margin-bottom: 50px;
+            @include m('768px') {
+                font-size: rem(20px);
+                margin-bottom: 30px
+            }
+        }
+
+        & > div:not(:last-child):not(.reviews-form__title) {
+            margin-bottom: 25px;
+        }
+
+        button {
+            @include clear-button();
+            width: 100%;
+            border-radius: 14px;
+            background-color: $reviews-main-color;
+            color: #fff;
+            border-color: $reviews-main-color;
+            padding: 18px 24px;
+            font-weight: bold;
+
+            &:hover:not(.active) {
+                //opacity: 0.8;
+                box-shadow: 1px 0px 3px 2px red;
+            }
+        }
+
+        &__input {
+            display: flex;
+            flex-direction: column;
+            position: relative;
+
+            &.bad {
+                position: relative;
+
+                label {
+                    color: red
+                }
+
+                input {
+                    border: 2px solid red;
+                }
+
+                .bad-text {
+                    position: absolute;
+                    right: 0;
+                    top: 5px;
+                    font-weight: bold;
+                    font-size: 14px;
+                    color: red;
+                    @include m('768px') {
+                        font-size: 12px;
+                        top: auto;
+                        bottom: -16px;
+                    }
+                }
+            }
+
+            &.reviews-form__input-textarea {
+                &.bad {
+                    textarea {
+                        box-shadow: 0 0 0 2px red;
+                    }
+                }
+
+                .textarea-btn__help {
+                    align-items: end;
+                    background: none;
+                    border: none;
+                    color: #000;
+                    font-weight: bold;
+                    text-decoration: underline;
+
+                    svg {
+                        margin-right: 5px;
+                    }
+                }
+
+                .textarea-help {
+                    display: none;
+                    flex-direction: column;
+                    position: absolute;
+                    width: 100%;
+                    left: 0%;
+                    background-color: #fff;
+                    border: 2px solid transparent;
+                    box-shadow: 0 0 0 2px #cacaca;
+                    border-radius: 4px;
+                    padding: 14px;
+                    z-index: 1;
+                    top: calc(100% + 20px);
+
+                    &.modal {
+                        display: flex !important;
+                        position: relative;
+                        box-shadow: none;
+                        border: none;
+                        padding: 0;
+
+                        ul li {
+                            @include m('480px') {
+                                font-size: rem(14px);
+                            }
+                        }
+                    }
+
+                    ul {
+                        padding-left: 1.55rem;
+
+                        li {
+                            color: #3b3b3b;
+                            line-height: 1.3rem;
+                        }
+                    }
+
+                    &__title,
+                    &__subtitle {
+                        font-size: rem(18px);
+                        margin-bottom: 20px;
+                        font-weight: bold;
+                    }
+
+                    &__subtitle {
+                        font-size: rem(16px);
+                        margin-bottom: 7px;
+                        display: flex;
+                        align-items: center;
+
+                        svg {
+                            margin-right: 5px;
+                        }
+                    }
+                }
+
+                &:hover {
+                    .textarea-help {
+                        display: flex;
+                        @include m('768px') {
+                            display: none;
+                        }
+                    }
+                }
+            }
+
+            label {
+                font-size: rem(18px);
+                margin-bottom: 15px;
+                font-weight: bold;
+                @include m('768px') {
+                    font-size: rem(16px);
+                    margin-bottom: 10px
+                }
+                @include m('460px') {
+                    font-size: rem(14px);
+                    margin-bottom: 8px
+                }
+            }
+
+            input {
+                border: 2px solid $reviews-second-color;
+                border-radius: 4px;
+                padding: 14px;
+                text-align: start;
+
+                &:focus-visible {
+                    border: 2px solid $reviews-second-color;
+                }
+
+                @include m('768px') {
+                    padding: 10px;
+                    font-size: rem(15px)
+                }
+            }
+
+            &.reviews-form__input-select {
+                &.bad {
+                    .vs--searchable .vs__dropdown-toggle {
+                        border: 2px solid red;
+                    }
+                }
+
+                input {
+                    border: none;
+                    padding: 0;
+
+                    &::placeholder {
+                        color: #000;
+                        opacity: 0.65;
+                    }
+                }
+
+                .vs--searchable .vs__dropdown-toggle {
+                    border: 2px solid $reviews-second-color;
+                    border-radius: 4px;
+                    padding: 14px 13px;
+                    height: 50px;
+                    align-items: center;
+                    @include m('768px') {
+                        padding: 10px;
+                        font-size: rem(15px);
+                        height: 41.1px;
+                    }
+                }
+
+                .dwarf-select {
+                    margin-bottom: 0;
+                }
+
+                .vs__selected {
+                    height: 100%;
+                    margin: 0;
+                }
+
+                .vs__search,
+                .vs__search:focus {
+                    margin: 0;
+                }
+            }
+
+            .reviews-form__input-radio {
+                &--btns {
+                    display: flex;
+                    @include m('460px') {
+                        justify-content: space-between
+                    }
+
+                    button {
+                        @include clear-button();
+                        border-radius: 7px;
+                        border: 2px solid $reviews-main-color;
+                        color: $reviews-main-color;
+                        display: inline-block;
+                        min-width: 54px;
+                        text-align: center;
+                        white-space: nowrap;
+                        font-weight: bold;
+                        width: auto;
+                        padding: 8px 12px;
+
+                        &.active {
+                            background-color: $reviews-main-color;
+                            color: #fff;
+                        }
+
+                        &:not(:last-child) {
+                            margin-right: 20px;
+                            @include m('460px') {
+                                margin-right: 0;
+                            }
+                        }
+
+                        @include m('768px') {
+                            font-size: rem(15px)
+                        }
+                        @include m('460px') {
+                            font-size: rem(14px);
+                            padding: 6px 10px;
+                            width: auto;
+                        }
+                    }
+                }
+            }
+
+            .reviews-form__input-group--wrap {
+                display: flex;
+                margin-bottom: 5px;
+                align-items: center;
+                position: relative;
+                @include m('460px') {
+                    flex-direction: column;
+                    align-items: flex-start;
+
+                    &:not(:last-child) {
+                        margin-bottom: 20px;
+                    }
+                }
+
+                &.blur {
+                    filter: blur(2px);
+                    transition: filter 0.3s ease;
+                }
+
+                .help-window {
+                    display: none;
+                    flex-direction: column;
+                    position: absolute;
+                    width: 50%;
+                    left: 20%;
+                    background-color: #fff;
+                    border: 2px solid transparent;
+                    box-shadow: 0 0 0 2px #cacaca;
+                    border-radius: 4px;
+                    padding: 14px;
+                    z-index: 1;
+                    top: 0;
+                    &__close {
+                        position: absolute;
+                        top: -3px;
+                        right: 2px;
+                    }
+                    @include m('992px') {
+                        left: auto;
+                        right: 0;
+                        width: 60%;
+                    }
+                    @include m('768px') {
+                        right: -5%;
+                        width: 65%;
+                    }
+                    @include m('576px') {
+                        top: 30px;
+                        width: 100%;
+                        left: 0;
+                        right: auto;
+                    }
+                    @include m('460px') {
+                        top: 110%;
+                        width: 100%;
+                        left: 0;
+                        right: auto;
+                        font-size: rem(14px)
+                    }
+
+                    &.show {
+                        display: flex;
+                    }
+
+                    &__timer {
+                        font-size: rem(14px);
+                        padding-top: 10px;
+                        color: #727272;
+                        font-style: italic;
+                        @include m('460px') {
+                            font-size: rem(12px)
+                        }
+                    }
+                }
+
+                .reviews-from__custom-name {
+                    width: 28%;
+                    @include m('992px') {
+                        width: 50%;
+                    }
+                    @include m('520px') {
+                        font-size: rem(14px);
+                        width: 43%;
+                    }
+                    @include m('460px') {
+                        margin-bottom: 10px;
+                        width: 100%;
+                    }
+
+                    span {
+                        &:hover {
+                            cursor: pointer;
+                        }
+                    }
+                }
+            }
+
+            &.reviews-form__input-group {
+                position: relative;
+            }
+
+            .reviews-form__input-help__window {
+                position: absolute;
+                top: 30px;
+                display: flex;
+                border: 2px solid transparent;
+                border-radius: 4px;
+                box-shadow: 0 0 0 2px #000;
+                margin: 2px;
+                padding: 14px 12px 14px 14px;
+                width: 80%;
+                left: 10%;
+                z-index: 10;
+                background-color: $reviews-bg-color;
+
+            }
+        }
+    }
+}

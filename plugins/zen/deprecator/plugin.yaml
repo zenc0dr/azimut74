@@ -1,0 +1,17 @@
+plugin:
+    name: 'zen.deprecator::lang.plugin.name'
+    description: 'zen.deprecator::lang.plugin.description'
+    author: 'Alex Blaze'
+    icon: oc-icon-cog
+    homepage: ''
+navigation:
+    main:
+        label: Deprecator
+        url: zen/deprecator/rulecontroller
+        icon: icon-cog
+        permissions:
+            - global
+permissions:
+    global:
+        tab: Deprecator
+        label: Global

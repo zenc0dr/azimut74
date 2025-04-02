@@ -1,0 +1,23 @@
+description = "Фишки"
+
+[viewBag]
+==
+{% if data %}
+<div class="features">
+    <div class="features__header title-section">
+        {{ data.title }}
+    </div>
+    <div class="features__subtitle">
+        {{ data.sub_title|raw }}
+    </div>
+    <div class="features__blocks">
+        {% for image in data.images %}
+        <div class="features__block">
+            <div class="features__image" style="background-image:url({{ image.image }})"></div>
+            <div class="features__title">{{ image.title }}</div>
+            <div class="features__desc">{{ image.desc }}</div>
+        </div>
+        {% endfor %}
+    </div>
+</div>
+{% endif %}

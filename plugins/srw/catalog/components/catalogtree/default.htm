@@ -1,0 +1,16 @@
+<ul>
+{% for category in catalogtree %}
+    <li>
+        <a href="/catalog{{ category.slug }}">{{ category.name }}</a>
+        {% if category.items %}
+            <ul>
+                {% for subcategory in category.items %}
+                <li>
+                    <a href="/catalog{{ category.slug }}{{ subcategory.slug }}">{{ subcategory.name }}</a>
+                </li>
+                {% endfor %}
+            </ul>
+        {% endif %}
+    </li>
+{% endfor %}
+</ul>

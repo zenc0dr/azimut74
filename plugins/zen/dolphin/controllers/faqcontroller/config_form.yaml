@@ -1,0 +1,10 @@
+name: FaqController
+form: $/zen/dolphin/models/faq/fields.yaml
+modelClass: Zen\Dolphin\Models\Faq
+defaultRedirect: zen/dolphin/faqcontroller
+create:
+    redirect: 'zen/dolphin/faqcontroller/update/:id'
+    redirectClose: zen/dolphin/faqcontroller
+update:
+    redirect: zen/dolphin/faqcontroller
+    redirectClose: zen/dolphin/faqcontroller

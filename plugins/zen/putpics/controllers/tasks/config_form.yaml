@@ -1,0 +1,10 @@
+name: Tasks
+form: $/zen/putpics/models/task/fields.yaml
+modelClass: Zen\Putpics\Models\Task
+defaultRedirect: zen/putpics/tasks
+create:
+    redirect: 'zen/putpics/tasks/update/:id'
+    redirectClose: zen/putpics/tasks
+update:
+    redirect: zen/putpics/tasks
+    redirectClose: zen/putpics/tasks

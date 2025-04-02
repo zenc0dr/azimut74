@@ -1,0 +1,190 @@
+description = "Левое меню временного каталога"
+
+[viewBag]
+==
+<?php
+function onStart() {
+	//$ss = $this->param('store_id');
+	//dd($ss);
+	//$this['store'] = \Zen\Om\Models\Store::where('id', $this->param('store_id'))->first(); 
+	//$storeid = \Zen\Om\Models\Store::where('id', $this->param('id'))->first();
+	//$ss = $this->param('parent_id');
+	//dd($ss);
+	//dd($storeid);
+	//$this['categories'] = \Zen\Om\Models\Category::where('store_id', $storeid)->first();
+	$storeid = $this->param('store');
+	//dd($storeid);
+	$this['storeid'] = $storeid;
+}
+?>
+==
+<div class="leftBlock">
+	<div class="leftBlockItem">
+		<div class="itemHead">
+		
+			{% if category.parent.name %}
+				<a href="{{ category.parent.url_cache }}
+					{% if category.parent.frame_link %}{{category.parent.frame_link}}{% endif %}
+				">{{ category.parent.name|mutator }}</a>
+			{% elseif category.name %}
+				<a href="{{ category.url_cache }}
+					{% if category.frame_link %}{{category.frame_link}}{% endif %}
+				">{{ category.name|mutator }}</a>
+			{% elseif item.category.parent.name %}
+				<a href="{{ item.category.parent.url_cache }}
+					{% if item.category.parent.frame_link %}{{item.category.parent.frame_link}}{% endif %}
+				">{{ item.category.parent.name|mutator }}</a>
+			{% elseif item.category.name %}
+				<a href="{{ item.category.url_cache }}
+					{% if item.category.frame_link %}{{item.category.frame_link}}{% endif %}
+				">{{ item.category.name|mutator }}</a>
+			{% endif %}
+		
+			<i class="fa fa-arrow-down arrow-s" aria-hidden="true"></i>
+		</div>
+		<div class="itemBody">
+			<ul>
+				{% if item.category.parent.cat_links %}
+					{#Выводим ссылки в категории#}
+					{% for item in item.category.parent.cat_links %}
+				    	<li class="
+				    	{% if item.linkmargin == 1 %}mb-20{% endif %}
+				    	{% if item.linkleftmargin_2 == 1 %}
+					    	pl-30
+					    {% elseif item.linkleftmargin_1 == 1 %}
+					  		pl-15
+					    {% endif %}	
+				    	"><a target="_blank" href="{{ item.cat_url }}">{{ item.cat_name|mutator }}</a></li>
+					{% endfor %}
+				{% elseif category.parent.cat_links %}
+					{#Выводим ссылки в категории2#}
+					{% for item in category.parent.cat_links %}
+				    	<li class="
+				    	{% if item.linkmargin == 1 %}mb-20{% endif %}
+				    	{% if item.linkleftmargin_2 == 1 %}
+					    	pl-30
+					    {% elseif item.linkleftmargin_1 == 1 %}
+					  		pl-15
+					    {% endif %}	
+				    	"><a target="_blank" href="{{ item.cat_url }}">{{ item.cat_name|mutator }}</a></li>
+					{% endfor %}
+				{% elseif category.cat_links %}
+					{#Выводим ссылки в итеме#}
+					{% for item in category.cat_links %}
+				    	<li class="
+				    	{% if item.linkmargin == 1 %}mb-20{% endif %}
+				    	{% if item.linkleftmargin_2 == 1 %}
+					    	pl-30
+					    {% elseif item.linkleftmargin_1 == 1 %}
+					  		pl-15
+					    {% endif %}	
+				    	"><a target="_blank" href="{{ item.cat_url }}">{{ item.cat_name|mutator }}</a></li>
+					{% endfor %}
+				{% endif %}	
+				
+				{% if category.sortedCategories %}
+					{#Выводим категории в категории#}
+	                {% for menuitem in category.sortedCategories if menuitem.lb_active == 1 %}
+	                	{% if menuitem.headingup %}
+	                	<li><span class="heading-up">{{ menuitem.headingup|mutator }}</span></li>
+	                	{% endif %}
+					    <li class="
+					    {% if menuitem.leftmargin_2 == 1 %}
+					    	pl-30
+					    {% elseif menuitem.leftmargin_1 == 1 %}
+					  		pl-15
+					    {% endif %}
+					    {% if menuitem.cat_links %}
+					    	{% if menuitem.catmargin == 1 %}mb-0{% endif %}
+					   	{% else %}
+					    	{% if menuitem.catmargin == 1 %}mb-20{% endif %}
+					    {% endif %}
+					    ">
+					    	<a href="/{{ category.slug }}/{{ menuitem.slug }}{% if menuitem.frame_link %}{{menuitem.frame_link}}{% endif %}">{{ menuitem.name|mutator }}</a></li>
+					    {% if menuitem.cat_links %}
+		                	{#Выводим ссылки категорий в категории#}
+		            		{% for item in menuitem.cat_links %}
+						    	<li class="
+						    	{% if item.linkmargin == 1 %}mb-20{% endif %}
+						    	{% if item.linkleftmargin_2 == 1 %}
+							    	pl-30
+							    {% elseif item.linkleftmargin_1 == 1 %}
+							  		pl-15
+							    {% endif %}
+						    	"><a href="{{ item.cat_url }}">{{ item.cat_name|mutator }}</a></li>
+		                	{% endfor %}
+	                	{% endif %}
+	                {% endfor %}
+	                {% if category.parent.sortedCategories %}
+		                {% for menuitem in category.parent.sortedCategories if menuitem.lb_active == 1 %}
+		                	{% if menuitem.headingup %}
+			                	<li><span class="heading-up">{{ menuitem.headingup|mutator }}</span></li>
+		                	{% endif %}
+						    <li class="
+						    {% if menuitem.leftmargin_2 == 1 %}
+						    	pl-30
+						    {% elseif menuitem.leftmargin_1 == 1 %}
+						  		pl-15
+						    {% endif %}
+						    {% if menuitem.cat_links %}
+						    	{% if menuitem.catmargin == 1 %}mb-0{% endif %}
+						    {% else %}
+						    	{% if menuitem.catmargin == 1 %}mb-20{% endif %}
+						   	{% endif %}
+						    ">
+						    	<a href="/{{category.parent.slug}}/{{ menuitem.slug }}{% if menuitem.frame_link %}{{menuitem.frame_link}}{% endif %}">{{ menuitem.name|mutator }}</a></li>
+						    {% if menuitem.cat_links %}
+			                	{#Выводим ссылки категорий в категории2#}
+			            		{% for item in menuitem.cat_links %}
+							    	<li class="
+							    	{% if item.linkmargin == 1 %}mb-20{% endif %}
+							    	{% if item.linkleftmargin_2 == 1 %}
+								    	pl-30
+								    {% elseif item.linkleftmargin_1 == 1 %}
+								  		pl-15
+								    {% endif %}
+							    	"><a href="{{ item.cat_url }}">{{ item.cat_name|mutator }}</a></li>
+			                	{% endfor %}
+			               	{% endif %}
+		                {% endfor %}
+	                {% endif %}
+                {% elseif item.category.parent.sortedCategories  %}
+                	{#Выводим категории в подкатегории#}
+                	{% for menuitem in item.category.parent.sortedCategories if menuitem.lb_active == 1 %}
+                		{% if menuitem.headingup %}
+	                		<li><span class="heading-up">{{ menuitem.headingup|mutator }}</span></li>
+	                	{% endif %}
+					    <li class="
+					    {% if menuitem.leftmargin_2 == 1 %}
+					    	pl-30
+					    {% elseif menuitem.leftmargin_1 == 1 %}
+					  		pl-15
+					    {% endif %}
+					    {% if menuitem.cat_links %}
+					    	{% if menuitem.catmargin == 1 %}mb-0{% endif %}
+					    {% else %}
+					    	{% if menuitem.catmargin == 1 %}mb-20{% endif %}
+					   	{% endif %}
+					    ">
+					    	<a href="/{{ menuitem.parent.slug }}/{{ menuitem.slug }}{% if menuitem.frame_link %}{{menuitem.frame_link}}{% endif %}">{{ menuitem.name|mutator }}</a>
+					    </li>
+					    {% if menuitem.cat_links %}
+		                	{#Выводим ссылки категорий в карточке#}
+		            		{% for item in menuitem.cat_links %}
+						    	<li class="
+						    	{% if item.linkmargin == 1 %}mb-20{% endif %}
+						    	{% if item.linkleftmargin_2 == 1 %}
+							    	pl-30
+							    {% elseif item.linkleftmargin_1 == 1 %}
+							  		pl-15
+							    {% endif %}
+						    	"><a href="{{ item.cat_url }}">{{ item.cat_name|mutator }}</a></li>
+		                	{% endfor %}
+		               	{% endif %}
+	                {% endfor %}
+                {% endif %}
+                
+			</ul>
+		</div>
+	</div>
+</div>

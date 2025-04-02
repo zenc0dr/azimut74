@@ -1,0 +1,12 @@
+.title-section {
+    text-align: center;
+    font-size: 1.7rem;
+    padding-top: 2rem;
+    padding-bottom: 2.5rem;
+
+    @include m('568px') {
+        font-size: 1.5rem;
+        padding-top: 1.5rem;
+        padding-bottom: 2rem;
+    }
+}

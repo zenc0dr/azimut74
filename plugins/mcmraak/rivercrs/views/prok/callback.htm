@@ -1,0 +1,55 @@
+<div id="CallBackForm" class="write-us-form" v-cloak>
+
+    <template v-if="bad_name = isBad('name')"></template>
+    <div class="write-us-input" :class="{bad:bad_name}">
+        <input v-model="name" placeholder="Имя">
+        <span v-if="bad_name" class="bad-input">${ bad_name }</span>
+    </div>
+
+    <template v-if="bad_email = isBad('email')"></template>
+    <div class="write-us-input" :class="{bad:bad_email}">
+        <input v-model="email" placeholder="email">
+        <span v-if="bad_email" class="bad-input">${ bad_email }</span>
+    </div>
+
+    <template v-if="bad_phone = isBad('phone')"></template>
+    <div class="write-us-input" :class="{bad:bad_phone}">
+        <input v-model="phone" placeholder="Телефон">
+        <span v-if="bad_phone" class="bad-input">${ bad_phone }</span>
+    </div>
+
+    <template v-if="bad_note = isBad('note')"></template>
+    <div class="write-us-input" :class="{bad:bad_note}">
+        <div class="write-us-input__note">Параметры тура</div>
+        <textarea v-model="note"></textarea>
+        <span v-if="bad_note" class="bad-input">${ bad_note }</span>
+    </div>
+
+    <div class="write-us-text-politic">
+        <input type="checkbox" v-model="agree">
+        <span>
+           Принимаю <a target="_blank" href="/pk-terms" class="bex-offerLink">пользовательское соглашение</a>
+        и
+        <a target="_blank" href="/pk-offer" class="bex-offerLink">согласен на обработку персональных данных</a>.
+        </span>
+    </div>
+
+    <template v-if="bad_time = isBad('notime')"></template>
+    <div v-if="bad_time" class="write-us-notime">
+        ${ bad_time }
+    </div>
+
+    <div class="write-us-wrapper-btn">
+        <button @click="send()" :disabled="!agree" class="btn red">
+            <template v-if="!process">
+                Подобрать тур
+            </template>
+            <template v-else>
+                <i class="fa fa-refresh callback-rotate"></i>
+            </template>
+        </button>
+    </div>
+    <div class="write-us-wrapper-success" v-if="success">
+        ${ success }
+    </div>
+</div>

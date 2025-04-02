@@ -1,0 +1,27 @@
+{% if slider_class == null %}
+    {% set slider_class = 'slider_one' %}
+{% endif %}
+{% set slider_class = slider_class ~ random('abcdefjiklmnoprstxyz') ~ random('abcdefjiklmnoprstxyz') ~ random(1,10000) %}
+<section swiper="{{slider_class}}" class="slider-and-thumbs {{slider_class}}">
+    <div style="--swiper-navigation-color: #fff; --swiper-pagination-color: #fff"
+         class="swiper-container shipSlide">
+        <div class="swiper-wrapper">
+            {% for image in images %}
+                <a class="swiper-slide fancybox ship-img-slide" data-fancybox="gallery-{{slider_class}}" href="{{ image }}">
+                    <img src="{{ image }}" />
+                </a>
+            {% endfor %}
+        </div>
+        <div class="swiper-button-next"></div>
+        <div class="swiper-button-prev"></div>
+    </div>
+    <div  class="swiper-container thumbSlider">
+        <div class="swiper-wrapper">
+            {% for image in images %}
+                <div class="swiper-slide ship-img-slide">
+                    <img src="{{ image }}" />
+                </div>
+            {% endfor %}
+        </div>
+    </div>
+</section>

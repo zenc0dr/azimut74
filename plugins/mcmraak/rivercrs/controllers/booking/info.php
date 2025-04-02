@@ -1,0 +1,1 @@
+<?php echo \View::make('mcmraak.rivercrs::booking_report',['booking' => $model]);

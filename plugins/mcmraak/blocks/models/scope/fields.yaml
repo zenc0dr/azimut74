@@ -1,0 +1,13 @@
+fields:
+    name:
+        label: 'Название области'
+        oc.commentPosition: ''
+        span: full
+        type: text
+    code:
+        label: Код
+        oc.commentPosition: ''
+        size: giant
+        language: javascript
+        span: full
+        type: codeeditor

@@ -1,0 +1,10 @@
+plugin:
+    name: 'zen.cli::lang.plugin.name'
+    description: 'zen.cli::lang.plugin.description'
+    author: 'Alexander Ablizin'
+    icon: oc-icon-play-circle
+    homepage: ''
+permissions:
+    zen.cli:
+        tab: Cli
+        label: 'Глобальный доступ к модулю'

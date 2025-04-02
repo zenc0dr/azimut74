@@ -1,0 +1,73 @@
+description = "Подобрать тур"
+
+[viewBag]
+==
+<div id="modalTour" class="modalFade">
+	<div class="modalWrap modalWrapStandart">
+		
+		<div class="modalDone">
+			<button title="Close (Esc)" type="button" class="mfp-close">×</button>
+
+			<div class="modalHead">
+				<span>Спасибо за заявку!</span>
+				<span>Специалист позвонит вам в ближайшее время</span>
+			</div>
+		</div>
+		
+		<div class="modalContent">
+
+			<button title="Close (Esc)" type="button" class="mfp-close">×</button>
+
+			<div class="modalHead">
+				<span>Подобрать тур</span>
+			</div>
+
+			<div class="modalDesc">
+				<span>Никакого спама, только реальный расчет стоимости тура!</span>
+			</div>
+
+			<div class="fLine">
+				<label for="">Ваше имя</label>
+				<input class="order-tour order" id="#name" name="name" type="text" placeholder="Ваше имя">
+			</div>
+
+			<div class="fLine">
+				<label for="">Ваш e-mail</label>
+				<input class="order-tour order" name="email" type="text" placeholder="Ваша электронная почта">
+			</div>
+
+			<div class="fLine">
+				<label for="">Ваш телефон</label>
+				<input class="phone order-tour order" name="phone" type="text" placeholder="+7(___)___-__-__">
+			</div>
+
+			<div class="fLine">
+				<label for="">Параметры тура</label>
+				<textarea class="order-tour order" name="message" type="text" placeholder="Cтрана, курорт, даты тура, питание, кол-во взрослых детей. 
+				Вопросы и пожелания"></textarea>
+			</div>
+			
+			<input type="hidden" name="ide" class="order-tour hidden" value="Подбор тура">
+			
+			<div class="offerItem" style="padding: 20px 0 0 0">
+	            <span class="check" id="#OfferCheck"><i class="fa fa-check" aria-hidden="true"></i></span>
+	            <span>Я принимаю <a class="offerLink" href="#modalOffer">договор оферты</a></span>
+	        </div>
+			
+			<div class="modalButton disabled">
+				<button data-ion="data=.order-tour;ajax=/callback/send;prepend=#SystemMessages;" class="hbtn">Подобрать тур</button>
+			</div>
+
+			<div class="modalDesc">
+				<span>Мы гарантируем конфиденциальность введенных данных</span>
+			</div>
+
+		</div>
+		
+		{% partial 'modal/preloader' %}
+		
+	</div>
+	
+	{% partial 'modal/modal-second' %}
+	
+</div>

@@ -1,0 +1,4 @@
+title: Showcases
+modelClass: Zen\Greeter\Models\Showcase
+toolbar:
+    buttons: reorder_toolbar

@@ -1,0 +1,248 @@
+{
+    "azimut_checkin_id": 1580226,
+    "waterway_checkin_id": 20670,
+    "azimut_ship_id": 208,
+    "waterway_ship_id": 40,
+    "waterway_tarrifs": [
+        {
+            "id": 1231,
+            "accommodations": [
+                {
+                    "id": 2,
+                    "name": "Тариф Лайт Детский (3-разовое питание)",
+                    "price": {
+                        "id": 23592895,
+                        "value": 4437000,
+                        "currency": 1,
+                        "nds": 1,
+                        "created_at": 1727456389,
+                        "updated_at": 1727456389,
+                        "status": 1,
+                        "tariff": 3145724,
+                        "user_edited": null,
+                        "fees": [],
+                        "discountedValue": 4215100,
+                        "promotion": {
+                            "offer_id": 45,
+                            "percent": 5
+                        },
+                        "metaTariff": 1231
+                    }
+                }
+            ],
+            "meta_id": 1231,
+            "meta_name": "Тариф Лайт Детский (3-разовое питание)"
+        },
+        {
+            "id": 1224,
+            "accommodations": [
+                {
+                    "id": 2,
+                    "name": "Тариф Лайт Взрослый (завтрак)",
+                    "price": {
+                        "id": 23592888,
+                        "value": 4350000,
+                        "currency": 1,
+                        "nds": 1,
+                        "created_at": 1727456389,
+                        "updated_at": 1727456389,
+                        "status": 1,
+                        "tariff": 3145666,
+                        "user_edited": null,
+                        "fees": [],
+                        "discountedValue": 4132500,
+                        "promotion": {
+                            "offer_id": 45,
+                            "percent": 5
+                        },
+                        "metaTariff": 1224
+                    }
+                },
+                {
+                    "id": 1,
+                    "name": "Тариф Лайт Взрослый (завтрак)",
+                    "price": {
+                        "id": 23592887,
+                        "value": 6520000,
+                        "currency": 1,
+                        "nds": 1,
+                        "created_at": 1727456389,
+                        "updated_at": 1727456389,
+                        "status": 1,
+                        "tariff": 3145665,
+                        "user_edited": null,
+                        "fees": [],
+                        "discountedValue": 6194000,
+                        "promotion": {
+                            "offer_id": 45,
+                            "percent": 5
+                        },
+                        "metaTariff": 1224
+                    }
+                }
+            ],
+            "meta_id": 1224,
+            "meta_name": "Тариф Лайт Взрослый (завтрак)"
+        },
+        {
+            "id": 1227,
+            "accommodations": [
+                {
+                    "id": 2,
+                    "name": "Тариф Лайт Взрослый (завтрак+ ужин)",
+                    "price": {
+                        "id": 23592891,
+                        "value": 4698000,
+                        "currency": 1,
+                        "nds": 1,
+                        "created_at": 1727456389,
+                        "updated_at": 1727456389,
+                        "status": 1,
+                        "tariff": 3145689,
+                        "user_edited": null,
+                        "fees": [],
+                        "discountedValue": 4463100,
+                        "promotion": {
+                            "offer_id": 45,
+                            "percent": 5
+                        },
+                        "metaTariff": 1227
+                    }
+                },
+                {
+                    "id": 1,
+                    "name": "Тариф Лайт Взрослый (завтрак+ ужин)",
+                    "price": {
+                        "id": 23592890,
+                        "value": 7041600,
+                        "currency": 1,
+                        "nds": 1,
+                        "created_at": 1727456389,
+                        "updated_at": 1727456389,
+                        "status": 1,
+                        "tariff": 3145688,
+                        "user_edited": null,
+                        "fees": [],
+                        "discountedValue": 6689500,
+                        "promotion": {
+                            "offer_id": 45,
+                            "percent": 5
+                        },
+                        "metaTariff": 1227
+                    }
+                }
+            ],
+            "meta_id": 1227,
+            "meta_name": "Тариф Лайт Взрослый (завтрак+ ужин)"
+        },
+        {
+            "id": 1225,
+            "accommodations": [
+                {
+                    "id": 2,
+                    "name": "Тариф Лайт Детский (завтрак)",
+                    "price": {
+                        "id": 23592889,
+                        "value": 3697500,
+                        "currency": 1,
+                        "nds": 1,
+                        "created_at": 1727456389,
+                        "updated_at": 1727456389,
+                        "status": 1,
+                        "tariff": 3145678,
+                        "user_edited": null,
+                        "fees": [],
+                        "discountedValue": 3512600,
+                        "promotion": {
+                            "offer_id": 45,
+                            "percent": 5
+                        },
+                        "metaTariff": 1225
+                    }
+                }
+            ],
+            "meta_id": 1225,
+            "meta_name": "Тариф Лайт Детский (завтрак)"
+        },
+        {
+            "id": 1230,
+            "accommodations": [
+                {
+                    "id": 2,
+                    "name": "Тариф Лайт Взрослый (3-разовое питание)",
+                    "price": {
+                        "id": 23592894,
+                        "value": 5089500,
+                        "currency": 1,
+                        "nds": 1,
+                        "created_at": 1727456389,
+                        "updated_at": 1727456389,
+                        "status": 1,
+                        "tariff": 3145712,
+                        "user_edited": null,
+                        "fees": [],
+                        "discountedValue": 4835000,
+                        "promotion": {
+                            "offer_id": 45,
+                            "percent": 5
+                        },
+                        "metaTariff": 1230
+                    }
+                },
+                {
+                    "id": 1,
+                    "name": "Тариф Лайт Взрослый (3-разовое питание)",
+                    "price": {
+                        "id": 23592893,
+                        "value": 7628400,
+                        "currency": 1,
+                        "nds": 1,
+                        "created_at": 1727456389,
+                        "updated_at": 1727456389,
+                        "status": 1,
+                        "tariff": 3145711,
+                        "user_edited": null,
+                        "fees": [],
+                        "discountedValue": 7247000,
+                        "promotion": {
+                            "offer_id": 45,
+                            "percent": 5
+                        },
+                        "metaTariff": 1230
+                    }
+                }
+            ],
+            "meta_id": 1230,
+            "meta_name": "Тариф Лайт Взрослый (3-разовое питание)"
+        },
+        {
+            "id": 1228,
+            "accommodations": [
+                {
+                    "id": 2,
+                    "name": "Тариф Лайт Детский (завтрак+ ужин)",
+                    "price": {
+                        "id": 23592892,
+                        "value": 4045500,
+                        "currency": 1,
+                        "nds": 1,
+                        "created_at": 1727456389,
+                        "updated_at": 1727456389,
+                        "status": 1,
+                        "tariff": 3145701,
+                        "user_edited": null,
+                        "fees": [],
+                        "discountedValue": 3843200,
+                        "promotion": {
+                            "offer_id": 45,
+                            "percent": 5
+                        },
+                        "metaTariff": 1228
+                    }
+                }
+            ],
+            "meta_id": 1228,
+            "meta_name": "Тариф Лайт Детский (завтрак+ ужин)"
+        }
+    ]
+}

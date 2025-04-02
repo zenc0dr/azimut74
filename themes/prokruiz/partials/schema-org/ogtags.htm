@@ -1,0 +1,37 @@
+description = "Og-tags"
+==
+{% set sImage = 'https://babylon64.8ber.ru/themes/babylon/assets/images/favicon/android-chrome-192x192.png' %}
+{% set sDescription = SeoToolbox.get('seo_description') %}
+
+{% if obProduct.isNotEmpty() %}
+    {% set sImage = obProduct.offer|first.preview_image.path %}
+    {% set sDescription = 'Доступные варианты: ' %}
+    {% for offer in obProduct.offer %}
+    {% set sDescription = sDescription ~ offer.name %}
+    {% if loop.last == false %}
+      {% set sDescription = sDescription ~', ' %}
+    {% endif %}
+    {% endfor %}
+{% endif %}
+
+{% if obActiveCategory %}
+   {% set sImage = obActiveCategory.preview_image.path %}
+{% endif %}
+
+{% if bSalePage %}
+{#    тут можно сделать своё изображение на скидку#}
+    {% set sImage = 'https://babylon64.8ber.ru/themes/babylon/assets/images/favicon/android-chrome-192x192.png' %}
+{% endif %}
+
+{% if obArticle %}
+    {% if obArticle.preview_image %}
+        {% set sImage = obArticle.preview_image.path %}
+    {% endif %}
+    {% set sDescription = obArticle.preview_text %}
+{% endif %}
+
+<meta property="og:title" content="{{ SeoToolbox.getTitle }}"/>
+<meta property="og:description" content="{{ sDescription|raw }}"/>
+<meta property="og:image" content="{{ sImage }}"/>
+<meta property="og:type" content="website"/>
+<meta property="og:url" content= "{{ fullUrl }}" />

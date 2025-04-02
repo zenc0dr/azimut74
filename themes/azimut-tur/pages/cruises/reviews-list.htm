@@ -1,0 +1,28 @@
+title = "Отзывы о круизах (Список)"
+url = "/russia-river-cruises/cruises-reviews-list/:ship"
+description = "Спиcок отзывов подгружаемый AJAX"
+meta_title = "Отзывы о круизах"
+meta_description = "Отзывы о круизах"
+is_hidden = 0
+seo_keywords = "Отзывы о круизах"
+robot_index = "index"
+robot_follow = "follow"
+contentType = "html"
+==
+<?php
+use Mcmraak\Rivercrs\Models\Review;
+use \Mcmraak\Rivercrs\Models\Motorships;
+
+function onStart()
+{
+    $this['ship'] = Motorships::find($this->param('ship'));
+    $_GET['page'] = post('page');
+    if($this->param('ship') == 0){
+        $this['reviews'] = Review::where('active',1)->orderBy('created_at', 'desc')->paginate(15);
+    } else {
+        $this['reviews'] = Review::where('motorship_id', $this->param('ship'))->where('active',1)->paginate(15);
+    }
+}
+?>
+==
+{% partial 'rivercrs/reviews-list' %}

@@ -1,0 +1,6 @@
+plugin:
+    name: 'zen.kit::lang.plugin.name'
+    description: 'zen.kit::lang.plugin.description'
+    author: 'Alexander Ablizin'
+    icon: oc-icon-briefcase
+    homepage: ''

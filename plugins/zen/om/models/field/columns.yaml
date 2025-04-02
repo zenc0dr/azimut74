@@ -1,0 +1,14 @@
+columns:
+    id:
+        label: id
+        type: number
+        sortable: true
+    name:
+        label: 'zen.om::lang.customs.name'
+        type: text
+        searchable: true
+        sortable: true
+    code:
+        label: 'zen.om::lang.customs.code'
+        type: text
+        sortable: true

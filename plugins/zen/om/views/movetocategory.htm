@@ -1,0 +1,76 @@
+<div class="modal-header">
+    <button id="closeModal" type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+    <h4 class="modal-title">{{ "zen.om::lang.categories.move"|trans }}</h4>
+</div>
+<table id="CategoriesTree" class="table data" data-control="rowlink">
+    <tbody>
+    {% for id, category in categories %}
+        <tr class="rowlink">
+            <td
+                    id="{{ id }}"
+                    class="list-cell"
+                    event-handler="onRefresh"
+                >{{ category|raw }}
+            </td>
+        </tr>
+    {% endfor %}
+    </tbody>
+</table>
+
+<style>
+    #Preloader {
+        position: fixed;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        background: rgba(0, 0, 0, 0.25);
+        display: none;
+
+    }
+    #Preloader>div {
+        width: 300px;
+        margin-left: auto;
+        margin-right: auto;
+        padding: 30px;
+        background: #f9f9f9;
+        border-radius: 5px;
+        margin-top: 20%;
+    }
+</style>
+<div id="Preloader">
+    <div>
+        <div class="loading-indicator-container">
+            <div class="loading-indicator">
+                <span></span>
+                <div>Loading...</div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<form id="Refresher"
+      style="display: none"
+        action="destination_url"
+        method="post">
+    <input name="page" type=submit />
+</form>
+
+<script>
+    var page = $(".control-pagination span[class*=rendered]").text();
+    $('#Refresher').attr('action',location.pathname);
+    $('#Refresher [name=page]').val(page);
+
+    $(document).on('click', '#CategoriesTree td', function(){
+        var category_id = $(this).attr('id');
+        $.request('onMoveitems', {
+            data: {'category_id':category_id, 'items_ids':'{{ items_ids }}' },
+            beforeSend: function (){
+                $('#Preloader').fadeIn(300);
+            },
+            success: function() {
+                $('#Refresher input').click();
+            }
+        })
+    });
+</script>

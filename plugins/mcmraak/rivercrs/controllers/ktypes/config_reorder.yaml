@@ -1,0 +1,4 @@
+title: Ktypes
+modelClass: Mcmraak\Rivercrs\Models\Ktype
+toolbar:
+    buttons: reorder_toolbar

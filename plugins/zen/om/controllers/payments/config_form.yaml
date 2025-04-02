@@ -1,0 +1,16 @@
+name: Payments
+modelClass: Zen\Om\Models\Payment
+form: $/zen/om/models/payment/fields.yaml
+defaultRedirect: zen/om/payments
+create:
+    title: 'zen.om::lang.payments.create'
+    redirect: 'zen/om/payments/update/:id'
+    redirectClose: zen/om/payments
+    flashSave: 'zen.om::lang.payments.created'
+update:
+    title: 'zen.om::lang.payments.update'
+    redirect: zen/om/payments
+    redirectClose: zen/om/payments
+    flashSave: 'zen.om::lang.payments.updated'
+    flashDelete: 'zen.om::lang.payments.deleted'
+preview: {  }

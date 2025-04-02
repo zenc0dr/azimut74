@@ -1,0 +1,120 @@
+.trust-block {
+    background-size: cover;
+    background-repeat: no-repeat;
+    background-position: center;
+    margin-bottom: 0;
+}
+
+
+.trust-block-bgc {
+    padding: 60px 0;
+    background-color: #40404052;
+}
+
+.trust-block-icons {
+    display: flex;
+    margin-bottom: 70px;
+}
+
+.trust-left-part {
+    color: #fff;
+}
+
+.trust-wrapper-btn {
+    display: flex;
+    justify-content: center;
+}
+
+.trust-block-text {
+    margin-bottom: 55px;
+    font-size: 18px;
+}
+
+.trust-block-icon {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    color: #fff;
+    font-size: 14px;
+    font-weight: bold;
+}
+
+.trust-block-icon span {
+    text-align: center;
+    margin-top: 10px;
+    width: 150px;
+}
+
+
+@media (max-width: 1200px) {
+    .trust-block-text {
+        font-size: 16px;
+    }
+
+    .trust-block-icon span {
+        font-size: 13px;
+        width: 125px;
+    }
+
+    .trust-block-icons {
+        margin-bottom: 50px;
+    }
+}
+
+@media (max-width: 567px) {
+    .trust-block-icons {
+        justify-content: space-between;
+    }
+
+    .trust-block-icon {
+        width: 25%;
+    }
+
+    .trust-block-icon span {
+        width: 100%;
+    }
+}
+
+@media (max-width: 500px) {
+    .trust-block-icon span {
+        font-size: 11px;
+    }
+    .trust-block-text {
+        font-size: 14px;
+    }
+}
+
+@media (max-width: 425px) {
+    .trust-block.no-bgc-mobile,
+    .trust-block.no-bgc-mobile .trust-block-bgc {
+        background-image: none!important;
+        background: transparent;
+    }
+
+    .trust-block.no-bgc-mobile .trust-left-part,
+    .trust-block.no-bgc-mobile .trust-block-icon {
+        color: #000;
+    }
+
+    .trust-block.no-bgc-mobile .trust-block-icon svg path {
+        fill: var(--red-color-text);
+    }
+
+    .trust-block-icons {
+        flex-wrap: wrap;
+    }
+    .trust-block-icon {
+        width: 50%;
+        margin-bottom: 20px;
+    }
+
+    .trust-block-icon span {
+        font-size: 13px;
+        width: 120px;
+    }
+
+    .trust-left-part {
+        padding: 0;
+    }
+
+}

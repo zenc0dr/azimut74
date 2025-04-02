@@ -1,0 +1,256 @@
+description = "Форма добавления отзыва САНС"
+
+[viewBag]
+==
+<div id="beforeWriter"></div>
+<div id="SansReview" class="s-reviews-writer">
+
+	<div class="s-reviews-writer__heading">
+		<span>Написать отзыв</span>
+	</div>
+
+	<div class="s-reviews-writer__form">
+
+        <hotel id="{{ hotel_info.hotel.id }}"></hotel>
+
+        <div class="c-r cp-0 mb-20">
+            <div class="col-35 col-xs-100">
+            	<div class="s-reviews-writer__col">
+            		Добавить комментарий
+            	</div>
+            </div>
+            <div class="col-65 col-xs-100 mt-xs-10">
+            	<div class="s-reviews-writer__col pl-15 pl-xs-0">
+            		<textarea class="order tbig s-reviews-writer__textarea s-reviews-writer__textarea_big"
+                              placeholder="Опишите здесь свои впечатления от отдыха в этом теплоходе. Не жалейте слов. Пишите подробнее. Помните, другим людям будет намного легче выбрать для себя теплоход и маршрут путешествия на основе ваших отзывов."
+                              v-model="send.comment"
+                              :class="{bad:warnings.badfields.comment}"
+                    ></textarea>
+            	</div>
+            </div>
+        </div>
+        
+        <div class="c-r cp-0 mb-20">
+            <div class="col-35 col-xs-100">
+            	<div class="s-reviews-writer__col">
+            		Что особенно понравилось
+            	</div>
+            </div>
+            <div class="col-65 col-xs-100 mt-xs-10">
+            	<div class="s-reviews-writer__col pl-15 pl-xs-0">
+            		<textarea class="order tbig s-reviews-writer__textarea s-reviews-writer__textarea_big"
+                              placeholder="Опишите, от чего вы остались в полном восторге (от какого-то сотрудника, питания, интерьера каюты или всего теплохода, анимации, экскурсионной программы). Не скупитесь на комплименты!"
+                              v-model="send.liked"
+                              :class="{bad:warnings.badfields.liked}"
+                    ></textarea>
+            	</div>
+            </div>
+        </div>
+        
+        <div class="c-r cp-0 mb-20">
+            <div class="col-35 col-xs-100">
+            	<div class="s-reviews-writer__col">
+            		Как вы оцениваете данный отель
+            	</div>
+            </div>
+            <div class="col-65 col-xs-100 mt-xs-10">
+            	<div class="s-reviews-writer__col pl-15 pl-xs-0">
+            		<div class="stars">
+            			<div class="stars-select va-m">
+							<span @click="send.stars = 1"
+                                  :class="[(send.stars > 0) ? 'active':'']"
+                            ></span>
+                            <span @click="send.stars = 2"
+                                  :class="[(send.stars > 1) ? 'active':'']"
+                            ></span>
+                            <span @click="send.stars = 3"
+                                  :class="[(send.stars > 2) ? 'active':'']"
+                            ></span>
+                            <span @click="send.stars = 4"
+                                  :class="[(send.stars > 3) ? 'active':'']"
+                            ></span>
+                            <span @click="send.stars = 5"
+                                  :class="[(send.stars > 4) ? 'active':'']"
+                            ></span>
+						</div>
+						<div class="stars__count-wrap va-m">
+							Ваша оценка: <span class="stars__count">${ send.stars }</span>
+						</div>
+            		</div>
+            		
+            	</div>
+            </div>
+        </div>
+        
+        <div class="c-r cp-0 mb-20">
+            <div class="col-35 col-xs-100">
+            	<div class="s-reviews-writer__col">
+            		Что надо начать делать
+            	</div>
+            </div>
+            <div class="col-65 col-xs-100 mt-xs-10">
+            	<div class="s-reviews-writer__col pl-15 pl-xs-0">
+            		<textarea class="order tmedium s-reviews-writer__textarea s-reviews-writer__textarea_medium"
+                              placeholder="Ваше предложение"
+                              v-model="send.startdoing"
+                              :class="{bad:warnings.badfields.startdoing}"
+                    ></textarea>
+            	</div>
+            </div>
+        </div>
+        
+        <div class="c-r cp-0 mb-20">
+            <div class="col-35 col-xs-100">
+            	<div class="s-reviews-writer__col">
+            		Что надо перестать делать
+            	</div>
+            </div>
+            <div class="col-65 col-xs-100 mt-xs-10">
+            	<div class="s-reviews-writer__col pl-15 pl-xs-0">
+            		<textarea class="order tmedium s-reviews-writer__textarea s-reviews-writer__textarea_medium"
+                              placeholder="Ваше предложение"
+                              v-model="send.stopdoing"
+                              :class="{bad:warnings.badfields.stopdoing}"
+                    ></textarea>
+            	</div>
+            </div>
+        </div>
+        
+        <div class="c-r cp-0 mb-20">
+            <div class="col-35 col-xs-100">
+            	<div class="s-reviews-writer__col">
+            		Что надо продолжать делать
+            	</div>
+            </div>
+            <div class="col-65 col-xs-100 mt-xs-10">
+            	<div class="s-reviews-writer__col pl-15 pl-xs-0">
+            		<textarea class="order tmedium s-reviews-writer__textarea s-reviews-writer__textarea_medium"
+                              placeholder="Ваше предложение"
+                              v-model="send.doing"
+                              :class="{bad:warnings.badfields.doing}"
+                    ></textarea>
+            	</div>
+            </div>
+        </div>
+        
+        <div class="c-r cp-0 mb-20">
+            <div class="col-35 col-xs-100">
+            	<div class="s-reviews-writer__col">
+            		Ваше имя <span style="color: red">*</span>
+            	</div>
+            </div>
+            <div class="col-65 col-xs-100 mt-xs-10">
+            	<div class="s-reviews-writer__col pl-15 pl-xs-0">
+            		<input class="order tsmall s-reviews-writer__input s-reviews-writer__input_small"
+                           placeholder="Ваше имя"
+                           v-model="send.name"
+                           :class="{bad:warnings.badfields.name}"
+                           required>
+            	</div>
+            </div>
+        </div>
+        
+        <div class="c-r cp-0 mb-20">
+            <div class="col-35 col-xs-100">
+            	<div class="s-reviews-writer__col">
+            		Электронная почта
+            	</div>
+            </div>
+            <div class="col-65 col-xs-100 mt-xs-10">
+            	<div class="s-reviews-writer__col pl-15 pl-xs-0">
+            		<input class="order tsmall s-reviews-writer__input s-reviews-writer__input_small"
+                           placeholder="Ваша электронная почта"
+                           v-model="send.email"
+                           :class="{bad:warnings.badfields.email}"
+                    >
+            	</div>
+            </div>
+        </div>
+        
+        <div class="c-r cp-0 mb-20">
+            <div class="col-35 col-xs-100">
+            	<div class="s-reviews-writer__col">
+            		Ваш город  <span style="color: red">*</span>
+            	</div>
+            </div>
+            <div class="col-65 col-xs-100 mt-xs-10">
+            	<div class="s-reviews-writer__col pl-15 pl-xs-0">
+            		<input class="order tsmall s-reviews-writer__input s-reviews-writer__input_small"
+                           placeholder="Ваш город"
+                           v-model="send.town"
+                           :class="{bad:warnings.badfields.town}"
+                           required>
+            	</div>
+            </div>
+        </div>
+        
+        <div class="c-r cp-0 mb-20">
+            <div class="col-35 col-xs-100">
+            	<div class="s-reviews-writer__col">
+            		Загрузить фото
+            	</div>
+            </div>
+            <div class="col-65 col-xs-100 mt-xs-10">
+            	<div class="s-reviews-writer__col pl-15 pl-xs-0">
+            		<div id="imagesWrap">
+					<div class="reviewSendImage addPhoto s-reviews-writer__add-photo">
+						<button class="addPhotoClose" title="Удалить фото">
+							<i class="fa fa-times" aria-hidden="true"></i>
+						</button>
+						<span><i class="fa fa-plus-circle" aria-hidden="true"></i></span>
+						<span>Добавить фото</span>
+	                    <input rev-send="image" type="file" accept="image/jpeg,image/png">
+					</div>
+					</div>
+	
+					<!-- <input type="file" class="order" multiple> -->
+	
+					<div class="offerItem offerPad" @click="confirm()">
+						<span class="s-check"
+                              :class="[(send.confirm === true) ? ' checked' : '']"
+                        >
+                            <i class="fa fa-check" aria-hidden="true"></i></span>
+						<span>Я принимаю <button class="offerLink" href="#modalOffer">договор оферты</button></span>
+					</div>
+	
+					<!-- <div class="revloader" style="display: none;">
+						<img src="/storage/app/media/uploaded-files/revloader.gif" alt="">
+					</div> -->
+	
+					<div class="s-reviews-writer__button writerButton">
+						<button @click="sendData()" :disabled="!send.confirm" class="hbtn">Отправить</button>
+					</div>
+					<div class="annoLine">
+						<span>Мы гарантируем конфиденциальность введенных данных, мы не используем ваши данные для навязчивых рассылок</span>
+					</div>
+					<div class="annoLine">
+						<span><span class="t_red">*</span> Поля, отмеченные звездочкой, обязательны для заполнения.</span>
+					</div>
+                    <div v-if="warnings.messages.length"
+                         class="sans-alerts"
+                         :class="{success: warnings.success}">
+                        <div v-for="message in warnings.messages">${message}</div>
+                    </div>
+            	</div>
+            </div>
+        </div>
+
+		<div class="revloader" style="display: none;">
+			<img src="/storage/app/media/uploaded-files/preloader_clear.svg" alt="">
+		</div>
+		
+	</div>
+</div>
+
+<ofmodal class="reviewsSecondModal">
+	<div class="modalSecond">
+		<div class="modalLine">
+			<div class="close">×</div>
+    		<ofmodalbody></ofmodalbody>
+		</div>
+	</div>
+</ofmodal>
+
+{% put scripts %}
+    <script src="/plugins/mcmraak/sans/assets/js/sans.review.js"></script>
+{% endput %}

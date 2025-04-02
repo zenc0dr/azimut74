@@ -1,0 +1,80 @@
+tabs:
+    fields:
+        notice_emails:
+            label: 'Адреса email для уведомлений'
+            prompt: 'Добавить e-mail'
+            span: auto
+            type: repeater
+            tab: Уведомления
+            form:
+                fields:
+                    email:
+                        label: email
+                        span: full
+                        type: text
+        default_page:
+            label: 'Страница по умолчанию'
+            span: auto
+            type: dropdown
+            tab: 'Постадочные страницы'
+        default_page_atm:
+            label: 'Страница по умолчанию для АТМ'
+            span: auto
+            type: dropdown
+            tab: 'Постадочные страницы'
+        text_field:
+            label: 'Текстовое поле над подвалом'
+            size: small
+            span: full
+            type: richeditor
+            tab: 'Постадочные страницы'
+        ext_background:
+            label: 'Фон для виджета'
+            mode: file
+            span: full
+            type: mediafinder
+            tab: 'Стартовая axt'
+        ext_title:
+            label: Заголовок
+            size: ''
+            span: full
+            type: richeditor
+            tab: 'Стартовая axt'
+        ext_sub_title:
+            label: Подзаголовок
+            size: ''
+            span: full
+            type: richeditor
+            tab: 'Стартовая axt'
+        ext_adv:
+            label: Приемущества
+            prompt: Добавить
+            style: default
+            span: auto
+            type: repeater
+            tab: 'Стартовая axt'
+            form:
+                fields:
+                    html:
+                        label: Приемущество
+                        size: ''
+                        span: full
+                        type: richeditor
+        start_gallery:
+            label: 'Галерея фотографий'
+            prompt: 'Добавить фото'
+            style: default
+            span: auto
+            type: repeater
+            tab: 'Стартовая axt'
+            form:
+                fields:
+                    image:
+                        label: Изображение
+                        mode: image
+                        span: full
+                        type: mediafinder
+                    title:
+                        label: Подпись
+                        span: full
+                        type: text

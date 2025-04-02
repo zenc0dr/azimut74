@@ -1,0 +1,13 @@
+fields:
+    code:
+        label: 'Код стиля'
+        oc.commentPosition: ''
+        span: auto
+        type: text
+    html:
+        label: Разметка
+        span: full
+        oc.commentPosition: ''
+        size: giant
+        language: twig
+        type: codeeditor

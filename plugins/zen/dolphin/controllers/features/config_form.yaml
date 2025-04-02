@@ -1,0 +1,14 @@
+name: Фишки
+modelClass: Zen\Dolphin\Models\Feature
+form: $/zen/dolphin/models/feature/fields.yaml
+defaultRedirect: zen/dolphin/features
+create:
+    title: 'Создание фишек'
+    redirect: 'zen/dolphin/features/update/:id'
+    redirectClose: zen/dolphin/features
+update:
+    title: 'Изменение фишек'
+    redirect: zen/dolphin/features
+    redirectClose: zen/dolphin/features
+    flashSave: 'Фишки сохранены'
+    flashDelete: 'Фишки удалены'

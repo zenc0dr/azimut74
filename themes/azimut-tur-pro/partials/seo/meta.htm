@@ -1,0 +1,72 @@
+description = "Метатеги"
+
+[viewBag]
+==
+<meta name="yandex-verification" content="8eef983a68c1a9ec" />
+<meta name="google-site-verification" content="9HLewRGujAYDxY-cvyGl-SN7N3ascBK7Pp-0K0qpAkc" />
+<meta name="cmsmagazine" content="b0cdd9b850bf292d9366aefb14bc5451" />
+{# Основные мета-теги #}
+{# Title #}
+{% if octositeTitle %}
+<title>{{ octositeTitle|mutator }}</title>
+{% elseif SeoStaticPage.seo_title %}
+<title>{{ SeoStaticPage.seo_title|mutator }}</title>
+{% elseif om_request.item %}
+{% set item = om_request.item %}
+<title>{{ item.seo_title|mutator }}</title>
+{% elseif om_request.category %}
+{% set category = om_request.category %}
+<title>{{ category.seo_title|mutator }}</title>
+{% elseif frame.metatitle %}
+<title>{{ frame.metatitle|mutator }}</title>
+{% elseif reviewsSwitcher %}
+<title>{{ this.page.meta_title|mutator }}</title>
+{% elseif this.page.meta_title %}
+<title>{{ this.page.meta_title|mutator }}</title>
+{% elseif RiverCRS.meta_title %}
+<title>{{ RiverCRS.meta_title|mutator }}</title>
+{% elseif Dolphin.meta_title %}
+<title>{{ Dolphin.meta_title|mutator }}</title>
+{% elseif GroupTours.meta_title %}
+<title>{{ GroupTours.meta_title|mutator }}</title>
+{% elseif this.page.title %}
+<title>{{ this.page.title|mutator }}</title>
+{% endif %}
+{# Description #}
+{% if octositeDescription %}
+<meta name="description" content="{{ octositeDescription|mutator }}">
+{% elseif SeoStaticPage.seo_description %}
+<meta name="description" content="{{ SeoStaticPage.seo_description|mutator }}">
+{% elseif om_request.item %}
+{% set item = om_request.item %}
+<meta name="description" content="{{ item.seo_description|mutator }}">
+{% elseif om_request.category %}
+{% set category = om_request.category %}
+<meta name="description" content="{{ category.seo_description|mutator }}">
+{% elseif frame.metadesc %}
+<meta name="description" content="{{ frame.metadesc|mutator }}">
+{% elseif RiverCRS.meta_description %}
+<meta name="description" content="{{ RiverCRS.meta_description|mutator }}">
+{% elseif GroupTours.meta_description %}
+<meta name="description" content="{{ GroupTours.meta_description|mutator }}">
+{% elseif this.page.meta_description %}
+<meta name="description" content="{{ this.page.meta_description|mutator }}">
+{% endif %}
+{# Keywords #}
+{% if octositeKeywords %}
+<meta name="keywords" content="{{ octositeKeywords|mutator }}">
+{% elseif SeoStaticPage.seo_keywords %}
+<meta name="keywords" content="{{ SeoStaticPage.seo_keywords|mutator }}">
+{% elseif om_request.item %}
+{% set item = om_request.item %}
+<meta name="keywords" content="{{ item.seo_keywords|mutator }}">
+{% elseif om_request.category %}
+{% set category = om_request.category %}
+<meta name="keywords" content="{{ category.seo_keywords|mutator }}">
+{% elseif frame.metakey %}
+<meta name="keywords" content="{{ frame.metakey|mutator }}">
+{% elseif this.page.seo_keywords %}
+<meta name="keywords" content="{{ this.page.seo_keywords|mutator }}">
+{% elseif RiverCRS.meta_keywords %}
+<meta name="keywords" content="{{ RiverCRS.meta_keywords|mutator }}">
+{% endif %}

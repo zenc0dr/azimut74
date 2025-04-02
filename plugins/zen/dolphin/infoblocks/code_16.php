@@ -1,0 +1,1 @@
+$template['atm_tour'] = @$input['atm_tour'];

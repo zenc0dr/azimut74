@@ -1,0 +1,369 @@
+// Надо будет еще потом оптимизировать это
+.tabs-group {
+    /*--border-color: #bbbbbb;*/
+    --border-color: #dcdcdc;
+    --border-width: 0px;
+    --bgc-tab: rgba(30, 136, 229, 1);
+    --bgc-tab-hover: rgba(26, 129, 219, 1);
+}
+
+.tabs {
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background-color: color('primary-100');
+    margin-top: 30px;
+    border-radius: 7px 7px 0 0;
+    padding-bottom: 5px;
+    border-left: 1px solid var(--border-color);
+    border-right: 1px solid var(--border-color);
+    @include m('lg') {
+        flex-direction: column;
+    }
+}
+
+.tabs .tab {
+    z-index: 1;
+    width: 100%;
+    display: flex;
+    align-items: center;
+    font-size: 21px;
+    padding: 25px 0;
+    color: color('primary-100');
+    transition: 300ms;
+    justify-content: center;
+    text-transform: uppercase;
+    background-color: var(--bgc-tab);
+    border-bottom: var(--border-width) solid var(--border-color);
+    /*box-shadow: 1px 1px 3px 0 var(--border-color);*/
+    @include m('lg') {
+        font-size: fs('def');
+        padding: 10px 0;
+        text-transform: none;
+    }
+    &:hover {
+        cursor: default;
+    }
+    &:not(.active):hover {
+        cursor: pointer;
+        background-color: var(--bgc-tab-hover);
+        color: color('primary-100');
+    }
+    &:not(:last-child):not(:first-child):not(.active) {
+        border-radius: 0 0 7px 0;
+        border-right: var(--border-width) solid var(--border-color);
+    }
+    &:last-child:not(.active) {
+        border-radius: 0 7px 0 0;
+    }
+    &.no-border {
+        border-radius: 7px 0 0 0!important;
+        border-right: none!important;
+    }
+
+}
+
+.tabs .tab.active {
+    font-weight: bold;
+    background-color: color('primary-100');
+    color: #404345;
+    border-radius: 7px 7px 0 0;
+    border: 1px solid var(--border-color);
+    border-bottom: none;
+    box-shadow: none;
+    z-index: 0;
+    margin-top: -14px;
+    margin-left: -1px;
+    margin-right: -1px;
+    @include m('lg') {
+        z-index: 1;
+        font-size: fs('h3');
+        padding: 25px 0;
+        margin-top: -5px;
+        border-left: none;
+        text-transform: uppercase;
+        border-right: none;
+    }
+}
+
+
+.tabs .tab:first-child.active+.tab {
+    border-radius: 0 0 0 7px;
+    border-left: var(--border-width) solid var(--border-color);
+    border-right: 0;
+}
+
+
+.tabs .tab:first-child:not(.active) {
+    border-radius: 7px 0 7px 0;
+    border-right: var(--border-width) solid var(--border-color);
+}
+
+.tabs .tab.active+.tab:last-child {
+    border-radius: 0 7px 0 7px;
+    border-left: var(--border-width) solid var(--border-color);
+}
+
+
+.tabs .tab+:not(.tab) {
+    border-radius: 0 0 7px 0;
+    background-color: #dedede;
+}
+
+.tab-content {
+    /*height: 300px;*/
+    width: 100%;
+    background-color: color('primary-100');
+    border-radius:  0 0 7px 7px;
+    border: 1px solid var(--border-color);
+    border-top: none;
+    padding: 40px 15px;
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    -o-user-select: none;
+    user-select: none;
+    > ul {
+        padding-left: 1rem;
+        li:not(:last-child) {
+            margin-bottom: 1rem;
+        }
+    }
+    &.tab-content__user-select {
+        -webkit-user-select: auto;
+        -moz-user-select: auto;
+        -ms-user-select: auto;
+        -o-user-select: auto;
+        user-select: auto;
+    }
+    @include m('lg') {
+       padding:  20px;
+    }
+}
+
+.tab-container {
+    display: none;
+    &.active {
+        display: flex;
+        flex-direction: column;
+    }
+    h2 {
+        margin: 0;
+        font-weight: bold;
+        font-size: fs('h2');
+    }
+}
+.tab-arrow-content {
+    display: flex;
+    align-items: flex-end;
+    i.tab-arrow-content__text {
+        &::before {
+            content: 'развернуть';
+            font-size: 14px;
+            font-style: normal;
+        }
+    }
+    i.bi-chevron-down {
+        margin-left: 5px;
+    }
+}
+
+.tab-item.open {
+    @include min('993px') {
+        &>.tab-content {
+            display: flex;
+            flex-direction: column;
+        }
+
+        &>div:first-child {
+            i.bi-chevron-down::before {
+                content: "\f286";
+            }
+            i.tab-arrow-content__text::before {
+                content: "свернуть"
+            }
+        }
+    }
+    @include m('992px') {
+        &:not(.close-mobile) {
+            & >.tab-content {
+                display: flex;
+                flex-direction: column;
+            }
+
+            &>div:first-child {
+                i.bi-chevron-down::before {
+                    content: "\f286";
+                }
+
+                i.tab-arrow-content__text::before {
+                    content: "свернуть"
+                }
+            }
+        }
+    }
+}
+
+
+.tabs-vertical  {
+    &.no-border {
+        border: none!important;
+        .tab-content {
+            border: none;
+            padding: 0;
+        }
+    }
+    &.no-padding {
+        padding: 0!important;
+    }
+    .tab-content {
+        display: none;
+        border: 1px solid var(--border-color);
+        border-radius: 4px;
+        padding: 5px;
+    }
+
+}
+
+
+.tab-content iframe {
+    border-radius: 4px;
+}
+
+.tab-name {
+    display: flex;
+    align-items: center;
+    width: fit-content;
+    i {
+        font-size: 22px;
+        margin-left: 15px;
+    }
+    &:hover {
+        cursor: pointer;
+    }
+
+    //h2 {
+    //    margin: 0;
+    //    font-weight: bold;
+    //    font-size: fs('h2');
+    //}
+}
+
+
+.tab-item .tab-content {
+    background: transparent;
+}
+
+.tab-content iframe {
+    height: 400px;
+}
+
+
+.tabs-vertical > .tab-item > .tab-name {
+    //margin-bottom: 30px;
+}
+
+.tabs-vertical .tab-item:not(:last-child) {
+    margin-bottom: 25px;
+}
+
+.wrapper-tab-content {
+    background-color: rgba(color('blue-200'),.1);
+    border-radius: 4px;
+    padding: 25px 15px;
+}
+
+.tab-item.tab-content {
+    position: relative;
+}
+
+
+
+.tab-item.route-tab .tab-content {
+    border: 1px solid color('gray-100') !important;
+    border-top: none;
+    margin-top: -5px;
+    border-radius: 4px;
+}
+
+// нужно перменную цвета
+.tabs-vertical .tab-item.route-tab > .tab-content {
+    background-color: #f2f2f2;
+    flex-direction: row;
+}
+
+@media (max-width: 992px) {
+
+    .tab-item:not(.close-mobile) > .tab-content {
+        display: flex;
+        flex-direction: column;
+    }
+
+    .tabs .tab:not(:first-child).active {
+        border: none;
+    }
+
+    .tabs .tab.active+.tab:last-child {
+        border-radius: 7px 7px 0 0;
+        padding: 7px 0;
+    }
+
+    .tabs .tab:first-child:not(.active) {
+        border-radius: 7px 7px 0 0 ;
+    }
+    .tabs .tab:first-child.active+.tab
+    {
+        border-radius: 7px 7px 0 0;
+    }
+
+    .tabs .tab:last-child:not(.active) {
+        border-radius: 0 0 0 0
+    }
+    .tab.no-border + .tab:not(.active) {
+        border-radius: 0 0 0 0!important;
+    }
+
+    .tabs .tab.no-border {
+        border-radius: 7px 7px 0 0 !important;
+    }
+
+    .tab-item.close-mobile  > .tab-content {
+        display: none;
+    }
+
+}
+
+@media (max-width: 470px) {
+    .ship-name-tab,
+    .tab-name h2 {
+        //font-size: fs('h2');
+    }
+
+    .tab-content iframe {
+        height: 300px;
+    }
+}
+
+@media (max-width: 420px) {
+    .ship-name-tab,
+    .tab-name h2 {
+        //font-size: fs('h3');
+    }
+}
+@media (max-width: 390px) {
+    .tab-content {
+        padding:  13px 9px;
+        font-size: fs('ss');
+    }
+    .tab-content iframe {
+        height: 280px;
+    }
+}
+
+@media (max-width: 360px) {
+    .ship-name-tab,
+    .tab-name h2 {
+        //font-size: fs('h3');
+    }
+}

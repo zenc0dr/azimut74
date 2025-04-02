@@ -1,0 +1,10 @@
+name: SliderTherapy
+form: $/srw/azimut/models/slidertherapy/fields.yaml
+modelClass: Srw\Azimut\Models\SliderTherapy
+defaultRedirect: srw/azimut/slidertherapy
+create:
+    redirect: 'srw/azimut/slidertherapy/update/:id'
+    redirectClose: srw/azimut/slidertherapy
+update:
+    redirect: srw/azimut/slidertherapy
+    redirectClose: srw/azimut/slidertherapy

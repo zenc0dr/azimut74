@@ -1,0 +1,16 @@
+title: Regions
+modelClass: Zen\Dolphin\Models\Region
+list: $/zen/dolphin/models/region/columns.yaml
+recordUrl: 'zen/dolphin/regions/update/:id'
+noRecordsMessage: 'backend::lang.list.no_records'
+recordsPerPage: 20
+showSetup: true
+showCheckboxes: true
+defaultSort:
+    column: id
+    direction: asc
+toolbar:
+    buttons: list_toolbar
+    search:
+        prompt: 'backend::lang.list.search_prompt'
+filter: config_filter.yaml

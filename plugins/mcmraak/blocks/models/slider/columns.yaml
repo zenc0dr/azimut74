@@ -1,0 +1,26 @@
+columns:
+    id:
+        label: id
+        type: text
+    name:
+        label: 'Название слайдера'
+        type: text
+    slug:
+        label: 'Относительная ссылка'
+        type: text
+    to_section:
+        label: 'Ко всему разделу'
+        type: text
+    count:
+        label: Количество
+        type: partial
+        path: $/mcmraak/blocks/controllers/slider/count.php
+    active:
+        label: Активность
+        type: partial
+    order:
+        label: Порядок
+        type: number
+    only:
+        label: 'Только этот слайд'
+        type: number

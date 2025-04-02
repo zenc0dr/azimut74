@@ -1,0 +1,94 @@
+title = "Бронирование EXT"
+url = "/ex-tours/ext/booking"
+layout = "master"
+is_hidden = 0
+robot_index = "index"
+robot_follow = "follow"
+contentType = "html"
+force_show = 0
+==
+<?php
+function onInit()
+{
+    $this['page_css'] = mix('css/dolphin-ext-offers.css', 'themes/azimut-tur-pro/assets');
+    $this['page_js'] = mix('js/dolphin-ext-offers.js', 'themes/azimut-tur-pro/assets');
+}
+
+function onStart()
+{
+    $init_success = Zen\Dolphin\Classes\DolphinFrontend::init($this);
+    if (!$init_success) {
+        $this->setStatusCode(404);
+        return $this->controller->run('404');
+    }
+}
+?>
+==
+{% put page_style %}
+<link rel="stylesheet" href="{{ page_css }}">
+{% endput %}
+{% put page_script %}
+<script src="{{ page_js }}" defer></script>
+{% endput %}
+
+<meta name="offers-widget-data" content="{{ Dolphin.offersWidgetData }}" />
+
+<section class="results my-4">
+    <div class="container">
+        <div class="d-flex flex-column flex-lg-row">
+            <section class="result-menu__categories col-12 col-lg-3">
+                {% partial 'blocks/page-groups' data=Dolphin.pageGroups sTitle='Направления и темы' %}
+            </section>
+
+            <div class="col-12 col-lg-9 wrapper-overflow__hidden">
+                <div>
+                    <h1>{{ Dolphin.title|raw }}</h1>
+                    <div class="wrapper-title-bottom">
+                        {% partial 'labels/labels' obData=Dolphin.labels %}
+                        {% partial 'print/btn' %}
+                    </div>
+                </div>
+                {% partial 'sliders/slider-thumbs' images=Dolphin.gallery slider_class='slider-card' %}
+                <div>
+                {% partial 'dolphin/video' class='' %}
+                {% partial 'waybill/waybill' obData=Dolphin.waybill %}
+                {% partial 'anonce/anonce' data=Dolphin.anonce %}
+
+                </div>
+                <div id="dolphin-ext-offers-widget-app"></div>
+                <div>
+
+                {# zenc0dr: Закомментировано на основании задачи https://8ber.kaiten.ru/21926130
+                <div class="dolphin-subs-telegram info-block__html__block">
+                    <div class="info-block__html__block__title mb-2">
+                        Акция
+                    </div>
+                    <div class="info-block__html__block__text">
+                        <div class="mb-1"><b style="color: #cb2022">СКИДКА 5%</b> для подписчиков канала Азимут-Тур в Телеграмм.</div>
+                        <div class="mb-1">Ссылка для присоединения к каналу: <a href="https://t.me/azimuttest" target="_blank">https://t.me/azimuttest</a></div>
+                        <div class="mb-1">Скидка распространяется на все экскурсионные автобусные туры, где туроператором выступает ООО "Азимут". Скидка предоставляется один раз. Акция действует до 31.08.2023</div>
+                    </div>
+                </div>
+                #}
+
+                {% partial 'conditions/conditions'
+                    obConditions=Dolphin.conditions
+                    obHotels=Dolphin.hotels
+                %}
+
+                {% partial 'tour-program/tour-program'
+                    obData=Dolphin.tour_program
+                %}
+
+                {% partial 'info-block/info-block'
+                    sTitle='Важная информация'
+                    content=Dolphin.important_info
+                    bRaw=true
+                %}
+
+                {% partial 'dolphin/faq' obItem=Dolphin.faq %}
+                </div>
+            </div>
+        </div>
+    </div>
+</section>

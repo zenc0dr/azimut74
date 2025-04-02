@@ -1,0 +1,18 @@
+columns:
+    name:
+        label: Название
+        type: text
+        searchable: true
+        sortable: true
+    slug:
+        label: URL
+        type: text
+        searchable: true
+    parent_id:
+        label: 'Родительский пункт'
+        type: text
+        relation: cruise
+        valueFrom: name
+    sort_order:
+        label: Порядок
+        type: number

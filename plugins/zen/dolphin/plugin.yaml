@@ -1,0 +1,39 @@
+plugin:
+    name: 'zen.dolphin::lang.plugin.name'
+    description: 'Экскурсионные и автобусные туры'
+    author: 'Alexander Ablizin'
+    icon: oc-icon-compass
+    homepage: ''
+navigation:
+    dolphin-main:
+        label: 'Экскурсионные туры'
+        url: zen/dolphin/exlists
+        icon: icon-compass
+        permissions:
+            - zen.dolphin.main
+        order: 3
+        sideMenu:
+            dolphin-orders:
+                label: Заявки
+                url: zen/dolphin/orders
+                icon: icon-dollar
+            dolphin-exlists:
+                label: 'База данных'
+                url: zen/dolphin/exlists
+                icon: icon-database
+            dolphin-import:
+                label: 'Импорт CSV'
+                url: zen/dolphin/import
+                icon: icon-cloud-upload
+            dolphin-logs:
+                label: 'Журнал событий'
+                url: zen/dolphin/logs
+                icon: icon-book
+            dolphin-settings:
+                label: 'Настройки модуля'
+                url: system/settings/update/zen/dolphin/options
+                icon: icon-cog
+permissions:
+    zen.dolphin.main:
+        tab: 'Экскурсионные туры'
+        label: 'Доступ к плагину'

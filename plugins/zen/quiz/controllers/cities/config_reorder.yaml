@@ -1,0 +1,4 @@
+title: Cities
+modelClass: Zen\Quiz\Models\City
+toolbar:
+    buttons: reorder_toolbar

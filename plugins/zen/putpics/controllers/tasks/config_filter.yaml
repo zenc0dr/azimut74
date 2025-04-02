@@ -1,0 +1,27 @@
+scopes:
+    created_by:
+        label: Сущность
+        type: group
+        conditions: attachment_type in (:filtered)
+        options:
+            Mcmraak\Rivercrs\Models\Cabins: Каюта RiverCRS
+            Mcmraak\Rivercrs\Models\Kpage: Cтраница pro-kruiz
+            Mcmraak\Rivercrs\Models\Motorships: Теплоход
+            Srw\Catalog\Models\Items: Горящий тур
+            Zen\Dolphin\Models\City: Город Dolphin
+            Zen\Dolphin\Models\Region: Регион Dolphin
+            Zen\Dolphin\Models\Hotel: Отель Dolphin
+            Zen\Dolphin\Models\Page: Страница Dolphin
+            Zen\Dolphin\Models\Tour: Тур Dolphin
+    active:
+        label: Состояние
+        type: switch
+        conditions:
+            - success = 0
+            - success = 1
+    found:
+        label: 'Не нашёл'
+        type: switch
+        conditions:
+            - not_found = 0
+            - not_found = 1

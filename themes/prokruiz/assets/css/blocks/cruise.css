@@ -1,0 +1,2136 @@
+.cruise-section .result-item {
+    height: auto;
+}
+
+.cruise-section .result-item-img {
+    width: 100%;
+}
+
+.cruise-section .result-item .result-item-left {
+    width: 50%;
+    position: relative;
+    flex-shrink: 0;
+    height: auto;
+}
+
+.cruise-section .booking-price {
+    font-size: 16px;
+}
+
+.cruise-section .result-item-right {
+    border-left: 0;
+    border-top: 2px dashed #D1D2D3;
+    width: 100%;
+}
+
+
+.cruise-section .result-item-top .result-item-sale:not(:last-child) {
+    margin-bottom: 5px;
+}
+
+.cruise-section .result-item-center,
+.cruise-section .result-item-right {
+    padding: 18px 26px;
+}
+
+pic.discount-image {
+    display: inline-block;
+    width: 40px;
+    height: 40px;
+    background-size: contain;
+    background-repeat: no-repeat;
+    background-position: center;
+}
+
+.cruise-section .result-center-right {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    width: 100%;
+}
+
+.cruise-section .booking-btn.btn {
+    width: 65%;
+}
+
+.cruise-section .result-item-img {
+    border-radius: 7px 0 0 0;
+}
+
+.cruise-section .result-item {
+    border-radius: 7px 7px 0 0;
+}
+
+.cruise-section .result-item .result-item-sale div {
+    font-size: 16px;
+}
+
+.cruise-section .result-item .result-item-top {
+    margin-bottom: 20px;
+}
+
+/*стили азимута*/
+.booking-exist-preloader {
+    text-align: center;
+    padding: 20px;
+}
+
+#BookingExist .offerItem {
+    display: inline-block;
+    width: 100%;
+    text-align: center;
+    padding-bottom: 20px;
+    padding-top: 20px;
+}
+
+#BookingExist #BookingSend {
+    display: inline-block;
+    width: 100%;
+    vertical-align: top;
+    text-align: center;
+    /* position: absolute; */
+    left: 0;
+    margin-top: -4px;
+}
+
+#BookingExist #BookingSend.disabled .hbtn {
+    background: #7c1213;
+}
+
+#BookingExist #BookingSend .hbtn {
+    background: #E12C2E;
+}
+
+#BookingExist .bex-board {
+    width: 100%;
+    /*margin-top: 25px;*/
+    border: 1px solid var(--border-color);
+    border-top: none;
+    border-collapse: collapse;
+}
+
+#BookingExist .prices-preloader {
+    display: flex;
+    padding: 15px;
+    font-size: 20px;
+    color: #09317d;
+    align-items: center;
+    justify-content: center;
+}
+
+#BookingExist .prices-preloader img {
+    margin-left: 5px;
+}
+
+.is-actual {
+    background-color: #9bdbae !important;
+    color: #434543;
+}
+
+.on-request {
+    background-color: #f9f9d4 !important;
+    color: #434543;
+}
+
+.is-selected {
+    background-color: #e74c3c !important;
+    color: #ffffff;
+}
+
+#BookingExist .bex-board th.bex-rooms-col {
+    width: 40%;
+    text-align: left;
+    padding: 10px 20px;
+}
+
+#BookingExist .bex-btn-col {
+    width: 15%;
+}
+
+#BookingExist .bex-places-col {
+}
+
+#BookingExist .bex-prices-col {
+}
+
+#BookingExist .bex-board th {
+    font-size: 16px;
+    text-align: center;
+    /*border-bottom: 1px solid #dcdcdc;*/
+    /*border-top: 1px solid #dcdcdc;*/
+    padding: 10px 0;
+}
+
+#BookingExist table.bex-board tr:first-child, #BookingExist table.bex-board tr:not(:last-child):not(.desc-type) {
+    border-bottom: 1px solid #dcdcdc;
+}
+
+#BookingExist table tr th:nth-of-type(3), #BookingExist table tr td:nth-of-type(3) {
+    background-color: #f9f9f9;
+}
+
+#BookingExist .bex-board tr:not(:last-child) td {
+    padding: 7px 0;
+    /*border-bottom: 1px solid #dcdcdc;*/
+}
+
+#BookingExist .bex-board tr td:first-child {
+    padding: 7px 20px;
+}
+
+#BookingExist .bex-board tr:first-child {
+    background-color: #eef1f3;
+}
+
+#BookingExist .bex-category-title {
+    font-size: 14px;
+    font-weight: bold;
+    text-decoration: underline;
+    display: inline-block;
+    width: 160px;
+    margin-bottom: 6px;
+    cursor: pointer;
+    color: #0a4069;
+}
+
+#BookingExist .bex-rooms {
+    display: flex;
+    align-items: flex-end;
+    width: 100%;
+    flex-wrap: wrap;
+}
+
+.bex-category-top-wrap {
+    display: flex;
+    flex-direction: column;
+}
+
+.bex-category-top-wrap div:last-child {
+    font-size: 12px;
+}
+
+.bex-rooms div:first-child {
+    font-size: 13px;
+    margin-right: 10px;
+}
+
+.bex-room {
+    display: inline-block;
+    padding: 3px;
+    border: 1px solid #9f9f9f;
+    border-radius: 3px;
+    background: #eef0f2;
+    text-align: center;
+    font-size: 9px;
+    margin-right: 3px;
+    margin-top: 5px;
+}
+
+#BookingExist .bex-scheme-button {
+    display: inline-block;
+    width: 100%;
+    text-align: center;
+}
+
+#BookingExist .bex-scheme-button > div {
+    display: inline-block;
+    border: 3px solid #dcdcdc;
+    width: 94px;
+    font-size: 13px;
+    padding: 7px;
+    transition: 300ms;
+    cursor: pointer;
+}
+
+#BookingExist {
+    margin-bottom: 30px;
+}
+
+#BookingExist .bex-scheme-button > div:hover {
+    background: #1e88e5;
+    color: #fff;
+}
+
+#BookingExist .bex-places {
+    display: inline-block;
+    width: 100%;
+}
+
+#BookingExist .bex-place {
+    display: inline-block;
+    width: 100%;
+    text-align: center;
+    padding: 5px 0;
+    font-size: 15px;
+}
+
+#BookingExist .bex-place:not(:last-child) {
+    /*border-bottom: 1px solid #dcdcdc;*/
+}
+
+#BookingExist .bex-prices {
+    display: inline-block;
+    width: 100%;
+}
+
+#BookingExist .bex-price {
+    display: inline-block;
+    width: 100%;
+    text-align: center;
+    font-weight: bold;
+    padding: 5px 0;
+    font-size: 15px;
+    color: #404345;
+}
+
+#BookingExist .bex-price:not(:last-child) {
+    /*border-bottom: 1px solid #dcdcdc;*/
+}
+
+#BookingExist .modal_info {
+    font-size: 12px;
+}
+
+#BookingExist .modal_info p {
+    font-size: 12px;
+}
+
+rivercrs_booking .bex-modal-pan {
+    display: inline-block;
+    width: 100%;
+}
+
+rivercrs_booking .bex-modal-pan .bex-modal-close, .bex-modal .v-close {
+    display: inline-block;
+    font-size: 34px;
+    position: inherit;
+    float: right;
+    color: #333;
+    margin-bottom: -5px;
+    margin-top: -15px;
+    cursor: pointer;
+}
+
+/*@media (max-width: 1000px) {*/
+/*rivercrs_booking {*/
+/*}*/
+/*}*/
+#bex-scheme {
+    overflow: auto;
+}
+
+#bex-scheme > div {
+    display: inline-block;
+    /* width: 1100px; */
+}
+
+.bex-ship-scheme {
+    width: 1100px;
+}
+
+.bex-ship-scheme img {
+    width: 1100px;
+}
+
+.v-modal {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    padding: 20px;
+    background: #000000ab;
+    z-index: 100000;
+    text-align: center;
+    overflow-y: auto;
+}
+
+.v-modal > div {
+    display: inline-block;
+    padding: 15px;
+    background: #fff;
+    text-align: left;
+    align-items: center;
+    justify-content: center;
+}
+
+.bex-point {
+    position: absolute;
+    background: #7e7e7e;
+    font-size: 11px;
+    font-family: Verdana;
+    color: #fff;
+    text-align: center;
+    cursor: pointer;
+    box-shadow: 0 0 0 2px #939a9b;
+}
+
+.bex-point:hover {
+    box-shadow: 0 0 0 3px #00a3ff;
+}
+
+.bex-point-name {
+    transform: rotate(-90deg);
+    display: inline-block;
+    pointer-events: none;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.bex-point.free {
+    background: #008004;
+}
+
+.bex-point.selected-category {
+    box-shadow: 0 0 0 2px #eb8989;
+    animation: pointFadein 800ms;
+}
+
+.bex-point.selected {
+    background: #00adff;
+}
+
+.cabin-on-scheme {
+    color: #2797ff;
+    cursor: pointer;
+    text-decoration: underline;
+}
+
+.wrapper-sales {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+}
+
+.wrapper-sales > div {
+    border-radius: 4px;
+    /*padding: 6px 12px;*/
+    display: flex;
+    width: 100%;
+    flex-direction: column;
+    padding: 25px 15px;
+}
+
+.wrapper-sales > div:not(:last-child) {
+    margin-bottom: 5px;
+}
+
+.sale-item-title {
+    font-weight: bold;
+    color: #013f75;
+}
+
+.sale-items .sale-item:not(:last-child) {
+    margin-bottom: 20px;
+}
+
+.sales-content-top {
+    background-color: #e31e241c;
+    padding: 25px 15px;
+}
+
+.sale-item-content {
+    margin-top: 15px;
+}
+
+.sales-content-bot {
+    background-color: #eef1f3;
+}
+
+@keyframes pointFadein {
+    from {
+        opacity: 0;
+        transform: scale(1.9, 1.9);
+    }
+
+    to {
+        opacity: 1;
+        transform: scale(1, 1);
+    }
+}
+
+.bex-cabin-body .cabinLeft {
+    display: inline-block;
+    width: 45%;
+    vertical-align: top;
+}
+
+.bex-cabin-body .cabinLeft .bigImages {
+    display: inline-block;
+    width: 100%;
+    padding: 5px;
+    background-color: #fff;
+    border: 1px solid #e6e6e6;
+}
+
+.bex-cabin-body .cabinLeft .smallImages {
+    display: inline-block;
+    width: 100%;
+    padding-top: 13px;
+    text-align: left;
+}
+
+.bex-cabin-body .cabinLeft .smallImages .imageItem {
+    display: inline-block;
+    margin-right: 5px;
+    margin-bottom: 5px;
+    border: 3px solid transparent;
+    height: 45px;
+    width: 60px;
+    cursor: pointer;
+    background-position: center;
+    -webkit-background-size: 120%;
+    background-size: 120%;
+    background-repeat: no-repeat;
+}
+
+.bex-cabin-body .cabinLeft .smallImages .imageItem.active, .bex-cabin-body .cabinLeft .smallImages .imageItem:hover {
+    border: 3px solid #1e88e5;
+}
+
+.bex-cabin-body .cabinRight {
+    display: inline-block;
+    width: 55%;
+    padding-left: 25px;
+    vertical-align: top;
+    text-align: left;
+}
+
+.bex-cabin-body .cabinRight .cabinName {
+    padding-bottom: 20px;
+}
+
+.bex-cabin-body .cabinRight .cabinName span {
+    font-size: 22px;
+    font-family: OpenSansBold, sans-serif;
+}
+
+.bex-cabin-body .cabinRight .cabinDescLine {
+    margin-top: 15px;
+}
+
+.bex-cabin-body .cabinRight .cabinDescLine span:first-child {
+    color: #666;
+}
+
+.bex-cabin-body .cabinRight .cabinDescLine span {
+    color: #000;
+    font-size: 14px;
+    display: inline-block;
+    width: 100%;
+}
+
+.bex-deck-title {
+    font-size: 16px;
+    padding-top: 40px !important;
+    border-bottom: none !important;
+    padding-bottom: 20px !important;
+    font-weight: bold;
+    text-decoration: underline;
+}
+
+#BookingExist .bex-board tbody tr:nth-child(2) .bex-deck-title {
+    padding-top: 15px !important;
+}
+
+#markCabin {
+    padding: 15px;
+    background: #c41a2b;
+    border-radius: 5px;
+    width: 100%;
+    font-size: 20px;
+    color: #fff;
+}
+
+.dataLineForm {
+    display: flex;
+    flex-direction: column;
+}
+
+.form-booking-top {
+    width: 100%;
+    order: 1;
+    display: flex;
+    flex-direction: column;
+}
+
+.form-booking-bottom {
+    width: 40%;
+    flex-shrink: 0;
+}
+
+
+.dLine input::-webkit-input-placeholder,
+.dataLineRight textarea::-webkit-input-placeholder {
+    color: #909090;
+}
+
+.dLine input:-ms-input-placeholder,
+.dataLineRight textarea::-ms-input-placeholder {
+    color: #909090;
+}
+
+.dLine input:-moz-placeholder,
+.dataLineRight textarea::-moz-placeholder {
+    color: #909090;
+}
+
+.form-content {
+    padding: 0 80px;
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+    justify-content: space-between;
+}
+
+
+.form-count-people {
+    height: 50%;
+}
+
+.form-count-people div:first-child {
+    margin-bottom: 20px;
+    font-weight: bold;
+    font-size: 18px;
+}
+
+.form-count-people input, .form-count-people .countBtn {
+    background-color: #fff;
+    border-radius: 4px;
+    padding: 10px 14px;
+    outline: none;
+    display: flex;
+    align-items: center;
+    width: 40px;
+    border: none;
+    justify-content: center;
+    text-align: center;
+}
+
+.form-count-people .countBtn {
+    color: white;
+    background-color: #fb363c;
+    margin: 0 6px;
+}
+
+.form-count-people .countBtn[disabled] {
+    background-color: #fb363c99;
+}
+
+.form-count-people .countBtn:not([disabled]):hover {
+    cursor: pointer;
+}
+
+.form-count-people div:last-child {
+    display: flex;
+    align-items: center;
+}
+
+.dLine {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 15px;
+    align-items: center;
+}
+
+.top-booking {
+    display: flex;
+}
+
+.dataLineRight div:last-child {
+    font-size: 13px;
+    width: 100%;
+}
+
+.dLine .req-input::after {
+    content: '*';
+    display: inline-block;
+    color: #ffffff;
+    vertical-align: top;
+    padding-left: 3px;
+}
+
+.bottom-booking {
+    margin-top: 40px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+}
+
+.bottom-booking div {
+    /*margin-bottom: 20px;*/
+}
+
+.bex-offerLink {
+    text-decoration: underline;
+}
+
+.bex-offerLink:hover {
+    cursor: pointer;
+}
+
+.dLine input, .dLine textarea {
+    background-color: #fff;
+    border-radius: 4px;
+    padding: 7px 14px;
+    outline: none;
+    width: 100%;
+    border: none;
+}
+
+.wrapper-tab-content.booking {
+    background-color: #0a4069;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    color: #fff;
+    padding: 25px 100px;
+}
+
+.dataLineRight textarea {
+    width: 100%;
+    height: 150px;
+    border: none;
+    outline: none;
+    padding: 20px;
+    border-radius: 4px;
+}
+
+.form-title-section {
+    margin-bottom: 40px;
+    text-align: center;
+    font-size: 22px;
+    font-weight: bold;
+}
+
+.dLine > div:last-child {
+    flex-shrink: 0;
+    width: 70%;
+}
+
+.form-cabin {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.form-cabin .bex-room {
+    font-size: 15px;
+    border: none;
+    border-radius: 4px;
+    width: 35px;
+    height: 35px;
+    display: flex;
+    align-items: center;
+    flex-direction: column;
+    margin: 0;
+    justify-content: center;
+}
+
+.form-cabin .bex-room.is-actual {
+    font-weight: bold;
+    color: #fff;
+}
+
+.form-cabins, .form-count-people {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+}
+
+.form-cabins {
+    align-items: flex-start;
+}
+
+.form-cabins > div:not(:last-child) {
+    margin-bottom: 15px;
+}
+
+.form-cabin-descr {
+    margin-left: 5px;
+    max-width: 260px;
+    font-size: 14px;
+}
+
+.form-cabin i {
+    color: #fff;
+    margin-left: 10px;
+}
+
+.form-cabin i:hover {
+    cursor: pointer;
+}
+
+table tr.preloader {
+    background-color: #f9f9f99e;
+}
+
+table tr.preloader .bex-deck-title span,
+table tr.preloader .bex-category-title,
+table tr.preloader .bex-category-top-wrap div:last-child,
+table tr.preloader .bex-rooms div:first-child,
+table tr.preloader .bex-room,
+table tr.preloader .bex-room input,
+table tr.preloader .bex-place span,
+table tr.preloader .bex-price span {
+    background: #f2f2f2 !important;
+    position: relative;
+    color: transparent !important;
+    border: none;
+    overflow: hidden;
+}
+
+table tr.preloader .bex-deck-title span::after,
+table tr.preloader .bex-category-title::after,
+table tr.preloader .bex-category-top-wrap div:last-child::after,
+table tr.preloader .bex-rooms div:first-child::after,
+table tr.preloader .bex-room::after,
+table tr.preloader .bex-room input::after,
+table tr.preloader .bex-place span::after,
+table tr.preloader .bex-price span::after {
+    position: absolute;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    left: 0;
+    transform: translateX(-100%);
+    background-image: linear-gradient(
+            90deg,
+            rgba(255, 255, 255, 0),
+            rgba(255, 255, 255, 0.2) 20%,
+            rgba(255, 255, 255, 0.5) 60%,
+            rgba(255, 255, 255, 0)
+    );
+    animation: shimmer 1.5s infinite;
+    content: '';
+}
+
+@keyframes shimmer {
+    100% {
+        transform: translateX(100%);
+    }
+}
+
+
+table tr.preloader .bex-deck-title {
+    text-decoration: none;
+}
+
+
+@keyframes respond-fadein {
+    from {
+        opacity: 0;
+        transform: scale(0.9, 0.9);
+    }
+
+    to {
+        opacity: 1;
+        transform: scale(1, 1);
+    }
+}
+
+input.bad {
+    box-shadow: 0 0 0px 2px rgba(255, 0, 0, 0.8);
+}
+
+textarea.bad {
+    box-shadow: 0 0 0px 2px rgba(255, 0, 0, 0.8);
+}
+
+.alerts {
+    display: inline-block;
+    width: 100%;
+    background: #ffd1d1;
+    padding: 19px;
+    color: red;
+    margin-top: 20px;
+    animation: respond-fadein 200ms;
+}
+
+.alerts.success {
+    background: #b1ffc4;
+    color: #005608;
+}
+
+.respond-alerts {
+    display: inline-block;
+    width: 100%;
+    margin-top: 15px;
+    margin-bottom: 15px;
+}
+
+.respond-alerts-close {
+}
+
+.respond-alerts i {
+
+}
+
+.respond-alerts > div {
+    background: #b1ffc4;
+    color: #005608;
+    animation: respond-fadein 200ms;
+    margin-bottom: 5px;
+    padding: 5px 14px;
+    border-radius: 5px;
+}
+
+.respond-alerts > div.danger {
+    background: #ffd1d1;
+    color: red;
+}
+
+.respond-alerts > div.info {
+    background: #8ddfff;
+    color: #444444;
+}
+
+.respond-alerts > div {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 8px 20px;
+}
+
+.accept-check {
+    margin-bottom: 20px;
+}
+
+.respond-alerts > div.warning {
+    background: #fffcd1;
+    color: #4a4a4a;
+}
+
+.bex-add-info {
+    padding: 20px 5px;
+    font-size: 13px;
+    overflow: hidden;
+    transition: 400ms;
+}
+
+.bex-add-info-title {
+    font-weight: bold;
+    font-size: 17px;
+}
+
+.bex-bottom-fog {
+    box-shadow: inset 0px -56px 90px 0px #fff;
+    display: block;
+    position: relative;
+    bottom: 0;
+    height: 100px;
+    margin-top: -100px;
+}
+
+.bex-btn-readmore {
+    background: #3394e8;
+    color: #fff;
+    font-size: 15px;
+    padding: 5px 0;
+    text-align: center;
+    cursor: pointer;
+    margin-bottom: 15px;
+}
+
+.bex-btn-readmore i {
+}
+
+.bex-booking-line {
+    font-size: 13px;
+    margin-bottom: 4px;
+}
+
+.bex-booking-line i {
+    color: #f00;
+    position: absolute;
+    margin-left: 8px;
+    margin-top: 4px;
+    cursor: pointer;
+}
+
+.bex-selected-title {
+    font-weight: bold;
+}
+
+.bex-selected {
+    margin-bottom: 15px;
+    padding: 5px;
+}
+
+.bex-scheme-info {
+    position: fixed;
+    left: 0;
+    right: 0;
+    top: 79px;
+    /*text-align: center;*/
+    z-index: 10;
+    /* pointer-events: none; */
+    font-size: 14px;
+}
+
+.bex-scheme-info > div {
+    display: inline-block;
+    background: #f1f1f1;
+    padding: 7px 15px;
+    border: 1px solid #b7b7b7;
+    border-radius: 3px;
+}
+
+.bex-scheme-info > div > div {
+    display: inline-block;
+    margin-right: 20px;
+}
+
+.bex-scheme-info > div > div > div:first-child {
+    display: inline-block;
+    padding: 6px 26px;
+    margin-right: 4px;
+    border: 2px solid #acacac;
+    border-radius: 2px;
+    margin-bottom: -3px;
+}
+
+.bex-scheme-info > div > div > div:last-child {
+    display: inline-block;
+}
+
+.bex-scheme-info .bex-hint {
+}
+
+.bex-scheme-info .bex-hint svg {
+    position: absolute;
+    margin-top: -13px;
+    margin-left: -18px;
+    font-size: 19px;
+    cursor: pointer;
+    border-radius: 30px;
+}
+
+.bex-scheme-info .bex-hint > div {
+    position: absolute;
+    background: #fff;
+    border: 1px solid #b9b9b9;
+    padding: 0px 20px;
+    width: 400px;
+    margin-left: -200px;
+    display: none;
+    box-shadow: 0px 9px 7px 0px #00000024;
+}
+
+.bex-scheme-info .bex-hint > div.show {
+    display: block !important;
+}
+
+.small-text {
+    font-size: 8px;
+}
+
+#BookingExist .bex-scheme-info {
+    position: sticky;
+    position: -webkit-sticky;
+    z-index: 0;
+    margin-top: 10px;
+    display: flex;
+    border: 1px solid #dcdcdc;
+    border-radius: 7px 7px 0 0;
+    background-color: #eef1f3;
+    align-items: center;
+    /* overflow: hidden; */
+}
+
+#BookingExist .bex-scheme-info > div {
+    border: none;
+    width: 100%;
+}
+
+#BookingExist .bex-scheme-info > div:last-child {
+    color: var(--red-color-text);
+    font-weight: bold;
+    text-align: right;
+}
+
+#BookingExist .bex-scheme-info > div:first-child {
+    width: auto;
+    flex-shrink: 0;
+}
+
+.offerItem .bex-offerLink {
+    color: #1e88e5;
+    font-size: 14px;
+    text-decoration: underline;
+    padding-bottom: 3px;
+    cursor: pointer;
+}
+
+.bex-cabin-info {
+    font-size: 14px;
+    background-color: #edf1f4;
+    border: 1px solid #b2b2b2;
+    padding: 15px;
+    text-align: left;
+    display: inline-block;
+    width: 100%;
+    padding-bottom: 30px;
+    margin-top: 10px;
+}
+
+.bex-cabin-number {
+    font-size: 25px;
+    color: #363636;
+    margin-bottom: 24px;
+}
+
+.bex-cabin-status {
+    font-weight: bold;
+}
+
+.bex-cabin-status .bex-free, .bex-cabin-status .bex-onreq {
+    font-size: 19px;
+    text-transform: uppercase;
+}
+
+.bex-cabin-status .bex-free {
+    color: green;
+    font-weight: normal;
+}
+
+.bex-cabin-status .bex-onreq {
+    color: orange;
+}
+
+.bex-cabin-status .bex-note {
+    font-size: 13px;
+    font-weight: normal;
+    color: #383838;
+}
+
+.bex-info-panel {
+    margin-top: 10px;
+}
+
+.bex-info-panel .bex-cabin-price {
+    width: 60%;
+    display: inline-block;
+    font-size: 17px;
+    margin-top: 10px;
+}
+
+.bex-info-panel .bex-cabin-price .price {
+    display: inline-block;
+    width: 49%;
+    text-align: center;
+}
+
+.bex-info-panel .bex-cabin-price .price span {
+    font-size: 22px;
+    font-weight: bold;
+}
+
+.bex-info-panel .bex-cabin-price .place {
+    display: inline-block;
+    width: 49%;
+    font-size: 15px;
+}
+
+.bex-info-panel .bex-button {
+    display: inline-block;
+    width: 30%;
+    float: right;
+}
+
+.bex-bold-title {
+    font-size: 24px;
+    text-align: center;
+    font-weight: bold;
+    margin-bottom: 10px;
+}
+
+.bex-info-panel .bex-button button {
+}
+
+.booking-fake-separator {
+    width: 100%;
+    height: 30px;
+}
+
+.booking-fake-separator > div {
+    height: 25px;
+    background: #eef1f3;
+    border-top: 1px solid #dcdcdc;
+    border-bottom: 1px solid #dcdcdc;
+    margin-left: -16px;
+    margin-right: -16px;
+}
+
+.tariff-name {
+}
+
+.tariff-name .tariff-name-name {
+}
+
+.tariff-name .tariff-name-name.desc {
+    color: #000;
+    text-decoration: underline;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.tariff-name .tariff-name-name.desc svg {
+    margin-left: 5px;
+}
+
+.tariff-name .tariff-name-desc {
+    display: none;
+    position: absolute;
+    width: 255px;
+    margin-left: -49px;
+    background: #f9f9d4;
+    padding: 10px;
+    border: 1px solid #bcbcbc;
+    border-radius: 2px;
+    box-shadow: 0px 4px 4px 0px #0000002b;
+    font-weight: normal;
+    text-align: left;
+    line-height: 23px;
+}
+
+#AnchorAssistant.show {
+    margin-bottom: 0;
+}
+
+#AnchorAssistant {
+    position: fixed;
+    height: 63px;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    text-align: center;
+    margin-bottom: -70px;
+    transition: 300ms;
+    z-index: 100000;
+}
+
+#AnchorAssistant > div {
+    display: inline-block;
+    background: #3394e8;
+    color: #fff;
+    padding: 16px 30px;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: 300ms;
+}
+
+#AnchorAssistant > div:hover {
+    background: #e74c3c;
+}
+
+#AnchorAssistant span {
+    margin-right: 45px;
+}
+
+#AnchorAssistant i {
+    font-size: 40px;
+    margin-top: -8px;
+    position: absolute;
+}
+
+/*конец  */
+.bex-category-mobile {
+    display: none;
+    font-weight: bold;
+}
+
+.bex-title-mobile, .bex-title-dotted, .bex-rooms-mobile {
+    display: none;
+}
+
+.tab-name.route-title {
+    width: 100%;
+    background-color: #7e84b6;
+    color: #fff;
+    padding: 19px 37px;
+    border-radius: 4px;
+}
+
+.route-date {
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+}
+
+.tab-name.route-title h2, .ship-place-left {
+    width: 250px;
+}
+
+.tabs-vertical > .tab-item > .tab-name.route-title {
+    margin: 0;
+}
+
+.tab-item.tab-content {
+    position: relative;
+}
+
+.tab-item.route-tab .tab-content {
+    border: 1px solid var(--border-color) !important;
+    border-top: none;
+    margin-top: -5px;
+    border-radius: 4px;
+}
+
+.tabs-vertical .tab-item.route-tab > .tab-content {
+    background-color: #f2f2f2;
+    flex-direction: row;
+}
+
+.ship-place {
+    font-size: 20px;
+    margin-bottom: 20px;
+    font-weight: bold;
+}
+
+.day-number-route {
+    text-transform: uppercase;
+}
+
+.time-stop-ship {
+    display: flex;
+}
+
+.ship-place-left {
+    display: flex;
+    flex-direction: column;
+    padding: 19px 37px;
+    background-color: #e8e8e8;
+}
+
+.ship-place-right {
+    padding: 19px 29px;
+}
+
+.ship-place-left > div:not(:last-child) {
+    margin-bottom: 15px;
+    font-size: 18px;
+}
+
+.route-date span {
+    text-transform: uppercase;
+}
+
+.ship-place-left > div > div {
+    margin-bottom: 15px;
+}
+
+.ship-name-tab {
+    display: flex;
+    align-items: center;
+}
+
+.time-stop-ship i {
+    margin-right: 10px;
+    color: #ff1300;
+}
+
+.ship-name-tab {
+    font-size: 24px;
+    font-weight: bold;
+    margin-bottom: 40px;
+}
+
+.time-in-ship,
+.time-out-ship {
+    text-transform: uppercase;
+    font-weight: bold;
+    font-size: 18px;
+}
+
+.tab-content iframe {
+    border-radius: 4px;
+}
+
+.cabin-wrapper {
+    display: flex;
+    overflow: hidden;
+}
+
+.cabin-left-content {
+    width: 50%;
+}
+
+.cabin-right-content {
+    padding-left: 30px;
+    padding-bottom: 10px;
+    display: flex;
+    flex-direction: column;
+}
+
+.cabin-name {
+    font-size: 20px;
+    font-weight: bold;
+}
+
+.wrapper-tab-content.cabin-wrapper {
+    background-color: white;
+}
+
+.ship-cabins-tab .slider-and-thumbs {
+    height: 350px;
+    margin-bottom: 0;
+}
+
+.cabin-parametrs ul li {
+    list-style: none;
+    margin-bottom: 5px;
+}
+
+.cabin-parametrs {
+    margin: 30px 0;
+}
+
+.cabin-parametrs ul {
+    padding-left: 0;
+}
+
+.cabin-parametrs strong,
+.title-desc-cabin,
+.cabin-name {
+    color: #0a4069;
+}
+
+.title-desc-cabin {
+    font-weight: bold;
+    margin-bottom: 5px;
+}
+
+.ship-cabins-tab .tab-name.route-title h2,
+.ship-cabins-tab .ship-place-left {
+    width: auto;
+}
+
+.cabin-left-content .cabin-name {
+    display: none;
+}
+
+.ship-cabins-tab h2 {
+    margin-bottom: 30px;
+}
+
+
+.ship-cabins-tab .tab-content {
+    flex-direction: column !important;
+}
+
+.ship-cabins-tab .tab-content .cabin-wrapper:nth-child(even) .cabin-left-content {
+    order: 1;
+}
+
+
+.ship-cabins-tab .tab-content .cabin-wrapper:nth-child(even) .cabin-right-content {
+    padding-left: 0;
+    padding-right: 30px;
+}
+
+.ship-cabins-tab .tab-content .cabin-wrapper:nth-child(even) {
+    background-color: #f2f2f2;
+}
+
+.ship-scheme {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.ship-scheme img {
+    max-width: 75%;
+}
+
+.wrapper-btn-order {
+    display: none;
+    align-items: center;
+    justify-content: center;
+    position: sticky;
+    position: -webkit-sticky;
+    bottom: 15px;
+    margin-top: 20px;
+    flex-direction: column;
+}
+
+.wrapper-btn-order div {
+    margin-bottom: 20px;
+}
+
+.countInput {
+    font-size: 22px;
+    margin: 0 5px;
+    font-weight: bold;
+}
+
+.wrapper-btn-order.active {
+    display: flex;
+}
+
+
+.cruise__waybill-attention {
+    padding: 10px 15px;
+    background: #ffffb2;
+    margin-bottom: 10px;
+    border-radius: 10px;
+    border: 1px solid #e6e675;
+    color: #ff6207;
+    font-weight: bold;
+}
+
+.cruise__waybill-attention i {
+    font-size: 20px;
+    margin-right: 6px;
+}
+
+.accept-check a {
+    color: #fff;
+}
+
+@media (max-width: 1300px) {
+    .wrapper-tab-content.booking {
+        padding: 25px 58px;
+    }
+}
+
+@media (max-width: 1200px) {
+
+    .bex-scheme-info > div > div {
+        font-size: 13px;
+    }
+
+    .bex-scheme-info > div > div > div:first-child {
+        padding: 6px 16px;
+    }
+
+    #BookingExist .bex-scheme-info > div:last-child {
+        font-size: 13px;
+        text-align: right;
+        font-weight: normal;
+    }
+
+    .cruise-section .result-item .result-item-sale div {
+        font-size: 14px;
+    }
+
+    .cruise-section .result-item-sale svg {
+        width: 22px;
+    }
+
+    .cruise-section .result-item-top .result-item-sale:not(:last-child) {
+        margin-bottom: 0px;
+    }
+
+    .cruise-section .result-item-center, .cruise-section .result-item-right {
+        padding: 13px 20px;
+    }
+
+    .form-booking-bottom {
+        width: 47%;
+    }
+
+    .form-content {
+        padding: 0 30px;
+    }
+
+    .dataLineRight div:last-child {
+        font-size: 12px;
+    }
+}
+
+@media (max-width: 992px) {
+
+    .tab-item:not(.close-mobile) > .tab-content {
+        display: flex;
+        flex-direction: column;
+    }
+
+    .tab-item:not(.close-mobile) > .tab-name:after {
+        content: "\f106";
+    }
+
+    .cruise-section .result-item .result-item-left {
+        width: 100%;
+    }
+
+    .cruise-section .result-item .tabs {
+        flex-direction: column;
+    }
+
+    .bex-scheme-info {
+        top: 54px;
+    }
+
+    #BookingExist .bex-board th,
+    .bex-deck-title,
+    #BookingExist .bex-place,
+    #BookingExist .bex-price {
+        font-size: 14px;
+    }
+
+    #BookingExist .bex-rooms div:first-child {
+        font-size: 12px;
+    }
+
+
+    .bex-deck-title {
+        padding-top: 25px !important;
+    }
+
+    #BookingExist .bex-board tr td:first-child {
+        padding-right: 0;
+    }
+
+
+    #BookingExist .bex-board th,
+    .bex-deck-title,
+    #BookingExist .bex-place,
+    #BookingExist .bex-price {
+        font-size: 13px;
+    }
+
+    #BookingExist .bex-board th.bex-rooms-col {
+        width: 51%;
+    }
+
+    #BookingExist .bex-scheme-info > div:last-child {
+        font-size: 11px;
+        padding-left: 0;
+    }
+
+    #BookingExist .bex-scheme-info > div:first-child {
+        padding-right: 0;
+    }
+
+    .bex-scheme-info > div > div {
+        font-size: 12px;
+    }
+
+    .tariff-name-name.desc svg {
+        display: none;
+    }
+
+    .bex-scheme-info > div > div > div:first-child {
+        padding: 6px 8px;
+    }
+
+    .wrapper-tab-content.booking {
+        padding: 25px 20px;
+    }
+
+    .bottom-booking div {
+        font-size: 14px;
+    }
+
+    .form-count-people div:first-child {
+        font-size: 16px;
+    }
+
+    .form-cabin .bex-room {
+        font-size: 13px;
+        width: 30px;
+        height: 30px;
+    }
+
+    .ship-place-left {
+        padding: 19px 35px;
+    }
+
+    .tab-name.route-title h2 {
+        font-size: 20px;
+    }
+
+    .tab-name.route-title h2, .ship-place-left {
+        width: 288px;
+    }
+
+    .cabin-right-content {
+        font-size: 14px;
+    }
+
+    .cabin-right-content {
+        padding-left: 15px;
+    }
+
+    .cabin-name {
+        font-size: 18px;
+    }
+
+    .cabin-left-content {
+        min-width: 40vw;
+        flex-shrink: 0;
+    }
+
+    .ship-cabins-tab .tab-content .cabin-wrapper:nth-child(even) .cabin-right-content {
+        padding-right: 15px;
+    }
+}
+
+@media (max-width: 768px) {
+    #BookingExist .bex-board tr {
+        display: flex;
+        flex-direction: column;
+        margin-bottom: 25px;
+        border-radius: 7px;
+    }
+
+    #BookingExist .bex-board tr:first-child {
+        display: none;
+    }
+
+    #BookingExist .bex-board tr.desc-type,
+    .bex-category-top-wrap div:last-child {
+        display: none;
+        order: -99;
+    }
+
+    .bex-category-mobile {
+        display: block;
+        margin: 20px 0;
+    }
+
+    .ship-scheme img {
+        max-width: 100%;
+    }
+
+    .bex-title-mobile,
+    .bex-title-dotted {
+        display: block;
+        font-size: 13px;
+        white-space: nowrap;
+
+    }
+
+    .bex-title-dotted {
+        width: 100%;
+        border-bottom: 2px dotted;
+        margin: 0 5px;
+    }
+
+    #BookingExist .bex-places,
+    #BookingExist .bex-prices {
+        display: flex;
+        justify-content: space-between;
+        align-items: baseline;
+    }
+
+    #BookingExist .bex-board tr td {
+        padding: 7px 20px !important;
+    }
+
+    #BookingExist .bex-places .bex-title-mobile:first-child,
+    #BookingExist .bex-place,
+    #BookingExist .bex-price {
+        width: auto;
+        font-size: 13px;
+        white-space: nowrap;
+    }
+
+    #BookingExist .bex-places .bex-title-mobile:last-child {
+        border-bottom: 1px dotted #000;
+        width: 100%;
+    }
+
+    #BookingExist .bex-places .bex-place:nth-child(even):before,
+    #BookingExist .bex-prices .bex-price:nth-child(even):before {
+        content: '/';
+        margin-left: 5px;
+    }
+
+    #BookingExist table tr th:nth-of-type(3),
+    #BookingExist table tr td:nth-of-type(3) {
+        background-color: transparent !important;
+    }
+
+    #BookingExist .bex-board tr:not(.desc-type):nth-child(even) {
+        background-color: #e74c3b05;
+    }
+
+    #BookingExist table.bex-board tr:first-child,
+    #BookingExist table.bex-board tr:not(.desc-type) {
+        border: 1px solid #dcdcdc;
+    }
+
+    #BookingExist .bex-board {
+        border: none;
+    }
+
+    #BookingExist .bex-board tr:nth-of-type(3) {
+        margin-top: 20px;
+    }
+
+    #BookingExist .bex-board tbody {
+        display: flex;
+        flex-direction: column;
+    }
+
+    #BookingExist .bex-scheme-info {
+        flex-direction: column;
+        border-radius: 7px;
+    }
+
+    #BookingExist .bex-scheme-info > div:last-child {
+        text-align: center;
+    }
+
+    .top-booking {
+        flex-direction: column;
+    }
+
+    .form-booking-bottom {
+        width: 100%;
+    }
+
+    .form-booking-top {
+        order: 0;
+        margin-bottom: 30px;
+    }
+
+    .form-title-section {
+
+        text-align: left;
+    }
+
+    .form-content {
+        align-items: flex-start;
+        padding: 0;
+    }
+
+    .form-count-people {
+        margin-top: 20px;
+    }
+
+    .tabs-vertical .tab-item.route-tab > .tab-content {
+        flex-direction: column;
+    }
+
+    .ship-place-left {
+        width: 100%;
+        flex-direction: row;
+        justify-content: space-between;
+    }
+
+    .ship-place-left > div > div {
+        margin-bottom: 5px;
+    }
+
+    .ship-place-left > div:not(:last-child),
+    .time-out-ship {
+        margin-bottom: 0;
+        font-size: 15px;
+    }
+
+    .ship-place {
+        font-size: 18px;
+    }
+
+    .cabin-wrapper {
+        flex-direction: column;
+    }
+
+    .cabin-left-content {
+        width: 100%;
+    }
+
+    .cabin-left-content .cabin-name {
+        display: block;
+        margin-bottom: 20px;
+    }
+
+    .cabin-right-content .cabin-name {
+        display: none;
+    }
+
+    .cabin-parametrs {
+        margin-top: 0;
+        margin-bottom: 10px;
+    }
+
+    .cabin-right-content {
+        padding: 0;
+    }
+
+    .ship-cabins-tab .tab-content .cabin-wrapper:nth-child(even) .cabin-left-content {
+        order: 0;
+    }
+
+    .ship-cabins-tab .tab-content .cabin-wrapper:nth-child(even) .cabin-right-content {
+        padding-right: 0;
+    }
+
+}
+
+@media (max-width: 590px) {
+
+    #BookingExist td:not(.bex-rooms-mobile) > .bex-rooms {
+        display: none;
+    }
+
+    #BookingExist .bex-rooms-mobile {
+        display: block;
+    }
+
+    .ship-cabins-tab .slider-and-thumbs {
+        height: 280px;
+    }
+
+    #BookingExist .bex-room {
+        margin-top: 6px;
+    }
+
+    #BookingExist .bex-scheme-info > div {
+        display: flex;
+        /*flex-direction: column;*/
+        align-items: flex-start;
+        justify-content: space-between;
+        width: 100% !important;
+    }
+
+    .bex-scheme-info > div > div > div:first-child {
+        border: 1px solid #acacac;
+        padding: 7px;
+    }
+
+    #BookingExist .bex-scheme-info > div:last-child,
+    #BookingExist .bex-scheme-info > div:first-child {
+        padding: 7px 20px;
+    }
+
+
+    .bex-scheme-info .bex-hint {
+        display: none;
+    }
+
+    .bex-scheme-info .bex-hint svg {
+        margin-top: -17px;
+        margin-left: 105px;
+    }
+
+    .bex-scheme-info > div > div > div:last-child {
+
+        font-size: 11px;
+    }
+
+    #BookingExist .bex-scheme-info > div {
+        background-color: #fffbfb;
+    }
+
+    .bex-scheme-info > div > div {
+
+        margin-bottom: 2px;
+    }
+
+    .bex-scheme-info > div > div {
+        margin-right: 0;
+    }
+
+    .bex-scheme-info > div > div:nth-of-type(2) div {
+        text-decoration: underline;
+    }
+
+    .tab-name.route-title,
+    .ship-place-left,
+    .ship-place-right {
+        padding: 13px 20px;
+    }
+
+    .tabs-vertical .tab-item.route-tab:not(:last-child) {
+        margin-bottom: 15px;
+    }
+
+    .place-descr,
+    .route-date {
+        font-size: 14px;
+    }
+
+    .ship-place-left > div:not(:last-child), .time-out-ship {
+        margin-bottom: 0;
+        font-size: 12px;
+    }
+
+    .tab-name.route-title h2 {
+        font-size: 16px;
+    }
+}
+
+@media (max-width: 470px) {
+    .ship-cabins-tab h2 {
+        font-size: 20px;
+    }
+}
+
+@media (max-width: 425px) {
+    .cruise-section a.booking-btn.btn {
+        width: 90%;
+    }
+
+    #BookingExist .bex-places .bex-title-mobile:first-child, #BookingExist .bex-place, #BookingExist .bex-price {
+        font-size: 12px;
+    }
+
+    #BookingExist .bex-board tr td,
+    .bex-scheme-info > div {
+        padding: 7px 10px !important;
+    }
+
+    .wrapper-tab-content.booking {
+        padding: 25px 10px;
+    }
+
+    .form-cabins > div:not(:last-child) {
+        margin-bottom: 7px;
+    }
+
+    .form-count-people {
+        margin-top: 25px;
+        width: 100%;
+        margin-bottom: 22px;
+    }
+
+    .dLine > div:first-child {
+        font-size: 14px;
+    }
+
+    .form-cabin-descr {
+        font-size: 12px;
+    }
+
+    .form-title-section {
+        font-size: 19px;
+    }
+
+    .bottom-booking div {
+        font-size: 13px;
+        text-align: center;
+        padding: 0 10px;
+    }
+
+    .tab-name.route-title, .ship-place-left, .ship-place-right {
+        padding: 9px 13px;
+    }
+
+    .ship-place {
+        font-size: 16px;
+        margin-bottom: 10px;
+    }
+
+    .place-descr, .route-date {
+        font-size: 13px;
+    }
+
+    .respond-alerts > div {
+        padding: 7px 10px;
+
+    }
+
+    .respond-alerts > div > div {
+        text-align: left;
+        font-size: 11px;
+    }
+}
+
+@media (max-width: 390px) {
+    .tab-name.route-title, .ship-place-left, .ship-place-right {
+        padding: 9px;
+    }
+
+    .ship-place-left > div:not(:last-child), .time-out-ship {
+        font-size: 11px;
+    }
+
+    .time-stop-ship {
+        flex-direction: column;
+    }
+
+    .time-stop-ship i {
+        margin-bottom: 5px;
+        text-align: center;
+    }
+
+    .dataLineRight div:last-child {
+        font-size: 9px;
+    }
+
+    .form-cabin .bex-room {
+        font-size: 10px;
+        width: 21px;
+        height: 24px;
+    }
+
+    .bex-scheme-info > div > div > div:first-child {
+        margin-right: 1px;
+    }
+
+    .cruise-section .result-item-center,
+    .cruise-section .result-item-right {
+        padding: 13px 9px;
+    }
+
+    .cruise-section .result-item .result-item-sale div {
+        font-size: 13px;
+    }
+
+    .cruise-section .result-item-bottom {
+        margin-top: 0;
+    }
+
+    body .cruise-section .custom-container {
+        padding: 0;
+    }
+
+    .tabs-group .custom-container {
+        padding: 0;
+    }
+}
+
+@media (max-width: 370px) {
+
+    .cabin-left-content .cabin-name {
+        margin-bottom: 13px;
+        font-size: 16px;
+    }
+
+    .bex-title-mobile, .bex-title-dotted,
+    #BookingExist .bex-places .bex-title-mobile:first-child,
+    #BookingExist .bex-place, #BookingExist .bex-price,
+    #BookingExist .bex-rooms div:first-child {
+        font-size: 10px;
+    }
+
+    #BookingExist .bex-price,
+    #BookingExist .bex-place {
+        color: #000;
+        font-size: 11px;
+    }
+
+    .bex-category-mobile {
+        margin-top: 10px;
+    }
+
+    .ship-type {
+        font-size: 12px;
+        padding: 6px 8px;
+        cursor: pointer;
+    }
+
+    body section h2 {
+        margin-bottom: 21px;
+    }
+
+    #BookingExist .bex-category-title {
+        font-size: 13px;
+    }
+
+}
+
+@media (max-width: 360px) {
+    .ship-cabins-tab h2 {
+        font-size: 17px;
+    }
+}

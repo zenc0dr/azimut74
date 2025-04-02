@@ -1,0 +1,10 @@
+name: Blocks
+form: $/zen/dolphin/models/block/fields.yaml
+modelClass: Zen\Dolphin\Models\Block
+defaultRedirect: zen/dolphin/blocks
+create:
+    redirect: 'zen/dolphin/blocks/update/:id'
+    redirectClose: zen/dolphin/blocks
+update:
+    redirect: zen/dolphin/blocks
+    redirectClose: zen/dolphin/blocks

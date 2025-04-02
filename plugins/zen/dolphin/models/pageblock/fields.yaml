@@ -1,0 +1,13 @@
+fields:
+    type_id:
+        label: 'Тип блока'
+        span: full
+        type: balloon-selector
+    name:
+        label: 'Заголовок блока'
+        span: full
+        type: text
+    options:
+        label: 'Настройка блока меню'
+        span: auto
+        type: checkboxlist

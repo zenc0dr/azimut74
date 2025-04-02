@@ -1,0 +1,41 @@
+fields:
+    active:
+        label: Активность
+        span: full
+        type: switch
+    name:
+        label: 'Название инфоблока'
+        span: auto
+        type: text
+    vars:
+        label: 'Переменные источника'
+        span: auto
+        type: text
+        comment: 'Переменные которые активируют блок (можно несколько через запятую) Пример: info, content'
+tabs:
+    fields:
+        block_code_hint:
+            span: full
+            path: $/zen/dolphin/partials/hints/block_code_hint.htm
+            type: hint
+            tab: Обработка
+        code:
+            label: 'Код обработки (PHP)'
+            size: giant
+            language: php
+            theme: tomorrow_night_blue
+            span: full
+            type: codeeditor
+            tab: Обработка
+        twig:
+            label: 'Шаблон (TWIG)'
+            size: giant
+            language: twig
+            span: full
+            type: codeeditor
+            tab: Шаблон
+        folders_multi:
+            label: 'Категории инфоблока'
+            span: full
+            type: checkboxlist
+            tab: Структура

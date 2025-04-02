@@ -1,0 +1,4 @@
+title: Azrooms
+modelClass: Zen\Dolphin\Models\Azroom
+toolbar:
+    buttons: reorder_toolbar

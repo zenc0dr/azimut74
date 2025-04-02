@@ -1,0 +1,10 @@
+name: Azrooms
+form: $/zen/dolphin/models/azroom/fields.yaml
+modelClass: Zen\Dolphin\Models\Azroom
+defaultRedirect: zen/dolphin/azrooms
+create:
+    redirect: 'zen/dolphin/azrooms/update/:id'
+    redirectClose: zen/dolphin/azrooms
+update:
+    redirect: zen/dolphin/azrooms
+    redirectClose: zen/dolphin/azrooms

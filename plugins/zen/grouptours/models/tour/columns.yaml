@@ -1,0 +1,22 @@
+columns:
+    id:
+        label: id
+        type: number
+        sortable: true
+    name:
+        label: 'Название тура'
+        type: text
+        searchable: true
+        sortable: true
+    days:
+        label: Дней
+        type: number
+        sortable: true
+    price:
+        label: Цена
+        type: number
+        sortable: true
+    active:
+        label: Активность
+        type: partial
+        sortable: true

@@ -1,0 +1,4 @@
+title: FaqController
+modelClass: Zen\Dolphin\Models\Faq
+toolbar:
+    buttons: reorder_toolbar

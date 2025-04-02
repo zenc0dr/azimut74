@@ -1,0 +1,10 @@
+name: Resorts
+form: $/mcmraak/sans/models/resort/fields.yaml
+modelClass: Mcmraak\Sans\Models\Resort
+defaultRedirect: mcmraak/sans/resorts
+create:
+    redirect: 'mcmraak/sans/resorts/update/:id'
+    redirectClose: mcmraak/sans/resorts
+update:
+    redirect: mcmraak/sans/resorts
+    redirectClose: mcmraak/sans/resorts

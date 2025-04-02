@@ -1,0 +1,16 @@
+name: 'Посадочные страницы'
+modelClass: Zen\GroupTours\Models\Page
+form: $/zen/grouptours/models/page/fields.yaml
+defaultRedirect: zen/grouptours/pages
+create:
+    title: 'Создать страницу'
+    redirect: 'zen/grouptours/pages/update/:id'
+    redirectClose: zen/grouptours/pages
+    flashSave: 'Страница создана'
+update:
+    title: 'Обновить страницу'
+    redirect: zen/grouptours/pages
+    redirectClose: zen/grouptours/pages
+    flashSave: 'Страница сохранена'
+    flashDelete: 'Страница удалена'
+preview: {  }

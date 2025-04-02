@@ -1,0 +1,125 @@
+description = "Список отзывов"
+
+[viewBag]
+==
+{% if reviews.count() > 0 %}
+{% for r in reviews %}
+        <div class="crReview">
+            {#<div class="crRevPhoto">
+                <img src="{{ r.files|first.path|resize(100) }}" alt="">
+            </div>#}
+            <div class="crRevData">
+
+                <div class="crRevDataTop">
+                    <div class="revDataTopLeft">
+                        <div class="revDate"><span>{{ r.created_at|date('d.m.Y') }}</span></div>
+                        <div class="revName">
+                            <span class="name">{{ r.name|mutator }}</span>
+                            <span class="city">({{ r.town|mutator }})</span>
+                            <span>пишет о теплоходе</span>
+                            <span class="ship">«{{ r.motorship.cleanSelfName|mutator }}»</span>
+                        </div>
+                    </div>
+                    <div class="revDataTopRight">
+                        {% if r.recommended == 1 %}
+                        <div class="recommend">
+                            {% partial 'svg/like' %}
+                            <span>Рекомендует круиз</span>
+                        </div>
+                        {% else %}
+                        <div class="notrecommend">
+                            {% partial 'svg/like' %}
+                            <span>Не рекомендует круиз</span>
+                        </div>
+                        {% endif %}
+                    </div>
+                </div>
+                
+                {% if r.files|length>0 %}
+                <div class="crRevData__images">
+                	{% for i in r.files %}
+                	<a data-lightbox-gallery="revGallery{{r.id}}" href="{{ i.path }}" class="crRevData__image-link gal">
+                		<img class="crRevData__image" src="{{ i.path|resize(100) }}" alt="{{ i.title|mutator }}">
+                	</a>
+                	{% endfor %}
+                </div>
+                {% endif %}
+
+                <div class="crRevDataMiddle">
+                    <div class="data">
+                        <div>
+                            {{ r.comment|raw|mutator }}
+                        </div>
+                        {% if r.liked %}
+                        	<div>
+                        		<span>Что особенно понравилось:</span>
+		                       	<p class="inline">
+		                       		{{ r.liked|mutator }}
+		                       	</p>
+                        	</div>
+                       	{% endif %}
+                       	{% if r.notliked %}
+	                       	<div>
+		                       	<span>Что не понравилось:</span>
+		                       	<p class="inline">
+		                       		{{ r.notliked|mutator }}
+		                       	</p>	
+	                       	</div>
+                       	{% endif %}
+                       	{% if r.startdoing %}
+                       		<div>
+                       			<span>Что надо начать делать:</span>
+		                       	<p class="inline">
+		                       		{{ r.startdoing|mutator }}
+		                       	</p>
+                       		</div>
+                       	{% endif %}
+                       	{% if r.stopdoing %}
+	                       	<div>
+	                       		<span>Что надо перестать делать:</span>
+		                       	<p class="inline">
+		                       		{{ r.stopdoing|mutator }}
+		                       	</p>
+	                       	</div>
+                       	{% endif %}
+                       	{% if r.doing %}
+	                       	<div>
+	                       		<span>Что надо продолжать делать:</span>
+		                       	<p class="inline">
+		                       		{{ r.doing|mutator }}
+		                       	</p>
+	                       	</div>
+                       	{% endif %}
+                    </div>
+                    {% if r.liked or r.notliked or r.startdoing or r.stopdoing or r.doing %}
+	                    <button id="revMore" class="rbtn">
+	                   		<span class="add">Показать весь отзыв</span>
+	                   		<span class="less">Скрыть</span>
+	                   	</button>
+                   	{% endif %}
+                </div>
+                {#
+                <div class="crRevDataBottom">
+                    <div class="revDataBottomLeft">
+                        <span>Отзыв полезен?</span>
+                        <div class="revBottomButtons">
+                            <button class="rbtn">Да</button>
+                            <span>5 /</span>
+                            <button class="rbtn">Нет</button>
+                            <span>3</span>
+                        </div>
+                    </div>
+                    <!-- <div class="revDataBottomRight">
+                            <a href="">Смотреть еще 12 отзывов о теплоходе "Федор Достоевский"</a>
+                        </div> -->
+                </div>
+                #}
+            </div>
+        </div>
+{% endfor %}
+    <div class="revBlockPagination">
+        <div class="pagination">{{ reviews.render|raw }}</div>
+    </div>
+{% else %}
+<span style="font-size:20px">Нет отзывов</span>
+{% endif %}

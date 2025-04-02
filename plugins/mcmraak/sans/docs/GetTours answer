@@ -1,0 +1,637 @@
+Array
+(
+    [version] => 2.1
+    [searchToken] => D4FxaE8WXUaI0aBxBX6O6D+NHI/mzyhGgwBg1FqDKkc=
+    [data] => Array
+        (
+            [0] => Array
+                (
+                    [offerId] => 13395868707
+                    [tourName] => Кавказские Минеральные воды. Проживание+3-разовое питание+санаторно-курортное лечение.
+                    [tourCID] => kmv(gou)
+                    [tourDate] => 29.03.2018
+                    [checkInDate] => 2018-03-29T14:00:00
+                    [checkOutDate] => 2018-04-07T12:00:00
+                    [hotelId] => 205
+                    [hotelCID] => celebnyi_narzan_(kislovo
+                    [hotelUrl] => https://www.alean.ru/object/48
+                    [hotelCategoryId] => 4
+                    [hotelIsInStop] => 0
+                    [hotelPrice] => 40500
+                    [resortId] => 14
+                    [mealId] => 4
+                    [mealCode] => FB
+                    [htPlaceName] => 1 ADL
+                    [roomTypeName] => Стандартный 2-местный стандартный номер
+                    [nights] => 9
+                    [price] => 40500
+                    [ticketsIncluded] => 0
+                    [hasEconomTicketsDpt] => 0
+                    [hasEconomTicketsRtn] => 0
+                    [hasBusinessTicketsDpt] => 0
+                    [hasBusinessTicketsRtn] => 0
+                    [tourUrl] => https://www.alean.ru/object/48/?utm_source=API-azimut#/?finder=0:48:0:29.03.2018:29.03.2018:9:9:-1:-1:-1&ksbtid=D4FxaE8WXUaI0aBxBX6O6D%2BNHI%2FmzyhGgwBg1FqDKkc%3D
+                    [bookUrl] => https://www.alean.ru/booking/?utm_source=API-azimut#/?finder=0:48:0:29.03.2018:29.03.2018:9:9:-1:-1:-1&ksbtid=D4FxaE8WXUaI0aBxBX6O6D%2BNHI%2FmzyhGgwBg1FqDKkc%3D&line=x8lSPAoC4QcMEw4M8wAAAAEA%2F%2F8AAJOcAAAAAAAANFAAACwIAACyqAAAuqgAABUAAAA%3D
+                    [fewPlacesInHotel] => 1
+                    [fewTicketsDptY] => -1
+                    [fewTicketsRtnY] => -1
+                    [fewTicketsDptB] => -1
+                    [fewTicketsRtnB] => -1
+                    [flags] => 2
+                    [description] => Внимание!!! При заезде  в санаторий дети до 18 лет должны иметь  справку об эпидокружении, и санаторно-курортную карту!!!
+                    [medical] => 1
+                )
+            [1] => Array
+                (
+                    [offerId] => 13395868708
+                    [tourName] => Кисловодск. Проживание+3-разовое питание+санаторно-курортное лечение.
+                    [tourCID] => kislovodsk
+                    [tourDate] => 31.03.2018
+                    [checkInDate] => 2018-03-31T14:00:00
+                    [checkOutDate] => 2018-04-09T12:00:00
+                    [hotelId] => 205
+                    [hotelCID] => celebnyi_narzan_(kislovo
+                    [hotelUrl] => https://www.alean.ru/object/48
+                    [hotelCategoryId] => 4
+                    [hotelIsInStop] => 0
+                    [hotelPrice] => 40500
+                    [resortId] => 14
+                    [mealId] => 4
+                    [mealCode] => FB
+                    [htPlaceName] => 1 ADL
+                    [roomTypeName] => Стандартный 2-местный стандартный номер
+                    [nights] => 9
+                    [price] => 40500
+                    [ticketsIncluded] => 0
+                    [hasEconomTicketsDpt] => 0
+                    [hasEconomTicketsRtn] => 0
+                    [hasBusinessTicketsDpt] => 0
+                    [hasBusinessTicketsRtn] => 0
+                    [tourUrl] => https://www.alean.ru/object/48/?utm_source=API-azimut#/?finder=0:48:0:31.03.2018:31.03.2018:9:9:-1:-1:-1&ksbtid=D4FxaE8WXUaI0aBxBX6O6D%2BNHI%2FmzyhGgwBg1FqDKkc%3D
+                    [bookUrl] => https://www.alean.ru/booking/?utm_source=API-azimut#/?finder=0:48:0:31.03.2018:31.03.2018:9:9:-1:-1:-1&ksbtid=D4FxaE8WXUaI0aBxBX6O6D%2BNHI%2FmzyhGgwBg1FqDKkc%3D&line=wRtUPAoC4QcMEw4MIQAAAAEA%2F%2F8AAJOcAAAAAAAANFAAACwIAAC0qAAAvKgAABUAAAA%3D
+                    [fewPlacesInHotel] => 3
+                    [fewTicketsDptY] => -1
+                    [fewTicketsRtnY] => -1
+                    [fewTicketsDptB] => -1
+                    [fewTicketsRtnB] => -1
+                    [flags] => 2
+                    [description] => Внимание!!! При заезде  в санаторий дети до 18 лет должны иметь  справку об эпидокружении, и санаторно-курортную карту!!!
+                    [medical] => 1
+                )
+            [2] => Array
+                (
+                    [offerId] => 13395868709
+                    [tourName] => Кисловодск. Проживание+3-разовое питание+санаторно-курортное лечение.
+                    [tourCID] => kislovodsk
+                    [tourDate] => 30.03.2018
+                    [checkInDate] => 2018-03-30T14:00:00
+                    [checkOutDate] => 2018-04-08T12:00:00
+                    [hotelId] => 205
+                    [hotelCID] => celebnyi_narzan_(kislovo
+                    [hotelUrl] => https://www.alean.ru/object/48
+                    [hotelCategoryId] => 4
+                    [hotelIsInStop] => 0
+                    [hotelPrice] => 43200
+                    [resortId] => 14
+                    [mealId] => 4
+                    [mealCode] => FB
+                    [htPlaceName] => 1 ADL
+                    [roomTypeName] => Комфорт  2-местный 1-комнатный на 3-ем этаже
+                    [nights] => 9
+                    [price] => 43200
+                    [ticketsIncluded] => 0
+                    [hasEconomTicketsDpt] => 0
+                    [hasEconomTicketsRtn] => 0
+                    [hasBusinessTicketsDpt] => 0
+                    [hasBusinessTicketsRtn] => 0
+                    [tourUrl] => https://www.alean.ru/object/48/?utm_source=API-azimut#/?finder=0:48:0:30.03.2018:30.03.2018:9:9:-1:-1:-1&ksbtid=D4FxaE8WXUaI0aBxBX6O6D%2BNHI%2FmzyhGgwBg1FqDKkc%3D
+                    [bookUrl] => https://www.alean.ru/booking/?utm_source=API-azimut#/?finder=0:48:0:30.03.2018:30.03.2018:9:9:-1:-1:-1&ksbtid=D4FxaE8WXUaI0aBxBX6O6D%2BNHI%2FmzyhGgwBg1FqDKkc%3D&line=rxtTzAoC4QcMEw4MIQAAAAEA%2F%2F8AAJOcAAAAAAAAU78AACwIAACzqAAAu6gAABUAAAA%3D
+                    [fewPlacesInHotel] => 3
+                    [fewTicketsDptY] => -1
+                    [fewTicketsRtnY] => -1
+                    [fewTicketsDptB] => -1
+                    [fewTicketsRtnB] => -1
+                    [flags] => 2
+                    [description] => Внимание!!! При заезде  в санаторий дети до 18 лет должны иметь  справку об эпидокружении, и санаторно-курортную карту!!!
+                    [medical] => 1
+                )
+            [3] => Array
+                (
+                    [offerId] => 13395868710
+                    [tourName] => Кавказские Минеральные воды. Проживание+3-разовое питание+санаторно-курортное лечение.
+                    [tourCID] => kmv(gou)
+                    [tourDate] => 29.03.2018
+                    [checkInDate] => 2018-03-29T14:00:00
+                    [checkOutDate] => 2018-04-07T12:00:00
+                    [hotelId] => 205
+                    [hotelCID] => celebnyi_narzan_(kislovo
+                    [hotelUrl] => https://www.alean.ru/object/48
+                    [hotelCategoryId] => 4
+                    [hotelIsInStop] => 0
+                    [hotelPrice] => 43200
+                    [resortId] => 14
+                    [mealId] => 4
+                    [mealCode] => FB
+                    [htPlaceName] => 1 ADL
+                    [roomTypeName] => Комфорт  2-местный 1-комнатный на 3-ем этаже
+                    [nights] => 9
+                    [price] => 43200
+                    [ticketsIncluded] => 0
+                    [hasEconomTicketsDpt] => 0
+                    [hasEconomTicketsRtn] => 0
+                    [hasBusinessTicketsDpt] => 0
+                    [hasBusinessTicketsRtn] => 0
+                    [tourUrl] => https://www.alean.ru/object/48/?utm_source=API-azimut#/?finder=0:48:0:29.03.2018:29.03.2018:9:9:-1:-1:-1&ksbtid=D4FxaE8WXUaI0aBxBX6O6D%2BNHI%2FmzyhGgwBg1FqDKkc%3D
+                    [bookUrl] => https://www.alean.ru/booking/?utm_source=API-azimut#/?finder=0:48:0:29.03.2018:29.03.2018:9:9:-1:-1:-1&ksbtid=D4FxaE8WXUaI0aBxBX6O6D%2BNHI%2FmzyhGgwBg1FqDKkc%3D&line=rslSzAoC4QcMEw4M8wAAAAEA%2F%2F8AAJOcAAAAAAAAU78AACwIAACyqAAAuqgAABUAAAA%3D
+                    [fewPlacesInHotel] => 3
+                    [fewTicketsDptY] => -1
+                    [fewTicketsRtnY] => -1
+                    [fewTicketsDptB] => -1
+                    [fewTicketsRtnB] => -1
+                    [flags] => 2
+                    [description] => Внимание!!! При заезде  в санаторий дети до 18 лет должны иметь  справку об эпидокружении, и санаторно-курортную карту!!!
+                    [medical] => 1
+                )
+            [4] => Array
+                (
+                    [offerId] => 13395868711
+                    [tourName] => Кисловодск. Проживание+3-разовое питание+санаторно-курортное лечение.
+                    [tourCID] => kislovodsk
+                    [tourDate] => 30.03.2018
+                    [checkInDate] => 2018-03-30T14:00:00
+                    [checkOutDate] => 2018-04-08T12:00:00
+                    [hotelId] => 205
+                    [hotelCID] => celebnyi_narzan_(kislovo
+                    [hotelUrl] => https://www.alean.ru/object/48
+                    [hotelCategoryId] => 4
+                    [hotelIsInStop] => 2
+                    [hotelPrice] => 83520
+                    [resortId] => 14
+                    [mealId] => 4
+                    [mealCode] => FB
+                    [htPlaceName] => 1 ADL
+                    [roomTypeName] => Де Люкс 2-местный 1,5-комнатный
+                    [nights] => 9
+                    [price] => 83520
+                    [ticketsIncluded] => 0
+                    [hasEconomTicketsDpt] => 0
+                    [hasEconomTicketsRtn] => 0
+                    [hasBusinessTicketsDpt] => 0
+                    [hasBusinessTicketsRtn] => 0
+                    [tourUrl] => https://www.alean.ru/object/48/?utm_source=API-azimut#/?finder=0:48:0:30.03.2018:30.03.2018:9:9:-1:-1:-1&ksbtid=D4FxaE8WXUaI0aBxBX6O6D%2BNHI%2FmzyhGgwBg1FqDKkc%3D
+                    [bookUrl] => https://www.alean.ru/booking/?utm_source=API-azimut#/?finder=0:48:0:30.03.2018:30.03.2018:9:9:-1:-1:-1&ksbtid=D4FxaE8WXUaI0aBxBX6O6D%2BNHI%2FmzyhGgwBg1FqDKkc%3D&line=2ptlPAoC4QcMEw4MIQAAAAEA%2F%2F8AAZOcAAAAAAAAOFAAABoAAACzqAAAu6gAABUAAAA%3D
+                    [fewPlacesInHotel] => -1
+                    [fewTicketsDptY] => -1
+                    [fewTicketsRtnY] => -1
+                    [fewTicketsDptB] => -1
+                    [fewTicketsRtnB] => -1
+                    [flags] => 0
+                    [description] => Внимание!!! При заезде  в санаторий дети до 18 лет должны иметь  справку об эпидокружении, и санаторно-курортную карту!!!
+                    [medical] => 1
+                )
+            [5] => Array
+                (
+                    [offerId] => 13395868712
+                    [tourName] => Кавказские Минеральные воды. Проживание+3-разовое питание+санаторно-курортное лечение.
+                    [tourCID] => kmv(gou)
+                    [tourDate] => 29.03.2018
+                    [checkInDate] => 2018-03-29T14:00:00
+                    [checkOutDate] => 2018-04-07T12:00:00
+                    [hotelId] => 205
+                    [hotelCID] => celebnyi_narzan_(kislovo
+                    [hotelUrl] => https://www.alean.ru/object/48
+                    [hotelCategoryId] => 4
+                    [hotelIsInStop] => 2
+                    [hotelPrice] => 83520
+                    [resortId] => 14
+                    [mealId] => 4
+                    [mealCode] => FB
+                    [htPlaceName] => 1 ADL
+                    [roomTypeName] => Де Люкс 2-местный 1,5-комнатный
+                    [nights] => 9
+                    [price] => 83520
+                    [ticketsIncluded] => 0
+                    [hasEconomTicketsDpt] => 0
+                    [hasEconomTicketsRtn] => 0
+                    [hasBusinessTicketsDpt] => 0
+                    [hasBusinessTicketsRtn] => 0
+                    [tourUrl] => https://www.alean.ru/object/48/?utm_source=API-azimut#/?finder=0:48:0:29.03.2018:29.03.2018:9:9:-1:-1:-1&ksbtid=D4FxaE8WXUaI0aBxBX6O6D%2BNHI%2FmzyhGgwBg1FqDKkc%3D
+                    [bookUrl] => https://www.alean.ru/booking/?utm_source=API-azimut#/?finder=0:48:0:29.03.2018:29.03.2018:9:9:-1:-1:-1&ksbtid=D4FxaE8WXUaI0aBxBX6O6D%2BNHI%2FmzyhGgwBg1FqDKkc%3D&line=20lkPAoC4QcMEw4M8wAAAAEA%2F%2F8AAZOcAAAAAAAAOFAAABoAAACyqAAAuqgAABUAAAA%3D
+                    [fewPlacesInHotel] => -1
+                    [fewTicketsDptY] => -1
+                    [fewTicketsRtnY] => -1
+                    [fewTicketsDptB] => -1
+                    [fewTicketsRtnB] => -1
+                    [flags] => 0
+                    [description] => Внимание!!! При заезде  в санаторий дети до 18 лет должны иметь  справку об эпидокружении, и санаторно-курортную карту!!!
+                    [medical] => 1
+                )
+            [6] => Array
+                (
+                    [offerId] => 13395868713
+                    [tourName] => Кисловодск. Проживание+3-разовое питание+санаторно-курортное лечение.
+                    [tourCID] => kislovodsk
+                    [tourDate] => 30.03.2018
+                    [checkInDate] => 2018-03-30T14:00:00
+                    [checkOutDate] => 2018-04-08T12:00:00
+                    [hotelId] => 205
+                    [hotelCID] => celebnyi_narzan_(kislovo
+                    [hotelUrl] => https://www.alean.ru/object/48
+                    [hotelCategoryId] => 4
+                    [hotelIsInStop] => 2
+                    [hotelPrice] => 86400
+                    [resortId] => 14
+                    [mealId] => 4
+                    [mealCode] => FB
+                    [htPlaceName] => 1 ADL
+                    [roomTypeName] => Стандарт Бизнес 1-комнатный 2-местный 23м2
+                    [nights] => 9
+                    [price] => 86400
+                    [ticketsIncluded] => 0
+                    [hasEconomTicketsDpt] => 0
+                    [hasEconomTicketsRtn] => 0
+                    [hasBusinessTicketsDpt] => 0
+                    [hasBusinessTicketsRtn] => 0
+                    [tourUrl] => https://www.alean.ru/object/48/?utm_source=API-azimut#/?finder=0:48:0:30.03.2018:30.03.2018:9:9:-1:-1:-1&ksbtid=D4FxaE8WXUaI0aBxBX6O6D%2BNHI%2FmzyhGgwBg1FqDKkc%3D
+                    [bookUrl] => https://www.alean.ru/booking/?utm_source=API-azimut#/?finder=0:48:0:30.03.2018:30.03.2018:9:9:-1:-1:-1&ksbtid=D4FxaE8WXUaI0aBxBX6O6D%2BNHI%2FmzyhGgwBg1FqDKkc%3D&line=4JtlDAoC4QcMEw4MIQAAAAEA%2F%2F8AAZOcAAAAAAAACtMAABoAAACzqAAAu6gAABUAAAA%3D
+                    [fewPlacesInHotel] => -1
+                    [fewTicketsDptY] => -1
+                    [fewTicketsRtnY] => -1
+                    [fewTicketsDptB] => -1
+                    [fewTicketsRtnB] => -1
+                    [flags] => 0
+                    [description] => Внимание!!! При заезде  в санаторий дети до 18 лет должны иметь  справку об эпидокружении, и санаторно-курортную карту!!!
+                    [medical] => 1
+                )
+            [7] => Array
+                (
+                    [offerId] => 13395868714
+                    [tourName] => Кавказские Минеральные воды. Проживание+3-разовое питание+санаторно-курортное лечение.
+                    [tourCID] => kmv(gou)
+                    [tourDate] => 29.03.2018
+                    [checkInDate] => 2018-03-29T14:00:00
+                    [checkOutDate] => 2018-04-07T12:00:00
+                    [hotelId] => 205
+                    [hotelCID] => celebnyi_narzan_(kislovo
+                    [hotelUrl] => https://www.alean.ru/object/48
+                    [hotelCategoryId] => 4
+                    [hotelIsInStop] => 2
+                    [hotelPrice] => 86400
+                    [resortId] => 14
+                    [mealId] => 4
+                    [mealCode] => FB
+                    [htPlaceName] => 1 ADL
+                    [roomTypeName] => Стандарт Бизнес 1-комнатный 2-местный 23м2
+                    [nights] => 9
+                    [price] => 86400
+                    [ticketsIncluded] => 0
+                    [hasEconomTicketsDpt] => 0
+                    [hasEconomTicketsRtn] => 0
+                    [hasBusinessTicketsDpt] => 0
+                    [hasBusinessTicketsRtn] => 0
+                    [tourUrl] => https://www.alean.ru/object/48/?utm_source=API-azimut#/?finder=0:48:0:29.03.2018:29.03.2018:9:9:-1:-1:-1&ksbtid=D4FxaE8WXUaI0aBxBX6O6D%2BNHI%2FmzyhGgwBg1FqDKkc%3D
+                    [bookUrl] => https://www.alean.ru/booking/?utm_source=API-azimut#/?finder=0:48:0:29.03.2018:29.03.2018:9:9:-1:-1:-1&ksbtid=D4FxaE8WXUaI0aBxBX6O6D%2BNHI%2FmzyhGgwBg1FqDKkc%3D&line=4UlkDAoC4QcMEw4M8wAAAAEA%2F%2F8AAZOcAAAAAAAACtMAABoAAACyqAAAuqgAABUAAAA%3D
+                    [fewPlacesInHotel] => -1
+                    [fewTicketsDptY] => -1
+                    [fewTicketsRtnY] => -1
+                    [fewTicketsDptB] => -1
+                    [fewTicketsRtnB] => -1
+                    [flags] => 0
+                    [description] => Внимание!!! При заезде  в санаторий дети до 18 лет должны иметь  справку об эпидокружении, и санаторно-курортную карту!!!
+                    [medical] => 1
+                )
+            [8] => Array
+                (
+                    [offerId] => 13395868715
+                    [tourName] => Кисловодск. Проживание+3-разовое питание+санаторно-курортное лечение.
+                    [tourCID] => kislovodsk
+                    [tourDate] => 30.03.2018
+                    [checkInDate] => 2018-03-30T14:00:00
+                    [checkOutDate] => 2018-04-08T12:00:00
+                    [hotelId] => 205
+                    [hotelCID] => celebnyi_narzan_(kislovo
+                    [hotelUrl] => https://www.alean.ru/object/48
+                    [hotelCategoryId] => 4
+                    [hotelIsInStop] => 2
+                    [hotelPrice] => 97920
+                    [resortId] => 14
+                    [mealId] => 4
+                    [mealCode] => FB
+                    [htPlaceName] => 1 ADL
+                    [roomTypeName] => Люкс Сюит 2-местный 2-комнатный
+                    [nights] => 9
+                    [price] => 97920
+                    [ticketsIncluded] => 0
+                    [hasEconomTicketsDpt] => 0
+                    [hasEconomTicketsRtn] => 0
+                    [hasBusinessTicketsDpt] => 0
+                    [hasBusinessTicketsRtn] => 0
+                    [tourUrl] => https://www.alean.ru/object/48/?utm_source=API-azimut#/?finder=0:48:0:30.03.2018:30.03.2018:9:9:-1:-1:-1&ksbtid=D4FxaE8WXUaI0aBxBX6O6D%2BNHI%2FmzyhGgwBg1FqDKkc%3D
+                    [bookUrl] => https://www.alean.ru/booking/?utm_source=API-azimut#/?finder=0:48:0:30.03.2018:30.03.2018:9:9:-1:-1:-1&ksbtid=D4FxaE8WXUaI0aBxBX6O6D%2BNHI%2FmzyhGgwBg1FqDKkc%3D&line=25tlPAoC4QcMEw4MIQAAAAEA%2F%2F8AAZOcAAAAAAAAOVAAABoAAACzqAAAu6gAABUAAAA%3D
+                    [fewPlacesInHotel] => -1
+                    [fewTicketsDptY] => -1
+                    [fewTicketsRtnY] => -1
+                    [fewTicketsDptB] => -1
+                    [fewTicketsRtnB] => -1
+                    [flags] => 0
+                    [description] => Внимание!!! При заезде  в санаторий дети до 18 лет должны иметь  справку об эпидокружении, и санаторно-курортную карту!!!
+                    [medical] => 1
+                )
+            [9] => Array
+                (
+                    [offerId] => 13395868716
+                    [tourName] => Кавказские Минеральные воды. Проживание+3-разовое питание+санаторно-курортное лечение.
+                    [tourCID] => kmv(gou)
+                    [tourDate] => 29.03.2018
+                    [checkInDate] => 2018-03-29T14:00:00
+                    [checkOutDate] => 2018-04-07T12:00:00
+                    [hotelId] => 205
+                    [hotelCID] => celebnyi_narzan_(kislovo
+                    [hotelUrl] => https://www.alean.ru/object/48
+                    [hotelCategoryId] => 4
+                    [hotelIsInStop] => 2
+                    [hotelPrice] => 97920
+                    [resortId] => 14
+                    [mealId] => 4
+                    [mealCode] => FB
+                    [htPlaceName] => 1 ADL
+                    [roomTypeName] => Люкс Сюит 2-местный 2-комнатный
+                    [nights] => 9
+                    [price] => 97920
+                    [ticketsIncluded] => 0
+                    [hasEconomTicketsDpt] => 0
+                    [hasEconomTicketsRtn] => 0
+                    [hasBusinessTicketsDpt] => 0
+                    [hasBusinessTicketsRtn] => 0
+                    [tourUrl] => https://www.alean.ru/object/48/?utm_source=API-azimut#/?finder=0:48:0:29.03.2018:29.03.2018:9:9:-1:-1:-1&ksbtid=D4FxaE8WXUaI0aBxBX6O6D%2BNHI%2FmzyhGgwBg1FqDKkc%3D
+                    [bookUrl] => https://www.alean.ru/booking/?utm_source=API-azimut#/?finder=0:48:0:29.03.2018:29.03.2018:9:9:-1:-1:-1&ksbtid=D4FxaE8WXUaI0aBxBX6O6D%2BNHI%2FmzyhGgwBg1FqDKkc%3D&line=2klkPAoC4QcMEw4M8wAAAAEA%2F%2F8AAZOcAAAAAAAAOVAAABoAAACyqAAAuqgAABUAAAA%3D
+                    [fewPlacesInHotel] => -1
+                    [fewTicketsDptY] => -1
+                    [fewTicketsRtnY] => -1
+                    [fewTicketsDptB] => -1
+                    [fewTicketsRtnB] => -1
+                    [flags] => 0
+                    [description] => Внимание!!! При заезде  в санаторий дети до 18 лет должны иметь  справку об эпидокружении, и санаторно-курортную карту!!!
+                    [medical] => 1
+                )
+            [10] => Array
+                (
+                    [offerId] => 13395868717
+                    [tourName] => Кавказские Минеральные воды. Проживание+3-разовое питание+санаторно-курортное лечение.
+                    [tourCID] => kmv(gou)
+                    [tourDate] => 29.03.2018
+                    [checkInDate] => 2018-03-29T14:00:00
+                    [checkOutDate] => 2018-04-07T12:00:00
+                    [hotelId] => 205
+                    [hotelCID] => celebnyi_narzan_(kislovo
+                    [hotelUrl] => https://www.alean.ru/object/48
+                    [hotelCategoryId] => 4
+                    [hotelIsInStop] => 2
+                    [hotelPrice] => 105120
+                    [resortId] => 14
+                    [mealId] => 4
+                    [mealCode] => FB
+                    [htPlaceName] => 1 ADL
+                    [roomTypeName] => Люкс Студия 1-комнатный (45 м.кв.)   на 6 этаже
+                    [nights] => 9
+                    [price] => 105120
+                    [ticketsIncluded] => 0
+                    [hasEconomTicketsDpt] => 0
+                    [hasEconomTicketsRtn] => 0
+                    [hasBusinessTicketsDpt] => 0
+                    [hasBusinessTicketsRtn] => 0
+                    [tourUrl] => https://www.alean.ru/object/48/?utm_source=API-azimut#/?finder=0:48:0:29.03.2018:29.03.2018:9:9:-1:-1:-1&ksbtid=D4FxaE8WXUaI0aBxBX6O6D%2BNHI%2FmzyhGgwBg1FqDKkc%3D
+                    [bookUrl] => https://www.alean.ru/booking/?utm_source=API-azimut#/?finder=0:48:0:29.03.2018:29.03.2018:9:9:-1:-1:-1&ksbtid=D4FxaE8WXUaI0aBxBX6O6D%2BNHI%2FmzyhGgwBg1FqDKkc%3D&line=6ElkDAoC4QcMEw4M8wAAAAEA%2F%2F8AAZOcAAAAAAAAA9MAABoAAACyqAAAuqgAABUAAAA%3D
+                    [fewPlacesInHotel] => -1
+                    [fewTicketsDptY] => -1
+                    [fewTicketsRtnY] => -1
+                    [fewTicketsDptB] => -1
+                    [fewTicketsRtnB] => -1
+                    [flags] => 0
+                    [description] => Внимание!!! При заезде  в санаторий дети до 18 лет должны иметь  справку об эпидокружении, и санаторно-курортную карту!!!
+                    [medical] => 1
+                )
+            [11] => Array
+                (
+                    [offerId] => 13395868718
+                    [tourName] => Кисловодск. Проживание+3-разовое питание+санаторно-курортное лечение.
+                    [tourCID] => kislovodsk
+                    [tourDate] => 30.03.2018
+                    [checkInDate] => 2018-03-30T14:00:00
+                    [checkOutDate] => 2018-04-08T12:00:00
+                    [hotelId] => 205
+                    [hotelCID] => celebnyi_narzan_(kislovo
+                    [hotelUrl] => https://www.alean.ru/object/48
+                    [hotelCategoryId] => 4
+                    [hotelIsInStop] => 2
+                    [hotelPrice] => 105120
+                    [resortId] => 14
+                    [mealId] => 4
+                    [mealCode] => FB
+                    [htPlaceName] => 1 ADL
+                    [roomTypeName] => Люкс Студия 1-комнатный (45 м.кв.)   на 6 этаже
+                    [nights] => 9
+                    [price] => 105120
+                    [ticketsIncluded] => 0
+                    [hasEconomTicketsDpt] => 0
+                    [hasEconomTicketsRtn] => 0
+                    [hasBusinessTicketsDpt] => 0
+                    [hasBusinessTicketsRtn] => 0
+                    [tourUrl] => https://www.alean.ru/object/48/?utm_source=API-azimut#/?finder=0:48:0:30.03.2018:30.03.2018:9:9:-1:-1:-1&ksbtid=D4FxaE8WXUaI0aBxBX6O6D%2BNHI%2FmzyhGgwBg1FqDKkc%3D
+                    [bookUrl] => https://www.alean.ru/booking/?utm_source=API-azimut#/?finder=0:48:0:30.03.2018:30.03.2018:9:9:-1:-1:-1&ksbtid=D4FxaE8WXUaI0aBxBX6O6D%2BNHI%2FmzyhGgwBg1FqDKkc%3D&line=6ZtlDAoC4QcMEw4MIQAAAAEA%2F%2F8AAZOcAAAAAAAAA9MAABoAAACzqAAAu6gAABUAAAA%3D
+                    [fewPlacesInHotel] => -1
+                    [fewTicketsDptY] => -1
+                    [fewTicketsRtnY] => -1
+                    [fewTicketsDptB] => -1
+                    [fewTicketsRtnB] => -1
+                    [flags] => 0
+                    [description] => Внимание!!! При заезде  в санаторий дети до 18 лет должны иметь  справку об эпидокружении, и санаторно-курортную карту!!!
+                    [medical] => 1
+                )
+            [12] => Array
+                (
+                    [offerId] => 13395868719
+                    [tourName] => Кавказские Минеральные воды. Проживание+3-разовое питание+санаторно-курортное лечение.
+                    [tourCID] => kmv(gou)
+                    [tourDate] => 29.03.2018
+                    [checkInDate] => 2018-03-29T14:00:00
+                    [checkOutDate] => 2018-04-07T12:00:00
+                    [hotelId] => 205
+                    [hotelCID] => celebnyi_narzan_(kislovo
+                    [hotelUrl] => https://www.alean.ru/object/48
+                    [hotelCategoryId] => 4
+                    [hotelIsInStop] => 2
+                    [hotelPrice] => 143280
+                    [resortId] => 14
+                    [mealId] => 4
+                    [mealCode] => FB
+                    [htPlaceName] => 1 ADL
+                    [roomTypeName] => Люкс Королевский 2-местный 2-комнатный 85 м2
+                    [nights] => 9
+                    [price] => 143280
+                    [ticketsIncluded] => 0
+                    [hasEconomTicketsDpt] => 0
+                    [hasEconomTicketsRtn] => 0
+                    [hasBusinessTicketsDpt] => 0
+                    [hasBusinessTicketsRtn] => 0
+                    [tourUrl] => https://www.alean.ru/object/48/?utm_source=API-azimut#/?finder=0:48:0:29.03.2018:29.03.2018:9:9:-1:-1:-1&ksbtid=D4FxaE8WXUaI0aBxBX6O6D%2BNHI%2FmzyhGgwBg1FqDKkc%3D
+                    [bookUrl] => https://www.alean.ru/booking/?utm_source=API-azimut#/?finder=0:48:0:29.03.2018:29.03.2018:9:9:-1:-1:-1&ksbtid=D4FxaE8WXUaI0aBxBX6O6D%2BNHI%2FmzyhGgwBg1FqDKkc%3D&line=2klkbAoC4QcMEw4M8wAAAAEA%2F%2F8AAZOcAAAAAAAAOmUAABoAAACyqAAAuqgAABUAAAA%3D
+                    [fewPlacesInHotel] => -1
+                    [fewTicketsDptY] => -1
+                    [fewTicketsRtnY] => -1
+                    [fewTicketsDptB] => -1
+                    [fewTicketsRtnB] => -1
+                    [flags] => 0
+                    [description] => Внимание!!! При заезде  в санаторий дети до 18 лет должны иметь  справку об эпидокружении, и санаторно-курортную карту!!!
+                    [medical] => 1
+                )
+            [13] => Array
+                (
+                    [offerId] => 13395868720
+                    [tourName] => Кисловодск. Проживание+3-разовое питание+санаторно-курортное лечение.
+                    [tourCID] => kislovodsk
+                    [tourDate] => 30.03.2018
+                    [checkInDate] => 2018-03-30T14:00:00
+                    [checkOutDate] => 2018-04-08T12:00:00
+                    [hotelId] => 205
+                    [hotelCID] => celebnyi_narzan_(kislovo
+                    [hotelUrl] => https://www.alean.ru/object/48
+                    [hotelCategoryId] => 4
+                    [hotelIsInStop] => 2
+                    [hotelPrice] => 143280
+                    [resortId] => 14
+                    [mealId] => 4
+                    [mealCode] => FB
+                    [htPlaceName] => 1 ADL
+                    [roomTypeName] => Люкс Королевский 2-местный 2-комнатный 85 м2
+                    [nights] => 9
+                    [price] => 143280
+                    [ticketsIncluded] => 0
+                    [hasEconomTicketsDpt] => 0
+                    [hasEconomTicketsRtn] => 0
+                    [hasBusinessTicketsDpt] => 0
+                    [hasBusinessTicketsRtn] => 0
+                    [tourUrl] => https://www.alean.ru/object/48/?utm_source=API-azimut#/?finder=0:48:0:30.03.2018:30.03.2018:9:9:-1:-1:-1&ksbtid=D4FxaE8WXUaI0aBxBX6O6D%2BNHI%2FmzyhGgwBg1FqDKkc%3D
+                    [bookUrl] => https://www.alean.ru/booking/?utm_source=API-azimut#/?finder=0:48:0:30.03.2018:30.03.2018:9:9:-1:-1:-1&ksbtid=D4FxaE8WXUaI0aBxBX6O6D%2BNHI%2FmzyhGgwBg1FqDKkc%3D&line=25tlbAoC4QcMEw4MIQAAAAEA%2F%2F8AAZOcAAAAAAAAOmUAABoAAACzqAAAu6gAABUAAAA%3D
+                    [fewPlacesInHotel] => -1
+                    [fewTicketsDptY] => -1
+                    [fewTicketsRtnY] => -1
+                    [fewTicketsDptB] => -1
+                    [fewTicketsRtnB] => -1
+                    [flags] => 0
+                    [description] => Внимание!!! При заезде  в санаторий дети до 18 лет должны иметь  справку об эпидокружении, и санаторно-курортную карту!!!
+                    [medical] => 1
+                )
+            [14] => Array
+                (
+                    [offerId] => 13395868721
+                    [tourName] => Кисловодск. Проживание+3-разовое питание+санаторно-курортное лечение.
+                    [tourCID] => kislovodsk
+                    [tourDate] => 29.03.2018
+                    [checkInDate] => 2018-03-29T14:00:00
+                    [checkOutDate] => 2018-04-07T12:00:00
+                    [hotelId] => 205
+                    [hotelCID] => celebnyi_narzan_(kislovo
+                    [hotelUrl] => https://www.alean.ru/object/48
+                    [hotelCategoryId] => 4
+                    [hotelIsInStop] => 2
+                    [hotelPrice] => 167760
+                    [resortId] => 14
+                    [mealId] => 4
+                    [mealCode] => FB
+                    [htPlaceName] => 1 ADL
+                    [roomTypeName] => Люкс Золотой 3-комнатный 4-местный с кухней, 118 м2
+                    [nights] => 9
+                    [price] => 167760
+                    [ticketsIncluded] => 0
+                    [hasEconomTicketsDpt] => 0
+                    [hasEconomTicketsRtn] => 0
+                    [hasBusinessTicketsDpt] => 0
+                    [hasBusinessTicketsRtn] => 0
+                    [tourUrl] => https://www.alean.ru/object/48/?utm_source=API-azimut#/?finder=0:48:0:29.03.2018:29.03.2018:9:9:-1:-1:-1&ksbtid=D4FxaE8WXUaI0aBxBX6O6D%2BNHI%2FmzyhGgwBg1FqDKkc%3D
+                    [bookUrl] => https://www.alean.ru/booking/?utm_source=API-azimut#/?finder=0:48:0:29.03.2018:29.03.2018:9:9:-1:-1:-1&ksbtid=D4FxaE8WXUaI0aBxBX6O6D%2BNHI%2FmzyhGgwBg1FqDKkc%3D&line=7JtkDAoC4QcMEw4MIQAAAAEA%2F%2F8AAZOcAAAAAAAAB9MAABoAAACyqAAAuqgAABUAAAA%3D
+                    [fewPlacesInHotel] => -1
+                    [fewTicketsDptY] => -1
+                    [fewTicketsRtnY] => -1
+                    [fewTicketsDptB] => -1
+                    [fewTicketsRtnB] => -1
+                    [flags] => 0
+                    [description] => Внимание!!! При заезде  в санаторий дети до 18 лет должны иметь  справку об эпидокружении, и санаторно-курортную карту!!!
+                    [medical] => 1
+                )
+            [15] => Array
+                (
+                    [offerId] => 13395868722
+                    [tourName] => Кавказские Минеральные воды. Проживание+3-разовое питание+санаторно-курортное лечение.
+                    [tourCID] => kmv(gou)
+                    [tourDate] => 29.03.2018
+                    [checkInDate] => 2018-03-29T14:00:00
+                    [checkOutDate] => 2018-04-07T12:00:00
+                    [hotelId] => 205
+                    [hotelCID] => celebnyi_narzan_(kislovo
+                    [hotelUrl] => https://www.alean.ru/object/48
+                    [hotelCategoryId] => 4
+                    [hotelIsInStop] => 2
+                    [hotelPrice] => 167760
+                    [resortId] => 14
+                    [mealId] => 4
+                    [mealCode] => FB
+                    [htPlaceName] => 1 ADL
+                    [roomTypeName] => Люкс Серебрянный 3-комнатный 4-местный с кухней, 115 м.кв., 6 этаж
+                    [nights] => 9
+                    [price] => 167760
+                    [ticketsIncluded] => 0
+                    [hasEconomTicketsDpt] => 0
+                    [hasEconomTicketsRtn] => 0
+                    [hasBusinessTicketsDpt] => 0
+                    [hasBusinessTicketsRtn] => 0
+                    [tourUrl] => https://www.alean.ru/object/48/?utm_source=API-azimut#/?finder=0:48:0:29.03.2018:29.03.2018:9:9:-1:-1:-1&ksbtid=D4FxaE8WXUaI0aBxBX6O6D%2BNHI%2FmzyhGgwBg1FqDKkc%3D
+                    [bookUrl] => https://www.alean.ru/booking/?utm_source=API-azimut#/?finder=0:48:0:29.03.2018:29.03.2018:9:9:-1:-1:-1&ksbtid=D4FxaE8WXUaI0aBxBX6O6D%2BNHI%2FmzyhGgwBg1FqDKkc%3D&line=7UlkDAoC4QcMEw4M8wAAAAEA%2F%2F8AAZOcAAAAAAAABtMAABoAAACyqAAAuqgAABUAAAA%3D
+                    [fewPlacesInHotel] => -1
+                    [fewTicketsDptY] => -1
+                    [fewTicketsRtnY] => -1
+                    [fewTicketsDptB] => -1
+                    [fewTicketsRtnB] => -1
+                    [flags] => 0
+                    [description] => Внимание!!! При заезде  в санаторий дети до 18 лет должны иметь  справку об эпидокружении, и санаторно-курортную карту!!!
+                    [medical] => 1
+                )
+            [16] => Array
+                (
+                    [offerId] => 13395868723
+                    [tourName] => Кисловодск. Проживание+3-разовое питание+санаторно-курортное лечение.
+                    [tourCID] => kislovodsk
+                    [tourDate] => 30.03.2018
+                    [checkInDate] => 2018-03-30T14:00:00
+                    [checkOutDate] => 2018-04-08T12:00:00
+                    [hotelId] => 205
+                    [hotelCID] => celebnyi_narzan_(kislovo
+                    [hotelUrl] => https://www.alean.ru/object/48
+                    [hotelCategoryId] => 4
+                    [hotelIsInStop] => 2
+                    [hotelPrice] => 167760
+                    [resortId] => 14
+                    [mealId] => 4
+                    [mealCode] => FB
+                    [htPlaceName] => 1 ADL
+                    [roomTypeName] => Люкс Серебрянный 3-комнатный 4-местный с кухней, 115 м.кв., 6 этаж
+                    [nights] => 9
+                    [price] => 167760
+                    [ticketsIncluded] => 0
+                    [hasEconomTicketsDpt] => 0
+                    [hasEconomTicketsRtn] => 0
+                    [hasBusinessTicketsDpt] => 0
+                    [hasBusinessTicketsRtn] => 0
+                    [tourUrl] => https://www.alean.ru/object/48/?utm_source=API-azimut#/?finder=0:48:0:30.03.2018:30.03.2018:9:9:-1:-1:-1&ksbtid=D4FxaE8WXUaI0aBxBX6O6D%2BNHI%2FmzyhGgwBg1FqDKkc%3D
+                    [bookUrl] => https://www.alean.ru/booking/?utm_source=API-azimut#/?finder=0:48:0:30.03.2018:30.03.2018:9:9:-1:-1:-1&ksbtid=D4FxaE8WXUaI0aBxBX6O6D%2BNHI%2FmzyhGgwBg1FqDKkc%3D&line=7JtlDAoC4QcMEw4MIQAAAAEA%2F%2F8AAZOcAAAAAAAABtMAABoAAACzqAAAu6gAABUAAAA%3D
+                    [fewPlacesInHotel] => -1
+                    [fewTicketsDptY] => -1
+                    [fewTicketsRtnY] => -1
+                    [fewTicketsDptB] => -1
+                    [fewTicketsRtnB] => -1
+                    [flags] => 0
+                    [description] => Внимание!!! При заезде  в санаторий дети до 18 лет должны иметь  справку об эпидокружении, и санаторно-курортную карту!!!
+                    [medical] => 1
+                )
+        )
+)

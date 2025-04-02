@@ -1,0 +1,49 @@
+title = "Отправление"
+url = "/departure"
+layout = "general"
+description = "Страница Отправление"
+is_hidden = 0
+robot_index = "index"
+robot_follow = "follow"
+contentType = "html"
+force_show = 0
+==
+<section class="about departure">
+					
+	{#Убрано по просьбе клиента#}				
+	{#<div class="headText">
+		<span>{{ this.page.title }}</span>
+	</div>#}
+
+	<div class="pageData">
+		
+		<div class="data">
+			{% component 'contenteditor' file="departure/main.htm" %}
+		</div>
+		
+		<div class="switchers">
+			<div class="switch active">
+				<span>Автобусные туры к морю</span>
+			</div>
+			<div class="switch">
+				<span>Экскурсионные</span>
+			</div>
+			<div class="switch">
+				<span>Круизы по Волге</span>
+			</div>
+		</div>
+		
+		<div class="data">
+			<div class="switchContent active">
+				{% component 'contenteditor' file="departure/buses-to-sea" %}
+			</div>
+			<div class="switchContent">
+				{% component 'contenteditor' file="departure/extours" %}
+			</div>
+			<div class="switchContent">
+				{% component 'contenteditor' file="departure/cruises-on-volga" %}
+			</div>
+		</div>
+	</div>
+
+</section>

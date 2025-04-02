@@ -1,0 +1,4 @@
+title: Onboard
+modelClass: Mcmraak\Rivercrs\Models\Onboard
+toolbar:
+    buttons: reorder_toolbar

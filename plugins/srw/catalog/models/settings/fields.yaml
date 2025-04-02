@@ -1,0 +1,11 @@
+fields:
+    name:
+        label: 'Имя переменной'
+        oc.commentPosition: ''
+        span: auto
+        type: text
+    value:
+        label: 'Значение переменной'
+        span: auto
+        oc.commentPosition: ''
+        type: text

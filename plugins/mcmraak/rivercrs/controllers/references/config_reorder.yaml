@@ -1,0 +1,5 @@
+title: References
+modelClass: Mcmraak\Rivercrs\Models\Reference
+nameFrom: name
+toolbar:
+    buttons: reorder_toolbar

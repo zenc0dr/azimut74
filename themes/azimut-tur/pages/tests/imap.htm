@@ -1,0 +1,16 @@
+title = "Тест imap"
+url = "/imap-test"
+is_hidden = 0
+robot_index = "index"
+robot_follow = "follow"
+contentType = "html"
+force_show = 0
+==
+<?php
+function onStart()
+{
+    $mbox = imap_open("{mail.s134742.smrtp.ru:143}", "test@s134742.smrtp.ru", "0P1q9S1v");
+    dd($mbox);
+}
+?>
+==

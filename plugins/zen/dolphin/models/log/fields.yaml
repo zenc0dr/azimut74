@@ -1,0 +1,5 @@
+fields:
+    log_info:
+        span: full
+        path: log_info
+        type: partial

@@ -1,0 +1,123 @@
+tabs:
+    fields:
+        attention:
+            span: full
+            cssClass: warning
+            path: $/mcmraak/rivercrs/controllers/cabins/attention.htm
+            type: hint
+            tab: Основное
+        category:
+            label: 'Категория каюты'
+            oc.commentPosition: ''
+            span: auto
+            required: 1
+            type: text
+            tab: Основное
+        motorship:
+            label: Теплоход
+            oc.commentPosition: ''
+            span: auto
+            required: 1
+            type: dropdown
+            tab: Основное
+        rooms_count:
+            label: 'Количество комнат'
+            oc.commentPosition: ''
+            span: auto
+            default: '0'
+            type: number
+            tab: Основное
+        bed_id:
+            label: 'Расположение кровати'
+            oc.commentPosition: ''
+            span: auto
+            type: dropdown
+            tab: Основное
+        comfort_id:
+            label: Комфорт
+            oc.commentPosition: ''
+            span: auto
+            type: dropdown
+            tab: Основное
+        places_main_count:
+            label: 'Количество основных мест'
+            oc.commentPosition: ''
+            span: auto
+            default: '0'
+            type: number
+            tab: Основное
+        places_extra_count:
+            label: 'Количество дополнительных мест'
+            oc.commentPosition: ''
+            span: auto
+            default: '0'
+            type: number
+            tab: Основное
+        space:
+            label: 'Площадь каюты в м2'
+            oc.commentPosition: ''
+            span: auto
+            default: '0'
+            type: number
+            tab: Основное
+        decks:
+            label: Палуба
+            oc.commentPosition: ''
+            span: auto
+            type: checkboxlist
+            tab: Основное
+        order:
+            label: 'Порядок каюты в XLS-выгрузке'
+            span: auto
+            default: '0'
+            type: number
+            comment: 'Любое целое число по которому будет произведена сортировка кают в XLS-таблице.'
+            tab: Основное
+        incabin:
+            label: 'В каюте'
+            oc.commentPosition: ''
+            span: full
+            type: checkboxlist
+            tab: 'В каюте'
+        images:
+            label: Фотогалерея
+            oc.commentPosition: ''
+            mode: image
+            useCaption: true
+            thumbOptions:
+                mode: crop
+                extension: auto
+            span: full
+            type: fileupload
+            tab: Описание
+        desc:
+            label: 'Дополнительная информация'
+            span: full
+            size: huge
+            oc.commentPosition: ''
+            type: richeditor
+            tab: Описание
+        hint1:
+            span: full
+            path: $/mcmraak/rivercrs/controllers/cabins/merger.htm
+            context:
+                - update
+                - preview
+            type: hint
+            tab: Слияние
+        merger:
+            label: 'Слияние текущей каюты. Выбор названия - Родителя'
+            span: full
+            context:
+                - update
+                - preview
+            type: dropdown
+            tab: Слияние
+        merger_partial:
+            span: auto
+            path: $/mcmraak/rivercrs/controllers/cabins/merge_button.htm
+            context:
+                - update
+                - preview
+            type: partial
+            tab: Слияние

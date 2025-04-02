@@ -1,0 +1,24 @@
+description = "Левое меню круизов"
+
+[viewBag]
+==
+<div class="left-menu">
+    {% for menu_chapter in RiverCRS.leftMenu %}
+        <div class="left-menu__chapter c-primary-200 mb-2 me-0 me-lg-4 mb-sm-3">
+            <div class="left-menu__chapter__title p-3  fs-s fw-bolder text-white bg-blue-100">
+                <span>{{ menu_chapter.title }}</span>
+                <i class="bi bi-chevron-up"></i>
+            </div>
+            <div class="left-menu__chapter__items py-2">
+                {% for item in menu_chapter.items %}
+                    <a href="{{ item.url }}" class="fs-s c-gray-300 px-3 py-2">{{ item.title }}</a>
+                {% endfor %}
+            </div>
+            {% if menu_chapter.after_button %}
+            <a href="{{ menu_chapter.after_button.url }}" class="left-menu__chapter__after-button">
+                {{ menu_chapter.after_button.title }}
+            </a>
+            {% endif %}
+        </div>
+    {% endfor %}
+</div>

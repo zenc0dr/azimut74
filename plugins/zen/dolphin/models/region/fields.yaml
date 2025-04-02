@@ -1,0 +1,22 @@
+fields:
+    name:
+        label: 'Название региона'
+        span: left
+        type: text
+    country_id:
+        label: Страна
+        showSearch: true
+        span: right
+        type: dropdown
+tabs:
+    fields:
+        snippets:
+            label: 'Изображения сниппетов'
+            mode: image
+            useCaption: true
+            thumbOptions:
+                mode: crop
+                extension: auto
+            span: full
+            type: fileupload
+            tab: Сниппеты

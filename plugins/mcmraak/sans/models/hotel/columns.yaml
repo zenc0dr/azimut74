@@ -1,0 +1,35 @@
+columns:
+    id:
+        label: id
+        type: number
+        searchable: true
+        sortable: true
+    bag_status:
+        label: Описание
+        type: partial
+        path: $/mcmraak/sans/controllers/hotels/bag_status.php
+    name:
+        label: 'Название отеля'
+        type: text
+        searchable: true
+        sortable: true
+    resort_id:
+        label: Курорт
+        type: number
+        sortable: true
+        relation: resort
+        valueFrom: name
+    hotel_category_id:
+        label: 'Категория отеля'
+        type: number
+        sortable: true
+        relation: category
+        valueFrom: name
+    short_name:
+        label: 'Краткое имя'
+        type: text
+        invisible: true
+    cid:
+        label: cid
+        type: text
+        sortable: true

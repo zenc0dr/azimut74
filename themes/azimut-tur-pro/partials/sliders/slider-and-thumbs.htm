@@ -1,0 +1,65 @@
+{% if sliderClass == null %}
+{% set sliderClass = 'slider_one' %}
+{% endif %}
+<section class="slider-and-thumbs {{sliderClass}}">
+   <div style="--swiper-navigation-color: #fff; --swiper-pagination-color: #fff" class="swiper-container shipSlide">
+      <div class="swiper-wrapper">
+         {% for number in 1..9 %}
+         <a class="swiper-slide fancybox ship-img-slide" data-fancybox="gallery-{{sliderClass}}"
+            href="/themes/prokruiz/assets/img/ship-{{ number }}.jpg">
+            <img src="/themes/prokruiz/assets/img/ship-{{ number }}.jpg" />
+         </a>
+         {% endfor %}
+      </div>
+      <div class="swiper-button-next"></div>
+      <div class="swiper-button-prev"></div>
+   </div>
+   <div thumbsSlider="" class="swiper-container thumbSlider">
+      <div class="swiper-wrapper">
+         {% for number in 1..9 %}
+         <div class="swiper-slide ship-img-slide">
+            <img src="/themes/prokruiz/assets/img/ship-{{ number }}.jpg" />
+         </div>
+         {% endfor %}
+      </div>
+   </div>
+</section>
+
+<script>
+   document.addEventListener('DOMContentLoaded', function () {
+      let swiper_{{ sliderClass}} 
+   = new Swiper(".{{sliderClass}} .thumbSlider", {
+         loop: true,
+         spaceBetween: 10,
+         slidesPerView: 4,
+         freeMode: true,
+         watchSlidesVisibility: true,
+         watchSlidesProgress: true,
+         breakpoints: {
+            0: {
+               slidesPerView: 3,
+            },
+            568: {
+               slidesPerView: 4,
+            }
+         }
+      });
+      new Swiper(".{{sliderClass}} .shipSlide", {
+         loop: true,
+         spaceBetween: 10,
+         navigation: {
+            nextEl: ".{{sliderClass}} .swiper-button-next",
+            prevEl: ".{{sliderClass}} .swiper-button-prev",
+         },
+         thumbs: {
+            swiper: swiper_{{ sliderClass }},
+        },
+    });
+   let parent = $('.{{sliderClass}}').parents('.tab-item.close-mobile');
+   if (parent) {
+      parent.on('click', function () {
+           swiper_{ { sliderClass } }.update();
+      });
+   }
+    }, false);
+</script>

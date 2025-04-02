@@ -1,0 +1,22 @@
+fields:
+    name:
+        label: 'Название списка Вопрос/Ответ'
+        span: full
+        type: text
+    data:
+        label: 'Вопрос / Ответ'
+        prompt: Добавить
+        style: default
+        span: full
+        type: repeater
+        form:
+            fields:
+                question:
+                    label: Вопрос
+                    span: full
+                    type: text
+                answer:
+                    label: Ответ
+                    size: small
+                    span: full
+                    type: richeditor

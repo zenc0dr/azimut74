@@ -1,0 +1,29 @@
+columns:
+    id:
+        label: id
+        type: number
+    created_at:
+        label: Создано
+        type: datetime
+        sortable: true
+        format: 'd.m.Y H:i:s'
+    name:
+        label: Имя
+        type: text
+    email:
+        label: Почта
+        type: text
+    phone:
+        label: Телефон
+        type: text
+    peoples:
+        label: 'Количество человек'
+        type: number
+    checkin_id:
+        label: Заезд
+        type: text
+        relation: checkin
+        valueFrom: info
+    processed:
+        label: Обработано
+        type: partial

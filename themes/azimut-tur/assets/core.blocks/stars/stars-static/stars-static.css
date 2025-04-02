@@ -1,0 +1,43 @@
+.stars-static, .stars-static span {
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
+}
+.stars-static {
+	position: relative;
+	display: inline-block;
+	line-height: 1;
+}
+.stars-static span {
+	display: inline-block;
+	color: #000;
+	margin-right: 3px;
+}
+.stars-static__down, .stars-static__up {
+	display: inline-flex;
+	align-items: center;
+}
+.stars-static__down {
+	/* flex-wrap: wrap; */
+}
+.stars-static__down span::before {
+	content: '\f005';
+	font-family: FontAwesome;
+	font-size: 18px;
+	color: #aeaeae;
+}
+.stars-static__up {
+	position: absolute;
+	top: 0;
+	left: 0;
+	width: 50%;
+	height: 100%;
+	overflow: hidden;
+}
+.stars-static__up span::before {
+	content: '\f005';
+	color: var(--m-color);
+	font-family: FontAwesome;
+	font-size: 18px;
+}

@@ -1,0 +1,4 @@
+title: HotelCategories
+modelClass: Mcmraak\Sans\Models\HotelCategory
+toolbar:
+    buttons: reorder_toolbar

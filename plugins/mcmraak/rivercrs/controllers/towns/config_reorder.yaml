@@ -1,0 +1,4 @@
+title: Towns
+modelClass: Mcmraak\Rivercrs\Models\Towns
+toolbar:
+    buttons: reorder_toolbar

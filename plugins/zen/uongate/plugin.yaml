@@ -1,0 +1,10 @@
+plugin:
+    name: 'zen.uongate::lang.plugin.name'
+    description: 'zen.uongate::lang.plugin.description'
+    author: 'Alex Blaze'
+    icon: oc-icon-cloud-upload
+    homepage: ''
+permissions:
+    zen.uongate.main:
+        tab: UonGate
+        label: 'Глобальный доступ'

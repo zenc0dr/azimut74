@@ -1,0 +1,117 @@
+[v-cloak] {
+    display: none
+}
+
+#Statistics {
+}
+
+.cabox-filelist {
+    transition: 100ms;
+}
+
+.cabox-filelist.process {
+    opacity: 0.60;
+}
+
+.cabox-file {
+    display: flex;
+    background: #e7e7e8;
+    margin-bottom: 5px;
+    padding: 2px 10px;
+    font-size: 13px;
+    cursor: pointer;
+}
+
+.cabox-file:hover {
+    background: #d4d4d4;
+}
+
+.cabox-file > div {
+    padding: 0 0px;
+}
+
+.cabox-file.titles {
+    background: #9098a2;
+    color: #fff;
+    font-weight: bold;
+}
+
+.cabox-key {
+    flex: 1 1 0;
+}
+
+.cabox-time {
+    width: 150px;
+    text-align: center;
+}
+
+.remove-cache:hover {
+    color: red;
+}
+
+.cabox-pagination {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-top: 20px;
+}
+
+.cabox-pagination > div {
+    text-align: center;
+    border-radius: 5px;
+}
+
+.cabox-pagination-arrow {
+    background: #e7e7e8;
+    width: 50px;
+    color: #939393;
+    padding: 3px;
+    cursor: pointer;
+}
+
+.cabox-pagination-arrow:hover {
+    color: #507de1;
+}
+
+.cabox-pagination-arrow i::before {
+    margin: 0;
+}
+
+.cabox-pagination-text {
+    font-weight: bold;
+    padding: 0 15px;
+}
+
+.cabox-dump {
+    margin-top: 15px;
+}
+.cabox-dump.image img {
+    max-width: 1000px;
+}
+
+.cabox-clean {
+    margin-top: 15px;
+}
+
+.cabox-filters {
+    width: 100%;
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    flex-wrap: wrap;
+}
+
+.cabox-filter {
+    margin-bottom: 15px;
+    padding: 3px 8px;
+    border: 1px solid #9098a2;
+}
+
+.filter-key {
+    flex: 1 1 0;
+    margin-right: 10px;
+}
+
+.filter-data {
+    width: 159px;
+}

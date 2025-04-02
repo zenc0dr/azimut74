@@ -1,0 +1,29 @@
+fields:
+    title:
+        label: Заголовок
+        span: auto
+        type: text
+    type:
+        label: 'Тип записи'
+        span: auto
+        type: text
+    method:
+        label: Метод
+        span: auto
+        type: text
+    eds_code:
+        label: 'Код источника'
+        span: auto
+        type: text
+    url:
+        label: 'URL - Запроса'
+        size: small
+        language: plain_text
+        span: full
+        type: codeeditor
+    text:
+        label: 'Дополнительные данные'
+        size: huge
+        language: plain_text
+        span: full
+        type: codeeditor

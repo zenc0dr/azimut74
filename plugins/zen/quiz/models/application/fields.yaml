@@ -1,0 +1,93 @@
+fields:
+    active:
+        label: Обработана
+        span: full
+        type: switch
+    created_at:
+        label: 'Дата создания'
+        mode: datetime
+        span: auto
+        readOnly: 1
+        type: datepicker
+    updated_at:
+        label: 'Дата обработки'
+        mode: datetime
+        span: auto
+        readOnly: 1
+        required: 0
+        context:
+            - update
+            - preview
+        type: datepicker
+    phone:
+        label: Телефон
+        span: auto
+        readOnly: 1
+        type: text
+    email:
+        label: Email
+        span: auto
+        readOnly: 1
+        type: text
+tabs:
+    fields:
+        city_id:
+            label: 'Город отправления'
+            showSearch: true
+            span: auto
+            readOnly: 1
+            type: dropdown
+            tab: 'Данные квиз'
+        section1:
+            label: Даты
+            span: full
+            type: section
+            tab: 'Данные квиз'
+        date_from:
+            label: 'Дата от'
+            mode: date
+            span: auto
+            readOnly: 1
+            type: datepicker
+            tab: 'Данные квиз'
+        date_to:
+            label: 'Дата до'
+            mode: date
+            span: auto
+            readOnly: 1
+            type: datepicker
+            tab: 'Данные квиз'
+        section2:
+            label: Дни
+            span: full
+            type: section
+            tab: 'Данные квиз'
+        day_from:
+            label: 'Дней от'
+            span: auto
+            readOnly: 1
+            type: number
+            tab: 'Данные квиз'
+        day_to:
+            label: 'Дней до'
+            span: auto
+            readOnly: 1
+            type: number
+            tab: 'Данные квиз'
+        section3:
+            label: Пассажиры
+            span: full
+            type: section
+            tab: 'Данные квиз'
+        count_adult:
+            label: 'Кол-во взрослых'
+            span: auto
+            readOnly: 1
+            type: number
+            tab: 'Данные квиз'
+        count_children:
+            label: 'Кол-во детей'
+            span: auto
+            readOnly: 1
+            type: number
+            tab: 'Данные квиз'

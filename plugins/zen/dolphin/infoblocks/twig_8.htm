@@ -1,0 +1,44 @@
+<style>
+    .tour-program {
+
+    }
+    .tour-program h2 {
+        text-align: center;
+    }
+    .tour-program_body {
+
+    }
+    .tour-program__day {
+        margin-bottom: 20px;
+    }
+    .tour-program_dow {
+        font-family: OpenSansBold, sans-serif;
+        background: #dbdcdd;
+        color: #000;
+        padding: 6px 18px;
+        margin-bottom: 9px;
+        font-size: 15px;
+    }
+    .tour-program_desc {
+        font-size: 14px;
+        /*background-color: #fffdea;*/
+        color: #414141;
+
+        line-height: 23px;
+        padding-bottom: 30px;
+    }
+</style>
+
+{% if tour_program %}
+<div class="data tour-program">
+    <h2>Программа тура</h2>
+    <div class="tour-program_body">
+        {% for item in tour_program %}
+            <div class="tour-program__day">
+               <div class="tour-program_dow">{{ item.title }}</div>
+               <div class="tour-program_desc">{{ item.text|raw }}</div>
+            </div>
+        {% endfor %}
+    </div>
+</div>
+{% endif %}

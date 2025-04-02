@@ -1,0 +1,170 @@
+.schedule-table {
+    @mixin styled-titles {
+        color: #666;
+        font-weight: bold;
+        background-color: #d7eafa;
+        text-align: center;
+    }
+    user-select: none;
+    $border: 1px solid #9d9d9d;
+    font-size: 14px;
+    margin-bottom: 50px;
+
+    &__title {
+        text-align: center;
+    }
+    .st-table {
+        display: flex;
+        flex-direction: column;
+
+        .st-titles {
+            display: flex;
+            flex-direction: row;
+            border-radius: 3px;
+            @include styled-titles;
+
+            > div {
+                padding: 9px 5px;
+            }
+
+            .st-arrival {
+                width: 120px;
+            }
+
+            .st-departure {
+                width: 120px;
+            }
+
+            .st-days {
+                width: 100px;
+            }
+
+            .st-tour {
+                flex: 1 0 0;
+            }
+
+            .st-price {
+                width: 100px;
+            }
+        }
+
+        .st-item {
+            display: flex;
+            flex-direction: row;
+            border-top: $border;
+
+            > div {
+                padding: 4px 3px;
+                display: flex;
+                flex-direction: column;
+                justify-content: center;
+                align-items: center;
+            }
+
+            .st-arrival {
+                width: 120px;
+            }
+
+            .st-departure {
+                width: 120px;
+            }
+
+            .st-days {
+                width: 100px;
+            }
+
+            .st-tour {
+                flex: 1 0 0;
+                align-items: start;
+                line-height: 19px;
+
+                .st-tour-name {
+                    margin-bottom: 3px;
+
+                    a {
+                    }
+                }
+
+                .st-waybill {
+
+                }
+            }
+
+            .st-price {
+                width: 100px;
+            }
+        }
+    }
+
+    .st-cards {
+        .st-card {
+            border: 1px solid #d7eafa;
+            border-radius: 5px;
+            margin-bottom: 10px;
+            &__header {
+                display: flex;
+                flex-direction: column;
+
+                > div {
+                    display: flex;
+                    flex-direction: row;
+                }
+            }
+
+            &__titles {
+                @include styled-titles;
+
+                > div {
+                    padding: 5px 3px;
+                }
+            }
+
+            .st-arrival {
+                flex: 1 0 0;
+            }
+
+            .st-days {
+                width: 50px;
+            }
+
+            .st-departure {
+                flex: 1 0 0;
+            }
+
+            &__time {
+                .st-arrival {
+                    flex: 1 0 0;
+                }
+
+                .st-days {
+                    width: 50px;
+                }
+
+                .st-departure {
+                    flex: 1 0 0;
+                }
+                > div {
+                    text-align: center;
+                    padding: 5px 3px;
+                }
+            }
+            .st-tour {
+                padding: 15px;
+                .st-tour-name {
+                    text-align: center;
+                    margin-bottom: 10px;
+                }
+            }
+            .st-price {
+                > span {
+                    font-size: 20px;
+                    font-weight: bold;
+                    color: #5f5f5f;
+                }
+                padding: 0 20px;
+                text-align: right;
+                margin-bottom: 10px;
+            }
+        }
+    }
+}

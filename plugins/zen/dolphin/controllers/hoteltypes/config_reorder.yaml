@@ -1,0 +1,4 @@
+title: HotelTypes
+modelClass: Zen\Dolphin\Models\HotelType
+toolbar:
+    buttons: reorder_toolbar

@@ -1,0 +1,68 @@
+1.0.1:
+    - 'Initialize plugin.'
+1.0.2:
+    - 'Created table mcmraak_blocks_posts'
+    - builder_table_create_mcmraak_blocks_posts.php
+1.0.3:
+    - 'Created table mcmraak_blocks_maps'
+    - builder_table_create_mcmraak_blocks_maps.php
+1.0.4:
+    - 'Created table mcmraak_blocks_markers'
+    - builder_table_create_mcmraak_blocks_markers.php
+1.0.5:
+    - 'Created table mcmraak_blocks_maps_markers'
+    - builder_table_create_mcmraak_blocks_maps_markers.php
+1.0.6:
+    - 'Created table mcmraak_blocks_slider'
+    - builder_table_create_mcmraak_blocks_slider.php
+1.0.7:
+    - 'Updated table mcmraak_blocks_slider'
+    - builder_table_update_mcmraak_blocks_slider.php
+1.0.8:
+    - 'Updated table mcmraak_blocks_slider'
+    - builder_table_update_mcmraak_blocks_slider_2.php
+1.0.9:
+    - 'Updated table mcmraak_blocks_slider'
+    - builder_table_update_mcmraak_blocks_slider_3.php
+1.0.10:
+    - 'Created table mcmraak_blocks_offer'
+    - builder_table_create_mcmraak_blocks_offer.php
+1.0.11:
+    - 'Updated table mcmraak_blocks_offer'
+    - builder_table_update_mcmraak_blocks_offer.php
+1.0.12:
+    - 'Created Galleries'
+    - builder_table_create_mcmraak_blocks_galleries.php
+1.0.13:
+    - 'Created table mcmraak_blocks_styles'
+    - builder_table_create_mcmraak_blocks_styles.php
+1.0.14:
+    - 'Updated table mcmraak_blocks_slider'
+    - builder_table_update_mcmraak_blocks_slider_4.php
+1.0.15:
+    - 'Created table mcmraak_blocks_codes'
+    - builder_table_create_mcmraak_blocks_codes.php
+1.0.16:
+    - 'Created table mcmraak_blocks_injects'
+    - builder_table_create_mcmraak_blocks_injects.php
+1.0.17:
+    - 'Created table mcmraak_blocks_templates'
+    - builder_table_create_mcmraak_blocks_templates.php
+1.0.18:
+    - 'Created table mcmraak_blocks_scopes'
+    - builder_table_create_mcmraak_blocks_scopes.php
+1.0.19:
+    - 'Created table mcmraak_blocks_injects_scopes'
+    - builder_table_create_mcmraak_blocks_injects_scopes.php
+1.0.20:
+    - 'Updated table mcmraak_blocks_injects'
+    - builder_table_update_mcmraak_blocks_injects.php
+1.0.21:
+    - 'Updated table mcmraak_blocks_slider'
+    - builder_table_update_mcmraak_blocks_slider_5.php
+1.0.22:
+    - 'Updated table mcmraak_blocks_slider'
+    - builder_table_update_mcmraak_blocks_slider_6.php
+1.0.23:
+    - 'Updated table mcmraak_blocks_injects'
+    - builder_table_update_mcmraak_blocks_injects_2.php

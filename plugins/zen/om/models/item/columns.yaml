@@ -1,0 +1,62 @@
+columns:
+    id:
+        label: id
+        type: number
+        sortable: true
+    name:
+        label: 'zen.om::lang.list.name'
+        type: text
+        searchable: true
+        sortable: true
+    slug:
+        label: 'zen.om::lang.plugin.slug'
+        type: text
+        searchable: true
+        sortable: true
+    url_cache:
+        label: 'zen.om::lang.plugin.url'
+        type: text
+    active:
+        label: 'zen.om::lang.plugin.active'
+        type: partial
+        sortable: true
+    category_id:
+        label: 'zen.om::lang.categories.category'
+        type: number
+        sortable: true
+        relation: category
+        valueFrom: name
+    hits:
+        label: 'zen.om::lang.list.hits'
+        type: number
+        invisible: true
+        sortable: true
+    images_count:
+        label: 'zen.om::lang.plugin.images'
+        type: partial
+        invisible: true
+        sortable: false
+    brand_id:
+        label: 'zen.om::lang.list.brand'
+        type: text
+        invisible: true
+        sortable: true
+        relation: brand
+        valueFrom: name
+    storage_id:
+        label: 'zen.om::lang.storage.storage'
+        type: number
+        invisible: true
+        relation: storage
+        valueFrom: name
+    store_id:
+        label: 'zen.om::lang.store.store'
+        type: text
+        invisible: true
+        relation: store
+        valueFrom: name
+    updated_at:
+        label: 'zen.om::lang.list.updated'
+        type: datetime
+        invisible: true
+        sortable: true

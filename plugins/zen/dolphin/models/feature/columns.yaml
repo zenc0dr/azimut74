@@ -1,0 +1,15 @@
+columns:
+    id:
+        label: id
+        type: number
+        sortable: true
+    name:
+        label: 'Название блока'
+        type: text
+        searchable: true
+        sortable: true
+    title:
+        label: Заголовок
+        type: text
+        searchable: true
+        sortable: true

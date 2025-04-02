@@ -1,0 +1,152 @@
+fields:
+    active:
+        label: Активность
+        span: left
+        default: 1
+        type: switch
+    menu:
+        label: 'Показать в меню'
+        span: right
+        default: 1
+        type: switch
+    cruise:
+        label: 'Родительский пункт'
+        span: full
+        oc.commentPosition: ''
+        nameFrom: name
+        descriptionFrom: description
+        type: relation
+    name:
+        label: 'Название в админке'
+        oc.commentPosition: ''
+        span: auto
+        type: text
+    slug:
+        label: 'url (фрагмент)'
+        oc.commentPosition: ''
+        span: auto
+        preset:
+            field: name
+            type: slug
+        type: text
+    menu_title:
+        label: 'Пункт меню'
+        span: auto
+        oc.commentPosition: ''
+        type: text
+    sort_order:
+        label: Порядок
+        span: auto
+        oc.commentPosition: ''
+        default: '0'
+        type: number
+    h1:
+        label: 'Заголовок H1'
+        span: full
+        type: text
+tabs:
+    fields:
+        images:
+            label: Изображение
+            oc.commentPosition: ''
+            mode: image
+            useCaption: true
+            thumbOptions:
+                mode: crop
+                extension: auto
+            span: full
+            type: fileupload
+            tab: Информация
+        text:
+            label: 'Информационный блок'
+            size: huge
+            oc.commentPosition: ''
+            span: full
+            type: richeditor
+            tab: Информация
+        town1:
+            label: 'Город отправления'
+            oc.commentPosition: ''
+            span: auto
+            type: dropdown
+            tab: 'Настройки фильтра'
+        town2:
+            label: 'Город на маршруте'
+            oc.commentPosition: ''
+            span: auto
+            type: dropdown
+            tab: 'Настройки фильтра'
+        date1:
+            label: 'Период отправления С'
+            oc.commentPosition: ''
+            mode: date
+            span: auto
+            type: datepicker
+            tab: 'Настройки фильтра'
+        date2:
+            label: 'Период отправления ПО'
+            oc.commentPosition: ''
+            mode: date
+            span: auto
+            type: datepicker
+            tab: 'Настройки фильтра'
+        ship_id:
+            label: Теплоход
+            oc.commentPosition: ''
+            span: auto
+            type: dropdown
+            tab: 'Настройки фильтра'
+        days:
+            label: Продолжительность
+            oc.commentPosition: ''
+            span: auto
+            default: '0'
+            type: number
+            tab: 'Настройки фильтра'
+        seo_articles:
+            label: 'SEO Статьи'
+            oc.commentPosition: ''
+            prompt: 'Добавить статью'
+            span: full
+            type: repeater
+            tab: Seo-статьи
+            form:
+                fields:
+                    seo_title:
+                        label: 'Заголовок статьи'
+                        oc.commentPosition: ''
+                        span: full
+                        type: text
+                    seo_text:
+                        label: 'Текст статьи'
+                        size: large
+                        oc.commentPosition: ''
+                        span: full
+                        type: richeditor
+                    seo_hash:
+                        label: Хэш-тег
+                        oc.commentPosition: ''
+                        span: auto
+                        hidden: 0
+                        preset:
+                            field: seo_title
+                            type: slug
+                        type: text
+        metatitle:
+            label: title
+            oc.commentPosition: ''
+            span: full
+            type: text
+            tab: Метатеги
+        metadesc:
+            label: description
+            oc.commentPosition: ''
+            span: full
+            type: text
+            tab: Метатеги
+        metakey:
+            label: keywords
+            oc.commentPosition: ''
+            span: auto
+            type: text
+            tab: Метатеги

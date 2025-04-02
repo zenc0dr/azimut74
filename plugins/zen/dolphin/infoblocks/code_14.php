@@ -1,0 +1,1 @@
+$template['tour_dates'] = @$input['tour_dates'];

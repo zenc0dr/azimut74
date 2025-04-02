@@ -1,0 +1,150 @@
+/* Order */
+.dw-order {
+    padding: 10px;
+}
+
+.dw-order .dw-order-h {
+    font-family: OpenSansBold, sans-serif;
+    font-size: 20px;
+    text-transform: uppercase;
+    text-align: center;
+}
+
+.dw-order .dw-order-h2 {
+    font-family: OpenSansBold, sans-serif;
+    font-size: 16px;
+    text-align: center;
+    color: #919191;
+    margin-top: 7px;
+}
+
+.dw-order .dw-order-wrap {
+    margin: -5px;
+    margin-bottom: 20px;
+    margin-top: 20px;
+}
+
+.dw-order .dw-order-raw {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+}
+
+.dw-order .dw-order-block {
+    display: inline-block;
+    background: #f1f1f1;
+    border-radius: 3px;
+    padding: 5px 11px;
+    padding-bottom: 10px;
+    flex: 1 0 0;
+    margin-left: 5px;
+    margin-right: 5px;
+    margin-bottom: 5px;
+}
+
+.dw-order .dw-order-label {
+    font-family: OpenSansBold, sans-serif;
+    font-size: 13px;
+    color: #868686;
+    margin-bottom: 5px;
+}
+
+.dw-order .dw-order-dates {
+    width: 100%;
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+    font-size: 26px;
+    margin-bottom: 5px;
+}
+
+.dw-order .dw-order-dates > div {
+    display: flex;
+    border: 1px solid #92ccff;
+    border-radius: 7px;
+    padding: 9px 20px;
+    margin: 0 14px;
+    background: #fff;
+}
+
+.dw-order .dw-order-dates > div > div {
+    font-family: OpenSansBold, sans-serif;
+    color: #666;
+    font-size: 25px;
+}
+
+.dw-order .dw-order-dates > div span {
+    margin-left: 11px;
+    color: #3c6f9b;
+    font-size: 13px;
+}
+
+.dw-order .dw-order-text {
+}
+
+.dw-order .dw-order-price {
+    font-family: OpenSansBold, sans-serif;
+    color: #36759b;
+}
+
+.dw-booking-button-wrap {
+    text-align: center;
+}
+
+.dw-booking-button {
+    background-color: #cb2022;
+    font-family: OpenSansBold, sans-serif;
+    color: #fff;
+    padding: 10px 65px 10px 65px;
+    font-size: 16px;
+    text-transform: uppercase;
+    border-radius: 23px;
+    transition: 300ms;
+}
+
+.dw-booking-button[disabled='disabled'] {
+    background-color: #bcbcbc;
+    cursor: default;
+}
+
+.dw-booking-button:not([disabled]):hover {
+    transform: scale(1.03);
+    background-color: #e71f21;
+}
+
+.dw-booking-button:not([disabled]):active {
+    transform: scale(0.95);
+    background-color: #ff0003;
+}
+
+.dw-order input.badfield {
+    border: 1px solid red !important;
+}
+
+.dw-order .preloader {
+    text-align: center;
+    margin-top: 18px;
+}
+
+.dw-order__desc {
+    display: flex;
+    justify-content: center;
+    margin-bottom: 10px;
+    span {
+        ont-size: 12px;
+        max-width: 500px;
+        color: #4d4d4d;
+    }
+}
+
+@media (max-width: 400px) {
+    .dw-order .dw-order-raw {
+        flex-direction: column;
+    }
+}
+@media (max-width: 560px) {
+    .dw-order .dw-order-dates {
+        flex-direction: column;
+    }
+}

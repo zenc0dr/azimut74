@@ -1,0 +1,22 @@
+title = "Настройка времени"
+url = "/time/test"
+is_hidden = 0
+robot_index = "index"
+robot_follow = "follow"
+contentType = "html"
+force_show = 0
+==
+<?php
+use Carbon\Carbon;
+function onStart()
+{
+    
+    $te = \Zen\History\Models\LinkType::where('code', 'tours')->lists('id');
+    dd($te[0]);
+    
+    $time = Carbon::now();
+    $this['time'] = $time->format('d.m.Y H:i:s');
+}
+?>
+==
+Серверное время: {{ time }}

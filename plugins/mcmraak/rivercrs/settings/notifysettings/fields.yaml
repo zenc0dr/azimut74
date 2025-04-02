@@ -1,0 +1,33 @@
+tabs:
+    fields:
+        sms:
+            label: 'Отправлять SMS при бронировании'
+            span: full
+            default: 1
+            type: switch
+            tab: 'Общие'
+        sms_profile:
+            label: 'Код профиля Zen.Sms'
+            span: auto
+            type: text
+            tab: 'Общие'
+        rivercrs_sms:
+            label: 'SMS ($id - Номер заезда)'
+            span: full
+            type: text
+            tab: 'Речные круизы'
+        rc_subject:
+            label: 'Тема письма ($id - Номер заезда)'
+            span: full
+            type: text
+            tab: 'Речные круизы'
+        prokruiz_sms:
+            label: 'SMS ($id - Номер заезда)'
+            span: full
+            type: text
+            tab: 'Про-Круиз'
+        pk_subject:
+            label: 'Тема письма ($id - Номер заезда)'
+            span: full
+            type: text
+            tab: 'Про-Круиз'

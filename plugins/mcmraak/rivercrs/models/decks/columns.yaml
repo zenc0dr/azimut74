@@ -1,0 +1,19 @@
+columns:
+    id:
+        label: id
+        type: number
+        sortable: true
+    name:
+        label: 'Название палубы'
+        type: text
+        searchable: true
+        sortable: true
+    sort_order:
+        label: Порядок
+        type: number
+        sortable: true
+    parent_id:
+        label: Указатель
+        type: text
+        relation: parent
+        valueFrom: name

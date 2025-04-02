@@ -1,0 +1,16 @@
+name: Deliveries
+modelClass: Zen\Om\Models\Delivery
+form: $/zen/om/models/delivery/fields.yaml
+defaultRedirect: zen/om/deliveries
+create:
+    title: 'zen.om::lang.deliveries.create'
+    redirect: 'zen/om/deliveries/update/:id'
+    redirectClose: zen/om/deliveries
+    flashSave: 'zen.om::lang.deliveries.created'
+update:
+    title: 'zen.om::lang.deliveries.update'
+    redirect: zen/om/deliveries
+    redirectClose: zen/om/deliveries
+    flashSave: 'zen.om::lang.deliveries.updated'
+    flashDelete: 'zen.om::lang.deliveries.deleted'
+preview: {  }

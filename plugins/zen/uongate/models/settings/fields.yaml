@@ -1,0 +1,28 @@
+fields:
+    api_url:
+        label: 'Api URL'
+        span: auto
+        type: text
+    api_key:
+        label: 'Api KEY'
+        span: auto
+        type: text
+tabs:
+    fields:
+        price_ranges:
+            label: 'Ценовые уровни (с 1-ого)'
+            prompt: Добавить
+            style: default
+            span: auto
+            type: repeater
+            tab: Интеграция
+            form:
+                fields:
+                    of:
+                        label: ОТ
+                        span: auto
+                        type: number
+                    to:
+                        label: ДО
+                        span: auto
+                        type: number

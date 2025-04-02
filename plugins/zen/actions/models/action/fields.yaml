@@ -1,0 +1,23 @@
+fields:
+    name:
+        label: Название
+        span: full
+        type: text
+    desc:
+        label: Описание
+        size: small
+        span: full
+        type: richeditor
+    code:
+        label: 'Код action'
+        size: huge
+        language: php
+        span: full
+        type: codeeditor
+    partial1:
+        span: full
+        path: $/zen/actions/controllers/actions/output.php
+        context:
+            - update
+            - preview
+        type: partial

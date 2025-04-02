@@ -1,0 +1,24 @@
+columns:
+    id:
+        label: id
+        type: number
+        searchable: true
+        sortable: true
+    name:
+        label: 'Название инфоблока'
+        type: text
+        searchable: true
+        sortable: true
+    vars:
+        label: 'Переменные источника'
+        type: text
+        searchable: true
+        sortable: true
+    sort_order:
+        label: Порядок
+        type: number
+        sortable: true
+    active:
+        label: Активность
+        type: partial
+        sortable: true

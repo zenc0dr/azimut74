@@ -1,0 +1,10 @@
+name: SliderBeach
+form: $/srw/azimut/models/sliderbeach/fields.yaml
+modelClass: Srw\Azimut\Models\SliderBeach
+defaultRedirect: srw/azimut/sliderbeach
+create:
+    redirect: 'srw/azimut/sliderbeach/update/:id'
+    redirectClose: srw/azimut/sliderbeach
+update:
+    redirect: srw/azimut/sliderbeach
+    redirectClose: srw/azimut/sliderbeach

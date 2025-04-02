@@ -1,0 +1,90 @@
+description = "Модальные окна"
+
+[viewBag]
+==
+<?php
+function onStart()
+{
+    $this['settings'] = \Mcmraak\Rivercrs\Models\Settings::find(1);
+}
+?>
+==
+<div class="hidden">
+    {# Модальное окно - Каюта #}
+    <div id="modalCabin" class="modalFade">
+        <div class="modalWrap modalCabin">
+            <div class="modalContent">
+                <button title="Close (Esc)" type="button" class="mfp-close">×</button>
+                <div class="modalLine">
+                    <span style="font-size: 20px">Загрузка...</span>
+                </div>
+            </div>
+        </div>
+        {% partial 'modal/modal-second' %}
+    </div>
+    
+    {# Модальное окно - График движения #}
+    <div id="modalGraphic" class="modalFade">
+        <div class="modalWrap modalGraphic">
+    		<button title="Close (Esc)" type="button" class="mfp-close">×</button>
+            <div class="modalContent">
+                <span style="font-size: 20px">Загрузка...</span>
+            </div>
+        </div>
+        {% partial 'modal/modal-second' %}
+    </div>
+        
+    {# Модальное окно - Бронирование #}
+    <div id="modalBooking" class="modalFade">
+        <div class="modalWrap modalWrapBook">
+        	
+        	<div class="modalDone">
+				<button title="Close (Esc)" type="button" class="mfp-close">×</button>
+	
+				<div class="modalHead">
+					<span>Спасибо за заявку!</span>
+					<span>Специалист позвонит вам в ближайшее время</span>
+				</div>
+			</div>
+    
+            <div class="modalContent">
+                <span style="font-size: 20px">Загрузка...</span>
+            </div>
+        </div>
+        {% partial 'modal/modal-second' %}
+    </div>
+    
+    {# Модальное окно - купить в рассрочку #}
+    <div id="modalCredit" class="modalFade">
+        <div class="modalWrap modalCredit">
+    
+            <div class="modalContent">
+                <button title="Close (Esc)" type="button" class="mfp-close">×</button>
+    
+                <div class="modalHead">
+                    <span>Купить тур в рассрочку</span>
+                    <span>{{ settings.banks_text1|mutator }}</span>
+                </div>
+    
+                <div class="modalLine">
+                    {% for bank in settings.banks %}
+                        <div class="crBlock">
+                            <div class="crBlockImage">
+                                <img src="{{ bank.bank_image|media }}">
+                            </div>
+                            <div class="crBlockDesc">
+                                {{ bank.bank_text|raw|mutator }}
+                            </div>
+                        </div>
+                    {% endfor %}
+                </div>
+    
+                <div class="modalLine modalAbout">
+                    <span>Позвоните нам и мы все подробно расскажем</span>
+                    <span>{{ settings.banks_text2|mutator }}</span>
+                </div>
+            </div>
+        </div>
+        {% partial 'modal/modal-second' %}
+    </div>
+</div>

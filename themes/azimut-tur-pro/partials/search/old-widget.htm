@@ -1,0 +1,95 @@
+<section id="RivercrsWidget" class="col-12 col-lg" v-cloak>
+    <div class="search-widget result-page">
+        <meta name="query_from_start" content="{{ query_from_start }}">
+            <div class="widget-content" v-if="loaded">
+                <div class="container">
+                    <h1>Тут заголовок</h1>
+                    <div class="widget-form">
+                        <div class="widget-form-input col-12 col-lg-auto">
+                            <div class="w-form-label">Город отправления</div>
+                            <mdropdown id="town" :opt="form.town" :any="'Город отправления'"></mdropdown>
+                        </div>
+
+                        <div class="widget-form-input col-12 col-lg-6 ">
+                            <div class="w-form-label">Период отправления</div>
+                            <div class="w-form-inputs">
+                                <div @click="openDP(1)" class="w-form-input">
+                                    <span class="w-form-input-prefix">с</span>
+                                    <div class="w-date-select">
+                                        <input v-model="form.date_1" name="date-1">
+                                        <img src="/themes/prokruiz/assets/img/svg/calendar.svg">
+                                    </div>
+                                </div>
+                                <div @click="openDP(2)" class="w-form-input">
+                                    <span class="w-form-input-prefix">по</span>
+                                    <div class="w-date-select">
+                                        <input v-model="form.date_2" name="date-2">
+                                        <img src="/themes/prokruiz/assets/img/svg/calendar.svg">
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="widget-form-input col-6 col-lg-auto ">
+                            <div class="w-form-label">Продолжительность</div>
+                            <mdropdown id="days" :opt="form.days" :any="'Дней'"></mdropdown>
+                        </div>
+                        <div class="widget-form-input col-6 col-lg-auto">
+                            <div class="w-form-label">Город на пути</div>
+                            <mdropdown id="dest" :opt="form.dest" :any="'Город на пути'"></mdropdown>
+                        </div>
+                        <div class="widget-form-input col-12 col-lg-6">
+                            <div class="w-form-label">Теплоход</div>
+                            <template v-if="fixed_ship">
+                                <div class="multi-drop">
+                                    <div class="value">
+                                        <div>
+                                            <div class="label-original">Теплоход</div>
+                                            <div class="input-wrapper"><span>{{ ship_name }}</span></div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </template>
+                            <template v-else>
+                                <mdropdown id="ship" :opt="form.ship" :any="'Теплоход'"></mdropdown>
+                            </template>
+                        </div>
+                        <div class="widget-form-button col-12 col-lg-auto">
+                            {% if on_start %}
+                                <button @click="searchFromStart" class="btn red white-text">Найти круиз</button>
+                            {% else %}
+                                <button @click="search()" class="btn red white-text">Найти круиз</button>
+                            {% endif %}
+                        </div>
+                        <div v-if="find_count" class="widget-form-count-result col-12">
+                            Найдено: ${ find_count }
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div v-else class="widget-content preloader" testpoint="true">
+                <div class="lds-default">
+                    <div></div>
+                    <div></div>
+                    <div></div>
+                    <div></div>
+                    <div></div>
+                    <div></div>
+                    <div></div>
+                    <div></div>
+                    <div></div>
+                    <div></div>
+                    <div></div>
+                    <div></div>
+                </div>
+            </div>
+    </div>
+    <template v-if="result">
+        <template>
+            <pagination @go="goPage" :page="page" :pages_count="pages_count"></pagination>
+        </template>
+        <div id="Result" class="d-flex flex-column" :class="{preloader:ajaxQueryProcess}"  v-html="result"></div>
+        <template>
+            <pagination @go="goPage" :page="page" :pages_count="pages_count"></pagination>
+        </template>
+    </template>
+</section>

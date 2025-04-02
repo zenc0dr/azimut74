@@ -1,0 +1,4 @@
+title: MainSlider
+modelClass: Srw\Azimut\Models\MainSlider
+toolbar:
+    buttons: reorder_toolbar

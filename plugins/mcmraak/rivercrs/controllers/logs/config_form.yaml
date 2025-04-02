@@ -1,0 +1,10 @@
+name: Logs
+form: $/mcmraak/rivercrs/models/log/fields.yaml
+modelClass: Mcmraak\Rivercrs\Models\Log
+defaultRedirect: mcmraak/rivercrs/logs
+create:
+    redirect: 'mcmraak/rivercrs/logs/update/:id'
+    redirectClose: mcmraak/rivercrs/logs
+update:
+    redirect: mcmraak/rivercrs/logs
+    redirectClose: mcmraak/rivercrs/logs

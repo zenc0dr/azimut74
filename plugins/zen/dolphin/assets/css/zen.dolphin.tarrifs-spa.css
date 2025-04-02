@@ -1,0 +1,307 @@
+/* Panel */
+.tarrifs-panel {
+    padding: 15px;
+}
+
+.tarrifs-panel > div {
+    margin-right: 10px;
+}
+
+.submit-panel {
+    text-align: right;
+    margin-top: 50px;
+}
+
+.submit-panel button {
+    margin-left: 10px;
+}
+
+/* ocv-list */
+.ocv-list {
+}
+
+.ocv-list .ocv-titles {
+    display: flex;
+    background: #fff;
+    border-top: 1px solid #d4d8da;
+    border-bottom: 2px solid #d4d8da;
+    justify-content: space-between;
+}
+
+.ocv-list .ocv-titles > div {
+    color: #666;
+    padding: 6px 10px;
+}
+
+.ocv-list .ocv-record {
+    display: flex;
+    color: #494949;
+    border-bottom: 2px solid #fff;
+    cursor: pointer;
+    justify-content: space-between;
+}
+
+.ocv-list .ocv-record:nth-child(even) {
+    background: #ecf0f1;
+}
+
+.ocv-list .ocv-record > div {
+    padding: 8px 10px;
+}
+
+.ocv-list .ocv-record:hover {
+    background: #3498db;
+    color: #fff;
+}
+
+.ocv-cell-ch {
+    width: 33px;
+}
+
+.ocv-cell-1 {
+    width: 50px;
+    text-align: right;
+}
+
+.ocv-cell-2 {
+    flex: 1 0 0;
+}
+
+.ocv-cell-3 {
+    width: 200px;
+}
+
+.ocv-cell-4 {
+    width: 200px;
+}
+
+.ocv-cell-5 {
+    width: 200px;
+}
+
+.ocv-cell-6 {
+    width: 160px;
+}
+
+.ocv-cell-7 {
+    width: 160px;
+}
+
+/* Select Reducts */
+.ts-reducts {
+}
+
+.reduct-dates-blocks {
+    display: flex;
+    flex-wrap: wrap;
+}
+
+.reduct-dates-blocks > div {
+    padding: 3px 9px;
+    background: #e3e3e3;
+    margin: 3px 4px;
+    font-size: 12px;
+    border-radius: 3px;
+    cursor: pointer;
+    user-select: none;
+}
+
+.reduct-dates-blocks > div.selected {
+    background: #0994fa;
+    color: #fff;
+}
+
+/* ZenDates */
+.zen-dates {
+    display: flex;
+    width: 100%;
+    justify-content: space-between;
+    margin-bottom: 40px;
+}
+
+.zen-dates-control {
+    width: 30px;
+    text-align: center;
+    background: #d2e3ed;
+    font-weight: bold;
+    user-select: none;
+    cursor: pointer;
+    transition: 200ms;
+    color: #7b7b7b;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.zen-dates-control:hover {
+    background: #98c4df;
+}
+
+.zen-dates-calendar {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    width: 252px;
+    justify-content: left;
+    align-items: flex-start;
+}
+
+.calendar-date {
+    width: 100%;
+    text-align: center;
+    background: #7c919c;
+    color: #fff;
+    font-weight: bold;
+    padding: 2px 0;
+    margin: 3px;
+}
+
+.calendar-day-name, .calendar-day, .calendar-day-empty {
+    width: 30px;
+    margin: 3px;
+    user-select: none;
+    font-size: 13px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    border-radius: 3px;
+}
+
+.calendar-day-name {
+    background: #fdff98;
+    height: 22px;
+}
+
+.calendar-day {
+    background: #e3e3e3;
+    cursor: pointer;
+    height: 28px;
+}
+
+.calendar-day.active {
+    background: #71c3fd;
+    color: #fff;
+}
+
+.calendar-day.loaded {
+    background: #0095ff;
+    color: #fff;
+}
+
+.calendar-day.selected {
+    background: #d800ff;
+}
+
+.calendar-day:hover {
+    background: #71cdfd;
+}
+
+/* ZenTabs */
+.zen-tabs {
+    display: flex;
+    width: 100%;
+    flex-wrap: wrap;
+    justify-content: center;
+    background: #e3e3e3;
+    padding: 5px;
+    margin-bottom: 20px;
+    border-radius: 5px;
+}
+
+.zen-tab {
+    width: 100px;
+    background: #ffffff;
+    color: #535353;
+    text-align: center;
+    padding: 3px 0;
+    cursor: pointer;
+    user-select: none;
+    margin: 2px;
+    border-radius: 4px;
+}
+
+.zen-tab.filled {
+    background: #0994fa;
+    color: #fff;
+}
+
+.zen-tab.active {
+    background: #d800ff;
+    color: #ffffff;
+    font-weight: bold;
+}
+
+/* ZenPrices */
+.zen-prices {
+    margin-bottom: 20px;
+}
+
+.zen-prices-table {
+    width: 100%;
+}
+
+.zen-prices-titles, .zen-prices-record {
+    display: flex;
+    width: 100%;
+    justify-content: space-between;
+}
+
+.zen-prices-titles {
+    background: #7c909c;
+    color: #fff;
+}
+
+.zen-prices-title, .zen-prices-cell {
+    padding: 5px 10px;
+}
+
+.zen-prices-title {
+    flex: 1 1 0;
+}
+
+.zen-prices-record {
+}
+
+.zen-prices-record:nth-child(odd) {
+    background: #efefef;
+}
+
+.zen-prices-cell {
+    flex: 1 1 0;
+}
+
+.zen-prices-cell input {
+    border: 1px solid #dadada;
+    padding: 0px 5px;
+    width: 100%;
+    background: rgba(0, 0, 0, 0);
+}
+
+.zen-prices-cell select {
+    width: 100%;
+    border: 1px solid #dadada;
+    background: rgba(0, 0, 0, 0);
+}
+
+.zen-prices-title.plus, .zen-prices-cell.plus {
+    width: 50px;
+    flex: 0;
+    flex-direction: row;
+}
+
+.cell-plus {
+    padding: 0px 6px;
+    background: #d2e3ed;
+    color: #857f7b;
+    border-radius: 4px;
+    font-weight: bold;
+    user-select: none;
+    cursor: pointer;
+    transition: 200ms;
+    width: 20px;
+    text-align: center;
+}
+
+.cell-plus:hover {
+    background: #98c4df;
+}

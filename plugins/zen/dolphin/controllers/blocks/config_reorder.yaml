@@ -1,0 +1,4 @@
+title: Blocks
+modelClass: Zen\Dolphin\Models\Block
+toolbar:
+    buttons: reorder_toolbar

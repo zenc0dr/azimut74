@@ -1,0 +1,10 @@
+plugin:
+    name: 'zen.ts::lang.plugin.name'
+    description: 'zen.ts::lang.plugin.description'
+    author: 'Alexander Ablizin'
+    icon: oc-icon-arrows-h
+    homepage: ''
+permissions:
+    zen.ts.main:
+        tab: 'Theme switcher'
+        label: 'Глобальный доступ'

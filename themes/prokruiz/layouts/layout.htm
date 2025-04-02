@@ -1,0 +1,73 @@
+description = "main template"
+
+[staticPage]
+useContent = 1
+default = 0
+==
+<?php
+function onInit()
+{
+    #return prok_items
+    Mcmraak\Rivercrs\Classes\Prok::addPages($this);
+}
+?>
+==
+<!doctype html>
+<html lang="ru">
+<head>
+    {% partial 'analytics/scripts' %}
+    <meta charset="UTF-8">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge">
+	<meta name="viewport" content="width=device-width, maximum-scale=1, initial-scale=1, user-scalable=0">
+    	{% partial 'schema-org/ogtags' %}
+        {# partial 'common/favicon' #}
+        {% partial 'favicon/all' %}
+    <title>Про круиз</title>
+    <link rel="stylesheet" href="{{ 'assets/css/bootstrap-grid.min.css'|theme }}" type="text/css" />
+    <link rel="stylesheet" href="{{ 'assets/css/normalize.css'|theme }}" type="text/css" />
+    <link rel="stylesheet" href="{{ 'assets/css/jquery.fancybox.min.css'|theme }}" type="text/css" />
+    <link rel="stylesheet" href="{{ 'assets/css/fonts.css'|theme }}" type="text/css" />
+    <link rel="stylesheet" href="{{ 'assets/css/layout.css'|theme }}" type="text/css" />
+    <link rel="stylesheet" href="{{ 'assets/css/blocks/header.css'|theme }}" type="text/css" />
+    <link rel="stylesheet" href="{{ 'assets/css/blocks/preloader.css'|theme }}" type="text/css" />
+    <link rel="stylesheet" href="{{ 'assets/css/swiper.min.css'|theme }}" type="text/css" />
+    <link rel="stylesheet" href="{{ 'assets/css/blocks/search-widget.css'|theme }}" type="text/css" />
+    <link rel="stylesheet" href="{{ 'assets/css/blocks/popular-directions.css'|theme }}" type="text/css" />
+    <link rel="stylesheet" href="{{ 'assets/css/blocks/write-us.css'|theme }}" type="text/css" />
+    <link rel="stylesheet" href="{{ 'assets/css/blocks/trust-block.css'|theme }}" type="text/css" />
+    <link rel="stylesheet" href="{{ 'assets/css/blocks/banner.css'|theme }}" type="text/css" />
+    <link rel="stylesheet" href="{{ 'assets/css/blocks/cruise.css'|theme }}" type="text/css" />
+    <link rel="stylesheet" href="{{ 'assets/css/blocks/tabs.css'|theme }}" type="text/css" />
+    <link rel="stylesheet" href="{{ 'assets/css/blocks/footer.css'|theme }}" type="text/css" />
+    <link rel="stylesheet" href="{{ 'assets/css/blocks/pagination.css'|theme }}" type="text/css" />
+    <link rel="stylesheet" href="{{ 'assets/css/font-awesome.min.css'|theme }}">
+    <link rel="stylesheet" href="{{ 'assets/css/blocks/slider-and-thumbs.css'|theme }}" type="text/css" />
+    {% styles %}
+</head>
+<body class="grey-layout">
+    {% partial 'blocks/header' %}
+	<main>
+        {% page %}
+	</main>
+    {% partial 'blocks/footer' %}
+
+    <script src="{{ 'assets/js/libs/vue.min.js'|theme }}"></script>
+	<script src="{{ 'assets/js/libs/jquery.min.js'|theme }}"></script>
+
+    {% scripts %}
+
+	<script src="{{ '/themes/prokruiz/assets/js/header.js?get'~random(1,100000) }}"></script>
+	<script src="{{ 'assets/js/libs/ease.min.js'|theme }}"></script>
+	<script src="{{ 'assets/js/libs/segment.min.js'|theme }}"></script>
+	<script src="{{ 'assets/js/libs/lazyload.js'|theme }}"></script>
+	<script src="{{ 'assets/js/layout.js'|theme }}"></script>
+	<script src="{{ 'assets/js/hamburger.js'|theme }}"></script>
+	<script src="{{ 'assets/js/tabs.js'|theme }}"></script>
+	<script defer src="{{ 'assets/js/libs/swiper.min.js'|theme }}"></script>
+    <script  src="{{ 'assets/js/libs/jquery.fancybox.min.js'|theme }}"></script>
+    <script src="{{ 'assets/js/slider-and-thumbs.js'|theme }}"></script>
+	<script src="{{ 'assets/js/banner.js'|theme~'?get'~random(1,100000) }}"></script>
+    <script src="{{ 'assets/js/common.js'|theme }}"></script>
+
+</body>
+</html>

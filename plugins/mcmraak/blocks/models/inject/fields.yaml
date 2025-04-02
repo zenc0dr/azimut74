@@ -1,0 +1,67 @@
+fields:
+    active:
+        label: Активно
+        span: full
+        type: switch
+    name:
+        label: 'Название банера'
+        oc.commentPosition: ''
+        span: auto
+        type: text
+    template_id:
+        label: 'Выбор шаблона'
+        oc.commentPosition: ''
+        span: auto
+        type: dropdown
+    instruction:
+        span: full
+        path: $/mcmraak/blocks/views/instruction.htm
+        type: partial
+tabs:
+    fields:
+        scopes:
+            label: 'Области инъекций'
+            oc.commentPosition: ''
+            prompt: Добавить
+            span: full
+            type: repeater
+            tab: Настройки
+            form:
+                fields:
+                    scope_id:
+                        label: Область
+                        oc.commentPosition: ''
+                        span: full
+                        type: dropdown
+                    sequence:
+                        label: Последовательность
+                        oc.commentPosition: ''
+                        span: full
+                        type: text
+        image:
+            label: Изображение
+            oc.commentPosition: ''
+            mode: image
+            span: full
+            type: mediafinder
+            tab: Контент
+        html:
+            label: Контент
+            size: huge
+            oc.commentPosition: ''
+            span: full
+            type: richeditor
+            tab: Контент
+        link:
+            label: Ссылка
+            oc.commentPosition: ''
+            span: full
+            type: text
+            tab: Контент
+        code:
+            label: 'Редактор кода'
+            size: giant
+            language: php
+            span: full
+            type: codeeditor
+            tab: Хук

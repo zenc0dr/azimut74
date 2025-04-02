@@ -1,0 +1,4 @@
+#!/usr/bin/php
+<?php
+$dir = '/home/zen/Temp/VueChrome';
+exec("google-chrome  --user-data-dir='$dir' --disable-web-security 'http://azimut.s:8080/plugins/zen/dolphin/vue/tarrifs-spa/assets/' > /dev/null 2>&1 &");

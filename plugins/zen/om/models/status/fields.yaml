@@ -1,0 +1,27 @@
+fields:
+    id:
+        label: id
+        oc.commentPosition: ''
+        span: auto
+        context:
+            - update
+        required: 1
+        default: '1'
+        type: number
+    name:
+        label: 'zen.om::lang.statuses.name'
+        oc.commentPosition: ''
+        span: auto
+        type: text
+    desc:
+        label: 'zen.om::lang.plugin.desc'
+        span: full
+        size: large
+        oc.commentPosition: ''
+        type: richeditor
+    sort_order:
+        label: 'zen.om::lang.plugin.sort_order'
+        oc.commentPosition: ''
+        span: auto
+        default: '0'
+        type: number

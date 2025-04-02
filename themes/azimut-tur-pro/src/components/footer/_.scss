@@ -1,0 +1,152 @@
+footer {
+  height: 500px;
+}
+
+.footer__top {
+  position: relative;
+}
+
+.footer__reestor {
+  width: 360px;
+  @include m('sm') {
+    width: 310px;
+  }
+  @include m('357px') {
+    width: 100%;
+  }
+}
+
+
+footer .footer__recall-btn {
+  border: 2px solid color('primary-100');
+  @include m('370px') {
+    width: 100%;
+  }
+}
+
+
+.footer__recall-text {
+  @include m('370px') {
+    flex-direction: row!important;
+  }
+  & span:first-child {
+    @include m('370px') {
+      margin-right: 8px;
+    }
+  }
+}
+
+.footer__recall-text {
+  opacity: .8;
+}
+
+
+.footer__policy {
+  &-text {
+    font-weight: bold;
+    a {
+      text-decoration: none;
+    }
+  }
+}
+
+
+.footer__phone-link {
+    white-space: nowrap;
+}
+
+.footer__phone-link:hover {
+  color: color('primary-100')
+}
+
+.footer__recall-btn:hover {
+  color: color('primary-100')!important;
+  border: 2px solid color('primary-100')!important;
+  opacity: 0.5
+}
+
+
+.footer__phones-left .footer__phone {
+  @include m('xl') {
+    width: 200px;
+  }
+  @include m('400px') {
+    width: 100%;
+  }
+}
+
+.footer__phones {
+  justify-content: center;
+  @include m('xl') {
+    justify-content: start;
+    align-items: start!important;
+  }
+}
+
+.footer__phones-right {
+  @include m('xl') {
+    align-items: start!important;
+  }
+}
+
+.footer__phones-2 {
+    max-width: 360px;
+    border-radius: 7px;
+    margin-bottom: 15px;
+
+    a {
+        text-decoration: none;
+        color: #fff;
+    }
+    span {
+        color: #fff;
+        font-size: 20px;
+    }
+    &__big {
+        margin-bottom: 8px;
+        a {
+            font-weight: bold;
+            font-size: 26px;
+        }
+    }
+    &__mid {
+        display: flex;
+        flex-direction: column;
+        span {
+            font-weight: bold;
+        }
+        a {
+            font-size: 23px;
+        }
+    }
+}
+
+
+.footer__right {
+
+  @include m('xl') {
+    position: absolute;
+    right: 0;
+    top: 0;
+    width: 60vw;
+    height: 100%;
+  }
+ @include m('1200px') {
+    width: 50vw;
+  }
+  @include m('lg') {
+    position: relative;
+    right: auto;
+    top: auto;
+    width: 100%;
+  }
+
+
+}
+
+.footer__right #map {
+ @include m('lg') {
+    height: 400px!important;
+    width: 100%;
+  }
+}

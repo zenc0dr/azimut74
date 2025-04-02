@@ -1,0 +1,4 @@
+title: Items
+modelClass: Srw\Catalog\Models\Items
+toolbar:
+    buttons: reorder_toolbar

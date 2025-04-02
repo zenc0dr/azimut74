@@ -1,0 +1,15 @@
+title: Reviews
+modelClass: Zen\Reviews\Models\Review
+list: $/zen/reviews/models/review/columns.yaml
+recordUrl: 'zen/reviews/reviews/update/:id'
+noRecordsMessage: 'backend::lang.list.no_records'
+recordsPerPage: 20
+showSetup: true
+showCheckboxes: true
+defaultSort:
+    column: id
+    direction: desc
+toolbar:
+    buttons: list_toolbar
+    search:
+        prompt: 'backend::lang.list.search_prompt'

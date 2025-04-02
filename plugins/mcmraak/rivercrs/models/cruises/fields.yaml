@@ -1,0 +1,169 @@
+fields:
+    active:
+        label: Активность
+        span: full
+        default: 1
+        type: switch
+    name:
+        label: Название
+        oc.commentPosition: ''
+        span: auto
+        type: text
+    slug:
+        label: 'url (фрагмент)'
+        oc.commentPosition: ''
+        span: auto
+        preset:
+            field: name
+            type: slug
+        type: text
+    menu_title:
+        label: 'Заголовок меню "Из города в"'
+        oc.commentPosition: ''
+        span: auto
+        type: text
+        tab: 'Связи и фильтрация'
+    link:
+        label: 'Ссылка редиректа'
+        span: auto
+        oc.commentPosition: ''
+        type: text
+    h1:
+        label: 'Заголовок H1'
+        span: full
+        type: text
+tabs:
+    fields:
+        images:
+            label: Изображение
+            oc.commentPosition: ''
+            mode: image
+            useCaption: true
+            thumbOptions:
+                mode: crop
+                extension: auto
+            span: full
+            type: fileupload
+            tab: Информация
+        text:
+            label: 'Информационный блок'
+            size: huge
+            oc.commentPosition: ''
+            span: full
+            type: richeditor
+            tab: Информация
+        town1:
+            label: 'Город отправления'
+            oc.commentPosition: ''
+            span: auto
+            type: dropdown
+            tab: 'Настройки фильтра'
+        town2:
+            label: 'Город на маршруте'
+            oc.commentPosition: ''
+            span: auto
+            type: dropdown
+            tab: 'Настройки фильтра'
+        date1:
+            label: 'Период отправления С'
+            oc.commentPosition: ''
+            mode: date
+            span: auto
+            type: datepicker
+            tab: 'Настройки фильтра'
+        date2:
+            label: 'Период отправления ПО'
+            oc.commentPosition: ''
+            mode: date
+            span: auto
+            type: datepicker
+            tab: 'Настройки фильтра'
+        days:
+            label: Продолжительность
+            oc.commentPosition: ''
+            span: auto
+            default: '0'
+            type: number
+            tab: 'Настройки фильтра'
+        ship_id:
+            label: Теплоход
+            oc.commentPosition: ''
+            span: auto
+            type: dropdown
+            tab: 'Настройки фильтра'
+        seo_articles:
+            label: 'SEO Статьи'
+            oc.commentPosition: ''
+            prompt: 'Добавить статью'
+            span: full
+            type: repeater
+            tab: Seo-статьи
+            form:
+                fields:
+                    seo_title:
+                        label: 'Заголовок статьи'
+                        oc.commentPosition: ''
+                        span: full
+                        type: text
+                    seo_text:
+                        label: 'Текст статьи'
+                        size: large
+                        oc.commentPosition: ''
+                        span: full
+                        type: richeditor
+                    seo_hash:
+                        label: Хэш-тег
+                        oc.commentPosition: ''
+                        span: auto
+                        hidden: 0
+                        preset:
+                            field: seo_title
+                            type: slug
+                        type: text
+        metatitle:
+            label: title
+            size: small
+            oc.commentPosition: ''
+            span: full
+            type: textarea
+            tab: Метатеги
+        metadesc:
+            label: description
+            size: small
+            oc.commentPosition: ''
+            span: full
+            type: textarea
+            tab: Метатеги
+        metakey:
+            label: keywords
+            size: small
+            oc.commentPosition: ''
+            span: full
+            type: textarea
+            tab: Метатеги
+        frame:
+            label: Включить
+            span: full
+            type: switch
+            tab: Фрейм-контент
+        frame_text:
+            label: 'Вступительный текст'
+            size: huge
+            oc.commentPosition: ''
+            span: full
+            type: richeditor
+            tab: Фрейм-контент
+        frame_link:
+            label: 'Ссылка фрейма'
+            oc.commentPosition: ''
+            span: full
+            type: text
+            tab: Фрейм-контент
+        frame_code:
+            label: Код
+            oc.commentPosition: ''
+            size: huge
+            language: html
+            span: full
+            type: codeeditor
+            tab: Фрейм-контент

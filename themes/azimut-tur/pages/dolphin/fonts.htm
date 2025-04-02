@@ -1,0 +1,17 @@
+title = "Шрифты для отладочной страницы"
+url = "/fonts/:?*"
+is_hidden = 0
+robot_index = "index"
+robot_follow = "follow"
+contentType = "html"
+force_show = 0
+==
+<?php
+function onStart()
+{
+    $path = Request::path();
+    $font_path = base_path('themes/azimut-tur/assets/'.$path);
+    return response(file_get_contents($font_path));
+}
+?>
+==

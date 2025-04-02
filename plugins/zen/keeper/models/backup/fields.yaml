@@ -1,0 +1,5 @@
+fields:
+    partial1:
+        span: full
+        path: $/zen/keeper/controllers/backups/info.php
+        type: partial

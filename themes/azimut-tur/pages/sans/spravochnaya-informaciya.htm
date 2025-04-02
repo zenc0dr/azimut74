@@ -1,0 +1,69 @@
+title = "Справочная информация"
+url = "/sans-pages/article_/:slug"
+layout = "general"
+is_hidden = 0
+robot_index = "index"
+robot_follow = "follow"
+contentType = "html"
+==
+<?php
+use \Mcmraak\Sans\Models\Article;
+
+function onInit()
+{
+    $slug = $this->param('slug');
+    #dd($slug);
+    $this['reference'] = Article::where('slug',$slug)->first();
+    if(!$this['reference']) return \Response::make($this->controller->run('404'), 404);
+    
+  /*  $this['references'] = Reference::orderBy('order')->get();
+    $this['cruises'] = Cruises::where('active', 1)->orderBy('sort_order')->get();
+    $this['motorships'] = Motorships::cleanNames();*/
+    
+    /*
+    $cruise_id = get('from_cruise');
+    $transit_id = get('from_transit');
+    
+    if($cruise_id)
+    {
+        $this['cruise'] = Cruises::find($cruise_id);
+    }
+    elseif ($transit_id)
+    {
+        $this['cruise'] = Transit::find($transit_id);
+    }
+    else
+    {
+        $this['cruise'] = Cruises::where('slug', 'river-cruises')->first();
+    }
+    */
+    
+   /* $this['cruise'] = Cruises::where('slug', 'river-cruises')->first();*/
+    
+}
+?>
+==
+<section class="s-card">
+
+	<div class="h h_size-m h_txt-bold h_txt-upper mb-30 t-c">
+		<span>{{ reference.name }}</span>
+		
+	</div>
+
+	<div class="cruiseData">
+		<div class="c-r">
+		
+            {% partial 'sans-page/left-block' %}
+
+			<div class="col-75 col-s-100 as-s">
+				<div class="rightBlock">
+                  <div class="cruiseExcerpt textBlock">
+                        {{ reference.text|raw|mutator }}
+                  </div>                       
+				</div>
+			</div>
+		</div>
+	</div>
+
+	
+</section>

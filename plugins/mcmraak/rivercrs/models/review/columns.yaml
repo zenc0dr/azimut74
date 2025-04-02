@@ -1,0 +1,25 @@
+columns:
+    id:
+        label: id
+        type: number
+    motorship_id:
+        label: Теплоход
+        type: text
+        relation: motorship
+        valueFrom: name
+    name:
+        label: Имя
+        type: text
+    town:
+        label: Город
+        type: text
+    created_at:
+        label: Создан
+        type: datetime
+        format: 'd.m.Y H:i'
+    recommended:
+        label: Рекомендация
+        type: partial
+    active:
+        label: Опубликовано
+        type: partial

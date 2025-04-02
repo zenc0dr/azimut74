@@ -1,0 +1,15 @@
+name: 'zen.om::lang.storage.title'
+modelClass: Zen\Om\Models\Storage
+form: $/zen/om/models/storage/fields.yaml
+defaultRedirect: zen/om/storages
+create:
+    title: 'zen.om::lang.storage.create'
+    redirect: 'zen/om/storages/update/:id'
+    redirectClose: zen/om/storages
+update:
+    title: 'zen.om::lang.storage.update'
+    redirect: zen/om/storages
+    redirectClose: zen/om/storages
+    flashSave: 'zen.om::lang.storage.updated'
+    flashDelete: 'zen.om::lang.storage.deleted'
+preview: {  }

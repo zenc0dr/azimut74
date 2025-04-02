@@ -1,0 +1,30 @@
+fields:
+    name:
+        label: Имя
+        span: auto
+        type: text
+    phone:
+        label: Телефон
+        span: auto
+        type: text
+    email:
+        label: email
+        span: auto
+        type: text
+tabs:
+    fields:
+        data:
+            span: full
+            path: $/zen/reviews/models/review/review.php
+            type: partial
+            tab: Данные
+        photos:
+            label: Фотографии
+            mode: image
+            useCaption: true
+            thumbOptions:
+                mode: crop
+                extension: auto
+            span: full
+            type: fileupload
+            tab: Фото

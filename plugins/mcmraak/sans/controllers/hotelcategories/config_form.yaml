@@ -1,0 +1,10 @@
+name: HotelCategories
+form: $/mcmraak/sans/models/hotelcategory/fields.yaml
+modelClass: Mcmraak\Sans\Models\HotelCategory
+defaultRedirect: mcmraak/sans/hotelcategories
+create:
+    redirect: 'mcmraak/sans/hotelcategories/update/:id'
+    redirectClose: mcmraak/sans/hotelcategories
+update:
+    redirect: mcmraak/sans/hotelcategories
+    redirectClose: mcmraak/sans/hotelcategories

@@ -1,0 +1,10 @@
+name: Injects
+form: $/mcmraak/blocks/models/inject/fields.yaml
+modelClass: Mcmraak\Blocks\Models\Inject
+defaultRedirect: mcmraak/blocks/injects
+create:
+    redirect: 'mcmraak/blocks/injects/update/:id'
+    redirectClose: mcmraak/blocks/injects
+update:
+    redirect: mcmraak/blocks/injects
+    redirectClose: mcmraak/blocks/injects

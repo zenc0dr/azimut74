@@ -1,0 +1,10 @@
+name: JobController
+form: $/zen/worker/models/job/fields.yaml
+modelClass: Zen\Worker\Models\Job
+defaultRedirect: zen/worker/jobcontroller
+create:
+    redirect: 'zen/worker/jobcontroller/update/:id'
+    redirectClose: zen/worker/jobcontroller
+update:
+    redirect: zen/worker/jobcontroller
+    redirectClose: zen/worker/jobcontroller

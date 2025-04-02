@@ -1,0 +1,12 @@
+[viewBag]
+==
+{% if dolphin.seo_menu  %}
+    <div class="dolphin-seo">
+        <div>
+            {% for item in dolphin.seo_menu %}
+                {% set prefix = 'ex-tours/' ~ dolphin.root_scope %}
+                <a href="{{ item.page.getUrl(prefix) }}">{{ item.name }}</a>
+            {% endfor %}
+        </div>
+    </div>
+{% endif %}

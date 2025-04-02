@@ -1,0 +1,10 @@
+<?php Block::put('breadcrumb') ?>
+<ul>
+    <li><a href="<?= Backend::url('zen/dolphin/exlists') ?>">База данных</a></li>
+    <li><a href="<?= Backend::url('zen/dolphin/pages') ?>">Посадочные страницы</a></li>
+    <li><a href="<?= Backend::url('zen/dolphin/pageblocks') ?>">Группирующие блоки</a></li>
+    <li>Редактирование последовательности группирующих блоков</li>
+</ul>
+<?php Block::endPut() ?>
+
+<?= $this->reorderRender() ?>

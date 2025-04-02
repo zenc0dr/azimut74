@@ -1,0 +1,27 @@
+title = "Зарубежные"
+url = "/extours/zarubezhnye"
+layout = "general"
+description = "Зарубежные"
+meta_title = "Зарубежные"
+is_hidden = 0
+robot_index = "index"
+robot_follow = "follow"
+contentType = "html"
+==
+{% put slider %}
+	{% partial 'header/sliderextours' %}
+{% endput %}
+
+<section class="extours">
+					
+	<div class="headText">
+		<span>{{ this.page.title }}</span>
+	</div>
+
+	<div class="pageData">
+		<div class="data">
+			{% component 'contenteditor' file="extours/zarubezhnye" %}
+		</div>
+	</div>
+
+</section>

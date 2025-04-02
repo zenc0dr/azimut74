@@ -1,0 +1,10 @@
+name: Cities
+form: $/zen/quiz/models/city/fields.yaml
+modelClass: Zen\Quiz\Models\City
+defaultRedirect: zen/quiz/cities
+create:
+    redirect: 'zen/quiz/cities/update/:id'
+    redirectClose: zen/quiz/cities
+update:
+    redirect: zen/quiz/cities
+    redirectClose: zen/quiz/cities

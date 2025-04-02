@@ -1,0 +1,11 @@
+name: элемент
+modelClass: Mcmraak\Rivercrs\Models\Incabin
+form: $/mcmraak/rivercrs/models/incabin/fields.yaml
+defaultRedirect: mcmraak/rivercrs/incabin
+create:
+    redirect: 'mcmraak/rivercrs/incabin/update/:id'
+    redirectClose: mcmraak/rivercrs/incabin
+update:
+    redirect: mcmraak/rivercrs/incabin
+    redirectClose: mcmraak/rivercrs/incabin
+preview: {  }

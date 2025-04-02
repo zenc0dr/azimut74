@@ -1,0 +1,47 @@
+description = "Основной шаблон"
+==
+<?php
+function onInit()
+{
+    $this['master_css'] = mix('css/master.css', 'themes/azimut-tur-pro/assets');
+    $this['master_js'] = mix('js/master.js', 'themes/azimut-tur-pro/assets');
+    $this['path_manifest_js'] = mix('js/manifest.js', 'themes/azimut-tur-pro/assets');
+    $this['path_vendor_js'] = mix('js/vendor.js', 'themes/azimut-tur-pro/assets');
+    $this['is_rivercrs'] = str_contains(request()->url(), 'russia-river-cruises');
+}
+?>
+==
+<!DOCTYPE html>
+<html lang="ru">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <meta http-equiv="X-UA-Compatible" content="ie=edge">
+        <link rel="shortcut icon" href="{{'assets/images/favicon/favicon.ico'|theme }}" type="image/x-icon">
+        {% partial 'seo/meta' %}
+        <link rel="stylesheet" href="{{ master_css }}">
+        {% placeholder page_style %}
+        {% styles %}
+    </head>
+
+    <body>
+        {% partial 'header/header' %}
+        {% partial 'blocks/greeter' %}
+        <main>
+            {% page %}
+        </main>
+        {% partial 'footer/footer' class="mt-4" %}
+        <script src="{{ path_manifest_js }}"></script>
+        <script src="{{ path_vendor_js }}"></script>
+        <script src="{{ master_js }}"></script>
+        {% scripts %}
+        {% placeholder page_script %}
+
+
+        <link rel="stylesheet" href="/plugins/zen/history/assets/css/history.css">
+        <script src="/plugins/zen/history/assets/js/manifest.js"></script>
+        <script src="/plugins/zen/history/assets/js/history.js"></script>
+
+        {% partial 'seo/includes' %}
+    </body>
+</html>

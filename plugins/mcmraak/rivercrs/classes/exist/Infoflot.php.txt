@@ -1,0 +1,56 @@
+<?php namespace Mcmraak\Rivercrs\Classes\Exist;
+
+use Mcmraak\Rivercrs\Classes\Exist;
+use Mcmraak\Rivercrs\Models\Cabins as Cabin;
+use Mcmraak\Rivercrs\Models\Decks as Deck;
+use Log;
+
+class Infoflot extends Exist
+{
+    public $query_type;
+    # Получить список круизов
+    # http://azimut.s/rivercrs/api/v2/parser/infoflotSeeder?id=init&debug=true
+
+    # http://azimut.s/rivercrs/api/v2/exist/29421?debug
+    public function getExist($checkin, $realtime) {
+        //dd($checkin, $realtime);
+
+        $this->query_type = ($realtime)?'array_now':'array';
+        $this->checkin = $checkin;
+
+        $ship_id = $checkin->motorship->infoflot_id;
+        $cruise_id = $checkin->eds_id;
+        $exist_cabins = $this->parser->cacheWarmUp('cabins-status', $this->query_type, ['id' => "$ship_id:$cruise_id"]);
+
+        $rooms = [];
+
+        foreach ($exist_cabins as $cabin)
+        {
+            $room = $cabin['name'];
+
+            $deck_name = $cabin['deck'];
+            $cabin_name = $cabin['type'];
+            $price = $cabin['price'];
+            $places_count = count($cabin['places']);
+
+            $record = $this->addRecord([
+                'deck_name' => $deck_name,
+                'cabin_name' => $cabin_name,
+                'price_places' => $places_count,
+                'price_value' => $price,
+                'eds' => true
+            ]);
+
+            $rooms[] = [
+                'n' => $room,
+                'd' => $record['deck_id']
+            ];
+        }
+
+        return [
+            'decks' => $this->records,
+            'rooms' => $rooms
+        ];
+    }
+
+}

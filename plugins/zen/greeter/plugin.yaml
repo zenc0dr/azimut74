@@ -1,0 +1,18 @@
+plugin:
+    name: 'zen.greeter::lang.plugin.name'
+    description: 'zen.greeter::lang.plugin.description'
+    author: 'Alexander Ablizin'
+    icon: oc-icon-image
+    homepage: ''
+navigation:
+    greeter-main:
+        label: Баннеры
+        url: zen/greeter/showcases
+        icon: icon-image
+        permissions:
+            - zen.greeter.main
+        order: 5
+permissions:
+    zen.greeter.main:
+        tab: Баннеры
+        label: 'Глобальный доступ'

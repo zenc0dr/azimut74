@@ -1,0 +1,14 @@
+title: 'Города следования'
+modelClass: Mcmraak\Rivercrs\Models\Transit
+list: $/mcmraak/rivercrs/models/transit/columns.yaml
+recordUrl: 'mcmraak/rivercrs/transit/update/:id'
+noRecordsMessage: 'backend::lang.list.no_records'
+recordsPerPage: '30'
+showSetup: true
+showCheckboxes: true
+showSorting: 1
+toolbar:
+    buttons: list_toolbar
+    search:
+        prompt: 'backend::lang.list.search_prompt'
+filter: config_filter.yaml

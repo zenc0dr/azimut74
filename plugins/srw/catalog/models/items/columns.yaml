@@ -1,0 +1,32 @@
+columns:
+    id:
+        label: id
+        type: number
+        sortable: true
+    name:
+        label: 'Название тура'
+        type: text
+        searchable: true
+    tourhotel:
+        label: 'Название отеля'
+        type: text
+        searchable: true
+    newprice:
+        label: Цена
+        type: number
+        sortable: true
+    active:
+        label: Активен
+        type: partial
+        sortable: true
+    order:
+        label: Порядок
+        type: number
+    time_start:
+        label: 'Начало показа'
+        type: date
+        format: 'd.m.Y H:i:s'
+    time_end:
+        label: 'Окончание акции'
+        type: date
+        format: 'd.m.Y H:i:s'

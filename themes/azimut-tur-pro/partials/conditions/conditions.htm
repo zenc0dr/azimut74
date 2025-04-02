@@ -1,0 +1,33 @@
+description = "Условия тура"
+
+[viewBag]
+==
+{% if obConditions or obHotels %}
+<div class="info-block">
+   <div class="info-block__title">
+      {{ (sTitle) ? sTitle : 'Условия тура' }}
+   </div>
+   <div class="info-block__html">
+      {% for condition in obConditions %}
+      <div class="info-block__html__block">
+         <div class="info-block__html__block__title">
+            {{ condition.name }}
+         </div>
+         <div class="info-block__html__block__text">
+            {{ condition.text|raw }}
+         </div>
+      </div>
+      {% endfor %}
+      {% if obHotels %}
+      <div class="info-block__html__block">
+         <div class="info-block__html__block__title">
+            Отели
+         </div>
+         <div class="info-block__html__block__text">
+            {% partial 'hotels/hotels' obItems=obHotels %}
+         </div>
+      </div>
+      {% endif %}
+   </div>
+</div>
+{% endif %}

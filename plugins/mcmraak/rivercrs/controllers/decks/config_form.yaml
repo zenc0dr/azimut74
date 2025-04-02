@@ -1,0 +1,10 @@
+name: Палубы
+modelClass: Mcmraak\Rivercrs\Models\Decks
+form: $/mcmraak/rivercrs/models/decks/fields.yaml
+defaultRedirect: mcmraak/rivercrs/decks
+create:
+    redirect: 'mcmraak/rivercrs/decks/update/:id'
+    redirectClose: mcmraak/rivercrs/decks
+update:
+    redirect: mcmraak/rivercrs/decks
+    redirectClose: mcmraak/rivercrs/decks

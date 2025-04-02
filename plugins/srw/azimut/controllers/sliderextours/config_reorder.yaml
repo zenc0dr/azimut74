@@ -1,0 +1,4 @@
+title: SliderExtours
+modelClass: Srw\Azimut\Models\SliderExtours
+toolbar:
+    buttons: reorder_toolbar

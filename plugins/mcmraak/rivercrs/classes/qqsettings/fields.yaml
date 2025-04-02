@@ -1,0 +1,17 @@
+tabs:
+    fields:
+        data_arr:
+            label: Унификатор
+            size: large
+            language: php
+            span: full
+            type: codeeditor
+            tab: 'Формирование данных'
+        room_type:
+            label: 'Оформление типа каюты'
+            size: large
+            language: twig
+            span: full
+            type: codeeditor
+            comment: 'cabin(object) - модель каюты, decks(string) - Список палуб'
+            tab: 'Формирование данных'

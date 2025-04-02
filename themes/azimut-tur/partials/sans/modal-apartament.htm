@@ -1,0 +1,287 @@
+[viewBag]
+==
+{% if artemFade %}
+<div id="modalApartaments--sans" class="modalFade">
+    <div class="modalWrap modalWrapBook pb-xs-30">
+    	
+    	<!-- <div class="modalDone">
+    				<button title="Close (Esc)" type="button" class="mfp-close">×</button>
+    	
+    				<div class="modalHead">
+    					<span>Спасибо за заявку!</span>
+    					<span>Специалист позвонит вам в ближайшее время</span>
+    				</div>
+    			</div> -->
+
+        <div class="modalContent">
+			<button title="Close (Esc)" type="button" class="mfp-close">×</button>
+			
+			<div class="modal__body">
+				
+				<div class="s-card__room mt-25">
+					<div class="s-card__room-name s-card__room-name_modal">
+						<span>
+							Название
+						</span>
+					</div>
+					<div class="s-card__room-details-wrap s-card__room-details-wrap_modal">
+						<div class="s-card__room-images">
+							<div class="c-r cp-0">
+								<div class="col-33">
+									<div class="s-card__room-image" href="/storage/app/uploads/public/113/738/03b/thumb__320_0_0_0_auto.jpg" style="background-image: url(/storage/app/uploads/public/113/738/03b/thumb__320_0_0_0_auto.jpg);"></div>
+								</div>
+								<div class="col-33">
+									<div class="s-card__room-image" href="/storage/app/uploads/public/113/738/03b/thumb__320_0_0_0_auto.jpg" style="background-image: url(/storage/app/uploads/public/113/738/03b/thumb__320_0_0_0_auto.jpg);"></div>
+								</div>
+								<div class="col-33">
+									<div class="s-card__room-image" href="/storage/app/uploads/public/113/738/03b/thumb__320_0_0_0_auto.jpg" style="background-image: url(/storage/app/uploads/public/113/738/03b/thumb__320_0_0_0_auto.jpg);"></div>
+								</div>
+								<div class="col-33">
+									<div class="s-card__room-image" href="/storage/app/uploads/public/113/738/03b/thumb__320_0_0_0_auto.jpg" style="background-image: url(/storage/app/uploads/public/113/738/03b/thumb__320_0_0_0_auto.jpg);"></div>
+								</div>
+								<div class="col-33">
+									<div class="s-card__room-image" href="/storage/app/uploads/public/113/738/03b/thumb__320_0_0_0_auto.jpg" style="background-image: url(/storage/app/uploads/public/113/738/03b/thumb__320_0_0_0_auto.jpg);"></div>
+								</div>
+								<div class="col-33">
+									<div class="s-card__room-image" href="/storage/app/uploads/public/113/738/03b/thumb__320_0_0_0_auto.jpg" style="background-image: url(/storage/app/uploads/public/113/738/03b/thumb__320_0_0_0_auto.jpg);"></div>
+								</div>
+								<div class="col-33">
+									<div class="s-card__room-image" href="/storage/app/uploads/public/113/738/03b/thumb__320_0_0_0_auto.jpg" style="background-image: url(/storage/app/uploads/public/113/738/03b/thumb__320_0_0_0_auto.jpg);"></div>
+								</div>
+								<div class="col-33">
+									<div class="s-card__room-image" href="/storage/app/uploads/public/113/738/03b/thumb__320_0_0_0_auto.jpg" style="background-image: url(/storage/app/uploads/public/113/738/03b/thumb__320_0_0_0_auto.jpg);"></div>
+								</div>
+							</div>
+							<div class="s-card__room-more">
+								<button class="more-button btn ibtn">
+									<span class="more">+ еще {{ массив|length - 3 }}10 фото </span>
+									<span class="less">- скрыть фото</span>
+								</button>
+							</div>
+						</div>
+						<div class="s-card__room-details">
+							<div class="r">
+								<div class="col-45 as-s">
+									<div class="s-card__room-details-col t-r">
+										<strong>Описание номера:</strong>
+									</div>
+								</div>
+								<div class="col-55 as-s">
+									<div class="s-card__room-details-col">
+										Двухкомнатный номер (спальная комната + гостиная).<br> 
+										Данные номера расположены с 4 по 16 этажи.
+									</div>
+								</div>
+							</div>
+							<div class="r">
+								<div class="col-45 as-s">
+									<div class="s-card__room-details-col t-r">
+										<strong>Количество номеров:</strong>
+									</div>
+								</div>
+								<div class="col-55 as-s">
+									<div class="s-card__room-details-col">
+										12
+									</div>
+								</div>
+							</div>
+							<div class="r">
+								<div class="col-45 as-s">
+									<div class="s-card__room-details-col t-r">
+										<strong>Количество комнат в номере:</strong>
+									</div>
+								</div>
+								<div class="col-55 as-s">
+									<div class="s-card__room-details-col">
+										2
+									</div>
+								</div>
+							</div>
+							<div class="r">
+								<div class="col-45 as-s">
+									<div class="s-card__room-details-col t-r">
+										<strong>Тип номера:</strong>
+									</div>
+								</div>
+								<div class="col-55 as-s">
+									<div class="s-card__room-details-col">
+										люкс
+									</div>
+								</div>
+							</div>
+							<div class="r">
+								<div class="col-45 as-s">
+									<div class="s-card__room-details-col t-r">
+										<strong>Корпус:</strong>
+									</div>
+								</div>
+								<div class="col-55 as-s">
+									<div class="s-card__room-details-col">
+										12
+									</div>
+								</div>
+							</div>
+							<div class="r">
+								<div class="col-45 as-s">
+									<div class="s-card__room-details-col t-r">
+										<strong>Количество основных мест:</strong>
+									</div>
+								</div>
+								<div class="col-55 as-s">
+									<div class="s-card__room-details-col">
+										12
+									</div>
+								</div>
+							</div>
+							<div class="r">
+								<div class="col-45 as-s">
+									<div class="s-card__room-details-col t-r">
+										<strong>Тип дополнительного места:</strong>
+									</div>
+								</div>
+								<div class="col-55 as-s">
+									<div class="s-card__room-details-col">
+										раскладной диван
+									</div>
+								</div>
+							</div>
+							<div class="r">
+								<div class="col-45 as-s">
+									<div class="s-card__room-details-col t-r">
+										<strong>Площадь номера:</strong>
+									</div>
+								</div>
+								<div class="col-55 as-s">
+									<div class="s-card__room-details-col">
+										23 м<sup>2</sup>
+									</div>
+								</div>
+							</div>
+							<div class="r">
+								<div class="col-45 as-s">
+									<div class="s-card__room-details-col t-r">
+										<strong>Балкон:</strong>
+									</div>
+								</div>
+								<div class="col-55 as-s">
+									<div class="s-card__room-details-col">
+										с сушилкой
+									</div>
+								</div>
+							</div>
+							<div class="r">
+								<div class="col-45 as-s">
+									<div class="s-card__room-details-col t-r">
+										<strong>Терраса:</strong>
+									</div>
+								</div>
+								<div class="col-55 as-s">
+									<div class="s-card__room-details-col">
+										есть
+									</div>
+								</div>
+							</div>
+							<div class="r">
+								<div class="col-45 as-s">
+									<div class="s-card__room-details-col t-r">
+										<strong>Мебель:</strong>
+									</div>
+								</div>
+								<div class="col-55 as-s">
+									<div class="s-card__room-details-col">
+										диван, кровати односпальные, двуспальная кровать, прикроватные тумбочки, стол, шкаф
+									</div>
+								</div>
+							</div>
+							<div class="r">
+								<div class="col-45 as-s">
+									<div class="s-card__room-details-col t-r">
+										<strong>Оборудование:</strong>
+									</div>
+								</div>
+								<div class="col-55 as-s">
+									<div class="s-card__room-details-col">
+										сплит-система, телевизор, холодильник
+									</div>
+								</div>
+							</div>
+							<div class="r">
+								<div class="col-45 as-s">
+									<div class="s-card__room-details-col t-r">
+										<strong>Санузел:</strong>
+									</div>
+								</div>
+								<div class="col-55 as-s">
+									<div class="s-card__room-details-col">
+										с душем (поддон)
+									</div>
+								</div>
+							</div>
+							<div class="r">
+								<div class="col-45 as-s">
+									<div class="s-card__room-details-col t-r">
+										<strong>Сервис:</strong>
+									</div>
+								</div>
+								<div class="col-55 as-s">
+									<div class="s-card__room-details-col">
+										смена полотонец: ежедневно, смена постельного белья: 1 раз в 3 дня, уборка номера: ежедневно
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+				
+			</div>
+			
+			<!-- <div class="bookingAnnoLine">
+			    <span>Мы гарантируем конфиденциальность введенных данных, мы не используем Ваши данные для навязчивых рассылок, заказ ни к чему Вас не обязывает</span>
+			</div> -->
+			
+			{#<script>
+				$(document).ready(function(){
+					$('.bookSelect').selectize({
+					    sortField: 'text'
+					});
+					$('#modalBooking .phone').inputmask('+7(999)999-99-99', { showMaskOnHover: false });
+				});
+			</script>#}
+			
+			{# Дополнительное модальное окно #}
+			
+			<!-- <topmodal>
+				<div class="modalSecond">
+					<div class="modalLine">
+						<div class="close">×</div>
+			    		<modalbody></modalbody>
+					</div>
+				</div>
+			</topmodal> -->
+		</div>
+	</div>
+	
+	<!-- <ofmodal>
+		<div class="modalSecond">
+			<div class="modalLine">
+				<div class="close">×</div>
+	    		<ofmodalbody></ofmodalbody>
+			</div>
+		</div>
+	</ofmodal> -->
+	
+</div>
+{% endif %}
+
+
+<div class="hidden">
+    <div id="modalApartaments--sans" class="modalFade">
+        <div class="modalWrap modalApartaments--sans">
+    		<button title="Close (Esc)" type="button" class="mfp-close">×</button>
+            <div class="modalContent">
+                <span style="font-size: 20px">Загрузка...</span>
+            </div>
+        </div>
+        {% partial 'modal/modal-second' %}
+    </div>
+</div>

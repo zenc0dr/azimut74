@@ -1,0 +1,19 @@
+<link rel="stylesheet" href="/plugins/zen/dolphin/assets/css/zen.dolphin.backend.css">
+<div class="dp-geo-group">
+    <meta name="geo_data" content="{{ geo_data }}">
+    <div>
+        <label>Страна</label>
+        <select onchange="GEO.changeSelect(this)" id="country" class="form-control custom-select"></select>
+    </div>
+    <div>
+        <label>Регион</label>
+        <select onchange="GEO.changeSelect(this)" id="region" class="form-control custom-select"></select>
+    </div>
+    <div>
+        <label>Город</label>
+        <select onchange="GEO.changeSelect(this)" id="city" class="form-control custom-select"></select>
+    </div>
+    <input type="hidden" name="Hotel[save_geo]">
+</div>
+<script src="/plugins/zen/dolphin/assets/js/axios.min.js"></script>
+<script src="/plugins/zen/dolphin/assets/js/zen.dolphin.backend.geo.js"></script>

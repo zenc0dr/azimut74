@@ -1,0 +1,24 @@
+title = "Информационные страницы"
+url = "/page/:slug"
+layout = "layout"
+is_hidden = 0
+robot_index = "index"
+robot_follow = "follow"
+contentType = "html"
+force_show = 0
+==
+<?php
+function onStart()
+{
+    # prok
+    Mcmraak\Rivercrs\Classes\Prok::page($this);
+}
+?>
+==
+<section>
+    <div class="custom-container">
+        <div class="kpage-content">
+            {{ page_content|raw }}
+        </div>
+    </div>
+</section>

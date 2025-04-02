@@ -1,0 +1,30 @@
+<style>
+    #stats {
+        border-collapse: collapse;
+    }
+    #stats td {
+        border: 1px solid #666;
+        padding: 3px 12px;
+    }
+</style>
+<table id="stats">
+    <tbody>
+        <tr style="background: #666; color: #fff">
+            <td>Имя</td>
+            <td>Дата</td>
+            <td>Телефон</td>
+            <td>Email</td>
+            {#<td>Цена</td>#}
+        </tr>
+        {% for record in records %}
+            <tr>
+                <td>{{ record.name }}</td>
+                <td>{{ record.date }}</td>
+                <td>{{ record.phone }}</td>
+                <td>{{ record.email }}</td>
+                {#<td>{{ record.price }}</td>#}
+            </tr>
+        {% endfor %}
+    </tbody>
+</table>
+

@@ -1,0 +1,20 @@
+plugin:
+    name: 'zen.fetcher::lang.plugin.name'
+    description: 'СБорщик данных с внешних источников'
+    author: 'Alex Blaze'
+    icon: oc-icon-angle-double-left
+    homepage: ''
+navigation:
+    main:
+        label: Fetcher
+        url: zen/fetcher/pools
+        icon: icon-angle-double-left
+        sideMenu:
+            dashboard:
+                label: Управление
+                url: zen/fetcher/dashboard
+                icon: icon-dashboard
+            pools:
+                label: Пулы
+                url: zen/fetcher/pools
+                icon: icon-sliders

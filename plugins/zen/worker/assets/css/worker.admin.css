@@ -1,0 +1,90 @@
+[v-cloak] {
+    display: none;
+}
+
+#Worker {
+
+}
+
+.worker-panel {
+    margin-bottom: 20px;
+}
+
+.stream {
+    border: 1px solid #a8b4c0;
+    background: #fff;
+    border-radius: 5px;
+    margin-bottom: 20px;
+    padding: 15px 20px;
+}
+
+.stream__name {
+    font-size: 20px;
+    margin-bottom: 10px;
+}
+
+.pools {
+
+}
+
+.pool {
+    border: 1px solid #869099;
+    padding: 15px 20px;
+    margin-bottom: 10px;
+    border-radius: 5px;
+}
+
+.pool.success {
+    background: #d3ffce;
+}
+
+.pool__name {
+    font-size: 15px;
+    background: #7f8e9e;
+    color: #fff;
+    border-radius: 5px;
+    padding: 3px 13px;
+    margin-bottom: 10px;
+}
+
+.pool__records {
+
+}
+
+.pool__record {
+    display: flex;
+    background: #eee;
+    padding: 3px 13px;
+    margin-bottom: 3px;
+    border-radius: 3px;
+}
+
+.pool__record__title {
+    width: 100px;
+    font-weight: bold;
+}
+
+.pool__record__value {
+
+}
+
+.pool__progress {
+    margin-top: 10px;
+}
+
+.rotator::before {
+    animation-name: rotation;
+    animation-duration: 1s;
+    animation-iteration-count: infinite;
+    animation-timing-function: linear;
+}
+
+@keyframes rotation {
+    0% {
+        transform: rotate(0deg);
+    }
+
+    100% {
+        transform: rotate(360deg);
+    }
+}

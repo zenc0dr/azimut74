@@ -1,0 +1,287 @@
+[viewBag]
+==
+<header class="header-of-page">
+    <div class="header-main">
+        <div class="container">
+            <div class="row">
+                <div class="col logo-blocks col-lg-3 order-1 order-lg-0">
+                    <div class="header-logoBlocks">
+                        <a href="/" class="header-logo">
+                            <img src="{{ 'assets/img/logo-new.svg'|theme }}" alt="pro-kruiz.ru">
+                        </a>
+                        {#<div class="header-logoTitle">
+                             <span class="header-siteName">Про Круиз</span>
+                             <span class="header-slogan d-none d-lg-flex">новый клиент - довольный клиент</span>
+                         </div>#}
+                    </div>
+                </div>
+                <div class="col header-hamburger d-lg-none">
+                    <svg width="1000px" height="1000px">
+                        <path id="pathD" d="M 300 400 L 700 400 C 900 400 900 750 600 850 A 400 400 0 0 1 200 200 L 800 800" style="stroke-dashoffset: 5803.15; stroke-dasharray: 2901.57, 2981.57, 240;"></path>
+                        <path id="pathE" d="M 300 500 L 700 500" style="stroke-dashoffset: 800; stroke-dasharray: 400, 480, 240;"></path>
+                        <path id="pathF" d="M 700 600 L 300 600 C 100 600 100 200 400 150 A 400 380 0 1 1 200 800 L 800 200" style="stroke-dashoffset: 6993.11; stroke-dasharray: 3496.56, 3576.56, 240;"></path>
+                    </svg>
+                    <button id="menu-icon-trigger2" class="header-hamburger-trigger"></button>
+                </div>
+                <div class="d-none d-lg-flex header-menuWrapper col-lg-6 ">
+                    <nav class="header-menuBlocks">
+                        <div class="header-menuItem" type="cruiz">
+                            <div class="wrapper-menuItem">
+                                <span>Круизы</span>
+                                {% partial 'common/svg/daw-down' %}
+                            </div>
+                            <div class="header-open" type="cruiz">
+                                <div class="container">
+                                    <div class="row">
+                                        <div class="col-sm h-100">
+                                            <div class="header-childWrapper">
+                                                <div class="header-childTitleWrapper">
+                                                    <span class="header-childTitle">Популярные направления</span>
+                                                    {% partial 'common/svg/daw-down' %}
+                                                </div>
+
+                                                <div class="header-childContent">
+                                                    {% if prok_items[1] %}
+                                                        {% for arItem in prok_items[1].items %}
+                                                            <a href="{{ arItem.url }}">{{ arItem.menu_name }}</a>
+                                                        {% endfor %}
+                                                    {% else %}
+                                                        Направлений пока нет...
+                                                    {% endif %}
+                                                </div>
+
+                                            </div>
+                                        </div>
+                                        <!--    <div class="col-sm-1 wrapper-line">  <div class="line h-100"></div></div>-->
+                                        <div class="col-sm h-100">
+                                            <div class="header-childWrapper">
+                                                <div class="header-childTitleWrapper">
+                                                    <span class="header-childTitle">Круизы по городам отправления</span>
+                                                    {% partial 'common/svg/daw-down' %}
+                                                </div>
+                                                <div class="header-childContent circle-point">
+                                                    {% if prok_items[2] %}
+                                                        {% for arItem in prok_items[2].items %}
+                                                            <a href="{{ arItem.url }}">{{ arItem.menu_name }}</a>
+                                                        {% endfor %}
+                                                    {% endif %}
+                                                    <a href="/popular-directions" class="btn red white-text">Смотреть всё</a>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="header-menuItem" type="ships">
+                            <div class="wrapper-menuItem">
+                                <span>Теплоходы</span>
+                                {% partial 'common/svg/daw-down' %}
+                            </div>
+
+                            <div class="header-open" type="ships">
+                                <div class="container">
+                                    <div class="row">
+                                        <div class="col-sm h-100">
+                                            <div class="header-childWrapper">
+
+                                                <div class="header-childContent">
+                                                    <div class="background-imageContent" style="background-image: url(/themes/prokruiz/assets/img/ships_in_menu.jpg)">
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                        <div class="col-sm h-100">
+                                            <div class="header-childWrapper">
+                                                <div class="header-childTitleWrapper">
+                                                    <span class="header-childTitle">Теплоходы</span>
+                                                    {% partial 'common/svg/daw-down' %}
+                                                </div>
+                                                <div class="header-childContent circle-point">
+                                                    {% for item in ships_menu %}
+                                                    <a href="/ship/{{ item.id }}">{{ item.name }}</a>
+                                                    {% endfor %}
+                                                    <a href="/ships" class="btn red white-text">Смотреть всё</a>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="header-menuItem" type="turist">
+                            <div class="wrapper-menuItem">
+                                <span>Туристам</span>
+                                {% partial 'common/svg/daw-down' %}
+                            </div>
+                            <div class="header-open" type="turist">
+                                <div class="container">
+                                    <div class="row">
+                                        <div class="col-sm h-100">
+                                            <div class="header-childWrapper">
+
+                                                <div class="header-childContent">
+                                                    <div class="background-imageContent" style="background-image: url({{ 'assets/img/turist.png'|theme }})">
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                        <div class="col-sm h-100">
+                                            <div class="header-childWrapper">
+                                                <div class="header-childTitleWrapper">
+                                                    <span class="header-childTitle">Полезная информация</span>
+                                                    {% partial 'common/svg/daw-down' %}
+                                                </div>
+                                                <div class="header-childContent circle-point">
+                                                    {% if prok_items[3] %}
+                                                        {% for arItem in prok_items[3].items %}
+                                                            <a href="{{ arItem.url }}">{{ arItem.menu_name }}</a>
+                                                        {% endfor %}
+                                                    {% endif %}
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </nav>
+                </div>
+                <div class="col col-lg-3 order-1 order-lg-0">
+                    <div class="header-wrapperPhone">
+                        <div class="header-phoneBlock">
+                            <a href="tel:{{ this.theme.footer_phone }}">
+                                <span class="d-none d-lg-block">{{ this.theme.footer_phone }}</span>
+                                <img class="d-flex d-lg-none" src="{{ 'assets/img/phone-icon.svg'|theme }}" alt="phone">
+                            </a>
+                            <span class="d-none d-lg-block">(звонок бесплатный)</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="h-m-menu mobile-header init" data-m-menu="">
+                    <div class="h-m-menu__close init" data-m-menu-close="">
+                        <div class="plus plus--cross"></div>
+                    </div>
+                    <div class="h-m-menu__inner">
+                        <div class="h-m-menu__inner-header"></div>
+                        <div class="h-m-menu__catalog" data-m-catalog="">
+                            <div class="h-m-menu__wrap" data-dropdown="">
+                                <div data-count="1">
+                                    <a href="/cruises/">
+                                        <span>Круизы</span>
+                                        <span class="h-m-menu__drop">
+                                            <svg class="i-icon" viewBox="0 0 8.15 12.601">
+                              <path id="m-c-arrow-Path_869" data-name="Path 869" d="M0,6,5.567,0l5.567,6"
+                                    transform="translate(6.681 0.733) rotate(90)" fill="none" stroke="#ff1300"
+                                    stroke-width="2"></path>
+                            </svg>
+                                        </span>
+                                    </a>
+                                    <div data-wrap="2" style="display: none;">
+                                        <div class="h-m-menu__wrap-inner" data-dropdown="" data-wrap-inner="">
+                                            <div data-count="2">
+                                                <a href="/popular-directions">
+                                                    <span>Популярные направления</span>
+                                                    <span class="h-m-menu__drop">
+                                                        <svg class="i-icon" viewBox="0 0 8.15 12.601">
+                                                            <path id="m-c-arrow-Path_869" data-name="Path 869" d="M0,6,5.567,0l5.567,6" transform="translate(6.681 0.733) rotate(90)" fill="none" stroke="#ff1300" stroke-width="2"></path></svg>
+                                                    </span>
+                                                </a>
+                                                <div data-wrap="3">
+                                                    <div class="h-m-menu__wrap-inner" data-dropdown="" data-wrap-inner="">
+                                                        {% if prok_items[1] %}
+                                                            {% for arItem in prok_items[1].items %}
+                                                                <div>
+                                                                    <a href="{{ arItem.url }}">
+                                                                        <span>{{ arItem.name }}</span>
+                                                                    </a>
+                                                                </div>
+                                                            {% endfor %}
+                                                        {% else %}
+                                                            Направлений пока нет...
+                                                        {% endif %}
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div data-count="2">
+                                                <a href="/cruises/cities/">
+                                                    <span>Круизы по городам отправления</span>
+                                                    <span class="h-m-menu__drop">
+                                        <svg class="i-icon" viewBox="0 0 8.15 12.601">
+                                        <path id="m-c-arrow-Path_869" data-name="Path 869" d="M0,6,5.567,0l5.567,6"
+                                              transform="translate(6.681 0.733) rotate(90)" fill="none" stroke="#ff1300" stroke-width="2"></path>
+                                        </svg>
+                                    </span>
+                                                </a>
+                                                <div data-wrap="3">
+                                                    <div class="h-m-menu__wrap-inner" data-dropdown="" data-wrap-inner="">
+                                                        {% if prok_items[2] %}
+                                                            {% for arItem in prok_items[2].items %}
+                                                                <div>
+                                                                    <a href="{{ arItem.url }}"><span>{{ arItem.name }}</span></a>
+                                                                </div>
+                                                            {% endfor %}
+                                                        {% endif %}
+                                                        <a href="/popular-directions" class="link link--more hidden">Смотреть всё</a>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div data-count="1">
+                                    <a href="/ships">
+                                        <span>Теплоходы</span>
+                                        <span class="h-m-menu__drop">
+                            <svg
+                                    class="i-icon" viewBox="0 0 8.15 12.601">
+  <path id="m-c-arrow-Path_869" data-name="Path 869" d="M0,6,5.567,0l5.567,6"
+        transform="translate(6.681 0.733) rotate(90)" fill="none" stroke="#ff1300" stroke-width="2"></path>
+</svg>
+                        </span>
+                                    </a>
+                                    <div data-wrap="2" style="display: none;">
+                                        <div class="h-m-menu__wrap-inner" data-dropdown="" data-wrap-inner="">
+                                            <div data-count="2">
+                                                {% for item in ships_menu %}
+                                                    <a href="/ship/{{ item.id }}"><span>{{ item.name }}</span></a>
+                                                {% endfor %}
+                                                <a href="/ships"><span>Все теплоходы</span></a>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div data-count="1">
+                                    <a href="javascript:void(0)">
+                                        <span>Для туристов</span>
+                                        <span class="h-m-menu__drop">
+                            <svg
+                                    class="i-icon" viewBox="0 0 8.15 12.601">
+  <path id="m-c-arrow-Path_869" data-name="Path 869" d="M0,6,5.567,0l5.567,6"
+        transform="translate(6.681 0.733) rotate(90)" fill="none" stroke="#ff1300" stroke-width="2"></path>
+</svg>
+                        </span>
+                                    </a>
+                                    <div data-wrap="2" style="display: none;">
+                                        <div class="h-m-menu__wrap-inner" data-dropdown="" data-wrap-inner="">
+                                            {% if prok_items[3] %}
+                                                {% for arItem in prok_items[3].items %}
+                                                    <a href="{{ arItem.url }}"><span>{{ arItem.menu_name }}</span></a>
+                                                {% endfor %}
+                                            {% endif %}
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="h-m-menu-mask init" data-m-menu-mask="" style="display: none;"></div>
+            </div>
+        </div>
+    </div>
+    </div>
+
+</header>

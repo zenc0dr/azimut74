@@ -1,0 +1,26 @@
+#Logs {
+    width: 100%;
+    margin: 0 auto;
+    font-size: 13px;
+}
+
+#Logs tr {
+}
+
+#Logs tr:nth-child(even) {
+    background: #eaeaea;
+}
+
+#Logs td {
+    padding: 3px;
+}
+
+.show-all {
+    display: inline-block;
+    padding: 12px 25px;
+    margin: 0 auto;
+    background: #ddd;
+    margin-bottom: 15px;
+    margin-left: 90px;
+    text-decoration: none;
+}

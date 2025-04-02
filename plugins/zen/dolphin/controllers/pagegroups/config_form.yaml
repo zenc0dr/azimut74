@@ -1,0 +1,10 @@
+name: PageGroups
+form: $/zen/dolphin/models/pagegroup/fields.yaml
+modelClass: Zen\Dolphin\Models\PageGroup
+defaultRedirect: zen/dolphin/pagegroups
+create:
+    redirect: 'zen/dolphin/pagegroups/update/:id'
+    redirectClose: zen/dolphin/pagegroups
+update:
+    redirect: zen/dolphin/pagegroups
+    redirectClose: zen/dolphin/pagegroups

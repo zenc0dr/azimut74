@@ -1,0 +1,1141 @@
+@import "@src/components/cruise/booking-form";
+
+.booking-exist-preloader {
+    text-align: center;
+    padding: 20px;
+}
+
+#BookingExist .offerItem {
+    display: inline-block;
+    width: 100%;
+    text-align: center;
+    padding-bottom: 20px;
+    padding-top: 20px;
+}
+
+#BookingExist #BookingSend {
+    display: inline-block;
+    width: 100%;
+    vertical-align: top;
+    text-align: center;
+    left: 0;
+    margin-top: -4px;
+}
+
+#BookingExist #BookingSend.disabled .hbtn {
+    background: color('red-400');
+}
+
+#BookingExist #BookingSend .hbtn {
+    background: color('red-200');
+}
+
+#BookingExist .bex-board {
+    width: 100%;
+    border: 1px solid color('gray-100');
+    border-top: none;
+    border-collapse: collapse;
+}
+
+.is-actual {
+    background-color: color('s-actual') !important;
+    color: color('gray-300');
+}
+
+.on-request {
+    background-color: color('s-request') !important;
+    color: color('gray-300');
+}
+
+.is-selected {
+    background-color: color('s-select') !important;
+    color: color('primary-100');
+}
+
+#BookingExist .bex-board th.bex-rooms-col {
+    width: 45%;
+    text-align: left;
+    padding: 10px 20px;
+}
+
+#BookingExist .bex-btn-col {
+    width: 15%;
+}
+
+#BookingExist .bex-board th {
+    font-size: fs('def');
+    text-align: center;
+    padding: 10px 0;
+}
+
+#BookingExist table.bex-board tr:first-child,
+#BookingExist table.bex-board tr:not(:last-child):not(.desc-type) {
+    border-bottom: 1px solid color('gray-100');
+}
+
+#BookingExist table tr th:nth-of-type(3),
+#BookingExist table tr td:nth-of-type(3) {
+    background-color: rgba(color('gray-200'),.1);
+}
+
+#BookingExist .bex-board tr:not(:last-child) td {
+    padding: 7px 0;
+}
+
+#BookingExist .bex-board tr td:first-child {
+    padding: 7px 20px;
+}
+
+#BookingExist .bex-board tr:first-child {
+    background-color: rgba(color('gray-200'),.1);
+}
+
+#BookingExist .bex-category-title {
+    font-size: fs('s');
+    font-weight: bold;
+    text-decoration: underline;
+    display: inline-block;
+    width: 160px;
+    margin-bottom: 6px;
+    cursor: pointer;
+    color: #0a4069;
+}
+
+#BookingExist .bex-rooms {
+    display: flex;
+    align-items: flex-end;
+    width: 100%;
+    flex-wrap: wrap;
+}
+
+.bex-category-top-wrap {
+    display: flex;
+    flex-direction: column;
+}
+
+.bex-category-top-wrap div:last-child {
+    font-size: fs('ss');
+}
+
+.bex-rooms div:first-child {
+    font-size: fs('ss');
+    margin-right: 10px;
+}
+
+// надо в переменную цвета
+.bex-room {
+    display: inline-block;
+    padding: 3px;
+    border: 1px solid #9f9f9f;
+    border-radius: 3px;
+    background: #eef0f2;
+    text-align: center;
+    font-size: rem(9px);
+    margin-right: 3px;
+    margin-top: 5px;
+}
+
+#BookingExist .bex-scheme-button {
+    display: inline-block;
+    width: 100%;
+    text-align: center;
+}
+
+// надо в переменную цвета
+#BookingExist .bex-scheme-button > div {
+    display: inline-block;
+    border: 3px solid #dcdcdc;
+    width: 94px;
+    font-size: fs('ss');
+    padding: 7px;
+    transition: 300ms;
+    cursor: pointer;
+}
+
+#BookingExist {
+    margin-bottom: 30px;
+}
+
+#BookingExist .bex-scheme-button > div:hover {
+    background: color('blue-100');
+    color: color('primary-100');
+}
+
+#BookingExist .bex-places {
+    display: inline-block;
+    width: 100%;
+}
+
+#BookingExist .bex-place {
+    display: inline-block;
+    width: 100%;
+    text-align: center;
+    padding: 5px 0;
+    font-size: fs('s');
+}
+
+#BookingExist .bex-prices {
+    display: inline-block;
+    width: 100%;
+}
+
+#BookingExist .bex-price {
+    display: inline-block;
+    width: 100%;
+    text-align: center;
+    font-weight: bold;
+    padding: 5px 0;
+    font-size: fs('s');
+    color: #404345;
+}
+
+#BookingExist .modal_info {
+    font-size: fs('ss');
+}
+
+#BookingExist .modal_info p {
+    font-size: fs('ss');
+}
+
+rivercrs_booking .bex-modal-pan {
+    display: inline-block;
+    width: 100%;
+}
+
+// надо переменную в цвета
+rivercrs_booking .bex-modal-pan .bex-modal-close,
+.bex-modal .v-close {
+    display: inline-block;
+    font-size: 34px;
+    position: inherit;
+    float: right;
+    color: #333;
+    margin-bottom: -5px;
+    margin-top: -15px;
+    cursor: pointer;
+}
+
+#bex-scheme {
+    overflow: auto;
+}
+
+#bex-scheme > div {
+    display: inline-block;
+}
+
+.bex-ship-scheme {
+    width: 1100px;
+}
+
+.bex-ship-scheme img {
+    width: 1100px;
+}
+
+.v-modal {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    padding: 20px;
+    background: rgba(color('primary-200'),.7);
+    z-index: 100000;
+    text-align: center;
+    overflow-y: auto;
+}
+
+.v-modal > div {
+    display: inline-block;
+    padding: 15px;
+    background: color('primary-100');
+    text-align: left;
+    align-items: center;
+    justify-content: center;
+}
+
+// надо добавить переменную в цвета
+.bex-point {
+    position: absolute;
+    background: #7e7e7e;
+    font-size: rem(11px);
+    color: color('primary-100');
+    text-align: center;
+    cursor: pointer;
+    box-shadow: 0 0 0 2px #939a9b;
+}
+
+.bex-point:hover {
+    box-shadow: 0 0 0 3px color('blue-100');
+}
+
+.bex-point-name {
+    transform: rotate(-90deg);
+    display: inline-block;
+    pointer-events: none;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+// надо добавить переменную в цвета
+.bex-point.free {
+    background: #008004;
+}
+
+// надо добавить переменную в цвета
+.bex-point.selected-category {
+    box-shadow: 0 0 0 2px #eb8989;
+    animation: pointFadein 800ms;
+}
+
+.bex-point.selected {
+    background: color('blue-100');
+}
+
+.cabin-on-scheme {
+    color: color('blue-100');
+    cursor: pointer;
+    text-decoration: underline;
+}
+
+
+@keyframes pointFadein {
+    from {
+        opacity: 0;
+        transform: scale(1.9, 1.9);
+    }
+
+    to {
+        opacity: 1;
+        transform: scale(1, 1);
+    }
+}
+
+.bex-cabin-body .cabinLeft {
+    display: inline-block;
+    width: 45%;
+    vertical-align: top;
+}
+
+// нужно перменную цвета
+.bex-cabin-body .cabinLeft .bigImages {
+    display: inline-block;
+    width: 100%;
+    padding: 5px;
+    background-color: color('primary-100');
+    border: 1px solid #e6e6e6;
+}
+
+.bex-cabin-body .cabinLeft .smallImages {
+    display: inline-block;
+    width: 100%;
+    padding-top: 13px;
+    text-align: left;
+}
+
+.bex-cabin-body .cabinLeft .smallImages .imageItem {
+    display: inline-block;
+    margin-right: 5px;
+    margin-bottom: 5px;
+    border: 3px solid transparent;
+    height: 45px;
+    width: 60px;
+    cursor: pointer;
+    background-position: center;
+    -webkit-background-size: 120%;
+    background-size: 120%;
+    background-repeat: no-repeat;
+}
+
+// нужно перменную цвета
+.bex-cabin-body .cabinLeft .smallImages .imageItem.active, .bex-cabin-body .cabinLeft .smallImages .imageItem:hover {
+    border: 3px solid #1e88e5;
+}
+
+.bex-cabin-body .cabinRight {
+    display: inline-block;
+    width: 55%;
+    padding-left: 25px;
+    vertical-align: top;
+    text-align: left;
+}
+
+.bex-cabin-body .cabinRight .cabinName {
+    padding-bottom: 20px;
+}
+
+.bex-cabin-body .cabinRight .cabinName span {
+    font-size: fs('h2');
+    font-weight: bold;
+}
+
+.bex-cabin-body .cabinRight .cabinDescLine {
+    margin-top: 15px;
+}
+
+// нужно перменную цвета
+.bex-cabin-body .cabinRight .cabinDescLine span:first-child {
+    color: #666;
+}
+
+.bex-cabin-body .cabinRight .cabinDescLine span {
+    color: color('primary-200');
+    font-size: fs('s');
+    display: inline-block;
+    width: 100%;
+}
+
+.bex-deck-title {
+    font-size: fs('def');
+    padding-top: 40px !important;
+    border-bottom: none !important;
+    padding-bottom: 20px !important;
+    font-weight: bold;
+    text-decoration: underline;
+}
+
+#BookingExist .bex-board tbody tr:nth-child(2) .bex-deck-title {
+    padding-top: 15px !important;
+}
+
+#markCabin {
+    padding: 15px;
+    background: color('red-300');
+    border-radius: 5px;
+    width: 100%;
+    font-size: fs('h3');
+    color: color('primary-100');
+}
+
+
+// нужно перменную цвета
+table tr.preloader {
+    background-color: #f9f9f99e;
+}
+
+// нужно перменную цвета
+table tr.preloader .bex-deck-title span,
+table tr.preloader .bex-category-title,
+table tr.preloader .bex-category-top-wrap div:last-child,
+table tr.preloader .bex-rooms div:first-child,
+table tr.preloader .bex-room,
+table tr.preloader .bex-room input,
+table tr.preloader .bex-place span,
+table tr.preloader .bex-price span {
+    background: #f2f2f2 !important;
+    position: relative;
+    color: transparent !important;
+    border: none;
+    overflow: hidden;
+}
+
+// нужно перменную цвета
+table tr.preloader .bex-deck-title span::after,
+table tr.preloader .bex-category-title::after,
+table tr.preloader .bex-category-top-wrap div:last-child::after,
+table tr.preloader .bex-rooms div:first-child::after,
+table tr.preloader .bex-room::after,
+table tr.preloader .bex-room input::after,
+table tr.preloader .bex-place span::after,
+table tr.preloader .bex-price span::after {
+    position: absolute;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    left: 0;
+    transform: translateX(-100%);
+    background-image: linear-gradient(
+            90deg,
+            rgba(255, 255, 255, 0),
+            rgba(255, 255, 255, 0.2) 20%,
+            rgba(255, 255, 255, 0.5) 60%,
+            rgba(255, 255, 255, 0)
+    );
+    animation: shimmer 1.5s infinite;
+    content: '';
+}
+
+@keyframes shimmer {
+    100% {
+        transform: translateX(100%);
+    }
+}
+
+
+table tr.preloader .bex-deck-title {
+    text-decoration: none;
+}
+
+
+@keyframes respond-fadein {
+    from {
+        opacity: 0;
+        transform: scale(0.9, 0.9);
+    }
+
+    to {
+        opacity: 1;
+        transform: scale(1, 1);
+    }
+}
+
+.bex-add-info {
+    padding: 20px 5px;
+    font-size: fs('s');
+    overflow: hidden;
+    transition: 400ms;
+}
+
+.bex-add-info-title {
+    font-weight: bold;
+    font-size: fs('def');
+}
+
+.bex-bottom-fog {
+    box-shadow: inset 0px -56px 90px 0px color('primary-100');
+    display: block;
+    position: relative;
+    bottom: 0;
+    height: 100px;
+    margin-top: -100px;
+}
+
+.bex-btn-readmore {
+    background: color('blue-200');
+    color: color('primary-100');
+    font-size: fs('def');
+    padding: 5px 0;
+    text-align: center;
+    cursor: pointer;
+    margin-bottom: 15px;
+}
+
+
+.bex-booking-line {
+    font-size: fs('ss');
+    margin-bottom: 4px;
+}
+
+.bex-booking-line i {
+    color: color('red-200');
+    position: absolute;
+    margin-left: 8px;
+    margin-top: 4px;
+    cursor: pointer;
+}
+
+.bex-selected-title {
+    font-weight: bold;
+}
+
+.bex-selected {
+    margin-bottom: 15px;
+    padding: 5px;
+}
+
+.bex-scheme-info {
+    position: fixed;
+    left: 0;
+    right: 0;
+    top: 0;
+    z-index: 10;
+    font-size: fs('s');
+}
+
+// нужно перменную цвета
+.bex-scheme-info > div {
+    display: inline-block;
+    padding: 7px 15px;
+    border: 1px solid #b7b7b7;
+    border-radius: 3px;
+}
+
+.bex-scheme-info > div > div {
+    display: inline-block;
+    margin-right: 20px;
+}
+
+// нужно перменную цвета
+.bex-scheme-info > div > div > div:first-child {
+    display: inline-block;
+    padding: 6px 26px;
+    margin-right: 4px;
+    border: 2px solid #acacac;
+    border-radius: 2px;
+    margin-bottom: -3px;
+}
+
+.bex-scheme-info > div > div > div:last-child {
+    display: inline-block;
+}
+
+
+.bex-scheme-info .bex-hint svg {
+    position: absolute;
+    margin-top: -13px;
+    margin-left: -18px;
+    font-size: fs('h20');
+    cursor: pointer;
+    border-radius: 30px;
+}
+
+// нужно перменную цвета
+.bex-scheme-info .bex-hint > div {
+    position: absolute;
+    background: color('primary-100');
+    border: 1px solid #b9b9b9;
+    padding: 0px 20px;
+    width: 400px;
+    margin-left: -200px;
+    display: none;
+    box-shadow: 0px 9px 7px 0px #00000024;
+}
+
+.bex-scheme-info .bex-hint > div.show {
+    display: block !important;
+}
+
+.small-text {
+    font-size: rem(8px);
+}
+
+// нужно перменную цвета
+#BookingExist .bex-scheme-info {
+    position: sticky;
+    position: -webkit-sticky;
+    z-index: 0;
+    margin-top: 10px;
+    display: flex;
+    border: 1px solid #dcdcdc;
+    border-radius: 7px 7px 0 0;
+    background-color: #eef1f3;
+    align-items: center;
+}
+
+#BookingExist .bex-scheme-info > div {
+    border: none;
+    width: 100%;
+}
+
+#BookingExist .bex-scheme-info > div:last-child {
+    color: color('red-200');
+    font-weight: bold;
+    text-align: right;
+}
+
+#BookingExist .bex-scheme-info > div:first-child {
+    width: auto;
+    flex-shrink: 0;
+}
+
+.offerItem .bex-offerLink {
+    color: color('blue-200');
+    font-size: fs('s');
+    text-decoration: underline;
+    padding-bottom: 3px;
+    cursor: pointer;
+}
+
+// нужно перменную цвета
+.bex-cabin-info {
+    font-size: fs('s');
+    background-color: #edf1f4;
+    border: 1px solid #b2b2b2;
+    padding: 15px;
+    text-align: left;
+    display: inline-block;
+    width: 100%;
+    padding-bottom: 30px;
+    margin-top: 10px;
+}
+
+// нужно перменную цвета
+.bex-cabin-number {
+    font-size: fs('h1');
+    color: #363636;
+    margin-bottom: 24px;
+}
+
+.bex-cabin-status {
+    font-weight: bold;
+}
+
+.bex-cabin-status .bex-free, .bex-cabin-status .bex-onreq {
+    font-size: fs('h3');
+    text-transform: uppercase;
+}
+
+// нужно перменную цвета
+.bex-cabin-status .bex-free {
+    color: green;
+    font-weight: normal;
+}
+
+// нужно перменную цвета
+.bex-cabin-status .bex-onreq {
+    color: orange;
+}
+
+// нужно перменную цвета
+.bex-cabin-status .bex-note {
+    font-size: fs('s');
+    font-weight: normal;
+    color: #383838;
+}
+
+.bex-info-panel {
+    margin-top: 10px;
+}
+
+.bex-info-panel .bex-cabin-price {
+    width: 60%;
+    display: inline-block;
+    font-size: fs('h3');
+    margin-top: 10px;
+}
+
+.bex-info-panel .bex-cabin-price .price {
+    display: inline-block;
+    width: 49%;
+    text-align: center;
+}
+
+.bex-info-panel .bex-cabin-price .price span {
+    font-size: fs('h2');
+    font-weight: bold;
+}
+
+.bex-info-panel .bex-cabin-price .place {
+    display: inline-block;
+    width: 49%;
+    font-size: fs('def');
+}
+
+.bex-info-panel .bex-button {
+    display: inline-block;
+    width: 30%;
+    float: right;
+}
+
+.bex-bold-title {
+    font-size: fs('h1');
+    text-align: center;
+    font-weight: bold;
+    margin-bottom: 10px;
+}
+
+.booking-fake-separator {
+    width: 100%;
+    height: 30px;
+}
+
+// нужно перменную цвета
+.booking-fake-separator > div {
+    height: 25px;
+    background: #eef1f3;
+    border-top: 1px solid #dcdcdc;
+    border-bottom: 1px solid #dcdcdc;
+    margin-left: -16px;
+    margin-right: -16px;
+}
+
+
+.tariff-name .tariff-name-name.desc {
+    color: color('primary-200');
+    text-decoration: underline;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.tariff-name .tariff-name-name.desc svg {
+    margin-left: 5px;
+}
+
+// нужно перменную цвета
+.tariff-name .tariff-name-desc {
+    display: none;
+    position: absolute;
+    width: 255px;
+    margin-left: -49px;
+    background: #f9f9d4;
+    padding: 10px;
+    border: 1px solid #bcbcbc;
+    border-radius: 2px;
+    box-shadow: 0px 4px 4px 0px #0000002b;
+    font-weight: normal;
+    text-align: left;
+    line-height: 23px;
+}
+
+#AnchorAssistant.show {
+    margin-bottom: 0;
+}
+
+#AnchorAssistant {
+    position: fixed;
+    height: 63px;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    text-align: center;
+    margin-bottom: -70px;
+    transition: 300ms;
+    z-index: 100000;
+}
+
+#AnchorAssistant > div {
+    display: inline-block;
+    background: color('blue-100');
+    color: color('primary-100');
+    padding: 16px 30px;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: 300ms;
+}
+
+#AnchorAssistant > div:hover {
+    background: color('blue-400');
+}
+
+#AnchorAssistant span {
+    margin-right: 45px;
+}
+
+#AnchorAssistant i {
+    font-size: 40px;
+    margin-top: -8px;
+    position: absolute;
+}
+
+/*конец  */
+.bex-category-mobile {
+    display: none;
+    font-weight: bold;
+}
+
+.bex-title-mobile,
+.bex-title-dotted,
+.bex-rooms-mobile {
+    display: none;
+}
+
+// нужно перменную цвета
+.cruise__waybill-attention {
+    padding: 10px 15px;
+    background: #ffffb2;
+    margin-bottom: 10px;
+    border-radius: 10px;
+    border: 1px solid #e6e675;
+    color: #ff6207;
+    font-weight: bold;
+    i {
+        font-size: fs('h20');
+        margin-right: 6px;
+    }
+}
+
+#BookingExist .prices-preloader {
+    padding: 15px;
+    font-size: 20px;
+    text-align: center;
+    color: #09317d;
+}
+
+/* -------------- Media ---------------- */
+
+@media (max-width: 1200px) {
+    .bex-scheme-info > div > div {
+        font-size: fs('s');
+    }
+
+    .bex-scheme-info > div > div > div:first-child {
+        padding: 6px 16px;
+    }
+
+    #BookingExist .bex-scheme-info > div:last-child {
+        font-size: fs('s');
+        text-align: right;
+        font-weight: normal;
+    }
+}
+
+@media (max-width: 992px) {
+    .bex-scheme-info {
+        top: 0;
+    }
+
+    #BookingExist .bex-board th,
+    .bex-deck-title,
+    #BookingExist .bex-place,
+    #BookingExist .bex-price {
+        font-size: fs('s');
+    }
+
+    #BookingExist .bex-rooms div:first-child {
+        font-size: fs('ss');
+    }
+
+    .bex-deck-title {
+        padding-top: 25px !important;
+    }
+
+    #BookingExist .bex-board tr td:first-child {
+        padding-right: 0;
+    }
+
+    #BookingExist .bex-board th,
+    .bex-deck-title,
+    #BookingExist .bex-place,
+    #BookingExist .bex-price {
+        font-size: fs('s');
+    }
+
+    #BookingExist .bex-board th.bex-rooms-col {
+        width: 51%;
+    }
+
+    #BookingExist .bex-scheme-info > div:last-child {
+        font-size: rem(11px);
+        padding-left: 0;
+    }
+
+    #BookingExist .bex-scheme-info > div:first-child {
+        padding-right: 0;
+    }
+
+    .bex-scheme-info > div > div {
+        font-size: fs('ss');
+    }
+
+    .tariff-name-name.desc svg {
+        display: none;
+    }
+
+    .bex-scheme-info > div > div > div:first-child {
+        padding: 6px 8px;
+    }
+}
+
+@media (max-width: 768px) {
+    #BookingExist .bex-board tr {
+        display: flex;
+        flex-direction: column;
+        margin-bottom: 25px;
+        border-radius: 7px;
+    }
+
+    #BookingExist .bex-board tr:first-child {
+        display: none;
+    }
+
+    #BookingExist .bex-board tr.desc-type,
+    .bex-category-top-wrap div:last-child {
+        display: none;
+        order: -99;
+    }
+
+    .bex-category-mobile {
+        display: block;
+        margin: 20px 0;
+    }
+
+    .bex-scheme-info {
+        top: 70px;
+    }
+
+    .bex-title-mobile,
+    .bex-title-dotted {
+        display: block;
+        font-size: fs('s');
+        white-space: nowrap;
+    }
+
+    .bex-title-dotted {
+        width: 100%;
+        border-bottom: 2px dotted;
+        margin: 0 5px;
+    }
+
+    #BookingExist .bex-places,
+    #BookingExist .bex-prices {
+        display: flex;
+        justify-content: space-between;
+        align-items: baseline;
+    }
+
+    #BookingExist .bex-board tr td {
+        padding: 7px 20px !important;
+    }
+
+    #BookingExist .bex-places .bex-title-mobile:first-child,
+    #BookingExist .bex-place,
+    #BookingExist .bex-price {
+        width: auto;
+        font-size: fs('s');
+        white-space: nowrap;
+    }
+
+    #BookingExist .bex-places .bex-title-mobile:last-child {
+        border-bottom: 1px dotted color('primary-200');
+        width: 100%;
+    }
+
+    #BookingExist .bex-places .bex-place:nth-child(even):before,
+    #BookingExist .bex-prices .bex-price:nth-child(even):before {
+        content: '/';
+        margin-left: 5px;
+    }
+
+    #BookingExist table tr th:nth-of-type(3),
+    #BookingExist table tr td:nth-of-type(3) {
+        background-color: transparent !important;
+    }
+
+    // нужно перменную цвета
+    #BookingExist .bex-board tr:not(.desc-type):nth-child(even) {
+        background-color: #e74c3b05;
+    }
+
+    // нужно перменную цвета
+    #BookingExist table.bex-board tr:first-child,
+    #BookingExist table.bex-board tr:not(.desc-type) {
+        border: 1px solid #dcdcdc;
+    }
+
+    #BookingExist .bex-board {
+        border: none;
+    }
+
+    #BookingExist .bex-board tr:nth-of-type(3) {
+        margin-top: 20px;
+    }
+
+    #BookingExist .bex-board tbody {
+        display: flex;
+        flex-direction: column;
+    }
+
+    #BookingExist .bex-scheme-info {
+        flex-direction: column;
+        border-radius: 7px;
+    }
+
+    #BookingExist .bex-scheme-info > div:last-child {
+        text-align: center;
+    }
+}
+
+@media (max-width: 590px) {
+
+    #BookingExist td:not(.bex-rooms-mobile) > .bex-rooms {
+        display: none;
+    }
+
+    #BookingExist .bex-rooms-mobile {
+        display: block;
+    }
+
+    #BookingExist .bex-room {
+        margin-top: 6px;
+    }
+
+    #BookingExist .bex-scheme-info > div {
+        display: flex;
+        align-items: flex-start;
+        justify-content: space-between;
+        width: 100% !important;
+    }
+
+    // нужно перменную цвета
+    .bex-scheme-info > div > div > div:first-child {
+        border: 1px solid #acacac;
+        padding: 7px;
+    }
+
+    #BookingExist .bex-scheme-info > div:last-child,
+    #BookingExist .bex-scheme-info > div:first-child {
+        padding: 7px 20px;
+    }
+
+    .bex-scheme-info .bex-hint {
+        display: none;
+    }
+
+    .bex-scheme-info .bex-hint svg {
+        margin-top: -17px;
+        margin-left: 105px;
+    }
+
+    .bex-scheme-info > div > div > div:last-child {
+        font-size: rem(11px)
+    }
+
+    // нужно перменную цвета
+    #BookingExist .bex-scheme-info > div {
+        background-color: #fffbfb;
+    }
+
+    .bex-scheme-info > div > div {
+        margin-bottom: 2px;
+    }
+
+    .bex-scheme-info > div > div {
+        margin-right: 0;
+    }
+
+    .bex-scheme-info > div > div:nth-of-type(2) div {
+        text-decoration: underline;
+    }
+
+}
+
+
+@media (max-width: 425px) {
+    #BookingExist .bex-places .bex-title-mobile:first-child,
+    #BookingExist .bex-place, #BookingExist .bex-price {
+        font-size: fs('ss');
+    }
+
+    #BookingExist .bex-board tr td,
+    .bex-scheme-info > div {
+        padding: 7px 10px !important;
+    }
+}
+
+@media (max-width: 390px) {
+    .bex-scheme-info > div > div > div:first-child {
+        margin-right: 1px;
+    }
+}
+
+@media (max-width: 370px) {
+
+    .bex-title-mobile, .bex-title-dotted,
+    #BookingExist .bex-places .bex-title-mobile:first-child,
+    #BookingExist .bex-place, #BookingExist .bex-price,
+    #BookingExist .bex-rooms div:first-child {
+        font-size: rem(10px)
+    }
+
+    #BookingExist .bex-price,
+    #BookingExist .bex-place {
+        color: color('primary-200');
+        font-size: rem(11px)
+    }
+
+    .bex-category-mobile {
+        margin-top: 10px;
+    }
+
+    //.ship-type {
+    //    font-size: fs('ss');
+    //    padding: 6px 8px;
+    //    cursor: pointer;
+    //}
+
+    #BookingExist .bex-category-title {
+        font-size: fs('s');
+    }
+}

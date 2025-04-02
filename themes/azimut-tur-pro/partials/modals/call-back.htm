@@ -1,0 +1,58 @@
+<section class="form-callback-init" style="display: none;">
+
+    <div class="form-callback px-2 px-sm-5 py-3">
+        <h2 class="mb-5 text-center c-gray-300">СПЕЦИАЛИСТ ПОЗВОНИТ<br> ВАМ В БЛИЖАЙШЕЕ ВРЕМЯ</h2>
+        <div class="form-callback__form d-flex flex-column">
+            <div class="form-callback__wrap-input mb-4 col-12 c0 fs-s fs-xxl-def">
+                <div class="form-callback__input_label fw-bolder mb-1 c-blue-300 fs-ss fs-sm-s ">
+                    Ваше имя
+                </div>
+                <input class="form-callback__input" type="text" placeholder="Ваше имя">
+            </div>
+            <div class="form-callback__wrap-input mb-4 col-12 c0 fs-s fs-xxl-def bad">
+                <div class="form-callback__input_label fw-bolder mb-1 c-blue-300  fs-ss fs-sm-s ">
+                    Ваш e-mail
+                </div>
+                <input class="form-callback__input" type="text" placeholder="Ваша электронная почта">
+                <span class="form-callback__input-error fs-s">Это поле обязательно для заполнения</span>
+            </div>
+            <div class="form-callback__wrap-input mb-4 col-12 c0 fs-s fs-xxl-def">
+                <div class="form-callback__input_label fw-bolder mb-1 c-blue-300  fs-ss fs-sm-s ">
+                    Ваш телефон
+                </div>
+                <input class="form-callback__input" type="text" placeholder="Ваш телефон">
+            </div>
+            <div class="form-callback__wrap-input mb-4 col-12 c0 fs-s fs-xxl-def">
+                <div class="form-callback__input_label fw-bolder mb-1 c-blue-300  fs-ss fs-sm-s ">
+                    Если у Ваc остались вопросы, мы с удовольствием на них ответим
+                </div>
+                <textarea class="form-callback__input-textarea" type="text"
+                          placeholder="Вопросы и пожелания"></textarea>
+            </div>
+
+            <div class="form-callback__check-wrapper mb-4 fs-s c-gray-300">
+                {# ВОТ ТАК СДЕЛАЙ ЧЕКЕР #}
+                {# <span @click="form.confirm = !form.confirm" class="form-callback__check"> #}
+                {# <i class="bi" :class="(form.confirm) ? 'bi-check-square' : 'bi-square'" aria-hidden="true"></i> #}
+                {# </span> #}
+
+                <span class="form-callback__check" @click="form.confirm = !form.confirm">
+            <i class="bi bi-square" aria-hidden="true"></i>
+         </span>
+
+                <span class="form-callback__check-text ms-2">Я принимаю
+            <a class="form-callback__check-link c-blue-300" target="_blank" href="/pk-terms" target="_blank">договор оферты</a>
+         </span>
+            </div>
+
+            <div class="form-callback__btn mb-4">
+                <button class="py-3 px-4 fw-bolder">Перезвоните мне</button>
+            </div>
+
+            <div class="form-callback__bot-text fs-ss fs-sm-s text-center c-gray-200">Мы гарантируем конфиденциальность
+                введенных данных
+            </div>
+
+        </div>
+    </div>
+</section>

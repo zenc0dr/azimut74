@@ -1,0 +1,10 @@
+name: Tops
+form: $/srw/catalog/models/tops/fields.yaml
+modelClass: Srw\Catalog\Models\Tops
+defaultRedirect: srw/catalog/tops
+create:
+    redirect: 'srw/catalog/tops/update/:id'
+    redirectClose: srw/catalog/tops
+update:
+    redirect: srw/catalog/tops
+    redirectClose: srw/catalog/tops

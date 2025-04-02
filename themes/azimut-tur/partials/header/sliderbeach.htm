@@ -1,0 +1,42 @@
+description = "Слайдер Пляжный отдых"
+
+[viewBag]
+==
+<?php
+function onStart() 
+{
+	$this['sliderbeach'] = \Srw\Azimut\Models\SliderBeach::orderBy('order')->get();
+}
+?>
+==
+{% if sliderbeach|length > 0 %}
+<section class="slider">
+
+	<div class="c-p p-r">
+		<div class="sliderNav hidden-xs-d">
+			<div class="nav next"></div>
+			<div class="nav prev"></div>
+		</div>
+	</div>
+	
+	<div class="sliderItems owl-carousel">
+		
+		{% for item in sliderbeach %}
+			<div class="slItem" style="background-image: url({{ item.image|media }})">
+				<div class="container">
+					<div class="slLine slTop"><span>{{ item.sltop|raw|mutator }}</span></div>
+					<div class="slLine slHeading"><span>{{ item.slmain|mutator }}</span></div>
+					<div class="slLine slButtons">
+						<div class="slButton">
+							<a href="{{ item.link }}" class="hbtn">Подробнее</a>
+						</div>
+						<div><span>{{ item.price|raw|mutator }}</span></div>
+					</div>
+				</div>
+			</div>
+		{% endfor %}
+
+	</div>
+	
+</section>
+{% endif %}

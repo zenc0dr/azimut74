@@ -1,0 +1,10 @@
+name: Category
+form: $/srw/catalog/models/category/fields.yaml
+modelClass: Srw\Catalog\Models\Category
+defaultRedirect: srw/catalog/category
+create:
+    redirect: 'srw/catalog/category/update/:id'
+    redirectClose: srw/catalog/category
+update:
+    redirect: srw/catalog/category
+    redirectClose: srw/catalog/category

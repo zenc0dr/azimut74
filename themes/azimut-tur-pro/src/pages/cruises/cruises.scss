@@ -1,0 +1,23 @@
+// general variables (подключаем на любой странице)
+@import "@src/components/!common/_.scss";
+
+@import '@components/search-widget/_';
+@import '@components/result-item/_';
+@import '@components/result-menu/left-menu';
+//@import '@components/result-menu/1v';
+//@import '@components/result-menu/2v';
+//@import '@components/result-menu/3v';
+@import '@components/cruize-head/_';
+@import '@components/cruize-article/_';
+
+@import '@components/blocks/pagination/_';
+
+@import '@components/injectors/injector';
+@import '@components/injectors/injector_reviews';
+@import '@components/quize/_';
+
+
+
+.info-wrapper {
+    border: 1px solid color('gray-100');
+}

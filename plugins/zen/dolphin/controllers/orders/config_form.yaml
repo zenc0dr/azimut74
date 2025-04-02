@@ -1,0 +1,10 @@
+name: Orders
+form: $/zen/dolphin/models/order/fields.yaml
+modelClass: Zen\Dolphin\Models\Order
+defaultRedirect: zen/dolphin/orders
+create:
+    redirect: 'zen/dolphin/orders/update/:id'
+    redirectClose: zen/dolphin/orders
+update:
+    redirect: zen/dolphin/orders
+    redirectClose: zen/dolphin/orders

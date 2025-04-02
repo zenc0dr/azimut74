@@ -1,0 +1,4 @@
+title: Deliveries
+modelClass: Zen\Om\Models\Delivery
+toolbar:
+    buttons: reorder_toolbar

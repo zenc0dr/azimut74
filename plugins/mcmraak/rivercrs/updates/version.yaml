@@ -1,0 +1,161 @@
+1.1.0:
+    - Инициализация
+1.1.1:
+    - motorships
+    - builder_table_create_mcmraak_rivercrs_motorships.php
+1.1.2:
+    - 'techs (Технические характеристики)'
+    - builder_table_create_mcmraak_rivercrs_techs.php
+1.1.3:
+    - techs_pivot
+    - builder_table_create_mcmraak_rivercrs_techs_pivot.php
+1.1.4:
+    - 'onboard (На борту)'
+    - builder_table_create_mcmraak_rivercrs_onboard.php
+1.1.5:
+    - onboard_pivot
+    - builder_table_create_mcmraak_rivercrs_onboard_pivot.php
+1.1.6:
+    - 'cabins (Каюты)'
+    - builder_table_create_mcmraak_rivercrs_cabins.php
+1.1.7:
+    - 'decks (Палубы)'
+    - builder_table_create_mcmraak_rivercrs_decks.php
+1.1.8:
+    - 'beds (Кровати)'
+    - builder_table_create_mcmraak_rivercrs_beds.php
+1.1.9:
+    - 'comforts (Комфорт)'
+    - builder_table_create_mcmraak_rivercrs_comforts.php
+1.1.10:
+    - 'incabin (В каюте)'
+    - builder_table_create_mcmraak_rivercrs_incabin.php
+1.1.11:
+    - incabin_pivot
+    - builder_table_create_mcmraak_rivercrs_incabin_pivot.php
+1.1.12:
+    - 'checkins (Заезды)'
+    - builder_table_create_mcmraak_rivercrs_checkins.php
+1.1.13:
+    - 'waybills (Маршруты)'
+    - builder_table_create_mcmraak_rivercrs_waybills.php
+1.1.14:
+    - 'towns (Города)'
+    - builder_table_create_mcmraak_rivercrs_towns.php
+1.1.15:
+    - 'Заполнитель городов из списка'
+    - seeder1018.php
+1.1.16:
+    - 'pricing (Ценообразование)'
+    - builder_table_create_mcmraak_rivercrs_pricing.php
+1.1.17:
+    - 'decks_pivot (Связь палуб и кают)'
+    - builder_table_create_mcmraak_rivercrs_decks_pivot.php
+1.1.18:
+    - 'cruises (Круизы)'
+    - builder_table_create_mcmraak_rivercrs_cruises.php
+1.1.19:
+    - 'reference (Статьи)'
+    - builder_table_create_mcmraak_rivercrs_reference.php
+1.1.20:
+    - 'transit (Города следования)'
+    - builder_table_create_mcmraak_rivercrs_transit.php
+1.1.21:
+    - 'settings (Настройки)'
+    - builder_table_create_mcmraak_rivercrs_settings.php
+1.1.22:
+    - 'booking (Бронирование)'
+    - builder_table_create_mcmraak_rivercrs_booking.php
+1.1.23:
+    - 'reviews (Отзывы)'
+    - builder_table_create_mcmraak_rivercrs_reviews.php
+1.1.24:
+    - 'cache storage (Хранилище кэша)'
+    - create_cache_storage.php
+1.1.25:
+    - 'logs (Журнал логов)'
+    - builder_table_create_mcmraak_rivercrs_logs.php
+1.1.26:
+    - 'Updated table mcmraak_rivercrs_cabins'
+    - builder_table_update_mcmraak_rivercrs_cabins.php
+1.1.27:
+    - 'Updated table mcmraak_rivercrs_towns'
+    - builder_table_update_mcmraak_rivercrs_towns.php
+1.1.28:
+    - 'Created table mcmraak_rivercrs_backups'
+    - builder_table_create_mcmraak_rivercrs_backups.php
+1.1.29:
+    - 'Updated table mcmraak_rivercrs_towns'
+    - builder_table_update_mcmraak_rivercrs_towns_2.php
+1.1.30:
+    - 'Updated table mcmraak_rivercrs_motorships'
+    - builder_table_update_mcmraak_rivercrs_motorships.php
+1.1.31:
+    - 'Updated table mcmraak_rivercrs_motorships'
+    - builder_table_update_mcmraak_rivercrs_motorships_2.php
+1.1.32:
+    - 'Updated table mcmraak_rivercrs_motorships'
+    - builder_table_update_mcmraak_rivercrs_motorships_3.php
+1.1.33:
+    - 'Updated table mcmraak_rivercrs_motorships'
+    - builder_table_update_mcmraak_rivercrs_motorships_4.php
+1.1.34:
+    - 'Updated table mcmraak_rivercrs_cabins'
+    - builder_table_update_mcmraak_rivercrs_cabins_2.php
+1.1.35:
+    - 'Слияние палуб - ссылка на родителя'
+    - builder_table_update_mcmraak_rivercrs_decks.php
+1.1.36:
+    - 'Updated table mcmraak_rivercrs_logs'
+    - builder_table_update_mcmraak_rivercrs_logs.php
+1.1.37:
+    - 'Updated table mcmraak_rivercrs_booking'
+    - builder_table_update_mcmraak_rivercrs_booking.php
+1.1.38:
+    - 'Updated table mcmraak_rivercrs_motorships'
+    - builder_table_update_mcmraak_rivercrs_motorships_5.php
+1.1.39:
+    - 'Updated table mcmraak_rivercrs_cruises'
+    - builder_table_update_mcmraak_rivercrs_cruises.php
+1.1.40:
+    - 'Updated table mcmraak_rivercrs_transit'
+    - builder_table_update_mcmraak_rivercrs_transit.php
+1.1.41:
+    - 'Created table mcmraak_rivercrs_kpages'
+    - builder_table_create_mcmraak_rivercrs_kpages.php
+1.1.42:
+    - 'Created table mcmraak_rivercrs_ktypes'
+    - builder_table_create_mcmraak_rivercrs_ktypes.php
+1.1.43:
+    - 'Updated table mcmraak_rivercrs_kpages'
+    - builder_table_update_mcmraak_rivercrs_kpages.php
+1.1.44:
+    - 'Updated table mcmraak_rivercrs_motorships'
+    - builder_table_update_mcmraak_rivercrs_motorships_discounts.php
+1.1.45:
+    - 'Created table mcmraak_rivercrs_discounts'
+    - builder_table_create_mcmraak_rivercrs_discounts.php
+1.1.46:
+    - 'Created table mcmraak_rivercrs_ship_statuses'
+    - builder_table_create_mcmraak_rivercrs_ship_statuses.php
+1.1.47:
+    - 'Updated table mcmraak_rivercrs_motorships'
+    - builder_table_update_mcmraak_rivercrs_motorships_6.php
+1.1.48:
+    - 'Updated table mcmraak_rivercrs_kpages'
+    - builder_table_update_mcmraak_rivercrs_kpages_2.php
+1.1.49:
+    - 'Updated table mcmraak_rivercrs_towns'
+    - builder_table_update_mcmraak_rivercrs_towns_3.php
+1.1.50:
+    - 'Created table mcmraak_rivercrs_checkins_memory'
+    - builder_table_create_mcmraak_rivercrs_checkins_memory.php
+1.1.51:
+    - 'Updated table mcmraak_rivercrs_kpages'
+    - builder_table_update_mcmraak_rivercrs_kpages_3.php
+1.1.52:
+    - 'Created table mcmraak_rivercrs_nprices'
+    - builder_table_create_mcmraak_rivercrs_nprices.php
+1.1.53:
+    - 'Updated table mcmraak_rivercrs_nprices'
+    - builder_table_update_mcmraak_rivercrs_nprices.php

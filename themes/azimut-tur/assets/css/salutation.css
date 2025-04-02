@@ -1,0 +1,40 @@
+#_Salutation {
+    position: fixed;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: #00000042;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    z-index: 100000;
+}
+
+#_Salutation p {
+    font-size: 19px;
+    line-height: 16px;
+}
+
+#_Salutation > div {
+    background: #fff;
+    padding: 20px 25px;
+    border-radius: 5px;
+    border: 3px solid #81b0db;
+    box-shadow: 0 0 20px 14px #ffffff42;
+}
+
+#_Salutation > div > div:first-child {
+    font-size: 18px;
+}
+
+#_Salutation > div > div:last-child {
+    background: #49ae47;
+    color: #fff;
+    text-align: center;
+    padding: 15px;
+    font-size: 29px;
+    border-radius: 7px;
+    cursor: pointer;
+    margin-top: 50px;
+}

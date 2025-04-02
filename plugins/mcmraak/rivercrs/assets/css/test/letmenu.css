@@ -1,0 +1,20 @@
+.left-menu {
+}
+
+.left-menu__chapter {
+}
+
+.left-menu__chapter__title {
+    border-radius: 4px 4px 0 0;
+    display: flex;
+    justify-content: space-between;
+}
+
+.left-menu__chapter__items {
+}
+
+.left-menu__chapter__item {
+    display: block;
+    text-decoration: none;
+    padding: 7px 5px;
+}

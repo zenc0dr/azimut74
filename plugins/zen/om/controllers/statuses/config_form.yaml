@@ -1,0 +1,16 @@
+name: Statuses
+modelClass: Zen\Om\Models\Status
+form: $/zen/om/models/status/fields.yaml
+defaultRedirect: zen/om/statuses
+create:
+    title: 'zen.om::lang.statuses.create'
+    redirect: 'zen/om/statuses/update/:id'
+    redirectClose: zen/om/statuses
+    flashSave: 'zen.om::lang.statuses.created'
+update:
+    title: 'zen.om::lang.statuses.update'
+    redirect: zen/om/statuses
+    redirectClose: zen/om/statuses
+    flashSave: 'zen.om::lang.statuses.updated'
+    flashDelete: 'zen.om::lang.statuses.deleted'
+preview: {  }

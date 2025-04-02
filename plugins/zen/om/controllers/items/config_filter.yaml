@@ -1,0 +1,22 @@
+scopes:
+    category:
+        label: 'zen.om::lang.categories.title'
+        modelClass: Zen\Om\Models\Category
+        nameFrom: name
+        scope: FilterCategories
+    store:
+        label: 'zen.om::lang.store.store'
+        modelClass: Zen\Om\Models\Store
+        nameFrom: name
+        scope: FilterStores
+    storage:
+        label: 'zen.om::lang.storage.storage'
+        modelClass: Zen\Om\Models\Storage
+        nameFrom: name
+        scope: FilterStorages
+    active:
+        label: 'zen.om::lang.plugin.active'
+        type: switch
+        conditions:
+          - active = 0
+          - active = 1

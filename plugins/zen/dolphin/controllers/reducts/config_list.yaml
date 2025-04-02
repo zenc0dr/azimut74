@@ -1,0 +1,15 @@
+title: Скидки
+modelClass: Zen\Dolphin\Models\Reduct
+list: $/zen/dolphin/models/reduct/columns.yaml
+recordUrl: 'zen/dolphin/reducts/update/:id'
+noRecordsMessage: 'backend::lang.list.no_records'
+recordsPerPage: 20
+showSetup: true
+showCheckboxes: true
+defaultSort:
+    column: id
+    direction: asc
+toolbar:
+    buttons: list_toolbar
+    search:
+        prompt: 'backend::lang.list.search_prompt'

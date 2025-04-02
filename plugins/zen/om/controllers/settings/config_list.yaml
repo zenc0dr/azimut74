@@ -1,0 +1,12 @@
+title: 'zen.om::lang.settings.menu'
+modelClass: Zen\Om\Models\Setting
+list: $/zen/om/models/setting/columns.yaml
+recordUrl: 'zen/om/settings/update/:id'
+noRecordsMessage: 'backend::lang.list.no_records'
+recordsPerPage: '30'
+showSetup: true
+showCheckboxes: true
+toolbar:
+    buttons: list_toolbar
+    search:
+        prompt: 'backend::lang.list.search_prompt'

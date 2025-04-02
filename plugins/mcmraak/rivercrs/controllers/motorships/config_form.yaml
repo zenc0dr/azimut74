@@ -1,0 +1,17 @@
+name: Теплоходы
+modelClass: Mcmraak\Rivercrs\Models\Motorships
+form: $/mcmraak/rivercrs/models/motorships/fields.yaml
+defaultRedirect: mcmraak/rivercrs/motorships
+create:
+    title: 'Создать теплоход'
+    redirect: 'mcmraak/rivercrs/motorships/update/:id'
+    redirectClose: mcmraak/rivercrs/motorships
+    flashSave: 'Теплоход создан'
+update:
+    title: 'Изменить теплоход'
+    redirect: mcmraak/rivercrs/motorships
+    redirectClose: mcmraak/rivercrs/motorships
+    flashSave: 'Теплоход сохранён'
+    flashDelete: 'Теплоход удалён'
+preview:
+    title: Теплоход

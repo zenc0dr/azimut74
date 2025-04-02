@@ -1,0 +1,12 @@
+@import "dolphin";
+@import "~font-awesome/scss/font-awesome";
+@import "@src/components/dolphin/ExtWidget";
+@import '@components/injectors/injector';
+@import '@components/injectors/injector_reviews';
+@import '@components/quize/_';
+
+@import "@src/components/blocks/page-groups/_";
+
+@import "@src/components/dolphin/features";
+@import "@src/components/dolphin/dolphin-reviews";
+@import "@src/components/tinybox-gallery/tinybox-gallery";

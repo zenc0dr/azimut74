@@ -1,0 +1,88 @@
+<style>
+    .d-log {
+    }
+
+    .d-log-block {
+        margin-bottom: 10px;
+    }
+
+    .d-log-pill {
+        display: flex;
+        border: 1px solid #d0d9dd;
+    }
+
+    .d-log-pill div {
+        display: flex;
+        align-items: center;
+        padding: 15px;
+    }
+
+    .d-log-pill div:first-child {
+        background: #d0d9dd;
+        width: 200px;
+        font-weight: bold;
+        color: #5a5f61;
+    }
+
+    .d-log-pill div:last-child {
+        background: #ffffff;
+        width: calc(100% - 200px);
+    }
+
+    .d-log-text {
+        border: 1px solid #d0d9dd;
+    }
+
+    .d-log-text div:first-child {
+        padding: 5px;
+        text-align: center;
+        background: #d0d9dd;
+        color: #5a5f61;
+        font-weight: bold;
+    }
+
+    .d-log-text div:last-child {
+        background: #fff;
+        padding: 15px;
+    }
+
+    .d-log-dump {
+        margin-top: 30px;
+    }
+
+    .d-log-dump div:first-child {
+        font-size: 20px;
+        margin-bottom: 20px;
+    }
+
+    .d-log-dump div:last-child {
+        margin-top: -10px;
+    }
+</style>
+<div class="d-log">
+    <div class="d-log-block">
+        <div class="d-log-pill">
+            <div>Тип</div>
+            <div>{{ data.type }}</div>
+        </div>
+    </div>
+
+    <div class="d-log-block">
+        <div class="d-log-pill">
+            <div>Источник</div>
+            <div>{{ data.source }}</div>
+        </div>
+    </div>
+    <div class="d-log-block">
+        <div class="d-log-text">
+            <div>Информация</div>
+            <div>{{ data.text }}</div>
+        </div>
+    </div>
+    <div class="d-log-block">
+        <div class="d-log-dump">
+            <div>Дамп</div>
+            <div>{{ data.dump|raw }}</div>
+        </div>
+    </div>
+</div>

@@ -1,0 +1,60 @@
+[modal]:hover {
+    cursor: pointer;
+    animation-name: quake;
+    animation-duration: 200ms;
+    animation-iteration-count: infinite;
+    animation-timing-function: linear;
+    transform: scale(1.1);
+    transition: 300ms;
+}
+
+/* modal */
+.zen-modal {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: #00000080;
+    z-index: 100000;
+    overflow: auto;
+}
+
+.zen-modal__body {
+    max-width: 1080px;
+    background: #fff;
+    margin: 0 auto;
+    margin-top: 50px;
+    border-radius: 5px;
+}
+
+.zen-modal__header {
+}
+
+.zen-modal__header__close {
+    display: flex;
+    justify-content: flex-end;
+}
+
+.zen-modal__header__close i {
+    font-size: 20px;
+    padding: 10px;
+    user-select: none;
+    cursor: pointer;
+    transition: 200ms;
+}
+.zen-modal__header__close i:hover {
+    color: red;
+}
+
+.zen-modal__content {
+    padding: 15px;
+}
+
+.zen-modal__content iframe {
+    width: 100%;
+    height: 31vw;
+    @include m('lg') {
+      height: 50vh;
+   }
+}

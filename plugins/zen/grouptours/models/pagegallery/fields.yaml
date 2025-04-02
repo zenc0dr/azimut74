@@ -1,0 +1,19 @@
+fields:
+    name:
+        label: 'Название галереи'
+        span: auto
+        type: text
+    title:
+        label: Заголовок
+        size: small
+        span: auto
+        type: richeditor
+    images:
+        label: Изображения
+        mode: image
+        useCaption: true
+        thumbOptions:
+            mode: crop
+            extension: auto
+        span: full
+        type: fileupload

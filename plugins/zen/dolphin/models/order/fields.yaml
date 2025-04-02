@@ -1,0 +1,14 @@
+fields:
+    processed:
+        label: Обработано
+        span: auto
+        type: switch
+    comment:
+        label: Заметка
+        size: small
+        span: full
+        type: textarea
+    data:
+        span: full
+        path: $/zen/dolphin/controllers/orders/order.php
+        type: partial

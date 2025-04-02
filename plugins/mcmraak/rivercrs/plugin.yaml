@@ -1,0 +1,110 @@
+plugin:
+    name: 'mcmraak.rivercrs::lang.plugin.name'
+    description: 'mcmraak.rivercrs::lang.plugin.description'
+    author: Mcmraak
+    icon: oc-icon-anchor
+    homepage: ''
+navigation:
+    rivercrs:
+        label: 'Речные круизы'
+        url: mcmraak/rivercrs/motorships
+        icon: icon-anchor
+        permissions:
+            - mcmraak.rivercrs
+        order: 0
+        sideMenu:
+            rivercrs-booking:
+                label: Бронирования
+                url: mcmraak/rivercrs/booking
+                icon: icon-rouble
+            quiz:
+                label: Квиз
+                url: zen/quiz/applications
+                icon: icon-trello
+            rivercrs-checkins:
+                label: Заезды
+                url: mcmraak/rivercrs/checkins
+                icon: icon-calendar
+                permissions:
+                    - mcmraak.rivercrs
+            rivercrs-motorships:
+                label: Теплоходы
+                url: mcmraak/rivercrs/motorships
+                icon: icon-ship
+                permissions:
+                    - mcmraak.rivercrs
+            rivercrs-cabins:
+                label: Каюты
+                url: mcmraak/rivercrs/cabins
+                icon: icon-tags
+                permissions:
+                    - mcmraak.rivercrs
+            rivercrs-discounts:
+                label: 'Временные скидки'
+                url: mcmraak/rivercrs/discounts
+                icon: icon-rub
+                permissions:
+                    - mcmraak.rivercrs
+            rivercrs-xls:
+                label: Импорт
+                url: mcmraak/rivercrs/import
+                icon: icon-table
+                permissions:
+                    - mcmraak.rivercrs
+            rivercrs-cruises:
+                label: 'Пункты меню'
+                url: mcmraak/rivercrs/cruises
+                icon: icon-map-marker
+            rivercrs-reference:
+                label: 'Справочная информация'
+                url: mcmraak/rivercrs/references
+                icon: icon-align-justify
+            rivercrs-settings:
+                label: Настройки
+                url: mcmraak/rivercrs/settings
+                icon: icon-cog
+            rivercrs-reviews:
+                label: Отзывы
+                url: mcmraak/rivercrs/reviews
+                icon: icon-thumbs-o-up
+            rivercrs-parsers:
+                label: 'Внешние источники'
+                url: mcmraak/rivercrs/parsers
+                icon: icon-cloud-download
+            rivercrs-backups:
+                label: 'Резервные копии'
+                url: mcmraak/rivercrs/backups
+                icon: icon-archive
+    kruiz-main:
+        label: Pro-Kruiz.RU
+        url: mcmraak/rivercrs/kpages
+        icon: icon-ship
+        permissions:
+            - mcmraak.prokruiz.main
+        order: 3
+        sideMenu:
+            kruiz-types:
+                label: Разделы
+                url: mcmraak/rivercrs/ktypes
+                icon: icon-folder
+            kruiz-pages:
+                label: Страницы
+                url: mcmraak/rivercrs/kpages
+                icon: icon-ship
+            kruize-settings:
+                label: 'Настройки темы'
+                url: cms/themeoptions/update/prokruiz
+                icon: icon-sliders
+permissions:
+    mcmraak.rivercrs:
+        tab: 'Речные круизы'
+        label: 'Глобальный доступ к модулю'
+    mcmraak.rivercrs.motorships:
+        tab: 'Речные круизы'
+        label: Теплоходы
+    mcmraak.rivercrs.motorships.change:
+        tab: 'Речные круизы'
+        label: 'Изменение данных теплохода'
+    mcmraak.prokruiz.main:
+        tab: 'Про Круиз'
+        label: 'Глобальный доступ'

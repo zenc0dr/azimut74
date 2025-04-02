@@ -1,0 +1,14 @@
+title: Categories
+modelClass: Zen\Om\Models\Category
+list: $/zen/om/models/category/columns.yaml
+recordUrl: 'zen/om/categories/update/:id'
+noRecordsMessage: 'backend::lang.list.no_records'
+recordsPerPage: '30'
+showSetup: true
+showCheckboxes: true
+toolbar:
+    buttons: list_toolbar
+    search:
+        prompt: 'backend::lang.list.search_prompt'
+showTree: 1
+filter: config_filter.yaml

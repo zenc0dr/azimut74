@@ -1,0 +1,58 @@
+tabs:
+    fields:
+        image:
+            label: 'Изображение категории'
+            oc.commentPosition: ''
+            mode: image
+            span: full
+            type: mediafinder
+            tab: 'Основные данные'
+        name:
+            label: 'Имя категории'
+            oc.commentPosition: ''
+            span: auto
+            type: text
+            tab: 'Основные данные'
+        slug:
+            label: 'Ссылка категории'
+            oc.commentPosition: ''
+            span: auto
+            required: 1
+            preset:
+                field: name
+                type: url
+            type: text
+            tab: 'Основные данные'
+        parent_id:
+            label: 'Родительская категория'
+            oc.commentPosition: ''
+            span: auto
+            type: dropdown
+            tab: 'Основные данные'
+        desc:
+            label: 'Описание категории'
+            span: full
+            size: giant
+            oc.commentPosition: ''
+            type: richeditor
+            tab: Описание
+        seo_title:
+            label: Title
+            oc.commentPosition: ''
+            span: full
+            type: text
+            tab: SEO
+        seo_description:
+            label: Description
+            size: large
+            oc.commentPosition: ''
+            span: auto
+            type: textarea
+            tab: SEO
+        seo_keywords:
+            label: Keywords
+            span: auto
+            size: large
+            oc.commentPosition: ''
+            type: textarea
+            tab: SEO

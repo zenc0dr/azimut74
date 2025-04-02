@@ -1,0 +1,10 @@
+name: Sites
+form: $/zen/keeper/models/site/fields.yaml
+modelClass: Zen\Keeper\Models\Site
+defaultRedirect: zen/keeper/sites
+create:
+    redirect: 'zen/keeper/sites/update/:id'
+    redirectClose: zen/keeper/sites
+update:
+    redirect: zen/keeper/sites
+    redirectClose: zen/keeper/sites

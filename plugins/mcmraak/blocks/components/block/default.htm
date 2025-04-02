@@ -1,0 +1,11 @@
+{% if block %}
+<div class="Rblock">
+    {% if block.onlyimage %}
+        <img src="{{ block.images|first.path }}"
+             alt="{{ block.images|first.title|mutator }}"
+             title="{{ block.images|first.title|mutator }}">
+    {% else %}
+    {{ block.text|raw|mutator }}
+    {% endif %}
+</div>
+{% endif %}

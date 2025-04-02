@@ -1,0 +1,4 @@
+title: Incabin
+modelClass: Mcmraak\Rivercrs\Models\Incabin
+toolbar:
+    buttons: reorder_toolbar

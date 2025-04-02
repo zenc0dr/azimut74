@@ -1,0 +1,1 @@
+<?php echo View::make('zen.dolphin::backend.select_tours', ['model' => $model])->render();

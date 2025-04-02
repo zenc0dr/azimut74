@@ -1,0 +1,11 @@
+<link rel="stylesheet" href="/plugins/zen/qm/assets/css/zen.qm.css">
+<div id="QM" v-cloak>
+    <div class="qm-panel">
+        <div @click="run()" class="btn btn-primary btn-lg" :class="icon">Выполнить задачи</div>
+    </div>
+    <div class="qm-queue">
+        <span class="qm-jobs">${ jobs_count }</span>
+    </div>
+</div>
+<script src="/plugins/zen/qm/assets/js/vue.min.js"></script>
+<script src="/plugins/zen/qm/assets/js/zen.qm.js"></script>

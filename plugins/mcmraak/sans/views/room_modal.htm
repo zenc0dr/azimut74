@@ -1,0 +1,256 @@
+<div id="modalApartaments--sans" class="modalFade">
+    <div class=" modalWrapBook pb-xs-30">
+    	<!-- {{d(hotel.RoomCategoryList)}}
+    	{{d(room)}} -->
+    	<!-- <div class="modalDone">
+    				<button title="Close (Esc)" type="button" class="mfp-close">×</button>
+    	
+    				<div class="modalHead">
+    					<span>Спасибо за заявку!</span>
+    					<span>Специалист позвонит вам в ближайшее время</span>
+    				</div>
+    			</div> -->
+
+        <div class="modalContent">
+			<button title="Close (Esc)" type="button" class="mfp-close">×</button>
+			{% set arrays = [] %}
+			{% for record in hotel.RoomCategoryList  %}
+				{% set sravnenie = record.RoomTypeName ~' '~record.RoomCategoryName %}
+				{% set arrays = arrays|merge([room|coincidence(sravnenie)])%}
+	
+			{% endfor %}
+
+			{% set persent = max(arrays) %}
+			{% for record in hotel.RoomCategoryList  %}
+					{% set sravnenie = record.RoomTypeName ~' '~record.RoomCategoryName %}
+			{% if room|coincidence(sravnenie) == persent %}
+			<div class="modal__body">
+				
+				<div class="s-card__room mt-25">
+					<div class="s-card__room-name s-card__room-name_modal">
+						<span>
+							{% if record.RoomTypeShortName != '?' %}
+							{{ record.RoomTypeShortName }} - {{record.RoomCategoryName }}
+							{% else %}
+							{{record.RoomCategoryName }}
+							{% endif %}
+							
+						</span>
+					</div>
+					<div class="s-card__room-details-wrap s-card__room-details-wrap_modal">
+						{% if record.RoomImageList %}
+						<div class="s-card__room-images">
+							<div class="c-r cp-0">
+								{% for i in record.RoomImageList %}
+								<div class="col-33">
+									<div data-lightbox-gallery="{{ room }}" class="s-card__room-image" href="{{ i.Url }}" style="background-image: url({{ i.Url }});"></div>
+								</div>
+								{% endfor %}
+							</div>
+							{% if record.RoomImageList|length > 3 %}
+							<div class="s-card__room-more">
+								<button class="more-button btn ibtn">
+									<span class="more">+ еще {% if record.RoomImageList|length>3 %}{{ record.RoomImageList|length - 3 }}{% endif %} </span>
+									<span class="less">- скрыть фото</span>
+								</button>
+							</div>
+							{% endif %}
+						</div>
+						{% endif %}
+				<div class="s-card__room-details">
+						
+						{% if record.Announcement|length > 15 %}
+						<div class="r">
+							<div class="col-45 as-s">
+								<div class="s-card__room-details-col t-r">
+									<strong>Описание номера:</strong>
+								</div>
+							</div>
+							<div class="col-55 as-s">
+								<div class="s-card__room-details-col">
+									<p>
+										{{ record.Announcement|raw }}
+									</p>
+								</div>
+							</div>
+						</div>
+						{% endif %}
+						
+						{% if record.Quantity %}
+						<div class="r">
+							<div class="col-45 as-s">
+								<div class="s-card__room-details-col t-r">
+									<strong>Количество номеров:</strong>
+								</div>
+							</div>
+							<div class="col-55 as-s">
+								<div class="s-card__room-details-col">
+									{{ record.Quantity }}
+								</div>
+							</div>
+						</div>
+						{% endif %}
+						{% if record.BaseSeatQuantity %}
+						<div class="r">
+							<div class="col-45 as-s">
+								<div class="s-card__room-details-col t-r">
+									<strong>Количество комнат в номере:</strong>
+								</div>
+							</div>
+							<div class="col-55 as-s">
+								<div class="s-card__room-details-col">
+									{{ record.BaseSeatQuantity }}
+								</div>
+							</div>
+						</div>
+						{% endif %}
+						{% if record.RoomTypeName %}
+						<div class="r">
+							<div class="col-45 as-s">
+								<div class="s-card__room-details-col t-r">
+									<strong>Тип номера:</strong>
+								</div>
+							</div>
+							<div class="col-55 as-s">
+								<div class="s-card__room-details-col">
+								{{ record.RoomTypeName }}
+								</div>
+							</div>
+						</div>
+						{% endif %}
+						{% if record.Building %}
+						<div class="r">
+							<div class="col-45 as-s">
+								<div class="s-card__room-details-col t-r">
+									<strong>Корпус:</strong>
+								</div>
+							</div>
+							<div class="col-55 as-s">
+								<div class="s-card__room-details-col">
+									{{ record.Building }}
+								</div>
+							</div>
+						</div>
+						{% endif %}
+						{% if record.BaseSeatQuantity %}
+						<div class="r">
+							<div class="col-45 as-s">
+								<div class="s-card__room-details-col t-r">
+									<strong>Количество основных мест:</strong>
+								</div>
+							</div>
+							<div class="col-55 as-s">
+								<div class="s-card__room-details-col">
+									{{ record.BaseSeatQuantity }}
+								</div>
+							</div>
+						</div>
+						{% endif %}
+						
+						{% if record.ExtSeatQuantity %}
+						<div class="r">
+							<div class="col-45 as-s">
+								<div class="s-card__room-details-col t-r">
+									<strong>Количество дополнительных мест мест:</strong>
+								</div>
+							</div>
+							<div class="col-55 as-s">
+								<div class="s-card__room-details-col">
+									{{ record.ExtSeatQuantity }}
+								</div>
+							</div>
+						</div>
+						{% endif %}
+						
+					{#	<div class="r">
+							<div class="col-45 as-s">
+								<div class="s-card__room-details-col t-r">
+									<strong>Тип дополнительного места:</strong>
+								</div>
+							</div>
+							<div class="col-55 as-s">
+								<div class="s-card__room-details-col">
+									{{d(record)}}
+								</div>
+							</div>
+						</div>#}
+						{% if record.RoomArea %}
+						<div class="r">
+							<div class="col-45 as-s">
+								<div class="s-card__room-details-col t-r">
+									<strong>Площадь номера:</strong>
+								</div>
+							</div>
+							<div class="col-55 as-s">
+								<div class="s-card__room-details-col">
+									{{ record.RoomArea }}
+								</div>
+							</div>
+						</div>
+						{% endif %}
+
+						{% if record.InteriorList %}
+						
+						{% for ell in record.InteriorList %}
+						<div class="r">
+							<div class="col-45 as-s">
+								<div class="s-card__room-details-col t-r">
+									<strong>{{ ell.Name }}:</strong>
+								</div>
+							</div>
+							<div class="col-55 as-s">
+								<div class="s-card__room-details-col data">
+								
+										    <ul>
+											{% for elll in ell.ContentList %}
+												<li>{{ elll.Name }}{% if elll.Description%}:{{elll.Description}}{% endif %}</li>
+											{% endfor %}
+											</ul>
+									
+								</div>
+							</div>
+						</div>
+						{% endfor %}
+						
+						{% endif %}
+					</div>
+					</div>
+				</div>
+				
+			</div>
+			{% endif %}
+			
+			{% endfor %}
+			
+			<!-- <div class="bookingAnnoLine">
+			    <span>Мы гарантируем конфиденциальность введенных данных, мы не используем Ваши данные для навязчивых рассылок, заказ ни к чему Вас не обязывает</span>
+			</div> -->
+			
+			
+				<script>
+			/**/
+		</script> 
+			{# Дополнительное модальное окно #}
+			
+			<!-- <topmodal>
+				<div class="modalSecond">
+					<div class="modalLine">
+						<div class="close">×</div>
+			    		<modalbody></modalbody>
+					</div>
+				</div>
+			</topmodal> -->
+	 
+		</div>
+	</div>
+	
+	<!-- <ofmodal>
+		<div class="modalSecond">
+			<div class="modalLine">
+				<div class="close">×</div>
+	    		<ofmodalbody></ofmodalbody>
+			</div>
+		</div>
+	</ofmodal> -->
+	
+</div>

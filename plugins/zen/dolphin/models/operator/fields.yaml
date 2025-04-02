@@ -1,0 +1,10 @@
+fields:
+    name:
+        label: 'Название оператора'
+        span: full
+        type: text
+    desc:
+        label: Описание
+        size: small
+        span: full
+        type: richeditor

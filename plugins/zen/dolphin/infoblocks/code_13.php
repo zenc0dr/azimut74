@@ -1,0 +1,1 @@
+$template['ext_azimut_tour_dates'] = @$input['ext_azimut_tour_dates'];

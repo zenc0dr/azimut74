@@ -1,0 +1,1191 @@
+description = "Конкретный Отель(санаторий)"
+
+[viewBag]
+==
+{% if hotel_info %}
+
+<section class="s-card">
+	{#<div class="h h_size-m h_txt-bold h_txt-upper mb-30 t-c">
+		<span>{{ hotel_info.hotel.name }} ({{ hotel_info.hotel_bag.HotelTypeName }})</span>
+	</div>#}
+
+	<div class="cruiseData">
+		<div class="c-r">
+
+            {% partial 'sans-page/left-block' %}
+
+			<div class="col-75 col-s-100 as-s">
+				<div class="rightBlock">
+
+					<div class="h h_size-s h_txt-bold h_txt-upper mb-15">
+						<span>{{ hotel_info.hotel.name }} ({{ hotel_info.hotel_bag.HotelTypeName }})</span>
+					</div>
+
+					<div class="s-card__attributes mt-s-10">
+						<div class="r">
+							<div class="col-25 col-xs-40">
+								<div class="s-sel__card-property-wrap">
+									Уровень:
+									<span class="s-sel__card-property s-sel__card-property_bold">{{ hotel_info.hotel_bag.Level }}</span>
+								</div>
+							</div>
+						</div>
+					</div>
+
+					<div class="s-card__images-wrap">
+						<div class="c-r cp-0">
+							<div class="col-60 col-xxs-100">
+								<div class="s-card__big-images owl-carousel">
+									{% for item in hotel_info.hotel_bag.HotelImageList %}
+										<a class="gal" data-lightbox-gallery="s-card__big-images" href="{{ item.Url }}">
+											<div data-hash="{{ item.Index }}" class="s-card__big-image" style="background-image: url({{ item.Url }})"></div>
+										</a>
+					                {% endfor %}
+								</div>
+							</div>
+							<div class="col-40 col-xxs-100 mt-xxs-15">
+								<div class="s-card__small-images pl-15 pl-xxs-0">
+									<div class="c-r cp-0">
+										{% for item in hotel_info.hotel_bag.HotelImageList %}
+											<div class="col-33 col-xxs-20">
+												<a href="#{{ item.Index }}">
+													<div class="s-card__small-image" style="background-image: url({{ item.Url }})"></div>
+												</a>
+											</div>
+						                {% endfor %}
+									</div>
+									<div class="s-card__small-images_add">
+										<button class="btn ibtn">
+											<span class="less">- скрыть</span>
+											<span class="more">+ еще фото</span>
+										</button>
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
+
+				{#	<div class="s-card__line s-card__help-wrap t-r">
+						<a href="" class="btn btn_size-l btn_bg-red btn_txt-white btn_txt-bold">
+							Подобрать путевку
+						</a>
+					</div>#}
+
+					<div class="s-card__switcher">
+
+                        {% if hotel_info.hotel_results %}
+						<div class="s-card__switch s-card__switch-el active sw--prices">
+							<span>Официальные цены {{ "now"|date("Y") }}</span>
+						</div>
+                        {% endif %}
+
+						<div class="s-card__switch s-card__switch-el {% if hotel_info.hotel_results == '' %}active {% endif %}sw--desc">
+							<span>Описание</span>
+						</div>
+				        {#<div class="s-card__switch s-card__switch-el sw--apartaments">
+							<span>Номерной фонд</span>
+						</div>#}
+						{% if hotel_info.hotel_bag.MedicalService %}
+						<div class="s-card__switch s-card__switch-el sw--healing">
+							<span>Лечение</span>
+						</div>
+						{% endif %}
+						<div class="s-card__switch s-card__switch-el sw--reviews">
+							<span>Отзывы</span>
+						</div>
+					</div>
+
+					<div class="s-card__switcher-content-wrap">
+						{% if hotel_info.hotel_results %}
+						<div class="s-card__switcher-content s-card__switch-el active sw--prices">
+
+							<div class="s-card__switcher-line">
+								<div class="s-card__heading">
+								Официальные цены {{ "now"|date("Y") }}
+								</div>
+							</div>
+
+
+				            {% partial 'sans-page/room-seach' %}
+						    {#{% partial 'sans-page/room-price' %}#}
+
+							<div class="s-card__heading" id="number_fond_scroll">
+								Номерной фонд
+							</div>
+
+							<div class="s-card__data s-card__rooms-collection">
+
+								{% for item in hotel_info.hotel_bag.RoomCategoryList %}
+
+								<div class="s-card__room">
+									<div class="s-card__room-name">
+										<span>
+
+										   {% if item.RoomTypeShortName|length > 4 %}
+											{{ item.RoomTypeShortName }} - {{ item.RoomCategoryName }}
+										   {% else %}
+										       {{ item.RoomCategoryName }}
+										   {% endif %}
+										</span>
+									</div>
+									<div class="s-card__room-details-wrap">
+
+										{% if item.RoomImageList %}
+										<div class="s-card__room-images">
+											<div class="c-r cp-0">
+												{% for el in item.RoomImageList %}
+												<div class="col-33">
+													<div data-lightbox-gallery="{{ item.RoomCategoryCID }}" class="s-card__room-image gal" href="{{ el.Url }}" style="background-image: url({{ el.Url }});"></div>
+												</div>
+												{% endfor %}
+											</div>
+											{% if item.RoomImageList|length>3 %}
+											<div class="s-card__room-more">
+												<button class="more-button btn ibtn">
+													<span class="more">+ еще {% if item.RoomImageList|length>3 %}{{ item.RoomImageList|length - 3 }}{% endif %} </span>
+													<span class="less">- скрыть фото</span>
+												</button>
+											</div>
+											{% endif %}
+										</div>
+										{% endif %}
+										<div class="s-card__room-details">
+
+											{% if item.Announcement|length > 15 %}
+											<div class="r">
+												<div class="col-45 as-s">
+													<div class="s-card__room-details-col t-r">
+														<strong>Описание номера:</strong>
+													</div>
+												</div>
+												<div class="col-55 as-s">
+													<div class="s-card__room-details-col">
+														<p>
+															{{ item.Announcement|raw }}
+														</p>
+													</div>
+												</div>
+											</div>
+											{% endif %}
+
+											{% if item.Quantity %}
+											<div class="r">
+												<div class="col-45 as-s">
+													<div class="s-card__room-details-col t-r">
+														<strong>Количество номеров:</strong>
+													</div>
+												</div>
+												<div class="col-55 as-s">
+													<div class="s-card__room-details-col">
+														{{ item.Quantity }}
+													</div>
+												</div>
+											</div>
+											{% endif %}
+											{% if item.BaseSeatQuantity %}
+											<div class="r">
+												<div class="col-45 as-s">
+													<div class="s-card__room-details-col t-r">
+														<strong>Количество комнат в номере:</strong>
+													</div>
+												</div>
+												<div class="col-55 as-s">
+													<div class="s-card__room-details-col">
+														{{ item.BaseSeatQuantity }}
+													</div>
+												</div>
+											</div>
+											{% endif %}
+											{% if item.RoomTypeName %}
+											<div class="r">
+												<div class="col-45 as-s">
+													<div class="s-card__room-details-col t-r">
+														<strong>Тип номера:</strong>
+													</div>
+												</div>
+												<div class="col-55 as-s">
+													<div class="s-card__room-details-col">
+													{{ item.RoomTypeName }}
+													</div>
+												</div>
+											</div>
+											{% endif %}
+											{% if item.Building %}
+											<div class="r">
+												<div class="col-45 as-s">
+													<div class="s-card__room-details-col t-r">
+														<strong>Корпус:</strong>
+													</div>
+												</div>
+												<div class="col-55 as-s">
+													<div class="s-card__room-details-col">
+														{{ item.Building }}
+													</div>
+												</div>
+											</div>
+											{% endif %}
+											{% if item.BaseSeatQuantity %}
+											<div class="r">
+												<div class="col-45 as-s">
+													<div class="s-card__room-details-col t-r">
+														<strong>Количество основных мест:</strong>
+													</div>
+												</div>
+												<div class="col-55 as-s">
+													<div class="s-card__room-details-col">
+														{{ item.BaseSeatQuantity }}
+													</div>
+												</div>
+											</div>
+											{% endif %}
+
+											{% if item.ExtSeatQuantity %}
+											<div class="r">
+												<div class="col-45 as-s">
+													<div class="s-card__room-details-col t-r">
+														<strong>Количество дополнительных мест мест:</strong>
+													</div>
+												</div>
+												<div class="col-55 as-s">
+													<div class="s-card__room-details-col">
+														{{ item.ExtSeatQuantity }}
+													</div>
+												</div>
+											</div>
+											{% endif %}
+
+										{#	<div class="r">
+												<div class="col-45 as-s">
+													<div class="s-card__room-details-col t-r">
+														<strong>Тип дополнительного места:</strong>
+													</div>
+												</div>
+												<div class="col-55 as-s">
+													<div class="s-card__room-details-col">
+														{{d(item)}}
+													</div>
+												</div>
+											</div>#}
+											{% if item.RoomArea %}
+											<div class="r">
+												<div class="col-45 as-s">
+													<div class="s-card__room-details-col t-r">
+														<strong>Площадь номера:</strong>
+													</div>
+												</div>
+												<div class="col-55 as-s">
+													<div class="s-card__room-details-col">
+														{{ item.RoomArea }}
+													</div>
+												</div>
+											</div>
+											{% endif %}
+
+											{% if item.InteriorList %}
+
+											{% for ell in item.InteriorList %}
+											<div class="r">
+												<div class="col-45 as-s">
+													<div class="s-card__room-details-col t-r">
+														<strong>{{ ell.Name }}:</strong>
+													</div>
+												</div>
+												<div class="col-55 as-s">
+													<div class="s-card__room-details-col data">
+
+															    <ul>
+																{% for elll in ell.ContentList %}
+																	<li>{{ elll.Name }}{% if elll.Description%}:{{elll.Description}}{% endif %}</li>
+																{% endfor %}
+																</ul>
+
+													</div>
+												</div>
+											</div>
+											{% endfor %}
+
+											{% endif %}
+										</div>
+									</div>
+								</div>
+								{% endfor %}
+
+			{#<div class="s-card__room">
+				<div class="s-card__room-name">
+					<span>
+						Стандартный двухместный номер  с 2 отдельными кроватями 1.2 корпус 5-7 этажи
+					</span>
+				</div>
+				<div class="s-card__room-details-wrap">
+					<div class="s-card__room-images">
+						<div class="c-r cp-0">
+							<div class="col-33">
+								<div class="s-card__room-image" style="background-image: url(/storage/app/uploads/public/113/738/03b/thumb__320_0_0_0_auto.jpg);"></div>
+							</div>
+							<div class="col-33">
+								<div class="s-card__room-image" style="background-image: url(/storage/app/uploads/public/113/738/03b/thumb__320_0_0_0_auto.jpg);"></div>
+							</div>
+							<div class="col-33">
+								<div class="s-card__room-image" style="background-image: url(/storage/app/uploads/public/113/738/03b/thumb__320_0_0_0_auto.jpg);"></div>
+							</div>
+							<div class="col-33">
+								<div class="s-card__room-image" style="background-image: url(/storage/app/uploads/public/113/738/03b/thumb__320_0_0_0_auto.jpg);"></div>
+							</div>
+							<div class="col-33">
+								<div class="s-card__room-image" style="background-image: url(/storage/app/uploads/public/113/738/03b/thumb__320_0_0_0_auto.jpg);"></div>
+							</div>
+							<div class="col-33">
+								<div class="s-card__room-image" style="background-image: url(/storage/app/uploads/public/113/738/03b/thumb__320_0_0_0_auto.jpg);"></div>
+							</div>
+							<div class="col-33">
+								<div class="s-card__room-image" style="background-image: url(/storage/app/uploads/public/113/738/03b/thumb__320_0_0_0_auto.jpg);"></div>
+							</div>
+							<div class="col-33">
+								<div class="s-card__room-image" style="background-image: url(/storage/app/uploads/public/113/738/03b/thumb__320_0_0_0_auto.jpg);"></div>
+							</div>
+						</div>
+						<div class="s-card__room-more">
+							<button class="more-button btn ibtn">
+								<span class="more">+ еще {{ массив|length - 3 }}10 фото </span>
+								<span class="less">- скрыть фото</span>
+							</button>
+						</div>
+					</div>
+					<div class="s-card__room-details">
+						<div class="r">
+							<div class="col-45 as-s">
+								<div class="s-card__room-details-col t-r">
+									<strong>Описание номера:</strong>
+								</div>
+							</div>
+							<div class="col-55 as-s">
+								<div class="s-card__room-details-col">
+									Двухкомнатный номер (спальная комната + гостиная).<br>
+									Данные номера расположены с 4 по 16 этажи.
+								</div>
+							</div>
+						</div>
+						<div class="r">
+							<div class="col-45 as-s">
+								<div class="s-card__room-details-col t-r">
+									<strong>Количество номеров:</strong>
+								</div>
+							</div>
+							<div class="col-55 as-s">
+								<div class="s-card__room-details-col">
+									12
+								</div>
+							</div>
+						</div>
+						<div class="r">
+							<div class="col-45 as-s">
+								<div class="s-card__room-details-col t-r">
+									<strong>Количество комнат в номере:</strong>
+								</div>
+							</div>
+							<div class="col-55 as-s">
+								<div class="s-card__room-details-col">
+									2
+								</div>
+							</div>
+						</div>
+						<div class="r">
+							<div class="col-45 as-s">
+								<div class="s-card__room-details-col t-r">
+									<strong>Тип номера:</strong>
+								</div>
+							</div>
+							<div class="col-55 as-s">
+								<div class="s-card__room-details-col">
+									люкс
+								</div>
+							</div>
+						</div>
+						<div class="r">
+							<div class="col-45 as-s">
+								<div class="s-card__room-details-col t-r">
+									<strong>Корпус:</strong>
+								</div>
+							</div>
+							<div class="col-55 as-s">
+								<div class="s-card__room-details-col">
+									12
+								</div>
+							</div>
+						</div>
+						<div class="r">
+							<div class="col-45 as-s">
+								<div class="s-card__room-details-col t-r">
+									<strong>Количество основных мест:</strong>
+								</div>
+							</div>
+							<div class="col-55 as-s">
+								<div class="s-card__room-details-col">
+									12
+								</div>
+							</div>
+						</div>
+						<div class="r">
+							<div class="col-45 as-s">
+								<div class="s-card__room-details-col t-r">
+									<strong>Тип дополнительного места:</strong>
+								</div>
+							</div>
+							<div class="col-55 as-s">
+								<div class="s-card__room-details-col">
+									раскладной диван
+								</div>
+							</div>
+						</div>
+						<div class="r">
+							<div class="col-45 as-s">
+								<div class="s-card__room-details-col t-r">
+									<strong>Площадь номера:</strong>
+								</div>
+							</div>
+							<div class="col-55 as-s">
+								<div class="s-card__room-details-col">
+									23 м<sup>2</sup>
+								</div>
+							</div>
+						</div>
+						<div class="r">
+							<div class="col-45 as-s">
+								<div class="s-card__room-details-col t-r">
+									<strong>Балкон:</strong>
+								</div>
+							</div>
+							<div class="col-55 as-s">
+								<div class="s-card__room-details-col">
+									с сушилкой
+								</div>
+							</div>
+						</div>
+						<div class="r">
+							<div class="col-45 as-s">
+								<div class="s-card__room-details-col t-r">
+									<strong>Терраса:</strong>
+								</div>
+							</div>
+							<div class="col-55 as-s">
+								<div class="s-card__room-details-col">
+									есть
+								</div>
+							</div>
+						</div>
+						<div class="r">
+							<div class="col-45 as-s">
+								<div class="s-card__room-details-col t-r">
+									<strong>Мебель:</strong>
+								</div>
+							</div>
+							<div class="col-55 as-s">
+								<div class="s-card__room-details-col">
+									диван, кровати односпальные, двуспальная кровать, прикроватные тумбочки, стол, шкаф
+								</div>
+							</div>
+						</div>
+						<div class="r">
+							<div class="col-45 as-s">
+								<div class="s-card__room-details-col t-r">
+									<strong>Оборудование:</strong>
+								</div>
+							</div>
+							<div class="col-55 as-s">
+								<div class="s-card__room-details-col">
+									сплит-система, телевизор, холодильник
+								</div>
+							</div>
+						</div>
+						<div class="r">
+							<div class="col-45 as-s">
+								<div class="s-card__room-details-col t-r">
+									<strong>Санузел:</strong>
+								</div>
+							</div>
+							<div class="col-55 as-s">
+								<div class="s-card__room-details-col">
+									с душем (поддон)
+								</div>
+							</div>
+						</div>
+						<div class="r">
+							<div class="col-45 as-s">
+								<div class="s-card__room-details-col t-r">
+									<strong>Сервис:</strong>
+								</div>
+							</div>
+							<div class="col-55 as-s">
+								<div class="s-card__room-details-col">
+									смена полотонец: ежедневно, смена постельного белья: 1 раз в 3 дня, уборка номера: ежедневно
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>#}
+
+		</div>
+		{#был пропущен див#}
+		</div>
+						</div>
+						{% endif %}
+
+						<div class="s-card__switcher-content s-card__switch-el {% if hotel_info.hotel_results == '' %}active {% endif %}sw--desc">
+
+							{% if hotel_info.hotel.name or hotel_info.hotel_bag.Announcement %}
+							<div class="s-card__switcher-line">
+								<div class="s-card__heading">
+									{{ hotel_info.hotel.name }}
+								</div>
+
+								{% if hotel_info.hotel_bag.Announcement %}
+								<div class="s-card__data data">
+									<p>
+										{{ hotel_info.hotel_bag.Announcement|raw }}
+									</p>
+								</div>
+								{% endif %}
+							</div>
+							{% endif %}
+
+							{% if hotel_info.hotel_bag.Description %}
+							<div class="s-card__switcher-line s-card__switcher-line_description">
+								<div class="s-card__heading">
+									Описание комплекса
+								</div>
+
+								<div class="s-card__data data s-card__data_description">
+									<p>
+										{{ hotel_info.hotel_bag.Description|raw }}
+									</p>
+								</div>
+
+								<button class="btn ibtn more-button">
+									<span class="less">Свернуть описание</span>
+									<span class="more">Развернуть полное описание</span>
+								</button>
+
+							</div>
+							{% endif %}
+
+							{% if hotel_info.hotel_bag.Level or hotel_info.hotel_bag.QuantitySeat or hotel_info.hotel_bag.BuiltYear or hotel_info.hotel_bag.ReconstructionYear or hotel_info.hotel_bag.Territory %}
+							<div class="s-card__switcher-line s-card__switcher-line_properties">
+								<div class="s-card__data data s-card__data_properties">
+									<ul class="properties-list">
+										{% if hotel_info.hotel_bag.Level %}
+										<li>
+											Уровень: <strong>{{ hotel_info.hotel_bag.Level }}</strong>
+										</li>
+										{% endif %}
+										{% if hotel_info.hotel_bag.QuantitySeats %}
+										<li>
+											Количество мест: <strong>{{ hotel_info.hotel_bag.QuantitySeats }}</strong>
+										</li>
+										{% endif %}
+										{% if hotel_info.hotel_bag.BuiltYear %}
+										<li>
+											Год постройки: <strong>{{ hotel_info.hotel_bag.BuiltYear }}</strong>
+										</li>
+										{% endif %}
+										{% if hotel_info.hotel_bag.ReconstructionYear %}
+										<li>
+											Год реконструкции: <strong>{{ hotel_info.hotel_bag.ReconstructionYear }}</strong>
+										</li>
+										{% endif %}
+										{% if hotel_info.hotel_bag.Territory %}
+										<li>
+											Площадь территории: <strong>{{ hotel_info.hotel_bag.Territory }}</strong>
+										</li>
+										{% endif %}
+										{% if hotel_info.hotel_bag.Building %}
+											<li>
+												Корпус: <strong>{{ hotel_info.hotel_bag.Building }}</strong>
+											</li>
+										{% endif %}
+									</ul>
+								</div>
+							</div>
+							{% endif %}
+
+							{% if hotel_info.hotel_bag.WorkPeriod %}
+							<div class="s-card__switcher-line">
+								<div class="s-card__heading">
+									Период работы
+								</div>
+
+								<div class="s-card__data data">
+									<ul>
+										{% for item in hotel_info.hotel_bag.WorkPeriod %}
+						                    <li>{{ item }}</li>
+						                {% endfor %}
+									</ul>
+								</div>
+							</div>
+							{% endif %}
+
+							{% if hotel_info.hotel_bag.DistanceList %}
+							<div class="s-card__switcher-line">
+								<div class="s-card__heading">
+									Дистанции
+								</div>
+
+								<div class="s-card__data data">
+									<ul>
+										{% for item in hotel_info.hotel_bag.DistanceList %}
+						                    <li><b>{{ item.Name }}</b> - {{ item.Distance }}</li>
+						                {% endfor %}
+									</ul>
+								</div>
+							</div>
+							{% endif %}
+
+							{% if hotel_info.hotel_bag.Advantages %}
+							<div class="s-card__switcher-line">
+								<div class="s-card__heading">
+									Преимущества
+								</div>
+
+								<div class="s-card__data data">
+									<p>
+										{{ hotel_info.hotel_bag.Advantages|raw }}
+									</p>
+								</div>
+							</div>
+							{% endif %}
+
+							{% if hotel_info.hotel_bag.MealList %}
+							<div class="s-card__switcher-line">
+								<div class="s-card__heading">
+									Питание
+								</div>
+
+								<div class="s-card__data data">
+									<ul>
+										{% for item in hotel_info.hotel_bag.MealList %}
+						                    {% for ii in item %}
+						                    <li>{{ ii }}</li>
+						                    {% endfor %}
+						                {% endfor %}
+									</ul>
+								</div>
+							</div>
+							{% endif %}
+
+							{% if hotel_info.hotel_bag.WaterSupply %}
+							<div class="s-card__switcher-line">
+								<div class="s-card__heading">
+									Водоснабжение
+								</div>
+								<div class="s-card__data data">
+									<p>
+										{{ hotel_info.hotel_bag.WaterSupply }}
+									</p>
+								</div>
+							</div>
+							{% endif %}
+
+							{% if hotel_info.hotel_bag.InfrastructureObjectList %}
+							<div class="s-card__switcher-line">
+								<div class="s-card__heading">
+									Инфраструктура
+								</div>
+
+								<div class="s-card__data data">
+									<ul>
+										{% for item in hotel_info.hotel_bag.InfrastructureObjectList %}
+						                    <li><b>{{ item.Name }}</b>
+						                        {% if item.ContentList %}
+						                            <ul>
+						                            {% for ii in item.ContentList %}
+						                                <li><b>{{ ii.Name|raw }}</b> - {{ ii.Description }}</li>
+						                            {% endfor %}
+						                            </ul>
+						                        {% endif %}
+						                    </li>
+						                {% endfor %}
+									</ul>
+								</div>
+							</div>
+							{% endif %}
+
+							{% if hotel_info.hotel_bag.ServiceList %}
+							<div class="s-card__switcher-line">
+								<div class="s-card__heading">
+									Услуги
+								</div>
+								<div class="s-card__data data">
+									<ul>
+										{% for item in hotel_info.hotel_bag.ServiceList %}
+											<li>
+												{{ item.Name }}
+												<ul>
+													{% for el in item.ContentList %}
+														<li>{{ el.Name }} - {{ el.Description }}</li>
+													{% endfor %}
+												</ul>
+											</li>
+										{% endfor %}
+									</ul>
+								</div>
+							</div>
+							{% endif %}
+
+							{% if hotel_info.hotel_bag.BeachList %}
+							<div class="s-card__switcher-line">
+								<div class="s-card__heading">
+									Пляж
+								</div>
+								<div class="s-card__data data">
+
+										{% for item in hotel_info.hotel_bag.BeachList %}
+
+												{{ item.Name }}
+												<ul>
+													{% for el in item.ContentList %}
+														<li>
+															{{ el.Name }} - {{ el.Description }}
+															<ul>
+																{% for ell in el.ContentList %}
+																	<li>
+																		{{ ell.Name }}
+																	</li>
+																{% endfor %}
+															</ul>
+														</li>
+													{% endfor %}
+												</ul>
+
+										{% endfor %}
+
+								</div>
+							</div>
+							{% endif %}
+
+							{% if hotel_info.hotel_bag.SportServiceList %}
+							<div class="s-card__switcher-line">
+								<div class="s-card__heading">
+									Спорт
+								</div>
+								<div class="s-card__data data">
+									<ul>
+										{% for item in hotel_info.hotel_bag.SportServiceList %}
+											<li>
+												{{ item.Name }}
+												<ul>
+													{% for el in item.ContentList %}
+														<li>
+															{{ el.Name }}
+														</li>
+													{% endfor %}
+												</ul>
+											</li>
+										{% endfor %}
+									</ul>
+								</div>
+							</div>
+							{% endif %}
+
+							{% if hotel_info.hotel_bag.EntertainmentServiceList %}
+							<div class="s-card__switcher-line">
+								<div class="s-card__heading">
+									Развлечения
+								</div>
+								<div class="s-card__data data">
+									<ul>
+										{% for item in hotel_info.hotel_bag.EntertainmentServiceList %}
+											<li>
+												{{ item.Name }}
+											</li>
+										{% endfor %}
+									</ul>
+								</div>
+							</div>
+							{% endif %}
+
+							{% if hotel_info.hotel_bag.ForChildren.Announcement or hotel_info.hotel_bag.ForChildren.AgeFrom or hotel_info.hotel_bag.ForChildren.ChargeFreeAgeTo or hotel_info.hotel_bag.ForChildren.DiscountOnBaseSeatAgeTo or hotel_info.hotel_bag.ForChildren.DiscountOnBaseSeatAgeTo or hotel_info.hotel_bag.ForChildren.DiscountOnExtSeatAgeTo %}
+							<div class="s-card__switcher-line">
+								<div class="s-card__heading">
+									Для детей
+								</div>
+								<div class="s-card__data data">
+									<ul>
+
+										{% if hotel_info.hotel_bag.ForChildren.AgeFrom %}
+										<li>
+											Возраст от {{ hotel_info.hotel_bag.ForChildren.AgeFrom }}
+										</li>
+										{% endif %}
+										{% if hotel_info.hotel_bag.ForChildren.ChargeFreeAgeTo %}
+										<li>
+											Бесплатно возраст до {{ hotel_info.hotel_bag.ForChildren.ChargeFreeAgeTo }}
+										</li>
+										{% endif %}
+										{% if hotel_info.hotel_bag.ForChildren.DiscountOnBaseSeatAgeTo %}
+										<li>
+											Скидка для возраста от и до {{ hotel_info.hotel_bag.ForChildren.DiscountOnBaseSeatAgeTo }}
+										</li>
+										{% endif %}
+										{% if hotel_info.hotel_bag.ForChildren.DiscountOnExtSeatAgeTo %}
+										<li>
+											Скидка на дополнительный возраст {{ hotel_info.hotel_bag.ForChildren.DiscountOnExtSeatAgeTo }}
+										</li>
+										{% endif %}
+
+									</ul>
+									{#	{% if hotel_info.hotel_bag.ForChildren.Announcement %}
+
+											{{ hotel_info.hotel_bag.ForChildren.Announcement|raw }}
+
+										{% endif %}#}
+								</div>
+							</div>
+							{% endif %}
+
+							{% if hotel_info.hotel_bag.PriceIncludes %}
+							<div class="s-card__switcher-line">
+								<div class="s-card__heading">
+									В стоимость тура входит
+								</div>
+								<div class="s-card__data data">
+									<p>
+										{{ hotel_info.hotel_bag.PriceIncludes|raw }}
+									</p>
+								</div>
+							</div>
+							{% endif %}
+
+							{#<div class="s-card__switcher-line">
+								<div class="s-card__heading">
+									Преимущества??? НЕТУ
+								</div>
+
+								<div class="s-card__data data">
+									<ul>
+										<li>Лечебно-диагностический комплекс</li>
+										<li>Принимаем детей с 3 лет</li>
+										<li>Близость  к морю</li>
+										<li>Лечебно-диагностический комплекс</li>
+										<li>Принимаем детей с 3 лет</li>
+										<li>Близость  к морю</li>
+									</ul>
+								</div>
+							</div>#}
+
+							{% if hotel_info.hotel_bag.ExtraCharged %}
+							<div class="s-card__switcher-line">
+								<div class="s-card__heading">
+									Отдельно оплачиваются
+								</div>
+								<div class="s-card__data data">
+									<p>
+										{{ hotel_info.hotel_bag.ExtraCharged|raw }}
+									</p>
+								</div>
+							</div>
+							{% endif %}
+
+							{% if hotel_info.hotel_bag.AnimalsAllowed %}
+							<div class="s-card__switcher-line">
+								<div class="s-card__heading">
+									Животные
+								</div>
+								<div class="s-card__data data">
+									<p>
+										{{ hotel_info.hotel_bag.AnimalsAllowed }}
+									</p>
+								</div>
+							</div>
+							{% endif %}
+
+							{% if hotel_info.hotel_bag.CheckInTime or hotel_info.hotel_bag.CheckOutTime %}
+							<div class="s-card__switcher-line">
+								<div class="s-card__heading">
+									Заезд и выезд
+								</div>
+								<div class="s-card__data data">
+									<ul class="properties-list">
+										{% if hotel_info.hotel_bag.CheckInTime %}
+										<li>
+											Заезд/выезд: <strong>{{ hotel_info.hotel_bag.CheckInTime|date('G:i') }}</strong>
+										</li>
+										{% endif %}
+										{% if hotel_info.hotel_bag.CheckOutTime %}
+										<li>
+											Расчетный час: <strong>{{ hotel_info.hotel_bag.CheckOutTime|date('G:i') }}</strong>
+										</li>
+										{% endif %}
+									</ul>
+								</div>
+							</div>
+							{% endif %}
+
+							{% if hotel_info.hotel_bag.SpecialRequirements %}
+							<div class="s-card__switcher-line">
+								<div class="s-card__heading">
+									Специальные требования
+								</div>
+								<div class="s-card__data data">
+									<p>
+										{{ hotel_info.hotel_bag.SpecialRequirements }}
+									</p>
+								</div>
+							</div>
+							{% endif %}
+
+							{% if hotel_info.hotel_bag.RequiredDocuments %}
+							<div class="s-card__switcher-line">
+								<div class="s-card__heading">
+									Необходимые для заезда документы
+								</div>
+								<div class="s-card__data data">
+									<p>
+										{{ hotel_info.hotel_bag.RequiredDocuments|raw }}
+									</p>
+								</div>
+							</div>
+							{% endif %}
+
+							{% if hotel_info.hotel_bag.Address %}
+							<div class="s-card__switcher-line">
+								<div class="s-card__heading">
+									Адрес
+								</div>
+								<div class="s-card__data data">
+									<p>
+										{{ hotel_info.hotel_bag.Address }}
+									</p>
+								</div>
+							</div>
+							{% endif %}
+
+							{% if hotel_info.hotel_bag.HowToReach %}
+							<div class="s-card__switcher-line">
+								<div class="s-card__heading">
+									Как добраться
+								</div>
+								<div class="s-card__data data">
+									<p>
+										{{ hotel_info.hotel_bag.HowToReach|raw }}
+									</p>
+								</div>
+							</div>
+							{% endif %}
+
+							<div class="s-card__switcher-line">
+								<div class="s-card__heading">
+									На карте
+								</div>
+								<div class="s-card__data data">
+									<div id="map-card"></div>
+
+									<script src="https://api-maps.yandex.ru/2.1/?lang=ru_RU" type="text/javascript"></script>
+
+									<script type="text/javascript">
+									  	ymaps.ready(init);
+										var myMap, myPlacemark, latitude, longitude;
+										lat = {{ hotel_info.hotel_bag.Coordinates.Latitude }} + '00';
+									    long = {{ hotel_info.hotel_bag.Coordinates.Longitude }} + '00';
+
+									    function init(){
+									        myMap = new ymaps.Map ("map-card", {
+									            center: [lat, long],
+									            zoom: 15,
+									            controls: ['zoomControl']
+									        });
+
+									        myPlacemark = new ymaps.Placemark([lat, long],
+									        	{ hintContent: '{{ hotel_info.hotel.name }}', balloonContent: '{{ hotel_info.hotel_bag.Address }}' },
+									        	{ preset: 'islands#dotIcon', iconColor: '#3b5998'}
+									        );
+
+									        myMap.geoObjects.add(myPlacemark);
+									        myMap.behaviors.disable('scrollZoom');
+									    }
+									</script>
+								</div>
+							</div>
+
+						</div>
+
+                        {#{% partial 'sans-page/nomer-fond' %}#}
+
+	                    {% partial 'sans-page/lecenie' %}
+
+						<div class="s-card__switcher-content s-card__switch-el s-card__reviews sw--reviews">
+							{#{% if reviewsSwitcher %}#}
+							    <div class="revBlockButtons">
+									<div class="revBlockButtonsLeft">
+										<span class="fwn">Поделитесь своими впечатлениями,чтобы другим туристам было проще сделать выбор </span>
+										{#<span class="blue">поделитесь своими впечатлениями,</span><br>
+										<span class="small">чтобы другим туристам было проще сделать выбор</span>#}
+									</div>
+									<div class="revBlockButtonsRight">
+										<button id="revBut1" href="#beforeWriter" class="sbtn">Написать отзыв</button>
+									</div>
+								</div>
+							{#{% else %}#}
+								{#<div class="revBlockButtons">
+									<div class="revBlockButtonsLeft">
+										<span>Если у Вас есть опыт путешествия на данном теплоходе, пожалуйста, </span>
+										<span class="blue">поделитесь своими впечатлениями,</span><br>
+										<span class="small">чтобы другим туристам было проще сделать выбор</span>
+									</div>
+									<div class="revBlockButtonsRight">
+										<button id="revBut1" href="#beforeWriter" class="sbtn">Написать отзыв</button>
+									</div>
+								</div>#}
+							{#{% endif %}#}
+
+							<div class="s-card__reviews-wrap">
+								{% partial 'sans/reviews-list' %}
+							</div>
+
+							{#{% if reviewsSwitcher %}#}
+								<div class="revBlockButtons" id="WriterDown">
+									<div class="revBlockButtonsLeft ">
+										<span class="fwn">Поделитесь своими впечатлениями,чтобы другим туристам было проще сделать выбор </span>
+										{#<span class="blue">поделитесь своими впечатлениями,</span><br>
+										<span class="small">чтобы другим туристам было проще сделать выбор</span>#}
+									</div>
+									<div class="revBlockButtonsRight">
+										<button id="revBut2" href="#beforeWriter" class="sbtn">Написать отзыв</button>
+									</div>
+								</div>
+								{#{% else %}#}
+								{#<div class="revBlockButtons" id="WriterDown">
+									<div class="revBlockButtonsLeft">
+										<span>Если у Вас есть опыт путешествия на данном теплоходе, пожалуйста, </span>
+										<span class="blue">поделитесь своими впечатлениями,</span><br>
+										<span class="small">чтобы другим туристам было проще сделать выбор</span>
+									</div>
+									<div class="revBlockButtonsRight">
+										<button id="revBut2" href="#beforeWriter" class="sbtn">Написать отзыв</button>
+									</div>
+								</div>#}
+							{#{% endif %}#}
+
+							{% partial 'sans/reviews-writer' %}
+
+						</div>
+
+					</div>
+
+				</div>
+			</div>
+		</div>
+	</div>
+
+	{#{% for tag in cruise.seo_articles %}
+		<a class="crbtn" href="#{{ tag.seo_hash }}">{{ tag.seo_title }}</a>
+    {% endfor %}#}
+
+	<div class="cruiseArticles">
+
+		<div class="col-100">
+    		{% for article in cruise.seo_articles %}
+    			<div class="crArticle" id="{{ article.seo_hash }}">
+    				<div class="data">
+    				    <h2>{{ article.seo_title }}</h2>
+    					{{ article.seo_text|raw }}
+    				</div>
+    			</div>
+    		{% endfor %}
+		</div>
+
+	</div>
+
+	<div class="cruiseArticles sans-seodown mt-30">
+
+		<div class="h t-c h_size-xxs mb-30 ">
+			Отдых на курорте по критериям
+		</div>
+
+		<div class="c-r">
+
+			<div class="col-25 col-s-50 col-xs-100">
+				<div class="sans-seodown__col">
+					<div class="sans-seodown__name">
+						По типу:
+					</div>
+					<div class="sans-seodown__list">
+						<ul>
+							{% for item in sans_page.wraps(2) %}
+								<li class="sans-seodown__list-item">
+									<a href="page_{{ item.slug }}">{{ item.name }}</a>
+								</li>
+                                {#<li><a href="page_{{ item.slug }}">{{ item.name }}</a></li>#}
+                            {% endfor %}
+						</ul>
+					</div>
+				</div>
+			</div>
+
+			<div class="col-25 col-s-50 col-xs-100">
+				<div class="sans-seodown__col">
+					<div class="sans-seodown__name">
+						{#По заболеванию:#}
+						По расположению:
+					</div>
+					<div class="sans-seodown__list">
+						<ul>
+							{% for item in sans_page.wraps(3) %}
+								<li class="sans-seodown__list-item">
+									<a href="page_{{ item.slug }}">{{ item.name }}</a>
+								</li>
+                                {#<li><a href="page_{{ item.slug }}">{{ item.name }}</a></li>#}
+                            {% endfor %}
+						</ul>
+					</div>
+				</div>
+			</div>
+
+			{#<div class="col-25 col-s-50 col-xs-100">
+				<div class="sans-seodown__col">
+					<div class="sans-seodown__name">
+						По методу лечения(???):
+					</div>
+					<div class="sans-seodown__list">
+						<ul>
+							<li class="sans-seodown__list-item"><a href="">Тест1</a></li>
+							<li class="sans-seodown__list-item"><a href="">Тест1</a></li>
+							<li class="sans-seodown__list-item"><a href="">Тест1</a></li>
+							<li class="sans-seodown__list-item"><a href="">Тест1</a></li>
+							<li class="sans-seodown__list-item"><a href="">Тест1</a></li>
+						</ul>
+					</div>
+				</div>
+			</div>#}
+
+			<div class="col-25 col-s-50 col-xs-100">
+				<div class="sans-seodown__col">
+					<div class="sans-seodown__name">
+						{#По отзывам:#}
+						{#По времени:#}
+						По дате:
+					</div>
+					<div class="sans-seodown__list">
+						<ul>
+							{% for item in sans_page.wraps(1) %}
+                                {#<li><a href="page_{{ item.slug }}">{{ item.name }}</a></li>#}
+                                <li class="sans-seodown__list-item">
+                                	<a href="page_{{ item.slug }}">{{ item.name }}</a>
+                                	</li>
+                            {% endfor %}
+						</ul>
+					</div>
+				</div>
+			</div>
+
+		</div>
+	</div>
+
+	{#{% partial 'rivercrs/relinks' %}#}
+
+	<div class="hidden">
+		{% partial 'sans/modal-booking' %}
+		{% partial 'sans/modal-apartament' %}
+	</div>
+
+</section>
+{% endif %}

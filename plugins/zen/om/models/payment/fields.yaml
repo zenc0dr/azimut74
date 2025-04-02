@@ -1,0 +1,18 @@
+fields:
+    name:
+        label: 'zen.om::lang.payments.name'
+        oc.commentPosition: ''
+        span: full
+        type: text
+    desc:
+        label: 'zen.om::lang.plugin.desc'
+        size: large
+        oc.commentPosition: ''
+        span: full
+        type: richeditor
+    sort_order:
+        label: 'zen.om::lang.plugin.sort_order'
+        span: auto
+        oc.commentPosition: ''
+        default: '0'
+        type: number

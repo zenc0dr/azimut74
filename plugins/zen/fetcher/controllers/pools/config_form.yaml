@@ -1,0 +1,10 @@
+name: Pools
+form: $/zen/fetcher/models/pool/fields.yaml
+modelClass: Zen\Fetcher\Models\Pool
+defaultRedirect: zen/fetcher/pools
+create:
+    redirect: 'zen/fetcher/pools/update/:code'
+    redirectClose: zen/fetcher/pools
+update:
+    redirect: zen/fetcher/pools
+    redirectClose: zen/fetcher/pools

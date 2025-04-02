@@ -1,0 +1,209 @@
+fields:
+    status_id:
+        label: 'Статус теплохода'
+        span: full
+        showSearch: true
+        type: dropdown
+tabs:
+    fields:
+        name:
+            label: 'Название теплохода'
+            oc.commentPosition: ''
+            span: auto
+            type: text
+            tab: Основные
+        extra_name:
+            label: 'Альтернативное название'
+            span: auto
+            type: text
+            tab: Основные
+        sort_order:
+            label: 'Порядковый номер'
+            span: auto
+            default: '0'
+            type: number
+            tab: Основные
+        images:
+            label: Изображения
+            oc.commentPosition: ''
+            mode: image
+            useCaption: true
+            thumbOptions:
+                mode: crop
+                extension: auto
+            span: full
+            type: fileupload
+            tab: Основные
+        scheme:
+            label: 'Схемы теплохода'
+            mode: image
+            useCaption: true
+            thumbOptions:
+                mode: crop
+                extension: auto
+            span: full
+            type: fileupload
+            tab: Основные
+        desc:
+            label: 'Описание теплохода'
+            size: giant
+            oc.commentPosition: ''
+            span: full
+            type: richeditor
+            tab: Основные
+        exist_scheme:
+            label: 'Схема теплохода (для бронирования)'
+            mode: image
+            span: auto
+            type: mediafinder
+            comment: '1100px по ширине'
+            tab: Основные
+        Techs:
+            label: 'Технические характеристики'
+            oc.commentPosition: ''
+            prompt: Добавить
+            span: auto
+            type: repeater
+            tab: Характеристики
+            form:
+                fields:
+                    tc:
+                        label: Характеристика
+                        oc.commentPosition: ''
+                        span: auto
+                        type: dropdown
+                    vl:
+                        label: Значение
+                        oc.commentPosition: ''
+                        span: auto
+                        type: text
+        onboards:
+            label: 'На борту'
+            oc.commentPosition: ''
+            span: auto
+            type: checkboxlist
+            tab: Характеристики
+        add_a:
+            label: 'В стоимость круиза входит'
+            size: huge
+            oc.commentPosition: ''
+            span: auto
+            type: richeditor
+            tab: Дополнительно
+        add_b:
+            label: 'Дополнительно оплачивается'
+            size: huge
+            oc.commentPosition: ''
+            span: auto
+            type: richeditor
+            tab: Дополнительно
+        booking_discounts:
+            label: 'Скидки раннего бронирования'
+            size: huge
+            oc.commentPosition: ''
+            span: auto
+            type: richeditor
+            tab: Скидки
+        social_discounts:
+            label: 'Cоциальные скидки'
+            span: auto
+            size: huge
+            oc.commentPosition: ''
+            type: richeditor
+            tab: Скидки
+        permanent_discounts:
+            label: 'Постоянные скидки'
+            prompt: 'Добавить скидку'
+            span: full
+            type: repeater
+            tab: Скидки
+            form:
+                fields:
+                    title:
+                        label: 'Заголовок скидки'
+                        span: full
+                        type: text
+                    text:
+                        label: 'Описание скидки'
+                        size: large
+                        span: full
+                        type: richeditor
+                    image:
+                        label: Изображение
+                        mode: image
+                        span: full
+                        type: mediafinder
+        banner:
+            label: 'Рекламный банер'
+            oc.commentPosition: ''
+            mode: image
+            span: full
+            type: mediafinder
+            tab: Реклама
+        youtube:
+            label: Видео
+            oc.commentPosition: ''
+            prompt: 'Добавить код видео'
+            span: full
+            type: repeater
+            tab: Реклама
+            form:
+                fields:
+                    vname:
+                        label: Название
+                        oc.commentPosition: ''
+                        span: auto
+                        type: text
+                    vcode:
+                        label: Код
+                        oc.commentPosition: ''
+                        size: large
+                        language: html
+                        theme: tomorrow_night_blue
+                        fontSize: '18'
+                        span: auto
+                        type: codeeditor
+                    sw_card:
+                        label: 'Активен в карточке теплохода'
+                        span: full
+                        type: switch
+                    sw_modal:
+                        label: 'Активен в модальной форме'
+                        span: full
+                        type: switch
+        price:
+            span: auto
+            path: $/mcmraak/rivercrs/partials/motorship-price.php
+            type: partial
+            tab: Прайс
+        metatitle:
+            label: title
+            size: small
+            oc.commentPosition: ''
+            span: full
+            type: textarea
+            tab: Метатеги
+        metadesc:
+            label: description
+            size: small
+            oc.commentPosition: ''
+            span: full
+            type: textarea
+            tab: Метатеги
+        metakey:
+            label: keywords
+            size: small
+            oc.commentPosition: ''
+            span: full
+            type: textarea
+            tab: Метатеги
+        exist_rooms:
+            span: full
+            path: $/mcmraak/rivercrs/controllers/motorships/exist_rooms.php
+            type: partial
+            tab: Схема
+        not_exist_rooms:
+            span: full
+            path: $/mcmraak/rivercrs/controllers/motorships/not_exist_rooms.php
+            type: partial
+            tab: Схема

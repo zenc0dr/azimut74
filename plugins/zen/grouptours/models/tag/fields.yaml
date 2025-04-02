@@ -1,0 +1,10 @@
+fields:
+    active:
+        label: Активность
+        span: full
+        default: 1
+        type: switch
+    name:
+        label: 'Название тега'
+        span: full
+        type: text

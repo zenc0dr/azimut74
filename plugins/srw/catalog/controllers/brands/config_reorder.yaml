@@ -1,0 +1,4 @@
+title: Brands
+modelClass: Srw\Catalog\Models\Brands
+toolbar:
+    buttons: reorder_toolbar

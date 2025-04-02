@@ -1,0 +1,4 @@
+title: PageBlocks
+modelClass: Zen\Dolphin\Models\PageBlock
+toolbar:
+    buttons: reorder_toolbar

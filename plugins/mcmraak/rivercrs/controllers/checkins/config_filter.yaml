@@ -1,0 +1,32 @@
+# ===================================
+# Filter Scope Definitions
+# ===================================
+
+scopes:
+    id:
+        label: 'id заезда'
+        type: text
+        scope: FilterId
+    motorships:
+        label: Теплоходы
+        modelClass: Mcmraak\Rivercrs\Models\Motorships
+        nameFrom: name
+        scope: FilterMotorships
+    active:
+        label: Активность
+        type: switch
+        conditions:
+          - active = 0
+          - active = 1
+    checkindate:
+        label: 'Время заезда'
+        type: daterange
+        conditions: date >= ':after' AND date <= ':before'
+    eds:
+        label: 'Источник'
+        type: text
+        scope: FilterEds
+    edscode:
+        label: 'id источника'
+        type: text
+        scope: FilterEdsid

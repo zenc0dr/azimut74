@@ -1,0 +1,29 @@
+fields:
+    active:
+        label: Активность
+        span: full
+        type: switch
+    name:
+        label: 'zen.om::lang.store.name'
+        oc.commentPosition: ''
+        span: auto
+        type: text
+    slug:
+        label: 'zen.om::lang.store.code'
+        oc.commentPosition: ''
+        span: auto
+        preset:
+            field: name
+            type: slug
+        type: text
+    sort_order:
+        label: 'Порядок сортировки'
+        oc.commentPosition: ''
+        span: auto
+        type: text
+    desc:
+        label: 'zen.om::lang.store.description'
+        size: large
+        oc.commentPosition: ''
+        span: full
+        type: richeditor

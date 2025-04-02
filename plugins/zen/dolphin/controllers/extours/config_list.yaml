@@ -1,0 +1,15 @@
+list: $/zen/dolphin/models/extour/columns.yaml
+modelClass: Zen\Dolphin\Models\Extour
+title: Extours
+noRecordsMessage: 'backend::lang.list.no_records'
+showSetup: true
+showCheckboxes: true
+defaultSort:
+    column: id
+    direction: asc
+recordsPerPage: 20
+toolbar:
+    buttons: list_toolbar
+    search:
+        prompt: 'backend::lang.list.search_prompt'
+recordUrl: 'zen/dolphin/extours/update/:id'

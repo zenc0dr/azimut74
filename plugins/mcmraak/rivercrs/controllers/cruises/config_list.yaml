@@ -1,0 +1,12 @@
+title: Круизы
+modelClass: Mcmraak\Rivercrs\Models\Cruises
+list: $/mcmraak/rivercrs/models/cruises/columns.yaml
+recordUrl: 'mcmraak/rivercrs/cruises/update/:id'
+noRecordsMessage: 'backend::lang.list.no_records'
+recordsPerPage: '30'
+showSetup: true
+showCheckboxes: true
+toolbar:
+    buttons: list_toolbar
+    search:
+        prompt: 'backend::lang.list.search_prompt'

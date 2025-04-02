@@ -1,0 +1,4 @@
+title: Comforts
+modelClass: Zen\Dolphin\Models\Azcomfort
+toolbar:
+    buttons: reorder_toolbar

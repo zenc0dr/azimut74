@@ -1,0 +1,35 @@
+.stars-select, .stars-select > span {
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
+}
+.stars-select > span {
+    color: #d7371a;
+    cursor: pointer;
+}
+.stars-select {
+	display: inline-flex;
+	align-items: center;
+	flex-wrap: wrap;
+}
+.stars-select span {
+	display: inline-block;
+	margin-right: 3px;
+}
+.stars-select span::before {
+	content: '\f005';
+	font-family: FontAwesome;
+	font-size: 18px;
+	color: #aeaeae;
+	transition: all .1s ease-in-out;
+}
+.stars-select span.active::before {
+	content: '\f005';
+	color: var(--m-color);
+}
+.stars__count {
+	font-size: 14px;
+	color: #000;
+	font-family: var(--font-b);
+}

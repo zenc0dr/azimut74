@@ -1,0 +1,10 @@
+name: Operators
+form: $/zen/dolphin/models/operator/fields.yaml
+modelClass: Zen\Dolphin\Models\Operator
+defaultRedirect: zen/dolphin/operators
+create:
+    redirect: 'zen/dolphin/operators/update/:id'
+    redirectClose: zen/dolphin/operators
+update:
+    redirect: zen/dolphin/operators
+    redirectClose: zen/dolphin/operators

@@ -1,0 +1,10 @@
+columns:
+    id:
+        label: id
+        type: number
+        sortable: true
+    name:
+        label: 'Имя профиля настроек'
+        type: text
+        searchable: true
+        sortable: true

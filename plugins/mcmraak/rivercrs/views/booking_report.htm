@@ -1,0 +1,140 @@
+<style>
+    #bookinginfo a {
+        text-decoration: underline;
+        cursor: pointer;
+    }
+    .desc {
+        background: #fff;
+        padding: 10px;
+    }
+</style>
+<div id="bookinginfo">
+    <h2 style="padding: 30px 15px 15px;">Данные о бронировании</h2>
+    <hr>
+    <h4 style="padding-left: 15px;">Данные о пассажирах</h4>
+   	<table style="width: 100%">
+   		<tr style="background-color: #f8f8f8;">
+   			<td style="padding: 10px; border: #c0c0c0 1px solid; color: #000;">
+   				<strong>Номер бронирования:</strong>
+   			</td>
+   			<td style="padding: 10px; border: #c0c0c0 1px solid; color: #000;">
+   				{{ booking.id }}
+   			</td>
+   		</tr>
+   		<tr style="background-color: #f8f8f8;">
+   			<td style="padding: 10px; border: #c0c0c0 1px solid; color: #000;">
+   				<strong>Имя:</strong>
+   			</td>
+   			<td style="padding: 10px; border: #c0c0c0 1px solid; color: #000;">
+   				{{ booking.name }}
+   			</td>
+   		</tr>
+   		<tr style="background-color: #f8f8f8;">
+   			<td style="padding: 10px; border: #c0c0c0 1px solid; color: #000;">
+   				<strong>Email:</strong>
+   			</td>
+   			<td style="padding: 10px; border: #c0c0c0 1px solid; color: #000;">
+   				{{ booking.email }}
+   			</td>
+   		</tr>
+   		<tr style="background-color: #f8f8f8;">
+   			<td style="padding: 10px; border: #c0c0c0 1px solid; color: #000;">
+   				<strong>Телефон:</strong>
+   			</td>
+   			<td style="padding: 10px; border: #c0c0c0 1px solid; color: #000;">
+   				{{ booking.phone }}
+   			</td>
+   		</tr>
+   		<tr style="background-color: #f8f8f8;">
+   			<td style="padding: 10px; border: #c0c0c0 1px solid; color: #000;">
+   				<strong>Кол-во человек:</strong>
+   			</td>
+   			<td style="padding: 10px; border: #c0c0c0 1px solid; color: #000;">
+   				{{ booking.peoples }}
+   			</td>
+   		</tr>
+   	</table>
+    <h4 style="padding: 15px;">
+        Дополнительная информация
+    </h4>
+    <div class="desc">
+        {{ booking.desc|raw }}
+    </div>
+
+	{% if booking.checkin.id %}
+
+    <h4 style="padding-left: 15px;">Заезд</h4>
+
+    <table style="width: 100%">
+    	<tr style="background-color: #f8f8f8;">
+    		<td style="padding: 10px; border: #c0c0c0 1px solid; color: #000;">
+   				<strong>id заезда: </strong>
+   			</td>
+   			<td style="padding: 10px; border: #c0c0c0 1px solid; color: #000;">
+   				<a target='_blank'
+               href='/backend/mcmraak/rivercrs/checkins/update/{{ booking.checkin.id }}'>{{ booking.checkin.id }}</a>
+   			</td>
+    	</tr>
+    	<tr style="background-color: #f8f8f8;">
+    		<td style="padding: 10px; border: #c0c0c0 1px solid; color: #000;">
+   				<strong>Дата и время отправления: </strong>
+   			</td>
+   			<td style="padding: 10px; border: #c0c0c0 1px solid; color: #000;">
+   				{{ booking.checkin.date|date('d.m.Y H:i') }}
+   			</td>
+    	</tr>
+    	<tr style="background-color: #f8f8f8;">
+    		<td style="padding: 10px; border: #c0c0c0 1px solid; color: #000;">
+   				<strong>Дата и время прибытия: </strong>
+   			</td>
+   			<td style="padding: 10px; border: #c0c0c0 1px solid; color: #000;">
+   				{{ booking.checkin.dateb|date('d.m.Y H:i') }}
+   			</td>
+    	</tr>
+    	<tr style="background-color: #f8f8f8;">
+			<td style="padding: 10px; border: #c0c0c0 1px solid; color: #000;">
+   				<strong>Маршрут: </strong>
+   			</td>
+   			<td style="padding: 10px; border: #c0c0c0 1px solid; color: #000;">
+   				{{ booking.checkin.getWaybill()|raw }}
+   			</td>
+    	</tr>
+    	<tr style="background-color: #f8f8f8;">
+    		<td style="padding: 10px; border: #c0c0c0 1px solid; color: #000;">
+   				<strong>Теплоход: </strong>
+   			</td>
+   			<td style="padding: 10px; border: #c0c0c0 1px solid; color: #000;">
+   				<a target='_blank' href='/backend/mcmraak/rivercrs/motorships/update/{{ booking.checkin.motorship.id }}'>
+                    {{ booking.checkin.motorship.alt_name }}
+                </a>
+   			</td>
+    	</tr>
+
+   	</table>
+
+    <h4 style="padding-left: 15px;">Каюты</h4>
+    <table class="table" style="width: 100%">
+        <tr style="background-color: #f8f8f8;">
+            <td style="padding: 10px; border: #c0c0c0 1px solid; color: #000;">Номер каюты</td>
+            <td style="padding: 10px; border: #c0c0c0 1px solid; color: #000;">Категория</td>
+            <td style="padding: 10px; border: #c0c0c0 1px solid; color: #000;">Палуба</td>
+            <td style="padding: 10px; border: #c0c0c0 1px solid; color: #000;">Цены</td>
+        </tr>
+        {% for cabin in booking.cabins() %}
+            <tr style="background-color: #f8f8f8;">
+                <td style="padding: 10px; border: #c0c0c0 1px solid; color: #000;">{{ cabin.num }}</td>
+                <td style="padding: 10px; border: #c0c0c0 1px solid; color: #000;">{{ cabin.cabin_name }}</td>
+                <td style="padding: 10px; border: #c0c0c0 1px solid; color: #000;">{{ cabin.deck_name }}</td>
+                <td style="padding: 10px; border: #c0c0c0 1px solid; color: #000;">
+					{% for price in cabin.prices  %}
+                        Мест: {{ price.price_places }}, Цена: {{ price.price_value }}руб.<br>
+                    {% endfor %}
+				</td>
+            </tr>
+        {% endfor %}
+    </table>
+    {% else %}
+        <h3 style="color: #666">Заезд удалён</h3>
+    {% endif %}
+
+</div>

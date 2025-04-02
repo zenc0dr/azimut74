@@ -1,0 +1,4 @@
+title: Slider
+modelClass: Mcmraak\Blocks\Models\Slider
+toolbar:
+    buttons: reorder_toolbar

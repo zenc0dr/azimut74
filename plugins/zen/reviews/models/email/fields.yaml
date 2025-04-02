@@ -1,0 +1,5 @@
+fields:
+    email:
+        label: email
+        span: full
+        type: text

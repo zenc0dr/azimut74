@@ -1,0 +1,4 @@
+title: Posts
+modelClass: Mcmraak\Blocks\Models\Post
+toolbar:
+    buttons: reorder_toolbar

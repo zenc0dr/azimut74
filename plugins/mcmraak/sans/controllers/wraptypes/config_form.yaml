@@ -1,0 +1,16 @@
+name: 'Типы обёрток'
+modelClass: Mcmraak\Sans\Models\WrapType
+form: $/mcmraak/sans/models/wraptype/fields.yaml
+defaultRedirect: mcmraak/sans/wraptypes
+create:
+    title: 'Создать тип'
+    redirect: 'mcmraak/sans/wraptypes/update/:id'
+    redirectClose: mcmraak/sans/wraptypes
+    flashSave: 'Тип сохранён'
+update:
+    title: 'Изменение типа'
+    redirect: mcmraak/sans/wraptypes
+    redirectClose: mcmraak/sans/wraptypes
+    flashSave: 'Тип изменён'
+    flashDelete: 'Тип обновлён'
+preview: {  }

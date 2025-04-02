@@ -1,0 +1,10 @@
+name: Tarrifs
+form: $/zen/dolphin/models/tarrif/fields.yaml
+modelClass: Zen\Dolphin\Models\Tarrif
+defaultRedirect: zen/dolphin/tarrifs
+create:
+    redirect: 'zen/dolphin/tarrifs/update/:id'
+    redirectClose: zen/dolphin/tarrifs
+update:
+    redirect: zen/dolphin/tarrifs
+    redirectClose: zen/dolphin/tarrifs

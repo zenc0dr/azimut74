@@ -1,0 +1,10 @@
+name: SliderExtours
+form: $/srw/azimut/models/sliderextours/fields.yaml
+modelClass: Srw\Azimut\Models\SliderExtours
+defaultRedirect: srw/azimut/sliderextours
+create:
+    redirect: 'srw/azimut/sliderextours/update/:id'
+    redirectClose: srw/azimut/sliderextours
+update:
+    redirect: srw/azimut/sliderextours
+    redirectClose: srw/azimut/sliderextours

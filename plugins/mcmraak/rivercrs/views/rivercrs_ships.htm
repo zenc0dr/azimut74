@@ -1,0 +1,69 @@
+<section class="search-widget-ResultList">
+    {% if ships %}
+    <div class="container">
+        {% for ship in ships %}
+        <section class="ship__top">
+            <div class="ship__item d-flex flex-column flex-lg-row justify-content-between mb-4 rounded">
+                <div class="ship__item-left">
+                    <div class="ship__item-left_img" style="background-image: url({{ ship.pic }})"></div>
+                    {% if ship.youtube_link %}
+                    <a class="ship__item-left_youtube" modal=".youtube-content">
+
+                        <img src="/themes/azimut-tur-pro/assets/images/components/cruise/youtube.svg" alt="youtube"/>
+                    </a>
+                    <div class="youtube-content" style="display: none">
+                        <iframe src="{{ ship.youtube_link }}" frameborder="0" allowfullscreen=""></iframe>
+                    </div>
+                    {% endif %}
+
+                    {% if ship.status_id %}
+                    <span tabindex="0"
+                        class="ship-type premium d-block d-md-none bg-gold-200 px-2 px-xxl-3  ms-2 py-2 py-xxl-2 c-primary-100 rounded-pill fw-bolder d-flex align-items-center justify-content-center"
+                        role="button" data-bs-toggle="popover" data-bs-trigger="focus" data-bs-placement="bottom"
+                        data-bs-content="{{ ship.status.desc }}"
+                    >
+                        {{  ship.status.name }}
+                    </span>
+                    {% endif %}
+                </div>
+                <div class="ship__item-right fs-s fs-xl-def">
+                    <div
+                        class="ship__item-right_center d-flex justify-content-between px-2 px-sm-3 py-2 py-sm-3 flex-column">
+                        <div class="ship__item-name d-flex align-items-center justify-content-between">
+                            <div class="d-flex align-items-center">
+                                <img src="/themes/azimut-tur-pro/assets/images/components/cruise/ship.svg" alt="{{ ship.cleanSelfName }}"/>
+
+                                <a href="/russia-river-cruises/ship/{{ship.id }}" target="_blank" class="ms-2 fs-h3 fs-xl-h2 fw-bolder c-blue-300">{{ ship.cleanSelfName }}</a>
+                            </div>
+                            {% if ship.status_id %}
+                            <span tabindex="0"
+                                class="ship-type premium d-none d-md-block bg-gold-200 px-2 px-xxl-3  ms-2 py-2 py-xxl-2 c-primary-100 rounded-pill fw-bolder d-flex align-items-center justify-content-center"
+                                role="button" data-bs-toggle="popover" data-bs-trigger="focus" data-bs-placement="bottom"
+                                data-bs-content="{{ ship.status.desc }}"
+                            >
+                                        {{  ship.status.name  }}
+                                </span>
+                            {% endif %}
+                        </div>
+                        <div class="ship__item-params">
+                            {% for item in ship.techs_arr %}
+                            <p>{{ item.name }}:
+                                {{ item.value }}</p>
+                            {% endfor %}
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+        {% endfor %}
+    </div>
+
+    {% else %}
+    По вашему запросу ничего не найдено!
+    {% endif %}
+</section>
+
+
+
+
+

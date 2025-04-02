@@ -1,0 +1,73 @@
+fields:
+    active:
+        label: Активность
+        span: auto
+        type: switch
+    name:
+        label: 'Название слайдера'
+        oc.commentPosition: ''
+        span: full
+        type: text
+    slug:
+        label: 'Относительная ссылка'
+        span: full
+        type: text
+    to_section:
+        label: 'Применить ко всему разделу'
+        span: full
+        type: switch
+    slides:
+        label: Слайды
+        oc.commentPosition: ''
+        prompt: 'Добавить слайд'
+        span: full
+        type: repeater
+        form:
+            fields:
+                image:
+                    label: Изображение
+                    oc.commentPosition: ''
+                    mode: image
+                    span: full
+                    type: mediafinder
+                slmain:
+                    label: 'Главный текст'
+                    oc.commentPosition: ''
+                    span: full
+                    type: text
+                sltop:
+                    label: 'Побочный текст (верх)'
+                    size: small
+                    oc.commentPosition: ''
+                    span: full
+                    type: richeditor
+                link:
+                    label: 'Ссылка на страницу:'
+                    span: full
+                    type: dropdown
+                    comment: 'Оставить пустой если ссылка не найдена'
+                link2:
+                    label: 'Ссылка на страницу'
+                    span: full
+                    type: text
+                    comment: 'Вставить ссылку (если она не найдена в выпадающем списке)'
+                linktext:
+                    label: 'Текст ссылки'
+                    oc.commentPosition: ''
+                    span: auto
+                    type: text
+                price:
+                    label: Цена
+                    size: ''
+                    oc.commentPosition: ''
+                    span: full
+                    type: richeditor
+    order:
+        label: Порядок
+        span: auto
+        default: '0'
+        type: number
+    only:
+        label: 'Только этот слайд'
+        span: full
+        type: switch

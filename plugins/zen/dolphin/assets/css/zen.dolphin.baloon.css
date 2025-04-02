@@ -1,0 +1,38 @@
+.dolphin-baloon {
+    display: flex;
+    flex-direction: row;
+    width: 400px;
+}
+
+.dolphin-baloon__image {
+    width: 150px;
+    height: 100px;
+    background-size: cover;
+    background-position: center;
+}
+
+.dolphin-baloon__content {
+    display: flex;
+    flex: 1 1 0;
+    margin-left: 15px;
+    align-content: space-between;
+    flex-direction: column;
+    justify-content: space-between;
+}
+
+.dolphin-baloon__title {
+    font-size: 19px;
+    color: #1e88e5;
+}
+
+.dolphin-baloon__buttons {
+    display: flex;
+    justify-content: flex-end;
+}
+
+.dolphin-baloon__button {
+    background: #1e88e5;
+    color: #fff;
+    padding: 15px;
+    font-size: 16px;
+}

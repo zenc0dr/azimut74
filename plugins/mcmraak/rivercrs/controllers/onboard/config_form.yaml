@@ -1,0 +1,10 @@
+name: Onboard
+form: $/mcmraak/rivercrs/models/onboard/fields.yaml
+modelClass: Mcmraak\Rivercrs\Models\Onboard
+defaultRedirect: mcmraak/rivercrs/onboard
+create:
+    redirect: 'mcmraak/rivercrs/onboard/update/:id'
+    redirectClose: mcmraak/rivercrs/onboard
+update:
+    redirect: mcmraak/rivercrs/onboard
+    redirectClose: mcmraak/rivercrs/onboard

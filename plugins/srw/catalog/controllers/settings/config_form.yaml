@@ -1,0 +1,10 @@
+name: Settings
+form: $/srw/catalog/models/settings/fields.yaml
+modelClass: Srw\Catalog\Models\Settings
+defaultRedirect: srw/catalog/settings
+create:
+    redirect: 'srw/catalog/settings/update/:id'
+    redirectClose: srw/catalog/settings
+update:
+    redirect: srw/catalog/settings
+    redirectClose: srw/catalog/settings

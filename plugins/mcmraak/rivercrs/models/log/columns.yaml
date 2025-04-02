@@ -1,0 +1,23 @@
+columns:
+    id:
+        label: id
+        type: number
+        sortable: true
+    type:
+        label: Тип
+        type: text
+        searchable: true
+        sortable: true
+    method:
+        label: Класс@Метод
+        type: text
+        searchable: true
+    created_at:
+        label: Время
+        type: datetime
+        sortable: true
+    url:
+        label: url
+        type: text
+        searchable: true
+        sortable: true

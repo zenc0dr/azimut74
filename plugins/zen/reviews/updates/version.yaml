@@ -1,0 +1,12 @@
+1.0.1:
+    - 'Initialize plugin.'
+1.0.2:
+    - 'Created table zen_reviews_reviews'
+    - builder_table_create_zen_reviews_reviews.php
+1.0.3:
+    - 'Created table zen_reviews_emails'
+    - builder_table_create_zen_reviews_emails.php
+1.0.4:
+    - 'Убрали лишние окна https://8ber.kaiten.ru/26952566'
+1.0.5:
+    - 'Добавил консольный скрипт для отчёта'

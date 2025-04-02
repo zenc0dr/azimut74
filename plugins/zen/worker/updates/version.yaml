@@ -1,0 +1,14 @@
+1.0.1:
+    - 'Initialize plugin.'
+1.0.2:
+    - 'Created Streams'
+    - builder_table_create_zen_worker_streams.php
+1.0.3:
+    - 'Created table zen_worker_jobs'
+    - builder_table_create_zen_worker_jobs.php
+1.0.4:
+    - 'Created table zen_worker_errors'
+    - builder_table_create_zen_worker_errors.php
+1.0.5:
+    - 'Created table zen_worker_events'
+    - builder_table_create_zen_worker_events.php

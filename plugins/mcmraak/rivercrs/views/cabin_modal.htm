@@ -1,0 +1,80 @@
+<div class="modalCabin">
+<div class="modalLine">
+    <div class="cabinLeft">
+        <div class="bigImages owl-carousel">
+            {% for image in cabin.images %}
+                <a class="cabinImage" data-lightbox-gallery="cabGallery" href="{{ image.path }}">
+                    <div class="imageItem" data-hash="cabin{{ loop.index }}" style="background-image: url({{ image.path|resize(350) }})"></div>
+                </a>
+            {% endfor %}
+        </div>
+        <div class="smallImages">
+            {% for image in cabin.images %}
+                <a href="#cabin{{ loop.index }}">
+                    <div class="imageItem" style="background-image: url({{ image.path|resize(350) }})"></div>
+                </a>
+            {% endfor %}
+        </div>
+    </div>
+    <div class="cabinRight">
+        <div class="cabinName">
+            <span>Категория {{ cabin.category|mutator }} - {{ placenames[cabin.places_main_count] }}местная каюта</span>
+        </div>
+        <div class="cabinDescLine">
+            <span>Расположение:</span>
+            <span>
+            <ul>
+                {% for deck in cabin.decks_list %}
+                    <li>{{ deck.name|mutator }}</li>
+                {% endfor %}
+            </ul>
+        </span>
+        </div>
+        <div class="cabinDescLine">
+        <span>
+            <a
+                    href="{{ cabin.motorship.scheme|first.path }}"
+                    style="color:#1e88e5"
+                    modalbox="type:img">
+                Расположение на схеме теплохода
+            </a>
+        </span>
+        </div>
+
+        <div class="cabinDescLine">
+            <span>Комфорт:</span>
+            <span>{{ cabin.comfort.name|mutator }}</span>
+        </div>
+        <div class="cabinDescLine">
+            <span>Расположение кроватей:</span>
+            <span>{{ cabin.bed.name|mutator }}</span>
+        </div>
+        <div class="cabinDescLine">
+            <span>Количество комнат:</span>
+            <span>{{ cabin.rooms_count|mutator }}</span>
+        </div>
+        {% if cabin.space %}
+            <div class="cabinDescLine">
+                <span>Площадь каюты в м2:</span>
+                <span>{{ cabin.space|mutator }}</span>
+            </div>
+        {% endif %}
+        <div class="cabinDescLine">
+            <span>В каюте имеются:</span>
+            <span>
+            {% for incabin in cabin.incabin_list %}
+                {{ incabin.name|mutator }}{% if loop.last != 1 %}, {% endif %}
+            {% endfor %}
+        </span>
+        </div>
+        <div class="cabinDescLine" style="font-size: 14px">
+            {{ cabin.desc|raw|mutator }}
+        </div>
+    </div>
+    <script>
+        $(document).ready(function(){
+            $('.bigImages .cabinImage').nivoLightbox();
+        });
+    </script>
+</div>
+</div>

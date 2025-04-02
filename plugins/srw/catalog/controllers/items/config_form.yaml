@@ -1,0 +1,10 @@
+name: Items
+form: $/srw/catalog/models/items/fields.yaml
+modelClass: Srw\Catalog\Models\Items
+defaultRedirect: srw/catalog/items
+create:
+    redirect: 'srw/catalog/items/update/:id'
+    redirectClose: srw/catalog/items
+update:
+    redirect: srw/catalog/items
+    redirectClose: srw/catalog/items

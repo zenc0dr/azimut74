@@ -1,0 +1,17 @@
+scopes:
+  soft:
+      label: 'Связь'
+      type: switch
+      conditions:
+        - soft_id = 0
+        - soft_id <> 0
+  hard:
+      label: 'Альтернативное название'
+      type: switch
+      conditions:
+        - alt_name = ''
+        - alt_name <> ''
+  eds:
+      label: 'Источник'
+      type: text
+      scope: FilterEds

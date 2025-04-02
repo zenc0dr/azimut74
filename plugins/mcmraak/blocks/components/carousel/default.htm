@@ -1,0 +1,87 @@
+{% if slider_items %}
+<section class="slider">
+	
+	{% if slider_items|length > 1 %}
+	<div class="sliderNav hidden-xs">
+		<div class="c-p p-r">
+			<div class="nav prev"></div>
+			<div class="nav next"></div>
+		</div>
+	</div>
+	{% endif %}
+	
+	{% if slider_items|length > 0 %}
+		<div class="sliderItems owl-carousel">
+			
+			{% for slide in slider_items %}
+			
+			{% if slide.linktext and slide.link or slide.linktext and slide.link2 %}
+				<div class="slItem" style="background-image: url({{ slide.image|media }})">
+					<div class="c">
+						{% if slide.sltop %}
+							<div class="slLine slTop"><span>{{ slide.sltop|raw|mutator }}</span></div>
+						{% endif %}
+						{% if slide.slmain %}
+							<div class="slLine slHeading"><span>{{ slide.slmain|mutator }}</span></div>
+						{% endif %}
+						<div class="slLine slButtons">
+							{% if slide.linktext %}
+								<div class="slButton">
+									<a href="{% if slide.link2 %}{{ slide.link2 }}{% elseif slide.link %}{{ slide.link }}{% endif %}" class="hbtn">{{ slide.linktext|mutator }}</a>
+								</div>
+							{% endif %}
+							{% if slide.price %}
+								<div>
+									<span>{{ slide.price|raw|mutator }}</span>
+								</div>
+							{% endif %}
+						</div>
+					</div>
+				</div>
+			{% elseif slide.link or slide.link2 %}
+				<a href="{% if slide.link2 %}{{ slide.link2 }}{% elseif slide.link %}{{ slide.link }}{% endif %}">
+					<div class="slItem" style="background-image: url({{ slide.image|media }})">
+						<div class="c">
+							{% if slide.sltop %}
+								<div class="slLine slTop"><span>{{ slide.sltop|raw|mutator }}</span></div>
+							{% endif %}
+							{% if slide.slmain %}
+								<div class="slLine slHeading"><span>{{ slide.slmain|mutator }}</span></div>
+							{% endif %}
+							{% if slide.price %}
+							<div class="slLine slButtons">
+								<div>
+									<span>{{ slide.price|raw|mutator }}</span>
+								</div>
+							</div>
+							{% endif %}
+						</div>
+					</div>
+				</a>
+			{% else %}
+				<div class="slItem" style="background-image: url({{ slide.image|media }})">
+					<div class="c">
+						{% if slide.sltop %}
+							<div class="slLine slTop"><span>{{ slide.sltop|raw|mutator }}</span></div>
+						{% endif %}
+						{% if slide.slmain %}
+							<div class="slLine slHeading"><span>{{ slide.slmain|mutator }}</span></div>
+						{% endif %}
+						{% if slide.price %}
+							<div class="slLine slButtons">
+								<div>
+									<span>{{ slide.price|raw|mutator }}</span>
+								</div>
+							</div>
+						{% endif %}
+					</div>
+				</div>
+			{% endif %}
+			
+			{% endfor %}
+			
+		</div>
+	{% endif %}
+	
+</section>
+{% endif %}

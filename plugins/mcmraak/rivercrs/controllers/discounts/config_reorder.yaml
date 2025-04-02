@@ -1,0 +1,4 @@
+title: Discounts
+modelClass: Mcmraak\Rivercrs\Models\Discount
+toolbar:
+    buttons: reorder_toolbar

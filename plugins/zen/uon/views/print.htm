@@ -1,0 +1,63 @@
+{% set debug = false %}
+
+
+{% if debug %}
+<!doctype html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport"
+          content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+    <link rel="stylesheet" href="/plugins/zen/uon/assets/css/styles.css">
+</head>
+<body>
+{% endif %}
+
+<div class="print-styler">
+    <div class="ps-title">
+        {{ dates }} - {{ tour_name }}
+    </div>
+    <div class="ps-table">
+        {% for ps_row in scheme %}
+            <div class="ps-row">
+                {% for ps_cell in ps_row %}
+                    {% if ps_cell.place %}
+                        <div class="ps-cell">
+                            <div class="ps-line ps-place">{{ ps_cell.place }}</div>
+
+                            {% set user = ps_cell.user %}
+
+                            {% if user %}
+                                <div class="ps-line ps-username">{{ user.name }}</div>
+                                <div class="ps-line ps-duble">
+                                    <div class="ps-code">{{ user.request_code }}</div>
+                                    <div class="ps-phone">{{ user.phone }}</div>
+                                </div>
+                                <div class="ps-line">
+                                    Посадка: {{ user.landing }}
+                                </div>
+                                <div class="ps-line empty">
+
+                                </div>
+                            {% endif %}
+                        </div>
+                    {% else %}
+                        <div class="ps-cell empty">
+
+                        </div>
+                    {% endif %}
+                {% endfor %}
+            </div>
+        {% endfor %}
+    </div>
+</div>
+{% if styler == 1 %}
+<link rel="stylesheet" href="/plugins/zen/uon/assets/css/styles.css">
+{% endif %}
+
+{% if debug %}
+</body>
+</html>
+{% endif %}

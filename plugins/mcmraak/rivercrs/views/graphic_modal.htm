@@ -1,0 +1,129 @@
+<!-- <button title="Close (Esc)" type="button" class="mfp-close">×</button> -->
+
+{% if to_print %}
+    <link rel="stylesheet" href="/plugins/mcmraak/rivercrs/assets/css/rivercrs.graphic_modal_print.css">
+{% endif %}
+
+<a class="print" onclick="popupWin=window.open('/rivercrs/api/v1/checkin/modalgraphic/{{ checkin.id }}?to_print=1','print','location,width=1200,height=1200,top=0');popupWin.focus();return false">
+	<span>
+		<svg
+                xmlns="http://www.w3.org/2000/svg"
+                xmlns:xlink="http://www.w3.org/1999/xlink"
+                width="18px" height="16px">
+			<image  x="0px" y="0px" width="18px" height="16px"  xlink:href="data:img/png;base64,iVBORw0KGgoAAAANSUhEUgAAABIAAAAQCAMAAAAs2N9uAAAABGdBTUEAALGPC/xhBQAAACBjSFJNAAB6JgAAgIQAAPoAAACA6AAAdTAAAOpgAAA6mAAAF3CculE8AAAAsVBMVEWwsLGvr7D///+wsLCvr7CwsLGwsLCvr7CwsLCwsLGwsLGvr7Cvr7Cvr7CwsLGwsLGvr7Cvr7CwsLCvr7CwsLGwsLGvr7CwsLGvr7Cvr7CwsLGwsLGvr7Cvr7Cvr7Cvr7Cvr7Cvr7Cvr7CwsLGwsLGwsLCwsLGvr7Cvr7Cvr7Cvr7CwsLCwsLGvr7Cvr7Cvr7CwsLGwsLCwsLGwsLGvr7CwsLGwsLGvr7CwsLGwsLD////HDVe8AAAAN3RSTlMAAAAAAoSEhIEE/PwD1NTQOldYWFhXO6mmdrQ3/ieBU1ThqKjjrFSsDSgrqCgEtywsLLoBfHx6PsLVUQAAAAFiS0dEAmYLfGQAAAAHdElNRQfhCBIKDhPMBl/UAAAAw0lEQVQY0z2PhxLCMAhAoRrrrNXUvVNXnVWrJP//Y4JRuQvkXh45AAAsq0oYKqVCVQUIAkDAGllLcmz9jzxh1EBkxNFstaIoktRGsUoYd7o60Trh0L2+NA64i9scSSUaBhDLPx45S6Oxm0Dv8/oxHE1nc7sAbb1G9NWXkEhZGZOmqVmLvwQtExlE3gI3grZiERmUkXHn+L6FfZYd6IhCcNfITqc9+3CmyzXPb3l+r/uFsHS21k/yWxvhUTyfRSHpBWy9AYGUI5wegPGzAAAAAElFTkSuQmCC" />
+		</svg>
+	</span>
+    <span>Версия для печати</span>
+</a>
+<div class="modalGraphic">
+    <div class="modalContent">
+    <div class="org-info">
+        <div class="r">
+            <div class="col-50">
+                <div class="org-info__line org-info__name">
+                    <strong>Туристическая компания Азимут-тур</strong>
+                </div>
+                <div class="org-info__line org-info__phone">
+                    <strong>8 800 511 00 96</strong>
+                    <span style="font-size: 12px;">(звонок по России бесплатный)</span>
+                </div>
+                <div class="org-info__line org-info__phone">
+                    <strong>8 (8452) 255-996</strong>
+                </div>
+            </div>
+            <div class="col-50">
+                <div class="org-info__line">
+                    Саратов, ул.Большая Казачья, д.108
+                </div>
+                <div class="org-info__line">
+                    Сайт: азимут-тур.рф
+                </div>
+                <div class="org-info__line">
+                    Е-mail: azimut-kruiz@yandex.ru
+                </div>
+                <div class="org-info__line">
+                    ИНН: 6454120758
+                </div>
+            </div>
+        </div>
+    </div>
+
+<div class="modalHead">
+    <span>График движения</span>
+</div>
+
+<div class="modalLine">
+    <div class="shipName">теплохода <span>"{{ checkin.motorship.cleanSelfName|mutator }}"</span></div>
+    <div class="shipRoute">
+        {{ checkin.getWaybill('-')|raw }}
+    </div>
+    <div class="shipDates">
+        c <span>{{ checkin.date|date('d.m.Y') }}</span> по <span>{{ checkin.dateb|date('d.m.Y') }}</span>
+    </div>
+</div>
+
+<div class="modalLine modalLineTimeTop">
+    <span class="attention">Внимание! Время отправления и прибытия — московское</span>
+</div>
+
+<div class="modalLine modalLineTable t-center">
+    {% if checkin.eds_code == 'volga' and checkin.volgaSchelude|length %}
+        <table class="rivercrs-gama-schelude-table">
+            <tbody>
+            <tr>
+                <th>Дата</th>
+                <th>Город</th>
+                <th>Прибытие</th>
+                <th>Стоянка</th>
+                <th>Отправление</th>
+            </tr>
+            {% for item in checkin.volgaSchelude %}
+                <tr>
+                    <td>{{ item.date }}</td>
+                    <td>{{ item.town }}</td>
+                    <td>{{ item.arrival }}</td>
+                    <td>{{ item.stay }}</td>
+                    <td>{{ item.departure }}</td>
+                </tr>
+            {% endfor %}
+            </tbody>
+        </table>
+    {% elseif checkin.eds_code == 'germes' and checkin.germesSchelude|length %}
+        <style>
+            #_Modalbox>div {
+                width: auto!important;
+            }
+        </style>
+        <div class="normal">
+            {{ checkin.germesSchelude|raw }}
+        </div>
+    {% elseif checkin.eds_code == 'waterway' %}
+        <div class="ww-table">
+            {{ checkin.desc_1|raw|mutator }}
+            {{ checkin.desc_2|raw|mutator }}
+        </div>
+    {% else %}
+        {{ checkin.desc_1|raw|mutator }}
+        {{ checkin.desc_2|raw|mutator }}
+    {% endif %}
+</div>
+<div class="modalLine temp-schedule">
+    <span>Расписание предварительное, возможны небольшие изменения.</span>
+</div>
+
+<div class="modalLine modalLineTimeBottom">
+    <span class="attention">Внимание! Время отправления и прибытия — московское</span>
+</div>
+
+{#<a class="print" onclick="window.print();">#}
+
+{#<a class="print" onclick="printGrapchicModal({{ checkin.id }})">#}
+{#<a class="print" href="/rivercrs/api/v1/checkin/modalgraphic/{{ checkin.id }}?to_print=1" target="_blank">#}
+    </div>
+</div>
+
+{% if to_print %}
+    <script>
+        window.print();
+    </script>
+{% endif %}

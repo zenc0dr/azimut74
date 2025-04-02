@@ -1,0 +1,25 @@
+description = "FAQ-Модуль"
+
+[viewBag]
+==
+{# themes/azimut-tur-pro/src/components/dolphin/faq.js #}
+{% if obItem %}
+<div class="faq">
+    <h4>Остались вопросы?</h4>
+    {% for item in obItem %}
+    <div class="faq__item">
+        <div class="faq__item__question">
+            <div>
+                {{ item.question }}
+            </div>
+            <div>
+                <i class="bi bi-plus-lg"></i>
+            </div>
+        </div>
+        <div class="faq__item__answer">
+            {{ item.answer|raw }}
+        </div>
+    </div>
+    {% endfor %}
+</div>
+{% endif %}

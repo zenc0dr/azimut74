@@ -1,0 +1,4 @@
+title: Hstructures
+modelClass: Zen\Dolphin\Models\Hstructure
+toolbar:
+    buttons: reorder_toolbar

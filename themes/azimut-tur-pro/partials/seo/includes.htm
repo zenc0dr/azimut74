@@ -1,0 +1,270 @@
+description = "Скрипты и подключения"
+
+[viewBag]
+==
+{% if this.environment != 'dev' %}
+
+{# begin::Yandex.Mertica #}
+<!-- Yandex.Metrika informer -->
+<a href="https://metrika.yandex.ru/stat/?id=13605125&amp;from=informer"
+target="_blank" rel="nofollow"><img src="https://informer.yandex.ru/informer/13605125/3_1_FFFFFFFF_EFEFEFFF_0_pageviews"
+style="width:88px; height:31px; border:0;" alt="Яндекс.Метрика" title="Яндекс.Метрика: данные за сегодня (просмотры, визиты и уникальные посетители)" class="ym-advanced-informer" data-cid="13605125" data-lang="ru" /></a>
+<!-- /Yandex.Metrika informer -->
+
+<!-- Yandex.Metrika counter -->
+<script type="text/javascript" >
+   (function(m,e,t,r,i,k,a){m[i]=m[i]||function(){(m[i].a=m[i].a||[]).push(arguments)};
+   m[i].l=1*new Date();k=e.createElement(t),a=e.getElementsByTagName(t)[0],k.async=1,k.src=r,a.parentNode.insertBefore(k,a)})
+   (window, document, "script", "https://mc.yandex.ru/metrika/tag.js", "ym");
+
+   ym(13605125, "init", {
+        clickmap:true,
+        trackLinks:true,
+        accurateTrackBounce:true,
+        webvisor:true
+   });
+</script>
+<noscript><div><img src="https://mc.yandex.ru/watch/13605125" style="position:absolute; left:-9999px;" alt="" /></div></noscript>
+<!-- /Yandex.Metrika counter -->
+{# end::Yandex.Mertica #}
+
+{# begin::Schema.org #}
+<div style="display:none" itemscope itemtype="http://schema.org/Organization">
+  <span itemprop="name">Турагентство "Азимут-тур"</span>
+  Контакты:
+  <div itemprop="address" itemscope itemtype="http://schema.org/PostalAddress">
+    Адрес:
+    <span itemprop="streetAddress">ул. Большая Казачья, д. 108</span>
+    <span itemprop="addressLocality">Саратов</span>,
+  </div>
+  Телефон:<span itemprop="telephone">(8452) 25-59-96</span>,
+  Электронная почта: <span itemprop="email">azimut-kruiz@yandex.ru</span>
+</div>
+{# end::Schema.org #}
+
+{# begin::Jivosite #}
+{# <script type='text/javascript'> #}
+{# (function(){ var widget_id = '9N5vrEaZAw';var d=document;var w=window;function l(){ #}
+{# var s = document.createElement('script'); s.type = 'text/javascript'; s.async = true; s.src = '//code.jivosite.com/script/widget/'+widget_id; var ss = document.getElementsByTagName('script')[0]; ss.parentNode.insertBefore(s, ss);}if(d.readyState=='complete'){l();}else{if(w.attachEvent){w.attachEvent('onload',l);}else{w.addEventListener('load',l,false);}}})(); #}
+{# </script> #}
+{# end::Jivosite #}
+
+{# begin::Whatsapp #}
+{% if is_rivercrs %}
+<script>(function () { var widget = document.createElement('script'); widget.dataset.pfId = 'fb2b4865-b731-4366-a182-b89bbe6ecfec'; widget.src = 'https://widget.profeat.team/script/widget.js?id=fb2b4865-b731-4366-a182-b89bbe6ecfec&now='+Date.now(); document.head.appendChild(widget); })()</script>
+{% endif %}
+{# end::Whatsapp #}
+
+{# begin::ПиксельVK #}
+<script type="text/javascript">!function(){var t=document.createElement("script");t.type="text/javascript",t.async=!0,t.src='https://vk.com/js/api/openapi.js?169',t.onload=function(){VK.Retargeting.Init("VK-RTRG-1362624-fsJz6"),VK.Retargeting.Hit()},document.head.appendChild(t)}();</script><noscript><img src="https://vk.com/rtrg?p=VK-RTRG-1362624-fsJz6" style="position:fixed; left:-999px;" alt=""/></noscript>
+{# end::ПиксельVK #}
+
+{# begin::Top.mail.ru #}
+<script type="text/javascript">
+var _tmr = window._tmr || (window._tmr = []);
+_tmr.push({id: "3247528", type: "pageView", start: (new Date()).getTime(), pid: "USER_ID"});
+(function (d, w, id) {
+  if (d.getElementById(id)) return;
+  var ts = d.createElement("script"); ts.type = "text/javascript"; ts.async = true; ts.id = id;
+  ts.src = "https://top-fwz1.mail.ru/js/code.js";
+  var f = function () {var s = d.getElementsByTagName("script")[0]; s.parentNode.insertBefore(ts, s);};
+  if (w.opera == "[object Opera]") { d.addEventListener("DOMContentLoaded", f, false); } else { f(); }
+})(document, window, "topmailru-code");
+</script><noscript><div>
+<img src="https://top-fwz1.mail.ru/counter?id=3247528;js=na" style="border:0;position:absolute;left:-9999px;" alt="Top.Mail.Ru" />
+</div></noscript>
+{# end::Top.mail.ru #}
+
+{# begin::Колибри #}
+<script src="//cdn.callibri.ru/callibri.js" type="text/javascript" charset="utf-8"></script>
+{# end::Колибри #}
+
+{# begin::60_sec #}
+<script>
+    var metricsFn = function () {
+        /* Тут перечислять все что нужно будет вызвать по достижению цели */
+        ym(13605125, 'reachGoal', '60_sec');
+        /* Тут перечислять все что нужно будет вызвать по достижению цели */
+    };
+
+    var ActiveScore = {
+        /* Настройки которые надо менять */
+        need: 60, // секунды
+        checkTime: 30, // секунды. период проверки
+        loop: false, // Повторять набор?
+        /* Настройки которые надо менять */
+
+        cookieName: '60sec_ap',
+        sendFn: null,
+        parts: 0,
+        active_parts: 0,
+        timer: 0,
+        events: [
+            "touchmove",
+            "blur",
+            "focus",
+            "focusin",
+            "focusout",
+            "load",
+            "resize",
+            "scroll",
+            "unload",
+            "click",
+            "dblclick",
+            "mousedown",
+            "mouseup",
+            "mousemove",
+            "mouseover",
+            "mouseout",
+            "mouseenter",
+            "mouseleave",
+            "change",
+            "select",
+            "submit",
+            "keydown",
+            "keypress",
+            "keyup",
+            "error",
+        ],
+
+        setEvents: function () {
+            for (var index = 0; index < this.events.length; index++) {
+                var eName = this.events[index];
+                window.addEventListener(eName, function (e) {
+                    ActiveScore.period.events = true;
+                });
+            }
+        },
+
+        period: {
+            start: 0,
+            end: 0,
+            events: false,
+        },
+
+        init: function (fn) {
+            this.calcParts();
+            this.setEvents();
+            if ( this.checkCookie() ) {
+                this.sendFn = fn;
+                this.start();
+            }
+        },
+
+        calcParts: function () {
+            this.parts = Math.ceil(this.need / this.checkTime);
+        },
+
+        setPeriod: function () {
+            this.period.start = this.microtime();
+            this.period.end = this.period.start + this.checkTime;
+            this.period.events = false;
+        },
+
+        microtime: function () {
+            var now = new Date().getTime() / 1000;
+            var s = parseInt(now);
+            return s;
+        },
+
+        start: function () {
+            this.setPeriod();
+            this.runPeriod();
+        },
+
+        timeoutId: null,
+
+        checkPeriod: function () {
+            if (this.period.events == true) {
+                this.active_parts = this.active_parts + 1;
+                // console.log('В этой секции были действия');
+            } else {
+                // console.log('В этой секции НЕБЫЛО действия');
+            }
+            this.timer = this.active_parts * this.checkTime;
+            console.log(this.active_parts + " / " + this.parts + " [" + this.timer + "]");
+
+            if (this.checkSecs()) {
+            } else {
+                this.start();
+            }
+            this.setCookie(this.cookieName, this.active_parts);
+        },
+
+        checkSecs: function () {
+            if (this.timer >= this.need) {
+                this.send();
+                if (this.loop == true) {
+                    this.timer = 0;
+                    this.active_parts = 0;
+                    return false;
+                } else {
+                    // console.log('Завершили проверку активности');
+                    return true;
+                }
+            }
+            return false;
+        },
+
+        timeoutFn: function () {
+            ActiveScore.checkPeriod();
+        },
+
+        runPeriod: function () {
+            this.timeoutId = setTimeout(this.timeoutFn, this.checkTime * 1000);
+        },
+
+        send: function () {
+            this.sendFn();
+        },
+
+        checkCookie: function () {
+            var c = this.getCookie(this.cookieName);
+
+            if ( c == null ) {
+                return true;
+            } else {
+                c = parseInt(c);
+                if ( c >= this.parts ) {
+                    // console.log('Скрипт даже не запустился...');
+                    if (this.loop == true) {
+                        return true;
+                    }
+                    return false;
+                } else {
+                    this.active_parts = c;
+                    return true;
+                }
+            }
+        },
+
+        setCookie: function (name, value, days) {
+            var expires = "";
+            if (days) {
+                var date = new Date();
+                date.setTime(date.getTime() + days * 24 * 60 * 60 * 1000);
+                expires = "; expires=" + date.toUTCString();
+            }
+            document.cookie = name + "=" + (value || "") + expires + "; path=/";
+        },
+        getCookie: function (name) {
+            var nameEQ = name + "=";
+            var ca = document.cookie.split(";");
+            for (var i = 0; i < ca.length; i++) {
+                var c = ca[i];
+                while (c.charAt(0) == " ") c = c.substring(1, c.length);
+                if (c.indexOf(nameEQ) == 0) return c.substring(nameEQ.length, c.length);
+            }
+            return null;
+        },
+        eraseCookie: function (name) {
+            document.cookie =
+                name + "=; Path=/; Expires=Thu, 01 Jan 1970 00:00:01 GMT;";
+        },
+    };
+
+    ActiveScore.init(metricsFn);
+</script>
+{# end::60_sec #}
+
+{% endif %}

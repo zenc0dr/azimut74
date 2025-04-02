@@ -1,0 +1,159 @@
+title = "Контакты"
+url = "/contacts"
+layout = "general"
+description = "Контакты"
+is_hidden = 0
+robot_index = "index"
+robot_follow = "follow"
+contentType = "html"
+force_show = 0
+==
+{% put breadcrumbs %}
+	{% partial 'template/breadcrumbs' %}
+{% endput %}
+
+<section class="contacts">
+
+	<div class="headText">
+		<span>Контакты турфирмы азимут-тур</span>
+	</div>
+
+	<div class="contactsData">
+		<div class="c-r">
+			<div class="col-33 col-m-50 col-xs-100 offset-16 offset-m-none">
+
+				<div class="contWrap contOrg">
+					{% if this.theme.contname1 %}
+					<div class="contHead">
+						<span>{{ this.theme.contname1|mutator }}</span>
+					</div>
+					{% endif %}
+					{% if this.theme.address %}
+					<div class="line">
+						<span>{{ this.theme.address|mutator }}</span>
+					</div>
+					{% endif %}
+					{% if this.theme.graphic %}
+					<div class="line">
+						{{ this.theme.graphic|raw|mutator }}
+					</div>
+					{% endif %}
+					{% if this.theme.email %}
+					<div class="line">
+						<a href="mailto:{{ this.theme.email|mutator }}">{{ this.theme.email|mutator }}</a>
+					</div>
+					{% endif %}
+                    <style>
+                        .contacts-email-pill {
+                            font-size: 14px;
+                            display: flex;
+                            flex-direction: column;
+                            margin-top: 10px;
+                            margin-bottom: 10px;
+                        }
+                        .contacts-email-pill__title {
+                            font-size: 14px;
+                            font-weight: bold;
+                            margin-bottom: 4px;
+                        }
+                        .contacts-email-pill a {
+                            font-weight: bold;
+                            color: #1e88e5;
+                        }
+                    </style>
+                    <div class="contacts-email-pill">
+                        <div class="contacts-email-pill__title">Отдел школьных и групповых туров</div>
+                        <a href="mailto:azimut.operator@yandex.ru">azimut.operator@yandex.ru
+                        </a>
+                    </div>
+					{% if this.theme.conttext1 %}
+					<div class="line line-data">
+						<div class="data">
+							<p>
+								{{ this.theme.conttext1|raw|mutator }}
+							</p>
+						</div>
+					</div>
+					{% endif %}
+				</div>
+
+				<div class="contWrap">
+                    <div class="contact-page-phones">
+                        <div class="contact-page-phones__label">
+                            Телефоны
+                        </div>
+                        <div class="contact-page-phones__phone">
+                            <a href="tel:88452990819">
+                                8 (8452) 99 08 19
+                            </a>
+                        </div>
+                        <div class="contact-page-phones__phone">
+                            <span>Круизный отдел</span>
+                            <a href="tel:88452990819">
+                                8 (8452) 99 08 19
+                            </a>
+                        </div>
+                    </div>
+                    <style>
+                        .contact-page-phones {
+
+                        }
+                        .contact-page-phones__label {
+                            color: #666;
+                            font-weight: bold;
+                            font-size: 19px;
+                        }
+                        .contact-page-phones__phone {
+                            display: flex;
+                            flex-direction: column;
+                            margin-bottom: 10px;
+                        }
+                        .contact-page-phones__phone a {
+                            font-size: 20px;
+                            color: #000;
+                            font-weight: bold;
+                        }
+                        .contact-page-phones__phone span {
+                            font-size: 12px;
+                        }
+                    </style>
+
+				</div>
+                <div class="contWrap">
+                    {% if this.theme.conttext2 %}
+                    <div class="line line-data">
+                        <div class="data">
+                            {{ this.theme.conttext2|raw|mutator }}
+                        </div>
+                    </div>
+                    {% endif %}
+                </div>
+
+			</div>
+			<div class="col-35 col-m-50 col-xs-100">
+
+				<div class="contWrap contDetails">
+
+					{% if this.theme.contname3 %}
+					<div class="contHead">
+						<span>{{ this.theme.contname3|mutator }}</span>
+					</div>
+					{% endif %}
+					{% if this.theme.conttext3 %}
+					<div class="line">
+						{{ this.theme.conttext3|raw|mutator }}
+					</div>
+					{% endif %}
+
+					<div class="conButton">
+						<div><span>Вам некогда? Мы перезвоним!</span></div>
+						<button onclick="CallBack.open()" class="hbtn mbtn">Заказать звонок</button>
+					</div>
+
+				</div>
+
+			</div>
+		</div>
+	</div>
+
+</section>

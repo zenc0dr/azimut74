@@ -1,0 +1,95 @@
+<h3>{% if record.recommended %}Хороший{% else %}Плохой{% endif %} отзыв о теплоходе:
+    {{ record.motorship.cleanSelfName }}</h3>
+<!--<h4>Имя</h4>
+{{ record.name }}
+<h4>Город</h4>
+{{ record.town }}
+<h4>email</h4>
+{{ record.email }}
+<h4>Комментарий</h4>
+{{ record.comment }}
+<h4>Что особенно понравилось?</h4>
+{{ record.liked }}
+<h4>Что не понравилось?</h4>
+{{ record.notliked }}
+<h4>Что надо начать делать?</h4>
+{{ record.startdoing }}
+<h4>Что надо перестать делать?</h4>
+{{ record.stopdoing }}
+<h4>Что надо продолжать делать?</h4>
+{{ record.doing }}
+-->
+<table style="width: 100%">
+	<tr style="background-color: #f8f8f8;">
+		<td style="padding: 10px; border: #c0c0c0 1px solid; color: #000;">
+			<h4>Имя</h4>
+		</td>
+		<td style="padding: 10px; border: #c0c0c0 1px solid; color: #000;">
+			{{ record.name|mutator }}
+		</td>
+	</tr>
+	<tr style="background-color: #f8f8f8;">
+		<td style="padding: 10px; border: #c0c0c0 1px solid; color: #000;">
+			<h4>Город</h4>
+		</td>
+		<td style="padding: 10px; border: #c0c0c0 1px solid; color: #000;">
+			{{ record.town|mutator }}
+		</td>
+	</tr>
+	<tr style="background-color: #f8f8f8;">
+		<td style="padding: 10px; border: #c0c0c0 1px solid; color: #000;">
+			<h4>E-mail</h4>
+		</td>
+		<td style="padding: 10px; border: #c0c0c0 1px solid; color: #000;">
+			{{ record.email|mutator }}
+		</td>
+	</tr>
+	<tr style="background-color: #f8f8f8;">
+		<td style="padding: 10px; border: #c0c0c0 1px solid; color: #000;">
+			<h4>Комментарий</h4>
+		</td>
+		<td style="padding: 10px; border: #c0c0c0 1px solid; color: #000;">
+			{{ record.comment|mutator }}
+		</td>
+	</tr>
+	<tr style="background-color: #f8f8f8;">
+		<td style="padding: 10px; border: #c0c0c0 1px solid; color: #000;">
+			<h4>Что особенно понравилось?</h4>
+		</td>
+		<td style="padding: 10px; border: #c0c0c0 1px solid; color: #000;">
+			{{ record.liked|mutator }}
+		</td>
+	</tr>
+	<tr style="background-color: #f8f8f8;">
+		<td style="padding: 10px; border: #c0c0c0 1px solid; color: #000;">
+			<h4>Что не понравилось?</h4>
+		</td>
+		<td style="padding: 10px; border: #c0c0c0 1px solid; color: #000;">
+			{{ record.notliked|mutator }}
+		</td>
+	</tr>
+	<tr style="background-color: #f8f8f8;">
+		<td style="padding: 10px; border: #c0c0c0 1px solid; color: #000;">
+			<h4>Что надо начать делать?</h4>
+		</td>
+		<td style="padding: 10px; border: #c0c0c0 1px solid; color: #000;">
+			{{ record.startdoing|mutator }}
+		</td>
+	</tr>
+	<tr style="background-color: #f8f8f8;">
+		<td style="padding: 10px; border: #c0c0c0 1px solid; color: #000;">
+			<h4>Что надо перестать делать?</h4>
+		</td>
+		<td style="padding: 10px; border: #c0c0c0 1px solid; color: #000;">
+			{{ record.stopdoing|mutator }}
+		</td>
+	</tr>
+	<tr style="background-color: #f8f8f8;">
+		<td style="padding: 10px; border: #c0c0c0 1px solid; color: #000;">
+			<h4>Что надо продолжать делать?</h4>
+		</td>
+		<td style="padding: 10px; border: #c0c0c0 1px solid; color: #000;">
+			{{ record.doing|mutator }}
+		</td>
+	</tr>
+</table>

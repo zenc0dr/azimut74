@@ -1,0 +1,17 @@
+plugin:
+    name: 'zen.qm::lang.plugin.name'
+    description: 'zen.qm::lang.plugin.description'
+    author: 'Alexander Ablizin'
+    icon: oc-icon-th-list
+    homepage: ''
+navigation:
+    qm-main:
+        label: 'Queue manager'
+        url: zen/qm/jobs
+        icon: icon-th-list
+        permissions:
+            - zen.queue
+permissions:
+    zen.queue:
+        tab: 'Очередь задач'
+        label: 'Общий доступ'

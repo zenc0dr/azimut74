@@ -1,0 +1,133 @@
+description = "Отзывы САНС карточка санатория"
+
+[viewBag]
+==
+{% for item in hotel_info.hotel.reviews() %}
+<div class="s-review">
+	<div class="s-review__top">
+		<div class="c-r cp-0">
+			<div class="col-70 as-c">
+				<div class="s-review__date">
+					20.15.16
+				</div>
+				<div class="s-review__name">
+					<span class="s-review__name--name">{{ item.name }}</span>
+                    <span class="s-review__name--city">({{ item.town }})</span>
+                    <span>пишет о отеле</span>
+                    <span class="s-review__name--ship">{{ item.hotel.name }}</span>
+				</div>
+			</div>
+			<div class="col-30 as-c t-r">
+				<div class="stars-static-wrap">
+					<div class="stars-static" data-rating="{{ item.stars }}" title="Оценка {{ item.stars }} из 5">
+						<div class="stars-static__up">
+							<span></span>
+							<span></span>
+							<span></span>
+							<span></span>
+							<span></span>
+						</div>
+						<div class="stars-static__down">
+							<span></span>
+							<span></span>
+							<span></span>
+							<span></span>
+							<span></span>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+	
+	<div class="s-review__images">
+		{#{% for i in item.files %}
+	    	<a data-lightbox-gallery="revGallery{{r.id}}" href="{{ i.path }}" class="s-review__image-link gal">
+	    		<img class="crRevData__image" src="{{ i.path|resize(100) }}" alt="{{ i.title }}">
+	    	</a>
+    	{% endfor %}#}
+	</div>
+	
+	<div class="s-review__data">
+        <div class="data">
+            <div>
+                <p>
+                	{{ item.comment }}
+                </p>
+            </div>
+            {% if item.liked %}
+            	<div>
+            		<span>Что особенно понравилось:</span>
+                   	<p class="inline">
+                   		{{ item.liked }}
+                   	</p>
+            	</div>
+           	{% endif %}
+           	{% if item.notliked %}
+               	<div>
+                   	<span>Что не понравилось:</span>
+                   	<p class="inline">
+                   		{{ item.notliked }}
+                   	</p>	
+               	</div>
+           	{% endif %}
+           	{% if item.startdoing %}
+           		<div>
+           			<span>Что надо начать делать:</span>
+                   	<p class="inline">
+                   		{{ item.startdoing }}
+                   	</p>
+           		</div>
+           	{% endif %}
+           	{% if item.stopdoing %}
+               	<div>
+               		<span>Что надо перестать делать:</span>
+                   	<p class="inline">
+                   		{{ item.stopdoing }}
+                   	</p>
+               	</div>
+           	{% endif %}
+           	{% if item.doing %}
+               	<div>
+               		<span>Что надо продолжать делать:</span>
+                   	<p class="inline">
+                   		{{ item.doing }}
+                   	</p>
+               	</div>
+           	{% endif %}
+        </div>
+        {% if item.liked or item.notliked or item.startdoing or item.stopdoing or item.doing %}
+            <button id="revMore" class="rbtn">
+           		<span class="add">Показать весь отзыв</span>
+           		<span class="less">Скрыть</span>
+           	</button>
+       	{% endif %}
+    </div>
+    
+    {#
+    <div class="crRevDataBottom">
+        <div class="revDataBottomLeft">
+            <span>Отзыв полезен?</span>
+            <div class="revBottomButtons">
+                <button class="rbtn">Да</button>
+                <span>5 /</span>
+                <button class="rbtn">Нет</button>
+                <span>3</span>
+            </div>
+        </div>
+        <!-- <div class="revDataBottomRight">
+                <a href="">Смотреть еще 12 отзывов о теплоходе "Федор Достоевский"</a>
+            </div> -->
+    </div>
+    #}
+	
+</div>
+{#{% endfor %}#}
+{#    <div class="revBlockPagination">
+        <div class="pagination">{{ reviews.render|raw }}</div>
+    </div>#}
+{#{% else %}
+<span style="font-size:20px">Нет отзывов</span>
+{% endif %}#}
+
+{% endfor %}

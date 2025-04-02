@@ -1,0 +1,23 @@
+title = "Способы оплаты"
+url = "/paymethods"
+layout = "general"
+description = "Страница Способы оплаты"
+is_hidden = 0
+robot_index = "index"
+robot_follow = "follow"
+contentType = "html"
+==
+<section class="about">
+	
+	{#Убрано по просьбе клиента#}				
+	{#<div class="headText">
+		<span>{{ this.page.title }}</span>
+	</div>#}
+
+	<div class="pageData">
+		<div class="data">
+			{% component 'contenteditor' file="pages/paymethods" %}
+		</div>
+	</div>
+
+</section>

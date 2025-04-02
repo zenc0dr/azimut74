@@ -1,0 +1,84 @@
+description = "Секция контактов в шапке"
+
+[viewBag]
+==
+<?php
+function onStart(){
+    $this['show_phone'] = (strpos(Request::url(), 'russia-river-cruises')?true:false);
+}
+?>
+==
+<section class="headContacts">
+	<div class="c-p">
+		<div class="c-r">
+			
+			<div class="col-25 col-m-100 as-c">
+				<div class="logo">
+					<a href="/">
+						<img src="/themes/azimut-tur/assets/img/logo/azlogo.png" alt="">
+					</a>
+					<div class="reestr">
+						Номер в реестре Ростуризма РТО 021653
+					</div>
+				</div>
+			</div>
+			
+			<div class="col-30 col-m-33 col-xs-100 as-c">
+			    <div class="worktime">
+					<div class="time">
+						<span>Пн-Пт:</span> <span>c 10:00 до 19:00</span>
+					</div>
+					<div class="time">
+						<span>Сб:</span> <span>c 11:00 до 15:00</span>
+					</div>
+					<div class="time">
+						<span>Вс:</span> <span>выходной</span>
+					</div>
+				</div>
+				<div class="address">
+					<div class="addrWrap">
+						<a href="mailto:{{ this.theme.email|mutator }}">{{ this.theme.email|mutator }}</a>
+					</div>
+				</div>
+			</div>
+
+			<div class="col-20 col-m-33 as-c hidden-xs-d">
+				<div class="all_phones">
+					<div class="p_number">
+						<span>Москва</span> <a href="tel:84997050096">8 (499) 705 00 96</a>
+					</div>
+					<div class="p_number">
+						<span>Казань</span> <a href="tel:88432085696">8 (843) 208 56 96</a>
+					</div>
+					<div class="p_number">
+						<span>Самара</span> <a href="tel:88462295796">8 (846) 229 57 96</a>
+					</div>
+					<div class="p_number">
+						<span>Саратов</span> <a href="tel:88452255996">8 (8452) 25 59 96</a>
+					</div>
+				</div>
+			</div>
+
+			<div class="col-25 col-m-33 col-xs-100 as-c">
+				<div class="phones">
+					<div class="phonesWrap">
+					    {% if show_phone %}
+						<div class="phone">
+							<a href="tel:{{ this.theme.headerphone1|mutator }}">{{ this.theme.headerphone1|mutator }}</a><br>
+							<span class="free">{{ this.theme.headerphone1p|mutator }}</span>
+						</div>
+						{% endif %}
+						<div class="phone">
+							<a href="tel:{{ this.theme.headerphone2|mutator }}">{{ this.theme.headerphone2|mutator }}</a>
+						</div>
+						<div class="phoneButton">
+							<i class="fa fa-mobile" aria-hidden="true"></i>
+							<button href="#modalCall" class="mbtn">Заказать звонок</button>
+						</div>
+					</div>
+				</div>
+			</div>
+
+		</div>
+	</div>
+</section>

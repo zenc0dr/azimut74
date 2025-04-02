@@ -1,0 +1,33 @@
+<!-- Slider main container -->
+<link rel="stylesheet" href="/plugins/mcmraak/rivercrs/assets/css/inject_reviews.css">
+<div class="inject-reviews">
+    <div class="inject-reviews-title">{{ title }}</div>
+    <div class="swiper-container">
+        <!-- Additional required wrapper -->
+        <div class="swiper-wrapper">
+            <!-- Slides -->
+            {% for review in reviews %}
+            <div class="swiper-slide">
+                <div class="inject-reviews-review">
+                    <div class="inject-review-header">
+                        <div class="inject-review-logo" style="background-image: url({{ review.avatar }})"></div>
+                        <div class="inject-review-name">{{ review.name }}</div>
+                        <div class="inject-review-date">{{ review.date }}</div>
+                    </div>
+                    <div class="inject-review-text">
+                        {{ review.text }}
+                    </div>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+        <!-- If we need pagination -->
+        <div class="swiper-pagination"></div>
+
+        <!-- If we need navigation buttons -->
+        <div class="swiper-button-prev"></div>
+        <div class="swiper-button-next"></div>
+    </div>
+    <div class="inject-reviews-subtitle">{{ subtitle|raw }}</div>
+    <script src="/plugins/mcmraak/rivercrs/assets/js/inject_reviews.js"></script>
+</div>

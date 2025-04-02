@@ -1,0 +1,15 @@
+title: Ktypes
+modelClass: Mcmraak\Rivercrs\Models\Ktype
+list: $/mcmraak/rivercrs/models/ktype/columns.yaml
+recordUrl: 'mcmraak/rivercrs/ktypes/update/:id'
+noRecordsMessage: 'backend::lang.list.no_records'
+recordsPerPage: 20
+showSetup: true
+showCheckboxes: true
+defaultSort:
+    column: id
+    direction: asc
+toolbar:
+    buttons: list_toolbar
+    search:
+        prompt: 'backend::lang.list.search_prompt'

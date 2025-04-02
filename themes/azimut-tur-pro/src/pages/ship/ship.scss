@@ -1,0 +1,29 @@
+// general variables (подключаем на любой странице)
+@import "@src/components/!common/_";
+
+@import '@components/search-widget/_';
+@import '@components/blocks/pagination/_';
+
+@import 'swiper/css';
+
+// почему-то не завелся
+@import "~@fancyapps/ui/dist/fancybox.css";
+
+@import "@src/components/ship/top-info";
+@import '@src/components/blocks/tabs/_';
+@import "@src/components/cruise/tab-ship";
+@import '@components/result-item/_';
+@import '@src/components/sliders/slider-thumbs';
+
+
+@import '@components/injectors/injector';
+@import '@components/injectors/injector_reviews';
+@import '@components/quize/_';
+
+
+.result-item__left  {
+   max-height: 260px;
+   @include m('md') {
+      height: 250px
+   }
+}

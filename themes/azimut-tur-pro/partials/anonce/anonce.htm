@@ -1,0 +1,14 @@
+description = "Анонс тура"
+
+[viewBag]
+==
+{% if data %}
+<div class="info-block">
+    <div class="info-block__title">
+        {{(sTitle)? sTitle : 'Анонс тура'}}
+    </div>
+    <div class="info-block__html">
+        {{ data|raw }}
+    </div>
+</div>
+{% endif %}

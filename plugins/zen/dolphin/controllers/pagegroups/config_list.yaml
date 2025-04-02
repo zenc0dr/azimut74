@@ -1,0 +1,15 @@
+title: PageGroups
+modelClass: Zen\Dolphin\Models\PageGroup
+list: $/zen/dolphin/models/pagegroup/columns.yaml
+recordUrl: 'zen/dolphin/pagegroups/update/:id'
+noRecordsMessage: 'backend::lang.list.no_records'
+recordsPerPage: 20
+showSetup: true
+showCheckboxes: true
+defaultSort:
+    column: id
+    direction: asc
+toolbar:
+    buttons: list_toolbar
+    search:
+        prompt: 'backend::lang.list.search_prompt'

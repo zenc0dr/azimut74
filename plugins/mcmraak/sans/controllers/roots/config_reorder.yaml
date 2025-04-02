@@ -1,0 +1,4 @@
+title: Roots
+modelClass: Mcmraak\Sans\Models\Root
+toolbar:
+    buttons: reorder_toolbar

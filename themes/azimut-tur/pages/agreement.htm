@@ -1,0 +1,17 @@
+title = "Пользовательское соглашение"
+url = "/agreement"
+layout = "general"
+is_hidden = 0
+robot_index = "index"
+robot_follow = "follow"
+contentType = "html"
+force_show = 0
+==
+<?php
+function onStart()
+{
+    $this['offer_text'] = DB::table('mcmraak_blocks_offer')->find(1)->offertext;
+}
+?>
+==
+{{ offer_text|raw }}

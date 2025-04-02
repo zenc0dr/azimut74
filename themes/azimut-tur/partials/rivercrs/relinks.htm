@@ -1,0 +1,27 @@
+description = "Модуль SEO-Ссылок"
+
+[viewBag]
+==
+<?php
+use \Mcmraak\Rivercrs\Models\Settings;
+function onStart()
+{
+    $this['settings'] = Settings::find(1);
+}
+?>
+==
+<div class="cruiseLinks">
+	<div class="c-r">
+		{% for relink in settings.relinks %}
+		<div class="col-25 col-xs-50">
+			<div class="crLink">
+				<a href="{{ relink.relinks_link }}">
+					<span>
+						{{ relink.relinks_name|mutator }}
+					</span>
+				</a>
+			</div>
+		</div>
+		{% endfor %}
+	</div>
+</div>

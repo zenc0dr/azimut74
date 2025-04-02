@@ -1,0 +1,23 @@
+columns:
+    id:
+        label: id
+        type: number
+        sortable: true
+    hotel_id:
+        label: Отель
+        type: number
+        relation: hotel
+        valueFrom: name
+    stars:
+        label: Рейтинг
+        type: number
+        sortable: true
+    active:
+        label: Опубликовано
+        type: partial
+        sortable: true
+    created_at:
+        label: Создано
+        type: datetime
+        sortable: true
+        format: 'd.m.Y H:i:s'

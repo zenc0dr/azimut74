@@ -1,0 +1,26 @@
+columns:
+    id:
+        label: id
+        type: number
+    created_at:
+        label: Создано
+        type: datetime
+        format: 'd.m.Y H:i'
+    processed:
+        label: Обработано
+        type: partial
+    name:
+        label: Имя
+        type: text
+        searchable: false
+    phone:
+        label: Телефон
+        type: text
+        searchable: false
+        sortable: false
+    email:
+        label: email
+        type: text
+    scope:
+        label: Тип
+        type: text

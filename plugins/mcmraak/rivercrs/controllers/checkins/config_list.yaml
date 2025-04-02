@@ -1,0 +1,11 @@
+title: Заезды
+modelClass: Mcmraak\Rivercrs\Models\Checkins
+list: $/mcmraak/rivercrs/models/checkins/columns.yaml
+recordUrl: 'mcmraak/rivercrs/checkins/update/:id'
+noRecordsMessage: 'backend::lang.list.no_records'
+recordsPerPage: '30'
+showSetup: true
+showCheckboxes: true
+toolbar:
+    buttons: list_toolbar
+filter: config_filter.yaml

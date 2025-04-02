@@ -1,0 +1,24 @@
+columns:
+    id:
+        label: id
+        type: number
+    name:
+        label: name
+        type: text
+        searchable: true
+        sortable: true
+    code:
+        label: code
+        type: text
+        searchable: true
+        sortable: true
+    key:
+        label: key
+        type: text
+        searchable: true
+        sortable: true
+    from:
+        label: Отправитель
+        type: text
+        searchable: true
+        sortable: true

@@ -1,0 +1,14 @@
+description = "Инфо блок"
+
+[viewBag]
+==
+{% if content and sTitle %}
+<div class="info-block">
+    <div class="info-block__title">
+        {{ sTitle }}
+    </div>
+    <div class="info-block__html">
+        {{ (bRaw) ? content|raw : content }}
+    </div>
+</div>
+{% endif %}

@@ -1,0 +1,19 @@
+columns:
+    id:
+        label: Номер
+        type: number
+    name:
+        label: Имя
+        type: text
+    phone:
+        label: Телефон
+        type: text
+    email:
+        label: 'Электронная почта'
+        type: text
+    tour:
+        label: 'Идентификатор тура'
+        type: text
+    ide:
+        label: 'Идентификатор формы'
+        type: text

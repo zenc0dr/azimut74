@@ -1,0 +1,16 @@
+name: Разметка
+modelClass: Mcmraak\Blocks\Models\Style
+form: $/mcmraak/blocks/models/style/fields.yaml
+defaultRedirect: mcmraak/blocks/styles
+create:
+    title: 'Создать разметку'
+    redirect: 'mcmraak/blocks/styles/update/:id'
+    redirectClose: mcmraak/blocks/styles
+    flashSave: 'Разметка создана'
+update:
+    title: 'Изменить разметку'
+    redirect: mcmraak/blocks/styles
+    redirectClose: mcmraak/blocks/styles
+    flashSave: 'Разметка изменена'
+    flashDelete: 'Разметка удалена'
+preview: {  }

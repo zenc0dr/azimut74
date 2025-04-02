@@ -1,0 +1,11 @@
+name: Hotels
+modelClass: Mcmraak\Sans\Models\Hotel
+form: $/mcmraak/sans/models/hotel/fields.yaml
+defaultRedirect: mcmraak/sans/hotels
+create:
+    redirect: 'mcmraak/sans/hotels/update/:id'
+    redirectClose: mcmraak/sans/hotels
+update:
+    redirect: mcmraak/sans/hotels
+    redirectClose: mcmraak/sans/hotels
+preview: {  }

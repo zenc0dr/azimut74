@@ -1,0 +1,11 @@
+1.0.1:
+    - 'Initialize plugin.'
+1.0.2:
+    - 'Created table zen_quiz_applications'
+    - builder_table_create_zen_quiz_applications.php
+1.0.3:
+    - 'Created table zen_quiz_cities'
+    - builder_table_create_zen_quiz_cities.php
+1.0.4:
+    - 'Добавляем города'
+    - cities_seeder.php

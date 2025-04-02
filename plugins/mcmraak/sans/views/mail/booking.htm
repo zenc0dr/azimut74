@@ -1,0 +1,33 @@
+<h2>{{ item.created_at|date('d.m.Y H:i:s') }}</h2>
+<div class="control-list">
+    <table class="table data">
+        <thead>
+        <tr>
+            <th width="30%"><span>Свойство</span></th>
+            <th><span>Значение</span></th>
+        </tr>
+        </thead>
+        <tbody>
+        {% set dt = item.data %}
+        <tr><td>Имя: </td><td>{{ dt.name }}</td></tr>
+        <tr><td>Телефон: </td><td>{{ dt.phone }}</td></tr>
+        <tr><td>email: </td><td>{{ dt.email }}</td></tr>
+        <tr><td>Дополнительная информация о туристах: </td><td>{{ item.data.desc }}</td></tr>
+        <tr><td>Страна: </td><td>{{ dt.сountry_name }}</td></tr>
+        <tr><td>Город: </td><td>{{ dt.town_name }}</td></tr>
+        <tr><td>Отель: </td><td>{{ dt.hotel_type }} {{ dt.hotel_name }} [{{ dt.hotel_id }}]</td></tr>
+        <tr><td>Адрес: </td><td>{{ dt.address }}</td></tr>
+        <tr><td>Название тура: </td><td>{{ dt.tour_name }}</td></tr>
+        <tr><td>Дата тура: </td><td>{{ dt.tour_date }}</td></tr>
+        <tr><td>Ночей: </td><td>{{ dt.nights }}</td></tr>
+        <tr><td>Тип номера: </td><td>{{ dt.room_type }}</td></tr>
+        <tr><td>Питание: </td><td>{{ dt.meal }}</td></tr>
+        <tr><td>Взрослых: </td><td>{{ dt.adults }}</td></tr>
+        <tr><td>Детей: </td><td>{{ dt.kids }}</td></tr>
+        {% if dt.kidsAges %}
+            <tr><td>Возраст детей: </td><td>{{ dt.kidsAges }}</td></tr>
+        {% endif %}
+        <tr><td style="font-size: 30px">Цена: </td><td style="font-size: 30px">{{ dt.price }}</td></tr>
+        </tbody>
+    </table>
+</div>

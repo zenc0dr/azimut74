@@ -1,0 +1,11 @@
+scopes:
+    category:
+        label: 'Категория отеля'
+        modelClass: Mcmraak\Sans\Models\HotelCategory
+        nameFrom: name
+        scope: FilterCategories
+    resort:
+        label: Курорт
+        modelClass: Mcmraak\Sans\Models\Resort
+        nameFrom: name
+        scope: FilterResorts

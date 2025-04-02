@@ -1,0 +1,36 @@
+.hotel_info {
+    display: flex;
+}
+
+.hotel_info__label {
+    color: #fff;
+    border-radius: 15px;
+    overflow: hidden;
+    margin-right: 15px;
+}
+
+.hotel_info__label > div {
+    padding: 10px 18px;
+    text-align: center;
+}
+
+.hotel_info__label__key {
+    background: #00000045;
+}
+
+.hotel_info__label__text {
+    font-weight: bold;
+    font-size: 21px;
+}
+
+.hotel_info_color1 {
+    background: #4472a0;
+}
+
+.hotel_info_color2 {
+    background: #31b031;
+}
+
+.hotel_info_color3 {
+    background: #9098a2;
+}

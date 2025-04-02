@@ -1,0 +1,76 @@
+fields:
+    code:
+        label: 'Код хранилища'
+        span: auto
+        type: text
+    name:
+        label: 'Название хранилища'
+        span: auto
+        type: text
+    path:
+        label: 'Расположение хранилища'
+        span: auto
+        required: 1
+        type: text
+        comment: ':storage = storage_path(), :base = base_path()'
+    time:
+        label: 'Время хранения в минутах'
+        span: auto
+        default: '0'
+        type: number
+tabs:
+    fields:
+        statistics:
+            span: full
+            path: $/zen/cabox/controllers/storages/statistics.php
+            context:
+                - update
+                - preview
+            type: partial
+            tab: Статистика
+        one_folder:
+            label: 'Одна папка для всех файлов'
+            span: full
+            default: 0
+            type: switch
+            tab: Настройки
+        compress:
+            label: 'Сжатие данных'
+            span: full
+            default: 1
+            type: switch
+            tab: Настройки
+        images:
+            label: Изображения
+            span: auto
+            type: switch
+            tab: Настройки
+        cache_data:
+            span: full
+            path: $/zen/cabox/controllers/storages/cache_data.php
+            context:
+                - update
+            type: partial
+            tab: Данные
+        handlers:
+            label: Обработчики
+            prompt: 'Добавить обработчик'
+            span: full
+            type: repeater
+            tab: Обработка
+            form:
+                fields:
+                    handler_code:
+                        label: 'Код обработчика'
+                        span: full
+                        type: text
+                    handler_php:
+                        label: 'Код обработчика'
+                        size: huge
+                        language: php
+                        span: full
+                        type: codeeditor
+                    handler_submit:
+                        span: auto
+                        path: $/zen/cabox/partials/handler_submit.php
+                        type: partial

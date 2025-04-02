@@ -1,0 +1,16 @@
+name: Каюты
+modelClass: Mcmraak\Rivercrs\Models\Cabins
+form: $/mcmraak/rivercrs/models/cabins/fields.yaml
+defaultRedirect: mcmraak/rivercrs/cabins
+create:
+    title: 'Создание каюты'
+    redirect: 'mcmraak/rivercrs/cabins/update/:id'
+    redirectClose: mcmraak/rivercrs/cabins
+    flashSave: 'Каюта сохранена'
+update:
+    title: 'Изменение каюты'
+    redirect: mcmraak/rivercrs/cabins
+    redirectClose: mcmraak/rivercrs/cabins
+    flashSave: 'Каюта обновлена'
+    flashDelete: 'Каюта удалена'
+preview: {  }

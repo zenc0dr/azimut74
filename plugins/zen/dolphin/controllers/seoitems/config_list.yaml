@@ -1,0 +1,13 @@
+title: Seoitems
+modelClass: Zen\Dolphin\Models\Seoitem
+list: $/zen/dolphin/models/seoitem/columns.yaml
+recordUrl: 'zen/dolphin/seoitems/update/:id'
+noRecordsMessage: 'backend::lang.list.no_records'
+recordsPerPage: 20
+showSetup: true
+showCheckboxes: true
+defaultSort:
+    column: id
+    direction: asc
+toolbar:
+    buttons: list_toolbar

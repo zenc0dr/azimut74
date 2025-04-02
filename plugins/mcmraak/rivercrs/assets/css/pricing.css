@@ -1,0 +1,56 @@
+/*[v-cloak] {
+    display: none;
+}*/
+.pricingHeader {
+    background: #fff;
+    padding: 6px 14px;
+}
+.pricingHeader .waybill-id {color: #0d70ff;}
+.pricingHeader .waybill-string {
+    color: #d74300;
+}
+.pricingTable {
+    width: 100%;
+    display: table;
+    border: 1px solid #d0d9dd;
+    margin-bottom: 20px;
+}
+.pricingTable>div {
+    display: table-row;
+    background: #fff;
+}
+.pricingTable .cell {
+    padding: 0;
+}
+.pricingTable>div.titles>div {
+    text-align: center;
+    background: #eceded;
+    font-weight: bold;
+    font-size: 15px;
+    color: #6c6c6c;
+    padding: 7px 0px;
+}
+.pricingTable>div>div:not(:last-child){
+    border-right: 1px solid #d0d9dd;
+}
+.pricingTable>div>div {
+    display: table-cell;
+    padding: 7px 8px;
+    border-bottom: 1px solid #d0d9dd;
+}
+.pricingTable .items:last-child>div {
+    border-bottom: none;
+}
+.pricingTable>div>div input {
+    display: inline-block;
+    width: 100%;
+    padding: 4px 5px;
+    border: none;
+    margin: 0;
+}
+.pricingTable>div>div[contenteditable] {
+    background: #fffdd6;
+}
+.pricingTable>div>div[contenteditable]:focus {
+    box-shadow: 0 0 0 2px #b4b29a inset;
+}

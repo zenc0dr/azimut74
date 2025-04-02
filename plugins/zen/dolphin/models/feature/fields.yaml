@@ -1,0 +1,23 @@
+fields:
+    name:
+        label: 'Название блока'
+        span: auto
+        type: text
+    title:
+        label: Заголовок
+        span: auto
+        type: text
+    sub_title:
+        label: Подзаголовок
+        size: small
+        span: full
+        type: richeditor
+    images:
+        label: Фишки
+        mode: image
+        useCaption: true
+        thumbOptions:
+            mode: crop
+            extension: auto
+        span: full
+        type: fileupload

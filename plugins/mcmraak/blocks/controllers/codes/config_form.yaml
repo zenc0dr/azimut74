@@ -1,0 +1,10 @@
+name: Codes
+form: $/mcmraak/blocks/models/code/fields.yaml
+modelClass: Mcmraak\Blocks\Models\Code
+defaultRedirect: mcmraak/blocks/codes
+create:
+    redirect: 'mcmraak/blocks/codes/update/:id'
+    redirectClose: mcmraak/blocks/codes
+update:
+    redirect: mcmraak/blocks/codes
+    redirectClose: mcmraak/blocks/codes

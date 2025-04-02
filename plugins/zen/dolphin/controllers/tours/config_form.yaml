@@ -1,0 +1,10 @@
+name: Tours
+form: $/zen/dolphin/models/tour/fields.yaml
+modelClass: Zen\Dolphin\Models\Tour
+defaultRedirect: zen/dolphin/tours
+create:
+    redirect: 'zen/dolphin/tours/update/:id'
+    redirectClose: zen/dolphin/tours
+update:
+    redirect: zen/dolphin/tours
+    redirectClose: zen/dolphin/tours

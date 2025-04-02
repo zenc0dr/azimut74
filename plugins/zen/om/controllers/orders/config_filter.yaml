@@ -1,0 +1,25 @@
+scopes:
+    status:
+        label: 'zen.om::lang.statuses.status'
+        modelClass: Zen\Om\Models\Status
+        nameFrom: name
+        scope: FilterStatuses
+    user:
+        label: 'zen.om::lang.user.title'
+        modelClass: RainLab\User\Models\User
+        nameFrom: name
+        scope: FilterUsers
+    payment:
+        label: 'zen.om::lang.payments.title'
+        modelClass: Zen\Om\Models\Payment
+        nameFrom: name
+        scope: FilterPayments
+    delivery:
+        label: 'zen.om::lang.deliveries.title'
+        modelClass: Zen\Om\Models\Delivery
+        nameFrom: name
+        scope: FilterDeliveries
+    order_date:
+           label: 'zen.om::lang.orders.created_at'
+           type: daterange
+           conditions: date >= ':after' AND date <= ':before'

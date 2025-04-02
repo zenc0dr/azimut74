@@ -1,0 +1,25 @@
+title = "Популярные направления"
+url = "/popular-directions"
+layout = "layout"
+is_hidden = 0
+robot_index = "index"
+robot_follow = "follow"
+contentType = "html"
+force_show = 0
+==
+<section class="popular-directions full-page">
+    <div class="custom-container">
+        <h2>Все направления</h2>
+        {% if prok_items[1] %}
+        <div class="popular-lists">
+            {% for arItem in prok_items[1].items %}
+            <a href="{{ arItem.url }}" class="popular-item" style="background-image: url({{ arItem.image }})">
+                <span>{{ arItem.name }}</span>
+            </a>
+            {% endfor %}
+        </div>
+        {% else %}
+            Направлений пока нет!
+        {% endif %}
+    </div>
+</section>

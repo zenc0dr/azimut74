@@ -1,0 +1,11 @@
+name: 'Элемента комфорта'
+modelClass: Mcmraak\Rivercrs\Models\Comforts
+form: $/mcmraak/rivercrs/models/comforts/fields.yaml
+defaultRedirect: mcmraak/rivercrs/comforts
+create:
+    redirect: 'mcmraak/rivercrs/comforts/update/:id'
+    redirectClose: mcmraak/rivercrs/comforts
+update:
+    redirect: mcmraak/rivercrs/comforts
+    redirectClose: mcmraak/rivercrs/comforts
+preview: {  }

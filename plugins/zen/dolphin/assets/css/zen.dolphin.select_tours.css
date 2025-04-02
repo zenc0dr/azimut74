@@ -1,0 +1,189 @@
+[v-cloak] {
+    display: none
+}
+
+/* PRELOADER */
+.css-loader {
+    width: 100%;
+    text-align: center;
+    margin-top: 50px;
+}
+
+.css-loader .lds-ring {
+    display: inline-block;
+    position: relative;
+    width: 80px;
+    height: 80px;
+}
+
+.css-loader .lds-ring div {
+    box-sizing: border-box;
+    display: block;
+    position: absolute;
+    width: 64px;
+    height: 64px;
+    margin: 8px;
+    border: 8px solid #fff;
+    border-radius: 50%;
+    animation: lds-ring 1.2s cubic-bezier(0.5, 0, 0.5, 1) infinite;
+    border-color: #9098a2 transparent transparent transparent;
+}
+
+.css-loader .lds-ring div:nth-child(1) {
+    animation-delay: -0.45s;
+}
+
+.css-loader .lds-ring div:nth-child(2) {
+    animation-delay: -0.3s;
+}
+
+.css-loader .lds-ring div:nth-child(3) {
+    animation-delay: -0.15s;
+}
+
+@keyframes lds-ring {
+    0% {
+        transform: rotate(0deg);
+    }
+
+    100% {
+        transform: rotate(360deg);
+    }
+}
+
+/* /PRELOADER */
+#SelectTours {
+    display: flex;
+    margin: 0px -15px;
+    flex-wrap: wrap;
+}
+
+.extours-panel {
+    margin: 15px;
+    min-width: 500px;
+    flex: 1 1 0;
+    animation: panel-fadein 400ms;
+}
+
+@keyframes panel-fadein {
+    from {
+        opacity: 0;
+    }
+
+    to {
+        opacity: 1;
+    }
+}
+
+.extours-records {
+    transition: 100ms;
+    width: 100%;
+}
+
+.extours-records.process {
+    opacity: 0.60;
+}
+
+.extours-record {
+    display: flex;
+    background: #e7e7e8;
+    margin-bottom: 5px;
+    padding: 2px 10px;
+    font-size: 13px;
+    cursor: pointer;
+    justify-content: space-between;
+    user-select: none;
+}
+
+.extours-record.last-added {
+    animation: hoba 400ms;
+}
+
+@keyframes hoba {
+    from {
+        opacity: 0;
+        transform: scale(1, 0.3);
+        background: #00d3e8;
+    }
+
+    to {
+        opacity: 1;
+        transform: scale(1, 1);
+        background: #e7e7e8;
+    }
+}
+
+.extours-record i {
+    font-size: 20px;
+    margin: -4px;
+    color: #767676;
+    transition: 200ms;
+}
+
+.extours-record i:hover {
+    transform: scale(1.2);
+    color: #317cc3;
+}
+
+.extours-record:hover {
+    background: #d4d4d4;
+}
+
+.extours-record > div {
+    padding: 0 0px;
+}
+
+.extours-record.titles {
+    background: #9098a2;
+    color: #fff;
+    font-weight: bold;
+}
+
+.extours-filters {
+    width: 100%;
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    flex-wrap: wrap;
+}
+
+.extours-filter {
+    margin-bottom: 8px;
+    padding: 3px 8px;
+    width: 100%;
+    border: 1px solid #9098a2;
+}
+
+/* Pagination */
+.extours-pagination {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-top: 20px;
+}
+
+.extours-pagination > div {
+    text-align: center;
+    border-radius: 5px;
+}
+
+.extours-pagination-arrow {
+    background: #e7e7e8;
+    width: 50px;
+    color: #939393;
+    padding: 3px;
+    cursor: pointer;
+}
+
+.extours-pagination-arrow:hover {
+    color: #507de1;
+}
+
+.extours-pagination-arrow i::before {
+    margin: 0;
+}
+
+.extours-pagination-text {
+    font-weight: bold;
+    padding: 0 15px;
+}

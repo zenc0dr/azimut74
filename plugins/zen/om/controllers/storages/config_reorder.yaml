@@ -1,0 +1,4 @@
+title: Storages
+modelClass: Zen\Om\Models\Storage
+toolbar:
+    buttons: reorder_toolbar

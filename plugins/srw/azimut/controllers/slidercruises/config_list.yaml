@@ -1,0 +1,11 @@
+list: $/srw/azimut/models/slidercruises/columns.yaml
+modelClass: Srw\Azimut\Models\SliderCruises
+title: SliderCruises
+noRecordsMessage: 'backend::lang.list.no_records'
+showSetup: true
+showCheckboxes: true
+toolbar:
+    buttons: list_toolbar
+    search:
+        prompt: 'backend::lang.list.search_prompt'
+recordUrl: 'srw/azimut/slidercruises/update/:id'

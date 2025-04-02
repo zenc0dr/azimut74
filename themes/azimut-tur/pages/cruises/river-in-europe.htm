@@ -1,0 +1,30 @@
+title = "Речные круизы по Европе"
+url = "/europe-river-cruises"
+layout = "general"
+description = "Речные круизы по Европе"
+meta_title = "Речные круизы по Европе"
+is_hidden = 0
+robot_index = "index"
+robot_follow = "follow"
+contentType = "html"
+force_show = 0
+==
+{% put slider %}
+	{% partial 'header/slidercruises' %}
+{% endput %}
+
+<section class="cruises">
+					
+	<div class="headText">
+		<span>{{ this.page.title|mutator }}</span>
+	</div>
+
+	{#<!-- <div class="pageData">
+		<div class="data">
+			{% component 'contenteditor' file="cruises/river-in-europe" %}
+		</div>
+	</div> -->#}
+	
+	{% partial 'rivercrs/relinks' %}
+	
+</section>

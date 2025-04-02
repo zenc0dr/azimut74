@@ -1,0 +1,12 @@
+description = "Текстовая информация"
+
+[viewBag]
+==
+{% if dolphin.page.text %}
+    <div class="dolphin-text-block gray-bg">
+        <div class="dolphin-text-block__image" style="background-image:url({{ dolphin.page.preview }})"></div>
+        <div class="dolphin-text-block__text">
+            {{ dolphin.page.text|raw }}
+        </div>
+    </div>
+{% endif %}

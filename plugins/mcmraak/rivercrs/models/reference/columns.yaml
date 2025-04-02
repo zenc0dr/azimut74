@@ -1,0 +1,23 @@
+columns:
+    id:
+        label: id
+        type: number
+        sortable: true
+    name:
+        label: Название
+        type: text
+        searchable: true
+        sortable: true
+    slug:
+        label: Ссылка
+        type: text
+        searchable: true
+        sortable: true
+    link:
+        label: Редирект
+        type: text
+        sortable: true
+    order:
+        label: Порядок
+        type: number
+        sortable: true

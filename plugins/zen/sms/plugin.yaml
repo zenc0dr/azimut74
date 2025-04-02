@@ -1,0 +1,28 @@
+plugin:
+    name: 'zen.sms::lang.plugin.name'
+    description: 'zen.sms::lang.plugin.description'
+    author: 'Александр Аблизин'
+    icon: oc-icon-envelope-square
+    homepage: ''
+navigation:
+    sms-main:
+        label: SMS.RU
+        url: zen/sms/profiles
+        icon: icon-envelope-square
+        permissions:
+            - zen.sms
+        sideMenu:
+            sms-profiles:
+                label: Профили
+                url: zen/sms/profiles
+                icon: icon-user
+            sms-sms:
+                label: SMS
+                url: zen/sms/items
+                icon: icon-envelope-square
+                permissions:
+                    - zen.sms
+permissions:
+    zen.sms:
+        tab: SMS
+        label: 'Глобальный доступ'

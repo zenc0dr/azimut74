@@ -1,0 +1,22 @@
+fields:
+    active:
+        label: Активно
+        span: full
+        type: switch
+    routes:
+        label: Назначения
+        prompt: 'Добавить назначение'
+        style: default
+        span: auto
+        type: repeater
+        form:
+            fields:
+                url_entry:
+                    label: 'URL Вхождение'
+                    span: full
+                    type: text
+                theme:
+                    label: Тема
+                    showSearch: true
+                    span: full
+                    type: dropdown

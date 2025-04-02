@@ -1,0 +1,15 @@
+fields:
+    call:
+        label: Вызов
+        span: full
+        type: text
+    data_string:
+        label: Данные
+        span: full
+        size: large
+        type: textarea
+    error:
+        label: Ошибка
+        size: large
+        span: full
+        type: textarea

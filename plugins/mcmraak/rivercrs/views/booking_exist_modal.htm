@@ -1,0 +1,314 @@
+<link rel="stylesheet" href="/plugins/mcmraak/rivercrs/assets/css/rivercrs.booking_exist.css">
+
+<style>
+    {% for item in statuses %}
+    .{{ item.class }} {
+        background-color: {{ item.bg_color }};
+        color: {{ item.tx_color }};
+    }
+    {% endfor %}
+</style>
+
+<div class="bex-modal-pan">
+    <div title="Close (Esc)" type="button" class="bex-modal-close">×</div>
+</div>
+<meta name="checkin-data" content="{{ checkin.json_data }}">
+<div class="shipBlock">
+    <div class="shipBlockTop">
+        <div class="shipImage">
+            <img src="{{ checkin.motorship.images|first.path|resize(300) }}" alt="">
+        </div>
+        <div class="shipInfo">
+            <div class="shipName">
+                <span>{{ checkin.motorship.alt_name|mutator }}</span>
+            </div>
+            <div class="shipDepartures">
+                <div class="shipDeparture">
+                    <div><span>Отправление:</span></div>
+                    <div>
+                        <span>{{ checkin.date|date('d.m.Y') }}</span>
+                        {% set ch_time = checkin.date|date('H:i') %}
+                        {% set ch_time = (ch_time=='00:00')?'':ch_time %}
+                        <span>&nbsp;({{ weekdays[checkin.date|date('w')] }}) {{ ch_time }}</span>
+                    </div>
+                </div>
+                <div class="shipDeparture">
+                    <div><span>Прибытие:</span></div>
+                    <div>
+                        <span>{{ checkin.dateb|date('d.m.Y') }}</span>
+                        {% set ch_time = checkin.dateb|date('H:i') %}
+                        {% set ch_time = (ch_time=='00:00')?'':ch_time %}
+                        <span>&nbsp;({{ weekdays[checkin.dateb|date('w')] }}) {{ ch_time }}</span>
+                    </div>
+                </div>
+                <div class="shipDeparture">
+                    <div><span>Дней:</span></div>
+                    <div>
+                        <span>{{ checkin.days|mutator }}</span>
+                    </div>
+                </div>
+                <div class="msk-time">
+                    <span>Время московское</span>
+                </div>
+            </div>
+            <div class="shipRouteBlock">
+                <div><span>Маршрут:</span></div>
+                <div class="shipRoute">
+                    {{ checkin.getWaybill('-')|raw|mutator }}
+                </div>
+            </div>
+            <div class="shipBlockGraphic">
+                <button class="gbtn mbtn" modalbox="css:{width:875px,min-width:auto,margin-top:50px,background:#edf1f4}" href="/rivercrs/api/v1/checkin/modalgraphic/{{ checkin.id }}">График движения</button>
+            </div>
+        </div>
+    </div>
+
+    <div class="booking-exist-preloader">
+        <img src="/plugins/mcmraak/rivercrs/assets/images/preline.gif">
+    </div>
+    <div id="BookingExist" checkin-id="{{ checkin.id }}">
+        {% include 'mcmraak.rivercrs::bex-scheme-info' %}
+        <table class="bex-board">
+            <tbody>
+                <tr>
+                    <th class="bex-rooms-col">Выберите нужную каюту</th>
+                    <th class="bex-btn-col"></th>
+                    <th class="bex-places-col">Размещение</th>
+                    <th class="bex-prices-col tariff-name">
+                        <div class="tariff-name-name" :class="{desc:tariff_price1_title.desc}" v-html="tariff_price1_title.name"></div>
+                        <div class="tariff-name-desc" v-if="tariff_price1_title.desc" v-html="tariff_price1_title.desc"></div>
+                    </th>
+                    <th v-if="tariff_price2" class="bex-prices-col tariff-name">
+                        <div class="tariff-name-name" :class="{desc:tariff_price2_title.desc}" v-html="tariff_price2_title.name"></div>
+                        <div class="tariff-name-desc" v-if="tariff_price2_title.desc" v-html="tariff_price2_title.desc"></div>
+                    </th>
+                    <th></th>
+                </tr>
+
+                <template v-for="deck in decks">
+                    <tr><td class="bex-deck-title" colspan="4">${ deck.name }</td></tr>
+                    <tr v-for="cabin in deck.cabins">
+                        <td>
+                            <div @click="openInfo(cabin)" class="bex-category-title">
+                                ${ cabin.name }
+                            </div>
+                            <div class="bex-rooms">
+                                <div v-for="room in rooms"
+                                     v-if="room.f == 1 && room.c == cabin.id && room.d == deck.id"
+                                     class="bex-room"
+                                     :class="room.check?'is-selected':(room.n != 'Под запрос')?'is-actual':'on-request'">
+                                    <input type="checkbox" v-model="room.check">
+                                    <div>${ room.n }</div>
+                                </div>
+                            </div>
+                        </td>
+                        <td>
+                            <div class="bex-scheme-button">
+                                <div @click="showScheme(cabin.id)">
+                                    Каюта на схеме
+                                </div>
+                            </div>
+                        </td>
+                        <td>
+                            <div class="bex-places">
+                                <div v-for="place in cabin.prices" class="bex-place">
+                                    ${ place.price_places }-местное
+                                </div>
+                            </div>
+                        </td>
+                        <td>
+                            <div class="bex-prices">
+                                <div v-for="price in cabin.prices" class="bex-price">
+                                    ${ price.price_value|priceFormat }
+                                </div>
+                            </div>
+                        </td>
+                        <td v-if="tariff_price2">
+                            <div class="bex-prices">
+                                <div v-if="price.price2_value" v-for="price in cabin.prices" class="bex-price">
+                                    ${ price.price2_value|priceFormat }
+                                </div>
+                            </div>
+                        </td>
+                        <td>
+                            <!-- Формирование метки для сервиса QQ -->
+                            <div v-for="item in cabin.QQ" class="qq-btn-place" :data-value="item"></div>
+                        </td>
+                    </tr>
+                </template>
+            </tbody>
+        </table>
+        {% include 'mcmraak.rivercrs::booking_modal_ship_scheme' %}
+        {#<div class="modal_info">#}
+            {# modal_info|raw #}
+        {#</div>#}
+        <div class="bex-add-info" :style="{height:info_block?'auto':'200px'}">
+            <div class="bex-add-info-title">
+                В стоимость круиза входит
+            </div>
+            {{ checkin.motorship.add_a|mutator }}
+
+            <div class="bex-add-info-title">
+                Дополнительно оплачивается
+            </div>
+            {{ checkin.motorship.add_b|mutator }}
+
+            <div class="bex-add-info-title">
+                Скидки раннего бронирования
+            </div>
+            {{ checkin.motorship.booking_discounts|mutator }}
+
+            <div class="bex-add-info-title">
+                Cоциальные скидки
+            </div>
+            {{ checkin.motorship.social_discounts|mutator }}
+        </div>
+        <div v-if="!info_block" class="bex-bottom-fog"></div>
+        <div @click="info_block=!info_block" class="bex-btn-readmore">
+            Развернуть информационный блок <i :class="info_block?'fa fa-caret-up':'fa fa-caret-down'"></i>
+        </div>
+
+        <div class="booking-fake-separator">
+            <div></div>
+        </div>
+
+        <div class="bookingBlockBottom">
+            <div class="bookingDataLine">
+                <input booking-name="checkin_id" type="hidden" value="{{ checkin.id }}">
+                <div class="dataLineHeading">
+                    <div class="bex-bold-title">Бронирование круиза</div>
+                    <div class="bex-selected-title">Выбранные каюты</div>
+                    <div class="bex-selected">
+                        <div v-for="item in selected" class="bex-booking-line">
+                            № ${ item.num } - ${ item.name } (${ item.deck }) <i @click="uncheckRoom(item)" class="fa fa-times-circle"></i>
+                        </div>
+                    </div>
+                    <span anchor-assistant>Данные о пассажирах</span>
+                </div>
+                <div class="dataLineForm">
+                    <div class="dataLineLeft">
+                        <div class="dLine">
+                            <div>
+                                <span class="req-input">Имя</span>
+                            </div>
+                            <div>
+                                <input v-model="form.name"
+                                        class="order orderBook"
+                                        :class="{bad:wrong('name')}"
+                                        placeholder="Введите ФИО">
+                            </div>
+                        </div>
+                        <div class="dLine">
+                            <div>
+                                <span class="req-input">Телефон</span>
+                            </div>
+                            <div>
+                                <input v-model="form.phone"
+                                       class="order phone orderBook"
+                                       :class="{bad:wrong('phone')}"
+                                       placeholder="Ваш телефон">
+                            </div>
+                        </div>
+                        <div class="dLine">
+                            <div>
+                                <span>E-mail</span>
+                            </div>
+                            <div>
+                                <input v-model="form.email"
+                                       class="order orderBook"
+                                       :class="{bad:wrong('email')}"
+                                       placeholder="Ваш e-mail">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="dataLineRight">
+                        <div>
+                            <textarea v-model="form.desc"
+                                      class="order orderBook"
+                                      :class="{bad:wrong('desc')}"
+                                      placeholder="Дополнительная информация"></textarea>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="bookingHumanLine">
+            <div class="catLineItem humanLineItem no-padl">
+                <div>
+                    <span>Количество человек</span>
+                </div>
+                <div>
+                    <button class="countBtn countMinus">
+                        <i class="fa fa-minus" aria-hidden="true"></i>
+                    </button>
+                    <input name="peoples" class="countInput orderBook" type="text" value="1" min="1">
+                    <button class="countBtn countPlus">
+                        <i class="fa fa-plus" aria-hidden="true"></i>
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <div v-if="alerts.length" class="respond-alerts">
+            <div :class="alert.type" v-for="(alert, key) in alerts">
+                <div class="respond-alerts-close"><i @click="alerts.splice(key,1)" class="fa fa-times-circle"></i></div>
+                ${alert.text}
+            </div>
+        </div>
+
+        <div class="offerItem">
+            <span @click="form.confirm = !form.confirm" class="check"
+                  :class="[(form.confirm === true) ? ' checked' : '']"
+                  ><i class="fa fa-check" aria-hidden="true"></i></span>
+            <span>Я принимаю <span class="bex-offerLink" @click="modals.offer = true">договор оферты</span></span>
+        </div>
+
+        <div id="BookingSend" class="bookingButton checkButton" :class="{'disabled':(!form.confirm)}">
+            <button class="hbtn" @click="sendBooking()" :disabled="!form.confirm">
+                <span v-if="process"><i class="process fa fa-refresh"></i> Обработка...</span>
+                <span v-else>Бронировать</span>
+            </button>
+        </div>
+
+        <div v-if="modals.offer" class="v-modal">
+            <div>
+                <div class="bex-modal-pan">
+                    <div @click="modals.offer = false" class="v-close">×</div>
+                </div>
+                <div class="bex-ship-scheme">
+                    {{ offer.offertext|raw }}
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+</div>
+
+<div class="bookingAnnoLine pb-0">
+    <span>Мы гарантируем конфиденциальность введенных данных, мы не используем Ваши данные для навязчивых рассылок, заказ ни к чему Вас не обязывает.</span>
+</div>
+<div class="bookingAnnoLine p-0">
+    <span><span class="t_red">*</span> Поля, отмеченные звездочкой, обязательны для заполнения.</span>
+</div>
+
+<topmodal>
+    <div class="modalSecond">
+        <div class="modalLine">
+            <div class="close">×</div>
+            <modalbody></modalbody>
+        </div>
+    </div>
+</topmodal>
+
+<div id="AnchorAssistant">
+    <div>
+        <span>
+            <i class="fa fa-arrow-circle-down"></i>
+        </span>
+        {{ anchor_assistant }}
+    </div>
+</div>
+
+<script src="/plugins/mcmraak/rivercrs/assets/js/rivercrs.booking_exist.js"></script>

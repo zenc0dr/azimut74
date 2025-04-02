@@ -1,0 +1,14 @@
+@import "@src/components/!common/_";
+@import '@components/result-menu/left-menu';
+.reference-page {
+    background: color('primary-100');
+    line-height: 26px;
+    h1 {
+        border-bottom: 1px solid color('gray-100');
+        padding-bottom: 22px;
+        margin-bottom: 50px;
+    }
+    strong, h2, h3, h4 {
+        color: color('gray-300')
+    }
+}

@@ -1,0 +1,12 @@
+title: Справка
+modelClass: Mcmraak\Rivercrs\Models\Reference
+list: $/mcmraak/rivercrs/models/reference/columns.yaml
+recordUrl: 'mcmraak/rivercrs/references/update/:id'
+noRecordsMessage: 'backend::lang.list.no_records'
+recordsPerPage: '30'
+showSetup: true
+showCheckboxes: true
+toolbar:
+    buttons: list_toolbar
+    search:
+        prompt: 'backend::lang.list.search_prompt'

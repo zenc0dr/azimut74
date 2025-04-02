@@ -1,0 +1,10 @@
+name: Backups
+form: $/zen/keeper/models/backup/fields.yaml
+modelClass: Zen\Keeper\Models\Backup
+defaultRedirect: zen/keeper/backups
+create:
+    redirect: 'zen/keeper/backups/update/:id'
+    redirectClose: zen/keeper/backups
+update:
+    redirect: zen/keeper/backups
+    redirectClose: zen/keeper/backups

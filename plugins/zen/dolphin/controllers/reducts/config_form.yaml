@@ -1,0 +1,15 @@
+name: Reducts
+modelClass: Zen\Dolphin\Models\Reduct
+form: $/zen/dolphin/models/reduct/fields.yaml
+defaultRedirect: zen/dolphin/reducts
+create:
+    title: 'Создание скидки'
+    redirect: 'zen/dolphin/reducts/update/:id'
+    redirectClose: zen/dolphin/reducts
+    flashSave: 'Скидка создана'
+update:
+    redirect: zen/dolphin/reducts
+    redirectClose: zen/dolphin/reducts
+    flashSave: 'Скидка изменена'
+    flashDelete: 'Скидка удалена'
+preview: {  }

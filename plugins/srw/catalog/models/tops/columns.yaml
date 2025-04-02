@@ -1,0 +1,14 @@
+columns:
+    id:
+        label: id
+        type: number
+        sortable: true
+    item_id:
+        label: item_id
+        type: number
+        relation: items
+        valueFrom: name
+    order:
+        label: order
+        type: number
+        sortable: true

@@ -1,0 +1,3660 @@
+.cruiseData {
+    display: inline-block;
+    width: 100%;
+    /* font-size: 0 */
+}
+
+.cruiseData .leftBlock {
+    display: inline-block;
+    width: 100%
+}
+
+.leftBlock .leftBlockItem {
+    margin-bottom: 20px
+}
+
+.leftBlock .leftBlockItem, .leftBlock .leftBlockItem .itemHead, .leftBlock .leftBlockItem .itemBody {
+    display: inline-block;
+    width: 100%
+}
+
+.leftBlock .leftBlockItem .itemBody .heading-up {
+    font-family: OpenSansBold, sans-serif;
+}
+
+.leftBlock .leftBlockItem .itemHead {
+    background: linear-gradient(to right, rgba(31,136,229,1), rgba(68,161,241,1));
+    padding: 20px 10px 20px 15px;
+    cursor: pointer;
+}
+
+.leftBlock .leftBlockItem .itemHead span, .leftBlock .leftBlockItem .itemHead a {
+    font-size: 14px;
+    font-family: OpenSansBold, sans-serif;
+    text-transform: uppercase;
+    color: #fff
+}
+
+.leftBlock .leftBlockItem .itemBody {
+    background-color: #e4f2fd;
+    padding: 20px 20px 20px 25px;
+    margin-top: 3px;
+}
+
+.leftBlock .leftBlockItem .itemBody ul {
+    padding-left: 0;
+    margin: 0;
+    transition: 300ms;
+}
+
+.leftBlock .leftBlockItem .itemBody ul li {
+    display: inline-block;
+    width: 100%
+}
+
+.leftBlock .leftBlockItem .itemBody ul li {
+    padding: 4px 0
+}
+
+.leftBlock .leftBlockItem .itemBody ul li a {
+    font-size: 14px;
+    color: #333;
+    border-bottom: 1px solid #9aa2a9;
+    /* display: inline-block; */
+    -webkit-transition: all .15s ease-in-out;
+    -moz-transition: all .15s ease-in-out;
+    -ms-transition: all .15s ease-in-out;
+    -o-transition: all .15s ease-in-out;
+    transition: all .15s ease-in-out
+}
+
+.leftBlock .leftBlockItem .itemBody ul li a:hover {
+    border-color: #333
+}
+
+.leftBlock .leftBlockItem .itemBody ul li.active a {
+    font-family: OpenSansBold, sans-serif;
+    color: #000;
+    border-bottom: none
+}
+
+.leftBlock .leftBlockItem .itemBody ul li.bold a {
+    font-family: var(--font-b);
+    color: #000;
+    border-color: #000;
+}
+
+.leftBlock .leftBlockItem .lbtn svg {
+    width: 35px;
+    height: 35px;
+    fill: #fff
+}
+
+.leftBlock .leftBlockItem .lbtn {
+    display: inline-block;
+    width: 100%;
+    background: linear-gradient(to right, rgba(31,136,229,1), rgba(68,161,241,1));
+    font-size: 0;
+    padding: 20px 0
+}
+
+.leftBlock .leftBlockItem .lbtn span:first-child {
+    display: inline-block;
+    width: 25%;
+    vertical-align: middle;
+    text-align: center
+}
+
+.leftBlock .leftBlockItem .lbtn span:last-child {
+    display: inline-block;
+    width: 75%;
+    font-size: 18px;
+    font-family: OpenSansBold, sans-serif;
+    color: #fff;
+    vertical-align: middle
+}
+
+.rightBlock {
+    display: inline-block;
+    width: 100%
+}
+
+.rightBlock .tourSelection {
+    display: inline-block;
+    width: 100%;
+    background-color: #80bff3;
+    padding: 15px 25px;
+    margin-bottom: 20px;
+    position: relative;
+    font-size: 0;
+}
+
+.rightBlock .tourSelection .tsHead {
+    display: inline-block;
+    width: 100%;
+    color: #fff;
+    text-transform: uppercase;
+    font-size: 18px;
+    font-family: OpenSansBold, sans-serif;
+    padding-bottom: 15px
+}
+
+.rightBlock .tourSelection .tsItem {
+    display: inline-block;
+    width: 25%;
+    vertical-align: bottom;
+    padding-bottom: 15px
+}
+
+.rightBlock .tourSelection .tsItemDate {
+    width: 50%;
+    padding-left: 2%;
+}
+
+.rightBlock .tourSelection .tsItemDate > div {
+    width: 100%;
+    display: inline-block
+}
+
+.rightBlock .tourSelection .tsItem label {
+    display: inline-block;
+    font-size: 14px;
+    font-family: OpenSansSemiBold, sans-serif;
+    color: #000;
+    padding-bottom: 5px;
+    /* width: 44%; */
+}
+
+.rightBlock .tourSelection .tsItem > div label {
+    width: 44%;
+    position: relative;
+}
+
+.rightBlock .tourSelection .tsItem > div .tsYearSwitcher {
+    display: inline-block;
+    width: 44%;
+    margin-left: 2%;
+    text-align: right;
+    margin-bottom: 5px;
+}
+
+.rightBlock .tourSelection .tsItem .tsSelect {
+    display: inline-block
+}
+
+.rightBlock .tourSelection .tsItem .tsBig {
+    width: 90%
+}
+
+.rightBlock .tourSelection .tsItem .tsSmall {
+    width: 44%
+}
+
+.rightBlock .tourSelection .tsItem > div:nth-of-type(3) {
+    margin-left: 2%
+}
+
+.rightBlock .tourSelection .tsButton {
+    display: inline-block;
+    width: 40%;
+    position: absolute;
+    right: 0px;
+    bottom: 15px
+}
+
+.rightBlock .tourSelection .tsButton .tbtn {
+    display: inline-block;
+    font-family: OpenSansBold, sans-serif;
+    font-size: 16px;
+    color: #fff;
+    background-color: #cb2022;
+    width: 90%;
+    padding: 15px 0;
+    -webkit-border-radius: 35px;
+    -moz-border-radius: 35px;
+    border-radius: 35px;
+    text-transform: uppercase;
+    -webkit-transition: all .2s ease-in-out;
+    -moz-transition: all .2s ease-in-out;
+    -ms-transition: all .2s ease-in-out;
+    -o-transition: all .2s ease-in-out;
+    transition: all .2s ease-in-out
+}
+
+.rightBlock .tourSelection .tsButton .tbtn:hover {
+    background-color: #E12C2E
+}
+
+.tourSelection .tsDate .selectize-input {
+    padding-left: 35px
+}
+
+.tourSelection .tsItemDate > div::before {
+    display: inline-block;
+    position: absolute;
+    left: 9px;
+    top: 50%;
+    margin-top: -10px;
+    font-size: 14px;
+    color: #1e88e5;
+    font-family: OpenSansBold, sans-serif;
+    z-index: 2
+}
+
+.tourSelection .tsItemDate > div:nth-of-type(2)::before {
+    content: 'c'
+}
+
+.tourSelection .tsItemDate > div:nth-of-type(3)::before {
+    content: 'по';
+}
+
+.cruiseHead {
+    padding-bottom: 30px;
+    border-bottom: 1px solid #eaeaea
+}
+
+.cruiseHead, .cruiseHead .cruiseInfo {
+    display: inline-block;
+    width: 100%
+}
+
+.cruiseHead .cruiseInfo {
+    padding-left: 15px
+}
+
+.cruiseHead .cruiseInfo .cruiseName {
+    display: inline-block;
+    width: 100%;
+    padding-top: 15px
+}
+
+.cruiseHead .cruiseInfo .cruiseName span {
+    font-size: 30px;
+    font-family: OpenSansBold, sans-serif;
+    color: #000
+}
+
+/* .cruiseHead .cruiseInfo .cruiseExcerpt > :first-child {
+	margin-top: 0;
+} */
+.cruiseHead .cruiseInfo .cruiseExcerpt p {
+    font-size: 14px;
+    color: #000
+}
+
+.cruiseHead .cruiseInfo .cruiseButtons {
+    display: inline-block;
+    width: 100%
+}
+
+.cruiseHead .cruiseInfo .cruiseButtons .crbtn {
+    display: inline-block;
+    padding: 7px 20px;
+    border: 1px solid #d4d4d4;
+    -webkit-border-radius: 35px;
+    -moz-border-radius: 35px;
+    border-radius: 35px;
+    font-size: 14px;
+    color: #1e88e5;
+    margin-right: 8px;
+    margin-bottom: 8px
+}
+
+.cruiseHead .cruiseInfo .cruiseButtons .crbtn:hover {
+    background-color: #1e88e5;
+    color: #fff
+}
+
+.cruiseBene {
+    display: inline-block;
+    width: 100%;
+    padding: 30px 0
+}
+
+.shipBlock {
+    display: inline-block;
+    width: 100%;
+    padding: 15px;
+    border: 1px solid #dcdcdc;
+    margin-bottom: 20px;
+    -webkit-transition: all .2s ease-in-out;
+    -moz-transition: all .2s ease-in-out;
+    -ms-transition: all .2s ease-in-out;
+    -o-transition: all .2s ease-in-out;
+    transition: all .2s ease-in-out;
+    background-color: #fff;
+}
+
+.rightBlock .shipBlock.yellow {
+    background-color: #ffead1;
+    border-color: #f7ebd8
+}
+
+.rightBlock .shipBlock > div {
+    display: inline-block;
+    width: 100%
+}
+
+.rightBlock .shipBlock:hover {
+    box-shadow: 0px 4px 15px 0px rgba(0,0,0,0.15)
+}
+
+.shipBlock .shipBlockTop {
+    font-size: 0
+}
+
+.shipBlock .shipBlockTop > div {
+    vertical-align: top
+}
+
+.shipBlock .shipBlockTop .shipImage {
+    display: inline-block;
+    width: 24%;
+    height: 133px;
+    background-size: cover;
+    position: relative;
+    z-index: 1;
+}
+
+.shipVideoButton {
+    position: absolute;
+    top: -8%;
+    left: -4%;
+    z-index: 99;
+    cursor: pointer;
+}
+
+.shipVideoButton svg {
+    height: 35px;
+}
+
+.shipVideoButton svg .but {
+    opacity: 0.9;
+}
+
+.shipVideoButton:hover .but {
+    opacity: 1;
+}
+
+.shipBlock .shipBlockTop .shipInfo {
+    display: inline-block;
+    width: 76%;
+    padding-left: 20px;
+    text-align: left
+}
+
+.shipBlock .shipBlockTop .shipInfo .shipName {
+    padding: 10px 0;
+    /* cursor: pointer */
+}
+
+.shipBlock .shipBlockTop .shipInfo .shipName span {
+    font-size: 18px;
+    color: #1e88e5;
+    font-family: OpenSansBold, sans-serif
+}
+
+.shipBlock .shipBlockTop .shipInfo .shipName a:hover span {
+    text-decoration: underline
+}
+
+.shipBlock .shipBlockTop .shipInfo .shipDepartures {
+    display: inline-block;
+    width: 100%;
+    font-size: 0;
+    padding-bottom: 15px
+}
+
+.shipBlockTop .shipInfo .shipDepartures .shipDeparture {
+    display: inline-block;
+    width: 33%;
+    vertical-align: top
+}
+
+.shipDepartures .shipDeparture > div:first-child {
+    display: inline-block;
+    width: 100%;
+    padding-bottom: 5px
+}
+
+.shipDepartures .shipDeparture > div:first-child span, .shipInfo .shipRouteBlock > div:first-child span {
+    font-size: 12px;
+    color: #666
+}
+
+.shipDepartures .shipDeparture > div:last-child span {
+    font-size: 14px;
+    color: #333
+}
+
+.shipDepartures .shipDeparture > div:last-child span:first-child {
+    font-family: OpenSansBold, sans-serif;
+    font-size: 16px
+}
+
+.shipDepartures .msk-time {
+    font-size: 12px;
+    color: #cb2022;
+    display: block
+}
+
+.shipInfo .shipRouteBlock {
+    display: inline-block;
+    width: 100%;
+    font-size: 0
+}
+
+.shipInfo .shipRouteBlock > div:first-child {
+    display: inline-block;
+    width: 10%;
+    vertical-align: top
+}
+
+.shipInfo .shipRouteBlock .shipRoute {
+    display: inline-block;
+    width: 90%;
+    padding-left: 15px;
+    vertical-align: top;
+    font-size: 13px;
+    color: #333
+}
+
+.shipBlock .shipBlockBottom {
+    padding-top: 25px
+}
+
+.shipBlock .shipBlockBottom > div:first-child {
+    display: inline-block;
+    width: 100%;
+    padding-bottom: 10px
+}
+
+.shipBlock .shipBlockBottom > div:first-child span {
+    font-family: OpenSansBold, sans-serif;
+    font-size: 14px;
+    color: #333
+}
+
+.shipBlock .shipBlockBottom .shipPricing {
+    display: inline-block;
+    width: 100%;
+    /* overflow-x: scroll; */
+    overflow-x: auto;
+    /* margin-bottom: 15px; */
+    padding-bottom: 8px
+}
+
+.shipBlock .shipBlockBottom .shipPricing::-webkit-scrollbar {
+    height: 7px
+}
+
+.shipBlock .shipBlockBottom .shipPricing::-webkit-scrollbar-thumb {
+    height: 8px;
+    width: 15px;
+    background-color: #b3b3b3;
+    border-radius: 35px
+}
+
+.shipBlock .shipBlockBottom .shipPricing::-webkit-scrollbar-track {
+    background-color: #dcdcdc;
+    height: 5px!important;
+    border-radius: 35px
+}
+
+.shipBlockBottom .shipPricing table {
+    border-spacing: 0;
+    border-collapse: collapse;
+    width: 100%
+}
+
+.shipBlockBottom .shipPricing table tr td {
+    padding: 7px 0px;
+    font-size: 12px;
+    color: #000;
+    border: 1px solid #dcdcdc;
+    /* white-space: nowrap; */
+    text-align: center;
+    cursor: pointer;
+    max-width: 70px;
+}
+
+.shipBlockBottom .shipPricing table tr:first-child td:hover {
+    background-color: #0b488a
+}
+
+.shipBlockBottom .shipPricing table tr:last-child td:hover {
+    background-color: #fff3e5
+}
+
+.shipBlockBottom .shipPricing table tr:first-child td {
+    background-color: #1e88e5;
+    color: #fff;
+    border-bottom: none
+}
+
+.shipBlock .shipBlockBottom .shipButtonBlock {
+    display: inline-block;
+    width: 100%
+}
+
+.shipBlock.yellow .shipBlockBottom .shipButtonBlock > div {
+    /* width: 50%; */
+    vertical-align: middle
+}
+
+.shipBlock .shipBlockBottom .shipButtonBlock .hotOffer {
+    /* display: none; */
+    text-align: left;
+    background: #ffced7;
+    padding: 15px;
+    border-radius: 5px;
+    margin-top: 13px;
+    width: 100%;
+}
+
+.shipBlock .shipBlockBottom .shipButtonBlock .hotOffer > :first-child {
+    margin-top: 0;
+}
+
+.shipBlock.yellow .shipBlockBottom .shipButtonBlock .hotOffer {
+    display: inline-block
+}
+
+.shipBlock.yellow .shipBlockBottom .shipButtonBlock .hotOffer span, .shipBlock.yellow .shipBlockBottom .shipButtonBlock .hotOffer p {
+    font-size: 14px;
+    font-family: OpenSansBold, sans-serif;
+    color: #cb2022
+}
+
+.shipBlock .shipBlockBottom .shipButtonBlock .shipButton {
+    display: inline-block;
+    width: 100%;
+    text-align: right
+}
+
+.shipBlock .shipBlockBottom .shipButton .sbtn {
+    /* background-color: #cb2022; */
+    background-color: transparent;
+    color: #cb2022;
+}
+
+.sbtn {
+    /* padding: 12px 25px; */
+    padding: 8px 25px;
+    text-transform: uppercase;
+    color: #fff;
+    font-family: OpenSansBold, sans-serif;
+    font-size: 14px;
+    -webkit-transition: all .2s ease-in-out;
+    -moz-transition: all .2s ease-in-out;
+    -ms-transition: all .2s ease-in-out;
+    -o-transition: all .2s ease-in-out;
+    transition: all .2s ease-in-out;
+    /* border-radius: 3px */
+    border-radius: 30px;
+    border: 1px solid #cb2022;
+}
+
+.shipBlock .shipBlockBottom .shipButton .sbtn:hover {
+    /* background-color: #E12C2E */
+    background-color: #cb2022;
+    color: #fff;
+}
+
+.sbtn2 {
+    padding: 4px 22px;
+    text-transform: uppercase;
+    color: #fff;
+    background-color: #cb2022;
+    font-family: OpenSansBold, sans-serif;
+    font-size: 14px;
+    -webkit-transition: all .2s ease-in-out;
+    -moz-transition: all .2s ease-in-out;
+    -ms-transition: all .2s ease-in-out;
+    -o-transition: all .2s ease-in-out;
+    transition: all .2s ease-in-out;
+    border-radius: 30px;
+    border: 1px solid #cb2022;
+    line-height: 20px;
+    margin-left: -40px;
+}
+
+.sbtn2>div:first-child {
+    font-size: 15px;
+}
+
+.sbtn2>div:last-child {
+    font-size: 20px;
+}
+
+.sbtn2:hover {
+    color: #cb2022;
+    background-color: #fff;
+}
+
+section.cruises .cruiseArticles {
+    display: inline-block;
+    width: 100%;
+    margin-top: 30px
+}
+
+.cruiseArticles .crArticle {
+    display: inline-block;
+    width: 100%;
+    background-color: #eef1f3;
+    padding: 10px 20px;
+    margin-bottom: 10px
+}
+
+section.cruises .cruiseLinks {
+    display: inline-block;
+    width: 100%;
+    padding-top: 25px
+}
+
+section.cruises .cruiseLinks .crLink {
+    padding-right: 15px;
+    margin-bottom: 20px
+}
+
+section.cruises .cruiseLinks .crLink a span {
+    font-size: 14px;
+    color: #1e88e5;
+    border-bottom: 1px solid #c9d4e2;
+    transition: all .15s ease-in-out
+}
+
+section.cruises .cruiseLinks .crLink a:hover span {
+    border-color: #1e88e5
+}
+
+.rightBlock .cruiseCardSwitchers {
+    display: block;
+    width: 100%;
+    font-size: 0;
+    background-color: #eaeaea;
+    margin: 20px 0;
+}
+
+.rightBlock .cruiseCardSwitchers .crSwitcher {
+    display: inline-block;
+    width: 33.3333333%;
+    padding: 15px 0 12px;
+    text-align: center;
+    background-color: #eaeaea;
+    cursor: pointer;
+    transition: all .1s ease-in-out;
+}
+
+.rightBlock .cruiseCardSwitchers .crSwitcher:hover span {
+    border-color: #333;
+}
+
+.rightBlock .cruiseCardSwitchers .crSwitcher span {
+    font-size: 12px;
+    color: #333;
+    text-transform: uppercase;
+    border-bottom: 1px dashed #777;
+    display: inline-block;
+    padding-bottom: 1px;
+}
+
+.rightBlock .cruiseCardSwitchers .crSwitcher.active {
+    background-color: #1e88e5;
+}
+
+.rightBlock .cruiseCardSwitchers .crSwitcher.active span {
+    color: #fff;
+    border: none;
+    padding-bottom: 2px;
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+}
+
+.rightBlock .cruiseCardContent {
+    display: inline-block;
+    width: 100%;
+}
+
+.rightBlock .cruiseCardContent .crSwitchContent {
+    display: none;
+    width: 100%;
+}
+
+.rightBlock .cruiseCardContent .crSwitchContent.active {
+    display: inline-block;
+}
+
+.crSwitchContent .crQuestion {
+    display: inline-block;
+    width: 100%;
+    background-color: #e4f2fd;
+    padding: 25px;
+    font-size: 0;
+    margin: 20px 0;
+}
+
+.crSwitchContent .crQuestion > div {
+    display: inline-block;
+    vertical-align: middle;
+}
+
+.crSwitchContent .crQuestion .crQuestionData {
+    width: 70%;
+}
+
+.crSwitchContent .crQuestion .crQuestionButton {
+    width: 30%;
+}
+
+.crSwitchContent .crQuestion .crQuestionData span:first-child {
+    font-size: 22px;
+    font-family: OpenSansBold, sans-serif;
+    color: #333;
+    display: block;
+}
+
+.crSwitchContent .crQuestion .crQuestionData span:last-child {
+    font-size: 14px;
+    color: #333;
+    display: block;
+    padding-top: 5px;
+}
+
+.crQuestionButton .hbtn {
+    background-color: #cb2022;
+    padding: 15px 0;
+    -webkit-border-radius: 35px;
+    -moz-border-radius: 35px;
+    border-radius: 35px;
+    width: 100%;
+    transition: all .15s ease-in-out
+}
+
+.crQuestionButton .hbtn:hover {
+    background-color: #E12C2E;
+}
+
+.crDescription {
+    font-size: 0;
+    display: inline-block;
+    width: 100%;
+    padding: 15px 0px 25px
+}
+
+.crDescription > div {
+    display: inline-block;
+    width: 50%;
+    vertical-align: top
+}
+
+.crDescription .crDescriptionRight {
+    padding-left: 20px
+}
+
+.crDescription .descItem {
+    display: inline-block;
+    width: 100%;
+    margin-bottom: 30px
+}
+
+.crDescription .descItem .heading {
+    display: inline-block;
+    width: 100%
+}
+
+.crDescriptionRight .descItem .heading {
+    padding-bottom: 10px
+}
+
+.crDescription .descItem .heading span {
+    display: inline-block;
+    width: 100%;
+    font-size: 18px;
+    font-family: OpenSansBold, sans-serif;
+    color: #000
+}
+
+.crDescription .descItem .data p {
+    font-size: 13px;
+    color: #000;
+    line-height: 1.8;
+    display: inline-block;
+    width: 100%
+}
+
+.crDescription .descItem .data p a, .crDescription .descItem .data ul a {
+    text-decoration: underline;
+    color: #1e88e5
+}
+
+.crDescription .descItem .data p b, .crDescription .descItem .data p strong {
+    font-size: 13px
+}
+
+.crDescription .descItem .data p a:hover, .crDescription .descItem .data ul a:hover {
+    text-decoration: none
+}
+
+.crDescription .descItem .data h2 {
+    font-size: 18px;
+    color: #333;
+    margin-bottom: 0.5em;
+}
+
+.crDescription .descItem .data h3 {
+    font-family: OpenSansBoldItalic, sans-serif;
+    font-size: 14px;
+    color: #cb2022;
+    margin: 0;
+    padding: 0
+}
+
+.crDescription .descItem .data p {
+    margin: 0.5em 0;
+}
+
+.crDescription .descItem .data ul {
+    padding-left: 0;
+    width: 100%;
+    margin: 5px 0
+}
+
+.crDescription .descItem .data ul li {
+    list-style-type: none;
+    display: inline-block;
+    width: 100%;
+    font-size: 13px;
+}
+
+.crDescription .descItem .data ul li::before {
+    display: inline-block;
+    width: 15px;
+    content: '\f111';
+    /* content: '•'; */
+    color: #1e88e5;
+    vertical-align: middle;
+    font-size: 5px;
+    font-family: FontAwesome;
+}
+
+.crDescription .descItem .data ul li {
+    vertical-align: middle;
+}
+
+.crDescription .descItem .bbtn:hover .buyBlock {
+    background-size: 185%
+}
+
+.crDescription .descItem .buyBlock {
+    display: inline-block;
+    -webkit-border-radius: 5px;
+    -moz-border-radius: 5px;
+    border-radius: 5px;
+    padding: 40px 15px 30px;
+    background-image: url(../img/tours/city.jpg);
+    background-position: 25% 65%;
+    background-repeat: no-repeat;
+    background-size: 180%;
+    width: 70%;
+    transition: all .15s ease-in-out
+}
+
+.crDescription .descItem .buyBlock span {
+    font-size: 16px;
+    font-family: OpenSansBold, sans-serif;
+    color: #fff;
+    text-decoration: underline;
+}
+
+.crDescription .descItem .tourCredit {
+    display: inline-block;
+    background-color: #cb2022;
+    padding: 5px;
+    font-size: 0;
+    width: 65%;
+    cursor: pointer
+}
+
+.crDescription .descItem .tourCredit > div {
+    display: inline-block;
+    vertical-align: middle
+}
+
+.crDescription .descItem .tourCredit .tourCreditIcon {
+    width: 25%
+}
+
+.crDescription .descItem .tourCredit .tourCreditIcon svg {
+    text-align: center
+}
+
+.crDescription .descItem .tourCredit .tourCreditIcon .cr1 {
+    width: 54px;
+    height: 54px
+}
+
+.crDescription .descItem .tourCredit .tourCreditIcon .cr2 {
+    width: 16px;
+    height: 29px;
+    /* text-align: center */
+}
+
+.crDescription .descItem .tourCredit .tourCreditText {
+    width: 75%
+}
+
+.crDescription .descItem .tourCredit .tourCreditText span:first-child {
+    font-family: OpenSansBold, sans-serif;
+    text-transform: uppercase;
+    margin-bottom: 8px
+}
+
+.crDescription .descItem .tourCredit .tourCreditText span {
+    font-size: 14px;
+    color: #fff;
+    display: inline-block;
+    width: 100%
+}
+
+.shipBlock .shipBlockGraphic {
+    display: inline-block;
+    /* width: 100%; */
+    text-align: left;
+    margin-left: 12.5%;
+    margin-top: 10px
+}
+
+.shipBlock .shipBlockGraphic .gbtn {
+    display: inline-block;
+    color: #1e88e5;
+    font-size: 14px;
+    font-family: OpenSansSemiBoldItalic, sans-serif;
+    text-decoration: underline;
+}
+
+.rightBlock .tourSelection .tsItem .tsYearSwitcher {
+    display: inline-block;
+    width: 44%;
+    vertical-align: top;
+    position: relative;
+    top: 1px;
+}
+
+.rightBlock .tourSelection .tsItem .tsYearSwitcher .tsYear {
+    display: inline-block;
+    cursor: pointer;
+    text-align: center;
+    transition: all .1s ease-in-out;
+    color: #fff;
+    padding: 1px 8px;
+    border: 1px solid #fff;
+    border-radius: 7px;
+    /* margin-bottom: 5px; */
+}
+
+.rightBlock .tourSelection .tsItem .tsYearSwitcher > div:last-child {
+    margin-left: 3%;
+}
+
+.rightBlock .tourSelection .tsItem .tsYearSwitcher .tsYear span {
+    font-family: OpenSansBold, sans-serif;
+    color: #fff;
+    text-transform: uppercase;
+    font-size: 14px;
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+}
+
+.rightBlock .tourSelection .tsItem .tsYearSwitcher .tsYear.active, .rightBlock .tourSelection .tsItem .tsYearSwitcher .tsYear:hover {
+    background-color: #1e88e5;
+    border-color: #1e88e5;
+}
+
+.rightBlock .tourSelection .tsItem .tsYearSwitcher .tsYear.active span, .rightBlock .tourSelection .tsItem .tsYearSwitcher .tsYear:hover span {
+    color: #fff;
+}
+
+.rightBlock .reviewsBlock {
+    display: inline-block;
+    width: 100%
+}
+
+.rightBlock .reviewsBlock .crReview {
+    display: inline-block;
+    width: 100%;
+    padding: 15px;
+    border: 1px solid #dcdcdc;
+    font-size: 0;
+    margin-bottom: 10px;
+}
+
+.reviewsBlock .crReview > div {
+    display: inline-block;
+    font-size: 0;
+    vertical-align: top;
+}
+
+.reviewsBlock .crReview .crRevPhoto {
+    width: 5%;
+}
+
+.reviewsBlock .crReview .crRevData {
+    /* width: 95%;
+	padding-left: 25px; */
+    width: 100%;
+}
+
+.reviewsBlock .crReview .crRevData > div {
+    display: inline-block;
+    width: 100%;
+}
+
+.reviewsBlock .crReview .crRevData .crRevDataTop {
+    font-size: 0
+}
+
+.reviewsBlock .crReview .crRevData .crRevDataTop > div {
+    display: inline-block;
+    vertical-align: bottom;
+}
+
+.reviewsBlock .crReview .crRevData .crRevDataTop .revDataTopLeft {
+    width: 72%
+}
+
+.reviewsBlock .crReview .crRevData .crRevDataTop .revDataTopRight {
+    width: 28%;
+    text-align: right
+}
+
+.crRevData .crRevDataTop .revDataTopLeft .revDate {
+    display: inline-block;
+    width: 100%;
+}
+
+.crRevData .crRevDataTop .revDataTopLeft .revDate span {
+    font-size: 13px;
+    color: #666;
+}
+
+.crRevData .crRevDataTop .revDataTopLeft .revName {
+    display: inline-block;
+    width: 100%;
+}
+
+.crRevData .crRevDataTop .revDataTopLeft .revName span:first-child {
+    padding-left: 0;
+}
+
+.crRevData .crRevDataTop .revDataTopLeft .revName span {
+    display: inline-block;
+    color: #333;
+    font-size: 16px;
+    padding-left: 4px;
+}
+
+.crRevData .crRevDataTop .revDataTopLeft .revName span.name, .crRevData .crRevDataTop .revDataTopLeft .revName span.ship {
+    font-family: OpenSansBold, sans-serif;
+    font-size: 16px;
+}
+
+.crRevData .crRevDataTop .revDataTopRight span {
+    font-size: 14px;
+    font-family: OpenSansBold, sans-serif;
+    display: inline-block;
+    vertical-align: middle;
+    margin-left: 8px;
+}
+
+.crRevData .crRevDataTop .revDataTopRight svg {
+    width: 15px;
+    height: 20px;
+    display: inline-block;
+    vertical-align: middle
+}
+
+.crRevData .crRevDataTop .revDataTopRight .recommend span {
+    color: #1e88e5
+}
+
+.crRevData .crRevDataTop .revDataTopRight .notrecommend span {
+    color: #cb2022
+}
+
+.crRevData .crRevDataTop .revDataTopRight .recommend svg {
+    fill: #1e88e5
+}
+
+.crRevData .crRevDataTop .revDataTopRight .notrecommend svg {
+    fill: #cb2022;
+    transform: rotateX(180deg) rotateY(180deg)
+}
+
+.crRevData .crRevDataBottom > div {
+    display: inline-block;
+    vertical-align: middle
+}
+
+.crRevData .crRevDataBottom .revDataBottomLeft {
+    width: 35%
+}
+
+.crRevData .crRevDataBottom .revDataBottomRight {
+    width: 65%;
+    text-align: right
+}
+
+.crRevData .crRevDataBottom .revDataBottomLeft span:first-child {
+    font-family: OpenSansBold, sans-serif;
+    font-size: 14px;
+    color: #333;
+    display: inline-block;
+    vertical-align: middle;
+}
+
+.crRevData .crRevDataBottom .revDataBottomLeft .revBottomButtons {
+    display: inline-block;
+    padding-left: 10px;
+}
+
+.crRevData .crRevDataBottom .revDataBottomLeft .revBottomButtons .rbtn {
+    color: #1e88e5;
+    font-family: OpenSansBold, sans-serif;
+    display: inline-block;
+    padding-left: 5px;
+    vertical-align: middle;
+    font-size: 14px;
+}
+
+.crRevData .crRevDataBottom .revDataBottomLeft .revBottomButtons span {
+    color: #666;
+    display: inline-block;
+    font-size: 14px;
+    padding-left: 5px;
+    vertical-align: middle;
+}
+
+.crRevData .crRevDataBottom .revDataBottomRight a {
+    color: #1e88e5;
+    font-family: OpenSansBold, sans-serif;
+    font-size: 14px;
+    text-decoration: underline;
+    -webkit-transition: all .15s ease-in-out;
+    -moz-transition: all .15s ease-in-out;
+    -ms-transition: all .15s ease-in-out;
+    -o-transition: all .15s ease-in-out;
+    transition: all .15s ease-in-out;
+}
+
+.crRevData .crRevDataBottom .revDataBottomRight a:hover {
+    text-decoration: none;
+}
+
+.rightBlock .revBlockButtons {
+    display: inline-block;
+    width: 100%;
+    margin: 30px 0 40px;
+    font-size: 0;
+}
+
+.rightBlock .revBlockButtons > div {
+    display: inline-block;
+    /* width: 50%; */
+}
+
+.rightBlock .revBlockButtons .revBlockButtonsLeft {
+    text-align: right;
+    vertical-align: middle;
+    width: 70%;
+}
+
+.rightBlock .revBlockButtons .revBlockButtonsLeft > span.fwn {
+    font-family: OpenSansRegular, sans-serif;
+}
+
+.rightBlock .revBlockButtons .revBlockButtonsLeft > span {
+    font-size: 16px;
+    color: #000;
+    font-family: OpenSansBold, sans-serif;
+}
+
+.rightBlock .revBlockButtons .revBlockButtonsLeft > span.blue {
+    color: #2087df;
+    display: inline-block;
+}
+
+.rightBlock .revBlockButtons .revBlockButtonsLeft > span.small {
+    font-size: 14px;
+    font-family: OpenSansRegular, sans-serif;
+}
+
+.rightBlock .revBlockButtons .revBlockButtonsRight {
+    text-align: right;
+    vertical-align: middle;
+    width: 30%;
+}
+
+.rightBlock .revBlockButtons .revBlockButtonsRight .sbtn {
+    /* background-color: #1e88e5; */
+    background-color: #cb0022;
+}
+
+.rightBlock .revBlockButtons .revBlockButtonsRight .sbtn:hover {
+    /* background-color: #2194F8; */
+    background-color: #E12C2E;
+}
+
+.rightBlock .revBlockWriter {
+    display: none;
+    width: 100%;
+    padding: 40px;
+    background-color: #eef1f3;
+    position: relative;
+    font-size: 0;
+}
+
+.rightBlock .revBlockWriter .writerHeading {
+    display: inline-block;
+    width: 100%;
+    text-align: center;
+}
+
+.rightBlock .revBlockWriter .writerHeading span {
+    font-family: OpenSansBold, sans-serif;
+    font-size: 24px;
+    color: #000;
+    text-transform: uppercase;
+}
+
+.rightBlock .revBlockWriter .writerForm {
+    display: inline-block;
+    width: 100%;
+    padding-top: 25px;
+}
+
+.rightBlock .revBlockWriter .writerForm .wLine {
+    display: inline-block;
+    width: 100%;
+    margin-bottom: 20px;
+}
+
+.writerForm .wLine > div {
+    display: inline-block;
+    font-size: 0;
+    vertical-align: top;
+}
+
+.writerForm .wLine > div:first-child {
+    width: 35%;
+}
+
+.writerForm .wLine > div:last-child {
+    width: 65%;
+    padding-left: 15px
+}
+
+.writerForm .wLine div:first-child span {
+    font-family: OpenSansBold, sans-serif;
+    font-size: 14px;
+    color: #000;
+}
+
+.writerForm .wLine .wrSelect {
+    width: 60%;
+}
+
+.writerForm .wLine div:last-child textarea, .writerForm .wLine div:last-child input {
+    width: 90%;
+    border: 1px solid #d8d8d8;
+    -webkit-border-radius: 3px;
+    -moz-border-radius: 3px;
+    border-radius: 3px;
+    font-size: 14px;
+    padding: 10px;
+    font-family: OpenSansRegular, sans-serif;
+}
+
+.writerForm .wLine div:last-child .tbig {
+    min-height: 135px;
+}
+
+.writerForm .wLine div:last-child .tmeduim {
+    min-height: 50px;
+}
+
+.writerForm .wLine div:last-child .tsmall {
+    min-height: 30px;
+    line-height: 1
+}
+
+.writerForm .wLine .order::-webkit-input-placeholder {
+    font-size: 12px;
+    color: #b1b1b1;
+    line-height: 1.3;
+    white-space: pre-line;
+    font-family: OpenSansRegular, sans-serif;
+}
+
+.writerForm .wLine .order::-moz-placeholder {
+    font-size: 12px;
+    color: #b1b1b1;
+    line-height: 1.3;
+    white-space: pre-line;
+    font-family: OpenSansRegular, sans-serif;
+}
+
+.writerForm .wLine .order:-moz-placeholder {
+    font-size: 12px;
+    color: #b1b1b1;
+    line-height: 1.3;
+    white-space: pre-line;
+    font-family: OpenSansRegular, sans-serif;
+}
+
+.writerForm .wLine .order::-ms-input-placeholder {
+    font-size: 12px;
+    color: #b1b1b1;
+    line-height: 1.3;
+    white-space: pre-line;
+    font-family: OpenSansRegular, sans-serif;
+}
+
+.writerForm .wLine .writerSwitchers {
+    display: inline-block;
+    width: 100%;
+}
+
+.writerForm .wLine .writerSwitchers div:first-child {
+    margin-left: 0
+}
+
+.writerForm .wLine .writerSwitchers .wrSwitcher {
+    display: inline-block;
+    margin-left: 10px;
+    background-color: transparent;
+    padding: 15px 30px;
+    border: 1px solid #d8d8d8;
+    text-align: center;
+    -webkit-border-radius: 35px;
+    -moz-border-radius: 35px;
+    border-radius: 35px;
+    cursor: pointer;
+    transition: all .15s ease-in-out;
+}
+
+.writerForm .wLine .writerSwitchers .wrSwitcher:hover {
+    background-color: #1e88e5;
+}
+
+.writerForm .wLine .writerSwitchers .wrSwitcher span {
+    font-size: 14px;
+    font-family: OpenSansBold, sans-serif;
+    color: #1e88e5;
+    display: inline-block;
+    vertical-align: middle;
+}
+
+.writerForm .wLine .writerSwitchers .wrSwitcher span.no {
+    transform: rotateZ(180deg);
+}
+
+.writerForm .wLine .writerSwitchers .wrSwitcher span.no svg {
+    margin-right: 6px;
+    margin-left: 0;
+}
+
+.writerForm .wLine .writerSwitchers .wrSwitcher svg {
+    fill: #1e88e5;
+    width: 15px;
+    height: 20px;
+    display: inline-block;
+    margin-left: 6px;
+    vertical-align: middle;
+}
+
+.writerForm .wLine .writerSwitchers .wrSwitcher.active {
+    background-color: #1e88e5;
+}
+
+.writerForm .wLine .writerSwitchers .wrSwitcher.active span, .writerForm .wLine .writerSwitchers .wrSwitcher:hover span {
+    color: #fff;
+}
+
+.writerForm .wLine .writerSwitchers .wrSwitcher.active svg, .writerForm .wLine .writerSwitchers .wrSwitcher:hover svg {
+    fill: #fff;
+}
+
+.writerForm .writerButton {
+    display: inline-block;
+    width: 100%;
+    text-align: left;
+    margin-top: 20px;
+}
+
+.writerButton .hbtn {
+    background-color: #cb2022;
+}
+
+.writerButton .hbtn:hover {
+    background-color: #E12C2E;
+}
+
+.modalWrapBook {
+    width: 930px;
+    padding: 35px;
+    background-color: #eef1f3;
+    text-align: left;
+}
+
+.modalWrapBook .shipBlock {
+    margin-bottom: 0
+}
+
+.modalWrapBook .shipToggleBlock {
+    font-size: 0
+}
+
+.modalWrapBook .shipToggleBlock > div {
+    display: inline-block;
+    vertical-align: middle
+}
+
+.modalWrapBook .shipToggleBlock .shitButtonAnnotation {
+    width: 70%
+}
+
+.modalWrapBook .shipToggleBlock .shitButtonAnnotation span {
+    font-size: 13px;
+    color: #666;
+}
+
+.modalWrapBook .shipToggleBlock .shipButtonToggle {
+    width: 30%;
+    text-align: right
+}
+
+.modalWrapBook .shipToggleBlock .shipButtonToggle .tbtn {
+    color: #1e88e5;
+}
+
+.modalWrapBook .shipToggleBlock .shipButtonToggle .tbtn span.active {
+    font-size: 14px;
+    font-family: OpenSansBold, sans-serif;
+    text-transform: uppercase;
+    display: inline-block;
+}
+
+.modalWrapBook .shipToggleBlock .shipButtonToggle .tbtn span {
+    display: none
+}
+
+.modalWrapBook .shipToggleBlock .shipButtonToggle .tbtn i {
+    display: none;
+    padding-left: 3px;
+}
+
+.modalWrapBook .shipToggleBlock .shipButtonToggle .tbtn i.active {
+    display: inline-block;
+}
+
+.modalWrapBook .bookingHeading {
+    display: inline-block;
+    width: 100%;
+    text-align: center;
+    padding: 25px 0;
+}
+
+.modalWrapBook .bookingHeading span {
+    font-family: OpenSansBold, sans-serif;
+    font-size: 20px;
+    color: #000;
+    text-transform: uppercase;
+}
+
+.modalWrapBook .bookingBlock {
+    display: inline-block;
+    width: 100%;
+    border: 1px solid #dcdcdc;
+    background-color: #fff;
+}
+
+.modalWrapBook .bookingBlock > div, .modalWrapBook .bookingBlock .bookingBlockTop > div {
+    display: inline-block;
+    width: 100%;
+}
+
+.modalWrapBook .bookingBlock .bookingBlockTop {
+    padding: 20px 18px;
+    background-color: #f4f4f4;
+    border-bottom: 1px solid #dcdcdc;
+}
+
+.modalWrapBook .bookingBlock .bookingBlockTop .shipName {
+    padding-bottom: 5px;
+}
+
+.modalWrapBook .bookingBlock .bookingBlockTop .shipName span {
+    font-family: OpenSansBold, sans-serif;
+    color: #000;
+    font-size: 16px;
+}
+
+.modalWrapBook .bookingBlock .bookingBlockTop .shipArrivalLine > div {
+    display: inline-block
+}
+
+.modalWrapBook .bookingBlock .bookingBlockTop .shipArrivalLine > div:first-child {
+    padding-left: 0
+}
+
+.modalWrapBook .bookingBlock .bookingBlockTop .shipArrivalLine .arrivalItem {
+    padding-left: 45px;
+}
+
+.bookingBlockTop .shipArrivalLine .arrivalItem span:first-child {
+    display: block;
+    font-size: 12px;
+    color: #666;
+}
+
+.bookingBlockTop .shipArrivalLine .arrivalItem span {
+    display: inline-block;
+    font-size: 12px;
+    color: #000;
+}
+
+.bookingBlockTop .shipArrivalLine .arrivalItem span.bold {
+    font-family: OpenSansBold, sans-serif;
+    color: #000;
+    font-size: 14px;
+    padding-right: 5px;
+}
+
+.modalWrapBook .bookingBlock .bookingBlockBottom {
+    background-color: #fff;
+    padding: 20px 18px;
+    position: relative;
+}
+
+.modalWrapBook .bookingBlock .bookingBlockBottom > div {
+    display: inline-block;
+    width: 100%;
+    vertical-align: top
+}
+
+.modalWrapBook .bookingBlock .bookingBlockBottom .bookingCategoryLine > div {
+    display: inline-block;
+    width: 50%;
+    vertical-align: top;
+}
+
+.modalWrapBook .bookingBlock .bookingBlockBottom .bookingCategoryLine > div:first-child {
+    padding-left: 0
+}
+
+.modalWrapBook .bookingBlock .bookingBlockBottom .bookingCategoryLine .catLineItem {
+    padding-left: 25px
+}
+
+.bookingBlockBottom .bookingCategoryLine {
+    font-size: 0;
+    position: relative
+}
+
+.bookingBlockBottom .bookingCategoryLine .catLineItem > div, .humanLineItem > div {
+    display: inline-block;
+    vertical-align: top
+}
+
+.bookingBlockBottom .bookingCategoryLine .catLineItem, .humanLineItem {
+    font-size: 0
+}
+
+.bookingBlockBottom .bookingCategoryLine .catLineItem > div:first-child {
+    width: 35%;
+    padding-top: 8px;
+}
+
+.bookingBlockBottom .bookingCategoryLine .catLineItem > div:last-child {
+    width: 65%;
+    padding-left: 5px;
+}
+
+.bookingBlockBottom .bookingCategoryLine .catLineItem > div:first-child span, .humanLineItem > div:first-child span {
+    font-size: 14px;
+    color: #000;
+}
+
+.bookingBlockBottom .bookingCategoryLine .catLineItem > div:last-child .bookSelect {
+    width: 100%;
+}
+
+.bookingBlockBottom .bookingCategoryLine .catLineItem > div:last-child .catAddBtn {
+    font-size: 14px;
+    color: #1e88e5;
+    padding-top: 10px;
+    padding-bottom: 10px;
+}
+
+.bookingBlockBottom .bookingCategoryLine .catLineItem > div:last-child .countBtn, .humanLineItem > div:last-child .countBtn {
+    display: inline-block;
+    padding: 10px 12px;
+    background: linear-gradient(to bottom, #5facf0, #1f89e5);
+    -webkit-border-radius: 5px;
+    -moz-border-radius: 5px;
+    border-radius: 5px;
+    color: #fff;
+    font-size: 14px;
+}
+
+.bookingBlockBottom .bookingCategoryLine .catLineItem > div:last-child .countInput, .humanLineItem > div:last-child .countInput {
+    font-size: 14px;
+    padding: 15px 5px;
+    -webkit-border-radius: 5px;
+    -moz-border-radius: 5px;
+    border-radius: 5px;
+    color: #333;
+    display: inline-block;
+    width: 35px;
+    height: 36px;
+    margin: 0 5px;
+    text-align: center;
+    -webkit-appearance: none;
+    border: 1px solid #dcdcdc;
+}
+
+.bookingBlockBottom .bookingDataLine {
+    padding-top: 10px;
+}
+
+.bookingBlockBottom .bookingDataLine > div {
+    display: inline-block;
+    width: 100%;
+    vertical-align: top
+}
+
+.bookingBlockBottom .bookingDataLine .dataLineHeading {
+    margin-bottom: 15px;
+}
+
+.bookingBlockBottom .bookingDataLine .dataLineHeading span {
+    font-size: 16px;
+    font-family: OpenSansBold, sans-serif;
+    color: #000;
+}
+
+.bookingBlockBottom .bookingDataLine .dataLineForm {
+    font-size: 0
+}
+
+.bookingBlockBottom .bookingDataLine .dataLineForm > div {
+    display: inline-block;
+    vertical-align: top
+}
+
+.bookingBlockBottom .bookingDataLine .dataLineForm .dataLineLeft {
+    width: 40%;
+}
+
+.bookingBlockBottom .bookingDataLine .dataLineForm .dataLineRight {
+    width: 60%;
+    padding-left: 20px;
+}
+
+.bookingBlockBottom .bookingDataLine .dataLineForm .dataLineLeft .dLine {
+    display: inline-block;
+    width: 100%;
+    margin-bottom: 15px;
+}
+
+.dataLineForm input,  .dataLineForm textarea {
+    font-size: 16px;
+}
+
+.dataLineForm .dataLineLeft .dLine > div {
+    display: inline-block;
+    vertical-align: middle
+}
+
+.dataLineForm .dataLineLeft .dLine > div:first-child {
+    width: 30%
+}
+
+.dataLineForm .dataLineLeft .dLine > div:last-child {
+    width: 70%
+}
+
+.dataLineForm .dataLineLeft .dLine > div:first-child span {
+    font-size: 14px;
+    color: #000;
+    display: inline-block;
+    vertical-align: top;
+}
+
+.req-input::after {
+    content: '*';
+    display: inline-block;
+    color: #cb2022;
+    vertical-align: top;
+    padding-left: 3px;
+}
+
+.dataLineForm .dataLineLeft .dLine > div:last-child .order {
+    padding: 10px 12px;
+    -webkit-border-radius: 3px;
+    -moz-border-radius: 3px;
+    border-radius: 3px;
+    border: 1px solid #dcdcdc;
+    -webkit-appearance: none;
+    width: 100%;
+}
+
+.dataLineForm .dataLineRight div {
+    display: inline-block;
+    width: 100%;
+    height: 140px;
+}
+
+.dataLineForm .dataLineRight div .order {
+    width: 100%;
+    height: 100%;
+    padding: 10px 12px;
+    -webkit-border-radius: 3px;
+    -moz-border-radius: 3px;
+    border-radius: 3px;
+    border: 1px solid #dcdcdc;
+    -webkit-appearance: none;
+}
+
+.humanLineItem > div:first-child {
+    padding-top: 8px
+}
+
+.humanLineItem > div:last-child {
+    padding-left: 15px
+}
+
+.bookingAnnoLine {
+    /* padding: 30px 30px 0 30px; */
+    /* text-align: center; */
+    padding: 30px 0 30px;
+    text-align: left;
+}
+
+.bookingAnnoLine span {
+    font-size: 14px;
+    color: #333
+}
+
+.bookingBlockBottom .bookingButton {
+    text-align: center;
+    position: absolute;
+    bottom: -20px;
+    left: 0
+}
+
+.bookingBlockBottom .bookingButton .hbtn {
+    background-color: #cb2022;
+    padding: 10px 65px;
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none
+}
+
+.bookingBlockBottom .bookingButton.disabled .hbtn, .checkButton.disabled .hbtn, .writerButton.disabled .hbtn {
+    background-color: #7c1213;
+    cursor: default
+}
+
+.bookingBlockBottom .bookingButton.disabled .hbtn:hover, .checkButton.disabled .hbtn:hover, .writerButton.disabled .hbtn:hover {
+    background-color: #7c1213
+}
+
+.bookingBlockBottom .bookingButton .hbtn:hover {
+    background-color: #E12C2E
+}
+
+.bookingHumanLine > div {
+    display: inline-block;
+    vertical-align: middle
+}
+
+.bookingHumanLine > div:first-child {
+    width: 40%
+}
+
+.bookingHumanLine > div:last-child {
+    width: 60%;
+    padding-left: 20px
+}
+
+.bookingHumanLine {
+    font-size: 0
+}
+
+.bookingBlockBottom .offerItem {
+    padding: 20px 0;
+    text-align: center
+}
+
+.offerItem .check {
+    flex-shrink: 0;
+    display: inline-block;
+    vertical-align: middle;
+    background-color: #fff;
+    width: 16px;
+    height: 16px;
+    -webkit-border-radius: 1px;
+    -moz-border-radius: 1px;
+    border-radius: 3px;
+    border: 1px solid #7dacd1;
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    position: relative;
+    cursor: pointer;
+    transition: all .1s ease-in-out;
+}
+
+.offerItem .check.checked {
+    background-color: #a3d1f4
+}
+
+.offerItem .check i {
+    color: #fff;
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 0;
+    height: 0;
+}
+
+.offerItem .check.checked i {
+    font-size: 14px;
+    color: #264964;
+    width: auto;
+    height: auto;
+}
+
+.offerItem .offerLink {
+    color: #1e88e5;
+    font-size: 14px;
+    text-decoration: underline;
+}
+
+.offerItem span {
+    font-size: 14px;
+    color: #000;
+    display: inline-block;
+    vertical-align: middle
+}
+
+.offerItem span:last-child {
+    padding-left: 10px
+}
+
+.offerItem .offerLink:hover {
+    text-decoration: none
+}
+
+.bookingCategoryLine .book-close {
+    position: absolute;
+    right: 0;
+    top: 15%;
+    display: inline-block;
+    cursor: pointer;
+    /* display: none; */
+}
+
+.bookingCategoryLine .book-close.enabled {
+    display: inline-block!important
+}
+
+.bookingCategoryLine .book-close svg {
+    width: 19px;
+    height: 19px;
+    fill: #aaa;
+}
+
+.bookingCategoryLine .book-close svg:hover {
+    fill: #999
+}
+
+.writerForm .wLine > div:last-child .addPhoto {
+    display: inline-block;
+    width: 30%;
+    background-color: #fff;
+    border: 1px solid #d8d8d8;
+    text-align: center;
+    padding: 10px 25px;
+    -webkit-border-radius: 3px;
+    -moz-border-radius: 3px;
+    border-radius: 3px;
+    cursor: pointer;
+    position: relative;
+    overflow: hidden;
+    -webkit-transition: all .15s ease-out;
+    -moz-transition: all .15s ease-out;
+    -ms-transition: all .15s ease-out;
+    -o-transition: all .15s ease-out;
+    transition: all .15s ease-out;
+}
+
+.writerForm .wLine > div:last-child .addPhoto:hover {
+    background-color: #f2f2f2;
+}
+
+.writerForm .wLine > div:last-child .addPhoto span {
+    color: #b1b1b1;
+    display: block;
+}
+
+.writerForm .wLine > div:last-child .addPhoto span:first-child {
+    font-size: 20px;
+}
+
+.writerForm .wLine > div:last-child .addPhoto span:last-child {
+    font-size: 12px;
+    padding-top: 10px;
+}
+
+.offerPad {
+    padding-top: 30px
+}
+
+.annoLine {
+    display: inline-block;
+    padding-top: 35px;
+}
+
+.annoLine span {
+    font-size: 14px;
+    color: #6c6c6c
+}
+
+.reviewsBlock .reviewsSwitcher {
+    display: inline-block;
+    width: 100%;
+    background-color: #eaeaea;
+    font-size: 0;
+    padding: 25px 35px;
+    margin-bottom: 15px;
+    text-align: center
+}
+
+.reviewsBlock .reviewsSwitcher span:first-child {
+    font-size: 14px;
+    color: #000;
+    font-family: OpenSansBold, sans-serif;
+    display: inline-block
+}
+
+.reviewsBlock .reviewsSwitcher > div {
+    display: inline-block;
+    vertical-align: middle
+}
+
+.reviewsBlock .reviewsSwitcher > div:nth-of-type(2) {
+    margin-left: 25px;
+    width: 40%;
+    text-align: left
+}
+
+.reviewsBlock .reviewsSwitcher > div:nth-of-type(3) {
+    margin-left: 25px
+}
+
+.reviewsBlock .reviewsSwitcher .tsSelect {
+    width: 100%;
+    display: inline-block
+}
+
+.reviewsBlock .reviewsSwitcher .hbtn {
+    font-family: OpenSansSemiBold, sans-serif;
+    font-size: 14px;
+    color: #fff;
+    background-color: #1e88e5;
+    display: inline-block;
+    text-transform: capitalize
+}
+
+.reviewsBlock .reviewsSwitcher .hbtn:hover {
+    background-color: #2194F8
+}
+
+.modalCredit, .modalGraphic, .modalCabin {
+    background-color: #edf1f4;
+    width: 850px;
+    font-size: 0;
+    padding: 35px 0 20px;
+}
+
+.modalCredit .modalHead span, .modalSecond .modalHead span {
+    font-size: 18px;
+    display: inline-block;
+    width: 100%
+}
+
+.modalCredit .modalHead span:last-child {
+    font-family: OpenSansRegular, sans-serif;
+    font-size: 16px;
+    color: #000;
+    text-transform: none;
+    padding-top: 25px
+}
+
+.modalWrap .modalLine {
+    display: inline-block;
+    width: 100%;
+    font-size: 0;
+    padding-top: 30px
+}
+
+.modalCredit .modalLine .crBlock {
+    padding: 15px 15px;
+    margin: 0 10px;
+    border: 1px solid #eaeaea;
+    width: 45%;
+    display: inline-block;
+    vertical-align: top;
+    background-color: #fff;
+    text-align: left;
+    height: 255px
+}
+
+.modalCredit .modalLine .crBlock > div {
+    display: inline-block;
+    width: 100%
+}
+
+.modalCredit .modalLine .crBlock .crBlockImage {
+    max-height: 55px
+}
+
+.modalCredit .modalLine .crBlock .crBlockDesc {
+    padding-top: 30px
+}
+
+.modalCredit .modalLine .crBlock .crBlockDesc span {
+    display: inline-block;
+    width: 100%
+}
+
+.modalCredit .modalLine .crBlock .crBlockDesc span:first-child {
+    font-size: 14px;
+    color: #000
+}
+
+.modalCredit .modalLine .crBlock .crBlockDesc span:nth-of-type(2) {
+    padding-top: 25px;
+    font-size: 12px
+}
+
+.modalCredit .modalLine .crBlock .crBlockDesc a {
+    color: #1e88e5;
+    text-decoration: underline;
+    font-size: 12px
+}
+
+.modalCredit .modalLine .crBlock .crBlockDesc a:hover {
+    text-decoration: none
+}
+
+.modalCredit .modalAbout span {
+    font-size: 14px;
+    color: #000;
+    display: inline-block;
+    width: 100%
+}
+
+.modalCredit .modalAbout span:last-child {
+    font-family: OpenSansBold, sans-serif;
+    font-size: 16px
+}
+
+.modalGraphic {
+    padding: 35px 25px 35px;
+}
+
+.modalGraphic .modalLine, .modalSecond .modalLine {
+    padding-top: 15px;
+    /* overflow-x: auto */
+}
+
+.modalLine .shipName, .modalLine .shipName span {
+    font-size: 16px;
+    font-family: OpenSansSemiBoldItalic, sans-serif;
+    color: #000
+}
+
+.modalLine .shipRoute {
+    padding-top: 5px;
+    line-height: 1.6
+}
+
+.modalLine .shipRoute, .modalLine .shipRoute span {
+    font-size: 13px;
+    color: #000
+}
+
+.modalLine .shipRoute span {
+    display: inline-block;
+    vertical-align: middle;
+    position: relative;
+    padding-left: 7px;
+}
+
+.modalLine .shipRoute span:first-child::before {
+    display: none
+}
+
+.modalLine .shipRoute span::before {
+    display: inline-block;
+    vertical-align: middle;
+    content: '-';
+    color: #000;
+    font-size: 14px;
+    height: 3px;
+    position: absolute;
+    left: 0
+}
+
+.modalLine .shipDates {
+    padding: 15px 0
+}
+
+.modalLine .shipDates, .modalLine .shipDates span {
+    font-size: 16px;
+    font-family: OpenSansBold, sans-serif
+}
+
+.modalGraphic .modalLine table, .modalSecond .modalLine table {
+    display: inline-block;
+    border-collapse: collapse;
+    border: none;
+    border-spacing: 0
+}
+
+.modalGraphic .modalLine table th, .modalSecond .modalLine table th {
+    background-color: #1e88e5;
+    color: #fff;
+    font-size: 16px;
+    padding: 5px 20px;
+    font-weight: normal;
+}
+
+.modalGraphic .modalLine table td, .modalSecond .modalLine table td {
+    padding: 5px 20px;
+    color: #000;
+    font-size: 14px;
+    border: 1px solid #fff;
+    width: 100%;
+}
+
+.modalGraphic .modalLine table tr:nth-child(even), .modalSecond .modalLine table tr:nth-child(even) {
+    background-color: #fff
+}
+
+.modalGraphic .modalLine table tr:nth-child(odd), .modalSecond .modalLine table tr:nth-child(odd) {
+    background-color: #cde9ff
+}
+
+.modalGraphic .modalLine table tr td:first-child, .modalSecond .modalLine table tr td:first-child {
+    font-family: OpenSansBold, sans-serif
+}
+
+.modalLine .attention {
+    font-family: OpenSansBold, sans-serif;
+    color: #cb2022;
+    text-transform: uppercase;
+    display: inline-block;
+    padding-top: 10px;
+    font-size: 14px
+}
+
+.modalGraphic .modalLine table td:first-child, .modalSecond .modalLine table td:first-child {
+    border-left: none
+}
+
+.modalGraphic .modalLine table td:last-child, .modalSecond .modalLine table td:last-child {
+    border-right: none
+}
+
+.modalGraphic .modalLine table tr:first-child td, .modalSecond .modalLine table tr:first-child td {
+    border-top: none
+}
+
+.modalGraphic .modalLine table tr:last-child td, .modalSecond .modalLine table tr:last-child td {
+    border-bottom: none
+}
+
+.modalCabin {
+    padding: 30px 25px;
+}
+
+topmodal .modalCabin {
+    width: 100%;
+}
+
+.modalCabin .modalLine, .modalSecond .modalLine {
+    padding-top: 0
+}
+
+.modalLine .cabinLeft {
+    display: inline-block;
+    width: 45%;
+    vertical-align: top
+}
+
+.modalLine .cabinRight {
+    display: inline-block;
+    width: 55%;
+    padding-left: 25px;
+    vertical-align: top;
+    text-align: left
+}
+
+.modalLine .cabinLeft .bigImages {
+    display: inline-block;
+    width: 100%;
+    padding: 5px;
+    background-color: #fff;
+    border: 1px solid #e6e6e6;
+}
+
+.modalLine .cabinLeft .bigImages .imageItem {
+    background-repeat: no-repeat;
+    background-position: center;
+    background-size: cover;
+    width: 100%;
+    display: inline-block;
+    height: 230px;
+    cursor: pointer
+}
+
+.modalLine .cabinLeft .smallImages {
+    display: inline-block;
+    width: 100%;
+    padding-top: 13px;
+    text-align: left
+}
+
+.modalLine .cabinLeft .smallImages .imageItem {
+    display: inline-block;
+    margin-right: 5px;
+    margin-bottom: 5px;
+    border: 3px solid transparent;
+    height: 45px;
+    width: 60px;
+    cursor: pointer;
+    background-position: center;
+    -webkit-background-size: 120%;
+    background-size: 120%;
+    background-repeat: no-repeat
+}
+
+.modalLine .cabinLeft .smallImages .imageItem.active, .modalCabin .modalLine .cabinLeft .smallImages .imageItem:hover {
+    border: 3px solid #1e88e5
+}
+
+.modalLine .cabinRight > div {
+    display: inline-block;
+    width: 100%
+}
+
+.modalLine .cabinRight .cabinName span {
+    font-size: 22px;
+    font-family: OpenSansBold, sans-serif;
+}
+
+.modalLine .cabinRight .cabinName {
+    padding-bottom: 20px
+}
+
+.modalLine .cabinRight .cabinDescLine {
+    margin-top: 15px;
+}
+
+.modalLine .cabinRight .cabinDescLine span:first-child {
+    color: #666
+}
+
+.modalLine .cabinRight .cabinDescLine span {
+    color: #000;
+    font-size: 14px;
+    display: inline-block;
+    width: 100%
+}
+
+.shipDescriptionBlock > div {
+    display: inline-block;
+    width: 100%
+}
+
+.shipDescriptionBlock .shipDescTop {
+    padding: 25px 30px 25px 15px;
+    border: 1px solid #dcdcdc;
+    font-size: 0
+}
+
+.shipDescriptionBlock .shipDescTop > div {
+    display: inline-block;
+    vertical-align: top
+}
+
+.shipDescriptionBlock .shipDescTop .shipDescImages {
+    width: 44%
+}
+
+.shipDescriptionBlock .shipDescTop .shipDescFeatures {
+    width: 56%;
+    /* padding-left: 30px */
+}
+
+.shipDescriptionBlock .shipDescTop .shipDescImages .bigImagesWrap {
+    display: inline-block;
+    width: 100%;
+    padding-right: 22px
+}
+
+.shipDescriptionBlock .shipDescTop .shipDescImages .bigImages {
+    display: inline-block;
+    width: 100%;
+    padding: 5px;
+    background-color: #e4f2fd;
+}
+
+.shipDescriptionBlock .shipDescTop .shipDescImages .bigImages .imageItem {
+    position: relative;
+    width: 100%;
+    display: inline-block;
+    background-position: center;
+    -webkit-background-size: cover;
+    background-size: cover;
+    background-repeat: no-repeat;
+    height: 245px
+}
+
+.shipDescriptionBlock .shipDescTop .shipDescImages .bigImages .imageItem:hover i {
+    opacity: 1
+}
+
+.shipDescriptionBlock .shipDescTop .shipDescImages .bigImages .imageItem i {
+    display: inline-block;
+    font-size: 22px;
+    color: #000;
+    position: absolute;
+    bottom: 5px;
+    right: 5px;
+    color: #fff;
+    opacity: 0;
+    transition: all .15s ease-in-out;
+}
+
+.shipDescriptionBlock .shipDescTop .shipDescImages .smallImages {
+    display: inline-block;
+    width: 100%;
+    padding-top: 15px;
+}
+
+.shipDescriptionBlock .shipDescTop .shipDescImages .smallImages .imageItem {
+    display: inline-block;
+    width: 100px;
+    height: 75px;
+    margin-right: 15px;
+    margin-bottom: 10px;
+    background-position: center;
+    background-repeat: no-repeat;
+    -webkit-background-size: 120%;
+    background-size: 120%;
+    border: 3px solid #e4f2fd;
+    transition: all .15s ease-in-out;
+}
+
+.shipDescriptionBlock .shipDescTop .shipDescImages .smallImages .imageItem.active, .shipDescriptionBlock .shipDescTop .shipDescImages .smallImages .imageItem:hover {
+    border: 3px solid #1e88e5
+}
+
+.shipDescriptionBlock .shipDescTop .shipDescImages .smallImages > :nth-child(n+10) {
+    display: none
+}
+
+.shipDescriptionBlock .shipDescTop .shipDescImages .imagePlusButton {
+    display: inline-block;
+    width: 100%;
+    text-align: center;
+    padding-top: 10px
+}
+
+.shipDescriptionBlock .shipDescTop .shipDescImages .imagePlusButton.active span.add, .shipDescriptionBlock .shipDescTop .shipDescImages .imagePlusButton span.less, .shipDescriptionBlock .shipDescAboutButton.active span.add, .shipDescriptionBlock .shipDescAboutButton span.less {
+    display: none
+}
+
+.shipDescriptionBlock .shipDescTop .shipDescImages .imagePlusButton.active span.less, .shipDescriptionBlock .shipDescAboutButton.active span.less {
+    display: inline-block
+}
+
+.shipDescriptionBlock .ibtn {
+    display: inline-block;
+    color: #1e88e5
+}
+
+.ibtn span {
+    color: #1e88e5;
+    font-size: 14px;
+    text-decoration: underline
+}
+
+.shipDescriptionBlock .shipDescTop .shipDescFeatures > div {
+    display: inline-block;
+    width: 100%;
+    vertical-align: top
+}
+
+.shipDescriptionBlock .shipDescTop .shipDescFeatures .shipDescFeaturesLine {
+    font-size: 0;
+    padding-bottom: 25px
+}
+
+.shipDescriptionBlock .shipDescTop .shipDescFeatures .shipDescFeaturesLine > div {
+    display: inline-block;
+    vertical-align: top
+}
+
+.shipDescriptionBlock .shipDescTop .shipDescFeatures .shipDescFeaturesLine > div:first-child {
+    width: 55%
+}
+
+.shipDescriptionBlock .shipDescTop .shipDescFeatures .shipDescFeaturesLine > div:first-child .data ul {
+    padding-left: 0;
+    margin: 0
+}
+
+.shipDescriptionBlock .shipDescTop .shipDescFeatures .shipDescFeaturesLine > div:first-child .data ul li {
+    list-style-type: none;
+    margin: 0.175em 0
+}
+
+.shipDescriptionBlock .shipDescTop .shipDescFeatures .shipDescFeaturesLine > div:first-child .data ul li::before {
+    display: none
+}
+
+.shipDescriptionBlock .shipDescTop .shipDescFeatures .shipDescFeaturesLine > div:last-child {
+    width: 45%;
+    /* padding-left: 30px */
+}
+
+.shipDescriptionBlock .shipDescTop .shipDescFeatures .shipDescFeaturesLine > div > :first-child {
+    font-size: 14px;
+    font-family: OpenSansBold , sans-serif;
+    padding-bottom: 15px;
+    display: inline-block;
+    width: 100%;
+    margin: 0;
+}
+
+.shipDescriptionBlock .shipDescTop .shipDescFeatures .shipDescFeaturesLine > div .data p {
+    margin: 0.3em 0
+}
+
+.shipDescriptionBlock .shipDescTop .shipDescFeatures .shipDescFeaturesLine > div .data p a {
+    color: #1e88e5;
+    text-decoration: underline
+}
+
+.shipDescriptionBlock .shipDescTop .shipDescFeatures .shipDescFeaturesLine > div .data p a:hover, .shipDescriptionBlock .shipDescTop .shipDescFeatures .shipDescFeaturesLine > div .data .plusbtn:hover, .shipDescriptionBlock .shipDescTop .shipDescImages .imagePlusButton .ibtn:hover span {
+    text-decoration: none
+}
+
+.shipDescriptionBlock .shipDescTop .shipDescFeatures .shipDescFeaturesLine > div .data ul {
+    padding-left: 0;
+    padding-top: 5px
+}
+
+.shipDescriptionBlock .shipDescTop .shipDescFeatures .shipDescFeaturesLine > div .data ul li {
+    list-style-type: none;
+    display: inline-block;
+    width: 100%;
+    font-size: 14px;
+}
+
+/*.shipDescriptionBlock .shipDescTop .shipDescFeatures .shipDescFeaturesLine > div .data img {
+	max-width: 170px
+}*/
+.shipDescriptionBlock .shipDescTop .shipDescFeatures .shipDescFeaturesLine > div .data ul li::before {
+    display: inline-block;
+    width: 15px;
+    /* content: '•'; */
+    content: '\f111';
+    color: #1e88e5;
+    vertical-align: middle;
+    font-size: 5px;
+    font-family: FontAwesome;
+}
+
+.shipDescriptionBlock .shipDescTop .shipDescFeatures .shipDescFeaturesLine > div .data .plusbtn {
+    color: #1e88e5;
+    font-size: 14px;
+    text-decoration: underline;
+    margin-top: 10px;
+    display: inline-block;
+}
+
+.shipDescriptionBlock .shipDescAbout {
+    margin-top: 15px
+}
+
+.shipDescriptionBlock .shipDescAbout .data {
+    height: 185px;
+    position: relative;
+    overflow: hidden
+}
+
+.shipDescriptionBlock .shipDescAboutVideo .data {
+    height: 100%!important;
+    overflow: auto;
+}
+
+.shipDescriptionBlock .shipDescAboutVideo .data::after {
+    display: none;
+}
+
+.shipDescriptionBlock .shipDescAbout .data.visible {
+    height: 100%;
+}
+
+.shipDescriptionBlock .shipDescAbout .data.visible::after {
+    display: none;
+}
+
+.shipDescriptionBlock .shipDescAbout .data::after {
+    content: '';
+    background: linear-gradient(to bottom, rgba(255,255,255,0), rgba(255,255,255,1));
+    left: 0;
+    position: absolute;
+    bottom: 0;
+    width: 100%;
+    height: 30%;
+}
+
+.shipDescriptionBlock .shipDescAbout .data p:nth-child(n+4) {
+    /* display: none */
+}
+
+.ibtn span {
+    font-family: OpenSansBold, sans-serif
+}
+
+.shipDescriptionBlock .shipDescCabinBlock {
+    padding-top: 40px
+}
+
+.shipDescriptionBlock .shipDescCabinBlock .cabinBlockHeading span {
+    font-size: 18px;
+    font-family: OpenSansBold, sans-serif;
+    color: #000
+}
+
+.shipDescriptionBlock .shipDescCabinBlock > div {
+    display: inline-block;
+    width: 100%
+}
+
+.shipDescriptionBlock .shipDescCabinBlock .shipDescCabinItem {
+    padding-top: 25px
+}
+
+.shipDescCabinBlock .shipDescCabinItem .cabinItemHeading {
+    display: inline-block;
+    width: 100%;
+    padding: 15px 40px;
+    background-color: #1e88e5;
+    font-size: 0;
+    margin-bottom: 10px
+}
+
+.shipDescCabinBlock .shipDescCabinItem .cabinItemHeading > div {
+    display: inline-block;
+    width: 50%;
+    vertical-align: middle
+}
+
+.shipDescCabinBlock .shipDescCabinItem .cabinItemHeading > div:first-child {
+    text-align: left;
+}
+
+.shipDescCabinBlock .shipDescCabinItem .cabinItemHeading > div:first-child span {
+    font-size: 16px;
+    color: #fff;
+    font-family: OpenSansBold, sans-serif
+}
+
+.shipDescCabinBlock .shipDescCabinItem .cabinItemHeading > div:last-child {
+    text-align: right
+}
+
+.shipDescCabinBlock .shipDescCabinItem .cabinItemHeading > div:last-child span {
+    font-size: 14px;
+    text-decoration: underline;
+    color: #fff;
+}
+
+.shipDescCabinBlock .shipDescCabinItem .cabinItemHeading > div:last-child span:hover, .shipDescCabinBlock .shipDescCabinItem .cabinItemHeading > div:last-child a:hover span, .shipDescCabinBlock .shipDescCabinItem .cabinItemLine .cabinItemLineLeft > div > :last-child, .shipDescriptionBlock .ibtn:hover span {
+    text-decoration: none
+}
+
+.shipDescCabinBlock .shipDescCabinItem .cabinItemLine {
+    display: inline-block;
+    width: 100%;
+    font-size: 0;
+    padding: 25px 20px;
+    border: 1px solid #dcdcdc
+}
+
+.shipDescCabinBlock .shipDescCabinItem .cabinItemLine .cabinItemLineLeft {
+    width: 35%;
+    font-size: 0
+}
+
+.shipDescCabinBlock .shipDescCabinItem .cabinItemLine > div, .shipDescCabinBlock .shipDescCabinItem .cabinItemLine .cabinItemLineLeft > div {
+    display: inline-block;
+    vertical-align: top
+}
+
+.shipDescCabinBlock .shipDescCabinItem .cabinItemLine .cabinItemLineRight {
+    width: 65%;
+    padding-left: 30px
+}
+
+.shipDescCabinBlock .shipDescCabinItem .cabinItemLine .cabinItemLineLeft > div:first-child {
+    width: 100%
+}
+
+.shipDescCabinBlock .shipDescCabinItem .cabinItemLine .cabinItemLineLeft > div:last-child {
+    /* width: 45%; */
+    /* padding-left: 15px; */
+}
+
+.shipDescCabinBlock .shipDescCabinItem .cabinItemLine .cabinItemLineLeft > div > span:first-child {
+    font-size: 14px;
+    color: #000;
+    font-family: OpenSansBold, sans-serif;
+    display: inline-block;
+    padding-bottom: 10px
+}
+
+.shipDescCabinBlock .shipDescCabinItem .cabinItemLine .cabinItemLineLeft > div > span:last-child, .shipDescCabinBlock .shipDescCabinItem .cabinItemLine .cabinItemLineLeft > div > :last-child span {
+    display: inline-block;
+    /* padding-top: 10px; */
+    font-size: 14px;
+    color: #1e88e5;
+    text-decoration: underline;
+    cursor: pointer
+}
+
+.shipDescCabinBlock .shipDescCabinItem .cabinItemLine .cabinItemLineLeft > div > span:last-child:hover, .shipDescCabinBlock .shipDescCabinItem .cabinItemLine .cabinItemLineLeft > div > :last-child:hover span {
+    text-decoration: none
+}
+
+.shipDescCabinBlock .shipDescCabinItem .cabinItemLine .cabinItemLineLeft > div:first-child > a:nth-of-type(n+2) {
+    display: none
+}
+
+.shipDescCabinBlock .shipDescCabinItem .cabinItemLine .cabinItemLineLeft > div:first-child.active > a {
+    display: inline-block;
+    width: 100%
+}
+
+.shipDescCabinBlock .shipDescCabinItem .cabinItemLine .cabinItemLineLeft > div .cabinImage {
+    background-position: center;
+    height: 115px;
+    width: 100%;
+    -webkit-background-size: cover;
+    background-size: cover;
+    background-repeat: no-repeat;
+    margin-bottom: 10px;
+    transition: all .15s ease-in-out;
+}
+
+.shipDescCabinBlock .shipDescCabinItem .cabinItemLine .cabinItemLineRight span:first-child {
+    display: inline-block;
+    width: 100%;
+    font-size: 18px;
+    color: #000;
+    font-family: OpenSansBold, sans-serif
+}
+
+.shipDescCabinBlock .shipDescCabinItem .cabinItemLine .cabinItemLineLeft > div > .cabinplus.active span.add, .shipDescCabinBlock .shipDescCabinItem .cabinItemLine .cabinItemLineLeft > div > .cabinplus span.less {
+    display: none
+}
+
+.shipDescCabinBlock .shipDescCabinItem .cabinItemLine .cabinItemLineLeft > div > .cabinplus.active span.less {
+    display: inline-block
+}
+
+.rightBlock .tourSelection .tourSelectPad {
+    width: 35%;
+}
+
+.tourSelectPad {
+    padding-left: 2%;
+}
+
+.dateSelect {
+    cursor: pointer;
+    position: relative;
+}
+
+.dateSelect:after {
+    border: none!important;
+    content: '\f107';
+    font: normal normal normal 14px/1 FontAwesome;
+    font-size: 20px;
+    color: #1e88e5;
+    right: 12px;
+    position: absolute;
+    top: calc(50% - 8px);
+    /* cursor: pointer; */
+}
+
+.tsItemDate .dateSelect [name^=date] {
+    /* cursor: pointer; */
+}
+
+.dateSelect:after {
+    content: '\f073';
+    font-size: 16px
+}
+
+.tsItemDate .dateSelect {
+    display: inline-block;
+    width: 44%;
+    box-shadow: 0 1px 0 rgba(0,0,0,0.0), inset 0 1px 0 rgba(255,255,255,0.8);
+    background-image: linear-gradient(to bottom, #fefefe, #f2f2f2);
+    background-repeat: repeat-x;
+    padding: 8px 8px 8px 35px;
+    border: 1px solid #b8b8b8;
+    border-radius: 3px;
+    position: relative;
+}
+
+.tsItemDate > div:nth-of-type(3) {
+    margin-left: 2%
+}
+
+.tsItemDate .dateSelect input {
+    width: 75%;
+    display: inline-block;
+    border: none;
+    outline: none;
+    background-image: linear-gradient(to bottom, #fafafa, #f5f5f5);
+    box-shadow: none;
+    -webkit-appearance: none;
+    pointer-events: none;
+}
+
+.modalGraphic .modalLineTable::-webkit-scrollbar {
+    height: 7px;
+    display: none
+}
+
+.modalGraphic .modalLineTable::-webkit-scrollbar-thumb {
+    height: 8px;
+    width: 15px;
+    background-color: #b3b3b3;
+    border-radius: 35px
+}
+
+.modalGraphic .modalLineTable::-webkit-scrollbar-track {
+    background-color: #dcdcdc;
+    height: 5px!important;
+    border-radius: 35px
+}
+
+.cabinDescLine span ul {
+    margin: 10px 0;
+    padding-left: 20px;
+    margin-bottom: 0;
+}
+
+.modalGraphic .modalLineTable {
+    overflow-x: auto
+}
+
+.modalGraphic .modalLineTable table {
+    width: 100%;
+}
+
+#Selector .tsYearSwitcher .tsYear {
+    opacity: 1;
+}
+
+.pagination-top {
+    padding-bottom: 30px
+}
+
+.cabinItemLineRight .data ul {
+    padding-left: 20px
+}
+
+.nivo-lightbox-overlay {
+    filter: none!important
+}
+
+.normalText {
+    font-size: 14px;
+}
+
+.normalText h1, .textBlock h1 {
+    font-family: OpenSansBold, sans-serif;
+    font-size: 24px;
+    color: #000;
+    margin-top: 0;
+}
+
+.textBlock {
+    overflow-x: auto;
+}
+
+h1.h-temp {
+    font-size: 24px;
+}
+
+.h1, .h2, .h3, .h4, .h5, .h6, h1, h2, h3, h4, h5, h6 {
+    display: block;
+}
+
+topmodal {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    z-index: 999999;
+    width: 100%;
+    height: 100%;
+    display: none;
+    text-align: center;
+    background: rgba(0, 0, 0, 0.63);
+    /* overflow: auto; */
+    /* padding-top: 5%; */
+    overflow-y: auto;
+}
+
+topmodal::before {
+    content: '';
+    display: inline-block;
+    height: 100%;
+    vertical-align: middle
+}
+
+topmodal .wrap {
+    display: inline-block;
+}
+
+topmodal .close {
+    background: transparent;
+    font-size: 28px;
+    width: 44px;
+    height: 44px;
+    position: absolute;
+    right: 0;
+    top: 0;
+    cursor: pointer;
+    text-align: center;
+    color: #333;
+    opacity: 0.65;
+    z-index: 999;
+}
+
+topmodal .close:hover {
+    opacity: 1
+}
+
+topmodal modalbody {
+    display: inline-block;
+    width: 100%;
+    /* padding: 10px 19px; */
+    /* background: #fff; */
+    /* font-size: 24px; */
+}
+
+.modalSecond {
+    width: 850px;
+    display: inline-block;
+    vertical-align: top;
+    margin: 3% 0;
+    background-color: #fff;
+    padding: 25px;
+    position: relative;
+    font-size: 0;
+}
+
+.selectize-control.single .selectize-input:after {
+    content: '\f107'!important;
+    font: normal normal normal 20px/1 FontAwesome!important;
+    color: #1e88e5;
+    border: none!important;
+    right: 23px!important;
+    margin-top: -9px!important
+}
+
+[rev-send=image] {
+    position: absolute;
+    /* width: 145px!important; */
+    /* height: 87px; */
+    width: 100%!important;
+    height: 150%;
+    /* margin-top: -76px; */
+    /* margin-left: -73px; */
+    /* background: rgba(0, 0, 0, 0.24); */
+    bottom: 0;
+    left: 0;
+    opacity: 0;
+    cursor: pointer;
+}
+
+.reviewSendImage {
+    background-size: cover;
+}
+
+.hotOffer {
+    font-size: 14px;
+    display: inline-block;
+    margin-bottom: 10px;
+}
+
+.hotOffer p {
+    font-size: 14px;
+    margin: 0;
+}
+
+.modalGraphic .print, .modalSecond .print {
+    display: inline-block;
+    position: absolute;
+    top: 10px;
+    right: 50px;
+    border: 1px solid #cdcfd0;
+    padding: 12px;
+    background-color: #fff;
+    -webkit-transition: all .2s ease-in-out;
+    -moz-transition: all .2s ease-in-out;
+    -ms-transition: all .2s ease-in-out;
+    -o-transition: all .2s ease-in-out;
+    transition: all .2s ease-in-out;
+    cursor: pointer;
+    -ms-user-select: none;
+    -moz-user-select: none;
+    -webkit-user-select: none;
+    user-select: none;
+}
+
+.modalGraphic .print:hover, .modalSecond .print:hover {
+    background-color: #e4f2fd;
+}
+
+.modalGraphic .print span, .modalSecond .print span {
+    display: inline-block;
+    vertical-align: middle;
+    font-size: 14px;
+}
+
+.modalGraphic .print > span:last-child, .modalSecond .print > span:last-child {
+    padding-left: 5px
+}
+
+.modalGraphic .print > span:first-child, .modalSecond .print > span:first-child {
+    font-size: 0
+}
+
+section.cruises .rightBlock .socialButtons {
+    text-align: right;
+    padding: 15px 0
+}
+
+.headText .h1 {
+    padding: 5px 0;
+    margin: 0
+}
+
+.modalLineTimeTop {
+    display: none!important
+}
+
+.crSwitchContent .heading h2 {
+    font-size: 20px;
+    font-family: OpenSansBold, sans-serif;
+    color: #000;
+    text-transform: uppercase
+}
+
+.revBlockPagination {
+    display: inline-block;
+    width: 100%;
+    padding: 25px 0
+}
+
+.headingRew {
+    display: inline-block;
+    width: 100%;
+    padding-bottom: 30px;
+    text-align: center
+}
+
+.crRevData .crRevDataMiddle .data > div {
+    padding: 5px 0;
+    font-size: 0;
+}
+
+.crRevData .crRevDataMiddle .data > div span {
+    font-size: 14px;
+    color: #333;
+    font-family: OpenSansBold, sans-serif;
+    display: inline-block;
+    width: 30%;
+    vertical-align: top;
+}
+
+.crRevData .crRevDataMiddle .data > div p.inline {
+    display: inline-block;
+    padding-left: 15px;
+    margin: 0;
+    width: 70%;
+    vertical-align: top;
+}
+
+.crRevData .crRevDataMiddle .rbtn {
+    display: inline-block
+}
+
+.crRevData .crRevDataMiddle .rbtn span {
+    color: #1e88e5;
+    font-size: 14px;
+    font-family: OpenSansBold, sans-serif;
+    text-decoration: underline;
+    -webkit-transition: all .15s ease-in-out;
+    -moz-transition: all .15s ease-in-out;
+    -ms-transition: all .15s ease-in-out;
+    -o-transition: all .15s ease-in-out;
+    transition: all .15s ease-in-out;
+}
+
+.crRevData .crRevDataMiddle .rbtn span:hover {
+    text-decoration: none;
+}
+
+.crRevData .crRevDataMiddle .rbtn span.less {
+    display: none
+}
+
+.crRevData .crRevDataMiddle .rbtn.active span.less {
+    display: inline-block
+}
+
+.crRevData .crRevDataMiddle .rbtn.active span.add {
+    display: none
+}
+
+.crRevData .crRevDataMiddle .data > :nth-child(n+2) {
+    display: none
+}
+
+ofmodal {
+    display: none
+}
+
+h1, h2, h3, h4, h5, h6 {
+    font-family: OpenSansBold, sans-serif;
+}
+
+.arrow-s {
+    display: none;
+    float: right;
+    margin-top: 3px;
+}
+
+.arrow-s::before {
+    font-size: 14px;
+    color: #fff;
+}
+
+.shipVideo iframe {
+    /* max-width: 70%!important; */
+    max-height: 355px!important;
+}
+
+.socialWrap {
+    margin-top: 20px;
+}
+
+.crRevData__images {
+    padding: 15px 0;
+}
+
+.crRevData__image-link {
+    display: inline-block;
+    margin-right: 10px;
+    margin-bottom: 10px;
+}
+
+.revloader {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    top: 0;
+    left: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background-color: rgba(255,255,255,0.6);
+}
+
+.filterloader {
+    width: 100%;
+    height: 100%;
+    top: 0;
+    left: 0;
+    padding-top: 100px;
+    background-color: rgba(255,255,255,0.9);
+    text-align: center;
+    z-index: 9999;
+}
+
+.filterloader span {
+    font-size: 16px;
+    color: #000;
+    display: block;
+    font-family: OpenSansBold, sans-serif;
+    margin-bottom: 20px;
+}
+
+.filterloader.active {
+    display: block!important;
+}
+
+#Result {
+    position: relative;
+    transition: 300ms;
+}
+
+.noresult {
+    font-size: 16px;
+    margin-top: 30px;
+    display: block;
+    text-align: center;
+    font-family: OpenSansBold, sans-serif;
+}
+
+.itemHead.closed .arrow-s {
+    display: inline-block;
+}
+
+.shipImage img {
+    max-height: 100%;
+}
+
+.addPhotoClose {
+    position: absolute;
+    top: 0;
+    right: 0;
+    display: none;
+    padding: 10px;
+    z-index: 999;
+}
+
+.addPhotoClose i {
+    font-size: 16px;
+    color: #000;
+}
+
+.addPhoto.added .addPhotoClose {
+    display: inline-block;
+}
+
+.g-image {
+    /* background-size: cover; */
+    background: center/contain no-repeat;
+    display: inline-block;
+    margin-bottom: 10px;
+    /* margin-right: 10px; */
+}
+
+.shipDescFeaturesLine_schema > div {
+    width: 100%!important;
+}
+
+.shipDescFeaturesLine_schema > div img {
+    max-width: 220px;
+}
+
+.org-info {
+    display: none!important;
+}
+
+.temp-schedule {
+    display: block;
+    font-size: 14px!important;
+}
+
+.modalLineTable ul, .modalLineTable ol {
+    font-size: 14px;
+}
+
+.s-sel__input_date {
+    pointer-events: none;
+    cursor: pointer;
+}
+
+.gal {
+    text-decoration: none!important;
+}
+
+.shipVideoModalSliderItem {
+    width: 100%;
+    height: 315px;
+}
+
+.slider-nav {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    left: 0;
+    top: 0;
+}
+
+.slider-nav .btn {
+    display: inline-flex;
+    height: 100%;
+    width: 5%;
+    justify-content: center;
+    align-items: center;
+    cursor: pointer;
+    -webkit-transition: all .15s ease;
+    -moz-transition: all .15s ease;
+    -ms-transition: all .15s ease;
+    -o-transition: all .15s ease;
+    transition: all .15s ease;
+}
+
+.slider-nav .btn:hover {
+    background-color: rgba(0,0,0,0.1);
+}
+
+.slider-nav i {
+    font-size: 0;
+}
+
+.slider-nav i::before {
+    font-size: 36px;
+    color: #000;
+}
+
+@media print {
+    @page :first {
+        margin: 0 0 20px 0;
+    }
+
+    @page :left {
+        margin: 20px 0;
+    }
+
+    @page :right {
+        margin: 20px 0;
+    }
+
+    .mfp-content {
+        vertical-align: top;
+    }
+
+    .mfp-wrap {
+        position: absolute!important;
+        top: 0;
+        left: 0;
+        min-height: 2500px;
+        -webkit-print-color-adjust: exact;
+    }
+
+    .mfp-wrap ~ * {
+        display: none;
+    }
+
+    .modalFade {
+        padding: 0
+    }
+
+    .modalWrap {
+        width: 100%;
+        max-width: 100%;
+        background-color: #fff;
+    }
+
+    .print, .mfp-close {
+        display: none!important
+    }
+
+    .attention {
+        -webkit-print-color-adjust: exact;
+    }
+
+    .mfp-wrap .modalLineTable table tr {
+        page-break-before: always
+    }
+
+    .modalLineTimeTop {
+        display: inline-block!important
+    }
+
+    .modalLineTimeBottom {
+        display: none!important
+    }
+
+    #modalBooking .modalWrap {
+        display: none;
+    }
+
+    topmodal .modalSecond {
+        width: 100%;
+        margin: 0;
+    }
+
+    topmodal {
+        position: absolute;
+        min-height: 2500px;
+        background-color: #fff;
+        overflow-x: hidden;
+        overflow-y: hidden;
+        top: 0;
+        left: 0;
+        z-index: 9999999;
+    }
+
+    topmodal .modalSecond .close {
+        display: none
+    }
+
+    .org-info {
+        display: block!important;
+        font-size: 14px;
+        text-align: left;
+        margin-bottom: 55px;
+    }
+}
+
+.discountsPopups {
+    display: inline-block;
+    width: 100%;
+}
+
+.discountsPopups-buttons {
+    display: inline-block;
+}
+
+.discountsPopups-buttons>div {
+    display: inline-block;
+    float: left;
+    padding: 10px 15px;
+    background: #fff;
+    color: #c41a2b;
+    font-size: 14px;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: 300ms;
+    border: 1px solid #c41a2b;
+}
+
+.discountsPopups-buttons>div:hover {
+    background: #c41a2b;
+    color: #fff;
+}
+
+.discountsPopups-buttons>div.active {
+    background: #529cee;
+}
+
+/*
+.discountsPopups-buttons>div.active::before {
+    content: "ꞌ";
+    font-family: Arial;
+    position: absolute;
+    color: #519aed;
+    font-size: 55px!important;
+    transform: scale(1,0.7);
+}
+
+.booking-discounts.active::before {
+    margin-top: 12px;
+    margin-left: 92px;
+}
+
+.social-discounts.active::before {
+    margin-top: 22px;
+    margin-left: 4px;
+}
+*/
+.booking-discounts {
+    margin-right: 10px;
+}
+
+.social-discounts {
+    font-size: 29px!important;
+    padding: 0 10px!important;
+}
+
+.discountsPopups-windows {
+}
+
+.discountsPopups-windows>div {
+    display: none;
+    padding: 10px 30px;
+    background: #e4f1fd;
+    border: 1px solid #aecfff;
+    border-radius: 5px;
+    margin-top: 5px;
+    font-size: 14px;
+    line-height: 23px;
+}
+
+.discountsPopups-windows>div ul {
+    padding-left: 20px;
+}
+
+.discountsPopups-h {
+    background: #539cee;
+    color: #fff;
+    margin: 0 -31px;
+    margin-top: -11px;
+    margin-bottom: 24px;
+    border-radius: 5px 5px 0 0;
+    padding: 3px 10px;
+    font-size: 13px;
+    text-align: center;
+}
+
+.mobile-booking {
+    display: none;
+    margin-top: 14px;
+}
+
+rivercrs_booking {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    padding: 20px;
+    background: #000000ab;
+    z-index: 100000;
+    text-align: center;
+    overflow-y: auto;
+}
+
+rivercrs_booking>div {
+    display: inline-block;
+    max-width: 1000px;
+    width: 100%;
+    padding: 15px;
+    background: #eef1f3;
+    text-align: left;
+}
+
+.normal {
+    font-size: 20px;
+}
+
+.more-items {
+    color: #1e88e5;
+    background-color: #fff;
+    padding: 6px;
+    text-align: center;
+    font-size: 14px;
+    margin-top: 15px;
+    cursor: pointer;
+}
+
+.ww-table td {
+    width: auto!important;
+}
+
+.ww-table td:first-child {
+    width: 10%!important;
+}
+
+.ww-table td:last-child {
+    /* width: 50%!important; */
+    text-align: left;
+}
+
+.cruiseData ol, .cruiseData ul {
+    font-size: 14px!important;
+}
+
+.cruiseData li {
+    margin-bottom: 7px;
+}
+
+/*Selector v2 - addons*/
+#Selector[v-cloak] {display: none}
+
+#Selector .widget-preloader {
+    height: 193px;
+    animation: widget-preloader 200ms;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+#Selector .widget-preloader span {display: inline-block;font-size: 20px;color: #fff;}
+
+#Selector .loaded-wrap {
+    animation: loaded-wrap 200ms;
+}
+
+@keyframes loaded-wrap {
+    from {
+        opacity: 0;
+        transform: scale(0.3,0.3);
+    }
+
+    to {
+        opacity: 1;
+        transform: scale(1,1);
+    }
+}
+@keyframes widget-preloader {
+    from {
+        opacity: 0;
+    }
+
+    to {
+        opacity: 1;
+    }
+}
+
+/* for datapicker */
+.calendar-note {
+    width: 100%;
+    background: #cde8ff;
+    padding: 3px 0;
+    margin: 0 3px;
+    border-radius: 3px;
+    text-align: center;
+}
+.-other-month- .calendar-note{
+    color: #000;
+}
+.datepicker--cell-day.-in-range- {
+    background-color: #5cc4ef;
+}
+
+
+@media only screen and (max-width : 767px) {
+    .mobile-booking {
+        display: inline-block;
+        width: 100%;
+    }
+
+    .desctop-booking {
+        display: none;
+    }
+}
+
+
+/* ModalBox fixes for RiverCRS */
+#_Modalbox {
+
+}
+
+#_Modalbox table {
+    width: 100%;
+}
+
+#_Modalbox .print {
+    display: inline-block;
+    /* position: absolute; */
+    /* top: 10px; */
+    /* right: 50px; */
+    border: 1px solid #cdcfd0;
+    padding: 12px;
+    background-color: #fff;
+    -webkit-transition: all .2s ease-in-out;
+    -moz-transition: all .2s ease-in-out;
+    -ms-transition: all .2s ease-in-out;
+    -o-transition: all .2s ease-in-out;
+    transition: all .2s ease-in-out;
+    cursor: pointer;
+    -ms-user-select: none;
+    -moz-user-select: none;
+    -webkit-user-select: none;
+    user-select: none;
+}
+
+#_Modalbox .print:hover {
+    background-color: #e4f2fd;
+}
+
+#_Modalbox .print span {
+    display: inline-block;
+    vertical-align: middle;
+    font-size: 14px;
+}
+
+#_Modalbox .print > span:last-child {
+    padding-left: 5px
+}
+
+#_Modalbox .print > span:first-child {
+    font-size: 0
+}
+
+/* Всякие быстроклассы */
+.zen-mt-40 {
+    margin-top: 40px;
+}

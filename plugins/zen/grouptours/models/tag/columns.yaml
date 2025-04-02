@@ -1,0 +1,18 @@
+columns:
+    id:
+        label: id
+        type: number
+        sortable: true
+    name:
+        label: 'Название тега'
+        type: text
+        searchable: true
+        sortable: true
+    sort_order:
+        label: Порядок
+        type: number
+        sortable: true
+    active:
+        label: Активен
+        type: partial
+        sortable: true

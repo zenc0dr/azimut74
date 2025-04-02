@@ -1,0 +1,27 @@
+plugin:
+    name: 'zen.om::lang.plugin.name'
+    description: 'zen.om::lang.plugin.description'
+    author: 'Александр Аблизин'
+    icon: oc-icon-cart-plus
+    homepage: 'http://october-studio.ru/om'
+navigation:
+    om-main:
+        label: 'Временный каталог'
+        url: zen/om/items
+        icon: icon-exclamation
+        permissions:
+            - zen.om
+        order: '10'
+        sideMenu:
+            om-items:
+                label: 'zen.om::lang.items.title'
+                url: zen/om/items
+                icon: icon-cubes
+            om-stores:
+                label: 'zen.om::lang.store.title'
+                url: zen/om/stores
+                icon: icon-building-o
+permissions:
+    zen.om:
+        tab: 'Временный каталог'
+        label: 'Глобальный доступ'

@@ -1,0 +1,21 @@
+{% for e in catalogTops if not e.items.active == 0 %}
+
+{% if e.items.images is empty %}
+{% set image_url = '/themes/shablon4/assets/img/no_image.png' %}
+{% else %}
+{% set image_url = e.items.images|first %}
+{% set image_url = image_url.path %}
+{% endif %}
+
+<a href="/catalog{{ e.items.url }}">
+	<div class="goodsItem">
+		<div class="goodsImg" style="background-image: url({{ image_url }});"></div>
+		<div class="goodsName">
+			{{ e.items.name }}
+		</div>
+		<div class="goodsPrice">
+			<span>{{ e.items.price }}</span> <i class="fa fa-rub" aria-hidden="true"></i>
+		</div>
+	</div>
+</a>
+{% endfor %}

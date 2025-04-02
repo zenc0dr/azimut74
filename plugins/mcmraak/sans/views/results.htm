@@ -1,0 +1,210 @@
+{% if results %}
+	<div class="s-sel__result">
+		<div class="s-sel__count">
+			Мы подобрали для вас {{ results|length }} подходящих вариантов
+		</div>
+
+		{% include 'mcmraak.sans::pagination' %}
+
+		{% set start_record = (pagination.currentPage * pagination.perPage) - pagination.perPage %}
+
+    	{% for item in results|slice(start_record, pagination.perPage) %}
+
+		<div class="s-sel__card">
+			<div class="s-sel__cart-top">
+				<a target="_blank" href="/sans-pages/hotel_{{ item.hotel_id }}--{{ query_key }}">
+					<div class="s-sel__card-name">
+						{{ item.hotel_name }} ({{ item.hotel_type }})
+					</div>
+				</a>
+				<div
+					class="widget-history__favorite"
+					widget-id="{{item.hotel_id}}"
+					title-element="{{ item.hotel_name }} ({{ item.hotel_type }})"
+					url="/sans-pages/hotel_{{ item.hotel_id }}--{{ query_key }}"
+					type="sans"
+					title="Добавить в избранное"
+                    days="{{ item.nights }} {{ self.inc_nights(item.nights) }}"
+					onclick="APP.clickFavorite(this)"
+				>
+					<img class="active" src="/plugins/zen/history/assets/images/icons/heart-active-1.svg">
+					<img class="no-active" src="/plugins/zen/history/assets/images/icons/heart.svg">
+				</div>
+			</div>
+			<div class="s-sel__card-data">
+				<div class="r">
+					<div class="col-35 col-xs-100">
+						<div class="s-sel__card-image" style="background-image: url({{ item.hotel_image }});"></div>
+					</div>
+					<div class="col-65 col-xs-100 mt-xs-20">
+						<div class="s-sel__card-line">
+							<div class="r">
+								<div class="col-50 col-xs-100">
+									<div class="s-sel__card-address s-sel__card-address_icon">
+
+										{{ item.сountry_name }} - {{ item.town_name }}
+
+									</div>
+								</div>
+								{#<div class="col-50 col-xs-100 mt-xs-10">
+									<div class="s-sel__card-rating">
+										<b>Оценка:</b>
+										<span class="s-sel__card-rate">4.5 из 5</span>
+										<a href="" class="s-sel__card-reviews">123 отзыва</a>
+									</div>
+								</div>#}
+							</div>
+						</div>
+						<div class="s-sel__card-line s-sel__card-line_properties">
+							<div class="c-r se-5 colp-5">
+								<div class="col-40 col-xs-100">
+									<div class="s-sel__card-property-wrap">
+										Уровень:
+										<span class="s-sel__card-property s-sel__card-property_bold">{{ item.level }}</span>
+									</div>
+								</div>
+								{% if item.sea_distance %}
+								<div class="col-40 col-xs-100">
+									<div class="s-sel__card-property-wrap">
+										До моря:
+										<span class="s-sel__card-property s-sel__card-property_bold">{{ item.sea_distance }}</span>
+									</div>
+								</div>
+								{% endif %}
+								<div class="col-20 col-xs-100">
+									<div class="s-sel__card-property-wrap">
+										Бассейн:
+										<span class="s-sel__card-property {% if item.pool %}s-sel__card-property_yes{% else %}s-sel__card-property_no{% endif %}">
+											<!--<i class="fa fa-check-circle" aria-hidden="true"></i>-->
+										</span>
+									</div>
+								</div>
+								<div class="col-40 col-xs-100">
+									<div class="s-sel__card-property-wrap">
+										Тип отеля:
+										<span class="s-sel__card-property s-sel__card-property_bold">{{ item.hotel_type }}</span>
+									</div>
+								</div>
+								<div class="col-40 col-xs-100">
+									<div class="s-sel__card-property-wrap">
+										Питание:
+										<span class="s-sel__card-property s-sel__card-property_bold">{{ item.meal }}</span>
+									</div>
+								</div>
+								<div class="col-20 col-xs-100">
+									<div class="s-sel__card-property-wrap">
+										Лечение:
+										<span class="s-sel__card-property {% if item.medical %}s-sel__card-property_yes{% else %}s-sel__card-property_no{% endif %}">
+											<!--<i class="fa fa-minus-circle" aria-hidden="true"></i>-->
+										</span>
+									</div>
+								</div>
+							</div>
+						</div>
+						<div class="s-sel__card-line s-sel__card-button">
+							<a target="_blank" href="/sans-pages/hotel_{{ item.hotel_id }}--{{ query_key }}" class="btn btn_bg-red btn_size-m btn_txt-white btn_txt-bold">
+								{{ price_prefix }} / {{ item.nights }} {{ self.inc_nights(item.nights) }}: от {{ item.price|round(0, 'ceil') }} руб. <i class="fa fa-long-arrow-right" aria-hidden="true"></i>
+							</a>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+
+		{% endfor %}
+
+	</div>
+
+	{% include 'mcmraak.sans::pagination' %}
+	{% else %}
+	<div class="s-sel__count">
+		По заданным параметрам ничего не найдено
+	</div>
+{% endif %}
+
+{#
+{% if results %}
+
+    <div class="results-count">Вариантов найдено: {{ results|length }}</div>
+
+    {% include 'mcmraak.sans::pagination' %}
+
+    {% set start_record = (pagination.currentPage * pagination.perPage) - pagination.perPage %}
+
+    {% for item in results|slice(start_record, pagination.perPage) %}
+        <div class="result_box">
+            <div class="rbrow">
+                <span class="var">Название отеля:</span>
+                <span class="val"><a target="_blank" href="/sans-pages/hotel_{{ item.hotel_id }}--{{ query_key }}">{{ item.hotel_name }}</a></span>
+            </div>
+            <div class="rbrow">
+                <span class="var">Идентификатор отеля:</span>
+                <span class="val">{{ item.hotel_id }}</span>
+            </div>
+            <div class="rbrow">
+                <span class="var">Название тура:</span>
+                <span class="val">{{ item.tour_name }}</span>
+            </div>
+            <div class="rbrow">
+                <span class="var">Тип отеля:</span>
+                <span class="val">{{ item.hotel_type }}</span>
+            </div>
+            <div class="rbrow">
+                <span class="var">Уровень отеля:</span>
+                <span class="val">{{ item.level }}</span>
+            </div>
+            <div class="rbrow">
+                <span class="var">Проживание:</span>
+                <span class="val">{{ item.room_type }}</span>
+            </div>
+            <div class="rbrow">
+                <span class="var">Ночей:</span>
+                <span class="val">{{ item.nights }}</span>
+            </div>
+            <div class="rbrow">
+                <span class="var">Питание:</span>
+                <span class="val">{{ item.meal }}</span>
+            </div>
+            <div class="rbrow">
+                <span class="var">Цена:</span>
+                <span class="val">{{ item.price|round(0, 'ceil') }} руб.</span>
+            </div>
+            <div class="rbrow">
+                <span class="var">Категория отеля:</span>
+                <span class="val">{{ item.level }}</span>
+            </div>
+            <div class="rbrow">
+                <span class="var">Объявление:</span>
+                <span class="val">{{ item.desc }}</span>
+            </div>
+            <div class="rbrow">
+                <span class="var">Бассейн:</span>
+                <span class="val">{% if item.pool %}Есть{% else %}Нет{% endif %}</span>
+            </div>
+            {% if item.sea_distance %}
+            <div class="rbrow">
+                <span class="var">До моря:</span>
+                <span class="val">{{ item.sea_distance }}</span>
+            </div>
+            {% endif %}
+            <div class="rbrow">
+                <span class="var">Адрес:</span>
+                <span class="val">{{ item.address }}</span>
+            </div>
+            <div class="rbrow medical">
+                {% if item.medical %}
+                    <p>Лечение</p>
+                    <ul>
+                    {% for m in item.medical %}
+                        <li>{{ m }}</li>
+                    {% endfor %}
+                    </ul>
+                {% endif %}
+            </div>
+        </div>
+    {% endfor %}
+
+    {% include 'mcmraak.sans::pagination' %}
+{% else %}
+    По заданным параметрам ничего не найдено
+{% endif %}#}

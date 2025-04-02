@@ -1,0 +1,11 @@
+name: 'Услуги гостиницы'
+modelClass: Zen\Dolphin\Models\Hservice
+form: $/zen/dolphin/models/hservice/fields.yaml
+defaultRedirect: zen/dolphin/hservices
+create:
+    redirect: 'zen/dolphin/hservices/update/:id'
+    redirectClose: zen/dolphin/hservices
+update:
+    redirect: zen/dolphin/hservices
+    redirectClose: zen/dolphin/hservices
+preview: {  }

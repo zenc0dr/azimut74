@@ -1,0 +1,20 @@
+<table class="rivercrs-gama-schelude-table">
+    <tbody>
+    <tr>
+        <th>Дата</th>
+        <th>Город</th>
+        <th>Прибытие</th>
+        <th>Стоянка</th>
+        <th>Отправление</th>
+    </tr>
+    {% for item in table %}
+        <tr>
+            <td>{{ item.date }}</td>
+            <td>{{ item.town }}</td>
+            <td>{{ item.arrival }}</td>
+            <td>{{ item.stay }}</td>
+            <td>{{ item.departure }}</td>
+        </tr>
+    {% endfor %}
+    </tbody>
+</table>

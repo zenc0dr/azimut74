@@ -1,0 +1,4 @@
+title: Azpansions
+modelClass: Zen\Dolphin\Models\Azpansion
+toolbar:
+    buttons: reorder_toolbar

@@ -1,0 +1,78 @@
+title = "SANS Страницы"
+url = "/sans-pages/:?*"
+layout = "general"
+is_hidden = 0
+robot_index = "index"
+robot_follow = "follow"
+contentType = "html"
+
+[sans_search]
+==
+<?php
+function onStart()
+{
+    return \Mcmraak\Sans\Controllers\Pages::getPage($this);
+}
+?>
+==
+<section class="cruises">
+<div class="cruiseHead">
+	<div class="col-wrap">
+		<div class="col-30 col-xs-100">
+			<div class="cruiseImage">
+			    {% set image = sans_page.images|first %}
+				<img src="{{ image.path|resize(400) }}" {% if image.title %}alt="{{ image.title }}"{% endif %}>
+			</div>
+		</div>
+		<div class="col-70 col-xs-100">
+			<div class="cruiseInfo">
+                {% partial 'template/socialbuttons' %}
+				<div class="cruiseExcerpt normalText">
+					<p>
+						{{ sans_page.text|raw }}
+					</p>
+				</div>
+
+				<div class="cruiseButtons">
+                    {% for tag in sans_page.seo_articles %}
+						<a class="crbtn" href="#{{ tag.sa_hash }}">{{ tag.sa_title }}</a>
+                    {% endfor %}
+				</div>
+
+			</div>
+		</div>
+	</div>
+</div>
+
+<div class="cruiseData">
+		<div class="col-wrap">
+			<div class="col-25 col-s-100 va-top">
+				<div class="leftBlock">
+                	<div class="leftBlockItem">
+                		<div class="itemHead">
+                			<span>
+                				Круизы
+                			</span>
+                			<i class="fa fa-arrow-down arrow-s" aria-hidden="true"></i>
+                		</div>
+                		<div class="itemBody">
+                			<ul>
+                               <li><a href="#">Группа 1</a></li>
+                               <li><a href="#">Группа 2</a></li>
+                               <li><a href="#">Группа 3</a></li>
+                			</ul>
+                	     </div>
+                    </div>
+                </div>
+            </div>
+
+			<div class="col-75 col-s-100 va-top">
+				<div class="rightBlock">
+
+                    {% component 'sans_search' %}
+                    
+				</div>
+			</div>
+		</div>
+    </div>
+</div>

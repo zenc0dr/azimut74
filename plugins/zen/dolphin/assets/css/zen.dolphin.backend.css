@@ -1,0 +1,14 @@
+.dp-geo-group {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    margin: 6px -13px;
+}
+
+.dp-geo-group > div {
+    flex: 1 1 0;
+    margin: 0 13px;
+    min-width: 300px;
+    margin-bottom: 20px;
+}

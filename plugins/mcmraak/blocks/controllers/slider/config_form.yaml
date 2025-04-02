@@ -1,0 +1,10 @@
+name: Slider
+form: $/mcmraak/blocks/models/slider/fields.yaml
+modelClass: Mcmraak\Blocks\Models\Slider
+defaultRedirect: mcmraak/blocks/slider
+create:
+    redirect: 'mcmraak/blocks/slider/update/:id'
+    redirectClose: mcmraak/blocks/slider
+update:
+    redirect: mcmraak/blocks/slider
+    redirectClose: mcmraak/blocks/slider

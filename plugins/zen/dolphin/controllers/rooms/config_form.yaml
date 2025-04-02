@@ -1,0 +1,16 @@
+name: 'Типы номеров'
+modelClass: Zen\Dolphin\Models\Room
+form: $/zen/dolphin/models/room/fields.yaml
+defaultRedirect: zen/dolphin/rooms
+create:
+    title: 'Создать тип номера'
+    redirect: 'zen/dolphin/rooms/update/:id'
+    redirectClose: zen/dolphin/rooms
+    flashSave: 'Тип номера создан'
+update:
+    title: 'Изменить тип номера'
+    redirect: zen/dolphin/rooms
+    redirectClose: zen/dolphin/rooms
+    flashSave: 'Тип номера изменён'
+    flashDelete: 'Тип номера удалён'
+preview: {  }

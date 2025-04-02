@@ -1,0 +1,4 @@
+title: SliderBeach
+modelClass: Srw\Azimut\Models\SliderBeach
+toolbar:
+    buttons: reorder_toolbar

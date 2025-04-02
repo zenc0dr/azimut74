@@ -1,0 +1,16 @@
+name: Tours
+modelClass: Zen\GroupTours\Models\Tour
+form: $/zen/grouptours/models/tour/fields.yaml
+defaultRedirect: zen/grouptours/tours
+create:
+    title: 'Создать тур'
+    redirect: 'zen/grouptours/tours/update/:id'
+    redirectClose: zen/grouptours/tours
+    flashSave: 'Тур создан'
+update:
+    title: 'Изменение тура'
+    redirect: zen/grouptours/tours
+    redirectClose: zen/grouptours/tours
+    flashSave: 'Тур сохранён'
+    flashDelete: 'Тур удалён'
+preview: {  }

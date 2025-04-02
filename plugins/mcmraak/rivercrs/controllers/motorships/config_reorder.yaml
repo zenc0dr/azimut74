@@ -1,0 +1,4 @@
+title: Motorships
+modelClass: Mcmraak\Rivercrs\Models\Motorships
+toolbar:
+    buttons: reorder_toolbar

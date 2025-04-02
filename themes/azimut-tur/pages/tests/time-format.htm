@@ -1,0 +1,16 @@
+title = "Тест форматирования времени"
+url = "/test/time-format"
+layout = "general"
+is_hidden = 0
+robot_index = "index"
+robot_follow = "follow"
+contentType = "html"
+force_show = 0
+==
+<?php
+function onStart()
+{
+    dd(date('d.m.Y H:i:s', 1566189000), date('d.m.Y H:i:s', 1566158400));
+}
+?>
+==

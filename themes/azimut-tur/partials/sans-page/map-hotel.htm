@@ -1,0 +1,36 @@
+description = "Карта для отеля"
+
+[viewBag]
+==
+<script src="https://api-maps.yandex.ru/2.1/?lang=ru_RU" type="text/javascript">
+</script>
+    <script type="text/javascript">
+        ymaps.ready(init1);
+      lat = {{ hotel_info.hotel_bag.Coordinates.Latitude }};
+	  long = {{ hotel_info.hotel_bag.Coordinates.Longitude }};
+      
+        function init1(){ 
+            var myMap = new ymaps.Map("map111", {
+                center: [lat, long],
+                zoom: 15
+            }); 
+            
+           {# var myPlacemark = new ymaps.Placemark([lat, long],
+            hintContent: 'nam', 
+            balloonContent: 'adre' },
+		    { preset: 'islands#dotIcon', iconColor: '#3b5998'} #}
+		    
+				{#	nam1 = {{hotel_info.hotel.name }}; 
+					addr1 = {{ hotel_info.hotel_bag.Address }}; #}
+            var myPlacemark = new ymaps.Placemark([lat, long], {
+                hintContent: '{{hotel_info.hotel.name }}',
+                balloonContent: '{{ hotel_info.hotel_bag.Address }}'                  
+            });
+            
+      myMap.geoObjects.add(myPlacemark);
+       
+        }
+    </script>
+
+    <div id="map111" style="width: 600px; height: 400px"></div>	
+	</script>

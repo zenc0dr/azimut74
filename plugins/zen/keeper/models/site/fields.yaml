@@ -1,0 +1,24 @@
+fields:
+    active:
+        label: Активно
+        span: full
+        default: 1
+        type: switch
+    name:
+        label: 'Название сайта'
+        span: auto
+        type: text
+    url:
+        label: 'URL сайта'
+        span: auto
+        type: text
+    security_token:
+        label: 'Ключ доступа к API (security token)'
+        span: full
+        type: text
+    partial1:
+        span: auto
+        path: $/zen/keeper/controllers/sites/backup.php
+        context:
+            - update
+        type: partial

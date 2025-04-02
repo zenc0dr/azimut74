@@ -1,0 +1,10 @@
+name: Hstructures
+form: $/zen/dolphin/models/hstructure/fields.yaml
+modelClass: Zen\Dolphin\Models\Hstructure
+defaultRedirect: zen/dolphin/hstructures
+create:
+    redirect: 'zen/dolphin/hstructures/update/:id'
+    redirectClose: zen/dolphin/hstructures
+update:
+    redirect: zen/dolphin/hstructures
+    redirectClose: zen/dolphin/hstructures

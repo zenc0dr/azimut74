@@ -1,0 +1,74 @@
+<table>
+    <tbody>
+    <tr>
+        <th>Пункт</th>
+        <th>Дата</th>
+        <th>Приб</th>
+        <th>Стоянка</th>
+        <th>Отпр</th>
+    </tr>
+    {% for item in trace_table %}
+        <tr>
+            <td style="width:40%">{{ item.value }}</td>
+            <td>{{ item.date_arrive }}</td>
+            <td>{{ item.time_arrive }}</td>
+            <td>{{ item.time_diff }}</td>
+            <td>{{ item.time_depart }}</td>
+        </tr>
+    {% endfor %}
+    </tbody>
+</table>
+{% if excursion_table|length %}
+    <h3>Экскурсионная программа</h3>
+    <table class="normalize-table">
+        <tbody>
+        <tr>
+            <th colspan="2">
+                Экскурсионное обслуживание
+            </th>
+            <th rowspan="2">
+                Длит. (часы)
+            </th>
+            <th colspan="2">
+                Стоимость на 1 чел. (руб)
+            </th>
+        </tr>
+        <tr>
+            <th>Город</th>
+            <th>Описание</th>
+            <th>Взр</th>
+            <th>Дет</th>
+        </tr>
+        {% for town, items in excursion_table %}
+            {% for item in items %}
+                <tr>
+                    {% if loop.index0 == 0 %}
+                        <td style="width:10%" rowspan="{{ items|length }}">
+                            {{ town }}
+                        </td>
+                    {% endif %}
+
+                    <td style="text-align:left">
+                        <strong>{{ item.name }}</strong><br>
+                        {{ item.desc }}
+                    </td>
+                    <td>
+                        {{ item.duration }}
+                    </td>
+                    <td>
+                        {{ item.price_adult }}
+                    </td>
+                    <td>
+                        {{ item.price_child }}
+                    </td>
+                </tr>
+            {% endfor %}
+        {% endfor %}
+        </tbody>
+    </table>
+    <style>
+        .modalGraphic {
+            min-width: 1200px;
+        }
+    </style>
+{% endif %}

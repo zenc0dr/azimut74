@@ -1,0 +1,15 @@
+columns:
+    id:
+        label: id
+        type: number
+        sortable: true
+    name:
+        label: Название
+        type: partial
+        path: $/zen/history/controllers/linktypes/_name_column.htm
+        searchable: true
+        sortable: true
+    code:
+        label: Код
+        type: text
+        sortable: true

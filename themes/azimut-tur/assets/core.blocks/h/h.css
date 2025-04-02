@@ -1,0 +1,53 @@
+.h, .h span {
+    font-family: var(--font-r);
+    font-size: 30px;
+}
+.h_size-l, .h_size-l span {
+    font-size: 46px;
+}
+.h_size-m, .h_size-m span {
+    font-size: 32px;
+}
+.h_size-xm, .h_size-xm span {
+    font-size: 28px;
+}
+.h_size-s, .h_size-s span {
+    font-size: 24px;
+}
+.h_size-xs, .h_size-xs span {
+    font-size: 20px;
+}
+.h_size-xxs, .h_size-xxs span {
+    font-size: 16px;
+}
+.h_txt-upper, .h_txt-upper span {
+    text-transform: uppercase;
+}
+.h_txt-bold, .h_txt-bold span {
+    font-family: var(--font-b);
+}
+.h_txt-orange, .h_txt-orange span {
+    color: #d7371a;
+}
+.h_txt-green, .h_txt-green span {
+    color: #b7ca3a;
+}
+.h_txt-red, .h_txt-red span {
+    color: #ef3b24;
+}
+
+
+/*.h_txt-blue, .h_txt-blue span {*/
+    /*color: #011ad6;*/
+/*}*/
+/*.h_txt-gray, .h_txt-gray span {*/
+    /*color: #797a7a;*/
+/*}*/
+/*.h_txt-light, .h_txt-light span {*/
+    /*!*font-family: GothamProLight, sans-serif;*!*/
+    /*font-family: OpenSansBold, sans-serif;*/
+/*}*/
+/*.h_txt-medium, .h_txt-medium span {*/
+    /*!*font-family: GothamProMedium, sans-serif;*!*/
+    /*font-family: OpenSansBold, sans-serif;*/
+/*}*/

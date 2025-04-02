@@ -1,0 +1,5 @@
+fields:
+    name:
+        label: 'Название категории номера'
+        span: auto
+        type: text

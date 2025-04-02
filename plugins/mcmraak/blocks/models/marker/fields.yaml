@@ -1,0 +1,40 @@
+fields:
+    name:
+        label: 'Название маркера'
+        span: auto
+        oc.commentPosition: ''
+        type: text
+    title:
+        label: 'Заголовок маркера'
+        oc.commentPosition: ''
+        span: auto
+        type: text
+    long:
+        label: Долгота
+        oc.commentPosition: ''
+        span: auto
+        default: '51.540044'
+        type: number
+    lat:
+        label: Широта
+        span: auto
+        oc.commentPosition: ''
+        default: '46.004441'
+        type: number
+    images:
+        label: 'Изображения для метки'
+        span: auto
+        oc.commentPosition: ''
+        mode: image
+        useCaption: true
+        thumbOptions:
+            mode: crop
+            extension: auto
+        type: fileupload
+    text:
+        label: 'HTML Код балуна'
+        oc.commentPosition: ''
+        size: huge
+        language: html
+        span: full
+        type: codeeditor

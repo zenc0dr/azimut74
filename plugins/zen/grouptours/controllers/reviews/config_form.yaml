@@ -1,0 +1,10 @@
+name: Reviews
+form: $/zen/grouptours/models/review/fields.yaml
+modelClass: Zen\GroupTours\Models\Review
+defaultRedirect: zen/grouptours/reviews
+create:
+    redirect: 'zen/grouptours/reviews/update/:id'
+    redirectClose: zen/grouptours/reviews
+update:
+    redirect: zen/grouptours/reviews
+    redirectClose: zen/grouptours/reviews

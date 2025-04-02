@@ -1,0 +1,26 @@
+columns:
+    id:
+        label: id
+        type: number
+        sortable: true
+    name:
+        label: Метка
+        type: text
+        searchable: true
+        sortable: true
+    filename:
+        label: Файл
+        type: text
+        sortable: true
+    last_restore:
+        label: Восстановлено
+        type: text
+        sortable: true
+    date:
+        label: 'Дата создания'
+        type: datetime
+        sortable: true
+    size_formated:
+        label: Размер
+        type: text
+        sortable: true

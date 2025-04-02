@@ -1,0 +1,15 @@
+list: $/zen/dolphin/models/tarrif/columns.yaml
+modelClass: Zen\Dolphin\Models\Tarrif
+title: Tarrifs
+noRecordsMessage: 'backend::lang.list.no_records'
+showSetup: true
+showCheckboxes: true
+recordsPerPage: 20
+defaultSort:
+    column: id
+    direction: asc
+toolbar:
+    buttons: list_toolbar
+    search:
+        prompt: 'backend::lang.list.search_prompt'
+recordUrl: 'zen/dolphin/tarrifs/update/:id'

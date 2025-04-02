@@ -1,0 +1,143 @@
+{% for hotel in hotels %}
+    {% if hotel.name != 'Без гостиницы' %}
+        <div class="dolphin-hotel-card">
+            <div class="dhc-block">
+                <div class="dhc-block-pic" style="background-image: url({{ hotel.preview_image }})"></div>
+                <div class="dhc-block-info">
+                    <div class="dhc-block-info-name">
+                        <span>{{ hotel.type }} {{ hotel.name }}</span>
+                        <span>{{ hotel.stars }}</span>
+                    </div>
+                    <div class="dhc-block-info-address">{{ hotel.address }}</div>
+                </div>
+                <div class="dhc-block-dropdown"><div>‣</div></div>
+            </div>
+            <div class="dhc-content">
+                {# <div class="dhc-hr"></div> #}
+                {{ hotel.gallery|raw }}
+                {% if hotel.info %}
+                    <div class="dhc-content-block">
+                        <div class="dhccb-title">Описание</div>
+                        <div class="dhccb-text">{{ hotel.info|raw }}</div>
+                    </div>
+                {% endif %}
+
+                {% if hotel.numbers_desc %}
+                    <div class="dhc-content-block">
+                        <div class="dhccb-title">Описание номеров</div>
+                        <div class="dhccb-text">{{ hotel.numbers_desc|raw }}</div>
+                    </div>
+                {% endif %}
+
+                {% if hotel.ci %}
+                    <div class="dhc-content-block">
+                        <div class="dhccb-title">Информация о строительстве</div>
+                        <div class="dhccb-text">{{ hotel.ci|raw }}</div>
+                    </div>
+                {% endif %}
+
+                {% if hotel.ta %}
+                    <div class="dhc-content-block">
+                        <div class="dhccb-title">Транспортная доступность</div>
+                        <div class="dhccb-text">{{ hotel.ta|raw }}</div>
+                    </div>
+                {% endif %}
+
+                {% if hotel.contacts %}
+                    <div class="dhc-content-block">
+                        <div class="dhccb-title">Контакты</div>
+                        <div class="dhccb-text">{{ hotel.contacts|raw }}</div>
+                    </div>
+                {% endif %}
+
+                {% if hotel.paid_services %}
+                    <div class="dhc-content-block">
+                        <div class="dhccb-title">Платные услуги</div>
+                        <div class="dhccb-text">{{ hotel.paid_services|raw }}</div>
+                    </div>
+                {% endif %}
+
+                {% if hotel.how_to_get %}
+                    <div class="dhc-content-block">
+                        <div class="dhccb-title">Проезд</div>
+                        <div class="dhccb-text">{{ hotel.how_to_get|raw }}</div>
+                    </div>
+                {% endif %}
+
+                {% if hotel.transfer %}
+                    <div class="dhc-content-block">
+                        <div class="dhccb-title">Трансфер</div>
+                        <div class="dhccb-text">{{ hotel.transfer|raw }}</div>
+                    </div>
+                {% endif %}
+
+                {% if hotel.therapy %}
+                    <div class="dhc-content-block">
+                        <div class="dhccb-title">Показания для лечения</div>
+                        <div class="dhccb-text">{{ hotel.therapy|raw }}</div>
+                    </div>
+                {% endif %}
+
+                {% if hotel.treatment %}
+                    <div class="dhc-content-block">
+                        <div class="dhccb-title">Профиль лечения</div>
+                        <div class="dhccb-text">{{ hotel.treatment|raw }}</div>
+                    </div>
+                {% endif %}
+
+                {% if hotel.hstructures %}
+                    <div class="dhc-content-block">
+                        <div class="dhccb-title">Инфраструктура гостиницы</div>
+                        <div class="dhccb-text">
+                            <ul>
+                                {% for item in hotel.hstructures %}
+                                    <li>{{ item }}</li>
+                                {% endfor %}
+                            </ul>
+                        </div>
+                    </div>
+                {% endif %}
+
+                {% if hotel.hservices %}
+                    <div class="dhc-content-block">
+                        <div class="dhccb-title">Услуги гостиницы</div>
+                        <div class="dhccb-text">
+                            <ul>
+                                {% for item in hotel.hservices %}
+                                    <li>{{ item }}</li>
+                                {% endfor %}
+                            </ul>
+                        </div>
+                    </div>
+                {% endif %}
+
+                {% if hotel.hopts %}
+                    <div class="dhc-content-block">
+                        <div class="dhccb-title">Характеристики гостиницы</div>
+                        <div class="dhccb-text">
+                            <ul>
+                                {% for item in hotel.hopts %}
+                                    <li>{{ item }}</li>
+                                {% endfor %}
+                            </ul>
+                        </div>
+                    </div>
+                {% endif %}
+
+                {% if hotel.plages %}
+                    <div class="dhc-content-block">
+                        <div class="dhccb-title">Пляжи</div>
+                        <div class="dhccb-text">
+                            <ul>
+                                {% for item in hotel.plages %}
+                                    <li>{{ item }}</li>
+                                {% endfor %}
+                            </ul>
+                        </div>
+                    </div>
+                {% endif %}
+
+            </div>
+        </div>
+    {% endif %}
+{% endfor %}

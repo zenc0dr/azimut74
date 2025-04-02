@@ -1,0 +1,22 @@
+columns:
+    id:
+        label: id
+        type: number
+        sortable: true
+    name:
+        label: 'zen.om::lang.store.name'
+        type: text
+        searchable: true
+        sortable: true
+    slug:
+        label: 'zen.om::lang.store.code'
+        type: text
+        searchable: true
+        sortable: true
+    sort_order:
+        label: 'zen.om::lang.plugin.sort_order'
+        type: number
+        sortable: true
+    active:
+        label: Активность
+        type: partial

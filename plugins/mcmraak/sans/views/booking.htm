@@ -1,0 +1,205 @@
+<div class="h h_txt-bold h_txt-upper h_size-xs mt-25 mb-25 t-c">
+    Бронирование путевки
+</div>
+<div class="modal__block modal__block_yellow">
+    <div class="h h_txt-bold h_size-xxs">
+        {{ data.hotel_type }} «{{ data.hotel_name }}»
+    </div>
+
+    <div class="modal__details-wrap mt-15">
+        <div class="r">
+            <div class="col-25 col-xs-100">
+                <div class="modal__detail">
+                    <div class="modal__label">
+                        Даты тура:
+                    </div>
+                    <div class="modal__detail-data">
+                        {{ data.date_of }} — {{ data.date_to }}
+                    </div>
+                </div>
+            </div>
+            <div class="col-25 col-xs-100">
+                <div class="modal__detail">
+                    <div class="modal__label">
+                        Дней отдыха:
+                    </div>
+                    <div class="modal__detail-data">
+                        {{ data.nights + 1 }} дней
+                    </div>
+                </div>
+            </div>
+            <div class="col-50 col-xs-100">
+                <div class="modal__detail">
+                    <div class="modal__label">
+                        Курорт:
+                    </div>
+                    <div class="modal__detail-data">
+                        г. {{ data.town_name }}
+                    </div>
+                </div>
+            </div>
+            <div class="col-25 col-xs-100">
+                <div class="modal__detail">
+                    <div class="modal__label">
+                        Взрослых:
+                    </div>
+                    <div class="modal__detail-data">
+                        {{ data.adults }}
+                    </div>
+                </div>
+            </div>
+            <div class="col-25 col-xs-100">
+                <div class="modal__detail">
+                    <div class="modal__label">
+                        Детей:
+                    </div>
+                    <div class="modal__detail-data">
+                        {{ data.kids }} <span class="modal__detail-data--little">
+                            {% if data.kidsAges %}
+                            (возраст: {{ data.kidsAges }})
+                            {% endif %}
+                        </span>
+                    </div>
+                </div>
+            </div>
+            <div class="col-50 col-xs-100">
+                <div class="modal__detail">
+                    <div class="modal__label">
+                        Номер:
+                    </div>
+                    <div class="modal__detail-data">
+                        <a class="modal__detail-data-link" href="#">
+                            {{ data.room_type }}
+                        </a>
+                    </div>
+                </div>
+            </div>
+            <div class="col-50 col-xs-100">
+                <div class="modal__detail">
+                    <div class="modal__label">
+                        В стоимость входит:
+                    </div>
+                    <div class="modal__detail-data">
+                        {{ data.tour_name|findAndDel(data.town_name~'.', '') }}
+                    </div>
+                </div>
+            </div>
+            <div class="col-50 col-xs-100">
+                <div class="modal__detail">
+                    <div class="modal__label">
+                        Цена:
+                    </div>
+                    <div class="modal__detail-data modal__detail-data_large">
+                        {{ data.price }} руб.
+                    </div>
+                </div>
+            </div>
+        </div>
+
+
+    </div>
+</div>
+
+<div id="SansBooking" class="modal__block p-r">
+    <div class="h h_txt-bold h_size-xxs">
+        Данные о пассажирах
+    </div>
+
+    <div class="modal__human-details bookingDataLine mt-20">
+        <input booking-name="checkin_id" type="hidden" value="{{ checkin.id }}">
+        <div class="modal__human-details-form dataLineForm">
+            <div class="r">
+                <div class="col-45 col-xs-100">
+                    <div class="dataLineLeft">
+                        <div class="modal__human-details-line dLine">
+                            <div>
+                                <span>Имя</span>
+                            </div>
+                            <div>
+                                <input booking-name="name"
+                                       class="order orderBook"
+                                       type="text"
+                                       placeholder="Ваше имя"
+                                       v-model="send.name"
+                                       :class="{bad:warnings.badfields.name}"
+                                >
+                            </div>
+                        </div>
+                        <div class="modal__human-details-line dLine">
+                            <div>
+                                <span>Телефон</span>
+                            </div>
+                            <div>
+                                <input booking-name="phone"
+                                       class="order phone orderBook"
+                                       type="text"
+                                       placeholder="Ваш телефон"
+                                       v-model="send.phone"
+                                       :class="{bad:warnings.badfields.phone}"
+                                >
+                            </div>
+                        </div>
+                        <div class="modal__human-details-line dLine">
+                            <div>
+                                <span>E-mail</span>
+                            </div>
+                            <div>
+                                <input booking-name="email"
+                                       class="order orderBook"
+                                       type="text"
+                                       placeholder="Ваш e-mail"
+                                       v-model="send.email"
+                                       :class="{bad:warnings.badfields.email}"
+                                >
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-55 col-xs-100 mt-xs-20">
+                    <div class="dataLineRight">
+                        <div>
+                            <textarea booking-name="desc"
+                                      class="order orderBook"
+                                      placeholder="Дополнительная информация"
+                                      v-model="send.desc"
+                                      :class="{bad:warnings.badfields.desc}"
+                            ></textarea>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+
+        </div>
+    </div>
+
+    <div class="modal__offer offerItem d-flex" @click="confirm()">
+        <span class="check"
+              :class="[(send.confirm === true) ? ' checked' : '']"
+              id="#OfferCheck"><i class="fa fa-check" aria-hidden="true"></i></span>
+        <span><a class="offerLink" href="#modalOffer">Нажимая кнопку «Бронировать», я даю свое согласие на обработку моих персональных данных, в соответствии с Федеральным
+        законом от 27.07.2006 года №152-ФЗ «О персональных данных», на условиях и для целей, определенных в Согласии на
+        обработку персональных данных</a>, в соответствии с  <a target="_blank" href="/politika-konfidencialnosti">Политикой по обработке персональных данных Компании</a></span>
+    </div>
+
+    <div class="modal__anno pt-30 pb-30">
+        <span>Мы гарантируем конфиденциальность введенных данных, мы не используем Ваши данные для навязчивых рассылок, заказ ни к чему Вас не обязывает</span>
+    </div>
+
+    <div id="BookingSend" class="modal__booking-button bookingButton checkButton disabled">
+        <button class="hbtn" @click="sendData()" :disabled="!send.confirm">
+            Бронировать
+        </button>
+    </div>
+
+    <div v-if="warnings.messages.length"
+         class="sans-alerts"
+         :class="{success: warnings.success}">
+        <div v-for="message in warnings.messages">${message}</div>
+    </div>
+
+</div>
+<div class="revloader" style="display: none;">
+    <img src="/storage/app/media/uploaded-files/preloader_clear.svg">
+</div>
+<script src="/plugins/mcmraak/sans/assets/js/sans.booking.send.js"></script>

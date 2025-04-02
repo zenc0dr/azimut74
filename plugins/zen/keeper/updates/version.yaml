@@ -1,0 +1,15 @@
+1.0.1:
+    - 'Initialize plugin.'
+1.0.2:
+    - 'Created table zen_keeper_sites'
+    - builder_table_create_zen_keeper_sites.php
+1.0.3:
+    - 'Created table zen_keeper_backups'
+    - builder_table_create_zen_keeper_backups.php
+1.0.4:
+    - 'Updated table zen_keeper_sites'
+    - builder_table_update_zen_keeper_sites.php
+1.0.5:
+    - 'some fixes'
+1.0.6:
+    - 'Рефакторинг кода, исключение *.zip файлов'

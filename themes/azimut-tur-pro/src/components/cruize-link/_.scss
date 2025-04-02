@@ -1,0 +1,16 @@
+.cruize-link a {
+    text-decoration: none;
+}
+
+.cruize-link a:hover {
+    color: color('blue-300');
+}
+
+.cruize-link a:hover span {
+    border-color: color('blue-300');
+}
+
+.cruize-link a span {
+    border-bottom: 1px solid color('gray-100');
+    transition: all .15s ease-in-out;
+}

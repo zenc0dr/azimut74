@@ -1,0 +1,5 @@
+function onStart()
+{
+    # Добавляет prok_items
+    \Mcmraak\Rivercrs\Classes\Prok::addPages($this);
+}

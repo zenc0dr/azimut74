@@ -1,0 +1,10 @@
+columns:
+    id:
+        label: id
+        type: number
+    name:
+        label: 'Название'
+        type: text
+    slug:
+        label: 'Отсносительная ссылка'
+        type: text

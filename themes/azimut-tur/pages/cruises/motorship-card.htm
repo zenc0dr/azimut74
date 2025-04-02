@@ -1,0 +1,414 @@
+title = "Карточка теплохода"
+url = "/russia-river-cruises/motorship/:id/:checkin_id?"
+layout = "general"
+description = "Карточка теплохода"
+is_hidden = 0
+robot_index = "index"
+robot_follow = "follow"
+contentType = "html"
+force_show = 0
+
+[Widget]
+outer_result_container = 1
+==
+<?php
+use \Mcmraak\Rivercrs\Models\Cruises;
+use \Mcmraak\Rivercrs\Models\Transit;
+use \Mcmraak\Rivercrs\Models\Reference;
+use \Mcmraak\Rivercrs\Models\Motorships;
+use \Mcmraak\Rivercrs\Models\Checkins;
+use \Mcmraak\Rivercrs\Models\Review;
+
+function onInit()
+{
+    $this['cruises'] = Cruises::where('active', 1)->orderBy('sort_order')->get();
+    $this['cruise'] = Cruises::where('slug', 'river-cruises')->first();
+    $this['ship'] = Motorships::find($this->param('id'));
+    $this['reviews'] = Review::where('motorship_id', $this->param('id'))->where('active',1)->orderBy('created_at', 'desc')->paginate(15);
+	$this['checkin_id'] = $checkin_id = $this->param('checkin_id');
+	$this['checkin'] = Checkins::find($checkin_id);
+	$this['references'] = Reference::orderBy('order')->get();
+	$this['motorships'] = Motorships::cleanNames();
+}
+?>
+==
+{% put breadcrumbs %}{% partial 'template/breadcrumbs' %}{% endput %}
+
+<filter-options town="0" ship="{{ ship.id }}" shipfix="1" items="{% if checkin_id !='' %}none{% endif %}"></filter-options>
+<input id="SelectShipReviews" type="hidden" value="{{ ship.id }}">
+
+<checkin-id id="{{ checkin_id }}"></checkin-id>
+
+<section class="cruises">
+
+	<div class="headText">
+		<h1 class="h1">{{ ship.name|mutator }}</h1>
+	</div>
+
+	<div class="cruiseData">
+		<div class="c-r">
+			<div class="col-25 col-s-100 as-s">
+				{% partial 'rivercrs/leftmenu' %}
+			</div>
+
+			<div class="col-75 col-s-100 as-s">
+				<div class="rightBlock">
+
+					<style>
+						.dp-note {
+							position: absolute;
+							background: #3e9def;
+							width: 16px;
+							height: 3px;
+							/* border-radius: 50%; */
+							left: 50%;
+							bottom: 4px;
+							-webkit-transform: translateX(-50%);
+							transform: translateX(-50%);
+						}
+					</style>
+					
+					{% partial 'template/socialbuttons' %}
+					
+					{% component 'Widget' %}
+
+					<div class="cruiseCardSwitchers">
+						<div class="crSwitcher active c-schedule" data-id="c-schedule">
+							<span>Расписание и стоимость</span>
+						</div>
+						<div class="crSwitcher c-description" data-id="c-description">
+							<span>Описание теплохода</span>
+						</div>
+						<div class="crSwitcher c-reviews" data-id="c-reviews">
+							<span>Отзывы о теплоходе</span>
+						</div>
+					</div>
+
+					<div class="cruiseCardContent">
+
+						<div class="crSwitchContent c-schedule active">
+
+
+							<div id="RiverResults">
+                                <template v-if="result"><pagination :page="page" :pages_count="pages_count"></pagination></template>
+                                <div id="Result" :class="{process:process}" v-html="result"></div>
+                                <template v-if="result"><pagination :page="page" :pages_count="pages_count"></pagination></template>
+                            </div>
+
+
+                            {% if checkin_id !='' %}
+							<div class="crDescription">
+								<div class="crDescriptionLeft">
+
+									
+									<div id="More-about-cruise" class="descItem">
+										<div class="heading">
+											<span>Подробнее о рейсе</span>
+										</div>
+										<div class="data">
+											{{ checkin.desc_2|raw|mutator }}
+										</div>
+									</div>
+									
+
+									<div class="descItem">
+										<div class="heading">
+											<span>В стоимость круиза входит:</span>
+										</div>
+										<div class="data">
+											{{ ship.add_a|raw|mutator }}
+										</div>
+									</div>
+
+									<div class="descItem">
+										<div class="heading">
+											<span>Дополнительно оплачиваются:</span>
+										</div>
+										<div class="data">
+											{{ ship.add_b|raw|mutator }}
+										</div>
+									</div>
+
+									<div class="descItem">
+										<a href="#modalOtherCity" class="bbtn">
+											<div class="buyBlock">
+												<span>Как купить круиз, если вы проживаете в другом городе?</span>
+											</div>
+										</a>
+									</div>
+									
+									{% partial 'modal/modal-second' %}
+
+								</div>
+
+								<div class="crDescriptionRight">
+
+									<div class="descItem">
+										<div class="tourCredit mbtn" href="#modalCredit">
+											<div class="tourCreditIcon">
+												{% partial 'svg/crediticon' %}
+											</div>
+											<div class="tourCreditText">
+												<span>Не хватает средств?</span>
+												<span>Купите тур в рассрочку</span>
+											</div>
+										</div>
+									</div>
+
+									<div class="descItem">
+										<div class="heading">
+										{% if ship.booking_discounts or ship.social_discounts %}
+											<span>Система скидок</span>
+										{% endif %}
+										</div>
+
+										<div class="data">
+										    {% if ship.booking_discounts %}
+											<h3>
+												Скидки раннего бронирования
+											</h3>
+											{{ ship.booking_discounts|raw|mutator }}
+											{% endif %}
+											{% if ship.social_discounts %}
+											<h3>
+												Социальные скидки
+											</h3>
+											{{ ship.social_discounts|raw|mutator }}
+											{% endif %}
+										</div>
+									</div>
+
+								</div>
+							</div>
+                            {% endif %}
+                            
+                            {# Форма закомментирована 250718, задача118 #}
+							{#<div class="crQuestion">
+								<div class="crQuestionData">
+									<span>Остались вопросы?</span>
+									<span>Не смогли определиться с выбором? Нужна помощь специалиста</span>
+								</div>
+								<div class="crQuestionButton">
+									<button href="#modalCall" class="hbtn mbtn">Помощь специалиста</button>
+								</div>
+							</div>#}
+
+						</div>
+
+						<div class="crSwitchContent c-description">
+							<div class="shipDescriptionBlock">
+
+								<div class="shipDescTop">
+									<div class="shipDescImages">
+										<div class="bigImagesWrap">
+											<div class="bigImages owl-carousel">
+												{% for image in ship.images %}
+												<a class="gal" data-lightbox-gallery="descBigGallery" href="{{ image.path }}">
+													<div class="imageItem" data-hash="shipdesc{{ loop.index }}" style="background-image: url({{ image.path|resize(320) }})">
+														<i class="fa fa-search-plus" aria-hidden="true"></i>
+													</div>
+												</a>
+												{% endfor %}
+											</div>
+										</div>
+
+										<div class="smallImages">
+											{% for image in ship.images %}
+											<a href="#shipdesc{{ loop.index }}">
+												<div class="imageItem" style="background-image: url({{ image.path|resize(320) }})">!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!</div>
+											</a>
+											{% endfor %}
+										</div>
+
+										<div class="imagePlusButton">
+											<button class="ibtn">
+												<span class="add">+ еще фото</span>
+												<span class="less">- меньше фото</span>
+											</button>
+										</div>
+									</div>
+									<div class="shipDescFeatures">
+
+										<div class="shipDescFeaturesLine">
+											<div>
+												<h2 class="h2">Технические характеристики</h2>
+												<div class="data">
+													{% for item in ship.technicals %}
+													<p>{{ item.name|mutator }} — {{ item.value|mutator }}</p>
+													{% endfor %}
+												</div>
+											</div>
+											<div>
+												<h3 class="h3">На борту теплохода</h3>
+												<div class="data">
+													<ul>
+														{% for item in ship.onboard_list %}
+														<li>{{ item.name|mutator }}</li>
+														{% endfor %}
+													</ul>
+												</div>
+											</div>
+										</div>
+
+										<div class="shipDescFeaturesLine shipDescFeaturesLine_schema">
+											<div>
+												<h3 class="h3">Схема теплохода</h3>
+												<div class="data">
+													{#<img src="{{ ship.scheme|first.path|resize(200) }}" alt="">#}
+													<img src="/storage/app/media/Cruises/Card/shema_teplohod.jpg" alt="Схема теплохода">
+													<span style="width: 100%; display: inline-block">
+														<a class="plusbtn" modalbox="type:img" href="{{ ship.scheme|first.path }}">увеличить</a>
+													</span>
+												</div>
+											</div>
+											<!-- <div>
+												<h3 class="h3">Видео</h3>
+												<div class="data">
+													{#<iframe width="100%" height="140" src="{{ ship.youtube }}" frameborder="0" allowfullscreen></iframe>#}
+													{#{% for video in ship.youtube %}#}
+													<div class="shipVideo">
+													{#{{ video.vcode|raw }}#}
+													</div>
+													{#{% endfor %}#}
+												</div>
+											</div> -->
+										</div>
+
+									</div>
+								</div>
+								{% set v_count = 0 %}
+								{% for item in ship.youtube %}
+									{% if item.sw_card == 1 %}
+										{% set v_count = v_count + 1 %}
+									{% endif %}
+								{% endfor %}
+								
+								{% if ship.youtube and v_count > 0 %}
+								<div class="shipDescAbout shipDescAboutVideo">
+									<div class="data">
+										<h2>Видео</h2>
+
+										{% for video in ship.youtube if video.sw_card == 1 %}
+											<div class="shipVideo t-c">
+                                                {% if this.environment != 'dev' %}
+												{{ video.vcode|raw }}
+                                                {% endif %}
+											</div>
+										{% endfor %}
+									</div>
+								</div>
+								{% endif %}
+
+								<div class="shipDescAbout">
+									<div class="data">
+										<h2>Описание теплохода <!-- « -->{{ ship.name|slice(9, 255) }}<!-- » --></h2>
+
+										{#{% set croptext = ship.desc|slice(0, 475)|raw ~ '...' %} 
+										{{ croptext|raw }}#}
+										<p>
+											{{ ship.desc|raw|mutator }}
+										</p>
+									</div>
+									<div class="shipDescAboutButton">
+										<button class="ibtn">
+											<span class="add">Развернуть полное описание теплохода</span>
+											<span class="less">Cвернуть полное описание теплохода</span>
+										</button>
+									</div>
+								</div>
+
+								<div class="shipDescCabinBlock">
+
+									<div class="cabinBlockHeading">
+										<span>Описание кают теплохода</span>
+									</div>
+
+									{% for record in ship.decksWithCabins %}
+
+									<div class="shipDescCabinItem">
+										<div class="cabinItemHeading">
+											<div>
+												<span>{{ record.deck.name|mutator }}</span>
+											</div>
+											<div>
+												<a href="{{ ship.scheme|first.path }}" class="plusbtn gal"><span>Расположение на схеме теплохода</span></a>
+											</div>
+										</div>
+
+										{% for cabin in record.cabins %}
+										<div class="cabinItemLine">
+											<div class="cabinItemLineLeft">
+												<div>
+													<span>Фотография каюты</span> {% for image in cabin.images %}
+													<a class="gal" data-lightbox-gallery="eachCabinGallery{{ cabin.id }}" href="{{ image.path }}">
+														<div class="cabinImage" style="background-image: url({{ image.path|resize(300) }})"></div>
+													</a>
+													{% endfor %}
+													{% if cabin.images.count > 1 %}
+													<span class="cabinplus">
+														<span class="add">+ еще фото</span>
+														<span class="less">- скрыть фото</span>
+													</span>
+													{% endif %}
+												</div>
+											</div>
+											<div class="cabinItemLineRight">
+											<span>Категория: {{ cabin.category|mutator }} - {{ cabin.placeName|mutator }}</span>
+												<div class="data">
+													<ul style="font-size:13px;">
+														<li><strong>Комфорт:</strong> {{ cabin.comfort.name|mutator }}</li>
+														<li><strong>Расположение кровати:</strong> {{ cabin.bed.name|mutator }}</li>
+														{% if cabin.rooms_count %}
+														<li><strong>Количество комнат:</strong> {{ cabin.rooms_count|mutator }}</li>
+														{% endif %}
+														{% if cabin.space %}
+														<li><strong>Площадь каюты в м2:</strong> {{ cabin.space|mutator }}</li>
+														{% endif %}
+													</ul>
+													<p>
+														В каюте имеются: {% for e in cabin.incabin_list %} {{ e.name|mutator }}{% if loop.last != true %},{% else %};{% endif %} {% endfor
+														%}
+													</p>
+													<p>
+														{{ cabin.desc|raw|mutator }}
+													</p>
+												</div>
+											</div>
+										</div>
+										{% endfor %}
+									</div>
+
+									{% endfor %}
+
+								</div>
+
+							</div>
+						</div>
+						
+						<div class="crSwitchContent c-reviews">
+							{% partial 'rivercrs/reviews' %}
+						</div>
+					</div>
+					
+					<div class="cruiseCardSwitchers">
+						<div class="crSwitcher active c-schedule" data-id="c-schedule">
+							<span>Расписание и стоимость</span>
+						</div>
+						<div class="crSwitcher c-description" data-id="c-description">
+							<span>Описание теплохода</span>
+						</div>
+						<div class="crSwitcher c-reviews" data-id="c-reviews">
+							<span>Отзывы о теплоходе</span>
+						</div>
+					</div>
+					
+				</div>
+			</div>
+		</div>
+	</div>
+	
+	{% partial 'rivercrs/relinks' %}
+
+</section>
+
+{% partial 'rivercrs/modals' %}

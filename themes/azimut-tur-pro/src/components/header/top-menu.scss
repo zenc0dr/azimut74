@@ -1,0 +1,140 @@
+.top-menu {
+    animation: fast-fadein;
+    animation-duration: 300ms;
+
+    .whats-app-btn {
+        background-image: url(/themes/azimut-tur-pro/assets/images/WhatsApp.svg);
+        background-size: contain;
+        background-repeat: no-repeat;
+        width: 34px;
+        height: 34px;
+        margin-right: 15px;
+        margin-top: 2px;
+        cursor: pointer;
+        transition: 150ms;
+        &:hover {
+            transform: scale(1.3);
+        }
+    }
+}
+
+
+.top-menu__dropdown-item.active .menu-tree__root {
+    margin-top: 15px;
+    font-weight: normal;
+}
+
+.top-menu__dropdown {
+    position: absolute;
+    z-index: 100;
+    margin-top: 0;
+    top: 100%;
+    margin-left: 0;
+    left: 0%;
+    border-top: 1px dashed;
+    background: #0056a0;
+    font-weight: normal;
+    border-bottom-right-radius: 4px;
+    border-bottom-left-radius: 4px;
+    min-width: 180px;
+}
+
+.top-menu_mobile-mini-logo  {
+   display: flex;
+   align-items: center;
+    img {
+    @include m('sm') {
+        width: 40px;
+    }
+}
+}
+
+.top-menu_mobile-humburger {
+    display: flex;
+    align-items: center;
+    i {
+        font-size: rem(36);
+    }
+}
+
+.bi-arrow-down-short {
+    position: absolute;
+    margin-top: -13px;
+    transition: 500ms;
+}
+
+.bi-arrow-down-short.rotate {
+    transform: rotate(180deg);
+}
+
+.top-menu__top-level {
+    position: relative;
+    font-weight: bold;
+}
+
+.top-menu__top-level.active {
+    background: #0056a0;
+}
+
+.menu-tree__item.level-3 {
+    padding: 10px;
+    padding-right: 0;
+}
+
+.dropdown-caret {
+    display: inline-block;
+    margin-left: 3px;
+}
+
+.menu-tree__item {
+    cursor: pointer;
+    white-space: nowrap;
+}
+.menu-tree__root .menu-tree__root {
+    animation-name: menu-fadein;
+    animation-duration: 200ms;
+}
+
+.top-menu__dropdown-item.active {
+    font-weight: bold;
+}
+
+
+.top-menu_mobile {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    z-index: 100;
+}
+.top-menu__mobile-menu {
+    overflow: hidden;
+    animation-name: mobile-menu-fadein;
+    animation-duration: 500ms;
+}
+@keyframes fast-fadein {
+    from {
+        opacity: 0;
+    }
+    to {
+        opacity: 1;
+    }
+}
+@keyframes menu-fadein {
+    from {
+        line-height: 5px;
+        font-size: 0;
+        opacity: 0;
+    }
+    to {
+        opacity: 1;
+    }
+}
+@keyframes mobile-menu-fadein {
+    from {
+        max-height: 1px;
+    }
+    to {
+        max-height: 600px;
+    }
+}

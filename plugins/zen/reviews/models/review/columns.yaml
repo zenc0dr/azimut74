@@ -1,0 +1,24 @@
+columns:
+    id:
+        label: id
+        type: number
+        sortable: true
+    name:
+        label: Имя
+        type: text
+        searchable: true
+        sortable: true
+    email:
+        label: email
+        type: text
+        searchable: true
+        sortable: true
+    phone:
+        label: Телефон
+        type: text
+        searchable: true
+        sortable: true
+    created_at:
+        label: Создано
+        type: datetime
+        sortable: true

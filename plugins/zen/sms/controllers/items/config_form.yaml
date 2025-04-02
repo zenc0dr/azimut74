@@ -1,0 +1,10 @@
+name: Items
+form: $/zen/sms/models/item/fields.yaml
+modelClass: Zen\Sms\Models\Item
+defaultRedirect: zen/sms/items
+create:
+    redirect: 'zen/sms/items/update/:id'
+    redirectClose: zen/sms/items
+update:
+    redirect: zen/sms/items
+    redirectClose: zen/sms/items

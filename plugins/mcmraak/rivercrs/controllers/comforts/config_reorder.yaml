@@ -1,0 +1,4 @@
+title: Comforts
+modelClass: Mcmraak\Rivercrs\Models\Comforts
+toolbar:
+    buttons: reorder_toolbar

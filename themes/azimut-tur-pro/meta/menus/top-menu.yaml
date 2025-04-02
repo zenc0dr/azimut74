@@ -1,0 +1,323 @@
+items:
+    -
+        title: Круизы
+        nesting: null
+        type: url
+        url: /russia-river-cruises
+        code: ''
+        reference: null
+        cmsPage: null
+        replace: null
+        viewBag:
+            isHidden: '0'
+            cssClass: ''
+            isExternal: '0'
+    -
+        title: Туры
+        nesting: null
+        type: url
+        url: dropdown
+        code: ''
+        reference: null
+        cmsPage: null
+        replace: null
+        viewBag:
+            isHidden: '0'
+            cssClass: ''
+            isExternal: '0'
+        items:
+            -
+                title: 'Экскурсионные / выходного дня'
+                nesting: null
+                type: url
+                url: /ex-tours/ext
+                code: ''
+                reference: null
+                cmsPage: null
+                replace: null
+                viewBag:
+                    isHidden: '0'
+                    cssClass: ''
+                    isExternal: '0'
+            -
+                title: 'Школьные туры'
+                type: url
+                url: /group-tours/shkolnye-tury-v-saratove
+                code: ''
+                viewBag:
+                    isHidden: '0'
+                    cssClass: ''
+                    isExternal: '0'
+            -
+                title: 'Прием туристов в Саратове'
+                type: url
+                url: /group-tours/priem-turistov-v-saratove
+                code: ''
+                viewBag:
+                    isHidden: '0'
+                    cssClass: ''
+                    isExternal: '0'
+            -
+                title: 'Автобусом к морю'
+                nesting: null
+                type: url
+                url: /ex-tours/atm/avtobusnye-tury-k-moryu
+                code: ''
+                reference: null
+                cmsPage: null
+                replace: null
+                viewBag:
+                    isHidden: '0'
+                    cssClass: ''
+                    isExternal: '0'
+            -
+                title: 'Горящие туры'
+                nesting: null
+                type: url
+                url: /tours
+                code: ''
+                reference: null
+                cmsPage: null
+                replace: null
+                viewBag:
+                    isHidden: '0'
+                    cssClass: ''
+                    isExternal: '0'
+            -
+                title: 'Зарубежные туры'
+                nesting: null
+                type: url
+                url: /poisk-zagranichnih-turov
+                code: ''
+                reference: null
+                cmsPage: null
+                replace: null
+                viewBag:
+                    isHidden: '0'
+                    cssClass: ''
+                    isExternal: '0'
+    -
+        title: 'Отели, санатории'
+        nesting: null
+        type: url
+        url: dropdown
+        code: ''
+        reference: null
+        cmsPage: null
+        replace: null
+        viewBag:
+            isHidden: '0'
+            cssClass: ''
+            isExternal: '0'
+        items:
+            -
+                title: КавМинВоды
+                nesting: null
+                type: url
+                url: /sans-pages/gr_kavkazskie-mineralnye-vody
+                code: ''
+                reference: null
+                cmsPage: null
+                replace: null
+                viewBag:
+                    isHidden: '0'
+                    cssClass: ''
+                    isExternal: '0'
+            -
+                title: 'Краснодарский край'
+                nesting: null
+                type: url
+                url: /sans-pages/gr_krasnodarskij-kraj
+                code: ''
+                reference: null
+                cmsPage: null
+                replace: null
+                viewBag:
+                    isHidden: '0'
+                    cssClass: ''
+                    isExternal: '0'
+            -
+                title: Крым
+                nesting: null
+                type: url
+                url: /sans-pages/gr_krym
+                code: ''
+                reference: null
+                cmsPage: null
+                replace: null
+                viewBag:
+                    isHidden: '0'
+                    cssClass: ''
+                    isExternal: '0'
+            -
+                title: Абхазия
+                nesting: null
+                type: url
+                url: /sans-pages/gr_abhaziya
+                code: ''
+                reference: null
+                cmsPage: null
+                replace: null
+                viewBag:
+                    isHidden: '0'
+                    cssClass: ''
+                    isExternal: '0'
+            -
+                title: 'Зарубежные отели'
+                nesting: null
+                type: url
+                url: /poisk-zagranichnih-turov
+                code: ''
+                reference: null
+                cmsPage: null
+                replace: null
+                viewBag:
+                    isHidden: '0'
+                    cssClass: ''
+                    isExternal: '0'
+    -
+        title: 'Для туристов'
+        nesting: null
+        type: url
+        url: dropdown
+        code: ''
+        reference: null
+        cmsPage: null
+        replace: null
+        viewBag:
+            isHidden: '0'
+            cssClass: ''
+            isExternal: '0'
+        items:
+            -
+                title: Отправление
+                nesting: null
+                type: url
+                url: /departure
+                code: ''
+                reference: null
+                cmsPage: null
+                replace: null
+                viewBag:
+                    isHidden: '0'
+                    cssClass: ''
+                    isExternal: '0'
+            -
+                title: 'Способы оплаты'
+                nesting: null
+                type: url
+                url: /paymethods
+                code: ''
+                reference: null
+                cmsPage: null
+                replace: null
+                viewBag:
+                    isHidden: '0'
+                    cssClass: ''
+                    isExternal: '0'
+            -
+                title: 'Кредит и рассрочка'
+                nesting: null
+                type: url
+                url: /credit
+                code: ''
+                reference: null
+                cmsPage: null
+                replace: null
+                viewBag:
+                    isHidden: '0'
+                    cssClass: ''
+                    isExternal: '0'
+    -
+        title: 'О компании'
+        nesting: null
+        type: url
+        url: dropdown
+        code: ''
+        reference: null
+        cmsPage: null
+        replace: null
+        viewBag:
+            isHidden: '0'
+            cssClass: ''
+            isExternal: '0'
+        items:
+            -
+                title: Контакты
+                nesting: null
+                type: url
+                url: /contacts
+                code: ''
+                reference: null
+                cmsPage: null
+                replace: null
+                viewBag:
+                    isHidden: '0'
+                    cssClass: ''
+                    isExternal: '0'
+            -
+                title: 'О нас'
+                nesting: null
+                type: url
+                url: /about
+                code: ''
+                reference: null
+                cmsPage: null
+                replace: null
+                viewBag:
+                    isHidden: '0'
+                    cssClass: ''
+                    isExternal: '0'
+            -
+                title: Вакансии
+                nesting: null
+                type: url
+                url: /vacancy
+                code: ''
+                reference: null
+                cmsPage: null
+                replace: null
+                viewBag:
+                    isHidden: '0'
+                    cssClass: ''
+                    isExternal: '0'
+            -
+                title: 'Новости компании'
+                nesting: null
+                type: url
+                url: /404
+                code: ''
+                reference: null
+                cmsPage: null
+                replace: null
+                viewBag:
+                    isHidden: '1'
+                    cssClass: ''
+                    isExternal: '0'
+            -
+                title: Агентствам
+                nesting: null
+                type: url
+                url: /404
+                code: ''
+                reference: null
+                cmsPage: null
+                replace: null
+                viewBag:
+                    isHidden: '1'
+                    cssClass: ''
+                    isExternal: '0'
+            -
+                title: Реквизиты
+                nesting: null
+                type: url
+                url: /404
+                code: ''
+                reference: null
+                cmsPage: null
+                replace: null
+                viewBag:
+                    isHidden: '1'
+                    cssClass: ''
+                    isExternal: '0'
+name: 'Главное меню'

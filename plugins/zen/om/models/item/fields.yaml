@@ -1,0 +1,106 @@
+tabs:
+    fields:
+        active:
+            label: 'zen.om::lang.plugin.active'
+            span: full
+            default: 1
+            type: switch
+            tab: 'zen.om::lang.tabs.basic_data'
+        name:
+            label: 'zen.om::lang.list.name'
+            oc.commentPosition: ''
+            span: auto
+            type: text
+            tab: 'zen.om::lang.tabs.basic_data'
+        slug:
+            label: 'zen.om::lang.list.link'
+            oc.commentPosition: ''
+            span: auto
+            preset:
+                field: name
+                type: slug
+            type: text
+            tab: 'zen.om::lang.tabs.basic_data'
+        url_cache:
+            label: 'Полная ссылка'
+            oc.commentPosition: ''
+            span: full
+            type: text
+            tab: 'zen.om::lang.tabs.basic_data'
+        category_id:
+            label: 'zen.om::lang.categories.category'
+            oc.commentPosition: ''
+            span: full
+            type: dropdown
+            tab: 'zen.om::lang.tabs.basic_data'
+        store_id:
+            label: 'zen.om::lang.store.store'
+            oc.commentPosition: ''
+            span: full
+            type: dropdown
+            tab: 'zen.om::lang.tabs.basic_data'
+        sort_order:
+            label: 'zen.om::lang.plugin.sort_order'
+            oc.commentPosition: ''
+            span: full
+            default: '100'
+            type: number
+            tab: 'zen.om::lang.tabs.basic_data'
+        itemlink:
+            span: auto
+            path: $/zen/om/controllers/items/_itemlink.htm
+            type: partial
+            tab: 'zen.om::lang.tabs.basic_data'
+        images:
+            label: 'zen.om::lang.plugin.images'
+            oc.commentPosition: ''
+            mode: image
+            useCaption: true
+            thumbOptions:
+                mode: crop
+                extension: auto
+            span: full
+            type: fileupload
+            tab: 'zen.om::lang.tabs.description'
+        full_desc:
+            label: 'zen.om::lang.plugin.full_desc'
+            size: huge
+            oc.commentPosition: ''
+            span: full
+            type: richeditor
+            tab: 'zen.om::lang.tabs.description'
+        frame:
+            label: 'Вставить iframe'
+            oc.commentPosition: ''
+            size: giant
+            language: php
+            span: full
+            type: codeeditor
+            tab: 'zen.om::lang.tabs.description'
+        seo_title:
+            label: title
+            oc.commentPosition: ''
+            span: full
+            type: text
+            tab: SEO
+        seo_description:
+            label: description
+            size: small
+            oc.commentPosition: ''
+            span: full
+            type: textarea
+            tab: SEO
+        seo_keywords:
+            label: keywords
+            span: full
+            size: small
+            oc.commentPosition: ''
+            type: textarea
+            tab: SEO
+        hits:
+            label: 'zen.om::lang.list.hits'
+            oc.commentPosition: ''
+            span: auto
+            default: '0'
+            type: number
+            tab: 'zen.om::lang.tabs.analytics'

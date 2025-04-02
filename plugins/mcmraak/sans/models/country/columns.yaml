@@ -1,0 +1,21 @@
+columns:
+    id:
+        label: id
+        type: number
+        sortable: true
+    cid:
+        label: cid
+        type: number
+        searchable: true
+        sortable: true
+    name:
+        label: Название
+        type: text
+    name_block:
+        label: Блокировка
+        type: number
+    sort_order:
+        label: Порядок
+        type: number
+        default: '0'
+        sortable: true

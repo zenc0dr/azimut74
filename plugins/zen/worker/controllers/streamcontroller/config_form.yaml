@@ -1,0 +1,10 @@
+name: StreamController
+form: $/zen/worker/models/stream/fields.yaml
+modelClass: Zen\Worker\Models\Stream
+defaultRedirect: zen/worker/streamcontroller
+create:
+    redirect: 'zen/worker/streamcontroller/update/:id'
+    redirectClose: zen/worker/streamcontroller
+update:
+    redirect: zen/worker/streamcontroller
+    redirectClose: zen/worker/streamcontroller

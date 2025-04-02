@@ -1,0 +1,4 @@
+title: Kpages
+modelClass: Mcmraak\Rivercrs\Models\Kpage
+toolbar:
+    buttons: reorder_toolbar

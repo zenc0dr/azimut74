@@ -1,0 +1,79 @@
+.exlists-search {
+    padding: 0 10px;
+    margin-bottom: 27px;
+}
+
+.exlists {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    margin-top: 8px;
+}
+
+.exlists-group {
+    margin-bottom: 20px;
+    border: 1px solid #dbdbdb;
+    background: #f6f6f6;
+    border-radius: 10px;
+    padding: 10px 9px;
+}
+
+.exlists-group-name {
+    font-size: 19px;
+    margin-left: 12px;
+    color: #818181;
+}
+
+.exlists .menu-item {
+    display: flex;
+    flex-direction: column;
+    width: 150px;
+    background-position: center;
+    background-repeat: no-repeat;
+    background-size: 100px;
+    background-color: #fff;
+    border: 1px solid #bebebe;
+    border-radius: 10px;
+    overflow: hidden;
+    color: #5d81b0;
+    transition: 200ms;
+    margin: 0 10px;
+    margin-bottom: 10px;
+}
+
+.exlists .menu-item.not {
+    opacity: 0.4;
+    transform: scale(0.9);
+    pointer-events: none;
+    filter: grayscale(100%);
+}
+
+.exlists .menu-item.find {
+    border: 1px solid #35adeb;
+    box-shadow: 0 0 9px #35adeb4f;
+}
+
+.exlists .menu-item:not(.not):hover, .exlists .menu-item:not(.not):active {
+    text-decoration: none;
+    color: #5d81b0;
+    transform: scale(1.1);
+}
+
+.exlists .menu-item:not(.not):not(.find):hover, .exlists .menu-item:not(.not):not(.find):active {
+    box-shadow: 1px 6px 10px -8px #00000061;
+}
+
+.exlists .menu-item-icon {
+    display: inline-block;
+    width: 150px;
+    height: 150px;
+    background-position: center;
+    background-repeat: no-repeat;
+    background-size: 100px;
+    background-color: #fff;
+}
+
+.exlists .menu-item-label {
+    text-align: center;
+    padding-bottom: 15px;
+}

@@ -1,0 +1,16 @@
+<b>Имя:</b> {{ form.name }}<br>
+<b>Теплоход:</b> {{ form.ship_name }}<br>
+<b>Дата:</b> {{ form.trip_date }}<br>
+<b>Сколько раз вы ранее отдыхали на теплоходе:</b> {{ form.exp_rest }}<br>
+<b>Оценка каюты:</b> {{ form.reviews.cabin }}<br>
+<b>Оценка питания:</b> {{ form.reviews.food }}<br>
+<b>Оценка обслуживания:</b> {{ form.reviews.service }}<br>
+<b>Оценка экскурсия:</b> {{ form.reviews.tours }}<br>
+<b>Оценка анимации на борту:</b> {{ form.reviews.anim_on_board }}<br>
+<b>Как бы вы оценили свой отдых в целом:</b> {{ form.reviews.cruise }}<br>
+<b>Как бы вы оценили работу компании Азимут:</b> {{ form.reviews.azimut }}<br>
+<br>
+<b>Отзыв:</b> {{ form.reviews_text }}
+<br>
+<b>email:</b> {{ model.email ?? 'Нет' }}<br>
+<b>Телефон:</b> {{ model.phone ?? 'Нет' }}<br>

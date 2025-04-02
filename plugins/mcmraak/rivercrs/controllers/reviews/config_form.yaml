@@ -1,0 +1,10 @@
+name: Reviews
+form: $/mcmraak/rivercrs/models/review/fields.yaml
+modelClass: Mcmraak\Rivercrs\Models\Review
+defaultRedirect: mcmraak/rivercrs/reviews
+create:
+    redirect: 'mcmraak/rivercrs/reviews/update/:id'
+    redirectClose: mcmraak/rivercrs/reviews
+update:
+    redirect: mcmraak/rivercrs/reviews
+    redirectClose: mcmraak/rivercrs/reviews

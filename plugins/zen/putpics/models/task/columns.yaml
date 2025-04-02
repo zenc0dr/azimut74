@@ -1,0 +1,24 @@
+columns:
+    id:
+        label: id
+        type: number
+        sortable: true
+    title:
+        label: Задача
+        type: text
+    photos_count:
+        label: Фотографий
+        type: number
+    success:
+        label: Выполнено
+        type: partial
+    user_id:
+        label: Пользователь
+        type: partial
+        sortable: true
+        path: $/zen/putpics/fields/UserField.php
+    not_found:
+        label: 'Не нашёл'
+        type: partial
+        sortable: true
+        path: $/zen/putpics/fields/NotFoundField.php

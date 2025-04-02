@@ -1,0 +1,6 @@
+pac это P-places A-adults C-childrens
+1 - осн
+2 - доп
+3 - реб
+4 - доп реб
+5 - без места

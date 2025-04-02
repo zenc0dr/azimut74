@@ -1,0 +1,19 @@
+columns:
+    code:
+        label: 'Код пула'
+        type: text
+        searchable: true
+        sortable: true
+    name:
+        label: 'Имя пула'
+        type: text
+        searchable: true
+        sortable: true
+    active:
+        label: Активность
+        type: text
+        sortable: true
+    sort_order:
+        label: Порядок
+        type: number
+        sortable: true

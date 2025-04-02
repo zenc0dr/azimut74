@@ -1,0 +1,34 @@
+columns:
+    id:
+        label: id
+        type: number
+        sortable: true
+    name:
+        label: Название
+        type: text
+        searchable: true
+        sortable: true
+    slug:
+        label: Ссылка
+        type: text
+        searchable: true
+        sortable: true
+    active:
+        label: Активность
+        type: text
+        sortable: true
+    resort_id:
+        label: Курорт
+        type: text
+        relation: resort
+        valueFrom: name
+        sortable: false
+    sort_order:
+        label: Порядок
+        type: number
+        sortable: true
+    events:
+        label: События
+        type: partial
+        path: $/mcmraak/sans/controllers/pages/events.php
+        sortable: false

@@ -1,0 +1,104 @@
+countries:
+    name: 'Географические объекты'
+    image: 'geo.png'
+    group: 'Общие'
+operators:
+    name: 'Тур-операторы'
+    image: 'tour_operator.png'
+    group: 'Общие'
+hotels:
+    name: 'Гостиницы'
+    image: 'hotels.png'
+    group: 'Общие'
+hoteltypes:
+    name: 'Типы гостиниц'
+    image: 'hotel_types.png'
+    group: 'Общие'
+hstructures:
+    name: 'Инфраструктуры гостиниц'
+    image: 'infrastructure.png'
+    group: 'Общие'
+hservices:
+    name: 'Услуги гостиниц'
+    image: 'reception.png'
+    group: 'Общие'
+hopts:
+    name: 'Характеристики гостиниц'
+    image: 'checklist.png'
+    group: 'Общие'
+plages:
+    name: 'Пляжи'
+    image: 'plage.png'
+    group: 'Общие'
+tours:
+    name: 'Туры'
+    image: 'tours.png'
+    group: 'Азимут'
+reducts:
+    name: 'Скидки'
+    image: 'reducts.png'
+    group: 'Азимут'
+places:
+    name: 'Места'
+    image: 'museum.png'
+    group: 'Азимут'
+labels:
+    name: 'Метки'
+    image: 'hashtag.png'
+    group: 'Азимут'
+pages:
+    name: 'Посадочные страницы'
+    image: 'page.png'
+    group: 'Азимут'
+seoitems:
+    name: 'SEO Меню'
+    image: 'seo.png'
+    group: 'Азимут'
+conditions:
+    name: 'Условия по туру'
+    image: 'conditions.png'
+    group: 'Азимут'
+azcomforts:
+    name: 'Комфортность номеров'
+    image: 'shower.png'
+    group: 'Азимут'
+azpansions:
+    name: 'Типы питания'
+    image: 'pansion.png'
+    group: 'Азимут'
+azrooms:
+    name: 'Типы номеров'
+    image: 'room3d_2.png'
+    group: 'Азимут'
+pricetypes:
+    name: 'Типы цен'
+    image: 'money.png'
+    group: 'Азимут'
+blocks:
+    name: 'Информационные блоки'
+    image: 'infoblocks.png'
+    group: 'Азимут'
+reviews:
+    name: 'Отзывы на главной экскурсионные туры'
+    image: 'reviews.png'
+    group: 'Азимут'
+faqcontroller:
+    name: 'Вопрос / Ответ'
+    image: 'faq.png'
+    group: 'Азимут'
+extours:
+    name: 'Комплексные туры'
+    image: 'extours.png'
+    group: 'Дельфин'
+rooms:
+    name: 'Типы номеров'
+    image: 'room3d.png'
+    group: 'Дельфин'
+roomcategories:
+    name: 'Категории номеров'
+    image: 'room_category.png'
+    group: 'Дельфин'
+pansions:
+    name: 'Типы питания'
+    image: 'food.png'
+    group: 'Дельфин'

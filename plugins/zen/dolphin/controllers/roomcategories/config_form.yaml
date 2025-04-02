@@ -1,0 +1,16 @@
+name: 'Категория номера'
+modelClass: Zen\Dolphin\Models\RoomCategory
+form: $/zen/dolphin/models/roomcategory/fields.yaml
+defaultRedirect: zen/dolphin/roomcategories
+create:
+    title: 'Создать категорию'
+    redirect: 'zen/dolphin/roomcategories/update/:id'
+    redirectClose: zen/dolphin/roomcategories
+    flashSave: Удалить
+update:
+    title: 'Обновить категорию'
+    redirect: zen/dolphin/roomcategories
+    redirectClose: zen/dolphin/roomcategories
+    flashSave: 'Категория сохранена'
+    flashDelete: 'Категория удалена'
+preview: {  }

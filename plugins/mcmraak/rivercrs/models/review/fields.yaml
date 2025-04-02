@@ -1,0 +1,87 @@
+fields:
+    active:
+        label: Опубликовано
+        span: full
+        type: switch
+    recommended:
+        label: Рекомендовано
+        span: auto
+        type: switch
+    files:
+        label: Аватар
+        span: full
+        oc.commentPosition: ''
+        mode: image
+        useCaption: true
+        thumbOptions:
+            mode: crop
+            extension: auto
+        type: fileupload
+    motorship:
+        label: Теплоход
+        oc.commentPosition: ''
+        nameFrom: name
+        descriptionFrom: description
+        span: full
+        type: relation
+    name:
+        label: Имя
+        oc.commentPosition: ''
+        span: auto
+        type: text
+    town:
+        label: Город
+        oc.commentPosition: ''
+        span: auto
+        type: text
+    created_at:
+        label: 'Дата публикации'
+        oc.commentPosition: ''
+        mode: datetime
+        span: auto
+        type: datepicker
+    email:
+        label: email
+        oc.commentPosition: ''
+        span: auto
+        type: text
+    commentsline:
+        label: Комментарии
+        span: full
+        type: section
+    comment:
+        label: Комментарий
+        size: large
+        oc.commentPosition: ''
+        span: full
+        type: richeditor
+    liked:
+        label: 'Что особенно понравилось'
+        size: small
+        oc.commentPosition: ''
+        span: full
+        type: textarea
+    notliked:
+        label: 'Что не понравилось'
+        size: small
+        oc.commentPosition: ''
+        span: full
+        type: textarea
+    startdoing:
+        label: 'Что надо начать делать'
+        size: small
+        oc.commentPosition: ''
+        span: full
+        type: textarea
+    stopdoing:
+        label: 'Что надо перестать делать'
+        size: small
+        oc.commentPosition: ''
+        span: full
+        type: textarea
+    doing:
+        label: 'Что надо продолжать делать'
+        size: small
+        oc.commentPosition: ''
+        span: full
+        type: textarea

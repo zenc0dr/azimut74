@@ -1,0 +1,12 @@
+fields:
+    name:
+        label: Название
+        oc.commentPosition: ''
+        span: full
+        type: text
+    offertext:
+        label: Текст
+        size: giant
+        oc.commentPosition: ''
+        span: full
+        type: richeditor

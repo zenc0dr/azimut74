@@ -1,0 +1,10 @@
+name: Profiles
+form: $/zen/sms/models/profile/fields.yaml
+modelClass: Zen\Sms\Models\Profile
+defaultRedirect: zen/sms/profiles
+create:
+    redirect: 'zen/sms/profiles/update/:id'
+    redirectClose: zen/sms/profiles
+update:
+    redirect: zen/sms/profiles
+    redirectClose: zen/sms/profiles

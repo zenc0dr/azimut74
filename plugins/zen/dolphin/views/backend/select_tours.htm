@@ -1,0 +1,52 @@
+<link rel="stylesheet" href="/plugins/zen/dolphin/assets/css/zen.dolphin.select_tours.css">
+<meta name="extours_eids" content="{{ model.extours_eids }}">
+<div id="SelectTours" v-cloak>
+    <template v-if="tours.length">
+        <div class="extours-panel">
+            <div class="extours-records" :class="{process}">
+                <div class="extours-record titles">
+                    <div class="extours-name">Полный список туров</div>
+                </div>
+                <div class="extours-filters">
+                    <input v-model="filter" class="extours-filter">
+                </div>
+                <div v-for="item in records" class="extours-record" @click="addTour(item.id)">
+                    <div class="extours-name">${ item.name }</div>
+                    <i @click.stop="openTour(item.id)" class="oc-icon-eye"></i>
+                </div>
+            </div>
+
+            <div v-if="pages_count > 1" class="extours-pagination">
+                <div @click="paginate(0)" class="extours-pagination-arrow"><i class="oc-icon-chevron-left"></i></div>
+                <div class="extours-pagination-text">
+                    <select v-model="page">
+                        <option v-for="index in pages_count">${ index }</option>
+                    </select> из ${ pages_count }</div>
+                <div @click="paginate(1)" class="extours-pagination-arrow"><i class="oc-icon-chevron-right"></i></div>
+            </div>
+        </div>
+        <div class="extours-panel">
+            <div class="extours-records" :class="{process}">
+                <div class="extours-record titles">
+                    <div class="extours-name">Выбранные туры</div>
+                </div>
+                <div v-for="item in selected"
+                     :class="{'last-added':(last_added_tour == item.id)}"
+                     class="extours-record" @click="removeTour(item.id)">
+                    <div class="extours-name">${ item.name }</div>
+                    <i @click.stop="openTour(item.id)" class="oc-icon-eye"></i>
+                </div>
+            </div>
+        </div>
+    </template>
+    <template v-else>
+        <div v-if="" class="css-loader">
+            <div class="lds-ring"><div></div><div></div><div></div><div></div></div>
+        </div>
+    </template>
+
+    <input type="hidden" name="Extour[extours_eids]" :value="save_value">
+</div>
+<script src="/plugins/zen/dolphin/assets/js/axios.min.js"></script>
+<script src="/plugins/zen/dolphin/assets/js/vue.min.js"></script>
+<script src="/plugins/zen/dolphin/assets/js/zen.dolphin.select_tours.js"></script>

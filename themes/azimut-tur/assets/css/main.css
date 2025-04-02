@@ -1,0 +1,1912 @@
+html.locked {
+    overflow: hidden;
+    width: calc(100vw - 17px);
+}
+
+main.main {
+    padding: 30px 0;
+    background-color: #eef1f3;
+    min-height: calc(100vh - 625px - 326px);
+}
+
+.mfp-close {
+    cursor: pointer !important;
+}
+
+.pageWrap {
+    margin-left: -35px;
+    margin-right: -35px;
+    background-color: #fff;
+    box-shadow: 0px 0px 15px 0px rgba(0, 0, 0, 0.25);
+    padding: 35px 35px
+}
+
+.headText, .headText .h1 {
+    font-family: OpenSansBold, sans-serif;
+    font-size: 24px;
+    color: #000;
+    text-transform: uppercase;
+    text-align: center;
+    padding: 5px 0;
+    margin-bottom: 30px
+}
+
+.textBlock {
+    font-size: 14px;
+}
+
+.tourBlock {
+    display: inline-block;
+    width: 100%
+}
+
+.tourBlock .tourItem {
+    height: 100%;
+}
+
+.toursBlock .tourItem {
+    /* display: inline-block; */
+    width: 100%;
+    /* font-size: 0; */
+    height: 100%;
+    margin-bottom: 30px;
+    overflow: hidden;
+}
+
+.tourItem .itemImg {
+    width: 42%;
+    /* height: 218px; */
+    display: inline-block;
+    -webkit-background-size: cover;
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+    vertical-align: top
+}
+
+.tourItem .itemData {
+    display: inline-block;
+    width: 58%;
+    padding: 0 25px;
+    background-color: #e3f2fd;
+    vertical-align: top;
+    /* height: 218px; */
+    position: relative
+}
+
+.tourItem .itemData::after {
+    content: '';
+    position: absolute;
+    left: -13px;
+    top: 18px;
+    border-top: 13px solid transparent;
+    border-bottom: 13px solid transparent;
+    border-right: 13px solid #e3f2fd
+}
+
+.tourItem .itemData .tourCategory, .tourItem .tourCard .tourName {
+    padding: 20px 0;
+    color: #1e88e5;
+    font-size: 14px;
+    font-family: OpenSansBold, sans-serif
+}
+
+.tourItem .itemData .tourName {
+    padding: 10px 0;
+    color: #000;
+    font-family: OpenSansBold, sans-serif;
+    font-size: 16px
+}
+
+.tourItem .itemData .tourDesc {
+    font-size: 14px;
+    color: #000
+}
+
+.tourItem .itemData .tourDesc ul {
+    padding-left: 20px
+}
+
+.tourItem .itemData .tourDesc ul li {
+    color: #1e88e5;
+    padding-bottom: 5px
+}
+
+.tourItem .itemData .tourDesc ul li a {
+    border-bottom: 1px solid #333;
+    color: #333
+}
+
+.tourItem .itemData .tourDesc ul li a:hover {
+    border-bottom: 1px solid #1e88e5;
+    color: #1e88e5
+}
+
+.toursBlock .tourItem {
+    border: 1px solid #dcdcdc
+}
+
+.tourItem .tourCard {
+    padding: 0 15px
+}
+
+.tourItem .tourCard .tourName {
+    padding: 15px 0
+}
+
+.tourItem .tourCard .tourWay {
+    padding-bottom: 15px;
+    min-height: 66px;
+    max-height: 66px
+}
+
+.tourItem .tourCard .tourWay i {
+    padding-right: 5px;
+    font-size: 12px;
+    color: #acb6cb;
+    vertical-align: middle;
+    display: inline-block
+}
+
+.tourItem .tourCard .tourWay p, .descInfo .line .routes p {
+    display: inline-block;
+    font-size: 12px;
+    color: #000;
+    vertical-align: middle;
+    margin: 0
+}
+
+.descInfo .line .routes p {
+    font-size: 14px !important
+}
+
+.tourItem .tourCard .tourWay p:before, .descInfo .line .routes p:before {
+    content: '—';
+    font-size: 12px;
+    color: #000;
+    padding: 0 3px
+}
+
+.tourItem .tourCard .tourWay p:first-of-type::before, .descInfo .line .routes p:first-of-type::before {
+    display: none
+}
+
+.tourBlock .tourItem .tourImg {
+    display: inline-block;
+    width: 100%;
+    /* height: 173px; */
+    height: 135px;
+    background-position: center;
+    -webkit-background-size: cover;
+    background-size: cover;
+    background-repeat: no-repeat
+}
+
+.tourItem .tourCard > div {
+    display: inline-block;
+    width: 100%
+}
+
+.tourItem .tourCard .tourHotel {
+    /* display: inline-block; */
+    display: inline-flex;
+    width: 100%
+}
+
+.tourItem .tourCard .tourHotel > div {
+    display: inline-block;
+    width: 50%;
+    vertical-align: middle
+}
+
+.tourCard .tourHotel .hotelName {
+    font-size: 14px;
+    font-family: OpenSansBold, sans-serif;
+    text-align: left;
+    /* min-height: 38px; */
+}
+
+.tourCard .tourHotel .hotelRate {
+    text-align: right
+}
+
+.hotelRate .star {
+    font-size: 14px;
+    color: #ee9700;
+    display: inline-block;
+    margin-right: 3px
+}
+
+.tourItem .tourCard .tourStart {
+    display: inline-block;
+    width: 100%;
+    font-size: 14px
+}
+
+.tourItem .tourCard .tourPrice {
+    /* display: inline-block; */
+    display: inline-flex;
+    width: 100%;
+    padding: 15px 0
+}
+
+.tourItem .tourCard .tourPrice > div {
+    display: inline-block;
+    width: 50%;
+    vertical-align: middle
+}
+
+.tourItem .tourCard .tourPrice .price {
+    display: inline-flex;
+    align-items: center;
+    flex-wrap: wrap;
+}
+
+.pbtn {
+    display: inline-block;
+    width: 100%;
+    padding: 10px 0;
+    border: 1px solid #cb2022;
+    border-radius: 22px;
+    color: #cb2022;
+    text-transform: uppercase;
+    font-family: OpenSansBold, sans-serif;
+    font-size: 10px;
+    transition: all .15s ease-in-out;
+    text-align: center
+}
+
+.pbtn:hover {
+    color: #fff;
+    background-color: #cb2022
+}
+
+.tourPrice .price > div {
+    display: inline-block
+}
+
+.tourPrice .price {
+    padding-left: 12px;
+    vertical-align: middle
+}
+
+.tourPrice .price .oldPrice {
+    width: 100%
+}
+
+.tourPrice .price .oldPrice span {
+    color: #000;
+    font-size: 14px;
+    text-transform: uppercase;
+    text-decoration: line-through
+}
+
+.tourPrice .price .oldPrice {
+    width: 100%;
+    font-size: 0
+}
+
+.tourPrice .price .currentPrice {
+    width: 100%
+}
+
+.tourPrice .price .currentPrice > span {
+    display: inline-block;
+    line-height: 1
+}
+
+.tourPrice .price .currentPrice span:first-child {
+    max-width: 82%;
+    font-size: 20px;
+    font-family: OpenSansBold, sans-serif;
+    color: #cb2022;
+    vertical-align: middle;
+    padding-right: 5px
+}
+
+.tourPrice .price .currentPrice span:last-child {
+    width: 22%;
+    vertical-align: middle;
+    font-size: 12px;
+    color: #666
+}
+
+.tourItem .tourTimer {
+    padding: 7px 15px;
+    background-color: #eaeaea;
+    border-top: 1px solid #dcdcdc;
+    display: flex;
+    align-items: center;
+}
+
+.tourItem .tourTimer > div {
+    display: inline-block;
+    vertical-align: middle
+}
+
+.tourItem .tourTimer .timeText span {
+    display: inline-block;
+    vertical-align: middle;
+    font-size: 0;
+}
+
+.tourItem .tourTimer .timeText span:first-child svg {
+    fill: #cb2022;
+    stroke: #cb2022;
+    width: 20px;
+    height: 20px
+}
+
+.tourItem .tourTimer .timeText span:last-child {
+    font-size: 14px;
+    color: #000;
+    padding-left: 8px;
+    vertical-align: middle
+}
+
+.tourItem .tourTimer .timeText {
+    width: 35%;
+    font-size: 0;
+}
+
+.tourItem .tourTimer .timeTimer {
+    /* display: inline-block; */
+    width: 65%;
+    text-align: center;
+    display: inline-flex;
+}
+
+.timeTimer > div {
+    display: inline-block;
+    padding: 0 10px;
+    vertical-align: middle;
+    line-height: 1
+}
+
+.timeTimer .number span {
+    display: block;
+    text-align: center
+}
+
+.timeTimer .number span:first-child {
+    font-size: 18px;
+    color: #000;
+    font-family: OpenSansSemiBold, sans-serif
+}
+
+.timeTimer .number span:last-child {
+    color: #a1a1a1;
+    font-size: 12px
+}
+
+.timeTimer .colon {
+    padding: 0;
+    font-size: 18px;
+    color: #cb2022;
+    font-family: OpenSansSemiBold, sans-serif
+}
+
+.tourMoreButton {
+    text-align: center;
+    display: inline-block;
+    width: 100%;
+    margin-top: 20px
+}
+
+.tourMoreButton .hbtn {
+    background-color: #1e88e5;
+    display: inline-block
+}
+
+.tourMoreButton .hbtn:hover {
+    background-color: #2194F8
+}
+
+.data {
+    display: inline-block;
+    width: 100%;
+    overflow-x: auto;
+    overflow: -moz-scrollbars-none;
+}
+
+.data h1 {
+    font-size: 24px;
+    font-family: OpenSansBold, sans-serif;
+    color: #000;
+    text-transform: uppercase
+}
+
+.data h2, .data h3 {
+    font-family: OpenSansBold, sans-serif;
+    color: #000
+}
+
+.data h2 {
+    font-size: 22px;
+}
+
+.data h3 {
+    font-size: 18px;
+}
+
+.data p {
+    font-size: 14px;
+    font-family: OpenSansRegular, sans-serif;
+    color: #333;
+    line-height: 1.6
+}
+
+.data ul {
+    padding-left: 10px;
+}
+
+.data ul, .data ol {
+    /* padding-left: 0; */
+    width: 100%;
+    margin: 5px 0;
+    line-height: 1.6;
+}
+
+.data ul li, .data ol li {
+    list-style-type: none;
+    /* display: inline-block; */
+    /* display: inline-flex; */
+    /* align-items: center; */
+    flex-wrap: wrap;
+    width: 100%;
+    font-size: 14px;
+    color: #333;
+}
+
+.data ol {
+    padding-left: 25px;
+}
+
+.data ol li {
+    list-style-type: decimal;
+    display: list-item;
+}
+
+.data ul li::before {
+    display: inline-block;
+    width: 15px;
+    content: '\f111';
+    /* content: 'â€¢'; */
+    color: #1e88e5;
+    vertical-align: middle;
+    font-size: 5px;
+    font-family: FontAwesome;
+}
+
+section.article {
+    padding-top: 60px
+}
+
+.articleData h1 {
+    padding-bottom: 10px;
+    margin: 0
+}
+
+.articleData .readMore {
+    display: inline-block;
+    width: 100%
+}
+
+.articleData .readMore.active .add {
+    display: none
+}
+
+.articleData .readMore.active .less, .articleData .readMore .add {
+    display: inline-block
+}
+
+.articleData .readMore .less {
+    display: none
+}
+
+.articleData .readMore .rbtn {
+    font-size: 14px;
+    font-family: OpenSansBold, sans-serif;
+    color: #1e88e5;
+    text-transform: uppercase;
+    vertical-align: middle
+}
+
+.articleData .readMore .rbtn span {
+    display: inline-block;
+    vertical-align: middle
+}
+
+.articleData .readMore .rbtn i {
+    font-size: 20px;
+    color: #1e88e5;
+    padding-left: 5px;
+    display: inline-block;
+    vertical-align: middle;
+    font-weight: bold
+}
+
+.articleMain .data {
+    height: 300px;
+    overflow-y: hidden;
+    position: relative;
+}
+
+.articleMain .data.active {
+    height: auto;
+}
+
+.articleMain .data::after {
+    content: '';
+    position: absolute;
+    width: 100%;
+    height: 15%;
+    background: linear-gradient(to top, rgba(255, 255, 255, 1), rgba(255, 255, 255, 0));
+    bottom: 0;
+    left: 0;
+}
+
+.articleMain .data.active::after {
+    display: none;
+}
+
+/* .articleMain .data > :nth-child(n+5) {
+	display: none
+}
+.articleMain .data > div :nth-child(n+5) {
+	display: none
+} */
+/* .articleMain .data.active p:nth-child(n+6) {
+	display: block
+} */
+.widgets {
+    display: inline-block;
+    width: 100%
+}
+
+footer.footer {
+    /* position: absolute; */
+    width: 100%;
+    /* bottom: 0 */
+}
+
+footer.footer .contacts {
+    background-color: #1e88e5;
+    padding: 11px 0;
+    position: relative;
+}
+
+.widget-history__favorite:hover {
+    cursor: pointer;
+}
+
+footer.footer .contacts {
+    color: #fff
+}
+
+footer.footer .contacts .all_phones .p_number span:first-child, footer.footer .contacts .all_phones .p_number a:first-child {
+    color: #09005f;
+    font-size: 16px;
+    font-family: OpenSansBold, sans-serif;
+}
+
+footer.footer .contacts .all_phones .p_number span:last-child, footer.footer .contacts .all_phones .p_number a:last-child {
+    color: #ffffff;
+    font-size: 16px;
+    font-family: OpenSansBold, sans-serif;
+}
+
+footer.footer .contacts .headText {
+    text-align: left;
+    margin-bottom: 2px;
+    color: #fff;
+}
+
+footer.footer .contacts .address {
+    font-size: 16px;
+    font-family: OpenSansBold, sans-serif;
+    text-align: left
+}
+
+footer.footer .contacts .workTime {
+    font-size: 14px;
+    /* padding: 15px 0 */
+}
+
+footer.footer .contacts .workTime div {
+    padding: 3px 0
+}
+
+footer.footer .contacts .number, footer.footer .contacts .number a {
+    font-size: 24px;
+    padding-top: 10px
+}
+
+footer.footer .contacts .number a span {
+    font-size: 14px;
+    font-family: OpenSansRegular, sans-serif;
+    display: block
+}
+
+footer.footer .contacts .number span, footer.footer .contacts .number a {
+    display: inline-block;
+    vertical-align: top
+}
+
+.footer.footer .contacts .number span a, footer.footer .contacts .number a {
+    color: #fff
+}
+
+footer.footer .contacts .mail {
+    padding-top: 3px;
+}
+
+footer.footer .contacts .mail a {
+    color: #09005f;
+    font-size: 16px;
+    font-family: OpenSansBold, sans-serif
+}
+
+footer.footer .contacts .conButtons {
+    padding-top: 25px
+}
+
+.footer.footer .contacts .conButtons > div {
+    display: inline-block;
+    font-size: 0;
+    vertical-align: middle
+}
+
+.conButtons .conButton .cbtn {
+    font-size: 14px;
+    font-family: OpenSansBold, sans-serif;
+    border: 1px solid #fff;
+    border-radius: 20px;
+    padding: 10px 25px;
+    text-transform: uppercase;
+    color: #fff;
+    transition: all .15s ease-in-out
+}
+
+.conButtons .conButton .cbtn:hover {
+    background-color: #fff;
+    color: #000
+}
+
+.conButtons .conText {
+    padding-left: 15px
+}
+
+.conButtons .conText span {
+    font-size: 14px;
+    color: #a3d4ff;
+    display: block
+}
+
+#map {
+    position: absolute;
+    right: 0;
+    top: 0;
+    width: 55%;
+    height: inherit
+}
+
+section.footerDown {
+    padding: 15px 0;
+    color: #7b6d5d
+}
+
+.footerDown .company, .footerDown .copyright p {
+    font-size: 14px
+}
+
+.footerDown .reestr {
+	font-weight: bold;
+    margin-top: 10px;
+    font-size: 13px;
+}
+.footerDown .reestr a {
+	color: #2372b6;
+	text-decoration: underline;
+}
+
+/*Блок с росреестром*/
+.ros-reestr-block {
+    background-image: url(/themes/azimut-tur/assets/images/gerb.png);
+    background-color: #0e4c85;
+    background-repeat: no-repeat;
+    background-size: 50px;
+    padding: 10px 12px;
+    padding-left: 76px;
+    background-position: 10px 4px;
+    margin-top: 10px;
+    width: 353px;
+    height: 64px;
+    cursor: pointer;
+}
+.ros-reestr-block div {
+
+}
+.ros-reestr-block div:first-child {font-weight: bold;}
+.ros-reestr-block div:last-child {font-size: 14px;margin-top: 3px;}
+
+.mfp-wrap, .mfp-bg {
+    z-index: 999999;
+}
+
+.mfp-content {
+    text-align: center;
+}
+
+.modalFade {
+    display: inline-block;
+    /* width: 100%; */
+    /* height: 100%; */
+    text-align: center;
+    padding: 25px 0;
+}
+
+.modalWrap {
+    display: inline-block;
+    width: 480px;
+    background-color: #fff;
+    padding: 35px 90px;
+    position: relative
+}
+
+.modalContent .mfp-close, .modalDone .mfp-close {
+    display: inline-block;
+    position: absolute;
+    top: 0;
+    right: 0;
+    color: #333;
+}
+
+.modalContent > div {
+    display: inline-block;
+    width: 100%
+}
+
+.modalContent .modalHead, .modalSecond .modalHead {
+    padding-bottom: 5px
+}
+
+.modalContent .modalHead span, .modalSecond .modalHead span {
+    font-size: 24px;
+    color: #000;
+    font-family: OpenSansBold, sans-serif;
+    text-transform: uppercase
+}
+
+.modalDone .modalHead span {
+    display: block;
+    padding-top: 15px;
+}
+
+.modalDone .modalHead span:first-child {
+    font-family: OpenSansBold, sans-serif;
+    padding-top: 0
+}
+
+.modalContent .modalDesc span {
+    font-size: 14px;
+    color: #888
+}
+
+.modalContent .fLine {
+    text-align: left;
+    width: 100%;
+    font-size: 0
+}
+
+.modalContent .fLine label {
+    display: inline-block;
+    width: 100%;
+    font-size: 14px;
+    font-family: OpenSansBold, sans-serif;
+    padding: 8px 0
+}
+
+.modalContent .fLine input {
+    padding: 8px 15px;
+    border: 1px solid #d8d8d8;
+    border-radius: 2px;
+    color: #000;
+    width: 100%;
+    font-size: 14px;
+    -webkit-appearance: none
+}
+
+.modalContent .fLine .order:focus::-webkit-input-placeholder {
+    color: #000
+}
+
+.modalContent .fLine .order:focus::-moz-placeholder {
+    color: #000
+}
+
+.modalContent .fLine .order:focus::-ms-input-placeholder {
+    color: #000
+}
+
+.modalContent .fLine .order::-webkit-input-placeholder {
+    color: #b1b1b1;
+    font-family: OpenSansRegular, sans-serif;
+    font-size: 12px
+}
+
+.modalContent .fLine .order:-moz-placeholder {
+    color: #b1b1b1;
+    font-family: OpenSansRegular, sans-serif;
+    font-size: 12px
+}
+
+.modalContent .fLine .order::-moz-placeholder {
+    color: #b1b1b1;
+    font-family: OpenSansRegular, sans-serif;
+    font-size: 12px
+}
+
+.modalContent .fLine .order:-ms-input-placeholder {
+    color: #b1b1b1;
+    font-family: OpenSansRegular, sans-serif;
+    font-size: 12px
+}
+
+.modalContent .fLine textarea {
+    display: block;
+    width: 100%;
+    padding: 8px 15px;
+    min-height: 100px;
+    color: #000;
+    border: 1px solid #d8d8d8;
+    white-space: pre-line;
+    font-size: 14px;
+    -webkit-appearance: none
+}
+
+.modalContent .modalButton {
+    padding: 25px 0 20px
+}
+
+.modalContent .modalButton.disabled .hbtn {
+    background-color: #0a2944;
+    cursor: default
+}
+
+.modalButton .hbtn {
+    background-color: #1e88e5
+}
+
+.modalButton .hbtn:hover {
+    background-color: #2194F8
+}
+
+#modalCall .modalContent .modalHead {
+    padding-bottom: 20px
+}
+
+#modalCall .modalContent .modalHead span {
+    font-size: 20px
+}
+
+.modalFade .modalWrap {
+    opacity: 0;
+    transform: scale(0.9);
+    transition: all .15s ease-in-out
+}
+
+.mfp-ready .modalFade .modalWrap {
+    opacity: 1;
+    transform: scale(1);
+}
+
+section.alert .alertDesc {
+    display: inline-block;
+    width: 100%;
+    text-align: center;
+    line-height: 1.6;
+    padding: 20px 0 50px
+}
+
+section.alert .alertDesc span {
+    font-size: 16px;
+    color: #333;
+    display: block
+}
+
+section.alert .alertDesc span a {
+    color: #1e88e5;
+    text-decoration: underline
+}
+
+section.alert .alertDesc span a:hover {
+    text-decoration: none
+}
+
+section.alert {
+    text-align: center
+}
+
+section.alert .toursModule {
+    display: inline-block;
+    width: 60%
+}
+
+.breadcrumbs {
+    display: inline-block;
+    width: 100%;
+    padding-bottom: 30px
+}
+
+.breadcrumbs .crumb {
+    display: inline-block;
+    /* padding-right: 15px; */
+    padding-right: 10px;
+    font-size: 14px;
+    color: #333
+}
+
+.breadcrumbs .crumb a {
+    color: #1e88e5
+}
+
+.breadcrumbs .crumb span {
+    color: #333;
+    padding-right: 8px
+}
+
+.breadcrumbs .crumb span i {
+    font-size: 14px
+}
+
+.breadcrumbs .crumb.active a {
+    color: #333
+}
+
+section.card .cardHead {
+    padding-bottom: 30px;
+    border-bottom: 1px solid #eaeaea
+}
+
+section.card .cardImages {
+    display: inline-block;
+    width: 100%;
+    padding-right: 25px
+}
+
+.cardImages .mainImages {
+    position: relative
+}
+
+.cardImages .mainImages:hover .sliderNav > div > div {
+    opacity: 0.3
+}
+
+.cardImages .mainImages .sliderNav {
+    height: 395px;
+    position: absolute;
+    display: inline-block;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+}
+
+.cardImages .mainImages .sliderNav > div {
+    position: absolute;
+    width: 25px;
+    display: inline-block;
+    cursor: pointer;
+    z-index: 5;
+    text-align: center;
+    height: inherit
+}
+
+.cardImages .mainImages .sliderNav > div > div {
+    background-color: #eaeaea;
+    opacity: 0;
+    height: inherit;
+    position: absolute;
+    z-index: 1045;
+    width: 100%;
+    display: inline-block;
+    left: 0;
+    top: 0;
+    transition: all .2s ease
+}
+
+.sliderNav > div i {
+    color: #fff;
+    font-size: 30px;
+    position: absolute;
+    top: 45%;
+    z-index: 1046
+}
+
+.mainImages .sliderNav .next {
+    right: 0;
+}
+
+.mainImages .sliderNav .next i {
+    right: 25%
+}
+
+.mainImages .sliderNav .prev {
+    left: 0
+}
+
+.mainImages .sliderNav .prev i {
+    left: 25%
+}
+
+.cardImages .mainImages .images {
+    height: 395px
+}
+
+.cardImages .mainImages, .cardImages .mainImages .images {
+    display: inline-block;
+    width: 100%;
+    overflow: hidden
+}
+
+.cardImages .mainImages .bigItem {
+    display: inline-block;
+    width: 100%;
+    height: 395px;
+    background-repeat: no-repeat;
+    -webkit-background-size: cover;
+    background-size: cover;
+    background-position: center
+}
+
+.cardImages .mainImages a {
+    display: inline-block;
+    width: 100%
+}
+
+.cardImages .smallImages a {
+    display: inline-block;
+    margin-top: 10px;
+    margin-right: 10px;
+    margin-bottom: 10px
+}
+
+.cardImages .smallImages .imageItem {
+    display: inline-block;
+    width: 65px;
+    height: 42px;
+    background-repeat: no-repeat;
+    background-position: center;
+    -webkit-background-size: cover;
+    background-size: cover;
+    vertical-align: middle;
+    cursor: pointer;
+    border: 3px solid transparent;
+    transition: all .1s ease-in-out
+}
+
+.cardImages .smallImages .imageItem.active, .cardImages .smallImages .imageItem:hover {
+    border: 3px solid #1e88e5
+}
+
+.cardData {
+    display: inline-block;
+    width: 100%
+}
+
+.cardData .socialButtons {
+    display: inline-block;
+    width: 100%
+}
+
+.cardInfo > div {
+    display: inline-block;
+    width: 100%
+}
+
+.cardData .identity {
+    display: inline-block;
+    width: 100%;
+    padding-top: 25px
+}
+
+.cardData .identity span {
+    font-size: 12px;
+    color: #a9a8a8
+}
+
+.cardInfo .cardName span {
+    font-size: 30px;
+    font-family: OpenSansBold, sans-serif;
+    color: #000
+}
+
+.cardInfo .cardAddress {
+    margin-top: 5px
+}
+
+.cardInfo .cardAddress span {
+    display: inline-block;
+    color: #2075d3;
+    font-size: 16px;
+    cursor: default
+}
+
+.cardInfo .cardHotel {
+    margin-top: 20px
+}
+
+.cardInfo .cardHotel > div {
+    display: inline-block;
+    vertical-align: middle
+}
+
+.cardHotel .hotelName span {
+    font-family: OpenSansSemiBold, sans-serif;
+    font-size: 24px;
+    color: #000
+}
+
+.cardHotel .hotelRate {
+    margin-left: 15px;
+    padding-top: 5px
+}
+
+.cardInfo .cardStart {
+    padding-top: 5px
+}
+
+.cardInfo .cardStart span svg {
+    width: 15px;
+    height: 15px;
+    fill: #acb6cb
+}
+
+.cardInfo .cardStart span {
+    font-size: 16px;
+    color: #000;
+    display: inline-block;
+    vertical-align: middle
+}
+
+.cardInfo .cardStart span:first-child {
+    padding-right: 10px;
+    padding-top: 3px
+}
+
+.cardPricing .manager span svg {
+    width: 16px;
+    height: 16px;
+    fill: #cb2022
+}
+
+.cardPricing .manager div p {
+    margin: 0
+}
+
+.cardInfo .cardPricing {
+    padding-top: 25px;
+    display: flex;
+    align-items: center;
+}
+
+.cardInfo .cardPricing > div, .cardInfo .cardOrders > div {
+    display: inline-block;
+    width: 50%;
+    vertical-align: top
+}
+
+.cardPricing .prices > div {
+    display: inline-block;
+    vertical-align: bottom
+}
+
+.cardPricing .prices > div:first-child span {
+    font-size: 14px;
+    font-family: OpenSansBold, sans-serif;
+    color: #000
+}
+
+.cardPricing .prices > div:last-child {
+    padding-left: 15px
+}
+
+.cardPricing .prices .oldPrice span {
+    font-size: 22px;
+    text-decoration: line-through;
+    color: #000
+}
+
+.cardPricing .prices .currentPrice {
+    padding-top: 5px
+}
+
+.cardPricing .prices .currentPrice span {
+    display: inline-block;
+    vertical-align: middle;
+    line-height: 1
+}
+
+.cardPricing .prices .currentPrice span:first-child {
+    font-family: OpenSansBold, sans-serif;
+    font-size: 32px;
+    color: #cb2022
+}
+
+.cardPricing .prices .currentPrice span:last-child {
+    color: #666;
+    font-size: 14px;
+    padding-left: 10px
+}
+
+.cardPricing .manager > div {
+    display: inline-block;
+    vertical-align: top
+}
+
+.cardPricing .manager > div:last-child, .cardTimer > div:last-child {
+    padding-left: 15px
+}
+
+.cardPricing .manager > div:last-child span, .cardTimer > div:last-child > div:first-child span, .cardPricing .manager > div:last-child p {
+    font-size: 16px;
+    color: #000;
+    display: block;
+    padding-top: 10px;
+    line-height: 1
+}
+
+.cardPricing .manager > div:last-child span:first-child, .cardTimer > div:last-child > div:first-child > span {
+    font-size: 16px;
+    font-family: OpenSansBold, sans-serif;
+    padding: 0
+}
+
+.cardPricing .manager > div:last-child span a {
+    color: #000
+}
+
+.cardInfo .cardOrders {
+    padding-top: 25px;
+    display: flex;
+    align-items: center;
+}
+
+.cardOrders .cardButton .hbtn {
+    background-color: #cb2022;
+    padding: 20px 55px;
+    border-radius: 40px
+}
+
+.cardOrders .cardButton .hbtn:hover {
+    background-color: #E12C2E
+}
+
+.cardTimer div span svg {
+    width: 16px;
+    height: 16px;
+    fill: #cb2022
+}
+
+.cardTimer > div {
+    display: inline-block;
+    vertical-align: top
+}
+
+.cardTimer .timeTimer {
+    padding-top: 10px
+}
+
+.cardTimer .timeTimer > div {
+    padding: 0 5px
+}
+
+.cardTimer .timeTimer > div:first-child span:first-child {
+    text-align: left
+}
+
+.cardTimer .timeTimer > div:last-child span:first-child {
+    text-align: right
+}
+
+.cardTimer .timeTimer > div:nth-child(3) {
+    padding: 0 10px
+}
+
+section.card .cardDesc {
+    padding-top: 50px;
+    padding-bottom: 50px;
+    border-bottom: 1px solid #eaeaea
+}
+
+.cardDesc .headText {
+    text-align: left
+}
+
+.cardDesc .descInfo {
+    display: inline-block;
+    width: 100%
+}
+
+.descInfo .line {
+    display: inline-block;
+    width: 100%;
+    padding-bottom: 30px
+}
+
+.descInfo .line .leftCol span {
+    font-size: 14px;
+    font-family: OpenSansBold, sans-serif;
+    color: #737c90;
+    text-transform: uppercase
+}
+
+.descInfo .line > div {
+    display: inline-block;
+    vertical-align: top
+}
+
+.descInfo .line .leftCol {
+    width: 20%
+}
+
+.descInfo .line .rightCol {
+    width: 80%
+}
+
+.descInfo .line .rightCol {
+    font-size: 14px;
+    color: #000
+}
+
+.descInfo .line .rightCol ul {
+    margin: 0;
+    padding-left: 0px
+}
+
+.descInfo .line .rightCol ul li {
+    color: #333;
+    display: inline-block;
+    list-style-type: none;
+    vertical-align: middle;
+    width: 100%;
+}
+
+.descInfo .line .rightCol ul li:before {
+    content: '•';
+    color: #1e88e5;
+    display: inline-block;
+    vertical-align: middle;
+    font-size: 20px;
+    padding-right: 10px;
+}
+
+.descInfo .line .rightCol p {
+    margin-top: 0
+}
+
+.descInfo .line .rightCol ul li span {
+    color: #000
+}
+
+section.card .cardOther {
+    padding-top: 30px
+}
+
+section.contacts .contactsData {
+    display: inline-block;
+    width: 100%
+}
+
+.contactsData .contWrap {
+    display: inline-block;
+    width: 100%;
+    padding-top: 30px
+}
+
+.contactsData .contWrap .contHead {
+    font-size: 20px;
+    color: #000;
+    font-family: OpenSansBold, sans-serif;
+    padding-bottom: 10px
+}
+
+.contactsData .contWrap .line {
+    display: inline-block;
+    width: 100%;
+    padding-bottom: 10px
+}
+
+.contactsData .contWrap .line span {
+    color: #333;
+    font-size: 16px;
+    display: block;
+    line-height: 1.5
+}
+
+.contactsData .contWrap .line span.gray {
+    font-size: 14px;
+    color: #959595
+}
+
+.contactsData .contOrg .line span {
+    font-size: 14px
+}
+
+.contactsData .contOrg .line a {
+    font-size: 14px;
+    font-family: OpenSansBold, sans-serif;
+    color: #1e88e5
+}
+
+.contactsData .contDetails .line span {
+    font-size: 14px
+}
+
+.contWrap .conButton {
+    display: inline-block;
+    width: 100%;
+    margin-top: 105px
+}
+
+.contWrap .conButton > div span {
+    font-size: 14px;
+    color: #333;
+    display: inline-block;
+    padding-bottom: 10px
+}
+
+.contWrap .conButton .hbtn {
+    background-color: #cc3a29;
+    padding: 14px 36px;
+    border-radius: 30px;
+}
+
+.contWrap .conButton .hbtn:hover {
+    background-color: #db503f;
+}
+
+.pagination {
+    display: inline-block;
+    width: 100%;
+    text-align: center;
+    padding-top: 30px
+}
+
+.pagination ul {
+    padding: 0;
+    margin: 0
+}
+
+.pagination ul li {
+    display: inline-block;
+    margin-right: 5px;
+    color: #000;
+    font-size: 14px;
+    text-align: center;
+}
+
+.pagination ul li span {
+    display: inline-block;
+    margin: 0 5px;
+}
+
+.pagination ul li a {
+    font-size: 14px;
+    color: #000;
+    display: inline-block;
+    padding: 4px 10px;
+    border: 1px solid #ddd;
+    border-radius: 100%;
+    transition: all .15s ease-in-out
+}
+
+.pagination ul li a:hover {
+    background-color: #2075d3;
+    border-color: #2075d3;
+    color: #fff
+}
+
+.pagination-item {
+    font-size: 14px;
+    color: #000;
+    display: inline-block;
+    padding: 4px 10px;
+    border: 1px solid #ddd;
+    border-radius: 100%;
+    transition: all .15s ease-in-out;
+    cursor: pointer;
+}
+
+.pagination-item:not(.active):hover {
+    background-color: #2075d3;
+    border-color: #2075d3;
+    color: #fff
+}
+
+.pagination-item.active {
+    color: #1e88e5;
+    font-family: OpenSansBold, sans-serif;
+    border: none;
+}
+
+.pagination-control {
+}
+
+.pagination-control.active {
+    font-size: 14px;
+    color: #000;
+    display: inline-block;
+    padding: 4px 10px;
+    border: 1px solid #ddd;
+    border-radius: 100%;
+    transition: all .15s ease-in-out;
+    cursor: pointer;
+}
+
+.pagination-control.active:hover {
+    background-color: #2075d3;
+    border-color: #2075d3;
+    color: #fff
+}
+
+.pagination ul li.active span {
+    color: #1e88e5;
+    font-family: OpenSansBold, sans-serif
+}
+
+.modalIn:before {
+    content: '';
+    display: inline-block;
+    height: 100%;
+    vertical-align: middle
+}
+
+.modalDone {
+    display: none
+}
+
+.socialButtons span {
+    cursor: pointer
+}
+
+/*span, p {
+	cursor: default
+}*/
+.widget {
+    margin-bottom: 10px
+}
+
+section.departure .switchers {
+    display: inline-block;
+    width: 100%;
+    text-align: justify;
+    -ms-text-align-last: justify;
+    text-align-last: justify;
+    padding: 15px 0;
+}
+
+section.departure .switchers .switch {
+    display: inline-block;
+    padding: 10px 0;
+    width: 33%;
+    text-align: center;
+    -ms-text-align-last: center;
+    text-align-last: center;
+    background-color: transparent;
+    border: 1px solid #ddd;
+    color: #333;
+    cursor: pointer;
+    vertical-align: middle;
+    -webkit-transition: all .15s ease-in-out;
+    -moz-transition: all .15s ease-in-out;
+    -ms-transition: all .15s ease-in-out;
+    -o-transition: all .15s ease-in-out;
+    transition: all .15s ease-in-out;
+}
+
+section.departure .switchers .switch:hover, section.departure .switchers .switch.active {
+    background-color: #1e88e5;
+    color: #fff;
+}
+
+section.departure .switchers .switch span {
+    text-transform: uppercase;
+    font-size: 14px
+}
+
+section.departure .switchContent {
+    display: none;
+    width: 100%;
+}
+
+section.departure .switchContent.active {
+    display: inline-block
+}
+
+.pageData {
+    padding: 0 15px
+}
+
+.data::-webkit-scrollbar {
+    display: none
+}
+
+p {
+    font-size: 14px
+}
+
+ofmodal {
+    position: fixed;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.5);
+    display: inline-block;
+    text-align: center;
+    top: 0;
+    left: 0;
+    display: none;
+    z-index: 999999;
+    overflow-y: auto !important;
+}
+
+ofmodal::before {
+    content: '';
+    display: inline-block;
+    vertical-align: middle;
+    height: 100%;
+}
+
+.modalSecond {
+    width: 850px;
+}
+
+ofmodal .modalSecond {
+    vertical-align: middle;
+    display: inline-block;
+    background-color: #fff;
+    padding: 25px;
+    margin: 2% 0;
+    position: relative;
+}
+
+ofmodal .close {
+    background: #fff;
+    font-size: 28px;
+    width: 44px;
+    height: 44px;
+    position: absolute;
+    right: 0;
+    top: 0;
+    cursor: pointer;
+    text-align: center;
+    color: #333;
+    opacity: 0.65;
+}
+
+ofmodal .close:hover {
+    opacity: 1
+}
+
+ofmodal ofmodalbody {
+    display: inline-block;
+    width: 100%;
+}
+
+ofmodal ofmodalbody .data {
+    text-align: left;
+}
+
+.arrow-s {
+    display: none;
+}
+
+.temporary .tourItem .tourImg {
+    /* background-size: contain; */
+}
+
+.temporary .tourItem .tourName {
+    min-height: 68px;
+}
+
+.temporary .data > :first-child {
+    margin-top: 0;
+    padding-top: 0;
+}
+
+.temporary-table {
+    overflow-x: auto;
+}
+
+.temporary-table table {
+    width: 100%;
+}
+
+table img {
+    max-width: none !important;
+}
+
+table td {
+    /* padding: 7px 15px; */
+    font-size: 14px;
+    color: #000;
+    /* border: 1px solid #dcdcdc; */
+    /* white-space: nowrap; */
+    /* cursor: pointer; */
+}
+
+.modalLineTable table td {
+    cursor: default;
+}
+
+table a {
+    color: #1e88e5;
+    text-decoration: underline;
+}
+
+.temporary-table table td {
+    padding: 7px 15px;
+    font-size: 14px;
+    color: #000;
+    /* border: 1px solid #dcdcdc; */
+    /* white-space: nowrap; */
+    cursor: pointer;
+}
+
+table.bordered td {
+    border: 1px solid #dcdcdc;
+}
+
+.temporary-table table a {
+    color: #1e88e5;
+    text-decoration: underline;
+}
+
+ofmodalbody {
+    font-size: 14px;
+}
+
+.f-phones .phone a, .f-phones .phone span, .f-phones .phone span.number {
+    font-size: 20px;
+}
+
+.f-phones div:nth-child(2) {
+    margin-top: 0;
+}
+
+.fixedNav .headButton .hbtn {
+    width: 100%;
+    padding: 10px 0;
+    font-size: 13px;
+}
+
+.phones .phone span.free {
+    font-size: 12px;
+}
+
+[href^=mailto] {
+    user-select: text;
+    -ms-user-select: text;
+    -webkit-user-select: text;
+    -moz-user-select: text;
+}
+
+.t_red {
+    color: #ff0000 !important;
+}
+
+.nivo-lightbox-overlay {
+    z-index: 999999;
+}
+
+.modal-loader {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    top: 0;
+    left: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background-color: rgba(255, 255, 255, 0.6);
+}
+
+.modal-loader span {
+    font-size: 16px;
+    color: #000;
+    display: block;
+    font-family: OpenSansBold, sans-serif;
+    margin-bottom: 20px;
+}
+
+.modal-loader.active {
+    display: block !important;
+}
+
+.modalWrap.blued {
+    background-color: #e4f2fd;
+}
+
+.modalWrap.blued .modalDone {
+    text-align: center;
+}
+
+.data-clientchange h2, .data-clientchange h3, .data-clientchange h1, .data-clientchange h4, .data-clientchange h5, .data-clientchange h6 {
+    margin-bottom: 0;
+}
+
+.data-clientchange p {
+    margin: 5px 0;
+}
+
+/*darkrogua 20.04*/
+.s-card__room-details-col.data ul li::before {
+    display: none;
+}
+
+#modalApartaments--sans .modalWrap {
+    width: 100%;
+}
+
+.s-card__data.data ul > li:last-child {
+    /* padding-top: 8px; */
+}
+
+.plus_minus {
+    color: #fff;
+    font-weight: bold;
+    font-size: 18px;
+}
+
+.plus_minus_input {
+    position: relative;
+}
+
+.plus_minus_input::before {
+    content: "+/-";
+    color: #fff;
+    font-weight: bold;
+    font-size: 16px;
+    position: absolute;
+    left: -25px;
+    bottom: 8px;
+}
+
+.descr_nomer:first-letter {
+    text-transform: uppercase;
+}
+
+.s-card__booking-col.data_nomer {
+    font-weight: bold;
+    font-size: 14px;
+    font-family: Open sans;
+}
+
+.s-card__booking-col.descr_nomer {
+    font-size: 14px;
+}
+
+.s-card__booking-line:hover .s-card__booking-col.descr_nomer {
+    font-size: 14px;
+    font-family: OpenSansRegular, sans-serif;
+}
+
+.parent-flex_card {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding-right: 5px;
+}
+
+.parent_s-card__flex {
+    flex-wrap: wrap;
+}
+
+.last_line_scard {
+    padding-top: 10px;
+}
+
+.normalize-table td {
+    width: 100%;
+}

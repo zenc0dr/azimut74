@@ -1,0 +1,77 @@
+<link rel="stylesheet" href="/plugins/mcmraak/rivercrs/assets/css/parsers.css">
+<div id="Parsers" v-cloak>
+    <div class="progress-line" :class="(parsers_process || seeders_process)?'active':''"></div>
+    <div class="parsers-panel" @click="info()">
+        <div class="row">
+            <div class="col-md-3">
+                <span class="title">Время обновления</span>
+                <ul>
+                    <li><input type="checkbox" v-model="tasks_switch.waterway"> <b>Водоходъ:</b> ${infopanel.waterway_time}</li>
+                    <li><input type="checkbox" v-model="tasks_switch.volga"> <b>ВолгаWolga:</b> ${infopanel.volga_time}</li>
+                    <li><input type="checkbox" v-model="tasks_switch.gama"> <b>Гама:</b> ${infopanel.gama_time}</li>
+                    <li><input type="checkbox" v-model="tasks_switch.germes"> <b>Спутник-Гермес:</b> ${infopanel.germes_time}</li>
+                    <li><input type="checkbox" v-model="tasks_switch.trashCleaner"> Станадртная проверка</li>
+                    <li><input type="checkbox" v-model="tasks_switch.dubleCheckins"> Проверка на дубли</li>
+                    <li><input type="checkbox" v-model="tasks_switch.cleanPrices"> Проверка цен</li>
+                </ul>
+            </div>
+            <div class="col-md-3">
+                <span class="title">Статистика <button class="parsers-refresh-info" @click="info()">Обновить</button></span>
+                <ul>
+                    <li><b>Активных заездов:</b> ${infopanel.active_checkins_count}</li>
+                    <li><b>Неактивных заездов</b> ${infopanel.inactive_checkins_count}</li>
+                    <li><b>Заездов добавленных вручную:</b> ${infopanel.noeds_checkins_count}</li>
+                    <li><b>Теплоходов</b> ${infopanel.motorships_count}</li>
+                    <li><b>Кают</b> ${infopanel.cabins_count}</li>
+                    <li><b>Городов:</b> ${infopanel.towns_count}</li>
+                </ul>
+            </div>
+        </div>
+    </div>
+    <button
+            :disabled="parsers_process || seeders_process"
+            @click="tasks_handler(0)"
+            class="parser-btn btn btn-primary oc-icon-refresh"
+            :class="{ process:parsers_process }">
+        Получить данные
+    </button>
+
+    <button
+            :disabled="parsers_process || seeders_process"
+            @click="tasks_handler(10)"
+            class="parser-btn btn btn-primary oc-icon-refresh"
+            :class="{ process:seeders_process }">
+        Обработать данные
+    </button>
+
+    <a target="_blank" class="btn parser-btn btn-primary oc-icon-book" href="{{ backend_url }}">
+        Журнал <span class="parsers-badge">${infopanel.jlog_count}</span>
+    </a>
+    <button @click="info()"
+            data-request="onCleanIdsMemory"
+            class="parser-btn btn btn-primary oc-icon-recycle">
+        Очистить память идентификаторов
+    </button>
+    <button
+            data-request="onSaveBD"
+            class="parser-btn btn btn-primary oc-icon-database">
+        Сохранить дамп БД
+    </button>
+    <button
+            data-request="onRestoreBD"
+            class="parser-btn btn btn-primary oc-icon-database">
+        Восстановить дамп БД
+    </button>
+
+    <div class="parsers-strings">
+        <div v-for="item in strings" v-html="item" class="parsers-string"></div>
+    </div>
+    <div v-if="errors.length" class="parser-errors-button" @click="errors_show=(errors_show)?false:true">
+        Ошибки: ${ errors.length }
+    </div>
+    <div v-if="errors_show" class="parsers-errors">
+        <div v-for="item in errors" v-html="item" class="parsers-error"></div>
+    </div>
+</div>
+<script src="/plugins/mcmraak/rivercrs/assets/js/vue.min.js"></script>
+<script src="/plugins/mcmraak/rivercrs/assets/js/parsers.js"></script>

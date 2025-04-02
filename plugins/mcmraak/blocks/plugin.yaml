@@ -1,0 +1,57 @@
+plugin:
+    name: 'mcmraak.blocks::lang.plugin.name'
+    description: 'mcmraak.blocks::lang.plugin.description'
+    author: Mcmraak
+    icon: oc-icon-bookmark
+    homepage: ''
+permissions:
+    blocks.usage:
+        tab: 'Рекламный модуль'
+        label: 'Доступ к модулю'
+navigation:
+    blocks-main:
+        label: 'Рекламный модуль'
+        url: mcmraak/blocks/posts
+        icon: icon-desktop
+        order: 4
+        permissions:
+            - blocks.usage
+        sideMenu:
+            blocks-content:
+                label: 'Рекламные блоки'
+                url: mcmraak/blocks/posts
+                icon: icon-align-justify
+                permissions:
+                    - blocks.usage
+            blocks-maps:
+                label: Карты
+                url: mcmraak/blocks/maps
+                icon: icon-location-arrow
+                permissions:
+                    - blocks.usage
+            blocks-markers:
+                label: Метки
+                url: mcmraak/blocks/markers
+                icon: icon-map-marker
+                permissions:
+                    - blocks.usage
+            blocks-slider:
+                label: Слайдеры
+                url: mcmraak/blocks/slider
+                icon: icon-sliders
+            offer:
+                label: 'Оферта и т. д.'
+                url: mcmraak/blocks/offer
+                icon: icon-file-text
+            blocks-galleries:
+                label: Галереи
+                url: mcmraak/blocks/galleries
+                icon: icon-image
+            blocks-mutator:
+                label: 'Мутатор метатегов'
+                url: mcmraak/blocks/codes
+                icon: icon-bullseye
+            blocks-injects:
+                label: Инъектор
+                url: mcmraak/blocks/injects
+                icon: icon-forward

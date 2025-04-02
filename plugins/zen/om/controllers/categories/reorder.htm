@@ -1,0 +1,19 @@
+<?php Block::put('breadcrumb') ?>
+    <ul>
+        <li><a href="<?= Backend::url('zen/om/categories') ?>">Categories</a></li>
+        <li><?= e($this->pageTitle) ?></li>
+    </ul>
+<?php Block::endPut() ?>
+
+<?= $this->reorderRender() ?>
+<script src="/plugins/zen/om/assets/js/om.recache.js"></script>
+<div id="RecacheDialog" style="display: none; margin-top: 50px">
+    <div id="RecacheStart" class="btn btn-primary oc-icon-refresh">
+        <?= e(trans('zen.om::lang.categories.recache')) ?>
+    </div>
+    <div class="progress" style="margin-top: 20px;">
+        <div id="RecacheProgress" class="progress-bar" style="width: 0%;">
+        </div>
+    </div>
+    <div id="RecacheLog"></div>
+</div>

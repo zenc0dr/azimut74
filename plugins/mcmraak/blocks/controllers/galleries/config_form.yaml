@@ -1,0 +1,16 @@
+name: Галереи
+modelClass: Mcmraak\Blocks\Models\Gallery
+form: $/mcmraak/blocks/models/gallery/fields.yaml
+defaultRedirect: mcmraak/blocks/galleries
+create:
+    title: 'Создание галереи'
+    redirect: 'mcmraak/blocks/galleries/update/:id'
+    redirectClose: mcmraak/blocks/galleries
+    flashSave: 'Галерея создана'
+update:
+    title: 'Обновление галереи'
+    redirect: mcmraak/blocks/galleries
+    redirectClose: mcmraak/blocks/galleries
+    flashSave: 'Галерея обновлена'
+    flashDelete: 'Галерея удалена'
+preview: {  }

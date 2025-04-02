@@ -1,0 +1,53 @@
+<link rel="stylesheet" href="/plugins/mcmraak/rivercrs/assets/css/import.css">
+<div class="toolbar-widget list-header">
+    <div class="control-toolbar">
+
+        <!-- Control Panel -->
+        <div class="toolbar-item toolbar-primary">
+            <h3>Импорт</h3>
+            <label>Теплоход</label><br>
+            <div id="Download" data-control="toolbar" data-disposable="">
+                            <select id="selectedMotorship_id" class="form-control custom-select" style="width:500px">
+                                {% for ship in motorships %}
+                                <option {% if loop.index == 1 %}selected="selected"{% endif %} value="{{ ship.id }}">{{ ship.name|mutator }}</option>
+                                {% endfor %}
+                            </select>
+                            {% set firstship = motorships|first %}
+                    <a id="priceDowloadLink" href="/rivercrs/api/v1/pricing/price/{{ firstship.id }}/0" class="btn btn-primary oc-icon-download">Скачать XLS</a>
+            </div>
+            <div id="Town" data-control="toolbar" data-disposable="">
+                <select id="selectedTown_id" class="form-control custom-select" style="width:500px">
+                        <option value="0">Все города</option>
+                </select>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="nav-tabs"></div>
+
+<div class="control-toolbar" style="padding-top:30px">
+    <div class="toolbar-item toolbar-primary">
+        <input
+        id="File"
+        type="file"
+        class="btn btn-sm btn-secondary oc-icon-upload upload-button dz-clickable"
+        style="width: 498px;margin-left: 21px;"
+        >Выбрать файл</input>
+        <div
+        id="Upload"
+        type="file"
+        class="btn btn-primary oc-icon-upload"
+        ion="data=#File;ajax=/rivercrs/api/v1/pricing/price/upload;html=#Answer;"
+        >Загрузить XLS</div>
+    </div>
+</div>
+<div id="Preloader" class="loading-indicator-container" style="display: none">
+    <div class="loading-indicator">
+        <span></span>
+        <div>Обработка...</div>
+    </div>
+</div>
+<div id="Answer"></div>
+<script src="/plugins/mcmraak/rivercrs/assets/js/octo-ion.js"></script>
+<script src="/plugins/mcmraak/rivercrs/assets/js/import.js"></script>

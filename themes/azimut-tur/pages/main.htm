@@ -1,0 +1,382 @@
+title = "Азимут-тур Главная"
+url = "/:?*"
+layout = "general"
+description = "Главная"
+meta_title = "Азимут-Тур — купить туры из Саратова по России и Загранице. Цены на отдых и путевки [[year]]"
+meta_description = "Огромный выбор туров и круизов по России и Загранице. Выезд из Саратова, Москвы и других городов. Удобный и быстрый подбор — не более 5 минут. Он-лайн оплата. Никаких переплат. Заходите!"
+is_hidden = 0
+seo_keywords = "Турфирма, Турагентство, Саратов, горящие, туры, путевки, он лайн, отдых, цена, купить, стоимость, бронировать, подбор, поиск, туроператор"
+robot_index = "index"
+robot_follow = "follow"
+contentType = "html"
+force_show = 0
+==
+<?php
+//use \Zen\Om\Models\Store;
+//use \Zen\Om\Models\Category;
+
+function onStart()
+{
+
+	App::setLocale('ru');
+	$nowDate = date('Y-m-d H:i:s');
+	$rounders = \Srw\Catalog\Models\Items::where('time_start','<', $nowDate)->where('time_end','>', $nowDate)->where('active',1)->orderBy('order')->get();
+
+    $this['directions'] = \Srw\Azimut\Models\Directions::orderBy('order')->get();
+    $items = \Srw\Catalog\Models\Items::get();
+	//$this['catitems'] = $items;
+	$this['catitems'] = $rounders;
+
+	// раскомментировать чтобы включить появление случайным образом
+	//$max = count($rounders);
+	//$rnd = rand(1, $max);
+	//if($rnd > ($max - 8)) $rnd = $max - 8;
+	//$this['rnd'] = $rnd;
+
+	//$link = $_SERVER['REQUEST_URI']; // неправильно
+	$link = Request::path(); // правильно
+
+	$link = explode('?', $link);
+	$link = $link[0];
+	/*$link = preg_replace('/\/$/', '', $link);*/
+
+	$this['link'] = $link;
+
+	$this['stores'] = \Zen\Om\Models\Store::get();
+
+	$request_uri = explode('/',$link);
+	$url_cache = $link;
+	//dd($request_uri);
+	$request_uri = $request_uri[count($request_uri) - 1]; //(получаем последний элемент массива)
+	// count выдает число (получаем последний элемент массива)
+	//dd($request_uri);
+
+	$category = \Zen\Om\Models\Category::where('slug', $request_uri)->where('url_cache', '/'.$url_cache)->first();
+	$item = \Zen\Om\Models\Item::where('slug', $request_uri)->where('url_cache', '/'.$url_cache)->first();
+    if($category)
+    {
+        $this['om_request'] = [
+            'category' => $category,
+            'categories' => $category->categories,
+            'breadcrumbs' => $category->breadcrumbs(),
+        ];
+        //dd($this['om_request']['category']->name);
+        return;
+    }
+    elseif ($item) {
+        $this['om_request'] = [
+            'item' => $item,
+            'breadcrumbs' => $item->category->breadcrumbs()
+        ];
+        return;
+    }
+    elseif ($link != '/') {
+    	return Response::make($this->controller->run('404')->getContent(), 404);
+    }
+
+
+	//$ss = $this->param('parent_id');
+	//dd($ss);
+
+
+	//$slug = \Zen\Om\Models\Store::param('slug');
+	//dd($slug);
+	//if(!$slug) $slug = 'ekskursionnye-tury';
+    //if(Store::where('slug', $slug)->count())
+    //{
+    //    $this['stores'] = Store::where('slug', $slug)->first();
+    //}
+    //else
+    //{
+    //    return \Response::make($this->controller->run('404'), 404);
+    //}
+}
+?>
+==
+{% if om_request.category.slug == 'poisk-zagranichnih-turov' %}
+
+
+<div class="data">
+    <h1 class="mt-0 h-temp">{{ om_request.category.category_title|mutator }}</h1>
+    {{ om_request.category.catframe|raw|mutator }}
+</div>
+
+
+{% else %}
+
+
+{% if om_request.category.categories or om_request.category.items %}
+	<div class="cruiseData">
+		<div class="c-r">
+			<div class="col-25 col-s-100 as-s">
+				{% partial 'tempcatalog/leftmenu' items=om_request.category.items category=om_request.category categories=om_request.category.categories store=om_request.category.store %}
+			</div>
+
+			<div class="col-75 col-s-100 as-s">
+				{% if om_request.category.category_title  %}
+					<h1 class="mt-0 h-temp">{{ om_request.category.category_title|mutator }}</h1>
+				{% endif %}
+				<div class="rightBlock tourBlock toursBlock temporary">
+					{% if om_request.category.catframeup %}
+						<div class="r">
+							<div class="col-100">
+								<div class="data">
+									{{ om_request.category.catframeup|raw|mutator }}
+								</div>
+							</div>
+						</div>
+					{% endif %}
+					{% if om_request.category.category_table %}
+						<div class="r">
+							<div class="col-100">
+								<div class="data temporary-table">
+									{{ om_request.category.category_table|raw|mutator }}
+								</div>
+							</div>
+						</div>
+					{% endif %}
+					{% if om_request.category.sortedCategories() %}
+						<div class="r">
+							{% if om_request.category.sortedCategories() %}
+								{% partial 'tempcatalog/rightitemscat' %}
+							{% endif %}
+							{#Для отображения итемов#}
+							{#{% if om_request.category.items %}
+								{% partial 'tempcatalog/rightitems' items=om_request.category.storeItems %}
+							{% endif %}#}
+						</div>
+					{% endif %}
+					{% if om_request.category.client_text %}
+						<div class="r">
+							<div class="col-100">
+								<div class="data">
+									{{ om_request.category.client_text|raw|mutator }}
+								</div>
+							</div>
+						</div>
+					{% endif %}
+					{% if om_request.category.catframe %}
+						<div class="r">
+							<div class="col-100">
+								<div class="data">
+									{{ om_request.category.catframe|raw|mutator }}
+								</div>
+							</div>
+						</div>
+					{% endif %}
+				</div>
+			</div>
+
+			{% if om_request.category.seo_text %}
+				<div class="col-100">
+					<div class="data data-clientchange">
+						{{ om_request.category.seo_text|raw|mutator }}
+					</div>
+				</div>
+			{% endif %}
+
+		</div>
+	</div>
+{% endif %}
+
+{% if om_request.item %}
+
+    {% set item = om_request.item %}
+
+    <div class="cruiseData">
+		<div class="c-r">
+			<div class="col-25 col-s-100 as-s">
+				{% partial 'tempcatalog/leftmenu' item=om_request.item category=om_request.category categories=om_request.category.categories store=om_request.category.store %}
+			</div>
+
+			<div class="col-75 col-s-100 as-s">
+				<div class="rightBlock tourBlock toursBlock temporary">
+					<div class="data">
+						{{ item.full_desc|raw|mutator }}
+						{{ item.frame|raw|mutator }}
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+{% endif %}
+
+{% if link == '/' %}
+
+{% put slider %}
+	{% partial 'header/slidermain' %}
+{% endput %}
+
+<section class="tours">
+
+	<div class="headText">
+		<span>Популярные направления</span>
+	</div>
+
+	<div class="tourBlock">
+
+		<div class="c-r ai-str">
+
+			{% for item in directions %}
+				<div class="col-50 col-s-100 mb-20">
+					<div class="tourItem df ai-str">
+						<div class="itemImg" style="background-image: url({{ item.image|media }});"></div>
+						<div class="itemData">
+							<div class="tourCategory">
+								<span>{{ item.category|mutator }}</span>
+							</div>
+							<div class="tourName">
+								<span>
+									{{ item.name|mutator }}
+								</span>
+							</div>
+							<div class="tourDesc">
+								{{ item.desc|raw|mutator }}
+							</div>
+						</div>
+					</div>
+				</div>
+			{% endfor %}
+
+		</div>
+	</div>
+
+	<div class="headText">
+
+		<span>Горящие туры и спецпредложения</span>
+	</div>
+
+	<div class="tourBlock toursBlock">
+		<div class="c-r">
+
+			{#{% for record in catitems|slice(rnd,8) %}#}
+			{% for record in catitems|slice(0,8) %}
+
+			{% if record.tourimage is empty %}
+			{% set image_url = '/themes/azimut-tur/assets/img/no_image.png' %}
+			{% else %}
+			{% set image_url = record.tourimage|media %}
+			{% endif %}
+
+			<div class="col-25 col-m-33 col-s-50 col-xs-100">
+				<div class="tourItem">
+					<div class="tourImg" style="background-image: url({{ image_url }});"></div>
+					<div class="tourCard">
+						<div class="tourName"><span>{{ record.name|mutator }}</span></div>
+						{% if record.routes %}
+						<div class="tourWay">
+							<i class="fa fa-map-marker" aria-hidden="true"></i>
+							{{ record.routes|raw|mutator }}
+						</div>
+						{% endif %}
+						<div class="tourHotel">
+							<div class="hotelName">
+								<span>{{ record.tourhotel|mutator }}</span>
+							</div>
+							<div class="hotelRate">
+								{% for i in range(1, record.stars) %}
+								    <div class="star">
+										<i class="fa fa-star" aria-hidden="true"></i>
+									</div>
+								{% endfor %}
+							</div>
+						</div>
+						<div class="tourStart">
+							c <span>{{ record.created_at|date('d F') }}</span>, <span>{{ record.duration|mutator }} ночей</span>
+						</div>
+						<div class="tourPrice">
+							<div class="priceButton">
+								<a target="_blank" href="/tours{{slug}}{{ record.slug }}" class="pbtn">Подробнее</a>
+							</div>
+							<div class="price">
+								{% if record.oldprice %}
+								<div class="oldPrice">
+									<span>{{ record.oldprice|mutator }} р.</span>
+								</div>
+								{% endif %}
+								<div class="currentPrice">
+									<span>{{ record.newprice|mutator }}</span>
+									<span>руб.<br>чел.</span>
+								</div>
+							</div>
+						</div>
+					</div>
+
+					<div class="tourTimer">
+						<div class="timeText">
+							<span>
+								{% partial 'svg/timer' %}
+							</span>
+							<span>Акция: </span>
+						</div>
+
+						<div class="timeTimer countdown" endtime="{{ record.time_end|date('m/d/Y H:i:s') }}">
+							<div class="number">
+								<span class="days"></span>
+								<span>день</span>
+							</div>
+							<div class="colon"><span>:</span></div>
+							<div class="number">
+								<span class="hours"></span>
+								<span>час</span>
+							</div>
+							<div class="colon"><span>:</span></div>
+							<div class="number">
+								<span class="minutes"></span>
+								<span>мин</span>
+							</div>
+						</div>
+
+					</div>
+
+				</div>
+			</div>
+
+			{% endfor %}
+
+		</div>
+	</div>
+
+	<div class="tourMoreButton">
+		<a href="/tours" class="hbtn">Посмотреть все</a>
+	</div>
+
+</section>
+
+{% endif %}
+
+<section class="article">
+	<div class="c-r">
+		<div class="col-25 hidden-m-d">
+			<div class="widgets">
+
+				{% partial 'widgets/vk' %}
+
+				{% partial 'widgets/ok' %}
+
+			</div>
+		</div>
+
+		<div class="col-75 col-m-100">
+			<div class="articleData articleMain">
+				<div class="data">
+					{% component 'contenteditor' file='main/about' %}
+				</div>
+				<div class="readMore">
+					<button class="rbtn">
+						<div class="add">
+							<span>Читать далее</span>
+							<i class="fa fa-angle-down" aria-hidden="true"></i>
+						</div>
+						<div class="less">
+							<span>Скрыть</span>
+							<i class="fa fa-angle-up" aria-hidden="true"></i>
+						</div>
+					</button>
+				</div>
+			</div>
+		</div>
+
+	</div>
+</section>
+{% endif %}

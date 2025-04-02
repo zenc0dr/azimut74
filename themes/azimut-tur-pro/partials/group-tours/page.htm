@@ -1,0 +1,29 @@
+description = "Посадочная страница"
+
+[viewBag]
+==
+<meta id="gt-preset" content="{{ GroupTours.preset }}">
+<meta id="grouptours-title" content="{{ GroupTours.name }}" >
+<section class="results my-4">
+    <div class="container d-flex flex-column">
+        <div class="d-flex flex-column flex-lg-row">
+            <section class="result-menu__categories col-12 col-lg-3">
+                {% partial 'blocks/page-groups' data=GroupTours.pageGroups sTitle='Заголовок' %}
+            </section>
+            <div class="w-100">
+                <div id="gt-search-widget-app">Поисковый виджет</div>
+                <div class="gt-infoblock">
+                    {{ GroupTours.infoblock|raw }}
+                </div>
+                {% partial 'dolphin/dolphin-reviews' class='mb-3 mb-xl-5 ' data=GroupTours.reviews_json %}
+                {% if GroupTours.tinybox_title %}
+                <div class="text-center fs-4 my-5">
+                    {{ GroupTours.tinybox_title|raw }}
+                </div>
+                {% endif %}
+                {% partial 'dolphin/tinybox-gallery' data=GroupTours.tinybox_gallery %}
+                {% partial 'dolphin/features' data=GroupTours.features %}
+            </div>
+        </div>
+    </div>
+</section>

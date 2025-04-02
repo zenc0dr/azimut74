@@ -1,0 +1,78 @@
+@import "_";
+@import "additional";
+
+//Переменные цветов
+$banner-bg-color: #e9ffdb;
+$banner-main-color: #e0292c;
+$banner-second-color: #e0e0e0;
+
+
+.banner-section__cruise {
+    display: flex;
+    width: 400px;
+    flex-direction: column;
+    border: 2px solid $banner-second-color;
+    padding: 20px;
+    justify-content: space-between;
+    align-items: center;
+    border-radius: 5px;
+    @media screen and ( max-width: 401px ) {
+        width: 100%;
+        padding: 20px 10px;
+    }
+    .banner-modal {
+        .modal-body {
+            @media screen and ( max-width: 768px ) {
+                padding: 0;
+            }
+        }
+    }
+    .banner-section__top {
+        font-weight: bold;
+        color: #484848;
+    }
+    .banner-section__center {
+        width: 100%;
+        padding:  20px 0;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        img {
+            width: 70%;
+           // height: 280px;
+            border-radius: 50%;
+            object-fit: cover;
+            object-position: center;
+            @media screen and ( max-width: 401px ) {
+                width: 65%;
+            }
+        }
+    }
+    .banner-section__bot-text {
+        margin-bottom: 10px;
+        font-size: 14px;
+        font-style: italic
+    }
+    .banner-section__btn {
+        //@include clear-button();
+        border-radius: 8px;
+        background-color: $banner-main-color;
+        color: #fff;
+        border-color: $banner-main-color;
+        padding: 13px 24px;
+        width: 100%;
+        font-weight: bold;
+    }
+}
+
+@media (max-width: 500px) {
+    .zen-date-range-fix {
+        flex-direction: column;
+        .section-cruise__step-input {
+            width: 100%!important;
+        }
+    }
+}
+
+
+

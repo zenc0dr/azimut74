@@ -1,0 +1,6 @@
+plugin:
+    name: 'srw.core::lang.plugin.name'
+    description: 'Catalog core'
+    author: Srw
+    icon: oc-icon-circle
+    homepage: ''

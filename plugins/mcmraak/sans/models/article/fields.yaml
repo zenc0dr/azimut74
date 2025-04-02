@@ -1,0 +1,110 @@
+fields:
+    active:
+        label: Активность
+        span: full
+        default: 1
+        dependsOn:
+            - root_id
+        preset:
+            field: root_id
+            type: ''
+        type: switch
+    resort_group:
+        label: 'Группа курортов'
+        span: auto
+        type: dropdown
+    sort_order:
+        label: Порядок
+        span: auto
+        default: '0'
+        type: number
+tabs:
+    fields:
+        name:
+            label: Название
+            oc.commentPosition: ''
+            span: auto
+            type: text
+            tab: 'Основные данные'
+        slug:
+            label: Код
+            oc.commentPosition: ''
+            span: auto
+            preset:
+                field: name
+                type: slug
+            type: text
+            tab: 'Основные данные'
+        images:
+            label: Изображение
+            oc.commentPosition: ''
+            mode: image
+            useCaption: true
+            thumbOptions:
+                mode: crop
+                extension: auto
+            span: full
+            type: fileupload
+            tab: 'Основные данные'
+        text:
+            label: 'Информационный блок'
+            size: large
+            oc.commentPosition: ''
+            span: full
+            type: richeditor
+            tab: 'Основные данные'
+        html:
+            label: 'Разметка страницы'
+            size: giant
+            oc.commentPosition: ''
+            span: full
+            type: richeditor
+            tab: 'Основные данные'
+        seo_articles:
+            label: 'SEO Статьи'
+            oc.commentPosition: ''
+            prompt: 'Добавить статью'
+            span: full
+            type: repeater
+            tab: Seo-статьи
+            form:
+                fields:
+                    sa_title:
+                        label: Заголовок
+                        oc.commentPosition: ''
+                        span: full
+                        type: text
+                    sa_text:
+                        label: Текст
+                        size: large
+                        oc.commentPosition: ''
+                        span: full
+                        type: richeditor
+                    sa_hash:
+                        label: Хэштег
+                        oc.commentPosition: ''
+                        span: auto
+                        preset:
+                            field: sa_title
+                            type: slug
+                        type: text
+        seo_title:
+            label: title
+            oc.commentPosition: ''
+            span: full
+            type: text
+            tab: Метатеги
+        seo_keywords:
+            label: keywords
+            size: small
+            oc.commentPosition: ''
+            span: full
+            type: textarea
+            tab: Метатеги
+        seo_description:
+            label: description
+            size: small
+            oc.commentPosition: ''
+            span: full
+            type: textarea
+            tab: Метатеги

@@ -1,0 +1,15 @@
+name: Techs
+form: $/mcmraak/rivercrs/models/techs/fields.yaml
+modelClass: Mcmraak\Rivercrs\Models\Techs
+defaultRedirect: mcmraak/rivercrs/techs
+create:
+    title: 'Создать характеристику'
+    redirect: 'mcmraak/rivercrs/techs/update/:id'
+    redirectClose: mcmraak/rivercrs/techs
+    flashSave: 'Характеристика создана'
+update:
+    title: 'Редактировать характеристику'
+    redirect: mcmraak/rivercrs/techs
+    redirectClose: mcmraak/rivercrs/techs
+    flashSave: 'Характеристика сохранена'
+    flashDelete: 'Характеристика удалена'

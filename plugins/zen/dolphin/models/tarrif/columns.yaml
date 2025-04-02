@@ -1,0 +1,9 @@
+columns:
+    id:
+        label: id
+        type: number
+        sortable: true
+    name:
+        label: 'Название тарифа'
+        type: text
+        sortable: true

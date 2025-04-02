@@ -1,0 +1,195 @@
+.ship-cabins-tab .tab-name.route-title h2,
+.ship-cabins-tab .ship-place-left {
+    width: auto;
+}
+
+.ship-name-tab {
+    display: flex;
+    align-items: center;
+       font-weight: bold;
+    margin-bottom: 40px;
+}
+
+.cabin-wrapper {
+    display: flex;
+    overflow: hidden;
+    @include m('md') {
+       flex-direction: column;
+    }
+}
+
+
+.cabin-left-content {
+    width: 50%;
+    @include m('lg') {
+      min-width: 40vw;
+      flex-shrink: 0;
+    }
+    @include m('md') {
+       width: 100%;
+    }
+}
+
+.cabin-right-content {
+    padding-left: 30px;
+    padding-bottom: 10px;
+    display: flex;
+    flex-direction: column;
+    @include m('lg') {
+      font-size: fs('s');
+      padding-left: 15px;
+    }
+    @include m('md') {
+        padding: 0;
+    }
+
+    .cabin-name {
+       @include m('md') {
+          display: none;
+       }
+    }
+}
+
+.tab-name.route-title {
+    width: 100%;
+    background-color: color('blue-300');
+    color: color('primary-100');
+    padding: 19px 37px;
+    border-radius: 4px;
+    justify-content: space-between;
+    @include m('590px') {
+       padding: 13px 20px;
+    }
+    @include m('425px') {
+        padding: 9px 13px;
+    }
+    @include m('390px') {
+       padding: 9px;
+    }
+    h2 {
+       width: 250px;
+       @include m('lg') {
+         font-size: fs('h20');
+         width: 288px;
+       }
+       @include m('590px') {
+         font-size: fs('def');
+       }
+    }
+}
+
+.cabin-name {
+    font-size: fs('h20');
+    font-weight: bold;
+    @include m('lg') {
+      font-size: fs('h3');
+    }
+}
+
+.wrapper-tab-content.cabin-wrapper {
+    background-color: color('primary-100');
+}
+
+.ship-cabins-tab .slider-and-thumbs {
+    height: 350px;
+    margin-bottom: 0;
+    @include m('590px') {
+      height: 280px;
+    }
+}
+
+
+.cabin-parametrs ul li {
+    list-style: none;
+    margin-bottom: 5px;
+}
+
+.cabin-parametrs {
+    margin: 30px 0;
+    @include m('md') {
+         margin-top: 0;
+        margin-bottom: 10px;
+    }
+}
+
+.cabin-parametrs ul {
+    padding-left: 0;
+}
+
+// нужно перменную цвета
+.cabin-parametrs strong,
+.title-desc-cabin,
+.cabin-name {
+    color: #0a4069;
+}
+
+.title-desc-cabin {
+    font-weight: bold;
+    margin-bottom: 5px;
+}
+
+.cabin-left-content .cabin-name {
+    display: none;
+    @include m('md') {
+      display: block;
+      margin-bottom: 20px;
+    }
+    @include m('370px') {
+        margin-bottom: 13px;
+        font-size: fs('def');
+    }
+}
+
+.ship-cabins-tab h2 {
+//   margin-bottom: 10px;
+   @include m('470px') {
+      font-size: fs('h2');
+   }
+
+   @include m('360px'){
+      font-size: fs('def');
+   }
+}
+
+.ship-cabins-tab .tab-content {
+    flex-direction: column !important;
+}
+
+.ship-cabins-tab .tab-content .cabin-wrapper:nth-child(even) .cabin-left-content {
+    order: 1;
+    @include m('md') {
+       order: 0;
+    }
+}
+
+
+.ship-cabins-tab .tab-content .cabin-wrapper:nth-child(even) .cabin-right-content {
+    padding-left: 0;
+    padding-right: 30px;
+    @include m('lg') {
+       padding-right: 15px;
+    }
+    @include m('md') {
+       padding-right: 0;
+    }
+}
+
+// нужно перменную цвета
+.ship-cabins-tab .tab-content .cabin-wrapper:nth-child(even) {
+    background-color: #f2f2f2;
+}
+
+
+.ship-scheme {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+
+.ship-scheme img {
+    max-width: 75%;
+    @include m('md') {
+        max-width: 100%;
+    }
+}

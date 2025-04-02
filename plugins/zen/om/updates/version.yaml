@@ -1,0 +1,98 @@
+1.0.1:
+    - 'Initialize plugin.'
+1.0.2:
+    - 'Created items'
+    - builder_table_create_zen_om_items.php
+1.0.3:
+    - 'Created categories'
+    - builder_table_create_zen_om_categories.php
+1.0.5:
+    - 'Created storages'
+    - builder_table_create_zen_om_storages.php
+1.0.6:
+    - 'Created stores'
+    - builder_table_create_zen_om_stores.php
+1.0.7:
+    - 'Created custom fields'
+    - builder_table_create_zen_om_fields.php
+1.0.8:
+    - 'Created custom fields pivot'
+    - builder_table_create_zen_om_fields_pivot.php
+1.0.9:
+    - 'Created settings profiles'
+    - builder_table_create_zen_om_settings.php
+1.0.10:
+    - 'Products test seeder (if uncommented)'
+    - seeder1010.php
+1.0.11:
+    - 'Created Profiles'
+    - builder_table_create_zen_om_profiles.php
+1.0.12:
+    - 'Created Brands'
+    - builder_table_create_zen_om_brands.php
+1.0.13:
+    - 'Created Orders'
+    - builder_table_create_zen_om_orders.php
+1.0.15:
+    - 'Created Statuses'
+    - builder_table_create_zen_om_statuses.php
+1.0.16:
+    - 'Created Payments'
+    - builder_table_create_zen_om_payments.php
+1.0.17:
+    - 'Created Deliveries'
+    - builder_table_create_zen_om_deliveries.php
+1.0.18:
+    - 'Updated table zen_om_items'
+    - builder_table_update_zen_om_items.php
+1.0.19:
+    - 'Updated table zen_om_stores'
+    - builder_table_update_zen_om_stores.php
+1.0.20:
+    - 'Updated table zen_om_stores'
+    - builder_table_update_zen_om_stores_2.php
+1.0.21:
+    - 'Updated table zen_om_categories'
+    - builder_table_update_zen_om_categories.php
+1.0.22:
+    - 'Updated table zen_om_categories'
+    - builder_table_update_zen_om_categories_2.php
+1.0.23:
+    - 'Updated table zen_om_categories'
+    - builder_table_update_zen_om_categories_3.php
+1.0.24:
+    - 'Updated table zen_om_categories'
+    - builder_table_update_zen_om_categories_4.php
+1.0.25:
+    - 'Updated table zen_om_categories'
+    - builder_table_update_zen_om_categories_5.php
+1.0.26:
+    - 'Updated table zen_om_categories'
+    - builder_table_update_zen_om_categories_6.php
+1.0.27:
+    - 'Updated table zen_om_categories'
+    - builder_table_update_zen_om_categories_7.php
+1.0.28:
+    - 'Updated table zen_om_categories'
+    - builder_table_update_zen_om_categories_8.php
+1.0.29:
+    - 'Updated table zen_om_categories'
+    - builder_table_update_zen_om_categories_9.php
+1.0.30:
+    - 'Updated table zen_om_categories'
+    - builder_table_update_zen_om_categories_10.php
+1.0.31:
+    - 'Updated table zen_om_categories'
+    - builder_table_update_zen_om_categories_11.php
+1.0.32:
+    - 'Updated table zen_om_items'
+    - builder_table_update_zen_om_items_2.php
+1.0.33:
+    - 'Updated table zen_om_categories'
+    - builder_table_update_zen_om_categories_12.php
+1.0.34:
+    - 'Updated table zen_om_categories'
+    - builder_table_update_zen_om_categories_13.php
+1.0.35:
+    - 'Updated table zen_om_categories'
+    - builder_table_update_zen_om_categories14.php

@@ -1,0 +1,14 @@
+fields:
+    name:
+        label: 'zen.om::lang.customs.name'
+        oc.commentPosition: ''
+        span: auto
+        type: text
+    code:
+        label: 'zen.om::lang.customs.code'
+        oc.commentPosition: ''
+        span: auto
+        preset:
+            field: name
+            type: camel
+        type: text

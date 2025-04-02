@@ -1,0 +1,11 @@
+scopes:
+    country:
+        label: 'Страна'
+        modelClass: Mcmraak\Sans\Models\Country
+        nameFrom: name
+        scope: FilterCountries
+    group:
+        label: 'Группа курортов'
+        modelClass: Mcmraak\Sans\Models\Group
+        nameFrom: name
+        scope: FilterGroups

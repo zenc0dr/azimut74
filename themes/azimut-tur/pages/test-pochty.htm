@@ -1,0 +1,28 @@
+title = "Тест почты"
+url = "/mailtest"
+is_hidden = 0
+robot_index = "index"
+robot_follow = "follow"
+contentType = "html"
+force_show = 0
+==
+<?php
+use Illuminate\Support\Facades\Mail;
+
+function onStart()
+{
+    $email = 'darkrogua@gmail.com';
+    $name = 'Тестовый Адресат';
+    
+    Mail::send([
+            'text' => '',
+            'html' => '<h1>Тестовое письмо!</h1>',
+            'raw' => true
+        ], [null], function ($message) use ($email, $name) {
+            $message->subject('Тестовое письмо');
+            $message->to($email, $name);
+        });
+}
+?>
+==
+Письмо отправлено

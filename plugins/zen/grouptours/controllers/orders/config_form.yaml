@@ -1,0 +1,10 @@
+name: Orders
+form: $/zen/grouptours/models/order/fields.yaml
+modelClass: Zen\GroupTours\Models\Order
+defaultRedirect: zen/grouptours/orders
+create:
+    redirect: 'zen/grouptours/orders/update/:id'
+    redirectClose: zen/grouptours/orders
+update:
+    redirect: zen/grouptours/orders
+    redirectClose: zen/grouptours/orders

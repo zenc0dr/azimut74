@@ -1,0 +1,6 @@
+scopes:
+  category:
+    label: Страна
+    modelClass: Zen\Dolphin\Models\Country
+    nameFrom: name
+    scope: FilterCauntries

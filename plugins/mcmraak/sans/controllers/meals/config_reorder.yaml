@@ -1,0 +1,4 @@
+title: Meals
+modelClass: Mcmraak\Sans\Models\Meal
+toolbar:
+    buttons: reorder_toolbar

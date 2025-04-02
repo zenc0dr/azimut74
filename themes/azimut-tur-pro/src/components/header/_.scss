@@ -1,0 +1,37 @@
+@import '@components/header/top-menu';
+@import '@components/header/bot-menu';
+@import '@components/call-back/_';
+header {
+  max-width: 1920px;
+  margin: 0 auto;
+}
+
+header .nav-item a {
+  color: color('primary-200')
+}
+
+
+.header-bot__logo {
+  img {
+    width: 270px;
+  }
+}
+
+.header__container {
+  min-height: 40px;
+  @include m('lg') {
+    min-height: 0;
+  }
+}
+
+/*
+.header-bot__cruize-phone {
+    opacity: 0;
+}
+.footer__phones-right {
+    opacity: 0;
+}
+.footer .all_phones .number {
+    opacity: 0;
+}
+*/

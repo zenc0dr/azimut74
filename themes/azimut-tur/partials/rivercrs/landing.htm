@@ -1,0 +1,12 @@
+description = "Лендинг в круизах"
+
+[viewBag]
+==
+<?php
+function onStart()
+{
+    $this['landing'] = \Mcmraak\Rivercrs\Classes\LandingSettings::render();
+}
+?>
+==
+{{ landing|raw }}

@@ -1,0 +1,24 @@
+columns:
+    id:
+        label: id
+        type: number
+        searchable: true
+        sortable: true
+    name:
+        label: 'Имя категории'
+        type: text
+        searchable: true
+        sortable: true
+    items_count:
+        label: 'Кол-во элементов'
+        type: text
+    slug:
+        label: Ссылка
+        type: text
+        searchable: true
+        sortable: true
+    parent_id:
+        label: 'Родительская категория'
+        type: text
+        relation: parent
+        valueFrom: name

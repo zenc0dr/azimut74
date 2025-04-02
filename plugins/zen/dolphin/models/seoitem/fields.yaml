@@ -1,0 +1,11 @@
+fields:
+    name:
+        label: 'Название пункта'
+        span: auto
+        type: text
+        comment: 'Если не указано то берётся из названия пункта связанной страницы'
+    page_id:
+        label: 'Посадочная страница'
+        showSearch: true
+        span: auto
+        type: dropdown

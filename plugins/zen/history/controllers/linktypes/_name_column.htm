@@ -1,0 +1,7 @@
+<?php
+/** @var \Zen $record */
+
+?>
+<div class="zen-badge"<?php if (!empty($record->color)) { ?> style="background-color: <?= e($record->color) ?>"<?php } ?>>
+    <?= e($value); ?>
+</div>

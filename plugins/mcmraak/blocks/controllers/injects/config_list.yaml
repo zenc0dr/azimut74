@@ -1,0 +1,12 @@
+list: $/mcmraak/blocks/models/inject/columns.yaml
+modelClass: Mcmraak\Blocks\Models\Inject
+title: Injects
+noRecordsMessage: 'backend::lang.list.no_records'
+showSetup: true
+showCheckboxes: true
+recordsPerPage: 20
+toolbar:
+    buttons: list_toolbar
+    search:
+        prompt: 'backend::lang.list.search_prompt'
+recordUrl: 'mcmraak/blocks/injects/update/:id'

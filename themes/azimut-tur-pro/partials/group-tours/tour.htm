@@ -1,0 +1,65 @@
+description = "Страница тура"
+
+[viewBag]
+==
+<meta name="order" content='{{ GroupTours.order }}'>
+
+<section class="results my-4">
+    <div class="container">
+        <div class="d-flex flex-column flex-lg-row">
+            <section class="result-menu__categories col-12 col-lg-3">
+                {% partial 'blocks/page-groups' data=GroupTours.pageGroups sTitle='Заголовок' %}
+            </section>
+
+            <div class="col-12 col-lg-9 wrapper-overflow__hidden">
+                <div>
+                    <h1>{{ GroupTours.name|raw }} Тур для школьных и взрослых групп</h1>
+                    {% partial 'labels/labels' obData=GroupTours.tags %}
+                </div>
+                {% partial 'sliders/slider-thumbs' images=GroupTours.gallery %}
+
+                {% if GroupTours.youtube_link %}
+                <div class="info-block">
+                    <div class="info-block__title">
+                        Видео
+                    </div>
+                    <div class="info-block__html">
+                        <iframe src="{{ GroupTours.youtube_link }}" frameborder="0" allowfullscreen=""></iframe>
+                    </div>
+                </div>
+                {% endif %}
+
+                <div>
+                    {% partial 'waybill/waybill' obData=GroupTours.waybill %}
+                    {% partial 'anonce/anonce' data=GroupTours.announcement %}
+                </div>
+                {% partial 'info-block/info-block'
+                    sTitle='Даты тура'
+                    content='Возможна любая дата, по желанию заказчика'
+                %}
+                <div id="gt-offer-widget-app"></div>
+
+                <div>
+                    {% partial 'conditions/conditions'
+                        obConditions=GroupTours.conditions
+                        obHotels=GroupTours.hotels
+                    %}
+
+                    {% partial 'tour-program/tour-program'
+                        obData=GroupTours.tour_program
+                    %}
+
+                    {% partial 'info-block/info-block'
+                        sTitle='Важная информация'
+                        content=GroupTours.important_info
+                        bRaw=true
+                    %}
+
+                    {# partial 'dolphin/faq' obItem=GroupTours.faq #}
+                    {% partial 'group-tours/file-block' %}
+                </div>
+            </div>
+
+        </div>
+    </div>
+</section>

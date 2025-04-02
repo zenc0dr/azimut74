@@ -1,0 +1,22 @@
+title = "Круизы"
+url = "/cruises/:?*"
+layout = "layout"
+is_hidden = 0
+robot_index = "index"
+robot_follow = "follow"
+contentType = "html"
+force_show = 0
+==
+<?php
+function onStart()
+{
+    # prok
+    Mcmraak\Rivercrs\Classes\Prok::init($this);
+}
+?>
+==
+{% set prok_cruises = prok.search %}
+{% if prok_cruises.kpage.slider %}
+{% partial 'blocks/banner' slider=prok_cruises.kpage.slider %}
+{% endif %}
+{{ prok_cruises.widget|raw }}

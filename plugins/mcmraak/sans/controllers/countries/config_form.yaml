@@ -1,0 +1,10 @@
+name: Countries
+form: $/mcmraak/sans/models/country/fields.yaml
+modelClass: Mcmraak\Sans\Models\Country
+defaultRedirect: mcmraak/sans/countries
+create:
+    redirect: 'mcmraak/sans/countries/update/:id'
+    redirectClose: mcmraak/sans/countries
+update:
+    redirect: mcmraak/sans/countries
+    redirectClose: mcmraak/sans/countries

@@ -1,0 +1,36 @@
+fields:
+    name:
+        label: 'Название скидки (внутреннее)'
+        span: full
+        type: text
+    image:
+        label: Изображение
+        span: full
+        mode: image
+        type: mediafinder
+    title:
+        label: 'Основной заголовок'
+        span: full
+        type: text
+    overlap_title:
+        label: 'Подменный заголовок'
+        span: full
+        type: text
+    desc:
+        label: 'Описание скидки'
+        size: large
+        span: full
+        type: richeditor
+    valid_until:
+        label: 'Скидка действует ДО'
+        mode: date
+        span: auto
+        type: datepicker
+    overlap_activation:
+        label: 'Активация подменного заголовка'
+        span: auto
+        type: number
+    motorships:
+        label: 'Отображать скидку в теплоходах'
+        span: full
+        type: checkboxlist

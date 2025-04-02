@@ -1,0 +1,19 @@
+fields:
+    name:
+        label: Название
+        oc.commentPosition: ''
+        span: auto
+        required: 1
+        type: text
+    prefix:
+        label: Префикс
+        span: auto
+        oc.commentPosition: ''
+        required: 1
+        type: text
+    sort_order:
+        label: Порядок
+        span: right
+        oc.commentPosition: ''
+        default: '0'
+        type: number

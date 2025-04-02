@@ -1,0 +1,10 @@
+fields:
+    name:
+        label: 'Название статуса'
+        span: full
+        type: text
+    desc:
+        label: 'Расшифровка статуса'
+        size: giant
+        span: full
+        type: richeditor

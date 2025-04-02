@@ -1,0 +1,16 @@
+name: 'Посадочные страницы'
+modelClass: Mcmraak\Rivercrs\Models\Kpage
+form: $/mcmraak/rivercrs/models/kpage/fields.yaml
+defaultRedirect: mcmraak/rivercrs/kpages
+create:
+    title: Создать
+    redirect: 'mcmraak/rivercrs/kpages/update/:id'
+    redirectClose: mcmraak/rivercrs/kpages
+    flashSave: Создано
+update:
+    title: Изменить
+    redirect: mcmraak/rivercrs/kpages
+    redirectClose: mcmraak/rivercrs/kpages
+    flashSave: Сохранено
+    flashDelete: Удалено
+preview: {  }

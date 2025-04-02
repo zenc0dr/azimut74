@@ -1,0 +1,6 @@
+plugin:
+    name: 'zen.http::lang.plugin.name'
+    description: 'zen.http::lang.plugin.description'
+    author: 'Alexander Ablizin'
+    icon: oc-icon-cloud-download
+    homepage: ''

@@ -1,0 +1,46 @@
+<script src="https://api-maps.yandex.ru/2.1/?apikey=7e5de8c2-f9ea-4213-b5e9-486e794fe5b9&lang=ru_RU" type="text/javascript"></script>
+<link rel="stylesheet" href="/plugins/zen/dolphin/assets/css/zen.dolphin.baloon.css">
+<div id="atmmap" style="width: 100%; height: 400px"></div>
+<script type="text/javascript">
+    // Функция ymaps.ready() будет вызвана, когда
+    // загрузятся все компоненты API, а также когда будет готово DOM-дерево.
+    ymaps.ready(init);
+    function init()
+    {
+        const myMap = new ymaps.Map('atmmap', {
+                center: [{{ start_gps[0] }}, {{ start_gps[1] }}],
+                zoom: {{ zoom }}
+            }, {
+                searchControlProvider: 'yandex#search'
+            }),
+            objectManager = new ymaps.ObjectManager({
+                // Чтобы метки начали кластеризоваться, выставляем опцию.
+                clusterize: true,
+                // ObjectManager принимает те же опции, что и кластеризатор.
+                gridSize: 32,
+                clusterDisableClickZoom: true
+            });
+
+        // Чтобы задать опции одиночным объектам и кластерам,
+        // обратимся к дочерним коллекциям ObjectManager.
+        objectManager.objects.options.set('preset', 'islands#blueStretchyIcon');
+        objectManager.clusters.options.set('preset', 'islands#blueClusterIcons');
+        myMap.geoObjects.add(objectManager);
+
+        objectManager.add({
+            "type": "FeatureCollection",
+            "features": {{ points|raw }}
+        })
+
+        // Откроем балун на главной метке
+        {% if main_point_id %}
+        const objectState = objectManager.getObjectState({{ main_point_id }});
+        if (objectState.isClustered) {
+            objectManager.clusters.state.set('activeObject', objectManager.objects.getById({{ main_point_id }}));
+            objectManager.clusters.balloon.open(objectState.cluster.id);
+        } else {
+            objectManager.objects.balloon.open({{ main_point_id }});
+        }
+        {% endif %}
+    }
+</script>

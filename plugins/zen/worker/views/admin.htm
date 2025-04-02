@@ -1,0 +1,48 @@
+<link rel="stylesheet" href="/plugins/zen/worker/assets/css/worker.admin.css">
+
+<div id="Worker" v-cloak>
+    <div class="worker-panel">
+        <button @click="go"
+                class="parser-btn btn btn-primary oc-icon-refresh"
+                :class="{ rotator:process }">
+            ${ (process)?'Остановить':'Запустить' }
+        </button>
+        <button
+                class="btn btn-primary oc-icon-recycle"
+                data-request="onClearState"
+                data-request-success="setTimeout(() => {location.reload()}, 2000)">Очистить состояние</button>
+    </div>
+    <div v-for="stream in state" class="stream">
+        <div class="stream__name">${ stream.name }</div>
+        <div class="pools">
+            <div v-for="pool in stream.pools" class="pool" :class="{success:pool.success}">
+                <div class="pool__name">${ pool.title }<span v-if="pool.success"> >> Завершено</span></div>
+                <div class="pool__records">
+                    <div class="pool__record">
+                        <div class="pool__record__title">Вызов:</div>
+                        <div class="pool__record__value">${ pool.call }</div>
+                    </div>
+                    <div class="pool__record">
+                        <div class="pool__record__title">Ошибок:</div>
+                        <div class="pool__record__value">${ pool.errors_count }</div>
+                    </div>
+                    <template v-if="!pool.self">
+                        <div v-if="pool.progress_of" class="pool__record">
+                            <div class="pool__record__title">Прогресс:</div>
+                            <div class="pool__record__value">${ pool.progress_to } из ${ pool.progress_of }</div>
+                        </div>
+                        <div class="pool__progress">
+                            <progress-bar :progress="getProgress(pool)"></progress-bar>
+                        </div>
+                    </template>
+
+                </div>
+            </div>
+        </div>
+
+    </div>
+</div>
+
+<script src="/plugins/zen/worker/assets/js/axios.min.js"></script>
+<script src="/plugins/zen/worker/assets/js/vue.min.js"></script>
+<script src="/plugins/zen/worker/assets/js/worker.admin.js"></script>

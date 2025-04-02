@@ -1,0 +1,13 @@
+scopes:
+  active:
+    label: Активность
+    type: switch
+    conditions:
+      - active = 0
+      - active = 1
+  status:
+    label: Тип
+    type: group
+    conditions: type_id in (:filtered)
+    modelClass: Zen\Dolphin\Models\Tour
+    options: getTypeIdOptions

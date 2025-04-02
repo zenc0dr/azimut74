@@ -1,0 +1,12 @@
+title: Tops
+modelClass: Srw\Catalog\Models\Tops
+list: $/srw/catalog/models/tops/columns.yaml
+recordUrl: 'srw/catalog/tops/update/:id'
+noRecordsMessage: 'backend::lang.list.no_records'
+recordsPerPage: '30'
+showSetup: true
+showCheckboxes: true
+toolbar:
+    buttons: list_toolbar
+    search:
+        prompt: 'backend::lang.list.search_prompt'

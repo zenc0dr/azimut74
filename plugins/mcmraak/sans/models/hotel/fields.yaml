@@ -1,0 +1,35 @@
+fields:
+    name:
+        label: 'Название отеля'
+        oc.commentPosition: ''
+        span: auto
+        type: text
+    id:
+        label: id
+        oc.commentPosition: ''
+        span: auto
+        type: text
+    resort_id:
+        label: resort_id
+        oc.commentPosition: ''
+        span: auto
+        type: text
+    hotel_category_id:
+        label: hotel_category_id
+        oc.commentPosition: ''
+        span: auto
+        type: text
+    short_name:
+        label: short_name
+        oc.commentPosition: ''
+        span: auto
+        type: text
+    cid:
+        label: cid
+        oc.commentPosition: ''
+        span: auto
+        type: text
+    debug:
+        span: full
+        path: $/mcmraak/sans/controllers/hotels/hotel-debug.php
+        type: partial

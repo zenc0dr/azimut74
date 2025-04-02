@@ -1,0 +1,13 @@
+fields:
+    success:
+        label: Выполнено
+        span: auto
+        type: switch
+    not_found:
+        label: 'Не найдено'
+        span: auto
+        type: switch
+    info:
+        span: full
+        path: $/zen/putpics/classes/TaskPartial.php
+        type: partial

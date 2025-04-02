@@ -1,0 +1,10 @@
+name: Links
+form: $/zen/history/models/link/fields.yaml
+modelClass: Zen\History\Models\Link
+defaultRedirect: zen/history/links
+create:
+    redirect: 'zen/history/links/update/:id'
+    redirectClose: zen/history/links
+update:
+    redirect: zen/history/links
+    redirectClose: zen/history/links

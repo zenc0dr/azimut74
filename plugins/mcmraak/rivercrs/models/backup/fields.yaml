@@ -1,0 +1,11 @@
+fields:
+    name:
+        label: Название
+        span: auto
+        type: text
+    restore:
+        span: full
+        path: $/mcmraak/rivercrs/controllers/backups/restore_btn.htm
+        context:
+            - update
+        type: partial

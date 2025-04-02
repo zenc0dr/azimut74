@@ -1,0 +1,68 @@
+@keyframes mbshow {
+    from {
+        opacity:0;
+        transform: scale(0.8,0.8);
+    }
+    to {
+        opacity:1;
+        transform: scale(1,1);
+    }
+}
+
+#_Modalbox {
+    display: none;
+    position: fixed;
+    top: 0px;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: #000000ab;
+    z-index: 100000;
+    overflow-y: auto;
+    text-align: center;
+}
+
+#_Modalbox img {
+    max-width: initial!important;
+    width: 100%;
+}
+
+#_Modalbox>div {
+    display: inline-block;
+    width: 90%;
+    min-width: 1400px;
+    padding: 15px;
+    margin: 15px;
+    background: #fff;
+    animation: mbshow 400ms;
+}
+
+#_Modalbox>div>div {
+    display: inline-block;
+    width: 100%;
+}
+
+#_Modalbox .mb-header {
+    text-align: right;
+}
+
+#_Modalbox .mb-header>div {
+    text-transform: uppercase;
+    cursor: pointer;
+    font-size: 30px;
+    font-family: Arial;
+}
+
+#_Modalbox .mb_body {
+    display: inline-block;
+    width: 100%;
+}
+
+#_Modalbox .mb_body>img {
+}
+
+@media only screen and (max-width : 1444px) {
+    #_Modalbox>div {
+        margin: 0;
+    }
+}

@@ -1,0 +1,16 @@
+name: Pages
+modelClass: Mcmraak\Sans\Models\Page
+form: $/mcmraak/sans/models/page/fields.yaml
+defaultRedirect: mcmraak/sans/pages
+create:
+    title: 'Создание страницы'
+    redirect: 'mcmraak/sans/pages/update/:id'
+    redirectClose: mcmraak/sans/pages
+    flashSave: 'Страница сохранена'
+update:
+    title: 'Изменение страницы'
+    redirect: mcmraak/sans/pages
+    redirectClose: mcmraak/sans/pages
+    flashSave: 'Страница изменена'
+    flashDelete: 'Страница удалена'
+preview: {  }

@@ -1,0 +1,11 @@
+plugin:
+    name: 'zen.forms::lang.plugin.name'
+    description: 'zen.forms::lang.plugin.description'
+    author: 'Alex Blaze'
+    icon: oc-icon-clipboard
+    homepage: ''
+navigation:
+    main:
+        label: Формы
+        url: zen/forms/items
+        icon: icon-clipboard

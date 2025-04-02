@@ -1,0 +1,58 @@
+description = "Подключения в дне"
+
+[viewBag]
+==
+<script src="/themes/azimut-tur/assets/js/vue.min.js"></script>
+<script src="/themes/azimut-tur/assets/js/jquery-2.2.4.min.js"></script>
+<script src="/themes/azimut-tur/assets/js/jquery-ui.min.js"></script>
+<script src="/themes/azimut-tur/assets/js/owl.carousel.min.js"></script>
+<script src="/themes/azimut-tur/assets/js/jquery.magnific-popup.min.js"></script>
+<script src="/themes/azimut-tur/assets/js/jquery.inputmask.bundle.js"></script>
+<script src="/plugins/aleksandrablizin/ion/assets/js/octo-ion.js"></script>
+<script src="/themes/azimut-tur/assets/js/jquery.downCount.js"></script>
+<script src="/themes/azimut-tur/assets/js/selectize.min.js"></script>
+<script src="/themes/azimut-tur/assets/bower_components/air-datepicker/dist/js/datepicker.min.js"></script>
+<script src="/themes/azimut-tur/assets/js/nivo-lightbox.min.js"></script>
+<script src="/themes/azimut-tur/assets/core.blocks/switcher/switcher.js"></script>
+<script src="/themes/azimut-tur/assets/core.blocks/price-range/price-range.js"></script>
+<script src="/themes/azimut-tur/assets/core.blocks/stars/stars-static/stars-static.js"></script>
+<script src="/themes/azimut-tur/assets/js/sans.js"></script>
+<script src="/themes/azimut-tur/assets/js/common.js"></script>
+{#<script src="/plugins/mcmraak/rivercrs/assets/js/rivercrs.js"></script>#}
+<script src="/themes/azimut-tur/assets/js/modalbox.js"></script>
+{#
+<script src="{{[
+    	'assets/js/jquery-2.2.4.min.js',
+    	'assets/js/jquery-ui.min.js',
+    	'assets/js/owl.carousel.min.js',
+    	'assets/js/jquery.magnific-popup.min.js',
+    	'assets/js/jquery.inputmask.bundle.js',
+    	'../../plugins/aleksandrablizin/ion/assets/js/octo-ion.js',
+    	'assets/js/jquery.downCount.js',
+    	'assets/js/selectize.min.js',
+        'assets/bower_components/air-datepicker/dist/js/datepicker.min.js',
+        'assets/js/nivo-lightbox.min.js',
+        'assets/core.blocks/switcher/switcher.js',
+        'assets/core.blocks/price-range/price-range.js',
+        'assets/core.blocks/stars/stars-static/stars-static.js',
+        'assets/js/sans.js',
+    	'assets/js/common.js',
+    	'../../plugins/mcmraak/rivercrs/assets/js/rivercrs.js',
+    	]|theme}}"></script>
+        {# Отключенные скрипты #}
+        {# 'assets/core.blocks/stars/stars-select/stars-select.js', #}
+{# framework extras #}
+{% scripts %}
+
+{% if this.environment != 'dev' %}
+{# <!— BEGIN JIVOSITE CODE {literal} —> #}
+{# <script type='text/javascript'> #}
+{# (function(){ var widget_id = '9N5vrEaZAw';var d=document;var w=window;function l(){ #}
+{# var s = document.createElement('script'); s.type = 'text/javascript'; s.async = true; s.src = '//code.jivosite.com/script/widget/'+widget_id; var ss = document.getElementsByTagName('script')[0]; ss.parentNode.insertBefore(s, ss);}if(d.readyState=='complete'){l();}else{if(w.attachEvent){w.attachEvent('onload',l);}else{w.addEventListener('load',l,false);}}})();</script> #}
+{# <!— {/literal} END JIVOSITE CODE —> #}
+{# begin::Whatsapp #}
+{% if is_rivercrs %}
+<script>(function () { var widget = document.createElement('script'); widget.dataset.pfId = 'fb2b4865-b731-4366-a182-b89bbe6ecfec'; widget.src = 'https://widget.profeat.team/script/widget.js?id=fb2b4865-b731-4366-a182-b89bbe6ecfec&now='+Date.now(); document.head.appendChild(widget); })()</script>
+{% endif %}
+{# end::Whatsapp #}
+{% endif %}

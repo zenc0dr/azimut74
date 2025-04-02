@@ -1,0 +1,4 @@
+http://sans/sans/api/v1/debug/dump/results_before
+http://sans/sans/api/v1/debug/dump/results_after
+http://sans/sans/api/v1/debug/dump/response
+http://sans/sans/api/v1/debug/dump/first_query

@@ -1,0 +1,42 @@
+fields:
+    avatar:
+        label: Аватар
+        mode: image
+        useCaption: true
+        thumbOptions:
+            mode: crop
+            extension: auto
+        span: auto
+        type: fileupload
+    image:
+        label: Изображение
+        mode: image
+        useCaption: true
+        thumbOptions:
+            mode: crop
+            extension: auto
+        span: auto
+        type: fileupload
+    name:
+        label: 'Имя клиента'
+        span: auto
+        type: text
+    source_link:
+        label: 'Ссылка на источник'
+        span: auto
+        type: text
+    date_time:
+        label: 'Дата и время отзыва'
+        mode: datetime
+        span: auto
+        type: datepicker
+    stars:
+        label: 'Оценка (Количество звёзд)'
+        span: auto
+        default: '5'
+        type: number
+    text:
+        label: 'Текст отзыва'
+        size: large
+        span: full
+        type: textarea

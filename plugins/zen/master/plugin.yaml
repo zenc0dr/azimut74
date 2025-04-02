@@ -1,0 +1,16 @@
+plugin:
+    name: 'zen.master::lang.plugin.name'
+    description: 'Плагин который поглощает весь код'
+    author: 'Alex Blaze'
+    icon: oc-icon-bullseye
+    homepage: ''
+navigation:
+    master-main:
+        label: Master
+        url: zen/master/logcontroller
+        icon: icon-bullseye
+        sideMenu:
+            master-log:
+                label: Log
+                url: zen/master/logcontroller
+                icon: icon-th-list

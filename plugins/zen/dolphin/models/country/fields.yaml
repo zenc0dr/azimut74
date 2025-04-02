@@ -1,0 +1,17 @@
+fields:
+    name:
+        label: 'Название страны'
+        span: auto
+        type: text
+tabs:
+    fields:
+        snippets:
+            label: 'Изображения сниппетов'
+            mode: image
+            useCaption: true
+            thumbOptions:
+                mode: crop
+                extension: auto
+            span: full
+            type: fileupload
+            tab: Сниппеты

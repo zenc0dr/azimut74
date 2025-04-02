@@ -1,0 +1,36 @@
+<link rel="stylesheet" href="/plugins/zen/dolphin/assets/css/zen.dolphin.exlists.css">
+<div class="exlists-search">
+    <input type="text" value="" class="form-control" oninput="elFilter(value)">
+</div>
+
+
+{% for groupname, items in menu %}
+    <div class="exlists-group">
+        <div class="exlists-group-name">{{ groupname }}</div>
+        <div class="exlists">
+            {% for slug, item in items %}
+                <a class="menu-item" href="{{ backend_url ~'/'~ slug }}">
+                    <div class="menu-item-icon" style="background-image: url({{ icons_url ~'/'~ item.image }})"></div>
+                    <div class="menu-item-label">{{ item.name }}</div>
+                </a>
+            {% endfor %}
+        </div>
+    </div>
+{% endfor %}
+
+<script>
+function elFilter(value) {
+    if(!value) {
+        $('.exlists .menu-item').removeClass('not').removeClass('find')
+        return
+    }
+    $('.exlists .menu-item').map(function (index, item) {
+        let label = $(item).find('.menu-item-label').text()
+        if(label.toLowerCase().indexOf(value.toLowerCase()) !== -1) {
+            $(item).removeClass('not').addClass('find')
+        } else {
+            $(item).addClass('not').removeClass('find')
+        }
+    })
+}
+</script>

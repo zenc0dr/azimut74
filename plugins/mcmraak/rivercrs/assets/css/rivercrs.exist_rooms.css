@@ -1,0 +1,136 @@
+#EX {
+}
+
+.ex-modal {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: #000c;
+    z-index: 10;
+    text-align: center;
+    overflow: auto;
+}
+
+.ex-modal>div {
+    width: 1100px;
+    display: inline-block;
+}
+
+.ex-pan {
+    display: inline-block;
+    width: 100%;
+    text-align: right;
+    background: #00adff;
+    margin-top: 20px;
+}
+
+.ex-close {
+    display: inline-block;
+    font-size: 20px;
+    padding: 5px 13px;
+    cursor: pointer;
+}
+
+.ex-modal-body {
+}
+
+.ex-scheme {
+    display: inline-block;
+    width: 100%;
+}
+
+.ex-point {
+    position: absolute;
+    background: #2981a3;
+    font-size: 9px;
+    color: #fff;
+    text-align: center;
+    box-shadow: 0 0 0 2px #26414f;
+    cursor: pointer;
+}
+
+.ex-point-name {
+    transform: rotate(-90deg);
+    display: inline-block;
+    pointer-events: none;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-family: Verdana;
+}
+
+.ex-point.selected {box-shadow: 0 0 0 1px #ff00ee;}
+
+.ex-scheme>img {
+}
+
+.point-popup {
+    position: absolute;
+    background: #dfdfdf;
+    color: #000;
+    width: 140px;
+    border: 1px solid #00adff;
+    box-shadow: 0px 7px 11px 0px rgba(0, 0, 0, 0.19);
+    z-index: 10000;
+    margin-left: -60px;
+    font-size: 10px;
+}
+
+.point-close {
+    display: inline-block;
+    width: 100%;
+    font-size: 12px;
+    background: #00adff;
+    cursor: pointer;
+}
+
+.point-body {
+    padding: 10px;
+}
+
+.point-label {
+}
+
+.point-body input {
+    width: 100%;
+    text-align: center;
+    margin-bottom: 7px;
+}
+
+.point-body .axis {
+}
+
+.point-body .axis input {
+    width: calc(100% - 40px);
+}
+
+.point-body .axis-u, .point-body .axis-d {
+    display: inline-block;
+    width: 15px;
+    background: #fff;
+    font-size: 11px;
+    cursor: pointer;
+    padding: 2px 3px;
+    -webkit-touch-callout: none;
+    -webkit-user-select: none;
+    -khtml-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
+}
+
+.point-body select {
+    width: 100%;
+}
+
+.point-del {
+    background: #c2c2c2;
+    cursor: pointer;
+}
+
+.point-del:hover {
+    color: #fff;
+    background: red;
+}

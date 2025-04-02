@@ -1,0 +1,12 @@
+<style>
+    .manager-data__operator-name {
+    position: fixed;
+    left: 6px;
+    bottom: 2px;
+    font-size: 12px;
+    color: #8b8b8b;
+}
+</style>
+{% if operator_name %}
+<div class="manager-data__operator-name">оп: {{ operator_name }}</div>
+{% endif %}

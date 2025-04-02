@@ -1,0 +1,5 @@
+fields:
+    name:
+        label: 'Название типа номера'
+        span: auto
+        type: text

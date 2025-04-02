@@ -1,0 +1,90 @@
+description = "Левое меню САНС"
+
+[viewBag]
+
+[Block]
+==
+<div class="leftBlock">
+	<div class="leftBlockItem">
+		<div class="itemHead">
+			<span>
+				Группы курортов
+			</span>
+			<i class="fa fa-arrow-down arrow-s" aria-hidden="true"></i>
+		</div>
+		<div class="itemBody">
+			<ul>
+				{% for item in sans_page.resortGroups %}
+					<li><a href="gr_{{ item.slug }}">{{ item.name }}</a></li>
+				{% endfor %}
+			</ul>
+		 </div>
+		 {% component 'Block' %}
+	</div>
+
+    <div class="leftBlockItem">
+        <div class="itemHead">
+			<span>
+				Курорты
+			</span>
+            <i class="fa fa-arrow-down arrow-s" aria-hidden="true"></i>
+        </div>
+        <div class="itemBody">
+            <ul>
+                {% for item in sans_page.resorts %}
+                    <li><a href="page_{{ item.slug }}">{{ item.name }}</a></li>
+                {% endfor %}
+            </ul>
+        </div>
+    </div>
+
+    <div class="leftBlockItem">
+        <div class="itemHead">
+			<span>
+				По времени
+			</span>
+            <i class="fa fa-arrow-down arrow-s" aria-hidden="true"></i>
+        </div>
+        <div class="itemBody">
+            <ul>
+                {% for item in sans_page.wraps(1) %}
+                    <li><a href="page_{{ item.slug }}">{{ item.name }}</a></li>
+                {% endfor %}
+            </ul>
+        </div>
+    </div>
+
+    <div class="leftBlockItem">
+        <div class="itemHead">
+			<span>
+				По типу
+			</span>
+            <i class="fa fa-arrow-down arrow-s" aria-hidden="true"></i>
+        </div>
+        <div class="itemBody">
+            <ul>
+                {% for item in sans_page.wraps(2) %}
+                    <li><a href="page_{{ item.slug }}">{{ item.name }}</a></li>
+                {% endfor %}
+            </ul>
+        </div>
+    </div>
+    
+    <div class="leftBlockItem">
+        <div class="itemHead">
+			<span>
+				По расположению
+			</span>
+            <i class="fa fa-arrow-down arrow-s" aria-hidden="true"></i>
+        </div>
+        <div class="itemBody">
+            <ul>
+                {% for item in sans_page.wraps(3) %}
+                    <li><a href="page_{{ item.slug }}">{{ item.name }}</a></li>
+                {% endfor %}
+            </ul>
+        </div>
+    </div>
+
+
+</div>

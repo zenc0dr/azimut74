@@ -1,0 +1,58 @@
+input.bad {
+    box-shadow: 0 0 4px 0px #ff000096;
+}
+textarea.bad {
+    box-shadow: 0 0 4px 0px #ff000096;
+}
+
+@keyframes kit-fadein {
+    from {
+        opacity: 0;
+        transform: scale(0.9,0.9);
+    }
+
+    to {
+        opacity: 1;
+        transform: scale(1,1);
+    }
+}
+
+.kit-alerts {
+    display: inline-block;
+    width: 100%;
+    margin-top: 15px;
+    margin-bottom: 15px;
+}
+
+.kit-alerts-close {
+}
+
+.kit-alerts i {
+    float: right;
+    margin-top: 4px;
+    margin-right: -6px;
+}
+
+.kit-alerts>div {
+    background: #b1ffc4;
+    color: #005608;
+    animation: kit-fadein 200ms;
+    margin-bottom: 5px;
+    padding: 5px 14px;
+    border-radius: 5px;
+}
+
+.kit-alerts>div.danger {
+    background: #ffd1d1;
+    color: red;
+}
+
+.kit-alerts>div.info {
+    background: #8ddfff;
+    color: #444444;
+}
+
+.kit-alerts>div.warning {
+    background: #fffcd1;
+    color: #4a4a4a;
+}

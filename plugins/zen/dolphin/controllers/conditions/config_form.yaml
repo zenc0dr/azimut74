@@ -1,0 +1,10 @@
+name: Conditions
+form: $/zen/dolphin/models/condition/fields.yaml
+modelClass: Zen\Dolphin\Models\Condition
+defaultRedirect: zen/dolphin/conditions
+create:
+    redirect: 'zen/dolphin/conditions/update/:id'
+    redirectClose: zen/dolphin/conditions
+update:
+    redirect: zen/dolphin/conditions
+    redirectClose: zen/dolphin/conditions

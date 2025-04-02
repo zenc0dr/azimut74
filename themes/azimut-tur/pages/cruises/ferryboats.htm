@@ -1,0 +1,29 @@
+title = "Паромы из Санкт-Петербурга"
+url = "/spb-sea-cruises"
+layout = "general"
+description = "Паромы из Санкт-Петербурга"
+meta_title = "Паромы из Санкт-Петербурга"
+is_hidden = 0
+robot_index = "index"
+robot_follow = "follow"
+contentType = "html"
+==
+{% put slider %}
+	{% partial 'header/slidercruises' %}
+{% endput %}
+
+<section class="cruises">
+					
+	<div class="headText">
+		<span>{{ this.page.title }}</span>
+	</div>
+
+	<div class="pageData">
+		<div class="data">
+			{% component 'contenteditor' file="cruises/ferryboats" %}
+		</div>
+	</div>
+	
+	{% partial 'rivercrs/relinks' %}
+
+</section>

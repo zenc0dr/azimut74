@@ -1,0 +1,15 @@
+name: Cruises
+modelClass: Mcmraak\Rivercrs\Models\Cruises
+form: $/mcmraak/rivercrs/models/cruises/fields.yaml
+defaultRedirect: mcmraak/rivercrs/cruises
+create:
+    title: 'Создание круиза'
+    redirect: 'mcmraak/rivercrs/cruises/update/:id'
+    redirectClose: mcmraak/rivercrs/cruises
+    flashSave: 'Круиз сохранён'
+update:
+    title: 'Изменение круиза'
+    redirect: mcmraak/rivercrs/cruises
+    redirectClose: mcmraak/rivercrs/cruises
+    flashSave: 'Круиз сохранён'
+    flashDelete: 'Круиз удалён'

@@ -1,0 +1,13 @@
+{% if tour_dates %}
+<style>
+    .tour-dates {
+        margin-bottom: 15px;
+    }
+</style>
+<div class="tour-dates">
+    <strong>Даты тура:</strong>
+{% for tour_date in tour_dates %}
+    {{ tour_date }}
+{% endfor %}
+</div>
+{% endif %}

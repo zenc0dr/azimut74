@@ -1,0 +1,11 @@
+list: $/srw/azimut/models/slidertherapy/columns.yaml
+modelClass: Srw\Azimut\Models\SliderTherapy
+title: SliderTherapy
+noRecordsMessage: 'backend::lang.list.no_records'
+showSetup: true
+showCheckboxes: true
+toolbar:
+    buttons: list_toolbar
+    search:
+        prompt: 'backend::lang.list.search_prompt'
+recordUrl: 'srw/azimut/slidertherapy/update/:id'

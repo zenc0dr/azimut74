@@ -1,0 +1,425 @@
+description = "Номерной фонд"
+
+[viewBag]
+==
+<div class="s-card__switcher-content s-card__switch-el sw--apartaments">
+	
+	<div class="s-card__switcher-line s-card__rooms">
+		<div class="s-card__heading">
+			Номерной фонд
+		</div>
+		<div class="s-card__data s-card__rooms-collection">
+		 
+			{% for item in hotel_info.hotel_bag.RoomCategoryList %}
+			<div class="s-card__room">
+				<div class="s-card__room-name">
+					<span>
+				
+					   {% if item.RoomTypeShortName|length > 4 %}
+						{{ item.RoomTypeShortName }} - {{ item.RoomCategoryName }}
+					   {% else %}
+					       {{ item.RoomCategoryName }}
+					   {% endif %}
+					</span>
+				</div>
+				<div class="s-card__room-details-wrap">
+				 
+					{% if item.RoomImageList %}
+					<div class="s-card__room-images">
+						<div class="c-r cp-0">
+							{% for el in item.RoomImageList %}
+							<div class="col-33">
+								<div data-lightbox-gallery="{{ item.RoomCategoryCID }}" class="s-card__room-image gal" href="{{ el.Url }}" style="background-image: url({{ el.Url }});"></div>
+							</div>
+							{% endfor %}
+						</div>
+						{% if item.RoomImageList|length>3 %}
+						<div class="s-card__room-more">
+							<button class="more-button btn ibtn">
+								<span class="more">+ еще {% if item.RoomImageList|length>3 %}{{ item.RoomImageList|length - 3 }}{% endif %} </span>
+								<span class="less">- скрыть фото</span>
+							</button>
+						</div>
+						{% endif %}
+					</div>
+					{% endif %}
+					<div class="s-card__room-details">
+						
+						{% if item.Announcement|length > 15 %}
+						<div class="r">
+							<div class="col-45 as-s">
+								<div class="s-card__room-details-col t-r">
+									<strong>Описание номера:</strong>
+								</div>
+							</div>
+							<div class="col-55 as-s">
+								<div class="s-card__room-details-col">
+									<p>
+										{{ item.Announcement|raw }}
+									</p>
+								</div>
+							</div>
+						</div>
+						{% endif %}
+						
+						{% if item.Quantity %}
+						<div class="r">
+							<div class="col-45 as-s">
+								<div class="s-card__room-details-col t-r">
+									<strong>Количество номеров:</strong>
+								</div>
+							</div>
+							<div class="col-55 as-s">
+								<div class="s-card__room-details-col">
+									{{ item.Quantity }}
+								</div>
+							</div>
+						</div>
+						{% endif %}
+						{% if item.BaseSeatQuantity %}
+						<div class="r">
+							<div class="col-45 as-s">
+								<div class="s-card__room-details-col t-r">
+									<strong>Количество комнат в номере:</strong>
+								</div>
+							</div>
+							<div class="col-55 as-s">
+								<div class="s-card__room-details-col">
+									{{ item.BaseSeatQuantity }}
+								</div>
+							</div>
+						</div>
+						{% endif %}
+						{% if item.RoomTypeName %}
+						<div class="r">
+							<div class="col-45 as-s">
+								<div class="s-card__room-details-col t-r">
+									<strong>Тип номера:</strong>
+								</div>
+							</div>
+							<div class="col-55 as-s">
+								<div class="s-card__room-details-col">
+								{{ item.RoomTypeName }}
+								</div>
+							</div>
+						</div>
+						{% endif %}
+						{% if item.Building %}
+						<div class="r">
+							<div class="col-45 as-s">
+								<div class="s-card__room-details-col t-r">
+									<strong>Корпус:</strong>
+								</div>
+							</div>
+							<div class="col-55 as-s">
+								<div class="s-card__room-details-col">
+									{{ item.Building }}
+								</div>
+							</div>
+						</div>
+						{% endif %}
+						{% if item.BaseSeatQuantity %}
+						<div class="r">
+							<div class="col-45 as-s">
+								<div class="s-card__room-details-col t-r">
+									<strong>Количество основных мест:</strong>
+								</div>
+							</div>
+							<div class="col-55 as-s">
+								<div class="s-card__room-details-col">
+									{{ item.BaseSeatQuantity }}
+								</div>
+							</div>
+						</div>
+						{% endif %}
+						
+						{% if item.ExtSeatQuantity %}
+						<div class="r">
+							<div class="col-45 as-s">
+								<div class="s-card__room-details-col t-r">
+									<strong>Количество дополнительных мест мест:</strong>
+								</div>
+							</div>
+							<div class="col-55 as-s">
+								<div class="s-card__room-details-col">
+									{{ item.ExtSeatQuantity }}
+								</div>
+							</div>
+						</div>
+						{% endif %}
+						
+					{#	<div class="r">
+							<div class="col-45 as-s">
+								<div class="s-card__room-details-col t-r">
+									<strong>Тип дополнительного места:</strong>
+								</div>
+							</div>
+							<div class="col-55 as-s">
+								<div class="s-card__room-details-col">
+									{{d(item)}}
+								</div>
+							</div>
+						</div>#}
+						{% if item.RoomArea %}
+						<div class="r">
+							<div class="col-45 as-s">
+								<div class="s-card__room-details-col t-r">
+									<strong>Площадь номера:</strong>
+								</div>
+							</div>
+							<div class="col-55 as-s">
+								<div class="s-card__room-details-col">
+									{{ item.RoomArea }}
+								</div>
+							</div>
+						</div>
+						{% endif %}
+
+						{% if item.InteriorList %}
+						
+						{% for ell in item.InteriorList %}
+						<div class="r">
+							<div class="col-45 as-s">
+								<div class="s-card__room-details-col t-r">
+									<strong>{{ ell.Name }}:</strong>
+								</div>
+							</div>
+							<div class="col-55 as-s">
+								<div class="s-card__room-details-col data">
+								
+										    <ul>
+											{% for elll in ell.ContentList %}
+												<li>{{ elll.Name }}{% if elll.Description%}:{{elll.Description}}{% endif %}</li>
+											{% endfor %}
+											</ul>
+									
+								</div>
+							</div>
+						</div>
+						{% endfor %}
+						
+						{% endif %}
+					</div>
+				</div>
+			</div>
+			{% endfor %}
+			
+			{#<div class="s-card__room">
+				<div class="s-card__room-name">
+					<span>
+						Стандартный двухместный номер  с 2 отдельными кроватями 1.2 корпус 5-7 этажи
+					</span>
+				</div>
+				<div class="s-card__room-details-wrap">
+					<div class="s-card__room-images">
+						<div class="c-r cp-0">
+							<div class="col-33">
+								<div class="s-card__room-image" style="background-image: url(/storage/app/uploads/public/113/738/03b/thumb__320_0_0_0_auto.jpg);"></div>
+							</div>
+							<div class="col-33">
+								<div class="s-card__room-image" style="background-image: url(/storage/app/uploads/public/113/738/03b/thumb__320_0_0_0_auto.jpg);"></div>
+							</div>
+							<div class="col-33">
+								<div class="s-card__room-image" style="background-image: url(/storage/app/uploads/public/113/738/03b/thumb__320_0_0_0_auto.jpg);"></div>
+							</div>
+							<div class="col-33">
+								<div class="s-card__room-image" style="background-image: url(/storage/app/uploads/public/113/738/03b/thumb__320_0_0_0_auto.jpg);"></div>
+							</div>
+							<div class="col-33">
+								<div class="s-card__room-image" style="background-image: url(/storage/app/uploads/public/113/738/03b/thumb__320_0_0_0_auto.jpg);"></div>
+							</div>
+							<div class="col-33">
+								<div class="s-card__room-image" style="background-image: url(/storage/app/uploads/public/113/738/03b/thumb__320_0_0_0_auto.jpg);"></div>
+							</div>
+							<div class="col-33">
+								<div class="s-card__room-image" style="background-image: url(/storage/app/uploads/public/113/738/03b/thumb__320_0_0_0_auto.jpg);"></div>
+							</div>
+							<div class="col-33">
+								<div class="s-card__room-image" style="background-image: url(/storage/app/uploads/public/113/738/03b/thumb__320_0_0_0_auto.jpg);"></div>
+							</div>
+						</div>
+						<div class="s-card__room-more">
+							<button class="more-button btn ibtn">
+								<span class="more">+ еще {{ массив|length - 3 }}10 фото </span>
+								<span class="less">- скрыть фото</span>
+							</button>
+						</div>
+					</div>
+					<div class="s-card__room-details">
+						<div class="r">
+							<div class="col-45 as-s">
+								<div class="s-card__room-details-col t-r">
+									<strong>Описание номера:</strong>
+								</div>
+							</div>
+							<div class="col-55 as-s">
+								<div class="s-card__room-details-col">
+									Двухкомнатный номер (спальная комната + гостиная).<br> 
+									Данные номера расположены с 4 по 16 этажи.
+								</div>
+							</div>
+						</div>
+						<div class="r">
+							<div class="col-45 as-s">
+								<div class="s-card__room-details-col t-r">
+									<strong>Количество номеров:</strong>
+								</div>
+							</div>
+							<div class="col-55 as-s">
+								<div class="s-card__room-details-col">
+									12
+								</div>
+							</div>
+						</div>
+						<div class="r">
+							<div class="col-45 as-s">
+								<div class="s-card__room-details-col t-r">
+									<strong>Количество комнат в номере:</strong>
+								</div>
+							</div>
+							<div class="col-55 as-s">
+								<div class="s-card__room-details-col">
+									2
+								</div>
+							</div>
+						</div>
+						<div class="r">
+							<div class="col-45 as-s">
+								<div class="s-card__room-details-col t-r">
+									<strong>Тип номера:</strong>
+								</div>
+							</div>
+							<div class="col-55 as-s">
+								<div class="s-card__room-details-col">
+									люкс
+								</div>
+							</div>
+						</div>
+						<div class="r">
+							<div class="col-45 as-s">
+								<div class="s-card__room-details-col t-r">
+									<strong>Корпус:</strong>
+								</div>
+							</div>
+							<div class="col-55 as-s">
+								<div class="s-card__room-details-col">
+									12
+								</div>
+							</div>
+						</div>
+						<div class="r">
+							<div class="col-45 as-s">
+								<div class="s-card__room-details-col t-r">
+									<strong>Количество основных мест:</strong>
+								</div>
+							</div>
+							<div class="col-55 as-s">
+								<div class="s-card__room-details-col">
+									12
+								</div>
+							</div>
+						</div>
+						<div class="r">
+							<div class="col-45 as-s">
+								<div class="s-card__room-details-col t-r">
+									<strong>Тип дополнительного места:</strong>
+								</div>
+							</div>
+							<div class="col-55 as-s">
+								<div class="s-card__room-details-col">
+									раскладной диван
+								</div>
+							</div>
+						</div>
+						<div class="r">
+							<div class="col-45 as-s">
+								<div class="s-card__room-details-col t-r">
+									<strong>Площадь номера:</strong>
+								</div>
+							</div>
+							<div class="col-55 as-s">
+								<div class="s-card__room-details-col">
+									23 м<sup>2</sup>
+								</div>
+							</div>
+						</div>
+						<div class="r">
+							<div class="col-45 as-s">
+								<div class="s-card__room-details-col t-r">
+									<strong>Балкон:</strong>
+								</div>
+							</div>
+							<div class="col-55 as-s">
+								<div class="s-card__room-details-col">
+									с сушилкой
+								</div>
+							</div>
+						</div>
+						<div class="r">
+							<div class="col-45 as-s">
+								<div class="s-card__room-details-col t-r">
+									<strong>Терраса:</strong>
+								</div>
+							</div>
+							<div class="col-55 as-s">
+								<div class="s-card__room-details-col">
+									есть
+								</div>
+							</div>
+						</div>
+						<div class="r">
+							<div class="col-45 as-s">
+								<div class="s-card__room-details-col t-r">
+									<strong>Мебель:</strong>
+								</div>
+							</div>
+							<div class="col-55 as-s">
+								<div class="s-card__room-details-col">
+									диван, кровати односпальные, двуспальная кровать, прикроватные тумбочки, стол, шкаф
+								</div>
+							</div>
+						</div>
+						<div class="r">
+							<div class="col-45 as-s">
+								<div class="s-card__room-details-col t-r">
+									<strong>Оборудование:</strong>
+								</div>
+							</div>
+							<div class="col-55 as-s">
+								<div class="s-card__room-details-col">
+									сплит-система, телевизор, холодильник
+								</div>
+							</div>
+						</div>
+						<div class="r">
+							<div class="col-45 as-s">
+								<div class="s-card__room-details-col t-r">
+									<strong>Санузел:</strong>
+								</div>
+							</div>
+							<div class="col-55 as-s">
+								<div class="s-card__room-details-col">
+									с душем (поддон)
+								</div>
+							</div>
+						</div>
+						<div class="r">
+							<div class="col-45 as-s">
+								<div class="s-card__room-details-col t-r">
+									<strong>Сервис:</strong>
+								</div>
+							</div>
+							<div class="col-55 as-s">
+								<div class="s-card__room-details-col">
+									смена полотонец: ежедневно, смена постельного белья: 1 раз в 3 дня, уборка номера: ежедневно
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>#}
+			
+		</div>
+	</div>
+	
+</div>

@@ -1,0 +1,339 @@
+title = "SANS Страницы"
+url = "/sans-pages/:?*"
+layout = "general"
+is_hidden = 0
+robot_index = "index"
+robot_follow = "follow"
+contentType = "html"
+force_show = 0
+
+[sans_search]
+==
+<?php
+function onStart()
+{
+    return \Mcmraak\Sans\Controllers\Pages::getPage($this);
+}
+?>
+==
+{% if query_memory %}
+	{% set sp = query_memory %}
+{% else %}
+    {% if sans_page.search_preset_active == 1 %}
+        {% set sp = sans_page.search_preset %}
+    {% endif %}
+{% endif %}
+
+{% if sp %}
+	<sans-options
+			wi_resort_id="{{ sp.wi_resort_id }}"
+			wi_parents_count="{{ sp.wi_parents_count }}"
+			wi_childrens_count="{{ sp.wi_childrens_count }}"
+            wi_childrens_ages="{{ sp.wi_childrens_ages }}"
+            {% if sp.wi_date == '' %}
+				wi_date=""
+            {% else %}
+				wi_date="{{ sp.wi_date|date('d.m.Y') }}"
+            {% endif %}
+			wi_date_delta_days="{{ sp.wi_date_delta_days }}"
+			wi_days_from="{{ sp.wi_days_from }}"
+			wi_days_to="{{ sp.wi_days_to }}"
+			wi_search_by_hotel_name="{{ sp.wi_search_by_hotel_name }}"
+	></sans-options>
+{% endif %}
+
+{% if sans_page and hotel_info is empty %}
+
+
+	{#
+    <div id="page-info">
+        <h3>Информация о странице</h3>
+        <ul>
+            <li>Название страницы: {{ sans_page.name }}</li>
+            <li>URL страницы: <a href="/sans-pages/page_{{ sans_page.slug }}">/sans-pages/page_{{ sans_page.slug }}</a></li>
+            <li>Курорт: {{ sans_page.resort.name }}</li>
+            <li>Настройки фильтра: {% if sans_page.search_preset_active %}Включены{% else %}Не включены{% endif %}</li>
+            <li>Активные события: {{ sans_page.events }}</li>
+        </ul>
+    </div>
+	#}
+<section class="cruises" page-id="{{ sans_page.id }}">
+	<div class="cruiseHead">
+		<div class="col-wrap">
+			<div class="col-30 col-xs-100">
+				<div class="cruiseImage">
+					{% set image = sans_page.images|first %}
+					<img src="{{ image.path|resize(400) }}" {% if image.title %}alt="{{ image.title }}"{% endif %}>
+				</div>
+			</div>
+			<div class="col-70 col-xs-100">
+				<div class="cruiseInfo">
+					{% partial 'template/socialbuttons' %}
+					<div class="cruiseExcerpt normalText">
+						<p>
+							{{ sans_page.text|mutator }}
+						</p>
+					</div>
+
+					<div class="cruiseButtons">
+						{% for tag in sans_page.seo_articles %}
+							<a class="crbtn" href="#{{ tag.sa_hash }}">{{ tag.sa_title }}</a>
+						{% endfor %}
+					</div>
+
+				</div>
+			</div>
+		</div>
+	</div>
+
+	<div class="cruiseData">
+		<div class="col-wrap">
+            {% partial 'sans-page/left-block' %}
+
+			<div class="col-75 col-s-100 va-top">
+				<div class="rightBlock">
+                    {% if sans_page.html %}
+                        {{ sans_page.html|raw }}
+                    {% else %}
+					    {% component 'sans_search' %}
+                    {% endif %}
+				</div>
+			</div>
+		</div>
+	</div>
+
+	<div class="cruiseArticles">
+		<div class="r">
+			<div class="col-100">
+				{% for item in sans_page.seo_articles %}
+					<div class="crArticle" id="{{ item.sa_hash }}">
+						<div class="data">
+							<h2>{{ item.sa_title }}</h2>
+							{{ item.sa_text|raw }}
+						</div>
+					</div>
+				{% endfor %}
+			</div>
+		</div>
+	</div>
+	
+	<div class="cruiseArticles sans-seodown mt-30">
+		
+		<div class="h t-c h_size-xxs h_txt-bold mb-30">
+			Отдых на курорте по критериям
+		</div>
+		
+		<div class="c-r">
+			
+			<div class="col-25 col-s-50 col-xs-100">
+				<div class="sans-seodown__col">
+					<div class="sans-seodown__name">
+						По типу:
+					</div>
+					<div class="sans-seodown__list">
+						<ul>
+							{% for item in sans_page.wraps(2) %}
+								<li class="sans-seodown__list-item">
+									<a href="page_{{ item.slug }}">{{ item.name }}</a>
+								</li>
+                                {#<li><a href="page_{{ item.slug }}">{{ item.name }}</a></li>#}
+                            {% endfor %}
+						</ul>
+					</div>
+				</div>
+			</div>
+			
+			<div class="col-25 col-s-50 col-xs-100">
+				<div class="sans-seodown__col">
+					<div class="sans-seodown__name">
+						{#По заболеванию:#}
+						По расположению:
+					</div>
+					<div class="sans-seodown__list">
+						<ul>
+							{% for item in sans_page.wraps(3) %}
+								<li class="sans-seodown__list-item">
+									<a href="page_{{ item.slug }}">{{ item.name }}</a>
+								</li>
+                                {#<li><a href="page_{{ item.slug }}">{{ item.name }}</a></li>#}
+                            {% endfor %}
+						</ul>
+					</div>
+				</div>
+			</div>
+			
+			{#<div class="col-25 col-s-50 col-xs-100">
+				<div class="sans-seodown__col">
+					<div class="sans-seodown__name">
+						По методу лечения(???):
+					</div>
+					<div class="sans-seodown__list">
+						<ul>
+							<li class="sans-seodown__list-item"><a href="">Тест1</a></li>
+							<li class="sans-seodown__list-item"><a href="">Тест1</a></li>
+							<li class="sans-seodown__list-item"><a href="">Тест1</a></li>
+							<li class="sans-seodown__list-item"><a href="">Тест1</a></li>
+							<li class="sans-seodown__list-item"><a href="">Тест1</a></li>
+						</ul>
+					</div>
+				</div>
+			</div>#}
+
+			<div class="col-25 col-s-50 col-xs-100">
+				<div class="sans-seodown__col">
+					<div class="sans-seodown__name">
+						{#По отзывам:#}
+						{#По времени:#}
+						По дате:
+					</div>
+					<div class="sans-seodown__list">
+						<ul>
+							{% for item in sans_page.wraps(1) %}
+                                {#<li><a href="page_{{ item.slug }}">{{ item.name }}</a></li>#}
+                                <li class="sans-seodown__list-item">
+                                	<a href="page_{{ item.slug }}">{{ item.name }}</a>
+                                	</li>
+                            {% endfor %}
+						</ul>
+					</div>
+				</div>
+			</div>
+
+		</div>
+	</div>
+
+</section>
+
+{% endif %}
+
+{% partial 'sans-page/hotel'  %}
+
+
+
+<!-- ORIGIN -->
+{#<section>
+<div style="font-size:12px">
+	<ul>
+		<li><b>id</b> - {{ hotel_info.hotel.id }}</li>
+		<li><b>Имя</b> - {{ hotel_info.hotel.name }}</li>
+        <li><b>Страна</b> - {{ hotel_info.hotel_bag.CountryName }}</li>
+        <li><b>Регион</b> - {{ hotel_info.hotel_bag.RegionName }}</li>
+        <li><b>Район</b> - {{ hotel_info.hotel_bag.AreaName }}</li>
+        <li><b>Город</b> - {{ hotel_info.hotel_bag.TownName }}</li>
+        <li><b>Курорт</b> - {{ hotel_info.hotel.resort.name }}</li>
+        <li><b>Категория</b> - {{ hotel_info.hotel_bag.HotelCategoryName }}</li>
+        <li><b>Адрес</b> - {{ hotel_info.hotel_bag.Address }}</li>
+        <li><b>Время вписки</b> - {{ hotel_info.hotel_bag.CheckInTime }}</li>
+        <li><b>Время выписки</b> - {{ hotel_info.hotel_bag.CheckOutTime }}</li>
+        <li><b>Требования</b> - {{ hotel_info.hotel_bag.SpecialRequirements }}</li>
+        <li>
+            <b>Координаты</b>
+            - Широта:{{ hotel_info.hotel_bag.Coordinates.Latitude }}
+                     {{ hotel_info.hotel_bag.Coordinates.Longitude }}
+        </li>
+        <li><b>Дистанции:</b>
+            <ul>
+                {% for item in hotel_info.hotel_bag.DistanceList %}
+                    <li><b>{{ item.Name }}</b> - {{ item.Distance }}</li>
+                {% endfor %}
+            </ul>
+        </li>
+        <li><b>Режимы работы:</b>
+            <ul>
+                {% for item in hotel_info.hotel_bag.WorkPeriod %}
+                    <li>{{ item }}</li>
+                {% endfor %}
+            </ul>
+        </li>
+        <li><b>Номерной фонд:</b>
+            <ul>
+                {% for item in hotel_info.hotel_bag.RoomCategoryList %}
+                    <li><b>{{ item.RoomTypeShortName }}</b>:
+                        <ul>
+                            <li><b>RoomTypeShortName</b> - {{ item.RoomTypeShortName }}</li>
+                            <li><b>RoomCategoryName</b> - {{ item.RoomCategoryName }}</li>
+                            <li><b>Quantity</b> - {{ item.Quantity }}</li>
+                            <li><b>RoomArea</b> - {{ item.RoomArea }}</li>
+                            <li><b>BaseSeatQuantity</b> - {{ item.BaseSeatQuantity }}</li>
+                            <li><b>ExtSeatQuantity</b> - {{ item.ExtSeatQuantity }}</li>
+                            <li><b>Интерьер</b>:
+                                <ul>
+                                    {% for record in item.InteriorList %}
+                                        <li><b>{{ record.Name }}:</b>
+                                            <ul>
+                                                {% for i in record.ContentList %}
+                                                    <li>{{ i.Name }}</li>
+                                                {% endfor %}
+                                            </ul>
+                                        </li>
+                                    {% endfor %}
+                                </ul>
+                            </li>
+                        </ul>
+                    </li>
+                {% endfor %}
+            </ul>
+        </li>
+
+        <li><b>Виды питания:</b>
+            <ul>
+                {% for item in hotel_info.hotel_bag.MealList %}
+                    {% for ii in item %}
+                    <li>{{ ii }}</li>
+                    {% endfor %}
+                {% endfor %}
+            </ul>
+        </li>
+
+        <li><b>Инфраструктура:</b>
+            <ul>
+                {% for item in hotel_info.hotel_bag.InfrastructureObjectList %}
+                    <li><b>{{ item.Name }}</b>
+                        {% if item.ContentList %}
+                            <ul>
+                            {% for ii in item.ContentList %}
+                                <li><b>{{ ii.Name }}</b> - {{ ii.Description }}</li>
+                            {% endfor %}
+                            </ul>
+                        {% endif %}
+                    </li>
+                {% endfor %}
+            </ul>
+        </li>
+
+        <li><b>Изображения:</b>
+            <ul>
+                <li>
+                {% for item in hotel_info.hotel_bag.HotelImageList %}
+                    <img style="width: 100px;" src="{{ item.Url }}" alt="{{ item.Description }}">
+                {% endfor %}
+                </li>
+            </ul>
+        </li>
+
+        <li><b>Описание:</b>
+            <div>
+                {{ hotel_info.hotel_bag.Description|raw }}
+            </div>
+        </li>
+        <li><b>Объявление:</b>
+            <div>
+                {{ hotel_info.hotel_bag.Announcement|raw }}
+            </div>
+        </li>
+	</ul>
+    <h2>Варианты:</h2>
+    <ul>
+        {% for item in hotel_info.hotel_results %}
+            <li>
+                <ul>
+                    <li><b>Тип номера:</b>{{ item.room_type }}</li>
+                    <li><b>Ночей:</b>{{ item.nights }}</li>
+                    <li><b>Цена:</b>{{ item.price }}</li>
+                </ul>
+            </li>
+        {% endfor %}
+    </ul>
+</div>
+</section>
+{% endif %}#}

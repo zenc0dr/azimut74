@@ -1,0 +1,26 @@
+<div class="dolphin-gallery-full">
+    <div class="dgf-big-images owl-carousel">
+        {% for image_url in images %}
+            <a href="{{ image_url }}" class="gal" data-lightbox-gallery="dolphinGallery{{ key }}">
+                <div class="dgf-preview" data-hash="dolphin-image{{ loop.index }}{{ key }}" style="background-image:url({{ image_url }})"></div>
+            </a>
+        {% endfor %}
+    </div>
+    <div class="dgf-small-images">
+        {% for image_url in images %}
+            {% if loop.index == 10 %}
+                {% set more_images = 1 %}
+                <div class="dgf-more-wrap-container">
+                <div class="dgf-more-images-wrap">
+            {% endif %}
+            <a href="#dolphin-image{{ loop.index }}{{ key }}">
+                <div class="dgf-image" style="background-image: url({{ image_url }})"></div>
+            </a>
+            {% if more_images == 1 and loop.last %}
+                </div>
+                </div>
+                <div class="dgf-more-images">+ ещё фото</div>
+            {% endif %}
+        {% endfor %}
+    </div>
+</div>

@@ -1,0 +1,40 @@
+{% set fb = GroupTours.files %}
+
+{% if fb %}
+<div class="file-block">
+    <div class="file-block__title">
+        {{ fb.name }}
+    </div>
+    <div class="file-block__wrap">
+        <div class="file-block__desc">
+            {{ fb.desc|raw }}
+        </div>
+        <div class="file-block__files">
+            {% for file in fb.files %}
+            <div class="file-block__file" onclick="downloadUri('{{ file.path }}', '{{ file.filename }}')">
+                <div class="file-block__file__icon"></div>
+                <div class="file-block__file__info">
+                    <div class="file-block__file__title">
+                        {{ file.name }}
+                    </div>
+                    <div class="file-block__file__desc">
+                        {{ file.desc }}
+                    </div>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+</div>
+<script>
+    window.downloadUri = (uri, name) => {
+        var link = document.createElement("a");
+        link.download = name;
+        link.href = uri;
+        document.body.appendChild(link);
+        link.click();
+        document.body.removeChild(link);
+        delete link;
+    }
+</script>
+{% endif %}

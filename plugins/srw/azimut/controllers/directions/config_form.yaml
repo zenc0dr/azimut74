@@ -1,0 +1,10 @@
+name: Directions
+form: $/srw/azimut/models/directions/fields.yaml
+modelClass: Srw\Azimut\Models\Directions
+defaultRedirect: srw/azimut/directions
+create:
+    redirect: 'srw/azimut/directions/update/:id'
+    redirectClose: srw/azimut/directions
+update:
+    redirect: srw/azimut/directions
+    redirectClose: srw/azimut/directions

@@ -1,0 +1,11 @@
+table {
+    width: 100%;
+    border-collapse: collapse;
+}
+th, td {
+    padding: 5px 7px;
+    border: 1px solid #000;
+}
+.print {
+    display: none;
+}

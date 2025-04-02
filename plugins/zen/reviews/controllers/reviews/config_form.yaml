@@ -1,0 +1,11 @@
+name: Reviews
+modelClass: Zen\Reviews\Models\Review
+form: $/zen/reviews/models/review/fields.yaml
+defaultRedirect: zen/reviews/reviews
+create:
+    redirect: 'zen/reviews/reviews/update/:id'
+    redirectClose: zen/reviews/reviews
+update:
+    redirect: zen/reviews/reviews
+    redirectClose: zen/reviews/reviews
+preview: {  }

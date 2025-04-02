@@ -1,0 +1,72 @@
+fields:
+    active:
+        label: Активно
+        span: full
+        default: 1
+        type: switch
+    name:
+        label: 'Название банера'
+        span: auto
+        type: text
+    url_entry:
+        label: 'Вхождение URL'
+        span: auto
+        type: text
+        comment: '"/*" в конце url, обозначает любое продолжение url'
+    opacity:
+        label: 'Прозрачность затемнения'
+        showSearch: true
+        span: auto
+        type: dropdown
+    color:
+        label: 'Цвет затемнения'
+        span: auto
+        default: '#000000'
+        type: colorpicker
+    template_code:
+        label: 'Шаблон twig (storage/greeter_templates)'
+        showSearch: true
+        span: auto
+        type: dropdown
+tabs:
+    fields:
+        title:
+            label: 'Основной заголовок'
+            size: small
+            span: full
+            type: richeditor
+            tab: Основное
+        description:
+            label: 'Подзаголовок / описание'
+            size: large
+            span: full
+            type: richeditor
+            tab: Основное
+        banner_image:
+            label: 'Фон баннера'
+            mode: image
+            useCaption: true
+            thumbOptions:
+                mode: crop
+                extension: auto
+            span: full
+            type: fileupload
+            tab: Изображения
+        advantages:
+            label: Преимущества
+            prompt: 'Добавить преимущество'
+            style: default
+            span: full
+            type: repeater
+            tab: Преимущества
+            form:
+                fields:
+                    advantage_marker:
+                        label: Иконка
+                        span: full
+                        type: switch
+                    advantage_html:
+                        label: 'Текст приемущества'
+                        size: small
+                        span: full
+                        type: richeditor

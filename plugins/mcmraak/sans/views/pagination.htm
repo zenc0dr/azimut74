@@ -1,0 +1,30 @@
+{% if pagination.lastPage > 1 %}
+    {% set pages_count = (pagination.total / pagination.perPage) |round(0, 'ceil') %}
+
+    <div class="sans pagination">
+        <ul>
+
+            {# Previous Page Link #}
+            {% if pagination.currentPage == 1 %}
+                <li class="disabled"><span>&lt;</span></li>
+            {% else %}
+                <li><a href="#" page="1">&lt;</a></li>
+            {% endif %}
+
+            {# Page links #}
+            {% for page_num in 1..pages_count %}
+                <li {% if page_num == pagination.currentPage %}class="active"{% endif %}>
+                    <a href="#" page="{{ page_num }}">{{ page_num }}</a>
+                </li>
+            {% endfor %}
+
+            {# Next Page Link #}
+            {% if pagination.currentPage == pages_count %}
+                <li class="disabled"><span>&gt;</span></li>
+            {% else %}
+                <li><a href="#" page="{{ pages_count }}">&gt;</a></li>
+            {% endif %}
+
+        </ul>
+    </div>
+{% endif %}

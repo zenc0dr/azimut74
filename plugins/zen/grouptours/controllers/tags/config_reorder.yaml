@@ -1,0 +1,4 @@
+title: Tags
+modelClass: Zen\GroupTours\Models\Tag
+toolbar:
+    buttons: reorder_toolbar

@@ -1,0 +1,42 @@
+fields:
+    active:
+        label: Активность
+        span: full
+        default: 1
+        type: switch
+    name:
+        label: 'Имя галереи'
+        oc.commentPosition: ''
+        span: auto
+        type: text
+    code:
+        label: 'Код галереи'
+        oc.commentPosition: ''
+        span: auto
+        preset:
+            field: name
+            type: slug
+        type: text
+    sort_order:
+        label: Порядок
+        oc.commentPosition: ''
+        span: right
+        default: '0'
+        type: number
+    images:
+        label: Изображения
+        span: full
+        oc.commentPosition: ''
+        mode: image
+        useCaption: true
+        thumbOptions:
+            mode: crop
+            extension: auto
+        type: fileupload
+    style:
+        label: Разметка
+        span: auto
+        oc.commentPosition: ''
+        nameFrom: name
+        descriptionFrom: description
+        type: relation

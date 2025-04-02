@@ -1,0 +1,4 @@
+title: Countries
+modelClass: Zen\Dolphin\Models\Country
+toolbar:
+    buttons: reorder_toolbar

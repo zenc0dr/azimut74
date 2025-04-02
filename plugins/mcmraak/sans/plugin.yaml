@@ -1,0 +1,59 @@
+plugin:
+    name: 'mcmraak.sans::lang.plugin.name'
+    description: 'mcmraak.sans::lang.plugin.description'
+    author: Mcmraak
+    icon: oc-icon-building
+    homepage: ''
+navigation:
+    sans-main:
+        label: Алеан
+        url: mcmraak/sans/pages
+        icon: icon-building
+        permissions:
+            - mcmraak.sans
+        order: '1'
+        sideMenu:
+            sans-pages:
+                label: Страницы
+                url: mcmraak/sans/pages
+                icon: icon-files-o
+            sans-resorts:
+                label: Курорты
+                url: mcmraak/sans/resorts
+                icon: icon-map-marker
+            sans-hotels:
+                label: Отели
+                url: mcmraak/sans/hotels
+                icon: icon-building-o
+            sans-parsers:
+                label: Парсеры
+                url: mcmraak/sans/panel
+                icon: icon-cloud-download
+            sans-countries:
+                label: Страны
+                url: mcmraak/sans/countries
+                icon: icon-map-marker
+            sans-categories:
+                label: 'Категории отелей'
+                url: mcmraak/sans/hotelcategories
+                icon: icon-star
+            sans-meals:
+                label: 'Виды питания'
+                url: mcmraak/sans/meals
+                icon: icon-cutlery
+            sans-reviews:
+                label: Отзывы
+                url: mcmraak/sans/reviews
+                icon: icon-star
+            sans-booking:
+                label: Бронирование
+                url: mcmraak/sans/bookings
+                icon: icon-dollar
+            sans-articles:
+                label: Cтатьи
+                url: mcmraak/sans/articles
+                icon: icon-file-text
+permissions:
+    mcmraak.sans:
+        tab: SANS
+        label: 'Глобальный доступ к модулю'

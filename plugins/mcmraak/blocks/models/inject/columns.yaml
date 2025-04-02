@@ -1,0 +1,18 @@
+columns:
+    id:
+        label: id
+        type: number
+        sortable: true
+    name:
+        label: 'Название банера'
+        type: text
+        searchable: true
+        sortable: true
+    template_id:
+        label: Шаблон
+        type: text
+        relation: template
+        valueFrom: name
+    active:
+        label: active
+        type: partial

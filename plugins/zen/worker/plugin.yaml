@@ -1,0 +1,38 @@
+plugin:
+    name: 'zen.worker::lang.plugin.name'
+    description: 'zen.worker::lang.plugin.description'
+    author: 'Alexander Ablizin'
+    icon: oc-icon-cog
+    homepage: ''
+navigation:
+    worker-main:
+        label: Worker
+        url: zen/worker/streamcontroller
+        icon: icon-cog
+        permissions:
+            - zen.worker.main
+        sideMenu:
+            worker-streams:
+                label: Потоки
+                url: zen/worker/streamcontroller
+                icon: icon-angle-double-right
+            worker-jobs:
+                label: Задачи
+                url: zen/worker/jobcontroller
+                icon: icon-check-square-o
+            worker-errors:
+                label: 'Лог ошибок'
+                url: zen/worker/errorlogcontroller
+                icon: icon-bug
+            worker-admin:
+                label: Управление
+                url: zen/worker/admin
+                icon: icon-refresh
+            worker-events:
+                label: События
+                url: zen/worker/eventcontroller
+                icon: icon-calendar
+permissions:
+    zen.worker.main:
+        tab: 'Worker - Брокер задач'
+        label: 'Глобальный доступ'

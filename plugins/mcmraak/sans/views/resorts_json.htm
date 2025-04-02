@@ -1,0 +1,7 @@
+<input placeholder="Фильтр">
+<ul>
+{% for group in groups %}
+    <li class="deep-{{ group.nest_depth }}" value="group_id:{{ group.id }}">{{ group.name }}</li>
+    {% include 'mcmraak.sans::resorts_for' %}
+{% endfor %}
+</ul>

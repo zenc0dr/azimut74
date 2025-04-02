@@ -1,0 +1,521 @@
+@import "schedule-table";
+
+.dw-results {
+    transition: 200ms;
+    min-height: 300px;
+}
+
+.dw-results.process {
+    opacity: 0.7;
+    pointer-events:none;
+}
+.dw-result-box {
+    background-color: #fff;
+    display: flex;
+    width: 100%;
+    flex-direction: row;
+    justify-content: space-between;
+    margin-bottom: 15px;
+}
+
+.dw-result-box:not(.titles) {
+    border: 1px solid #dcdcdc;
+    border-radius: 4px;
+}
+
+.dw-result-box:not(.titles):hover {
+    box-shadow: 0px 4px 15px 0px rgba(0, 0, 0, 0.15);
+}
+
+.dw-results .dw-result-box.titles {
+    margin-bottom: 0;
+}
+
+.dw-results .dw-result-box.titles > div {
+    color: #666;
+}
+
+.dw-result-box .dw-pic {
+    width: 180px;
+    background-position: center;
+    background-size: cover;
+    background-color: #000;
+    border-radius: 4px 0 0 4px;
+    @include m('767px') {
+        border-radius: 4px 4px 0 0 ;
+    }
+}
+
+.dw-result-box .dw-box-body {
+    flex: 1 1 0;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    margin-left: 20px;
+    padding: 15px;
+}
+
+.dw-result-box .dw-tour-name {
+    font-size: 18px;
+    color: #1e88e5;
+    font-family: OpenSansBold, sans-serif;
+    margin-bottom: 10px;
+    cursor: pointer;
+}
+
+.dw-result-box_content-wrap {
+    display: flex;
+    position: relative;
+}
+
+.dw-result-box .dw-waybill {
+    font-size: 13px;
+    flex: 1 0 0;
+    margin-right: 15px;
+}
+
+.dw-result-box .dw-waybill span {
+    margin-right: 5px;
+    color: #464545;
+}
+
+.dw-result-box .dw-price-wrap {
+    margin-top: 14px;
+    width: 225px;
+    display: flex;
+    align-items: flex-end;
+    bottom: -71px;
+}
+
+.dw-price-wrap.mobile {
+    display: none;
+}
+
+.dw-result-box .dw-price-btn {
+    display: inline-block;
+    width: 100%;
+    color: #cb2022;
+    background-color: #fff;
+    padding: 10px 5px;
+    text-align: center;
+    cursor: pointer;
+    font-weight: bold;
+    transition: 300ms;
+    border: 1px solid #cb2022;
+    border-radius: 5px;
+}
+
+.dw-result-box .dw-price-btn:hover {
+    color: #fff;
+    background-color: #cb2022;
+}
+
+.dw-result-box .dw-price-btn i {
+    margin-left: 9px;
+}
+
+.dw-box-body.schedule {
+    margin-left: 0;
+    flex-direction: column;
+}
+
+.dw-schedule-info {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+}
+
+.dw-schedule-info-names {
+    flex-direction: column;
+    flex: 1 0 0;
+}
+
+.dw-schedule-info__tour-name {
+    font-size: 16px;
+    color: #1e88e5;
+    font-weight: bold;
+    font-family: OpenSansBold, sans-serif;
+    margin-bottom: 3px;
+    cursor: pointer;
+}
+
+.dw-schedule-info__tour-dates {
+    display: flex;
+    align-items: flex-end;
+}
+
+.dw-schedule-info__tour-dates > div:first-child {
+    font-family: OpenSansBold, sans-serif;
+    font-size: 15px;
+    margin-right: 10px;
+    font-weight: bold;
+}
+
+.dw-schedule-info__tour-dates > div:last-child {
+    font-size: 12px;
+    color: #cc3a29;
+    font-weight: bold;
+}
+
+.dw-schedule-info__tour-price {
+    margin-left: 15px;
+    width: 225px;
+    &-mobile {
+        display: flex;
+        align-items: center;
+    }
+}
+
+.dw-schedule-info__tour-waybill {
+    font-size: 13px;
+    margin-top: 7px;
+}
+
+.dw-tour-labels {
+    flex-wrap: wrap;
+    display: flex;
+
+}
+
+.dw-tour-bottom__wrapper {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-top: 10px;
+    .widget-history__favorite {
+        flex-shrink: 0;
+        padding-left: 10px;
+        padding-right: 0;
+        text-align: right;
+        &:hover {
+            cursor: pointer;
+        }
+    }
+}
+
+.dw-tour-label {
+    font-size: 12px;
+    margin: 3px;
+    //background: #e1422e;
+    background-color: #d6eafa;
+    color: #010101;
+
+    border-radius: 10px;
+    padding: 2px 10px;
+    cursor: pointer;
+}
+
+/* Mobile */
+.dw-offer-mobile {
+    padding: 0 6px;
+}
+
+.dwm-row {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-around;
+    width: 100%;
+    /* border: 1px solid #dcdcdc; */
+    background: #f4f4f4;
+    margin: 7px 0;
+    padding: 6px 0px;
+}
+
+.dwm-row-title {
+    padding: 3px 8px;
+    border: 1px solid #666;
+    border-radius: 4px;
+    margin-top: 4px;
+    color: #4b4b4b;
+    margin-bottom: 8px;
+    text-align: center;
+}
+
+.dwm-row-title.accent {
+    border: 1px solid #e2422f;
+    color: #e2422f;
+}
+
+.dwm-col-title {
+    font-family: OpenSansBold, sans-serif;
+    width: 200px;
+    color: #666;
+    display: flex;
+    align-items: center;
+}
+
+.dwm-col-data {
+    margin-left: auto;
+}
+
+.dw-result-box.mobile {
+    margin-bottom: 30px;
+}
+
+.dw-offer-date-mobile {
+}
+
+.dw-offer-date-mobile .dwm-date {
+    font-family: OpenSansBold, sans-serif;
+    font-size: 14px;
+    margin-left: 6px;
+}
+
+.dw-offer-date-mobile .dwm-day {
+    color: #034882;
+    margin: 0 3px;
+    font-size: 14px;
+}
+
+.dw-offer-date-mobile .dwm-days {
+    color: #cc3a29;
+    font-family: OpenSansBold, sans-serif;
+    margin-left: 20px;
+}
+
+.dwm-row-submit {
+    margin-top: 11px;
+    margin-bottom: 7px;
+}
+
+.dwm-row-submit .dw-price-btn {
+    border-radius: 6px;
+    padding: 13px 10px;
+    text-align: center;
+}
+
+@media (max-width: 768px) {
+    .dw-result-box {
+        display: flex;
+        flex-direction: column;
+    }
+
+    .dw-result-box .dw-pic {
+        height: 30vw;
+        width: 100%;
+    }
+
+    .dw-schedule-info {
+        flex-direction: column;
+        position: relative;
+    }
+
+    .dw-schedule-info__tour-price {
+        width: auto;
+        margin: 15px;
+        text-align: right;
+    }
+}
+
+
+@media (max-width: 767px) {
+    .dw-result-box.catalog {
+        flex-direction: column;
+    }
+
+    .dw-result-box.catalog .dw-pic {
+        height: 150px;
+        width: 100%;
+    }
+
+    .dw-result-box.catalog .dw-result-box_content-wrap {
+        flex-direction: column;
+        align-items: flex-end;
+    }
+
+    .dw-result-box.catalog .dw-box-body {
+        margin: 0;
+    }
+
+    .dw-result-box.catalog .dw-waybill {
+        margin: 0;
+        margin-bottom: 10px;
+    }
+}
+
+/* begin::OFFERS */
+.dw-box-body.offer {
+    margin-left: 0;
+    flex-direction: row;
+    font-size: 12px;
+}
+
+.dw-result-box .dw-offer-date {
+    width: 158px;
+    color: #333;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+}
+
+.dw-result-box.titles .dw-offer-date {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-family: OpenSansBold, sans-serif;
+}
+
+.dw-result-box .dw-offer-date > div {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-around;
+}
+
+.dw-result-box .dw-offer-date > div:first-child {
+    font-family: OpenSansBold, sans-serif;
+    font-size: 13px;
+}
+
+.dw-result-box .dw-offer-date > div:last-child > div {
+    color: #034882;
+}
+
+.dw-result-box .dw-offer-tarrif {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    flex: 1 1 0;
+}
+
+.dw-result-box.titles .dw-offer-tarrif {
+    font-family: OpenSansBold, sans-serif;
+}
+
+.dw-result-box .dw-offer-tarrif.dolphin-tour {
+}
+
+.dw-result-box .dw-offer-tarrif.azimut-tour {
+    width: 150px;
+    flex: auto;
+}
+
+.dw-result-box .dw-offer-days {
+    width: 55px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-weight: bold;
+    padding-right: 10px;
+    color: #cc3a29;
+}
+
+.dw-result-box .dw-offer-hotel {
+    display: flex;
+    padding: 0 5px;
+    font-size: 12px;
+    color: #1e88e5;
+    font-family: OpenSansBold, sans-serif;
+    flex: 1 1 0;
+    justify-content: center;
+    align-items: center;
+}
+
+.dw-result-box .dw-offer-room {
+    width: 100px;
+    display: flex;
+    justify-content: left;
+    padding: 0 5px;
+    font-size: 10px;
+}
+
+.dw-result-box.titles .dw-offer-room {
+    font-family: OpenSansBold, sans-serif;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.dw-result-box .dw-offer-pansion {
+    display: flex;
+    width: 100px;
+    padding: 0 10px;
+    justify-content: left;
+    align-items: center;
+    font-size: 10px;
+}
+
+.dw-result-box.titles .dw-offer-pansion {
+    font-family: OpenSansBold, sans-serif;
+    display: flex;
+    /* justify-content: center; */
+    align-items: center;
+}
+
+.dw-result-box .dw-offer-price {
+    width: 180px;
+    display: flex;
+    padding: 0 5px;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    font-family: OpenSansBold, sans-serif;
+}
+
+.dw-result-box .dw-offer-price.dolphin-tour {
+    width: 95px;
+    flex-direction: column;
+}
+
+.dw-result-box .dw-offer-price.azimut-tour {
+    /* width: auto; */
+    flex-direction: column;
+}
+
+.dw-offer-price__title {
+    font-family: OpenSansRegular, sans-serif;
+}
+
+.dw-offer-price__sum {
+    font-size: 20px;
+}
+
+.dw-offer-price__old {
+    font-size: 14px;
+    color: #707070;
+    text-decoration: line-through;
+}
+
+.dwm-price_old {
+    color: #767676;
+    text-decoration: line-through;
+}
+
+.dwm-col-data.price {
+    font-family: OpenSansBold, sans-serif;
+    font-size: 20px;
+}
+
+.dw-offer-price__reduct-title {
+    padding: 3px 8px;
+    border: 1px solid #666;
+    border-radius: 4px;
+    margin-top: 4px;
+    color: #4b4b4b;
+}
+
+.dw-offer-price__reduct-title.accent {
+    border: 1px solid #e2422f;
+    color: #e2422f;
+}
+
+.dw-schedule-info__tour-price .dw-offer-price__reduct-title {
+    border: none;
+    font-size: 14px;
+}
+
+.dw-schedule-info__tour-price .dw-offer-price__reduct-title.accent {
+}
+
+.dw-result-box .dw-price-btn:hover .dw-offer-price__reduct-title {
+    color: #fff;
+}
+
+.dw-result-box .dw-offer-submit {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 0 5px;
+    width: 120px;
+}
+
+/* end::OFFERS */

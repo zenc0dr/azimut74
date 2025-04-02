@@ -1,0 +1,187 @@
+fields:
+    active:
+        label: Активность
+        span: full
+        default: 1
+        dependsOn:
+            - root_id
+        preset:
+            field: root_id
+            type: ''
+        type: switch
+    root_id:
+        label: 'Базовая группа'
+        oc.commentPosition: ''
+        span: auto
+        type: dropdown
+    resort_id:
+        label: Курорт
+        oc.commentPosition: ''
+        span: auto
+        type: dropdown
+tabs:
+    fields:
+        name:
+            label: Название
+            oc.commentPosition: ''
+            span: auto
+            type: text
+            tab: 'Основные данные'
+        slug:
+            label: Код
+            oc.commentPosition: ''
+            span: auto
+            preset:
+                field: name
+                type: slug
+            type: text
+            tab: 'Основные данные'
+        images:
+            label: Изображение
+            oc.commentPosition: ''
+            mode: image
+            useCaption: true
+            thumbOptions:
+                mode: crop
+                extension: auto
+            span: full
+            type: fileupload
+            tab: 'Основные данные'
+        text:
+            label: 'Информационный блок'
+            size: large
+            oc.commentPosition: ''
+            span: full
+            type: richeditor
+            tab: 'Основные данные'
+        wraps:
+            span: full
+            path: $/mcmraak/sans/controllers/pages/wraps.php
+            type: partial
+            tab: SEO-обёртки
+        seo_articles:
+            label: 'SEO Статьи'
+            oc.commentPosition: ''
+            prompt: 'Добавить статью'
+            span: full
+            type: repeater
+            tab: Seo-статьи
+            form:
+                fields:
+                    sa_title:
+                        label: Заголовок
+                        oc.commentPosition: ''
+                        span: full
+                        type: text
+                    sa_text:
+                        label: Текст
+                        size: large
+                        oc.commentPosition: ''
+                        span: full
+                        type: richeditor
+                    sa_hash:
+                        label: Хэштег
+                        oc.commentPosition: ''
+                        span: auto
+                        preset:
+                            field: sa_title
+                            type: slug
+                        type: text
+        seo_title:
+            label: title
+            oc.commentPosition: ''
+            span: full
+            type: text
+            tab: Метатеги
+        seo_keywords:
+            label: keywords
+            size: small
+            oc.commentPosition: ''
+            span: full
+            type: textarea
+            tab: Метатеги
+        seo_description:
+            label: description
+            size: small
+            oc.commentPosition: ''
+            span: full
+            type: textarea
+            tab: Метатеги
+        search_preset_active:
+            label: Активно
+            span: left
+            type: switch
+            tab: 'Настройки виджета'
+        is_show_group:
+            label: 'Просмотреть группы курортов'
+            span: right
+            type: switch
+            tab: 'Настройки виджета'
+        wi_resort_id_group:
+            label: 'Группы курортов'
+            oc.commentPosition: ''
+            span: full
+            trigger:
+                action: show
+                field: is_show_group
+                condition: checked
+            type: dropdown
+            tab: 'Настройки виджета'
+        wi_resort_id:
+            label: 'Выбор курорта'
+            oc.commentPosition: ''
+            span: full
+            trigger:
+                action: hide
+                field: is_show_group
+                condition: checked
+            type: dropdown
+            tab: 'Настройки виджета'
+        wi_parents_count:
+            label: Взрослых
+            oc.commentPosition: ''
+            span: auto
+            type: number
+            tab: 'Настройки виджета'
+        wi_childrens_count:
+            label: Детей
+            oc.commentPosition: ''
+            span: auto
+            type: number
+            tab: 'Настройки виджета'
+        wi_hint:
+            span: full
+            path: $/mcmraak/sans/controllers/pages/wi_hint.htm
+            type: hint
+            tab: 'Настройки виджета'
+        wi_date:
+            label: 'Дата заезда'
+            oc.commentPosition: ''
+            mode: date
+            span: auto
+            type: datepicker
+            tab: 'Настройки виджета'
+        wi_date_delta_days:
+            label: 'Возможное смещение даты заезда (дней)'
+            span: auto
+            default: '0'
+            type: number
+            tab: 'Настройки виджета'
+        wi_days_from:
+            label: 'Дней отдыха (от)'
+            oc.commentPosition: ''
+            span: auto
+            type: number
+            tab: 'Настройки виджета'
+        wi_days_to:
+            label: 'Дней отдыха (до)'
+            oc.commentPosition: ''
+            span: auto
+            type: number
+            tab: 'Настройки виджета'
+        wi_search_by_hotel_name:
+            label: 'Поиск по названию'
+            span: auto
+            oc.commentPosition: ''
+            type: text
+            tab: 'Настройки виджета'

@@ -1,0 +1,4 @@
+title: SliderCruises
+modelClass: Srw\Azimut\Models\SliderCruises
+toolbar:
+    buttons: reorder_toolbar

@@ -1,0 +1,81 @@
+<div class="result-item">
+    <div class="result-item-left">
+        <div class="result-item-img" style="background-image: url({{ checkin.image }})"></div>
+        {% if checkin.youtube %}
+        <a modal=".youtube-content" class="result-item-youtube">
+            <img src="/themes/prokruiz/assets/img/svg/youtube.svg">
+        </a>
+        <div class="youtube-content" style="display: none">
+            <iframe  src="{{ checkin.youtube }}" frameborder="0" allowfullscreen=""></iframe>
+        </div>
+        {% endif %}
+        {% if checkin.motorship_status %}
+            <span class="ship-type premium">{{ checkin.motorship_status }}</span>
+        {% endif %}
+    </div>
+    <div class="result-item-center">
+        <div class="result-center-name">
+            <img src="/themes/prokruiz/assets/img/svg/ship.svg">
+            <a target="_blank" href="/ship/{{ checkin.motorship_id }}">{{ checkin.motorship_name }}</a>
+            {% if checkin.motorship_status %}
+            <span class="ship-type premium">{{ checkin.motorship_status }}</span>
+            {% endif %}
+        </div>
+        <div class="result-center-date">
+            <div class="result-date-left">
+                <div>
+                    <img src="/themes/prokruiz/assets/img/svg/calendar.svg">
+                    <b>{{ checkin.date.d1 }}</b>, {{ checkin.date.d1d }} ({{ checkin.date.t1 }})  <span>—</span> <b>{{ checkin.date.d2 }}</b>, {{ checkin.date.d2d }} ({{ checkin.date.t2 }})
+                </div>
+                <div>Время московское</div>
+            </div>
+            <div class="result-date-right">
+                <img src="/themes/prokruiz/assets/img/svg/clock.svg">
+                {{ checkin.days }}
+            </div>
+        </div>
+        <div class="result-center-route">
+            {{ checkin.waybill|raw }}
+        </div>
+    </div>
+    <div class="result-item-right">
+        <div class="result-item-top">
+            {% for discount in checkin.permanent_discounts %}
+                <div class="result-item-sale">
+                    <div>
+                        {% if discount.image %}
+                            <pic class="discount-image" style="background-image: url({{ discount.image|media }})"></pic>
+                        {% else %}
+                            <pic class="discount-image" style="background-image: url(/themes/prokruiz/assets/img/svg/discount.svg)"></pic>
+                        {% endif %}
+                    </div>
+                    <div>
+                        {{ discount.title }}
+                    </div>
+                </div>
+            {% endfor %}
+            {% for discount in checkin.temporary_discounts %}
+                <div class="result-item-sale">
+                    <div>
+                        {% if discount.image %}
+                            <pic class="discount-image" style="background-image: url({{ discount.image|media }})"></pic>
+                        {% else %}
+                            <pic class="discount-image" style="background-image: url(/themes/prokruiz/assets/img/svg/discount.svg)"></pic>
+                        {% endif %}
+                    </div>
+                    <div>
+                        {{ discount.title }}
+                    </div>
+                </div>
+            {% endfor %}
+        </div>
+        <div class="result-item-bottom">
+            <div class="booking-price">
+                <div>от <span>{{ checkin.price_start|price_format }}</span> р./чел</div>
+                <div>без учёта скидок</div>
+            </div>
+            <a target="_blank" class="booking-btn btn red" href="/cruise/{{ checkin.id }}"><span>наличие мест, цены</span><span>Бронирование</span></a>
+        </div>
+
+    </div>
+</div>

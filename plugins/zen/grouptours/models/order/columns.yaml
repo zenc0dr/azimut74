@@ -1,0 +1,17 @@
+columns:
+    id:
+        label: id
+        type: number
+        searchable: true
+        sortable: true
+    name:
+        label: Имя
+        type: text
+    data:
+        label: Данные
+        type: text
+        searchable: true
+    created_at:
+        label: Создано
+        type: datetime
+        sortable: true

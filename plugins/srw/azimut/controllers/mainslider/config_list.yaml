@@ -1,0 +1,11 @@
+list: $/srw/azimut/models/mainslider/columns.yaml
+modelClass: Srw\Azimut\Models\MainSlider
+title: MainSlider
+noRecordsMessage: 'backend::lang.list.no_records'
+showSetup: true
+showCheckboxes: true
+toolbar:
+    buttons: list_toolbar
+    search:
+        prompt: 'backend::lang.list.search_prompt'
+recordUrl: 'srw/azimut/mainslider/update/:id'

@@ -1,0 +1,239 @@
+/* MultiDrop */
+#ship.multi-drop {
+    width: 100%;
+    cursor: pointer;
+    position: relative;
+}
+
+.multi-drop {
+    font-size: 14px;
+    display: inline-block;
+    font-family: OpenSansRegular, sans-serif;
+    width: 179px;
+    width: 100%;
+    position: relative;
+}
+
+.multi-drop .filter {
+    width: inherit;
+    /*position: absolute;*/
+    margin: 0;
+    /*margin-top: 32px;*/
+    background: #ffffff;
+    padding: 5px 8px;
+    /*border: 1px solid #bcbcbc;*/
+    border-bottom: none;
+    z-index: 10;
+}
+
+.multi-drop .filter input {
+    border: 1px solid #519bee;
+    background: #fff;
+    width: 100%;
+    border-radius: 3px;
+    padding: 3px 5px;
+    color: #2f70b9;
+}
+
+.multi-drop div {
+    display: inline-block;
+    width: 100%;
+}
+
+.multi-drop .input-wrapper {
+    display: flex;
+}
+
+.multi-drop .value {
+    background: #fff;
+    border: 1px solid #bcbcbc;
+    border-radius: 3px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.multi-drop .value i {
+    color: #ff1300;
+    font-size: 20px;
+    /*position: absolute;*/
+    margin: 0;
+    margin-right: 10px;
+}
+
+.multi-drop .options {
+    background: #fff;
+    /*border: 1px solid #bcbcbc;*/
+    border-top: none;
+    /*position: absolute;*/
+    width: inherit;
+    z-index: 10;
+    /*margin-top: 87px;*/
+    max-height: 235px;
+    overflow-y: auto;
+    overflow-x: hidden;
+    border-radius: 0 0 3px 3px;
+    color: #000;
+}
+
+.multi-drop .popup {
+    height: 0;
+    width: inherit;
+}
+
+.multi-drop .option {
+    padding: 4px 7px;
+    cursor: pointer;
+}
+
+.multi-drop .option.checked {
+    background: #e31e24;
+    color: #fff;
+}
+
+.multi-drop .option:hover {
+    background: #ff130073;
+    color: #fff;
+}
+
+.multi-drop .clean {
+    width: inherit;
+    /*position: absolute;*/
+    /*margin-top: 65px;*/
+    padding: 3px 0;
+    text-align: center;
+    background: #ff6c6d;
+    color: #fff;
+    transition: 300ms;
+    /*border: 1px solid #bcbcbc;*/
+    z-index: 9;
+    cursor: pointer;
+}
+
+.multi-drop .clean:hover {
+    text-align: center;
+    background: #cb2022;
+    color: #fff;
+}
+
+.multi-drop .clean:not(.active) {
+    background: #e0e0e0;
+    color: #adadad;
+}
+
+.multi-drop .option i {
+    display: none;
+    margin-left: 5px;
+    color: #fff;
+}
+
+.multi-drop .option.checked i {
+    display: inline-block;
+}
+
+.multi-drop input {
+}
+
+.multi-drop .value span {
+    display: inline-block;
+    padding: 9px 10px;
+    width: calc(100% - 24px);
+    margin-right: 7px;
+    color: #393939;
+    min-height: 29px;
+}
+
+.wrapper-absolute {
+    position: absolute;
+    z-index: 10;
+    display: flex;
+    flex-direction: column;
+    top: calc(100% - 4px);
+    border: 1px solid #bcbcbc;
+}
+
+.multi-drop .label-original {
+    display: none;
+}
+
+.multi-drop .value span {
+    white-space: nowrap;
+    text-overflow: ellipsis;
+    overflow: hidden;
+}
+
+
+@media (max-width: 992px) {
+    .multi-drop {
+        font-size: 16px;
+    }
+
+    .multi-drop .value {
+        padding: 10px;
+    }
+
+    .wrapper-absolute {
+        border: none;
+    }
+
+    .multi-drop .value.selected .label-original {
+        color: #0a4069;
+        padding: 0 10px;
+        font-size: 13px;
+        display: block;
+        font-weight: bold;
+        position: absolute;
+    }
+
+    .multi-drop .value i {
+        position: relative;
+        margin: 0;
+        margin-right: 10px;
+    }
+
+    .multi-drop .value.selected span {
+        padding-bottom: 0;
+        padding-top: 18px;
+    }
+}
+
+@media (max-width: 576px) {
+    .multi-drop .value span {
+        padding: 9px 5px;
+    }
+
+    .multi-drop .value.selected .label-original {
+        padding: 0 5px;
+    }
+}
+
+@media (max-width: 425px) {
+
+    .multi-drop .value {
+        padding: 5px;
+    }
+
+
+
+    .widget-form .widget-form-input .value {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+    }
+
+
+}
+
+@media (max-width: 350px) {
+
+    .multi-drop .value span {
+        width: calc(100% - 5px);
+    }
+    .multi-drop {
+        font-size: 14px;
+    }
+
+    .multi-drop .value.selected .label-original {
+        font-size: 11px;
+    }
+}

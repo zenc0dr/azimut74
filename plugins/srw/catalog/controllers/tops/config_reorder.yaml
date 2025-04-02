@@ -1,0 +1,4 @@
+title: Tops
+modelClass: Srw\Catalog\Models\Tops
+toolbar:
+    buttons: reorder_toolbar

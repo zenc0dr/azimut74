@@ -1,0 +1,165 @@
+tabs:
+    fields:
+        active:
+            label: Активность
+            span: full
+            default: 1
+            type: switch
+            tab: 'Основные данные'
+        tourimage:
+            label: 'Изображение карточки'
+            oc.commentPosition: ''
+            mode: image
+            span: full
+            type: mediafinder
+            tab: 'Основные данные'
+        name:
+            label: 'Название тура'
+            oc.commentPosition: ''
+            span: auto
+            type: text
+            tab: 'Основные данные'
+        slug:
+            label: URL
+            oc.commentPosition: ''
+            span: auto
+            preset:
+                field: name
+                type: url
+            type: text
+            tab: 'Основные данные'
+        address:
+            label: Местонахождение
+            oc.commentPosition: ''
+            span: full
+            type: text
+            tab: 'Основные данные'
+        tourhotel:
+            label: 'Название отеля'
+            oc.commentPosition: ''
+            span: full
+            type: text
+            tab: 'Основные данные'
+        created_at:
+            label: 'Дата заезда'
+            oc.commentPosition: ''
+            mode: date
+            span: auto
+            type: datepicker
+            tab: 'Основные данные'
+        duration:
+            label: 'Количество ночей'
+            oc.commentPosition: ''
+            span: auto
+            type: number
+            tab: 'Основные данные'
+        oldprice:
+            label: 'Старая цена'
+            oc.commentPosition: ''
+            span: auto
+            type: text
+            tab: 'Основные данные'
+        newprice:
+            label: 'Новая цена'
+            oc.commentPosition: ''
+            span: auto
+            type: text
+            tab: 'Основные данные'
+        stars:
+            label: 'Количество звезд отеля'
+            oc.commentPosition: ''
+            options:
+                2: '2 звезды'
+                3: '3 звезды'
+                4: '4 звезды'
+                5: '5 звезд'
+            span: auto
+            attributes: {  }
+            type: dropdown
+            tab: 'Основные данные'
+        routes:
+            label: 'Маршрут (вводится через Enter)'
+            size: ''
+            oc.commentPosition: ''
+            span: auto
+            type: richeditor
+            tab: 'Основные данные'
+        order:
+            label: Порядок
+            oc.commentPosition: ''
+            span: auto
+            default: '100'
+            type: number
+            tab: 'Основные данные'
+        hits:
+            label: 'Количество просмотров'
+            oc.commentPosition: ''
+            span: auto
+            required: 1
+            default: '0'
+            type: number
+            tab: 'Основные данные'
+        seo_title:
+            label: title
+            oc.commentPosition: ''
+            span: full
+            type: text
+            tab: SEO
+        seo_description:
+            label: description
+            oc.commentPosition: ''
+            span: full
+            type: text
+            tab: SEO
+        seo_keywords:
+            label: keywords
+            oc.commentPosition: ''
+            span: full
+            type: text
+            tab: SEO
+        images:
+            label: Изображения
+            oc.commentPosition: ''
+            mode: image
+            useCaption: true
+            thumbOptions:
+                mode: crop
+                extension: auto
+            span: full
+            type: fileupload
+            tab: Описание
+        sdesc:
+            label: 'Описание тура'
+            size: huge
+            oc.commentPosition: ''
+            span: auto
+            type: richeditor
+            tab: Описание
+        consultant:
+            label: 'Консультант (его данные)'
+            size: ''
+            oc.commentPosition: ''
+            span: auto
+            type: richeditor
+            tab: Описание
+        fdesc:
+            label: 'В стоимость входит'
+            size: huge
+            oc.commentPosition: ''
+            span: auto
+            type: richeditor
+            tab: Описание
+        time_start:
+            label: 'Время начала показа'
+            oc.commentPosition: ''
+            mode: datetime
+            span: auto
+            type: datepicker
+            tab: Таймеры
+        time_end:
+            label: 'Время окончания акции и показа'
+            oc.commentPosition: ''
+            mode: datetime
+            span: auto
+            type: datepicker
+            tab: Таймеры

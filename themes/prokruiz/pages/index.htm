@@ -1,0 +1,102 @@
+title = "Главная"
+url = "/"
+layout = "layout"
+is_hidden = 0
+robot_index = "index"
+robot_follow = "follow"
+contentType = "html"
+force_show = 0
+==
+<?php
+function onStart()
+{
+    # prok
+    Mcmraak\Rivercrs\Classes\Prok::init($this);
+}
+?>
+==
+{#
+<section class="main-slider">
+    <div class="swiper-container">
+        <div class="swiper-wrapper">
+            <div class="swiper-slide"><img src="{{ 'assets/img/slide1.png'|theme }}" alt="slide1"></div>
+        </div>
+    </div>
+</section>#}
+{{ prok.start|raw }}
+
+<section class="popular-directions">
+    <div class="custom-container">
+        <h2>Популярные направления</h2>
+
+        {% set pd = prok_items[1].items %}
+
+        <div class="popular-lists">
+            <div class="popular-listLeft">
+                <a href="{{ pd[0].url }}" class="popular-item" style="background-image: url({{ pd[0].image }})">
+                    <span>{{ pd[0].name }}</span>
+                </a>
+                <div class="popular-double">
+                    <a href="{{ pd[1].url }}" class="popular-item " style="background-image: url({{ pd[1].image }})">
+                        <span>{{ pd[1].name }}</span>
+                    </a>
+                    <a href="{{ pd[2].url }}" class="popular-item" style="background-image: url({{ pd[2].image }})">
+                        <span>{{ pd[2].name }}</span>
+                    </a>
+                </div>
+                <a href="{{ pd[3].url }}" class="popular-item" style="background-image: url({{ pd[3].image }})">
+                    <span>{{ pd[3].name }}</span>
+                </a>
+            </div>
+            <div class="popular-listRight">
+                <a href="{{ pd[4].url }}" class="popular-item double-height" style="background-image: url({{ pd[4].image }})">
+                    <span>{{ pd[4].name }}</span>
+                </a>
+                <a href="{{ pd[5].url }}" class="popular-item " style="background-image: url({{ pd[5].image }})">
+                    <span>{{ pd[5].name }}</span>
+                </a>
+            </div>
+        </div>
+        <div class="wrapper-btn">
+            <a href="/popular-directions" class="btn red">Больше направлений</a>
+        </div>
+    </div>
+</section>
+
+<section class="write-us" style="background-image: url({{ 'assets/img/bgc-write-us.png'|theme }})">
+    <div class="write-us-bgc">
+    <div class="custom-container">
+        <div class="col-12 col-md-6 col-lg-7 write-us-title">
+            <span>Бесплатно и быстро подберем вам круиз</span>
+        </div>
+        <div class="col-lg-5 col-md-6 col-12 write-us-formWrapper">
+            {{ prok.callbackWidget|raw }}
+        </div>
+    </div>
+    </div>
+</section>
+
+{% put styles %}
+<link rel="stylesheet" href="/themes/prokruiz/assets/css/infocards.css">
+{% endput %}
+
+<section class="trust-block no-bgc-mobile" style="background-image: url({{ 'assets/img/ship-trust.jpg'|theme }})">
+    <div class="trust-block-bgc">
+        <div class="custom-container">
+            <div class="infocards">
+                <div class="infocards__card">
+                    {{ this.theme.info_card_1|raw }}
+                </div>
+                <div class="infocards__card">
+                    {{ this.theme.info_card_2|raw }}
+                </div>
+                <div class="infocards__card">
+                    {{ this.theme.info_card_3|raw }}
+                </div>
+                <div class="infocards__card">
+                    {{ this.theme.info_card_4|raw }}
+                </div>
+            </div>
+        </div>
+    </div>
+</section>

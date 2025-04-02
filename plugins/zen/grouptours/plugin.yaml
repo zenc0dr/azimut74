@@ -1,0 +1,51 @@
+plugin:
+    name: 'zen.grouptours::lang.plugin.name'
+    description: 'Групповые туры'
+    author: 'Zenc0dr, Darkrogua'
+    icon: oc-icon-group
+    homepage: ''
+navigation:
+    main:
+        label: 'Групповые туры'
+        url: zen/grouptours/tours
+        icon: icon-users
+        permissions:
+            - zen.group-tours.main
+        order: 4
+        sideMenu:
+            orders:
+                label: Заявки
+                url: zen/grouptours/orders
+                icon: icon-dollar
+            tours:
+                label: Туры
+                url: zen/grouptours/tours
+                icon: icon-compass
+            tags:
+                label: Тэги
+                url: zen/grouptours/tags
+                icon: icon-slack
+            pages:
+                label: 'Посадочные страницы'
+                url: zen/grouptours/pages
+                icon: icon-edit
+            side-menu-item:
+                label: 'Блоки отзывов'
+                url: zen/grouptours/reviews
+                icon: icon-star-half-empty
+            galleries:
+                label: Галереи
+                url: zen/grouptours/pagegalleries
+                icon: icon-image
+            features:
+                label: Фишки
+                url: zen/grouptours/features
+                icon: icon-check-circle
+            fileblocks:
+                label: Файл-блоки
+                url: zen/grouptours/fileblocks
+                icon: icon-archive
+permissions:
+    zen.group-tours.main:
+        tab: 'Групповые туры'
+        label: 'Глобальный доступ'

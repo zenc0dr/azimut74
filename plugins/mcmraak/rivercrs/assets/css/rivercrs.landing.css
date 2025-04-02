@@ -1,0 +1,234 @@
+.rcrs-landing {
+    display: flex;
+    flex-direction: row;
+    margin: 0 15px;
+    margin-bottom: 30px;
+}
+
+.rcrs-landing-decor {
+    width: 352px;
+    display: flex;
+    flex-direction: column;
+    background: #1e88e5;
+    padding-left: 20px;
+    padding-top: 15px;
+}
+
+.rcrs-landing-logo {
+    display: inline-block;
+    width: 332px;
+    height: 69px;
+    background-repeat: no-repeat;
+    background-position-y: center;
+    background-color: #ffffffb3;
+    margin-bottom: 15px;
+}
+
+.rcrs-landing-poster {
+    width: 370px;
+    height: 222px;
+    margin-bottom: 15px;
+}
+
+.rcrs-landing-content {
+    margin-left: 38px;
+    display: flex;
+    flex-direction: column;
+}
+
+.rcrs-landing-title {
+    font-family: OpenSansBold, sans-serif;
+    font-size: 30px;
+    min-height: 99px;
+    text-transform: uppercase;
+    text-align: center;
+}
+
+.rcrs-landing-subtitle {
+    font-family: OpenSansBold, sans-serif;
+    font-size: 25px;
+    margin-left: 30px;
+    color: #CC3A29;
+    text-transform: uppercase;
+    margin-bottom: 33px;
+}
+
+.rcrs-landing-edges {
+    margin-left: 30px;
+}
+
+.rcrs-landing-edge {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    margin-bottom: 15px;
+}
+
+.rcrs-landing-edge div:first-child {
+    font-family: OpenSansBold, sans-serif;
+    font-size: 60px;
+    color: #1e88e5;
+    width: 46px;
+    height: 63px;
+    line-height: 1;
+}
+
+.rcrs-landing-edge sep {
+    width: 3px;
+    height: 44px;
+    background-color: #1e88e5;
+    display: inline-block;
+}
+
+.rcrs-landing-edge div:last-child {
+    flex: 1 1 0;
+    margin-left: 10px;
+    font-size: 21px;
+}
+
+.rcrs-landing-control {
+    margin-left: 30px;
+    display: flex;
+    justify-content: flex-end;
+    margin-top: auto;
+}
+
+.rcrs-landing-submit {
+    border: 2px solid #cc3a29;
+    color: #cc3a29;
+    padding: 15px 26px;
+    font-family: OpenSansBold, sans-serif;
+    border-radius: 10px;
+    text-transform: uppercase;
+    transition: 200ms;
+}
+
+.rcrs-landing-submit:hover {
+    background: #cc3a29;
+    color: #fff;
+}
+
+.rcrs-landing-mobile {
+    display: none;
+    box-shadow: inset 121px 0px 0 0 #3798ed;
+    margin: 0 15px;
+    margin-bottom: 15px;
+}
+
+.rcrs-landing-mobile-head {
+    display: flex;
+}
+
+.rcrs-landing-mobile-head div:first-child {
+    width: 120px;
+    height: 100px;
+    background-size: 100px;
+    background-repeat: no-repeat;
+    background-position: center;
+}
+
+.rcrs-landing-mobile-head div:last-child {
+    flex: 1 1 0;
+    font-family: OpenSansBold, sans-serif;
+    font-size: 23px;
+    min-height: 99px;
+    text-transform: uppercase;
+    padding: 0 20px;
+}
+
+.rcrs-landing-mobile-posters {
+    margin-top: 15px;
+    display: flex;
+    padding: 0 15px;
+}
+
+.rcrs-landing-mobile-poster {
+    flex: 1 1 0;
+    padding: 0px 10px;
+}
+
+.rcrs-landing-mobile-poster img {
+}
+
+.rcrs-landing-mobile-subtitle {
+    margin-top: 15px;
+    padding: 0 25px;
+    font-family: OpenSansBold, sans-serif;
+    font-size: 18px;
+    line-height: 23px;
+    color: #CC3A29;
+    text-transform: uppercase;
+    margin-bottom: 18px;
+}
+
+.rcrs-landing-mobile-edges {
+    padding: 0 25px;
+}
+
+.rcrs-landing-mobile-edge {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    margin-bottom: 15px;
+    margin-left: 5px;
+}
+
+.rcrs-landing-mobile-edge div:first-child {
+    font-family: OpenSansBold, sans-serif;
+    font-size: 76px;
+    color: #ffffff;
+    width: 46px;
+    height: 61px;
+    line-height: 56px;
+    margin-right: 9px;
+}
+
+.rcrs-landing-mobile-edge sep {
+    width: 6px;
+    height: 53px;
+    background-color: #ffffff;
+    display: inline-block;
+}
+
+.rcrs-landing-mobile-edge div:last-child {
+    flex: 1 1 0;
+    margin-left: 47px;
+    font-size: 17px;
+}
+
+.rcrs-landing-mobile-control {
+    display: flex;
+    justify-content: flex-end;
+}
+
+.rcrs-landing-mobile-control .rcrs-landing-submit {
+    font-size: 3vw;
+    padding: 11px;
+}
+
+@media (max-width: 991px) {
+    .rcrs-landing {
+        display: none;
+    }
+
+    .rcrs-landing-mobile {
+        display: flex;
+        flex-direction: column;
+    }
+}
+
+@media (max-width: 529px) {
+    .rcrs-landing-mobile-head div:last-child {
+        font-size: 4vw;
+    }
+
+    .rcrs-landing-mobile-subtitle {
+        font-size: 3.5vw;
+    }
+}
+
+@media (max-width: 457px) {
+    .rcrs-landing-mobile-edge div:last-child {
+        font-size: 3vw;
+    }
+}

@@ -1,0 +1,26 @@
+==
+<!doctype html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge">
+	<meta name="viewport" content="width=device-width, maximum-scale=1, initial-scale=1, user-scalable=0">
+    	{% partial 'schema-org/ogtags' %}
+        {# partial 'common/favicon' #}
+       	<link rel="stylesheet" href="{{ 'assets/css/normalize.css'|theme }}" type="text/css" />
+       	<link rel="stylesheet" href="{{ 'assets/css/bootstrap-grid.min.css'|theme }}" type="text/css" />
+       	<link rel="stylesheet" href="{{ 'assets/css/fonts.css'|theme }}" type="text/css" />
+       	<link rel="stylesheet" href="{{ 'assets/css/layout.css'|theme }}" type="text/css" />
+       	<link rel="stylesheet" href="{{ 'assets/css/test.css'|theme }}" type="text/css" />
+
+</head>
+<body>
+
+    
+    {% page %}
+	<script src="{{ 'assets/js/libs/jquery.min.js'|theme }}"></script>
+	<script src="{{ 'assets/js/test.js'|theme }}"></script>
+
+
+</body>
+</html>

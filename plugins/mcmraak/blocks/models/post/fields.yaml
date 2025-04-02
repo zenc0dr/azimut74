@@ -1,0 +1,33 @@
+fields:
+    onlyimage:
+        label: 'Только изображение'
+        span: full
+        type: switch
+    images:
+        label: 'File upload'
+        oc.commentPosition: ''
+        mode: image
+        useCaption: true
+        thumbOptions:
+            mode: crop
+            extension: auto
+        span: full
+        fileTypes: 'jpg,jpeg,png,gif'
+        mimeTypes: 'jpg,jpeg,png,gif'
+        type: fileupload
+    name:
+        label: Название
+        oc.commentPosition: ''
+        span: auto
+        type: text
+    slug:
+        label: 'Относительная ссылка (* в конце строки значит фрагмент)'
+        oc.commentPosition: ''
+        span: auto
+        type: text
+    text:
+        label: Запись
+        size: large
+        oc.commentPosition: ''
+        span: full
+        type: richeditor

@@ -1,0 +1,68 @@
+<link rel="stylesheet" href="/plugins/mcmraak/rivercrs/assets/css/rivercrs.landing.css">
+
+<div class="rcrs-landing">
+    <div class="rcrs-landing-decor">
+        <div class="rcrs-landing-logo" style="background-image: url({{ logo|media }})"></div>
+        <div class="rcrs-landing-poster" style="background-image: url({{ poster1|media }})"></div>
+        <div class="rcrs-landing-poster" style="background-image: url({{ poster2|media }})"></div>
+    </div>
+    <div class="rcrs-landing-content">
+        <div class="rcrs-landing-title">{{ title|raw }}</div>
+        <div class="rcrs-landing-subtitle">{{ subtitle|raw }}</div>
+        <div class="rcrs-landing-edges">
+            <div class="rcrs-landing-edge">
+                <div>1</div>
+                <sep></sep>
+                <div>{{ edge1|raw }}</div>
+            </div>
+            <div class="rcrs-landing-edge">
+                <div>2</div>
+                <sep></sep>
+                <div>{{ edge2|raw }}</div>
+            </div>
+            <div class="rcrs-landing-edge">
+                <div>3</div>
+                <sep></sep>
+                <div>{{ edge3|raw }}</div>
+            </div>
+        </div>
+        <div class="rcrs-landing-control">
+            {{ button|raw }}
+        </div>
+    </div>
+</div>
+<div class="rcrs-landing-mobile">
+    <div class="rcrs-landing-mobile-head">
+        <div style="background-image: url({{ logo_mobile|media }})"></div>
+        <div>{{ title|raw }}</div>
+    </div>
+    <div class="rcrs-landing-mobile-posters">
+        <div class="rcrs-landing-mobile-poster">
+            <img src="{{ poster1|media }}">
+        </div>
+        <div class="rcrs-landing-mobile-poster">
+            <img src="{{ poster2|media }}">
+        </div>
+    </div>
+    <div class="rcrs-landing-mobile-subtitle">{{ subtitle|raw }}</div>
+    <div class="rcrs-landing-mobile-edges">
+        <div class="rcrs-landing-mobile-edge">
+            <div>1</div>
+            <sep></sep>
+            <div>{{ edge1|raw }}</div>
+        </div>
+        <div class="rcrs-landing-mobile-edge">
+            <div>2</div>
+            <sep></sep>
+            <div>{{ edge2|raw }}</div>
+        </div>
+        <div class="rcrs-landing-mobile-edge">
+            <div>3</div>
+            <sep></sep>
+            <div>{{ edge3|raw }}</div>
+        </div>
+    </div>
+    <div class="rcrs-landing-mobile-control">
+        {{ button|raw }}
+    </div>
+</div>

@@ -1,0 +1,11 @@
+description = "Сео текст"
+
+[viewBag]
+==
+{% if dolphin.page.seo_text %}
+    <div class="dolphin-text-block">
+        <div class="dolphin-text-block__text">
+            {{ dolphin.page.seo_text|raw }}
+        </div>
+    </div>
+{% endif %}

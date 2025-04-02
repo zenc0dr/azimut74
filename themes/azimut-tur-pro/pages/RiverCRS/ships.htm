@@ -1,0 +1,39 @@
+title = "Теплоходы"
+url = "/russia-river-cruises/ships"
+layout = "master"
+is_hidden = 0
+robot_index = "index"
+robot_follow = "follow"
+contentType = "html"
+force_show = 0
+==
+<?php
+function onInit()
+{
+    $this['page_css'] = mix('css/ships.css', 'themes/azimut-tur-pro/assets');
+    $this['page_js'] = mix('js/ships.js', 'themes/azimut-tur-pro/assets');
+}
+
+function onStart()
+{
+    $init_success = Mcmraak\Rivercrs\Classes\RivercrsCore::init($this);
+    if (!$init_success) {
+        $this->setStatusCode(404);
+        return $this->controller->run('404');
+    }
+}
+?>
+==
+{% put page_style %}
+<link rel="stylesheet" href="{{ page_css }}">
+{% endput %}
+{% put page_script %}
+<script src="{{ page_js }}"></script>
+{% endput %}
+
+{# Поисковый виджет для теплоходов и результаты #}
+
+
+<div class="container my-4">
+    {% partial 'ships/ship-search' %}
+</div>

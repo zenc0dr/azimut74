@@ -1,0 +1,86 @@
+fields:
+    active:
+        label: Опубликовано
+        span: full
+        type: switch
+    images:
+        label: 'Прикреплённые изображения'
+        oc.commentPosition: ''
+        mode: image
+        imageWidth: '1000'
+        imageHeight: '1000'
+        fileTypes: 'jpg,png,jpeg'
+        useCaption: true
+        thumbOptions:
+            mode: crop
+            extension: auto
+        span: full
+        type: fileupload
+    hotel:
+        label: Отель
+        oc.commentPosition: ''
+        nameFrom: name
+        descriptionFrom: description
+        span: full
+        type: relation
+    created_at:
+        label: 'Дата публикации'
+        oc.commentPosition: ''
+        mode: datetime
+        span: auto
+        type: datepicker
+    email:
+        label: email
+        oc.commentPosition: ''
+        span: auto
+        type: text
+    name:
+        label: Имя
+        oc.commentPosition: ''
+        span: auto
+        type: text
+    town:
+        label: Город
+        oc.commentPosition: ''
+        span: auto
+        type: text
+    stars:
+        label: Рейтинг
+        oc.commentPosition: ''
+        span: right
+        default: '5'
+        type: number
+    section1:
+        label: Комментарии
+        span: full
+        type: section
+    comment:
+        label: Комментарий
+        size: small
+        oc.commentPosition: ''
+        span: full
+        type: textarea
+    liked:
+        label: 'Что особенно понравилось'
+        size: small
+        oc.commentPosition: ''
+        span: full
+        type: textarea
+    startdoing:
+        label: 'Что надо начать делать'
+        size: small
+        oc.commentPosition: ''
+        span: full
+        type: textarea
+    stopdoing:
+        label: 'Что надо перестать делать'
+        size: small
+        oc.commentPosition: ''
+        span: full
+        type: textarea
+    doing:
+        label: 'Что надо продолжать делать'
+        size: small
+        oc.commentPosition: ''
+        span: full
+        type: textarea

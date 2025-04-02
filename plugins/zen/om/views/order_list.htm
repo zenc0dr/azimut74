@@ -1,0 +1,27 @@
+<div class="control-list">
+    <table class="table data">
+        <thead>
+            <tr>
+                <th><span>id</span></th>
+                <th><span>{{"zen.om::lang.list.vendor_code"|trans }}</span></th>
+                <th><span>{{"zen.om::lang.items.item"|trans }}</span></th>
+                <th><span>{{"zen.om::lang.list.price"|trans }}</span></th>
+                <th><span>{{"zen.om::lang.list.quantity"|trans }}</span></th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for item in order.getItems %}
+                <tr>
+                    <td>{{ item.id }}</td>
+                    <td>{{ item.vaendor_code }}</td>
+                    <td>{{ item.name }}</td>
+                    <td>{{ item.price }}</td>
+                    <td>{{ item.quantity }}</td>
+                </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+<div class="order-summ">
+    {{"zen.om::lang.orders.summ"|trans }}: {{ order.summ }}
+</div>

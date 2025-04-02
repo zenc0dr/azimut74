@@ -1,0 +1,198 @@
+description = "Секция Услуг"
+
+[viewBag]
+
+[om_static]
+==
+<?php
+function onStart() {
+	$this['stores'] = \Zen\Om\Models\Store::where('active', 1)->orderBy('sort_order')->get();
+	//$this['categories'] = \Zen\Om\Models\Category::where('parent_id', 0)->get();
+	$this['sans_menu'] = \Mcmraak\Sans\Models\Root::orderBy('sort_order')->get();
+}
+?>
+==
+<section class="headServices">
+	<div class="c-p">
+
+		<div class="servicesMenu">
+			<ul>
+				
+				<li>
+					<span class="servLink" href="{{ 'cruises/river-in-russia'|page }}">
+						<span>
+							{% partial 'svg/cruises' %}
+						</span>
+						<span>Круизы</span>
+					</span>
+					
+					<ul class="hidden-s-d">
+						{% partial 'dropdowns/cruises' %}
+						{% for category in om_static.get({shop_id:5}) %}
+							<li>
+								<a href="/{{ category.slug }}{% if category.frame_link %}{{category.frame_link}}{% endif %}">{{ category.name|mutator }}</a>
+							</li>
+						{% endfor %}
+					</ul>
+					
+				</li>
+				
+				<ul class="hidden-m-u">
+					{% partial 'dropdowns/cruises' %}
+					{#Вот тут поменять на сторе у которого id = 5 по аналогии с нижними#}
+					{% for category in om_static.get({shop_id:5}) %}
+						<li>
+							<a href="{{ category.slug }}{% if category.frame_link %}{{category.frame_link}}{% endif %}">{{ category.name|mutator }}</a>
+						</li>
+					{% endfor %}
+				</ul>
+				
+				
+				{% for store in stores|slice(0,1) %}
+					<li>
+						<span class="servLink">
+							<span>
+								{% if store.name == 'Круизы' %}
+									{% partial 'svg/cruises' %}
+								{% elseif store.name == 'Экскурсионные туры' %}
+									{% partial 'svg/extours' %}
+								{% elseif store.name == 'Горящие туры' %}
+									{% partial 'svg/tours' %}
+								{% elseif store.name == 'Пляжный отдых' %}
+									{% partial 'svg/beach' %}
+								{% elseif store.name == 'Лечение и оздоровление' %}
+									{% partial 'svg/therapy' %}
+								{% elseif store.name == 'Туры на праздники' %}
+									{% partial 'svg/may' %}
+								{% elseif store.name == 'Новогодние праздники' %}
+									{% partial 'svg/may' %}
+								{% endif %}
+							</span>
+							<span>{{ store.name|mutator }}</span>
+						</span>
+						
+						<ul class="hidden-s-d">
+							{% for category in store.rootItems %}
+								<li>
+									<a href="/{{ category.slug }}{% if category.frame_link %}{{category.frame_link}}{% endif %}">{{ category.name|mutator }}</a>
+								</li>
+							{% endfor %}
+                            {#{% if sans_menu %}
+                                {% for item in sans_menu %}
+                                    <li>
+                                        <a href="/sans-pages/rt_{{ item.slug }}">{{ item.name }}</a>
+                                    </li>
+                                {% endfor %}
+                            {% endif %}#}
+						</ul>
+					</li>
+					
+					<ul class="hidden-m-u">
+						{% for category in store.rootItems %}
+							<li>
+								<a href="/{{ category.slug }}{% if category.frame_link %}{{category.frame_link}}{% endif %}">{{ category.name|mutator }}</a>
+							</li>
+						{% endfor %}
+					</ul>
+				{% endfor %}
+				
+				<li>
+					<a class="servLink" href="{#{{ 'tours/tours'|page }}#}/tours">
+						<span>
+							{% partial 'svg/tours' %}
+						</span>
+						<span>Горящие туры</span>
+					</a>
+				</li>
+				{% set st = 0 %}
+				{% for store in stores|slice(1,3) %}
+					{% set st = st + 1 %}
+					
+					<li>
+						<span class="servLink">
+							<span>
+								{% if store.name == 'Круизы' %}
+									{% partial 'svg/cruises' %}
+								{% elseif store.name == 'Экскурсионные туры' %}
+									{% partial 'svg/extours' %}
+								{% elseif store.name == 'Горящие туры' %}
+									{% partial 'svg/tours' %}
+								{% elseif store.name == 'Пляжный отдых' %}
+									{% partial 'svg/beach' %}
+								{% elseif store.name == 'Лечение и оздоровление' %}
+									{% partial 'svg/therapy' %}
+								{% elseif store.name == 'Туры на праздники' %}
+									{% partial 'svg/may' %}
+								{% elseif store.name == 'Новогодние праздники' %}
+									{% partial 'svg/may' %}
+								{% endif %}
+							</span>
+							<span>{{ store.name }}</span>
+						</span>
+						
+						<ul class="hidden-s-d">
+						{#		{% if st == 1 %}
+								<li>
+									<a href="/sans-pages/rt_plyazhnyj-otdyh">Пляжный отдых</a>
+								</li>
+							{% endif %}
+							{% if st == 2 %}
+								<li>
+									<a href="/sans-pages/rt_otdyh-i-lechenie">Лечение и оздоровление</a>
+								</li>
+							{% endif %}#}
+							
+					        {% if sans_menu %}
+                                {% for item in sans_menu if item.id == st %}
+                                    {% for record in item.resortgroups %}
+                                    <li>
+                                        <a href="/sans-pages/gr_{{ record.slug }}">{{ record.name }}</a>
+                                    </li>
+                                    {% endfor %}
+                                {% endfor %}
+                            {% endif %}
+							{% for category in store.rootItems %}
+								<li>
+									<a href="/{{ category.slug }}{% if category.frame_link %}{{category.frame_link}}{% endif %}">{{ category.name|mutator }}</a>
+								</li>
+							{% endfor %}
+				
+                    
+						</ul>
+					</li>
+					
+					<ul class="hidden-m-u">
+					  {% if sans_menu %}
+                                {% for item in sans_menu if item.id == st %}
+                                    {% for record in item.resortgroups %}
+                                    <li>
+                                        <a href="/sans-pages/gr_{{ record.slug }}">{{ record.name }}</a>
+                                    </li>
+                                    {% endfor %}
+                                {% endfor %}
+                            {% endif %}
+						{% for category in store.rootItems %}
+							<li>
+								<a href="/{{ category.slug }}{% if category.frame_link %}{{category.frame_link}}{% endif %}">{{ category.name|mutator }}</a>
+							</li>
+						{% endfor %}
+					{#	{% if st == 1 %}
+							<li>
+								<a href="/sans-pages/rt_plyazhnyj-otdyh">Пляжный отдых</a>
+							</li>
+						{% endif %}
+						{% if st == 2 %}
+							<li>
+								<a href="/sans-pages/rt_otdyh-i-lechenie">Лечение и оздоровление</a>
+							</li>
+						{% endif %}#}
+					</ul>
+				{% endfor %}
+				
+				
+				
+			</ul>
+		</div>
+
+	</div>
+</section>

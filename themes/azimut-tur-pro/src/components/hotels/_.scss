@@ -1,0 +1,224 @@
+.tour-hotels {
+
+   // .tour-hotels__items
+   &__items {
+      display: flex;
+      margin-top: 15px;
+      flex-direction: column;
+   }
+
+   // .tour-hotels__item
+   &__item {
+      border: 1px solid #dcdcdc;
+      border-radius: 4px;
+
+      &:hover {
+         border: 1px solid #3695e7
+      }
+   }
+
+}
+
+.tour-hotel {
+
+   // .tour-hotel____item-top
+   &__item-top {
+      display: flex;
+      justify-content: space-between;
+      height: 70px;
+      position: relative;
+      -webkit-user-select: none;
+      user-select: none;
+
+      @include m('768px') {
+         height: 80px;
+      }
+
+      @include m('480px') {
+         flex-direction: column;
+         height: 100px;
+      }
+
+      @include m(420px) {
+         height: auto;
+      }
+
+      &:hover {
+         cursor: pointer;
+      }
+   }
+
+   //.tour-hotel____item-top 
+   &__item-bot {
+      display: none;
+      background-color: #fff;
+      padding: 12px 15px;
+   }
+
+   // .tour-hotel__img
+   &__img {
+      width: 20%;
+
+      @include m(420px) {
+         width: 100%;
+         height: 150px;
+      }
+
+      img {
+         border-radius: 4px 0 0 4px;
+         display: block;
+         height: 100%;
+         object-fit: cover;
+         width: 100%;
+
+         @include m('480px') {
+            border-radius: 4px 0 0 0;
+         }
+
+      }
+   }
+
+   // .tour-hotel__short-content
+   &__short-content {
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      width: 100%;
+      background-color: #fff;
+      padding: 12px 15px;
+   }
+
+   //.tour-hotels__title
+   &__title {
+      font-size: rem(18px);
+      font-weight: bold;
+      margin-bottom: 10px;
+
+      @include m(720px) {
+         font-size: rem(16px);
+      }
+   }
+
+   // .tour-hotel__short-top
+   &__short-top {
+      display: flex;
+      align-items: center;
+   }
+
+   // .tour-hotel__short-name
+   &__short-name {
+      font-size: rem(20px);
+
+      @include m(720px) {
+         font-size: rem(16px);
+      }
+   }
+
+   &__wrapper-item-top {
+      display: flex;
+      width: 100%;
+
+      @include m(420px) {
+         flex-direction: column;
+      }
+   }
+
+   // .tour-hotel__short-stars
+   &__short-stars {
+      font-size: rem(18px);
+      color: #3695e7;
+      letter-spacing: 2px;
+   }
+
+   // .tour-hotel__short-bot
+   &__short-bot {}
+
+   // .tour-hotel__short-address
+   &__short-address {
+      font-size: rem(14px);
+      color: #727272;
+      line-height: lh(14, 15);
+
+      @include m(720px) {
+         font-size: rem(12px);
+      }
+   }
+
+   // .tour-hotel__content-text 
+
+   &__content-text {
+      @include m(720px) {
+         font-size: rem(14px);
+      }
+   }
+
+   // .tour-hotel__arrow
+   &__arrow {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: #50575e;
+      width: 10%;
+      background-color: rgba(54, 149, 231, 0.2);
+
+      @include m('480px') {
+         width: 100%;
+         height: 100%;
+         background-color: #1a81db;
+         color: #fff;
+      }
+
+      &.rotate {
+         transform: rotate(180deg);
+      }
+   }
+
+   // .tour-hotel__content
+   &__content {}
+
+   // .tour-hotel__gallery-custom
+   &__gallery-custom {
+      &.slider-thumbs {
+         height: 280px;
+         background-color: #fff;
+         flex-direction: row;
+         justify-content: space-between;
+
+         @include m(450px) {
+            flex-direction: column;
+         }
+
+         .shipSlide {
+            height: 100%;
+            width: 70%;
+
+            @include m(450px) {
+               width: 100%;
+               height: 100%;
+            }
+         }
+
+         .thumbSlider {
+            height: 100%;
+            width: 100%;
+            padding: 0 15px;
+            background: #ffff;
+            z-index: 15;
+
+            @include m(450px) {
+               display: none;
+            }
+
+            .swiper-slide {
+               width: 100%;
+            }
+
+            .swiper-button-next,
+            .swiper-button-prev {
+               display: none;
+            }
+         }
+      }
+
+   }
+}

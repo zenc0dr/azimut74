@@ -1,0 +1,4 @@
+title: Items
+modelClass: Zen\Om\Models\Item
+toolbar:
+    buttons: reorder_toolbar

@@ -1,0 +1,6 @@
+scopes:
+    category:
+        label: Курорт
+        modelClass: Mcmraak\Sans\Models\Resort
+        nameFrom: name
+        scope: FilterResorts

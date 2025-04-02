@@ -1,0 +1,11 @@
+scopes:
+  country:
+    label: Страна
+    modelClass: Zen\Dolphin\Models\Country
+    nameFrom: name
+    scope: FilterCauntries
+  region:
+    label: Регион
+    modelClass: Zen\Dolphin\Models\Region
+    nameFrom: name
+    scope: FilterRegions

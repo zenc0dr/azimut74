@@ -1,0 +1,11 @@
+description = "Метки тура"
+
+[viewBag]
+==
+{% if obData %}
+<div class="tour-labels">
+    {% for label in obData %}
+    <div>{{ label }}</div>
+    {% endfor %}
+</div>
+{% endif %}

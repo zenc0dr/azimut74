@@ -1,0 +1,16 @@
+name: Reviews
+modelClass: Zen\Dolphin\Models\Review
+form: $/zen/dolphin/models/review/fields.yaml
+defaultRedirect: zen/dolphin/reviews
+create:
+    title: 'Создать отзыв'
+    redirect: 'zen/dolphin/reviews/update/:id'
+    redirectClose: zen/dolphin/reviews
+    flashSave: 'Отзыв создан'
+update:
+    title: 'Изменить отзыв'
+    redirect: zen/dolphin/reviews
+    redirectClose: zen/dolphin/reviews
+    flashSave: 'Отзыв изменён'
+    flashDelete: 'Отзыв удалён'
+preview: {  }

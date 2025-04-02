@@ -1,0 +1,10 @@
+name: Categories
+form: $/zen/om/models/category/fields.yaml
+modelClass: Zen\Om\Models\Category
+defaultRedirect: zen/om/categories
+create:
+    redirect: 'zen/om/categories/update/:id'
+    redirectClose: zen/om/categories
+update:
+    redirect: zen/om/categories
+    redirectClose: zen/om/categories

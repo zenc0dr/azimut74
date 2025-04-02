@@ -1,0 +1,13 @@
+title: Resorts
+modelClass: Mcmraak\Sans\Models\Resort
+list: $/mcmraak/sans/models/resort/columns.yaml
+recordUrl: 'mcmraak/sans/resorts/update/:id'
+noRecordsMessage: 'backend::lang.list.no_records'
+recordsPerPage: '30'
+showSetup: true
+showCheckboxes: true
+toolbar:
+    buttons: list_toolbar
+    search:
+        prompt: 'backend::lang.list.search_prompt'
+filter: config_filter.yaml

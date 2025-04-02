@@ -1,0 +1,16 @@
+name: Карты
+modelClass: Mcmraak\Blocks\Models\Map
+form: $/mcmraak/blocks/models/map/fields.yaml
+defaultRedirect: mcmraak/blocks/maps
+create:
+    title: 'Создать карту'
+    redirect: 'mcmraak/blocks/maps/update/:id'
+    redirectClose: mcmraak/blocks/maps
+    flashSave: 'Карта сохранена'
+update:
+    title: 'Изменить карту'
+    redirect: mcmraak/blocks/maps
+    redirectClose: mcmraak/blocks/maps
+    flashSave: 'Карта изменена'
+    flashDelete: 'Карта удалена'
+preview: {  }

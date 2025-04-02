@@ -1,0 +1,16 @@
+name: Azpansions
+modelClass: Zen\Dolphin\Models\Azpansion
+form: $/zen/dolphin/models/azpansion/fields.yaml
+defaultRedirect: zen/dolphin/azpansions
+create:
+    title: 'Создание типа питания'
+    redirect: 'zen/dolphin/azpansions/update/:id'
+    redirectClose: zen/dolphin/azpansions
+    flashSave: 'Тип питания создан'
+update:
+    title: 'Изменение типа питания'
+    redirect: zen/dolphin/azpansions
+    redirectClose: zen/dolphin/azpansions
+    flashSave: 'Тип питания обновлён'
+    flashDelete: 'Тип питания удалён'
+preview: {  }

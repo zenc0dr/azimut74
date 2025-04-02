@@ -1,0 +1,19 @@
+columns:
+    id:
+        label: id
+        type: number
+        sortable: true
+    code:
+        label: 'Код формы'
+        type: text
+        searchable: true
+        sortable: true
+    status:
+        label: Статус
+        type: text
+        searchable: true
+        sortable: true
+    created_at:
+        label: created_at
+        type: datetime
+        sortable: true

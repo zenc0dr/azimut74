@@ -1,0 +1,34 @@
+columns:
+    id:
+        label: id
+        type: number
+        sortable: true
+    user_id:
+        label: 'zen.om::lang.user.title'
+        type: number
+        relation: user
+        valueFrom: name
+    created_at:
+        label: 'zen.om::lang.orders.created_at'
+        type: datetime
+    summ:
+        label: 'zen.om::lang.orders.summ'
+        type: text
+        sortable: true
+    status_id:
+        label: 'zen.om::lang.orders.status'
+        type: text
+        relation: status
+        valueFrom: name
+    delivery_id:
+        label: 'zen.om::lang.deliveries.delivery'
+        type: text
+        invisible: true
+        relation: delivery
+        valueFrom: name
+    payment_id:
+        label: 'zen.om::lang.payments.payment'
+        type: text
+        invisible: true
+        relation: payment
+        valueFrom: name

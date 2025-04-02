@@ -1,0 +1,4 @@
+title: Hotels
+modelClass: Mcmraak\Sans\Models\Hotel
+toolbar:
+    buttons: reorder_toolbar

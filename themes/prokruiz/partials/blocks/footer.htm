@@ -1,0 +1,63 @@
+description = "Footer"
+==
+<footer style="background-image: url({{ 'assets/img/footer-bgc.jpg'|theme }})">
+    <div class="footer-block-bgc">
+
+    <div class="container">
+        <div class="row">
+
+        <div class="col-12">
+            <div class="footer-wrapperLogo">
+                <a href="/">
+                    <div class="footer-logoLeft"><img src="{{ 'assets/img/logo-white.svg'|theme }}" alt="pro-kruiz"></div>
+                    <div class="footer-logoRight">
+                     {#    <div class="footer-logoTitle">Про Круиз</div>#}
+{#                        <div class="footer-slogan">"Новый клиент - довольный клиент"</div>#}
+                    </div>
+                </a>
+            </div>
+        </div>
+        <div class="order-1 order-md-0 col-md-6 col-lg-4">
+            <div class="footer-wrapperContacts">
+                <div class="footer-phone">
+                    <a href="tel:{{ this.theme.footer_phone }}">{{ this.theme.footer_phone }}</a>
+                    <span>(звонок бесплатный)</span>
+                </div>
+                <div class="footer-email">
+                    <a href="mailto:{{ this.theme.footer_email }}">{{ this.theme.footer_email }}</a>
+                </div>
+            </div>
+            <div class="footer-importantText">
+                Внимание! Все материалы и цены, размещенные на сайте, носят справочный характер и не являются публичной офертой, определяемой положениями Статьи 437 (2) Гражданского кодекса Российской Федерации
+            </div>
+        </div>
+        <div class="col-md-6 col-lg-8">
+            <nav class="footer-navigation">
+                <div class="footer-nav-tab">
+                    <span class="footer-nav-title">Туристам</span>
+                    {% if footer_menu[3] %}
+                        {% for arItem in footer_menu[3].items %}
+                        <a href="{{ arItem.url }}">{{ arItem.menu_name }}</a>
+                        {% endfor %}
+                    {% endif %}
+                </div>
+                <div class="footer-nav-tab">
+                    <span class="footer-nav-title">Турагентствам</span>
+                    {% if footer_menu[4] %}
+                    {% for arItem in footer_menu[4].items %}
+                    <a href="{{ arItem.url }}">{{ arItem.menu_name }}</a>
+                    {% endfor %}
+                    {% endif %}
+                </div>
+            </nav>
+        </div>
+        <div class="order-2 order-md-0 col-12 copyright-project">
+            <div>© 2021 "Про-Круиз". Все права защищены. </div>
+            <div class="dev-company"> Разработано в <a target="_blank" href="https://october-studio.ru"><img src="{{ 'assets/img/october.png'|theme }}" alt="october-studio"></a>
+            </div>
+
+        </div>
+        </div>
+    </div>
+    </div>
+</footer>

@@ -1,0 +1,106 @@
+.atm-tour {
+}
+
+.atm-tour__name {
+    font-family: OpenSansBold, sans-serif;
+    font-size: 24px;
+    margin-bottom: 15px;
+}
+
+.atm-tour__header {
+    display: flex;
+    width: 100%;
+    margin-bottom: 30px;
+}
+
+.atm-tour__header-preview {
+    width: 200px;
+    height: 150px;
+    background-size: cover;
+    background-position: center;
+}
+
+.atm-tour_header-content {
+    flex: 1 1 0;
+    margin-left: 15px;
+}
+
+.atm-tour__dates {
+    margin-bottom: 11px;
+}
+
+.atm-tour__dates span {
+    font-size: 21px;
+    margin-left: 4px;
+    color: #0c5da4;
+}
+
+.atm-tour__waybill {
+
+}
+
+#atmmap {
+    margin-bottom: 20px;
+}
+
+/* Программа тура */
+.tour-program {
+
+}
+
+.tour-program h2 {
+    text-align: center;
+}
+
+.tour-program_body {
+
+}
+
+.tour-program__day {
+    margin-bottom: 20px;
+}
+
+.tour-program_dow {
+    font-family: OpenSansBold, sans-serif;
+    background: #dbdcdd;
+    color: #000;
+    padding: 6px 18px;
+    margin-bottom: 9px;
+    font-size: 15px;
+}
+
+.tour-program_desc {
+    font-size: 14px;
+    color: #414141;
+    line-height: 23px;
+    padding-bottom: 30px;
+}
+
+.atm-tour h2 {
+    font-size: 20px;
+    color: #919191;
+    padding-bottom: 5px;
+}
+
+.atm-tour h2.blue-color {
+    color: #409ef0;
+}
+
+.atm-tour__hotel-name {
+    color: #1e88e5;
+    margin: 0;
+    margin-bottom: 15px;
+}
+
+.atm-tour .dgf-small-images {
+    max-width: 400px;
+    justify-content: flex-end;
+}
+
+.atm-tour .dgf-small-images .dgf-image {
+    width: 120px;
+}
+
+.atm-tour .atm-tour-map {
+    margin-bottom: 40px;
+}

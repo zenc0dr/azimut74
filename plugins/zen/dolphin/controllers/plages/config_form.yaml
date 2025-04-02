@@ -1,0 +1,10 @@
+name: Plages
+form: $/zen/dolphin/models/plage/fields.yaml
+modelClass: Zen\Dolphin\Models\Plage
+defaultRedirect: zen/dolphin/plages
+create:
+    redirect: 'zen/dolphin/plages/update/:id'
+    redirectClose: zen/dolphin/plages
+update:
+    redirect: zen/dolphin/plages
+    redirectClose: zen/dolphin/plages

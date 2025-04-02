@@ -1,0 +1,61 @@
+.file-block {
+    margin-bottom: 35px;
+    position: relative;
+
+    &__wrap {
+        border: 1px solid #dcdcdc;
+        border-radius: 5px;
+    }
+
+    &__title {
+        font-weight: bold;
+        font-size: rem(20px);
+        color: #7b7b7b;
+        margin-bottom: 15px;
+        display: flex;
+        align-items: center;
+    }
+
+    &__desc {
+        padding: 15px;
+    }
+
+    &__files {
+
+    }
+
+    &__file {
+        display: flex;
+        background: #f7f7f7;
+        margin: 8px;
+        cursor: pointer;
+        border-radius: 4px;
+
+        &:hover {
+            box-shadow: 0 0 0 1px #adcbe9;
+        }
+        &__icon {
+            background-image: url(/themes/azimut-tur-pro/assets/images/folder-blue-icon.png);
+            background-size: cover;
+            background-position: center;
+            width: 100px;
+            height: 100px;
+        }
+        &__info {
+            flex: 1 0 0;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            transition: 200ms;
+        }
+        &__title {
+            font-size: 15px;
+            font-weight: bold;
+            color: #868686;
+            line-height: 24px;
+        }
+        &__desc {
+            font-size: 13px;
+        }
+    }
+}

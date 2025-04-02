@@ -1,0 +1,12 @@
+list: $/mcmraak/rivercrs/models/backup/columns.yaml
+modelClass: Mcmraak\Rivercrs\Models\Backup
+title: Backups
+noRecordsMessage: 'backend::lang.list.no_records'
+showSetup: true
+showCheckboxes: true
+recordsPerPage: 20
+toolbar:
+    buttons: list_toolbar
+    search:
+        prompt: 'backend::lang.list.search_prompt'
+recordUrl: 'mcmraak/rivercrs/backups/update/:id'

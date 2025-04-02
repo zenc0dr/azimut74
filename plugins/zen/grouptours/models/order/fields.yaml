@@ -1,0 +1,5 @@
+fields:
+    data:
+        span: full
+        path: $/zen/grouptours/controllers/orders/order.php
+        type: partial

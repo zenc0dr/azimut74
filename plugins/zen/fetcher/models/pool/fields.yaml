@@ -1,0 +1,79 @@
+tabs:
+    fields:
+        desc:
+            label: 'Описание пула'
+            size: giant
+            span: auto
+            type: richeditor
+            tab: Описание
+        pool_settings:
+            label: 'Настройки пула'
+            prompt: 'Добавить настройку'
+            displayMode: accordion
+            span: auto
+            type: repeater
+            tab: Описание
+            form:
+                fields:
+                    pool_settings_key:
+                        label: 'Ключ настройки'
+                        span: auto
+                        type: text
+                    pool_settings_name:
+                        label: 'Название ключа'
+                        span: auto
+                        type: text
+                    pool_settings_data:
+                        label: 'Данные настройки (json)'
+                        size: large
+                        language: javascript
+                        theme: tomorrow_night_blue
+                        fontSize: '18'
+                        span: full
+                        type: codeeditor
+        scenario:
+            label: 'Методы пула'
+            prompt: 'Добавить метод'
+            displayMode: accordion
+            span: auto
+            type: repeater
+            tab: Сценарий
+            form:
+                fields:
+                    method_active:
+                        label: 'Метод активен'
+                        span: auto
+                        default: 1
+                        type: switch
+                    path:
+                        label: 'Адрес метода'
+                        span: full
+                        type: text
+fields:
+    active:
+        label: 'Активность пула'
+        span: auto
+        default: 1
+        type: switch
+    sort_order:
+        label: Порядок
+        span: auto
+        default: '0'
+        type: number
+    code_readonly:
+        label: ''
+        span: left
+        path: $/zen/fetcher/controllers/pools/code_partial.php
+        type: partial
+    code:
+        label: 'Уникальный код пула'
+        span: left
+        disabled: 0
+        readOnly: 0
+        context:
+            - create
+        type: text
+    name:
+        label: 'Имя пула'
+        span: right
+        type: text

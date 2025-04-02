@@ -1,0 +1,260 @@
+description = "Отзывы"
+
+[viewBag]
+==
+{#{% if reviewsSwitcher != false %}
+<div class="heading headingRew">
+	<h2 class="h2">Отзывы о теплоходе «{{ ship.name|slice(10, 255) }}»</h2>
+</div>
+{% endif %}#}
+
+<div class="reviewsBlock">
+    {% if reviewsSwitcher %}
+	<div class="reviewsSwitcher">
+		<div>
+			<span>Показать отзывы только о теплоходе</span>
+		</div>
+		<div>
+			<select class="tsSelect" id="SelectShipReviews">
+			    <option value="0">-- Все теплоходы --</option>
+                {% for motorship in motorships %}
+                    <option {% if motorship.id == ship.id %}selected {% endif %}value="{{ motorship.id }}">{{ motorship.name|mutator }}</option>
+                {% endfor %}
+			</select>
+		</div>
+		{#<div>
+			<button class="hbtn">Выбрать</button>
+		</div>#}
+	</div>
+    {% endif %}
+    {% if reviewsSwitcher %}
+	    <div class="revBlockButtons">
+			<div class="revBlockButtonsLeft">
+				<span>Если у Вас есть опыт речных путешествий, пожалуйста, </span>
+				<span class="blue">поделитесь своими впечатлениями,</span><br>
+				<span class="small">чтобы другим туристам было проще сделать выбор</span>
+			</div>
+			<div class="revBlockButtonsRight">
+				<button id="revBut1" href="#beforeWriter" class="sbtn">Написать отзыв</button>
+			</div>
+		</div>
+	{% else %}
+		<div class="revBlockButtons">
+			<div class="revBlockButtonsLeft">
+				<span>Если у Вас есть опыт путешествия на данном теплоходе, пожалуйста, </span>
+				<span class="blue">поделитесь своими впечатлениями,</span><br>
+				<span class="small">чтобы другим туристам было проще сделать выбор</span>
+			</div>
+			<div class="revBlockButtonsRight">
+				<button id="revBut1" href="#beforeWriter" class="sbtn">Написать отзыв</button>
+			</div>
+		</div>
+	{% endif %}
+	<div id="ReviewsContainer">
+        {% partial 'rivercrs/reviews-list' %}
+    </div>
+</div>
+{% if reviewsSwitcher %}
+<div class="revBlockButtons" id="WriterDown">
+	<div class="revBlockButtonsLeft">
+		<span>Если у Вас есть опыт речных путешествий, пожалуйста, </span>
+		<span class="blue">поделитесь своими впечатлениями,</span><br>
+		<span class="small">чтобы другим туристам было проще сделать выбор</span>
+	</div>
+	<div class="revBlockButtonsRight">
+		<button id="revBut2" href="#beforeWriter" class="sbtn">Написать отзыв</button>
+	</div>
+</div>
+{% else %}
+<div class="revBlockButtons" id="WriterDown">
+	<div class="revBlockButtonsLeft">
+		<span>Если у Вас есть опыт путешествия на данном теплоходе, пожалуйста, </span>
+		<span class="blue">поделитесь своими впечатлениями,</span><br>
+		<span class="small">чтобы другим туристам было проще сделать выбор</span>
+	</div>
+	<div class="revBlockButtonsRight">
+		<button id="revBut2" href="#beforeWriter" class="sbtn">Написать отзыв</button>
+	</div>
+</div>
+{% endif %}
+
+<div id="beforeWriter"></div>
+<div class="revBlockWriter">
+
+	<div class="writerHeading">
+		<span>Написать отзыв</span>
+	</div>
+
+	<div class="writerForm">
+        {% if reviewsSwitcher %}
+            <div class="wLine">
+                <div>
+                    <span>Теплоход</span>
+                </div>
+                <div>
+                    <select rev-send="motorship_id" class="wrSelect">
+                        {% for motorship in motorships %}
+                            <option {% if motorship.id == ship.id %}selected {% endif %}value="{{ motorship.id }}">{{ motorship.name|mutator }}</option>
+                        {% endfor %}
+                    </select>
+                </div>
+            </div>
+        {% else %}
+            <input rev-send="motorship_id" type="hidden" value="{{ ship.id }}">
+        {% endif %}
+
+		<div class="wLine">
+			<div>
+				<span>Добавить комментарий</span>
+			</div>
+			<div>
+				<textarea rev-send="comment" class="order tbig" placeholder="Опишите здесь свои впечатления от отдыха в этом теплоходе. Не жалейте слов. Пишите подробнее. Помните, другим людям будет намного легче выбрать для себя теплоход и маршрут путешествия на основе ваших отзывов."></textarea>
+			</div>
+		</div>
+
+		<div class="wLine">
+			<div>
+				<span>Что особенно понравилось</span>
+			</div>
+			<div>
+				<textarea rev-send="liked" class="order tbig" placeholder="Опишите, от чего вы остались в полном восторге (от какого-то сотрудника, питания, интерьера каюты или всего теплохода, анимации, экскурсионной программы). Не скупитесь на комплименты!"></textarea>
+			</div>
+		</div>
+
+		<div class="wLine">
+			<div>
+				<span>Что не понравилось</span>
+			</div>
+			<div>
+				<textarea rev-send="notliked" class="order tbig" placeholder="Укажите, что вам не понравилось на отдыхе (невежливый сотрудник, плохая уборка, маленькие порции в ресторане.) Чем точнее вы опишете недостаток, тем легче администрации теплохода будет этот недостаток устранить. Критика должна быть конструктивной. Хорошая критика - залог будущего роста."></textarea>
+			</div>
+		</div>
+
+		<div class="wLine">
+			<div>
+				<span>Рекомендовали бы вы отдых на этом теплоходе другу</span>
+			</div>
+			<div>
+				<div class="writerSwitchers">
+					<div rev-send="recommended" value="1" class="wrSwitcher active">
+						<span>Да</span>
+						<span class="yes">
+								{% partial 'svg/like' %}
+							</span>
+					</div>
+					<div rev-send="recommended" value="0" class="wrSwitcher">
+						<span>Нет</span>
+						<span class="no">
+								{% partial 'svg/like' %}
+							</span>
+					</div>
+				</div>
+			</div>
+		</div>
+
+		<div class="wLine">
+			<div>
+				<span>Что надо начать делать</span>
+			</div>
+			<div>
+				<textarea rev-send="startdoing" class="order tmedium" placeholder="Ваше предложение"></textarea>
+			</div>
+		</div>
+
+		<div class="wLine">
+			<div>
+				<span>Что надо перестать делать</span>
+			</div>
+			<div>
+				<textarea rev-send="stopdoing" class="order tmedium" placeholder="Ваше предложение"></textarea>
+			</div>
+		</div>
+
+		<div class="wLine">
+			<div>
+				<span>Что надо продолжать делать</span>
+			</div>
+			<div>
+				<textarea rev-send="doing" class="order tmedium" placeholder="Ваше предложение"></textarea>
+			</div>
+		</div>
+
+		<div class="wLine">
+			<div>
+				<span>Ваше имя <span style="color: red">*</span></span>
+			</div>
+			<div>
+				<input rev-send="name" class="order tsmall" placeholder="Ваше имя" required>
+			</div>
+		</div>
+
+		<div class="wLine">
+			<div>
+				<span>Электронная почта</span>
+			</div>
+			<div>
+				<input rev-send="email" class="order tsmall" placeholder="Ваша электронная почта">
+			</div>
+		</div>
+
+		<div class="wLine">
+			<div>
+				<span>Ваш город  <span style="color: red">*</span></span>
+			</div>
+			<div>
+				<input rev-send="town" class="order tsmall" placeholder="Ваш город" required>
+			</div>
+		</div>
+
+		<div class="wLine">
+			<div>
+				<span>Загрузить фото</span>
+			</div>
+			<div>
+				<div id="imagesWrap">
+				<div class="reviewSendImage addPhoto">
+					<button class="addPhotoClose" title="Удалить фото">
+						<i class="fa fa-times" aria-hidden="true"></i>
+					</button>
+					<span><i class="fa fa-plus-circle" aria-hidden="true"></i></span>
+					<span>Добавить фото</span>
+                    <input rev-send="image" type="file" accept="image/jpeg,image/png">
+				</div>
+				</div>
+
+				<!-- <input type="file" class="order" multiple> -->
+
+				<div class="offerItem offerPad">
+					<span class="check" id="#OfferCheck"><i class="fa fa-check" aria-hidden="true"></i></span>
+					<span>Я принимаю <button class="offerLink" href="#modalOffer">договор оферты</button></span>
+				</div>
+
+				<!-- <div class="revloader" style="display: none;">
+					<img src="/storage/app/media/uploaded-files/revloader.gif" alt="">
+				</div> -->
+
+				<div id="ReviewSend" class="writerButton disabled">
+					<button class="hbtn">Отправить</button>
+				</div>
+				<div class="annoLine">
+					<span>Мы гарантируем конфиденциальность введенных данных, мы не используем ваши данные для навязчивых рассылок</span>
+				</div>
+				<div class="annoLine">
+					<span><span class="t_red">*</span> Поля, отмеченные звездочкой, обязательны для заполнения.</span>
+				</div>
+			</div>
+		</div>
+	</div>
+	<div class="revloader" style="display: none;">
+		<img src="/storage/app/media/uploaded-files/preloader_clear.svg" alt="">
+	</div>
+</div>
+
+<ofmodal class="reviewsSecondModal">
+	<div class="modalSecond">
+		<div class="modalLine">
+			<div class="close">×</div>
+    		<ofmodalbody></ofmodalbody>
+		</div>
+	</div>
+</ofmodal>

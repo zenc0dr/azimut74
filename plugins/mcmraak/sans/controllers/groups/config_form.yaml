@@ -1,0 +1,10 @@
+name: Groups
+form: $/mcmraak/sans/models/group/fields.yaml
+modelClass: Mcmraak\Sans\Models\Group
+defaultRedirect: mcmraak/sans/groups
+create:
+    redirect: 'mcmraak/sans/groups/update/:id'
+    redirectClose: mcmraak/sans/groups
+update:
+    redirect: mcmraak/sans/groups
+    redirectClose: mcmraak/sans/groups

@@ -1,0 +1,7 @@
+<script>
+    {% for item in scopes %}
+    {% if item %}
+    {{ item.code|raw }}
+    {% endif %}
+    {% endfor %}
+</script>

@@ -1,0 +1,26 @@
+// general variables (подключаем на любой странице)
+@import "@src/components/!common/_";
+
+.print-wrapper {
+   button {
+      display: inline-block;
+      width: 100%;
+      color: #cb2022;
+      background-color: #fff;
+      padding: 10px;
+      text-align: center;
+      cursor: pointer;
+      font-weight: bold;
+      transition: 300ms;
+      border: 1px solid #cb2022;
+      font-size: 14px;
+      border-radius: 5px;
+      &:hover {
+         color: #fff;
+         background-color: #cb2022;
+      }
+   }
+   @include m('lg') {
+      display: none;
+   }
+}

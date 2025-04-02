@@ -1,0 +1,10 @@
+name: HotelTypes
+form: $/zen/dolphin/models/hoteltype/fields.yaml
+modelClass: Zen\Dolphin\Models\HotelType
+defaultRedirect: zen/dolphin/hoteltypes
+create:
+    redirect: 'zen/dolphin/hoteltypes/update/:id'
+    redirectClose: zen/dolphin/hoteltypes
+update:
+    redirect: zen/dolphin/hoteltypes
+    redirectClose: zen/dolphin/hoteltypes

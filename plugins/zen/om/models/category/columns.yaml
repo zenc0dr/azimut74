@@ -1,0 +1,31 @@
+columns:
+    id:
+        label: id
+        type: number
+        sortable: true
+    name:
+        label: 'zen.om::lang.list.name'
+        type: text
+        searchable: true
+        sortable: true
+    slug:
+        label: 'zen.om::lang.plugin.slug'
+        type: text
+        searchable: true
+        sortable: true
+    url_cache:
+        label: 'zen.om::lang.plugin.url'
+        type: text
+    active:
+        label: 'zen.om::lang.plugin.active'
+        type: partial
+        sortable: true
+    store_id:
+        label: 'zen.om::lang.store.store'
+        type: text
+        relation: store
+        valueFrom: name
+    sort_order:
+        label: 'zen.om::lang.plugin.sort_order'
+        type: number
+        sortable: true

@@ -1,0 +1,33 @@
+fields:
+    active:
+        label: Активно
+        span: full
+        default: 1
+        type: switch
+    image:
+        label: Изображение
+        oc.commentPosition: ''
+        mode: image
+        span: full
+        type: mediafinder
+    category:
+        label: Категория
+        oc.commentPosition: ''
+        span: auto
+        type: text
+    name:
+        label: Название
+        oc.commentPosition: ''
+        span: auto
+        type: text
+    desc:
+        label: 'Краткая аннотация'
+        size: large
+        oc.commentPosition: ''
+        span: auto
+        type: richeditor
+    order:
+        label: Порядок
+        oc.commentPosition: ''
+        span: auto
+        type: number

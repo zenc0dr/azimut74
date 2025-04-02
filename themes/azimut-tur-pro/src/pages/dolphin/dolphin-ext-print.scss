@@ -1,0 +1,62 @@
+.info-block__title {
+   font-weight: bold;
+}
+
+.info-block {
+   margin-bottom: 10px;
+}
+
+.content {
+  
+   img {
+      display: none;
+   }
+   .title-1 {
+      font-size: 2rem;
+   }
+   .info-block__html__block__title,
+   .info-block__title {
+      font-size: 1.25rem;
+      font-weight: bold;
+   }
+
+   .text-center {
+      text-align: center;
+   }
+
+   .info-block.title-center .info-block__title {
+      text-align: center;
+   }
+
+   .info-block.title-margin .info-block__title {
+      margin-top: 40px;
+   }
+   .info-block.tab-content-margin-top .tab-item .tab-name {
+      margin-top: 20px;
+   }
+}
+
+
+
+.info-block__html {
+   p:first-child {
+      margin-top: 0;
+   }
+   p {
+      margin-top: 0.5em;
+      margin-bottom: 0.5em;
+   }
+   ul {
+      margin-top: 0;
+   }
+}
+
+.tour-hotel__img {
+   display: none;
+}
+
+.more-info-date {
+   .info-block__html:not(:last-child) {
+      margin-bottom: 20px;
+   }
+}

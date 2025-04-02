@@ -1,0 +1,51 @@
+<section class="ship__top {{class}}">
+
+
+	<div class="container">
+		<div class="ship__item d-flex flex-column flex-lg-row justify-content-between mb-4 rounded">
+			<div class="ship__item-left">
+				<div class="ship__item-left_img" style="background-image: url({{ RiverCRS.ship_pic }})"></div>
+<a class="ship__item-left_youtube" modal=".youtube-content">
+
+	<img src="/themes/azimut-tur-pro/assets/images/components/cruise/youtube.svg" alt="youtube"/>
+</a>
+<div class="youtube-content" style="display: none">
+<iframe loading="lazy" src="{{ RiverCRS.ship_video }}" frameborder="0" allowfullscreen=""></iframe>
+
+</div>
+
+                {% if RiverCRS.ship_status %}
+
+					<a tabindex="0"
+						class="ship-type text-decoration-none premium d-block d-md-none bg-gold-200 px-2 px-xxl-3  ms-2 py-2 py-xxl-2 c-primary-100 rounded-pill fw-bolder d-flex align-items-center justify-content-center"
+						role="button" data-bs-toggle="popover" data-bs-trigger="focus" data-bs-placement="bottom"
+						data-bs-content="{{ RiverCRS.ship_status_desc }}">{{ RiverCRS.ship_status }}
+					</a>
+                {% endif %}
+			</div>
+			<div class="ship__item-right fs-s fs-xl-def">
+				<div class="ship__item-right_center d-flex justify-content-between px-2 px-sm-3 py-2 py-sm-3 flex-column">
+<div class="ship__item-name d-flex align-items-center justify-content-between">
+<div class="d-flex align-items-center">
+						<img src="{{'assets/images/components/cruise/ship.svg'|theme}}" alt="ship"/>
+						<h1 class="ms-2 fs-h3 fs-xl-h2 fw-bolder c-blue-300">{{ RiverCRS.ship_name }}</h1>
+						</div>
+                        {% if RiverCRS.ship_status %}
+								<a tabindex="0"
+									class="ship-type text-decoration-none premium d-none d-md-block bg-gold-200 px-2 px-xxl-3  ms-2 py-2 py-xxl-2 c-primary-100 rounded-pill fw-bolder d-flex align-items-center justify-content-center"
+									role="button" data-bs-toggle="popover" data-bs-trigger="focus" data-bs-placement="bottom"
+									data-bs-content="{{ RiverCRS.ship_status_desc }}">{{ RiverCRS.ship_status }}
+								</a>
+                        {% endif %}
+					</div>
+					<div class="ship__item-params">
+                        {% for item in RiverCRS.ship.techs_arr %}
+                            <p>{{ item.name }}: {{ item.value }}</p>
+                        {% endfor %}
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+</section>
+

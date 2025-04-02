@@ -1,0 +1,10 @@
+name: Applications
+form: $/zen/quiz/models/application/fields.yaml
+modelClass: Zen\Quiz\Models\Application
+defaultRedirect: zen/quiz/applications
+create:
+    redirect: 'zen/quiz/applications/update/:id'
+    redirectClose: zen/quiz/applications
+update:
+    redirect: zen/quiz/applications
+    redirectClose: zen/quiz/applications

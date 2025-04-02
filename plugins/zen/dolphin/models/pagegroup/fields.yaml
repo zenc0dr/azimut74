@@ -1,0 +1,18 @@
+fields:
+    scope:
+        label: 'Область контента'
+        span: auto
+        type: balloon-selector
+    name:
+        label: 'Название группы'
+        span: full
+        type: text
+    image:
+        label: 'Изображение группы'
+        mode: image
+        useCaption: true
+        thumbOptions:
+            mode: crop
+            extension: auto
+        span: full
+        type: fileupload

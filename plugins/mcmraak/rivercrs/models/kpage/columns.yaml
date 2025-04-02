@@ -1,0 +1,36 @@
+columns:
+    id:
+        label: id
+        type: number
+        sortable: true
+    name:
+        label: Имя
+        type: text
+        searchable: true
+        sortable: true
+    menu_item:
+        label: 'Пункт меню'
+        type: text
+        searchable: true
+        sortable: true
+    slug:
+        label: URL
+        type: text
+        searchable: true
+        sortable: true
+    ktype_id:
+        label: 'Раздел меню'
+        type: number
+        sortable: true
+        relation: type
+        valueFrom: name
+    in_menu:
+        label: 'В меню'
+        type: partial
+    sort_order:
+        label: Порядок
+        type: number
+        sortable: true
+    active:
+        label: Активно
+        type: partial

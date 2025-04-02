@@ -1,0 +1,14 @@
+description = "Видео тура"
+
+[viewBag]
+==
+{% if Dolphin.youtube_link %}
+<div class="info-block">
+   <div class="info-block__title">
+      Видео
+   </div>
+   <div class="info-block__html">
+      <iframe src="{{ Dolphin.youtube_link }}" frameborder="0" allowfullscreen=""></iframe>
+   </div>
+</div>
+{% endif %}

@@ -1,0 +1,10 @@
+name: LinkTypes
+form: $/zen/history/models/linktype/fields.yaml
+modelClass: Zen\History\Models\LinkType
+defaultRedirect: zen/history/linktypes
+create:
+    redirect: 'zen/history/linktypes/update/:id'
+    redirectClose: zen/history/linktypes
+update:
+    redirect: zen/history/linktypes
+    redirectClose: zen/history/linktypes

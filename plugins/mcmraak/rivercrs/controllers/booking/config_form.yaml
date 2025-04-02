@@ -1,0 +1,16 @@
+name: Бронирования
+modelClass: Mcmraak\Rivercrs\Models\Booking
+form: $/mcmraak/rivercrs/models/booking/fields.yaml
+defaultRedirect: mcmraak/rivercrs/booking
+create:
+    title: Создание
+    redirect: 'mcmraak/rivercrs/booking/update/:id'
+    redirectClose: mcmraak/rivercrs/booking
+    flashSave: Сохранено
+update:
+    title: Изменить
+    redirect: mcmraak/rivercrs/booking
+    redirectClose: mcmraak/rivercrs/booking
+    flashSave: Сохранено
+    flashDelete: Удалено
+preview: {  }

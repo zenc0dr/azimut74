@@ -1,0 +1,4 @@
+title: SliderTherapy
+modelClass: Srw\Azimut\Models\SliderTherapy
+toolbar:
+    buttons: reorder_toolbar

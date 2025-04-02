@@ -1,0 +1,13 @@
+name: Towns
+modelClass: Mcmraak\Rivercrs\Models\Towns
+form: $/mcmraak/rivercrs/models/towns/fields.yaml
+defaultRedirect: mcmraak/rivercrs/towns
+create:
+    title: 'Создание города'
+    redirect: 'mcmraak/rivercrs/towns/update/:id'
+    redirectClose: mcmraak/rivercrs/towns
+update:
+    title: 'Изменение города'
+    redirect: mcmraak/rivercrs/towns
+    redirectClose: mcmraak/rivercrs/towns
+preview: {  }

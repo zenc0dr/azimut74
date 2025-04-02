@@ -1,0 +1,381 @@
+{% set checkin = RiverCRS.checkin %}
+<div class="tab-container {{ class }}" tab="{{ tab }}">
+    <style>
+        {% for item in RiverCRS.statuses %}
+        .{{ item.class }} {
+            background-color: {{ item.bg_color }};
+            color: {{ item.tx_color }};
+        }
+
+        {% endfor %}
+    </style>
+    <meta name="checkin-data" content="{{ RiverCRS.json_data }}">
+    <meta name="checkin-prices" content="{{ RiverCRS.checkin_prices }}">
+    <div id="BookingExistVueWrap">
+        <div class="tabs-vertical open no-border no-padding">
+            <div class="tab-item open tab-booking-table">
+                <div class="tab-name">
+                    <h2>Цены, бронирование</h2>
+                    <i class="bi bi-chevron-down"></i>
+
+                </div>
+                <div class="tab-content">
+                    <div id="BookingExist" checkin-id="{{ RiverCRS.checkin.id }}" v-cloak>
+                        <div class="bex-scheme-info">
+                            <div>
+                                {% for item in RiverCRS.statuses %}
+                                    <div>
+                                        <div class="{{ item.class }}"></div>
+
+                                        {% if item.hint|trim is not empty %}
+                                        <a tabindex="0" class="d-inline-flex c-primary-200 text-decoration-none" role="button" data-bs-toggle="popover" data-bs-trigger="focus" data-bs-placement="bottom"
+                                            data-bs-content="{{ item.hint }}" data-bs-original-title="" title="">
+                                            {{ item.title }} (?)
+                                        </a>
+                                        {% else %}
+                                        <div>{{ item.title }}</div>
+                                        {% endif %}
+                                    </div>
+
+                                {% endfor %}
+                            </div>
+                            <div>
+                                Цены представлены в руб на 1 человека
+                            </div>
+                        </div>
+                        <div v-if="exist_preloader" class="prices-preloader">
+                            Уточняем наличие кают <img src="/themes/azimut-tur-pro/assets/images/preloaders/cubesline_preloader.gif" alt="Загрузка...">
+                        </div>
+                        <table class="bex-board" border="0" cellpadding="0" cellspacing="0">
+                            <tbody>
+                            <tr>
+                                <th class="bex-rooms-col">Тип каюты</th>
+                                <th class="bex-places-col">Размещение</th>
+                                <th class="bex-prices-col tariff-name">
+                                    <a tabindex="0" class="d-inline-flex c-primary-200" role="button" data-bs-toggle="popover"
+                                        data-bs-trigger="focus" data-bs-placement="bottom" :data-bs-content="tariff_price1_title.name" data-bs-original-title=""
+                                        title="">
+                                        Базовый тариф <img class="ms-1" src="{{'assets/images/question-icon.svg'|theme}}" alt="question-icon">
+                                    </a>
+                                </th>
+                                <th class="bex-prices-col tariff-name">
+                                    <a tabindex="0" class="d-inline-flex c-primary-200" role="button" data-bs-toggle="popover"
+                                        data-bs-trigger="focus"
+                                        data-bs-placement="bottom" :data-bs-content="tariff_price2_title.name" data-bs-original-title="" title="">
+                                        Расширенный тариф <img class="ms-1" src="{{'assets/images/question-icon.svg'|theme}}" alt="question-icon">
+                                    </a>
+                                </th>
+                                <th></th>
+                            </tr>
+
+                            <template v-if="decks && decks.length" v-for="deck in decks">
+                                <tr class="desc-type">
+                                    <td class="bex-deck-title">${ deck.name }</td>
+                                    <td></td>
+                                    <td></td>
+                                    <td></td>
+                                    <td></td>
+                                </tr>
+                                <tr v-for="cabin in deck.cabins">
+                                    <td>
+                                        <div class="bex-category-top-wrap">
+                                            <div class="bex-category-mobile">${ deck.name }</div>
+                                            <div class="bex-category-title" @click="openInfo(cabin)">
+                                                ${ cabin.name }
+                                            </div>
+                                            <div class="cabin-on-scheme" @click="showScheme(cabin.id)">(Каюта на
+                                                схеме)
+                                            </div>
+                                        </div>
+                                        <div class="bex-rooms">
+                                            <div>
+                                                Свободные каюты:
+                                            </div>
+
+                                            <div v-for="room in rooms"
+                                                 v-if="room.f === 1 && room.c === cabin.id && room.d === deck.id"
+                                                 class="bex-room"
+                                                 :class="room.check?'is-selected':(room.n !== 'Под запрос')?'is-actual':'on-request'">
+                                                <input type="checkbox" v-model="room.check">
+                                                <div>${ (room.n == 'Под запрос') ? '?' : room.n }</div>
+                                            </div>
+
+                                        </div>
+                                    </td>
+                                    <td>
+                                        <div class="bex-places">
+                                            <div class="bex-title-mobile">
+                                                Размещение
+                                            </div>
+                                            <div class="bex-title-dotted">
+                                            </div>
+                                            <div v-for="place in cabin.prices" class="bex-place">
+                                                ${ place.price_places }-местное
+                                            </div>
+                                        </div>
+                                    </td>
+                                    <td>
+                                        <div class="bex-prices">
+                                            <div class="bex-title-mobile">Базовый тариф</div>
+                                            <div class="bex-title-dotted"></div>
+                                            <div v-for="price in cabin.prices" class="bex-price">
+                                                ${ price.price_value|priceFormat }
+                                            </div>
+                                        </div>
+                                    </td>
+                                    <td>
+                                        <div v-if="cabin.prices.filter(function (item) { return !!item.price2_value }).length" class="bex-prices">
+                                            <div class="bex-title-mobile">Расширенный тариф</div>
+                                            <div class="bex-title-dotted"></div>
+                                            <div v-if="price.price2_value" v-for="price in cabin.prices"
+                                                 class="bex-price">
+                                                ${ price.price2_value|priceFormat }
+                                            </div>
+                                        </div>
+                                    </td>
+
+                                    <td class="bex-rooms-mobile">
+                                        <div class="bex-rooms">
+                                            <div>
+                                                Свободные каюты:
+                                            </div>
+                                            <div v-for="room in rooms"
+                                                 v-if="room.f === 1 && room.c === cabin.id && room.d === deck.id"
+                                                 class="bex-room"
+                                                 :class="room.check ? 'is-selected' : (room.n !== 'Под запрос') ? 'is-actual' : 'on-request'">
+                                                <input type="checkbox" v-model="room.check">
+                                                <div>${ (room.n === 'Под запрос') ? '?' : room.n }</div>
+                                            </div>
+                                        </div>
+                                    </td>
+                                    <td>
+                                        <!-- Формирование метки для сервиса QQ -->
+                                        <div v-for="item in cabin.QQ" class="qq-btn-place" :data-value="item"></div>
+                                    </td>
+                                </tr>
+                            </template>
+                            </tbody>
+                        </table>
+                        {% include 'mcmraak.rivercrs::prok.scheme' %}
+
+                        <div class="wrapper-btn-order" :class="(selected.length) ? 'active' : ''">
+                            <button @click="scrollBooking()" class="btn red">Перейти к бронированию</button>
+                        </div>
+
+
+                        <div class="cabin-modal-wrap" v-if="modal_cabin_info" @click.self="modal_cabin_info = null">
+                            <div class="cabin-modal-wrap__body">
+                                <div class="cabin-modal-wrap__close-panel">
+                                    <div @click="modal_cabin_info = null" class="cabin-modal-wrap__close">×</div>
+                                </div>
+                                <div class="cabin-modal-wrap__content">
+                                    <div class="cabin-modal-wrap__body_html" v-html="modal_cabin_info"></div>
+                                </div>
+                            </div>
+                        </div>
+
+
+                    </div>
+                </div>
+            </div>
+            {% if RiverCRS.temporary_discounts or RiverCRS.permanent_discounts or RiverCRS.social_discounts %}
+                <div class="tab-item open close-mobile">
+                    <div class="tab-name mb-3"><h2>Действующие скидки</h2>
+                        <i class="bi bi-chevron-down"></i></div>
+                    <div class="tab-content">
+                        <div class="wrapper-sales">
+                            <div class="sales-content-top">
+                                <div class="sale-items">
+                            {% if RiverCRS.temporary_discounts %}
+                                {% for discount in RiverCRS.temporary_discounts %}
+                                    <div class="sale-item tab-item open">
+                                        <div class="sale-item-title fw-bolder tab-name mb-2 mb-xl-3">{{ discount.title }}</div>
+                                        <div class="sale-item-content tab-content p-3">
+                                            {{ discount.text|raw }}
+                                        </div>
+                                    </div>
+                                {% endfor %}
+                            {% endif %}
+                            {% if RiverCRS.permanent_discounts %}
+                                {% for discount in RiverCRS.permanent_discounts %}
+                                    <div class="sale-item tab-item open">
+                                        <div class="sale-item-title fw-bolder tab-name mb-2 mb-xl-3">{{ discount.title }} </div>
+                                        <div class="sale-item-content tab-content p-3">
+                                            {{ discount.text|raw }}
+                                        </div>
+                                    </div>
+                                {% endfor %}
+                            {% endif %}
+
+                            {% if RiverCRS.booking_discounts|length > 5 %}
+                                <div class="sale-item tab-item open ">
+                                    <div class="sale-item-title tab-name mb-2 mb-xl-3">Скидки раннего бронирования</div>
+                                    <div class="sale-item-content tab-content p-3">
+                                        {{ RiverCRS.booking_discounts|raw }}
+                                    </div>
+                                </div>
+                            {% endif %}
+
+                            {% if RiverCRS.social_discounts|length > 5 %}
+                                <div class="sale-item tab-item open ">
+                                    <div class="sale-item-title tab-name mb-2 mb-xl-3">Социальные скидки</div>
+                                    <div class="sale-item-content tab-content p-3">
+                                        {{ RiverCRS.social_discounts|raw }}
+                                    </div>
+                                </div>
+                            {% endif %}
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            {% endif %}
+            <div class="tab-item close-mobile">
+                <div class="tab-name mb-3">
+                    <h2>В стоимость входит</h2>
+                    <i class="bi bi-chevron-down"></i>
+                </div>
+
+                <div class="tab-content">
+                    <div class="wrapper-tab-content">
+                        {{ RiverCRS.price_contains|raw }}
+                    </div>
+
+                </div>
+            </div>
+            <div class="tab-item close-mobile">
+                <div class="tab-name mb-3">
+                    <h2>Дополнительно оплачивается</h2>
+                    <i class="bi bi-chevron-down"></i>
+                </div>
+
+                <div class="tab-content">
+                    <div class="wrapper-tab-content">
+                        {{ RiverCRS.additionally_paid|raw }}
+                    </div>
+                </div>
+            </div>
+            <div class="tab-item open booking-tab">
+                <input booking-name="checkin_id" type="hidden" value="{{ RiverCRS.checkin.id }}">
+                <div class="tab-name mb-3"><h2>Бронирование круиза</h2></div>
+                <div class="tab-content">
+                    <div class="wrapper-tab-content booking">
+                        <div class="top-booking">
+                            <div class="form-booking-top">
+                                <div class="form-title-section">
+                                    Выбранные каюты
+                                </div>
+                                <div class="form-content">
+                                    <div class="form-cabins" v-if="selected.length">
+                                        <div v-for="item in selected" class="form-cabin">
+                                            <div class="bex-room"
+                                                 :class="(item.num === 'Под запрос') ? 'on-request':'is-actual'">
+                                                <div v-if="item.num !== 'Под запрос'">${ item.num }</div>
+                                                <div v-else>?</div>
+                                            </div>
+                                            <div class="form-cabin-descr">
+                                                ${ item.name } (${ item.deck })
+                                            </div>
+                                            <i @click="uncheckRoom(item)" class="bi bi-x"
+                                               title="удалить"></i>
+                                        </div>
+                                    </div>
+                                    <div v-else class="wrapper-btn-order active">
+                                        <div>Для продолжения бронирования выберите каюты</div>
+                                        <button @click="scrollTable()" class="btn light-red">Выбрать каюты</button>
+                                    </div>
+                                    <div class="form-count-people">
+                                        <div><span>Количество человек</span></div>
+                                        <div>
+                                            <button @click="form.peoples--" class="countBtn countMinus fs-h2"
+                                                    :disabled="(form.peoples < 2)">
+
+                                                <i aria-hidden="true" class="bi bi-dash"></i>
+                                            </button>
+                                            <span class="countInput orderBook">${ form.peoples }</span>
+                                            <button @click="form.peoples++" class="countBtn countPlus fs-h2"
+                                                    :disabled="(form.peoples > 3)">
+                                                <i aria-hidden="true" class="bi bi-plus"></i>
+
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="form-booking-bottom">
+                                <div class="form-title-section">
+                                    Данные о пассажирах
+                                </div>
+                                <div class="dataLineForm">
+                                    <div class="dataLineLeft">
+                                        <div class="dLine">
+                                            <div><span class="req-input">Имя</span></div>
+                                            <div><input
+                                                    v-model="form.name"
+                                                    :class="{bad:wrong('name')}"
+                                                    placeholder="Введите ФИО" class="order orderBook"></div>
+                                        </div>
+                                        <div class="dLine">
+                                            <div><span class="req-input">Телефон</span></div>
+                                            <div><input
+                                                    v-model="form.phone"
+                                                    :class="{bad:wrong('phone')}"
+                                                    placeholder="Ваш телефон" class="order phone orderBook">
+                                            </div>
+                                        </div>
+                                        <div class="dLine">
+                                            <div><span>E-mail</span></div>
+                                            <div><input
+                                                    v-model="form.email"
+                                                    :class="{bad:wrong('email')}"
+                                                    placeholder="Ваш e-mail" class="order orderBook"></div>
+                                        </div>
+                                    </div>
+                                    <div class="dataLineRight">
+                                        <div>
+                                                    <textarea
+                                                        v-model="form.desc"
+                                                        :class="{bad:wrong('desc')}"
+                                                        placeholder="Дополнительная информация"
+                                                        class="order orderBook"></textarea>
+                                        </div>
+                                        <div class="bottom-form-text fs-ss">* Поля, отмеченные звездочкой, обязательны
+                                            для заполнения.
+                                        </div>
+
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="bottom-booking">
+                            <div v-if="alerts.length" class="respond-alerts">
+                                <div :class="alert.type" v-for="(alert, key) in alerts">
+                                    <div>${alert.text}</div>
+                                    <div class="respond-alerts-close">
+                                        <i @click="alerts.splice(key,1)" class="bi bi-x"></i></div>
+
+                                </div>
+                            </div>
+                            <div class="accept-check">
+                                        <span @click="form.confirm = !form.confirm" class="check">
+<i class="bi" :class="(form.confirm) ? 'bi-check-square' : 'bi-square'" aria-hidden="true"></i></span>
+
+
+                                <span class="fs-ss">
+                                    Нажимая кнопку «Бронировать», я даю свое согласие на обработку моих персональных данных, в соответствии с <a target="_blank" href="/personal-soglasie" class="bex-offerLink">Федеральным
+                                            законом от 27.07.2006 года №152-ФЗ «О персональных данных», на условиях и для целей, определенных в Согласии на
+                                            обработку персональных данных</a>, в соответствии с <a target="_blank" href="/politika-konfidencialnosti">Политикой по обработке персональных данных Компании</a>
+                                </span>
+                            </div>
+
+                            <button class="btn red" @click="sendBooking()" :disabled="!form.confirm">
+                                <span v-if="process"><i class="process bi bi-refresh"></i> Обработка...</span>
+                                <span v-else>Бронировать</span>
+                            </button>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

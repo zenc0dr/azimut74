@@ -1,0 +1,14 @@
+fields:
+    name:
+        label: 'Название расширенного тура'
+        span: auto
+        type: text
+    geo_object:
+        label: 'Географический объект - контейнер'
+        showSearch: true
+        span: auto
+        type: dropdown
+    extours_eids:
+        span: full
+        path: $/zen/dolphin/controllers/extours/select_tours.php
+        type: partial

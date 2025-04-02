@@ -1,0 +1,95 @@
+fields:
+    name:
+        label: 'Имя профиля настроек'
+        oc.commentPosition: ''
+        span: full
+        type: text
+tabs:
+    fields:
+        relinks:
+            label: 'Набор SEO-Ссылок'
+            oc.commentPosition: ''
+            prompt: Добавить
+            span: auto
+            type: repeater
+            tab: 'SEO-Ссылки в круизах'
+            form:
+                fields:
+                    relinks_name:
+                        label: Название
+                        oc.commentPosition: ''
+                        span: auto
+                        type: text
+                    relinks_link:
+                        label: Ссылка
+                        oc.commentPosition: ''
+                        span: auto
+                        preset:
+                            field: relinks_name
+                            type: slug
+                        type: text
+        bookingemails:
+            label: 'Адреса для уведомления'
+            oc.commentPosition: ''
+            prompt: 'Добавить email'
+            span: full
+            type: repeater
+            tab: Бронирование
+            form:
+                fields:
+                    bemail:
+                        label: email
+                        span: auto
+                        oc.commentPosition: ''
+                        type: text
+        reviewsemails:
+            label: 'Адреса для уведомления'
+            oc.commentPosition: ''
+            prompt: 'Добавить email'
+            span: full
+            type: repeater
+            tab: Отзывы
+            form:
+                fields:
+                    remail:
+                        label: email
+                        span: auto
+                        oc.commentPosition: ''
+                        type: text
+        banks_text1:
+            label: 'Первоначальный взнос'
+            oc.commentPosition: ''
+            span: full
+            placeholder: 'Условие рассрочки'
+            default: 'Первоначальный взнос составит 10% от стоимости тура'
+            type: text
+            tab: Рассрочка
+        banks_text2:
+            label: 'Позвоните нам и мы все подробно расскажем'
+            oc.commentPosition: ''
+            span: full
+            placeholder: Телефон
+            default: '8 (8452) 255-996'
+            type: text
+            tab: Рассрочка
+        banks:
+            label: Банки
+            oc.commentPosition: ''
+            prompt: 'Добавить банк'
+            span: full
+            type: repeater
+            tab: Рассрочка
+            form:
+                fields:
+                    bank_image:
+                        label: 'Логотип банка'
+                        oc.commentPosition: ''
+                        mode: image
+                        span: full
+                        type: mediafinder
+                    bank_text:
+                        label: 'Текстовка банка'
+                        size: ''
+                        oc.commentPosition: ''
+                        span: full
+                        type: richeditor

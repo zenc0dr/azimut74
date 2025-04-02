@@ -1,0 +1,168 @@
+fields:
+    type_id:
+        label: 'Тип тура'
+        span: auto
+        type: balloon-selector
+    active:
+        label: 'Тур активен'
+        span: auto
+        default: 1
+        type: switch
+    name:
+        label: 'Название тура'
+        span: auto
+        type: text
+    duration:
+        label: 'Продолжительность в днях'
+        span: auto
+        default: '1'
+        required: 1
+        type: number
+    operator_id:
+        label: Туроператор
+        showSearch: true
+        span: auto
+        type: dropdown
+    faq_id:
+        label: 'Вопрос / Ответ'
+        showSearch: true
+        span: auto
+        type: dropdown
+    info_tech:
+        label: 'Техническая информация (не выводится на фронт)'
+        size: large
+        span: full
+        type: richeditor
+tabs:
+    fields:
+        tarrif:
+            span: full
+            path: $/zen/dolphin/controllers/tours/tarrif.php
+            context:
+                - update
+                - preview
+            type: partial
+            tab: Тарифы
+        info:
+            label: 'Важная информация'
+            size: large
+            span: auto
+            type: richeditor
+            tab: Информация
+        anonce:
+            label: 'Анонс тура'
+            size: large
+            span: auto
+            type: richeditor
+            tab: Информация
+        allocation:
+            label: 'Первый город'
+            options:
+                - Отправления
+                - Назначения
+            span: auto
+            type: balloon-selector
+            tab: Маршрут
+        waybill:
+            label: Маршрут
+            prompt: 'Добавить пункт'
+            style: default
+            span: full
+            type: repeater
+            tab: Маршрут
+            form:
+                fields:
+                    geo:
+                        label: 'Гео объект'
+                        showSearch: true
+                        span: full
+                        attributes: {  }
+                        type: dropdown
+        preview_image:
+            label: 'Превью изображение (аватар)'
+            mode: image
+            useCaption: true
+            thumbOptions:
+                mode: crop
+                extension: auto
+            span: full
+            type: fileupload
+            tab: Медиа
+        youtube_link:
+            label: 'Ссылка на ролик в yotube.com'
+            span: full
+            type: text
+            tab: Медиа
+        clean_images:
+            span: full
+            path: $/zen/dolphin/controllers/tours/_button.htm
+            type: partial
+            tab: Медиа
+        images:
+            label: 'Галерея (Аттачмент)'
+            mode: image
+            useCaption: true
+            thumbOptions:
+                mode: crop
+                extension: auto
+            span: full
+            type: fileupload
+            tab: Медиа
+        media_images:
+            label: 'Галерея (Медиафайлы)'
+            prompt: 'Добавить изображение'
+            style: default
+            span: full
+            type: repeater
+            tab: Медиа
+            form:
+                fields:
+                    src:
+                        label: Изображение
+                        mode: image
+                        span: full
+                        type: mediafinder
+                    title:
+                        label: 'Подпись к фото'
+                        span: full
+                        type: text
+        tour_program:
+            label: 'Программа тура'
+            prompt: 'Добавить день'
+            span: full
+            type: repeater
+            tab: 'Программа тура'
+            form:
+                fields:
+                    title:
+                        label: Заголовок
+                        span: full
+                        type: text
+                    text:
+                        label: Описание
+                        size: large
+                        span: full
+                        type: richeditor
+        conditions:
+            label: 'Условия по туру'
+            prompt: 'Добавить условие'
+            span: full
+            type: repeater
+            tab: Условия
+            form:
+                fields:
+                    condition_id:
+                        label: Условие
+                        showSearch: true
+                        span: full
+                        type: dropdown
+                    text:
+                        label: Описание
+                        size: large
+                        span: full
+                        type: richeditor
+        labels_list:
+            label: Метки
+            span: auto
+            type: checkboxlist
+            tab: Метки

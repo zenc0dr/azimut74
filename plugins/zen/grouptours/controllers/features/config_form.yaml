@@ -1,0 +1,16 @@
+name: Features
+modelClass: Zen\GroupTours\Models\Feature
+form: $/zen/grouptours/models/feature/fields.yaml
+defaultRedirect: zen/grouptours/features
+create:
+    title: 'Создать блок фишек'
+    redirect: 'zen/grouptours/features/update/:id'
+    redirectClose: zen/grouptours/features
+    flashSave: 'Блок фишек создан'
+update:
+    title: 'Изменить блок фишек'
+    redirect: zen/grouptours/features
+    redirectClose: zen/grouptours/features
+    flashSave: 'Блок фишек сохранён'
+    flashDelete: 'Блок фишек обновлён'
+preview: {  }

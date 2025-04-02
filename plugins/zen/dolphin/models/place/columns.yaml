@@ -1,0 +1,18 @@
+columns:
+    id:
+        label: id
+        type: number
+        searchable: true
+    name:
+        label: name
+        type: text
+        searchable: true
+    geo_name:
+        label: Гео-объект
+        type: text
+        searchable: true
+        sortable: true
+    sort_order:
+        label: Порядок
+        type: number
+        sortable: true

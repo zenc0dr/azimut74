@@ -1,0 +1,12 @@
+scopes:
+    store:
+        label: 'zen.om::lang.store.store'
+        modelClass: Zen\Om\Models\Store
+        nameFrom: name
+        scope: FilterStores
+    active:
+        label: 'zen.om::lang.plugin.active'
+        type: switch
+        conditions:
+          - active = 0
+          - active = 1

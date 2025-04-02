@@ -1,0 +1,12 @@
+title: Палубы
+modelClass: Mcmraak\Rivercrs\Models\Decks
+list: $/mcmraak/rivercrs/models/decks/columns.yaml
+recordUrl: 'mcmraak/rivercrs/decks/update/:id'
+noRecordsMessage: 'backend::lang.list.no_records'
+recordsPerPage: '30'
+showSetup: true
+showCheckboxes: true
+toolbar:
+    buttons: list_toolbar
+    search:
+        prompt: 'backend::lang.list.search_prompt'

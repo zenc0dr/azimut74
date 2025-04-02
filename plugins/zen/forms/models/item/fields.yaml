@@ -1,0 +1,11 @@
+fields:
+    code:
+        label: 'Код формы'
+        span: full
+        type: text
+    data:
+        label: 'Данные формы'
+        span: full
+        size: large
+        language: javascript
+        type: codeeditor

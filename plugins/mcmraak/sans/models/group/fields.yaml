@@ -1,0 +1,42 @@
+tabs:
+    fields:
+        name:
+            label: 'Название группы курортов'
+            oc.commentPosition: ''
+            span: auto
+            type: text
+            tab: 'Основные данные'
+        slug:
+            label: Ссылка
+            oc.commentPosition: ''
+            span: auto
+            preset:
+                field: name
+                type: slug
+            type: text
+            tab: 'Основные данные'
+        parent_id:
+            label: 'Родительская группа'
+            oc.commentPosition: ''
+            span: auto
+            type: dropdown
+            tab: 'Основные данные'
+        default_resort_id:
+            label: 'Курорт по умолчанию'
+            oc.commentPosition: ''
+            span: auto
+            required: 1
+            type: dropdown
+            tab: 'Основные данные'
+        desc:
+            label: Описание
+            size: large
+            oc.commentPosition: ''
+            span: full
+            type: richeditor
+            tab: 'Основные данные'
+        resorts_list:
+            span: auto
+            path: $/mcmraak/sans/controllers/groups/resorts_list.php
+            type: partial
+            tab: 'Список курортов'

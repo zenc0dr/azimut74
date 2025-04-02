@@ -1,0 +1,6 @@
+scopes:
+    category:
+        label: Круизы
+        modelClass: Mcmraak\Rivercrs\Models\Cruises
+        nameFrom: name
+        scope: FilterCruises

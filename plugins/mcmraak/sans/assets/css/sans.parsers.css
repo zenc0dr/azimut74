@@ -1,0 +1,14 @@
+#parsersResult, #hotelsCacheResult {
+    margin-bottom: 10px;
+    margin-top: 15px;
+    font-size: 17px;
+}
+
+#parsersResult result, #hotelsCacheResult result {
+    margin-left: 6px;
+}
+
+#parserInfo {
+    margin-bottom: 30px;
+    font-size: 18px;
+}

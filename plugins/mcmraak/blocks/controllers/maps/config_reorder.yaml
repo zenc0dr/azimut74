@@ -1,0 +1,4 @@
+title: Maps
+modelClass: Mcmraak\Blocks\Models\Map
+toolbar:
+    buttons: reorder_toolbar

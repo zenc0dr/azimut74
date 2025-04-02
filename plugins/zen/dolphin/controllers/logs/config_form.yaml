@@ -1,0 +1,10 @@
+name: Logs
+form: $/zen/dolphin/models/log/fields.yaml
+modelClass: Zen\Dolphin\Models\Log
+defaultRedirect: zen/dolphin/logs
+create:
+    redirect: 'zen/dolphin/logs/update/:id'
+    redirectClose: zen/dolphin/logs
+update:
+    redirect: zen/dolphin/logs
+    redirectClose: zen/dolphin/logs

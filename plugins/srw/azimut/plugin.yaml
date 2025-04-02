@@ -1,0 +1,31 @@
+plugin:
+    name: 'srw.azimut::lang.plugin.name'
+    description: 'srw.azimut::lang.plugin.description'
+    author: srw
+    icon: oc-icon-globe
+    homepage: ''
+navigation:
+    main-menu-item:
+        label: Азимут-тур
+        url: Srw/Azimut/Directions
+        icon: icon-globe
+        permissions:
+            - srv.azimut
+        sideMenu:
+            side-menu-item:
+                label: 'Популярные направления'
+                url: srw/azimut/directions
+                icon: icon-chevron-circle-right
+            side-menu-item3:
+                label: Заказы
+                url: srw/azimut/callme
+                icon: icon-phone
+            side-menu-item4:
+                label: 'Горящие туры'
+                url: srw/catalog/items
+                icon: icon-paper-plane
+                permissions: {  }
+permissions:
+    srv.azimut:
+        tab: Азимут-тур
+        label: 'Функционал сайта'

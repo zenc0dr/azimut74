@@ -1,0 +1,6 @@
+plugin:
+    name: 'zen.captcha::lang.plugin.name'
+    description: 'Каптча на сайт'
+    author: 'Alex Blaze'
+    icon: oc-icon-lock
+    homepage: ''

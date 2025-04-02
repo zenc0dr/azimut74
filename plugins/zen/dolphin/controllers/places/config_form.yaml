@@ -1,0 +1,10 @@
+name: Достопримечательности
+modelClass: Zen\Dolphin\Models\Place
+form: $/zen/dolphin/models/place/fields.yaml
+defaultRedirect: zen/dolphin/places
+create:
+    redirect: 'zen/dolphin/places/update/:id'
+    redirectClose: zen/dolphin/places
+update:
+    redirect: zen/dolphin/places
+    redirectClose: zen/dolphin/places

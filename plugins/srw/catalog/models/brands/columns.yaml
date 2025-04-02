@@ -1,0 +1,14 @@
+columns:
+    id:
+        label: id
+        type: number
+        sortable: true
+    name:
+        label: Брэнд
+        type: text
+        searchable: true
+        sortable: true
+    order:
+        label: Порядок
+        type: number
+        sortable: true

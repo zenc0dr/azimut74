@@ -1,0 +1,4 @@
+title: Pages
+modelClass: Zen\GroupTours\Models\Page
+toolbar:
+    buttons: reorder_toolbar

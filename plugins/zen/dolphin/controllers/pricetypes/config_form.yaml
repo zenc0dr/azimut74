@@ -1,0 +1,10 @@
+name: Pricetypes
+form: $/zen/dolphin/models/pricetype/fields.yaml
+modelClass: Zen\Dolphin\Models\Pricetype
+defaultRedirect: zen/dolphin/pricetypes
+create:
+    redirect: 'zen/dolphin/pricetypes/update/:id'
+    redirectClose: zen/dolphin/pricetypes
+update:
+    redirect: zen/dolphin/pricetypes
+    redirectClose: zen/dolphin/pricetypes

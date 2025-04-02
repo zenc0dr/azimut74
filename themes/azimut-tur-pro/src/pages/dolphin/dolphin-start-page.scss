@@ -1,0 +1,52 @@
+@import "dolphin";
+@import "~font-awesome/scss/font-awesome";
+@import "@src/components/dolphin/ExtWidget";
+@import "popular-directions";
+@import "@src/components/dolphin/schedule-table";
+@import "@src/components/dolphin/dolphin-reviews";
+@import "@src/components/tinybox-gallery/tinybox-gallery";
+
+.dolphin-start-widget {
+    background-position: center;
+    background-size: cover;
+}
+.dolphin-start-widget__container {
+    display: flex;
+    flex-direction: column;
+    color: #fff;
+    align-items: center;
+    padding-top: 50px;
+    strong {
+        font-weight: normal;
+        color: #ffe600;
+    }
+}
+.dolphin-start-widget__title {
+    font-size: 34px;
+    width: 100%;
+    text-align: center;
+}
+.dolphin-start-widget__subtitle {
+    font-size: 22px;
+    width: 100%;
+    text-align: center;
+}
+.dolphin-start-widget__advantages {
+    display: flex;
+    width: 100%;
+    max-width: 900px;
+    justify-content: space-between;
+}
+.dolphin-start-widget__advantage {
+    display: flex;
+    width: 260px;
+}
+.dolphin-start-widget__advantage > div:first-child {
+    width: 30px;
+}
+.dolphin-start-widget__advantage > div:first-child i {
+
+}
+.dolphin-start-widget__advantage > div:last-child {
+    flex: 1 0 0;
+}

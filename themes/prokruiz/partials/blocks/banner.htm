@@ -1,0 +1,18 @@
+<section class="banner banner-cruiz">
+    <div class="custom-container">
+        <div class="swiper-container">
+            <div class="swiper-wrapper">
+                {% for slide in slider %}
+                    <div class="swiper-slide">
+                        <div class="slide-bgc">
+                            <div class="slide-overlay opacity-3"></div>
+                            <img src="{{ slide.image|media }}" class="swiper-lazy">
+                        </div>
+                        {{ slide.html|raw }}
+                        <div class="swiper-lazy-preloader swiper-lazy-preloader-white"></div>
+                    </div>
+                {% endfor %}
+            </div>
+        </div>
+    </div>
+</section>

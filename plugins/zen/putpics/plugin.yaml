@@ -1,0 +1,17 @@
+plugin:
+    name: 'zen.putpics::lang.plugin.name'
+    description: 'Совместное наполнение'
+    author: 'Alex Blaze'
+    icon: oc-icon-camera
+    homepage: ''
+navigation:
+    putpics-main:
+        label: Заполнение
+        url: zen/putpics/tasks
+        icon: icon-camera
+        permissions:
+            - putpics.main
+permissions:
+    putpics.main:
+        tab: PutPics
+        label: 'Глобальный доступ'

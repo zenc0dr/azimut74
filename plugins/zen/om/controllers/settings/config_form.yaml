@@ -1,0 +1,15 @@
+name: Настройки
+modelClass: Zen\Om\Models\Setting
+form: $/zen/om/models/setting/fields.yaml
+defaultRedirect: zen/om/settings
+create:
+    title: 'Создание профиля настроек'
+    redirect: 'zen/om/settings/update/:id'
+    redirectClose: zen/om/settings
+    flashSave: 'Настройки сохранены'
+update:
+    title: 'Изменение профиля настроек'
+    redirect: zen/om/settings
+    redirectClose: zen/om/settings
+    flashSave: 'Настройки изменены'
+    flashDelete: 'Профиль удалён'

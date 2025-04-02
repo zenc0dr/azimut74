@@ -1,0 +1,242 @@
+<section id="ProkSearch" v-cloak>
+    <div class="search-widget{% if on_start == false %} result-page{% endif %}">
+        <meta name="query_from_start" content="{{ query_from_start }}">
+
+        <div class="widget-wrapper custom-container" {% if on_start %}
+             style="background-image: url(/themes/prokruiz/assets/img/main-banner-ship.jpg)" {% endif %}>
+            <div
+                    class="widget-content"
+                    {% if bg_image %}style="background-image:url({{bg_image}})"{% endif %}
+                    :class="{loaded}"
+                    v-if="loaded">
+                <div class="container">
+                    {% if title %}
+                    <h1>{{ title }}</h1>
+                    {% else %}
+                    <h1>{{ main_title }}</h1>
+                    {% endif %}
+                    <div class="widget-form">
+                        <div class="widget-form-input col-12 col-lg-auto">
+                            <div class="w-form-label">Город отправления</div>
+                            <mdropdown id="town" :opt="form.town" :any="'Город отправления'"></mdropdown>
+                        </div>
+
+                        <div class="widget-form-input col-12 col-lg-6 ">
+                            <div class="w-form-label">Период отправления</div>
+                            <div class="w-form-inputs">
+                                <div @click="openDP(1)" class="w-form-input">
+                                    <span class="w-form-input-prefix">с</span>
+                                    <div class="w-date-select">
+                                        <input v-model="form.date_1" name="date-1">
+                                        <img src="/themes/prokruiz/assets/img/svg/calendar.svg">
+                                    </div>
+
+                                </div>
+                                <div @click="openDP(2)" class="w-form-input">
+                                    <span class="w-form-input-prefix">по</span>
+                                    <div class="w-date-select">
+                                        <input v-model="form.date_2" name="date-2">
+                                        <img src="/themes/prokruiz/assets/img/svg/calendar.svg">
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="widget-form-input col-6 col-lg-auto ">
+                            <div class="w-form-label">Продолжительность</div>
+                            <mdropdown id="days" :opt="form.days" :any="'Дней'"></mdropdown>
+                        </div>
+                        <div class="widget-form-input col-6 col-lg-auto">
+                            <div class="w-form-label">Город на пути</div>
+                            <mdropdown id="dest" :opt="form.dest" :any="'Город на пути'"></mdropdown>
+                        </div>
+                        <div class="widget-form-input col-12 col-lg-6">
+                            <div class="w-form-label">Теплоход</div>
+                            <template v-if="fixed_ship">
+                                <div class="multi-drop">
+                                    <div class="value">
+                                        <div>
+                                            <div class="label-original">Теплоход</div>
+                                            <div class="input-wrapper"><span>{{ ship_name }}</span></div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </template>
+                            <template v-else>
+                                <mdropdown id="ship" :opt="form.ship" :any="'Теплоход'"></mdropdown>
+                            </template>
+
+                        </div>
+                        <div class="widget-form-button col-12 col-lg-auto">
+                            {% if on_start %}
+                            <button @click="searchFromStart" class="btn red white-text">Найти круиз</button>
+                            {% else %}
+                            <button @click="search()" class="btn red white-text">Найти круиз</button>
+                            {% endif %}
+                        </div>
+                        <div v-if="find_count" class="widget-form-count-result col-12">
+                            Найдено: ${ find_count }
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div v-else class="widget-content preloader" testpoint="true">
+                <div class="lds-default">
+                    <div></div>
+                    <div></div>
+                    <div></div>
+                    <div></div>
+                    <div></div>
+                    <div></div>
+                    <div></div>
+                    <div></div>
+                    <div></div>
+                    <div></div>
+                    <div></div>
+                    <div></div>
+                </div>
+                <div class="container"><h1>Поиск круизов по всей России и Европе</h1>
+                    <div class="widget-form">
+                        <div class="widget-form-input col-12 col-lg-auto">
+                            <div class="w-form-label">Город отправления</div>
+                            <div id="town" class="multi-drop"><!---->
+                                <div class="value">
+                                    <div>
+                                        <div class="label-original">Город отправления</div>
+                                        <div class="input-wrapper"><span>Любой(ая)</span></div>
+                                    </div>
+                                    <i class="fa fa-angle-down"></i></div>
+                            </div>
+                        </div>
+                        <div class="widget-form-input col-12 col-lg-6 ">
+                            <div class="w-form-label">Период отправления</div>
+                            <div class="w-form-inputs">
+                                <div class="w-form-input"><span class="w-form-input-prefix">с</span>
+                                    <div class="w-date-select">
+                                        <input type="text" value="{{ 'now'|date('d.m.Y') }}">
+                                        <img
+                                                src="/themes/prokruiz/assets/img/svg/calendar.svg"></div>
+                                </div>
+                                <div class="w-form-input"><span class="w-form-input-prefix">по</span>
+                                    <div class="w-date-select"><input disabled="disabled" name="date-2"> <img
+                                                src="/themes/prokruiz/assets/img/svg/calendar.svg"></div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="widget-form-input col-6 col-lg-auto ">
+                            <div class="w-form-label">Продолжительность</div>
+                            <div id="days" class="multi-drop"><!---->
+                                <div class="value">
+                                    <div>
+                                        <div class="label-original">Дней</div>
+                                        <div class="input-wrapper"><span>Любой(ая)</span></div>
+                                    </div>
+                                    <i class="fa fa-angle-down"></i></div>
+                            </div>
+                        </div>
+                        <div class="widget-form-input col-6 col-lg-auto">
+                            <div class="w-form-label">Город на пути</div>
+                            <div id="dest" class="multi-drop"><!---->
+                                <div class="value">
+                                    <div>
+                                        <div class="label-original">Город на пути</div>
+                                        <div class="input-wrapper"><span>Любой(ая)</span></div>
+                                    </div>
+                                    <i class="fa fa-angle-down"></i></div>
+                            </div>
+                        </div>
+                        <div class="widget-form-input col-12 col-lg-6">
+                            <div class="w-form-label">Теплоход</div>
+                            <div id="ship" class="multi-drop"><!---->
+                                <div class="value">
+                                    <div>
+                                        <div class="label-original">Теплоход</div>
+                                        <div class="input-wrapper"><span>Любой(ая)</span></div>
+                                    </div>
+                                    <i class="fa fa-angle-down"></i></div>
+                            </div>
+                        </div>
+                        <div class="widget-form-button col-12 col-lg-auto">
+                            <button class="btn red white-text">Найти круиз</button>
+                        </div> <!----></div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <template v-if="!outer_result_container">
+        <div class="custom-container">
+            <template v-if="result">
+                <template>
+                    <pagination @go="goPage" :page="page" :pages_count="pages_count"></pagination>
+                </template>
+                <div id="Result" :class="{preloader:ajaxQueryProcess}"  v-html="result"></div>
+                <template>
+                    <pagination @go="goPage" :page="page" :pages_count="pages_count"></pagination>
+                </template>
+            </template>
+
+            <template v-else-if="find_count > 0 && !result">
+                <div id="Result" class="preloader">
+                    <div class="lds-default">
+                        <div></div>
+                        <div></div>
+                        <div></div>
+                        <div></div>
+                        <div></div>
+                        <div></div>
+                        <div></div>
+                        <div></div>
+                        <div></div>
+                        <div></div>
+                        <div></div>
+                        <div></div>
+                    </div>
+                    {% for i in 1..3 %}
+                    <div class="result-item">
+                        <div class="result-item-left">
+                            <div class="result-item-img"></div>
+                            <a class="result-item-youtube" href="/ship/23">
+                                <img src="/themes/prokruiz/assets/img/svg/youtube.svg">
+                            </a>
+                        </div>
+                        <div class="result-item-center">
+                            <div class="result-center-name">
+                                <img src="/themes/prokruiz/assets/img/svg/ship.svg">
+                                <a href="/ship/23">Теплоход "Владимир Маяковский" (проект 301)</a>
+                            </div>
+                            <div class="result-center-date">
+                                <div class="result-date-left">
+                                    <div>
+                                        <img src="/themes/prokruiz/assets/img/svg/calendar.svg">
+                                        <b>13.05.2021</b>, Чт (07:30)  <span>—</span> <b>17.05.2021</b>, Пн (07:30)
+                                    </div>
+                                    <div>Время московское</div>
+                                </div>
+                                <div class="result-date-right">
+                                    <img src="/themes/prokruiz/assets/img/svg/clock.svg">
+                                    5 дней
+                                </div>
+                            </div>
+                            <div class="result-center-route">
+                                <strong>Ульяновск (трансфер в Казань)</strong> - <strong>Ярославль</strong> - <strong>Казань (трансфер в Ульяновск)</strong>
+                            </div>
+                        </div>
+                        <div class="result-item-right">
+                            <div class="result-item-top">
+                            </div>
+                            <div class="result-item-bottom">
+                                <div class="booking-price">
+                                    <div>от <span>16 400</span> р./чел</div>
+                                    <div>без учёта скидок</div>
+                                </div>
+                                <a class="booking-btn btn red" href="/cruise/1089"><span>наличие мест, цены</span><span>Бронирование</span></a>
+                            </div>
+
+                        </div>
+                    </div>
+                    {% endfor %}
+                </div>
+            </template>
+        </div>
+    </template>
+</section>

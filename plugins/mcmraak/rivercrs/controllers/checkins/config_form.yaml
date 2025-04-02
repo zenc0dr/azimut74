@@ -1,0 +1,13 @@
+name: Заезд
+modelClass: Mcmraak\Rivercrs\Models\Checkins
+form: $/mcmraak/rivercrs/models/checkins/fields.yaml
+defaultRedirect: mcmraak/rivercrs/checkins
+create:
+    title: 'Создание заезда'
+    redirect: 'mcmraak/rivercrs/checkins/update/:id'
+    redirectClose: mcmraak/rivercrs/checkins
+update:
+    title: 'Изменение заезда'
+    redirect: mcmraak/rivercrs/checkins
+    redirectClose: mcmraak/rivercrs/checkins
+preview: {  }

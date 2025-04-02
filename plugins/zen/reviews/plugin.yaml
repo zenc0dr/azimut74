@@ -1,0 +1,20 @@
+plugin:
+    name: 'zen.reviews::lang.plugin.name'
+    description: 'Модуль отзывов'
+    author: 'Alexander Ablizin'
+    icon: oc-icon-trophy
+    homepage: ''
+navigation:
+    reviews-main:
+        label: Отзывы
+        url: zen/reviews/reviews
+        icon: icon-trophy
+        sideMenu:
+            reviews-reviews:
+                label: Отзывы
+                url: zen/reviews/reviews
+                icon: icon-trophy
+            reviews-emails:
+                label: Email
+                url: zen/reviews/emails
+                icon: icon-envelope

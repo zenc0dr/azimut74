@@ -1,0 +1,16 @@
+name: Города
+modelClass: Zen\Dolphin\Models\City
+form: $/zen/dolphin/models/city/fields.yaml
+defaultRedirect: zen/dolphin/cities
+create:
+    title: 'Создать город'
+    redirect: 'zen/dolphin/cities/update/:id'
+    redirectClose: zen/dolphin/cities
+    flashSave: 'Город создан'
+update:
+    title: 'Изменить город'
+    redirect: zen/dolphin/cities
+    redirectClose: zen/dolphin/cities
+    flashSave: 'Город изменён'
+    flashDelete: 'Город удалён'
+preview: {  }

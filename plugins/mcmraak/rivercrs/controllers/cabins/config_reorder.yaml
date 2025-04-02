@@ -1,0 +1,4 @@
+title: Cabins
+modelClass: Mcmraak\Rivercrs\Models\Cabins
+toolbar:
+    buttons: reorder_toolbar

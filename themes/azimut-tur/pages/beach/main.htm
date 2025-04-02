@@ -1,0 +1,23 @@
+title = "Пляжный отдых"
+url = "/beach"
+layout = "general"
+description = "Пляжный отдых"
+meta_title = "Пляжный отдых"
+is_hidden = 0
+robot_index = "index"
+robot_follow = "follow"
+contentType = "html"
+==
+<section class="beach">
+					
+	<div class="headText">
+		<span>{{ this.page.title }}</span>
+	</div>
+
+	<div class="pageData">
+		<div class="data">
+			{% component 'contenteditor' file="beach/main" %}
+		</div>
+	</div>
+
+</section>

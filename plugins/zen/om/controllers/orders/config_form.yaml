@@ -1,0 +1,16 @@
+name: Orders
+modelClass: Zen\Om\Models\Order
+form: $/zen/om/models/order/fields.yaml
+defaultRedirect: zen/om/orders
+create:
+    title: 'zen.om::lang.orders.create'
+    redirect: 'zen/om/orders/update/:id'
+    redirectClose: zen/om/orders
+    flashSave: 'zen.om::lang.orders.created'
+update:
+    title: 'zen.om::lang.orders.update'
+    redirect: zen/om/orders
+    redirectClose: zen/om/orders
+    flashSave: 'zen.om::lang.orders.updated'
+    flashDelete: 'zen.om::lang.orders.deleted'
+preview: {  }

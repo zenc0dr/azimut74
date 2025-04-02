@@ -1,0 +1,10 @@
+name: Hopts
+form: $/zen/dolphin/models/hopt/fields.yaml
+modelClass: Zen\Dolphin\Models\Hopt
+defaultRedirect: zen/dolphin/hopts
+create:
+    redirect: 'zen/dolphin/hopts/update/:id'
+    redirectClose: zen/dolphin/hopts
+update:
+    redirect: zen/dolphin/hopts
+    redirectClose: zen/dolphin/hopts

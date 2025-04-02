@@ -1,0 +1,5 @@
+title: Reviews
+modelClass: Zen\Dolphin\Models\Review
+nameFrom: sort_order
+toolbar:
+    buttons: reorder_toolbar

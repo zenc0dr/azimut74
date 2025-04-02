@@ -1,0 +1,57 @@
+description = "Модальная форма бронирование путевки"
+
+[viewBag]
+==
+<div id="modalBooking--sans" class="modalFade">
+    <div class="modalWrap modalWrapBook pb-xs-30">
+    	
+    	<div class="modalDone">
+			<button title="Close (Esc)" type="button" class="mfp-close">×</button>
+
+			<div class="modalHead">
+				<span>Спасибо за заявку!</span>
+				<span>Специалист позвонит вам в ближайшее время</span>
+			</div>
+		</div>
+
+        <div class="modalContent">
+			<button title="Close (Esc)" type="button" class="mfp-close">×</button>
+			
+			<div id="SansBookingModalContent" class="modal__body"></div>
+			
+			<!-- <div class="bookingAnnoLine">
+			    <span>Мы гарантируем конфиденциальность введенных данных, мы не используем Ваши данные для навязчивых рассылок, заказ ни к чему Вас не обязывает</span>
+			</div> -->
+			
+			{#<script>
+				$(document).ready(function(){
+					$('.bookSelect').selectize({
+					    sortField: 'text'
+					});
+					$('#modalBooking .phone').inputmask('+7(999)999-99-99', { showMaskOnHover: true });
+				});
+			</script>#}
+			
+			{# Дополнительное модальное окно #}
+			
+			<topmodal>
+				<div class="modalSecond">
+					<div class="modalLine">
+						<div class="close">×</div>
+			    		<modalbody></modalbody>
+					</div>
+				</div>
+			</topmodal>
+		</div>
+	</div>
+	
+	<ofmodal>
+		<div class="modalSecond">
+			<div class="modalLine">
+				<div class="close">×</div>
+	    		<ofmodalbody></ofmodalbody>
+			</div>
+		</div>
+	</ofmodal>
+	
+</div>

@@ -1,0 +1,21 @@
+fields:
+    active:
+        label: Активность
+        span: full
+        type: switch
+    info:
+        span: full
+        path: $/mcmraak/rivercrs/controllers/towns/info.php
+        type: hint
+    name:
+        label: 'Название города'
+        span: full
+        type: text
+    soft_id:
+        label: 'Связь - для Поиска. (Выбор города - Родителя. Поиск Текущего города будет осуществляться по имени Родителя)'
+        span: auto
+        type: dropdown
+    alt_name:
+        label: 'Альтернативное название города - то имя текущего города, которое будет отображаться в маршруте.'
+        span: auto
+        type: text

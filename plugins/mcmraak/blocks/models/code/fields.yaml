@@ -1,0 +1,18 @@
+fields:
+    active:
+        label: Активно
+        span: full
+        default: 1
+        type: switch
+    code:
+        label: 'Код замены'
+        span: auto
+        type: text
+    replace:
+        label: Замена
+        span: auto
+        type: text
+    hint:
+        span: auto
+        path: hint
+        type: hint

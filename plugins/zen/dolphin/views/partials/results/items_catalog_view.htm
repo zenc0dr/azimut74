@@ -1,0 +1,13 @@
+{% for item in items %}
+    <div class="dolphin-result-item">
+        <div class="dri-tour-name">{{ item.tour_name }}</div>
+        {% if item.waybill %}
+        <div class="dri-waybill">
+            {% for point in item.waybill %}
+                <div>{{ point }}</div>
+            {% endfor %}
+        </div>
+            <div class="dri-price-of">{{ item.price_of }}</div>
+        {% endif %}
+    </div>|
+{% endfor %}

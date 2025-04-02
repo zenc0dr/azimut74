@@ -1,0 +1,13 @@
+title: Каюты
+modelClass: Mcmraak\Rivercrs\Models\Cabins
+list: $/mcmraak/rivercrs/models/cabins/columns.yaml
+recordUrl: 'mcmraak/rivercrs/cabins/update/:id'
+noRecordsMessage: 'backend::lang.list.no_records'
+recordsPerPage: '30'
+showSetup: true
+showCheckboxes: true
+toolbar:
+    buttons: list_toolbar
+    search:
+        prompt: 'backend::lang.list.search_prompt'
+filter: config_filter.yaml

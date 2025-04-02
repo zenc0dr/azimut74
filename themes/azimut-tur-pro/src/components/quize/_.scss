@@ -1,0 +1,35 @@
+.quiz {
+    display: flex;
+    flex-direction: column;
+}
+.quize-video {
+    display: flex;
+    justify-content: center;
+}
+.quize-video-frame {
+    width: 100%;
+    height: 460px;
+    @include m('lg') {
+        width: 100%;
+        height: 300px;
+    }
+    @include m('600px') {
+        height: 52vw;
+    }
+}
+
+.quiz-button {
+    padding: 15px 0;
+    .marquiz__container {
+        .marquiz__button {
+            border-radius: 4px;
+        }
+    }
+}
+
+.quiz-desc {
+    padding: 15px;
+    @include m('sm') {
+        padding: 5px;
+    }
+}

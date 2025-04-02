@@ -1,0 +1,26 @@
+fields:
+    name:
+        label: Название
+        span: auto
+        required: 1
+        type: text
+    code:
+        label: 'Код правила'
+        span: auto
+        required: 1
+        preset:
+            field: name
+            type: slug
+        type: text
+    ttl:
+        label: TTL
+        span: auto
+        default: '15'
+        required: 1
+        type: number
+    answer:
+        label: Ответ
+        size: large
+        language: plain_text
+        span: full
+        type: codeeditor

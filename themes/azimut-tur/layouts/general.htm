@@ -1,0 +1,105 @@
+description = "Главный шаблон"
+
+[contenteditor]
+tools = "*"
+
+[ion]
+
+[Carousel]
+
+[Gallery]
+
+[Injector]
+
+[Map]
+
+[staticPage]
+useContent = 0
+default = 1
+==
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    {% partial 'seo/google-tm-head' %}
+	<meta name="yandex-verification" content="8eef983a68c1a9ec" />
+	<meta charset="UTF-8">
+
+	<meta name="google-site-verification" content="9HLewRGujAYDxY-cvyGl-SN7N3ascBK7Pp-0K0qpAkc" />
+	<meta name="cmsmagazine" content="b0cdd9b850bf292d9366aefb14bc5451" />
+
+	{% partial 'seo/meta' %}
+
+{#	<meta name="viewport" content="width=device-width, initial-scale=1">#}
+	<meta name="viewport" content="width=device-width, maximum-scale=1, initial-scale=1, user-scalable=0">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge">
+
+	{% partial 'includes/head' %}
+
+</head>
+<body>
+	{% partial 'modal/salutation' %}
+    {% partial 'seo/google-tm-body' %}
+
+    {# old header
+	<header class="header">
+		{% partial 'header/nav' %}
+		{% partial 'header/fixednav' %}
+		{% partial 'header/contacts' %}
+		{% component 'Carousel' %}
+        {% component 'Map' %}
+		{% partial 'header/services' %}
+
+	</header>
+	#}
+
+	{% partial 'header/new-header' %}
+
+	<main class="main">
+
+		{% placeholder breadcrumbs %}
+
+		<div class="c-p">
+			<div class="pageWrap">
+
+				{% page %}
+
+			</div>
+		</div>
+
+	</main>
+
+	{# Скрипты сайта подключаются ДО яндекс.карт #}
+	{% component 'ion' %}
+	{% partial 'includes/footer' %}
+
+	<footer class="footer">
+
+		{% partial 'footer/contacts' %}
+
+		{% partial 'footer/down' %}
+
+	</footer>
+
+	<div class="hidden">
+		{% partial 'modal/tour' %}
+		{% partial 'modal/call' %}
+		{% partial 'modal/call-tour' %}
+	</div>
+
+    {% if this.environment != 'dev' %}
+	{% partial 'analytics/yametrika' %}
+	{% partial 'analytics/googleanalytics' %}
+	{% endif %}
+	{% partial 'seo/schema' %}
+
+	{% partial 'temporary/meeting-window' %}
+
+	{% component 'Injector' %}
+
+	{% placeholder additional_scripts %}
+	<link rel="stylesheet" href="/plugins/zen/history/assets/css/history.css">
+	<script src="/plugins/zen/history/assets/js/manifest.js"></script>
+	<script src="/plugins/zen/history/assets/js/history.js"></script>
+</body>
+
+</html>

@@ -1,0 +1,15 @@
+.noparent {
+    color: #bbbbbb;
+}
+.images-badge {
+    background: #1991d2;
+    color: #fff;
+    display: inline-block;
+    min-width: 24px;
+    border-radius: 3px;
+    text-align: center;
+}
+.order-summ {
+    font-size: 18px;
+    text-align: right;
+}

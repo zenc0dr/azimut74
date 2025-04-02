@@ -1,0 +1,11 @@
+1.0.1:
+    - 'Initialize plugin.'
+1.0.2:
+    - 'Created table zen_sms_profiles'
+    - builder_table_create_zen_sms_profiles.php
+1.0.3:
+    - 'Created table zen_sms_items'
+    - builder_table_create_zen_sms_items.php
+1.0.4:
+    - 'Updated table zen_sms_profiles'
+    - builder_table_update_zen_sms_profiles.php

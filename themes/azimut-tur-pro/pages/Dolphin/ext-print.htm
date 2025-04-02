@@ -1,0 +1,94 @@
+title = "Версия для печати"
+url = "/ex-tours/ext/print"
+layout = "print"
+is_hidden = 0
+robot_index = "index"
+robot_follow = "follow"
+contentType = "html"
+force_show = 0
+==
+<?php
+function onInit()
+{
+    $this['page_css'] = mix('css/dolphin-ext-print.css', 'themes/azimut-tur-pro/assets');
+}
+
+function onStart()
+{
+    $init_success = Zen\Dolphin\Classes\DolphinFrontend::init($this);
+    
+    if (!$init_success) {
+        $this->setStatusCode(404);
+        return $this->controller->run('404');
+    }
+    
+}
+?>
+==
+{% put page_style %}
+<link rel="stylesheet" href="{{ page_css }}">
+{% endput %}
+
+
+<section class="content my-4">
+   <div>
+      <h1 class="title-1">{{ Dolphin.title|raw }}</h1>
+   </div>
+   <div>
+      {% partial 'waybill/waybill' obData=Dolphin.waybill %}
+      {% partial 'anonce/anonce' data=Dolphin.anonce %}
+   </div>
+   <div class="possibly-date">
+      <div class="info-block">
+         <div class="info-block__title">
+           Возможные даты тура
+         </div>
+         <div class="info-block__html">
+            <ul>
+               {% for item in Dolphin.allowed_dates %}
+               <li>{{ item }}</li>
+               {% endfor %}
+            </ul>
+         </div>
+      </div>
+   </div>
+   <div class="more-info-date">
+      <div class="info-block">
+         <div class="info-block__title text-center mt-2">
+            Подробности тура
+         </div>
+         {% set widget_data = Dolphin.widgets_data %}
+
+         {% for item in widget_data %}
+            <div class="info-block__html">
+               <div>Дата тура: {{ item.date.d1 }} ({{ item.date.d1d}}) - {{ item.date.d2 }} ({{ item.date.d2d}}), {{ item.days }} дн</div>
+               <div>Состав: {{ item.consist }}</div>
+               <div><strong>Общая цена тура: {% for i in item.price.chain %} {{ i.code }}({{ i.price|number_format(-3, '', ' ') }} руб){% if loop.last == false %} + {% endif %}{% endfor %} = {{ item.price.sum|number_format(-3, '', ' ') }} руб</strong></div>
+               <div>Отель: {{ item.hotel_name }}</div> 
+               <div>Номер: {{ item.number_name }}</div>
+               <div>Размещение: {{ item.placement }}</div>
+               <div>Питание: {{ item.pansion_name }}</div>
+            </div>
+         {% endfor %}
+      </div>
+   </div>
+ 
+    {% partial 'conditions/conditions'
+      obConditions=Dolphin.conditions
+      obHotels=Dolphin.hotels
+    %}
+    
+ 
+    {% partial 'tour-program/tour-program'
+      obData=Dolphin.tour_program
+      class="title-center title-margin tab-content-margin-top"
+    %}
+   
+    
+    {% partial 'info-block/info-block'
+      sTitle='Важная информация'
+      content=Dolphin.important_info
+      bRaw=true
+    %}
+    
+</section>

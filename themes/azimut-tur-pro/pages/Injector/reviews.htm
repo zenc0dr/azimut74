@@ -1,0 +1,16 @@
+title = "Блок отзывы"
+url = "/inject_reviews"
+is_hidden = 0
+robot_index = "index"
+robot_follow = "follow"
+contentType = "html"
+force_show = 0
+==
+<?php
+function onStart()
+{
+    $this['reviews'] = \Mcmraak\Rivercrs\Classes\InjSettings::getReviews();
+}
+?>
+==
+{{ reviews|raw }}

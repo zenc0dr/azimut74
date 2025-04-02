@@ -1,0 +1,73 @@
+fields:
+    active:
+        label: Активен
+        span: full
+        default: 1
+        type: switch
+    name:
+        label: 'Название потока'
+        span: auto
+        type: text
+    code:
+        label: 'Код потока'
+        span: auto
+        type: text
+tabs:
+    fields:
+        pools:
+            label: 'Пулы задач потока'
+            prompt: 'Добавить пул'
+            span: full
+            type: repeater
+            tab: Пулы
+            form:
+                fields:
+                    active:
+                        label: 'Пул активен'
+                        span: full
+                        default: 1
+                        type: switch
+                    call:
+                        label: 'Вызов пула'
+                        span: auto
+                        type: text
+                    title:
+                        label: 'Название пула'
+                        span: auto
+                        type: text
+                    self:
+                        label: 'Самовызываемый пул'
+                        span: auto
+                        type: switch
+                    critical:
+                        label: 'Критический пул'
+                        span: auto
+                        type: switch
+                    attempts:
+                        label: 'Количество попыток'
+                        span: auto
+                        type: number
+                    pause:
+                        label: 'Пауза между попытками (сек)'
+                        span: auto
+                        type: number
+                    timeout:
+                        label: 'Время на выполнение (сек)'
+                        span: auto
+                        type: number
+        data_repeater:
+            label: 'Переменные потока'
+            prompt: 'Добавить переменную'
+            span: full
+            type: repeater
+            tab: Настройки
+            form:
+                fields:
+                    key:
+                        label: Ключ
+                        span: auto
+                        type: text
+                    value:
+                        label: Значение
+                        span: auto
+                        type: text

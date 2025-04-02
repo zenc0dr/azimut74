@@ -1,0 +1,172 @@
+fields:
+    idsinfo:
+        span: full
+        path: $/zen/dolphin/controllers/hotels/idsinfo.php
+        type: partial
+    info_tech:
+        label: 'Служебная информация'
+        size: small
+        span: full
+        type: textarea
+    name:
+        label: Название
+        span: auto
+        type: text
+    type_id:
+        label: Тип
+        showSearch: true
+        span: auto
+        type: dropdown
+    save_geo:
+        span: full
+        path: $/zen/dolphin/controllers/hotels/geo.php
+        type: partial
+    gps:
+        label: 'GPS координаты'
+        span: auto
+        type: text
+        comment: 'Формат: долгота(E):широта(N) Пример:  30.3156:59.8688'
+    stars:
+        label: 'Количество звёзд'
+        span: auto
+        default: '0'
+        type: number
+    operator_id:
+        label: Туроператор
+        showSearch: true
+        span: auto
+        type: dropdown
+    to_sea:
+        label: 'Расстояние до моря'
+        span: auto
+        default: '0'
+        type: number
+    address:
+        label: Адрес
+        span: full
+        type: text
+    samopage:
+        span: full
+        path: $/zen/dolphin/controllers/hotels/samopage.php
+        type: partial
+tabs:
+    fields:
+        preview_image:
+            label: 'Аватар (Превью)'
+            mode: image
+            useCaption: true
+            thumbOptions:
+                mode: crop
+                extension: auto
+            span: full
+            type: fileupload
+            tab: 'Локальные изображения'
+        images:
+            label: Изображения
+            mode: image
+            useCaption: true
+            thumbOptions:
+                mode: crop
+                extension: auto
+            span: full
+            type: fileupload
+            tab: 'Локальные изображения'
+        hotel_images:
+            span: full
+            path: $/zen/dolphin/controllers/hotels/hotel_images.php
+            type: partial
+            tab: 'Внешние изображения'
+        info:
+            label: 'Описание гостиницы'
+            size: large
+            span: auto
+            type: richeditor
+            tab: Описание
+        numbers_desc:
+            label: 'Описание номеров'
+            size: large
+            span: auto
+            type: richeditor
+            tab: Описание
+        ci:
+            label: 'Информация о строительстве'
+            size: large
+            span: auto
+            type: richeditor
+            tab: Описание
+        ta:
+            label: 'Транспортная доступность'
+            size: large
+            span: auto
+            type: richeditor
+            tab: Описание
+        contacts:
+            label: Контакты
+            size: large
+            span: auto
+            type: richeditor
+            tab: Описание
+        dolphin_dump:
+            span: full
+            path: $/zen/dolphin/controllers/hotels/dolphin_dump.php
+            context:
+                - update
+                - preview
+            type: partial
+            tab: 'Данные Дельфина'
+        note:
+            label: Примечание
+            size: large
+            span: auto
+            type: richeditor
+            tab: Дополнительно
+        paid_services:
+            label: 'Платные услуги'
+            size: large
+            span: auto
+            type: richeditor
+            tab: Дополнительно
+        how_to_get:
+            label: Проезд
+            size: large
+            span: auto
+            type: richeditor
+            tab: Дополнительно
+        transfer:
+            label: Трансфер
+            size: large
+            span: auto
+            type: richeditor
+            tab: Дополнительно
+        therapy:
+            label: 'Показания для лечения'
+            size: large
+            span: auto
+            type: richeditor
+            tab: Дополнительно
+        treatment:
+            label: 'Профиль лечения'
+            size: large
+            span: auto
+            type: richeditor
+            tab: Дополнительно
+        hstructure_multi:
+            label: 'Инфраструктура гостиницы'
+            span: auto
+            type: checkboxlist
+            tab: Опции
+        hservice_multi:
+            label: 'Услуги гостиницы'
+            span: auto
+            type: checkboxlist
+            tab: Опции
+        hopts_multi:
+            label: 'Характеристики гостиницы'
+            span: auto
+            type: checkboxlist
+            tab: Опции
+        plage_multi:
+            label: Пляж
+            span: auto
+            type: checkboxlist
+            tab: Опции

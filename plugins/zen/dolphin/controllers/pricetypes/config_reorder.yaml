@@ -1,0 +1,4 @@
+title: Pricetypes
+modelClass: Zen\Dolphin\Models\Pricetype
+toolbar:
+    buttons: reorder_toolbar

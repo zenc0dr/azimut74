@@ -1,0 +1,16 @@
+title: HotelTypes
+modelClass: Zen\Dolphin\Models\HotelType
+list: $/zen/dolphin/models/hoteltype/columns.yaml
+recordUrl: 'zen/dolphin/hoteltypes/update/:id'
+noRecordsMessage: 'backend::lang.list.no_records'
+recordsPerPage: 20
+showSetup: true
+showCheckboxes: true
+defaultSort:
+    column: id
+    direction: asc
+toolbar:
+    buttons: list_toolbar
+    search:
+        prompt: 'backend::lang.list.search_prompt'
+filter: config_list.yaml

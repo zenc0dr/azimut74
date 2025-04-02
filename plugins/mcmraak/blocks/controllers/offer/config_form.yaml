@@ -1,0 +1,10 @@
+name: Offer
+form: $/mcmraak/blocks/models/offer/fields.yaml
+modelClass: Mcmraak\Blocks\Models\Offer
+defaultRedirect: mcmraak/blocks/offer
+create:
+    redirect: 'mcmraak/blocks/offer/update/:id'
+    redirectClose: mcmraak/blocks/offer
+update:
+    redirect: mcmraak/blocks/offer
+    redirectClose: mcmraak/blocks/offer

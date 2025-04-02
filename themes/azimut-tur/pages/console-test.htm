@@ -1,0 +1,17 @@
+title = "console test"
+url = "/console-test"
+is_hidden = 0
+robot_index = "index"
+robot_follow = "follow"
+contentType = "html"
+force_show = 0
+==
+<?php
+function onStart()
+{
+    $text = 'Теплоход "Михаил Фрунзе" (проект 92-016)';
+    dd( preg_replace("/(.*?)\(.*?\)\s?(.*?)/is", '\\1\\3', $text));
+    #echo `wget -O infoflot.txt 'https://restapi.infoflot.com/ships?key=b5262f5d8de5be65b201bb5e3f5e544a245b6082';echo 'ok' >> 'ok.txt' &`;
+}
+?>
+==

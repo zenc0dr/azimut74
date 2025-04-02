@@ -1,0 +1,45 @@
+.switcher {
+    width: 50px;
+    height: 26px;
+    display: inline-block;
+    background-color: transparent;
+    border: 1px solid #b7ca3a;
+    border-radius: 30px;
+    position: relative;
+    cursor: pointer;
+    -webkit-transition: all .2s ease;
+    -moz-transition: all .2s ease;
+    -ms-transition: all .2s ease;
+    -o-transition: all .2s ease;
+    transition: all .2s ease;
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
+    line-height: 1;
+    font-size: 0;
+}
+.switcher.active {
+    background-color: #b7ca3a;
+}
+.switcher::before {
+    content: '';
+    width: 20px;
+    height: 20px;
+    border-radius: 100%;
+    /* border: 1px solid #b7ca3a; */
+    display: inline-block;
+    position: absolute;
+    background-color: #fff;
+    top: 1.5px;
+    left: 1px;
+    box-shadow: 0 1px 2px 0 rgba(0,0,0,0.5);
+    -webkit-transition: all .2s ease;
+    -moz-transition: all .2s ease;
+    -ms-transition: all .2s ease;
+    -o-transition: all .2s ease;
+    transition: all .2s ease;
+}
+.switcher.active::before {
+    transform: translateX(25px);
+}

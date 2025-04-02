@@ -1,0 +1,11 @@
+Данная функция нужна для того чтобы производить слияние категорий кают появившихся посредством
+парсинга из внешних источников. Нужно выбрать из списка категорий кают для данного теплохода ту
+которой соотвествует эта категория.
+<h2>Теплоход: <?php if(isset($model->motorship)) echo $model->motorship->name?><br>Категория: <?=$model->category?></h2>
+<ul>
+    <li>Имя в источнике "Водоходъ":  <strong><?=$model->waterway_name?></strong>    </li>
+    <li>Имя в источнике "Волга Wolga": <strong><?=$model->volga_name?></strong></li>
+    <li>Имя в источнике "Гама": <strong><?=$model->gama_name?></strong></li>
+    <li>Имя в источнике "Спутник-Гермес": <strong><?=$model->germes_name?></strong></li>
+    <li>Имя в источнике "Инфофлот": <strong><?=$model->infoflot_name?></strong></li>
+</ul>

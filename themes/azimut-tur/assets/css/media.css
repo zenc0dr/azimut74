@@ -1,0 +1,836 @@
+@media only screen and (max-width : 1199px) {
+	.headMenu ul li a {
+		margin-right: 20px
+	}
+	.headButton .hbtn {
+		padding: 10px 20px
+	}
+	section.headContacts .logo {
+		margin-bottom: 15px
+	}
+	.servicesMenu > ul > li {
+		width: 16.6666667%
+	}
+	.pageWrap {
+		margin-left: -15px;
+		margin-right: -15px;
+		padding: 15px;
+		padding-top: 30px
+	}
+	.tourItem .itemImg, .tourItem .itemData {
+		/* height: 230px */
+	}
+	.sliderNav .nav {
+		width: 20px;
+		height: 20px;
+		/* top: 46% */
+	}
+	.sliderNav .prev {
+		left: -1vw
+	}
+	.sliderNav .next {
+		right: -1vw
+	}
+	.servicesMenu > ul > li .servLink span:last-child {
+		min-height: 44px
+	}
+	section.card .cardImages {
+		padding-right: 0
+	}
+	.fixedMenu ul {
+		width: 100%
+	}
+	.fixedMenu ul li a {
+		margin-right: 6px
+	}
+	.tourSelection .tsDate .selectize-input {
+		padding-left: 30px
+	}
+	.selectize-control.single .selectize-input:after {
+		right: 5px;
+		margin-top: -2px
+	}
+	.crSwitchContent .crQuestion .crQuestionData {
+		width: 65%
+	}
+	.crSwitchContent .crQuestion .crQuestionButton {
+		width: 35%
+	}
+	.crRevData .crRevDataBottom .revDataBottomLeft .revBottomButtons {
+		padding-left: 5px
+	}
+	.reviewsBlock .crReview .crRevData .crRevDataTop .revDataTopLeft {
+		width: 70%
+	}
+	.reviewsBlock .crReview .crRevData .crRevDataTop .revDataTopRight {
+		width: 30%
+	}
+	.rightBlock .tourSelection .tsItemShip {
+		width: 30%
+	}
+	.crDescription .descItem .tourCredit {
+		width: 75%
+	}
+	.shipDescriptionBlock .shipDescTop .shipDescImages .smallImages .imageItem {
+		width: 81px;
+		height: 50px;
+		margin-right: 14px
+	}
+	.shipDescriptionBlock .shipDescTop .shipDescImages .bigImagesWrap {
+		padding-right: 15px
+	}
+	.shipDescriptionBlock .shipDescTop .shipDescFeatures, .shipDescriptionBlock .shipDescTop .shipDescFeatures .shipDescFeaturesLine > div:last-child {
+		padding-left: 15px
+	}
+	.reviewsBlock .reviewsSwitcher {
+		padding: 20px 20px
+	}
+	.reviewsBlock .reviewsSwitcher > div:nth-of-type(3), .reviewsBlock .reviewsSwitcher > div:nth-of-type(2) {
+		margin-left: 15px
+	}
+	.reviewsBlock .reviewsSwitcher > div:nth-of-type(2) {
+		width: 32%
+	}
+	.reviewsBlock .crReview .crRevData .crRevDataTop > div {
+		vertical-align: middle
+	}
+	.reviewsBlock .crReview .crRevData .crRevDataTop .revDataTopLeft {
+		width: 65%
+	}
+	.reviewsBlock .crReview .crRevData .crRevDataTop .revDataTopRight {
+		width: 35%
+	}
+	.f-phones .phone a, .f-phones .phone span, .f-phones .phone span.number {
+		font-size: 18px;
+	}
+	.slItem {
+		height: 175px;
+		min-height: 175px;
+	}
+	.s-card__switch {
+		padding: 15px 20px 12px;
+	}
+	.s-sel__input {
+		/* width: 100%; */
+	}
+	.s-sel__button .btn {
+		font-size: 14px;
+	}
+	.s-sel__input_price, .s-sel__input_sealength {
+		width: 55px;
+	}
+}
+@media only screen and (max-width : 991px) {
+	.toggleButton {
+		cursor: pointer
+	}
+	.servicesMenu > ul > li {
+		width: 33%
+	}
+	#map {
+		width: 45%
+	}
+	footer.footer .contacts {
+		height: 510px
+	}
+	.pageWrap {
+		margin-left: -5px;
+		margin-right: -5px;
+		padding: 15px;
+		padding-top: 30px
+	}
+	.sliderNav .prev {
+		left: -0.5vw
+	}
+	.sliderNav .next {
+		right: -0.5vw
+	}
+	.servicesMenu > ul > li a span:last-child {
+		min-height: auto
+	}
+	.cardInfo .cardName span, .cardHotel .hotelName span, .cruiseHead .cruiseInfo .cruiseName span {
+		font-size: 22px
+	}
+	.cardInfo .cardAddress a {
+		font-size: 14px
+	}
+	.cardOrders .cardButton .hbtn {
+		padding: 10px 30px
+	}
+	.cardPricing .manager > div:first-child, .cardTimer > div:first-child {
+		display: none
+	}
+	.cardPricing .prices > div:last-child {
+		padding-left: 0
+	}
+	section.card .cardDesc {
+		padding-top: 25px;
+		padding-bottom: 25px
+	}
+	.contWrap .conButton {
+		margin-top: 85px
+	}
+	.servicesMenu > ul > ul {
+		text-align: left;
+		text-align-last: left
+	}
+	.modalCredit, .modalGraphic, .modalCabin, .modalSecond {
+		width: 720px
+	}
+	.modalContent .modalHead span {
+		font-size: 20px
+	}
+	.modalGraphic .modalLineTable::-webkit-scrollbar {
+		display: inline-block
+	}
+	.modalGraphic .modalLineTable {
+		padding-bottom: 10px
+	}
+	.modalWrapBook {
+		width: 750px
+	}
+	.slItem .slHeading span {
+		font-size: 42px
+	}
+	.leftBlock .leftBlockItem .itemBody {
+		display: none;
+	}
+	.leftBlock .leftBlockItem .itemHead {
+		cursor: pointer;
+	}
+	.leftBlock .leftBlockItem {
+		margin-bottom: 15px;
+	}
+	.arrow-s {
+		display: inline-block;
+		float: right;
+		margin-top: 3px;
+	}
+	.arrow-s::before {
+		font-size: 14px;
+		color: #fff;
+	}
+	.shipVideo iframe {
+		max-height: 390px!important;
+	}
+	.meeting__meet {
+		font-size: 18px;
+	}
+	.meeting__text {
+		font-size: 16px;
+	}
+	.slItem {
+		height: 150px;
+		min-height: 150px;
+	}
+	.h_size-m, .h_size-m span {
+		font-size: 28px;
+	}
+}
+@media only screen and (max-width : 767px) {
+	.phones {
+		margin-top: 10px
+	}
+	.phones, .phones .phonesWrap, .addrWrap, .slItem .slHeading, .slItem .slTop, .slLine {
+		text-align: center
+	}
+	.slItem .slHeading {
+		padding: 10px 0
+	}
+	.slItem .slHeading span {
+		font-size: 28px;
+		color: #d4171d;
+		background-color: transparent!important;
+		-webkit-background-clip: border-box;
+		background: none;
+		line-height: 1
+	}
+	.slItem .slHeading span span {
+		display: block;
+		font-size: 48px
+	}
+	.slItem {
+		padding: 15px 0
+	}
+	.slItem .slTop span {
+		font-size: 16px
+	}
+	.slItem .slButtons, .slItem .slButtons div:last-child {
+		margin-top: 10px;
+		display: block
+	}
+	.slItem .slButtons div:last-child {
+		margin-left: 0
+	}
+	.slItem .slButtons .slButton {
+		display: inline-block;
+		width: 100%
+	}
+	.slItem .slButtons div {
+		margin-left: 0
+	}
+	section.slider {
+		height: 100%;
+		/* min-height: 239px; */
+		/* max-height: 100% */
+	}
+	.servicesMenu > ul > li {
+		width: 50%
+	}
+	.servicesMenu > ul {
+		text-align: left;
+		text-align-last: left
+	}
+	main.main {
+		padding: 25px 0
+	}
+	.tourItem .itemImg, .tourItem .itemData::after {
+		display: none
+	}
+	.tourItem .itemData {
+		width: 100%;
+		height: auto
+	}
+	.tourMoreButton {
+		margin-top: 0
+	}
+	section.article {
+		padding-top: 30px
+	}
+	#map {
+		width: 100%;
+		position: static;
+		height: 415px;
+		padding-top: 50px
+	}
+	footer.footer .contacts {
+		height: auto;
+		padding-top: 50px;
+		padding-bottom: 0
+	}
+	.conButtons .conText span {
+		display: inline-block
+	}
+	.footer.footer .contacts .conButtons .conText {
+		padding-left: 0;
+		padding-top: 10px;
+		display: block
+	}
+	.conButtons .conText span:last-child {
+		padding-left: 5px
+	}
+	.footerDown .copyright p {
+		font-size: 11px
+	}
+	.servicesMenu > ul > li a {
+		width: 100%;
+		padding: 20px 12px
+	}
+	.servicesMenu > ul > li a span:last-child {
+		min-height: 44px
+	}
+	.pageWrap {
+		padding-left: 0;
+		padding-right: 0;
+		margin-left: 0;
+		margin-right: 0
+	}
+	.modalWrap {
+		width: 300px;
+		padding: 15px 20px;
+		margin-top: 10%
+	}
+	section.alert .toursModule {
+		width: 100%;
+		padding: 0 15px
+	}
+	.cardImages .mainImages .images, .cardImages .mainImages .sliderNav {
+		height: 255px
+	}
+	.cardData {
+		padding-top: 20px
+	}
+	.cardInfo .cardOrders > div {
+		width: 100%;
+		text-align: center
+	}
+	.cardInfo .cardPricing > div {
+		text-align: left;
+		width: 100%
+	}
+	.cardInfo .cardPricing .oldPrice {
+		text-align: left
+	}
+	.cardPricing .prices > div:last-child {
+		padding-left: 15px
+	}
+	.cardPricing .manager > div:first-child, .cardTimer > div:first-child {
+		display: inline-block
+	}
+	.cardPricing .manager > div:last-child, .cardTimer > div:last-child {
+		text-align: left
+	}
+	.cardPricing .manager, .cardOrders .cardTimer {
+		padding-top: 15px;
+		text-align: left
+	}
+	.cardOrders .cardTimer {
+		display: none!important
+	}
+	.descInfo .line .leftCol {
+		width: 35%
+	}
+	.descInfo .line .rightCol {
+		width: 65%
+	}
+	.contWrap .conButton {
+		margin-top: 25px;
+		text-align: center
+	}
+	.contactsData .contWrap {
+		padding-top: 15px
+	}
+	.toursBlock .pagination {
+		padding-top: 5px
+	}
+	.footerDown .copyright {
+		height: 116px
+	}
+	section.departure .switchers .switch {
+		width: 100%;
+		margin-bottom: 5px
+	}
+	section.departure .switchers .switch span {
+		font-size: 12px
+	}
+	.cruiseHead .cruiseInfo {
+		margin-top: 30px
+	}
+	.rightBlock .tourSelection .tsItem, .rightBlock .tourSelection .tsItem .tsBig, .rightBlock .tourSelection .tsItem .tsSmall, .shipBlock .shipBlockTop .shipImage {
+		width: 100%
+	}
+	.rightBlock .tourSelection .tsItem > div:nth-of-type(2) {
+		margin-left: 0;
+		margin-top: 5px
+	}
+	.rightBlock .tourSelection .tsButton {
+		text-align: center
+	}
+	.shipBlock .shipBlockTop .shipInfo {
+		width: 100%;
+		padding-left: 0
+	}
+	.shipInfo .shipRouteBlock > div:first-child {
+		width: 15%
+	}
+	.shipInfo .shipRouteBlock .shipRoute {
+		width: 85%
+	}
+	.data h2 {
+		font-size: 18px
+	}
+	.reviewsBlock .crReview .crRevData {
+		padding-left: 10px;
+	}
+	.crRevData .crRevDataBottom .revDataBottomRight a, .crRevDataMiddle .data p, .crRevData .crRevDataBottom .revDataBottomLeft span:first-child, .crRevData .crRevDataBottom .revDataBottomLeft .revBottomButtons .rbtn, .crRevData .crRevDataBottom .revDataBottomLeft .revBottomButtons span {
+		font-size: 12px;
+	}
+	.crRevData .crRevDataTop .revDataTopLeft .revName span.name, .crRevData .crRevDataTop .revDataTopLeft .revName span.ship, .crRevData .crRevDataTop .revDataTopLeft .revName span {
+		font-size: 14px;
+	}
+	.crRevData .crRevDataTop .revDataTopRight span {
+		display: none
+	}
+	.reviewsBlock .crReview .crRevData .crRevDataTop > div {
+		vertical-align: middle
+	}
+	.crRevData .crRevDataTop .revDataTopLeft .revDate span {
+		font-size: 10px
+	}
+	.crRevData .crRevDataBottom .revDataBottomLeft .revBottomButtons, .crRevData .crRevDataBottom .revDataBottomLeft .revBottomButtons > :first-child {
+		padding-left: 0
+	}
+	.writerForm .wLine > div:last-child {
+		width: 100%;
+		margin-top: 10px;
+		padding-left: 0;
+	}
+	.writerForm .wLine .writerSwitchers .wrSwitcher {
+		padding: 10px 20px
+	}
+	.writerForm .wLine > div:first-child, .writerForm .wLine div:last-child textarea, .writerForm .wLine div:last-child input, .rightBlock .revBlockButtons > div {
+		width: 100%
+	}
+	.rightBlock .revBlockWriter, .s-reviews-writer {
+		padding: 20px 15px
+	}
+	.rightBlock .revBlockWriter .writerHeading span {
+		font-size: 20px
+	}
+	.rightBlock .revBlockButtons {
+		margin: 20px 0 25px
+	}
+	.rightBlock .revBlockButtons .revBlockButtonsRight {
+		margin-top: 10px
+	}
+	.shipBlock .shipBlockGraphic, .rightBlock .tourSelection .tsItem > div:nth-of-type(3) {
+		margin-left: 0
+	}
+	.rightBlock .tourSelection .tsItemDate, .tourSelectPad {
+		padding-left: 0
+	}
+	.rightBlock .tourSelection .tsItem > div:nth-of-type(3) {
+		margin-top: 5px
+	}
+	.tsItemDate .dateSelect input {
+		width: 85%
+	}
+	.rightBlock .tourSelection .tsButton {
+		position: static
+	}
+	.rightBlock .tourSelection .tsItem > div .tsYearSwitcher {
+		width: 48%
+	}
+	.rightBlock .tourSelection .tsItem > div label {
+		width: 50%
+	}
+	.tsItemDate .dateSelect:after {
+		right: 15px
+	}
+	.modalCredit, .modalGraphic, .modalCabin, .modalSecond {
+		width: 450px
+	}
+	[id*="modal"] .modalContent .modalHead span {
+		font-size: 18px!important
+	}
+	.modalCredit, .modalGraphic, .modalCabin, .modalSecond {
+		padding: 35px 15px 20px
+	}
+	.modalGraphic .modalLine .shipName, .modalGraphic .modalLine .shipName span, .modalGraphic .modalLine .shipDates, .modalGraphic .modalLine .shipDates span, .modalGraphic .modalLine table td, .modalGraphic .modalLine table th {
+		font-size: 14px
+	}
+	.modalGraphic .modalLine .attention, .s-sel__sealength-txt {
+		font-size: 12px
+	}
+	.crDescription > div {
+		width: 100%
+	}
+	.crDescription .descItem {
+		margin-bottom: 10px
+	}
+	.crDescription .crDescriptionRight {
+		padding-top: 15px;
+		padding-left: 0
+	}
+	.crDescription .descItem .buyBlock {
+		width: 100%
+	}
+	.crDescription .descItem .bbtn:hover .buyBlock {
+		background-size: 100%
+	}
+	.crDescription {
+		padding: 15px 0
+	}
+	.shipDescCabinBlock .shipDescCabinItem .cabinItemLine {
+		padding: 15px
+	}
+	.shipDescCabinBlock .shipDescCabinItem .cabinItemLine .cabinItemLineLeft, .shipDescCabinBlock .shipDescCabinItem .cabinItemLine .cabinItemLineRight {
+		width: 100%
+	}
+	.shipDescCabinBlock .shipDescCabinItem .cabinItemLine .cabinItemLineRight {
+		padding-top: 15px;
+		padding-left: 0
+	}
+	.shipDescCabinBlock .shipDescCabinItem .cabinItemHeading, .shipDescriptionBlock .shipDescTop {
+		padding: 15px
+	}
+	.shipDescriptionBlock .shipDescTop .shipDescImages {
+		width: 100%
+	}
+	.shipDescriptionBlock .shipDescTop .shipDescFeatures {
+		width: 100%;
+		padding-top: 15px;
+		padding-left: 0
+	}
+	.shipDescriptionBlock .shipDescTop .shipDescFeatures .shipDescFeaturesLine {
+		padding-bottom: 10px
+	}
+	.reviewsBlock .reviewsSwitcher > div:nth-of-type(1), .reviewsBlock .reviewsSwitcher > div:nth-of-type(2) {
+		width: 50%
+	}
+	.reviewsBlock .reviewsSwitcher > div:nth-of-type(3) {
+		width: 100%;
+		margin-left: 0;
+		text-align: center;
+		margin-top: 15px
+	}
+	.reviewsBlock .reviewsSwitcher > div:nth-of-type(2) {
+		margin-left: 0
+	}
+	.reviewsBlock .reviewsSwitcher {
+		padding: 15px
+	}
+	.writerForm .wLine > div:last-child .addPhoto, .s-reviews-writer__add-photo {
+		padding: 10px 0;
+		width: 100%
+	}
+	.modalWrapBook {
+		width: 470px
+	}
+	.modalWrapBook .bookingBlock .bookingBlockBottom .bookingCategoryLine > div, .bookingBlockBottom .bookingDataLine .dataLineForm .dataLineLeft, .bookingBlockBottom .bookingDataLine .dataLineForm .dataLineRight, .bookingHumanLine > div:first-child, .bookingHumanLine > div:first-child, .bookingHumanLine > div:last-child {
+		width: 100%
+	}
+	.bookingHumanLine > div:first-child, .bookingHumanLine > div:first-child, .bookingHumanLine > div:last-child {
+		margin-top: 15px;
+		text-align: center
+	}
+	.modalWrapBook .bookingBlock .bookingBlockBottom .bookingCategoryLine > div:nth-of-type(2) {
+		margin-top: 15px;
+		padding-left: 0
+	}
+	.bookingBlockBottom .bookingDataLine .dataLineForm .dataLineRight {
+		padding-left: 0
+	}
+	.bookingBlockBottom .bookingAnnoLine {
+		padding: 10px 10px
+	}
+	.bookingHumanLine > div:last-child, .humanLineItem > div:last-child, .modalCabin .modalLine .cabinRight, .modalSecond .modalLine .cabinRight {
+		padding-left: 0
+	}
+	.humanLineItem > div:last-child {
+		margin-top: 10px
+	}
+	.modalLine .cabinLeft, .modalLine .cabinRight {
+		width: 100%
+	}
+	.modalLine .cabinRight {
+		margin-top: 15px
+	}
+	.modalLine .cabinRight .cabinName span {
+		font-size: 18px
+	}
+	.modalLine .cabinRight .cabinDescLine {
+		margin-top: 10px
+	}
+	.modalLine .cabinRight .cabinName {
+		padding-bottom: 10px;
+	}
+	.modalCredit .modalLine .crBlock {
+		height: auto
+	}
+	.modalCredit .modalLine .crBlock .crBlockImage svg {
+		max-width: 100%
+	}
+	.rightBlock .revBlockButtons .revBlockButtonsLeft {
+		width: 100%;
+		text-align: left;
+	}
+	.rightBlock .revBlockButtons .revBlockButtonsRight {
+		width: 100%;
+		text-align: center;
+	}
+	.shipVideo iframe {
+		width: 100%!important;
+		max-height: 330px!important;
+	}
+	.revloader {
+		align-items: flex-end;
+		padding-bottom: 25%;
+	}
+	.writerForm .wLine .wrSelect {
+		width: 100%;
+	}
+	html.locked {
+		width: 100%;
+	}
+	html.locked section.fixedNav {
+		width: 100%;
+	}
+	.meeting__meet {
+		margin: 0;
+	}
+	.slItem {
+		height: 90px;
+		min-height: 90px;
+	}
+	.slider .sliderNav .nav {
+		width: 10px;
+		height: 10px;
+	}
+	.slider .sliderNav .prev {
+		left: 1vw;
+	}
+	.slider .sliderNav .next {
+		right: 1vw;
+	}
+	.s-card__booking-wrap {
+		padding: 20px;
+	}
+	.s-card__booking-line, .s-sel__line {
+		padding: 15px;
+	}
+	.s-card__booking-col .btn, .s-sel__label, .s-sel__input, .s-sel__select-list-item {
+		font-size: 12px;
+	}
+	.s-sel__input {
+		padding: 6.5px;
+	}
+	.s-sel__select-output {
+		padding: 4px 5px;
+	}
+	.s-sel__select-value {
+		font-size: 12px;
+	}
+	.s-sel__button .btn {
+		font-size: 14px;
+		padding: 10px 0;
+	}
+	.h_size-m, .h_size-m span {
+		font-size: 24px;
+	}
+	.s-sel__line-head, .s-card__heading {
+		font-size: 16px;
+	}
+	.s-card__small-images > div > :nth-child(n+6) {
+		height: 0;
+	}
+	.s-card__small-images > div > :nth-child(n+6) .s-card__small-image {
+		height: 0;
+		-webkit-transition: height .3 ease-in-out;
+		-moz-transition: height .3 ease-in-out;
+		-ms-transition: height .3 ease-in-out;
+		-o-transition: height .3 ease-in-out;
+		transition: height .3 ease-in-out;
+		overflow: hidden;
+	}
+	.s-card__small-images.active > div > :nth-child(n+6) {
+		height: 100%;
+	}
+	.s-card__small-images.active > div > :nth-child(n+6) .s-card__small-image, .s-card__small-image {
+		height: 45px;
+	}
+	.s-card__room-name {
+		padding: 15px 25px;
+	}
+	.s-card__images-wrap {
+		padding: 15px;
+	}
+	.modal__detail-label {
+		font-size: 12px;
+	}
+	.modal__detail-data {
+		font-size: 14px;
+	}
+	.s-card__room-image, .s-card__room-images.active div > :nth-child(n+4) .s-card__room-image {
+		height: 105px;
+	}
+	.s-card__room-details-col {
+		padding-left: 0;
+		padding: 5px 0;
+	}
+	.s-sel__card-name {
+		font-size: 16px;
+	}
+	.s-sel__card {
+		padding: 20px;
+	}
+	.modal__detail-data, .s-sel__card-button .btn {
+		font-size: 14px;
+	}
+	.s-sel__card-line_properties {
+		padding: 15px 10px 5px;
+	}
+}
+@media only screen and (max-width : 479px) {
+	.headButton .hbtn {
+		font-size: 12px;
+		padding: 10px 0;
+		width: 100%
+	}
+	footer.footer .contacts .number span {
+		display: block
+	}
+	.footerDown .copyright {
+		height: 176px
+	}
+	.shipBlock .shipBlockBottom .shipButton .sbtn {
+		padding: 12px;
+		font-size: 12px
+	}
+	.shipBlock.yellow .shipBlockBottom .shipButtonBlock .event span {
+		font-size: 12px
+	}
+	.shipInfo .shipRouteBlock > div:first-child {
+		width: 25%
+	}
+	.shipInfo .shipRouteBlock .shipRoute {
+		width: 75%
+	}
+	.shipBlockTop .shipInfo .shipDepartures .shipDeparture {
+		width: 50%;
+		margin-bottom: 10px
+	}
+	.shipBlockBottom .shipPricing table tr td {
+		padding: 7px 12px
+	}
+	.crSwitchContent .crQuestion .crQuestionData, .rightBlock .cruiseCardSwitchers .crSwitcher {
+		width: 100%
+	}
+	.crSwitchContent .crQuestion .crQuestionButton {
+		width: 100%;
+		margin-top: 15px
+	}
+	.modalCredit, .modalGraphic, .modalCabin, .modalSecond {
+		width: 300px;
+		padding: 15px 10px 15px
+	}
+	.shipDescriptionBlock .shipDescTop .shipDescFeatures .shipDescFeaturesLine > div:first-child, .shipDescriptionBlock .shipDescTop .shipDescFeatures .shipDescFeaturesLine > div:last-child {
+		width: 100%
+	}
+	.shipDescriptionBlock .shipDescTop .shipDescFeatures .shipDescFeaturesLine > div:last-child {
+		padding-top: 15px;
+		padding-left: 0
+	}
+	.shipDescriptionBlock .shipDescTop .shipDescImages .smallImages .imageItem {
+		margin-right: 10px
+	}
+	.shipDescriptionBlock .shipDescTop .shipDescImages .bigImagesWrap {
+		padding-right: 0
+	}
+	.reviewsBlock .reviewsSwitcher > div:nth-of-type(1), .reviewsBlock .reviewsSwitcher > div:nth-of-type(2) {
+		width: 100%
+	}
+	.reviewsBlock .reviewsSwitcher > div:nth-of-type(2) {
+		margin-top: 15px
+	}
+	.modalWrapBook {
+		width: 310px
+	}
+	.modalWrap {
+		padding: 15px
+	}
+	.shipBlock .shipBlockTop .shipInfo .shipName span {
+		font-size: 16px
+	}
+	.modalWrapBook .shipToggleBlock .shipButtonToggle .tbtn span.active {
+		font-size: 12px
+	}
+	.modalWrapBook .bookingBlock .bookingBlockTop .shipArrivalLine .arrivalItem {
+		padding-left: 0
+	}
+	.modalLine .cabinRight .cabinName span {
+		font-size: 16px
+	}
+	.modalCredit .modalLine .crBlock {
+		width: 100%;
+		margin-left: 0;
+		margin-right: 0
+	}
+	.slItem {
+		height: 65px;
+		min-height: 65px;
+	}
+	.s-card__switch {
+		width: 100%;
+	}
+}

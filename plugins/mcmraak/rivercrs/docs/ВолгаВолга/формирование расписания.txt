@@ -1,0 +1,3 @@
+# http://azimut.s/rivercrs/debug/Service@testVolgaShelude
+plugins/mcmraak/rivercrs/classes/Service.php
+

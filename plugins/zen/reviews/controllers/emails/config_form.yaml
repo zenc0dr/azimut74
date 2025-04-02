@@ -1,0 +1,10 @@
+name: Emails
+form: $/zen/reviews/models/email/fields.yaml
+modelClass: Zen\Reviews\Models\Email
+defaultRedirect: zen/reviews/emails
+create:
+    redirect: 'zen/reviews/emails/update/:id'
+    redirectClose: zen/reviews/emails
+update:
+    redirect: zen/reviews/emails
+    redirectClose: zen/reviews/emails

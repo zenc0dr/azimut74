@@ -1,0 +1,26 @@
+1.0.1:
+    - 'Initialize plugin.'
+1.0.2:
+    - 'Created table zen_history_links'
+    - builder_table_create_zen_history_links.php
+1.0.3:
+    - 'Create Link types'
+    - builder_table_create_zen_history_link_types.php
+1.0.4:
+    - 'Seeder link types'
+    - seeder_default_link_types.php
+1.0.5:
+    - 'Updated table zen_history_links'
+    - builder_table_update_zen_history_links.php
+1.0.6:
+    - 'Updated table zen_history_links'
+    - builder_table_update_zen_history_links_2.php
+1.0.7:
+    - 'Updated table zen_history_links'
+    - builder_table_update_zen_history_links_3.php
+1.0.8:
+    - 'Updated table zen_history_links'
+    - builder_table_update_zen_history_links4.php
+1.0.9:
+    - 'Создание индексов'
+    - create_indexes.php

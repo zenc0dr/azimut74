@@ -1,0 +1,19 @@
+title = "Страница Оферты"
+url = "/offer"
+description = "Страница Оферты (встраивается в модальную форму)"
+is_hidden = 0
+robot_index = "index"
+robot_follow = "follow"
+contentType = "html"
+==
+<?php
+function onStart() {
+	$this['offers'] = Mcmraak\Blocks\Models\Offer::get();
+}
+?>
+==
+<div class="data">
+	{% for item in offers if item.id == '1' %}
+		{{ item.offertext|raw }}
+	{% endfor %}
+</div>

@@ -1,0 +1,10 @@
+name: Backups
+form: $/mcmraak/rivercrs/models/backup/fields.yaml
+modelClass: Mcmraak\Rivercrs\Models\Backup
+defaultRedirect: mcmraak/rivercrs/backups
+create:
+    redirect: 'mcmraak/rivercrs/backups/update/:id'
+    redirectClose: mcmraak/rivercrs/backups
+update:
+    redirect: mcmraak/rivercrs/backups
+    redirectClose: mcmraak/rivercrs/backups

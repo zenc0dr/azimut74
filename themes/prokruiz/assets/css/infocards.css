@@ -1,0 +1,32 @@
+.infocards {
+    color: #fff;
+    display: flex;
+    flex-wrap: wrap;
+}
+
+.infocards__card {
+    width: 46%;
+    padding: 5px 50px;
+    background: #0000004f;
+    margin: 20px;
+    border-radius: 5px;
+}
+
+.infocards__card ul {
+
+}
+
+.infocards__card li {
+
+}
+
+.infocards__card p {
+    margin: 0;
+    margin-bottom: 10px;
+}
+
+@media (max-width: 1040px) {
+    .infocards__card {
+        width: auto;
+    }
+}

@@ -1,0 +1,13 @@
+fields:
+    name:
+        label: Название
+        span: auto
+        type: text
+    color:
+        label: Цвет
+        span: auto
+        type: colorpicker
+    code:
+        label: Код
+        span: auto
+        type: text

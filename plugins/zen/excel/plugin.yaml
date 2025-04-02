@@ -1,0 +1,6 @@
+plugin:
+    name: 'zen.excel::lang.plugin.name'
+    description: 'zen.excel::lang.plugin.description'
+    author: 'Alexander Ablizin'
+    icon: oc-icon-file-excel-o
+    homepage: ''

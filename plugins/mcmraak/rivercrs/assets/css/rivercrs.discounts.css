@@ -1,0 +1,8 @@
+input[name="ship-name"] {
+    margin-bottom: 10px;
+}
+#ship-list {
+    background: #fff;
+    padding: 10px;
+    margin-bottom: 15px;
+}

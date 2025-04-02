@@ -1,0 +1,68 @@
+description = "Заказать звонок"
+
+[viewBag]
+==
+<div id="modalCall" class="modalFade">
+	<div class="modalWrap modalWrapStandart">
+		
+		<div class="modalDone">
+			<button title="Close (Esc)" type="button" class="mfp-close">×</button>
+
+			<div class="modalHead">
+				<span>Спасибо за заявку!</span>
+				<span>Специалист позвонит Вам в ближайшее время</span>
+			</div>
+		</div>
+		
+		<div class="modalContent">
+
+			<button title="Close (Esc)" type="button" class="mfp-close">×</button>
+
+			<div class="modalHead">
+				<span>Специалист позвонит вам в ближайшее время</span>
+			</div>
+
+			<div class="fLine">
+				<label for="">Ваше имя</label>
+				<input class="order-call order" name="name" id="#name" type="text" placeholder="Ваше имя">
+			</div>
+
+			<div class="fLine">
+				<label for="">Ваш e-mail</label>
+				<input class="order-call order" name="email" type="text" placeholder="Ваша электронная почта">
+			</div>
+
+			<div class="fLine">
+				<label for="">Ваш телефон</label>
+				<input class="phone order-call order" name="phone" placeholder="+7(___)___-__-__">
+			</div>
+
+			<div class="fLine">
+				<label for="">Если у Ваc остались вопросы, мы с удовольствием на них ответим</label>
+				<textarea class="order-call order" name="message" type="text" placeholder="Вопросы и пожелания"></textarea>
+			</div>
+			
+			<input type="hidden" name="ide" class="order-call hidden" value="Заказ звонка">
+			
+			<div class="offerItem" style="padding: 20px 0 0 0">
+	            <span class="check" id="#OfferCheck"><i class="fa fa-check" aria-hidden="true"></i></span>
+	            <span>Я принимаю <a class="offerLink" href="#modalOffer">договор оферты</a></span>
+	        </div>
+			
+			<div class="modalButton disabled">
+				<button data-ion="data=.order-call;ajax=/callback/send;prepend=#SystemMessages;" class="hbtn">Перезвоните мне</button>
+			</div>
+
+			<div class="modalDesc">
+				<span>Мы гарантируем конфиденциальность введенных данных</span>
+			</div>
+
+		</div>
+		
+		{% partial 'modal/preloader' %}
+		
+	</div>
+
+	{% partial 'modal/modal-second' %}
+	
+</div>

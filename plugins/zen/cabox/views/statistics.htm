@@ -1,0 +1,18 @@
+<link rel="stylesheet" href="/plugins/zen/cabox/assets/css/zen.cabox.backend.css">
+<meta name="storage_id" content="{{ model.id }}">
+<div id="Statistics" v-cloak>
+    <div v-if="!size" class="loading-indicator-container">
+        <div class="loading-indicator">
+            <span></span>
+        </div>
+    </div>
+    <div v-else>
+        <b>Размер хранилища:</b> ${ size }<br>
+        <b>Количество файлов:</b> ${ count_files }<br>
+        <b>Количество папок:</b> ${ count_dirs }<br>
+        <span @click="clearStorage" class="btn btn-default cabox-clean">Очистить</span>
+    </div>
+</div>
+<script src="/plugins/zen/cabox/assets/js/axios.min.js"></script>
+<script src="/plugins/zen/cabox/assets/js/vue.min.js"></script>
+<script src="/plugins/zen/cabox/assets/js/zen.cabox.statistics.js"></script>

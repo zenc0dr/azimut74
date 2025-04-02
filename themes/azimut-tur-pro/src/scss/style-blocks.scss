@@ -1,0 +1,6 @@
+.wrapper-block-style {
+   & > section:nth-child(odd) {
+      background-color: #ebf6ff;
+      border-radius: 8px;
+   }
+}

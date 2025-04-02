@@ -1,0 +1,15 @@
+name: 'Город следования'
+modelClass: Mcmraak\Rivercrs\Models\Transit
+form: $/mcmraak/rivercrs/models/transit/fields.yaml
+defaultRedirect: mcmraak/rivercrs/transit
+create:
+    title: Создание
+    redirect: 'mcmraak/rivercrs/transit/update/:id'
+    redirectClose: mcmraak/rivercrs/transit
+    flashSave: Сохранено
+update:
+    title: Обновление
+    redirect: mcmraak/rivercrs/transit
+    redirectClose: mcmraak/rivercrs/transit
+    flashSave: Обновлено
+    flashDelete: Удалено

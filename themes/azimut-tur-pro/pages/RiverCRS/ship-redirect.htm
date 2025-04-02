@@ -1,0 +1,16 @@
+title = "Редирект"
+url = "/russia-river-cruises/ship/:id"
+is_hidden = 0
+robot_index = "index"
+robot_follow = "follow"
+contentType = "html"
+force_show = 0
+==
+<?php
+function onStart()
+{
+    $ship_id = $this->param('id');
+    return Redirect::to("/russia-river-cruises/motorship/$ship_id");
+}
+?>
+==

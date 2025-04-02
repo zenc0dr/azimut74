@@ -1,0 +1,16 @@
+name: Fields
+modelClass: Zen\Om\Models\Field
+form: $/zen/om/models/field/fields.yaml
+defaultRedirect: zen/om/fields
+create:
+    title: 'zen.om::lang.customs.create'
+    redirect: 'zen/om/fields/update/:id'
+    redirectClose: zen/om/fields
+    flashSave: 'Поле сохранено'
+update:
+    title: 'zen.om::lang.customs.update'
+    redirect: zen/om/fields
+    redirectClose: zen/om/fields
+    flashSave: 'zen.om::lang.customs.updated'
+    flashDelete: 'zen.om::lang.customs.deleted'
+preview: {  }

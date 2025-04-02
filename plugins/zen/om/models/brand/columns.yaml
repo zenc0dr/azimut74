@@ -1,0 +1,25 @@
+columns:
+    id:
+        label: id
+        type: number
+        sortable: true
+    name:
+        label: 'zen.om::lang.brands.name'
+        type: text
+        searchable: true
+        sortable: true
+    link:
+        label: 'zen.om::lang.brands.link'
+        type: text
+        searchable: true
+        invisible: true
+        sortable: true
+    slug:
+        label: 'zen.om::lang.brands.slug'
+        type: text
+        searchable: true
+        sortable: true
+    sort_order:
+        label: 'zen.om::lang.plugin.sort_order'
+        type: number
+        sortable: true

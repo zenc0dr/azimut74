@@ -1,0 +1,186 @@
+<div class="shipBlock{% if checkin.special %} yellow{% endif %}" checkin-id="{{ checkin.id }}">
+    <div class="shipBlockTop">
+        <div class="shipImage"
+                {% if checkin.motorship.youtube is empty %}
+                    onclick="window.open('/russia-river-cruises/motorship/{{ checkin.motorship.id }}/{{ checkin.id }}','_blank')"
+                {% endif %}
+             style="
+             {% if checkin.motorship.youtube is empty %}cursor:pointer;{% endif %}
+                     background-image: url({{ checkin.motorship.images|first.path|resize(300) }});">
+            {% if checkin.motorship.youtube is not empty %}
+                <div href="#shipVideoModal{{ checkin.id }}" class="shipVideoButton">
+                    <svg version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink"
+                         viewBox="0 0 512 512" style="enable-background:new 0 0 512 512;" xml:space="preserve">
+					<path class="but" style="fill:#D8362A;" d="M506.703,145.655c0,0-5.297-37.959-20.303-54.731c-19.421-22.069-41.49-22.069-51.2-22.952
+						C363.697,62.676,256,61.793,256,61.793l0,0c0,0-107.697,0.883-179.2,6.179c-9.71,0.883-31.779,1.766-51.2,22.952
+						C9.71,107.697,5.297,145.655,5.297,145.655S0,190.676,0,235.697v41.49c0,45.021,5.297,89.159,5.297,89.159
+						s5.297,37.959,20.303,54.731c19.421,22.069,45.021,21.186,56.497,23.835C122.703,449.324,256,450.207,256,450.207
+						s107.697,0,179.2-6.179c9.71-0.883,31.779-1.766,51.2-22.952c15.007-16.772,20.303-54.731,20.303-54.731S512,321.324,512,277.186
+						v-41.49C512,190.676,506.703,145.655,506.703,145.655"/>
+                        <polygon style="fill:#FFFFFF;" points="194.207,166.841 194.207,358.4 361.931,264.828 "/>
+                </div>
+                <div class="hidden">
+                    <div id="shipVideoModal{{ checkin.id }}" class="modalFade">
+
+                        <div class="modalWrap modalWrapBook">
+
+                            <div class="modalContent">
+
+                                <button title="Close (Esc)" type="button" class="mfp-close">×</button>
+
+                                <div class="shipVideoWrap">
+                                    <div class="shipVideoModalSlider owl-carousel">
+                                        {% for video in checkin.motorship.youtube if video.sw_modal == 1 %}
+                                            <div class="shipVideoModalSliderItem t-c">
+                                                {% if environment != 'dev' %}
+                                                    {{ video.vcode|raw }}
+                                                {% endif %}
+                                            </div>
+                                        {% endfor %}
+                                    </div>
+                                    {% if checkin.motorship.youtube|length > 1 %}
+                                        <div class="slider-nav">
+                                            <div class="prev btn">
+                                                <i class="fa fa-angle-left" aria-hidden="true"></i>
+                                            </div>
+                                            <div class="next btn">
+                                                <i class="fa fa-angle-right" aria-hidden="true"></i>
+                                            </div>
+                                        </div>
+                                    {% endif %}
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            {% endif %}
+        </div>
+
+        <div class="shipInfo">
+            <div class="shipName">
+                <a target="_blank" href="/russia-river-cruises/motorship/{{ checkin.motorship.id }}/{{ checkin.id }}"><span>{{ checkin.motorship.alt_name|mutator }}</span></a>
+            </div>
+            <div class="shipDepartures">
+                <div class="shipDeparture">
+                    <div><span>Отправление:</span></div>
+                    <div>
+                        <span>{{ checkin.date|date('d.m.Y') }}</span>
+                        {% set ch_time = checkin.date|date('H:i') %}
+                        {% set ch_time = (ch_time=='00:00')?'':ch_time %}
+                        <span>&nbsp;({{ weekdays[checkin.date|date('w')] }}) {{ ch_time }}</span>
+                    </div>
+                </div>
+                <div class="shipDeparture">
+                    <div><span>Прибытие:</span></div>
+                    <div>
+                        <span>{{ checkin.dateb|date('d.m.Y') }}</span>
+                        {% set ch_time = checkin.dateb|date('H:i') %}
+                        {% set ch_time = (ch_time=='00:00')?'':ch_time %}
+                        <span>&nbsp;({{ weekdays[checkin.dateb|date('w')] }}) {{ ch_time }}</span>
+                    </div>
+                </div>
+                <div class="shipDeparture">
+                    <div><span>Дней:</span></div>
+                    <div>
+                        <span>{{ checkin.days|mutator }}</span>
+                    </div>
+                </div>
+                <div class="msk-time">
+                    <span>Время московское</span>
+                </div>
+            </div>
+            <div class="shipRouteBlock">
+                <div><span>Маршрут:</span></div>
+                <div class="shipRoute">
+                    {{ checkin.getWaybill('-')|raw }}
+                </div>
+            </div>
+            <div class="shipBlockGraphic">
+                <button class="gbtn mbtn" modalbox="css:{width:875px,min-width:auto,margin-top:50px,background:#edf1f4}" href="/rivercrs/api/v1/checkin/modalgraphic/{{ checkin.id }}">График движения</button>
+            </div>
+        </div>
+    </div>
+    <div class="shipBlockBottom">
+        <div><span>Стоимость путевок в каютах различной категории в рублях на 1 чел:</span></div>
+        <div class="shipPricing">
+            <table>
+                <tbody>
+                <tr>
+                    {% for price in checkin.getPrice %}
+                        {#<td cabin-id="{{ price.cabin_id }}" href="#modalCabin">#}
+                        <td href="/rivercrs/api/v1/cabin/modal/{{ price.cabin_id }}" modalbox="eval:owlGalleryBind(),css:{width:auto,min-width:auto,background:#edf1f4}">
+                            {{ price.cabin_name|mutator }}
+                        </td>
+                    {% endfor %}
+                </tr>
+                <tr>
+                    {% for price in checkin.getPrice %}
+                        {% if price.price_b != 0 %}
+                            <td>
+                                <span><del>{{ price.price_a|mutator }}</del></span><br>
+                                <span style="color:red">{{ price.price_b|mutator }}</span>
+                            </td>
+                        {% else %}
+                            <td>
+                                {{ price.price_a|mutator }}
+                            </td>
+                        {% endif %}
+                    {% endfor %}
+                </tr>
+                </tbody>
+            </table>
+        </div>
+
+        <div class="shipButtonBlock">
+            <div class="r">
+                <div class="col-75 col-m-60 col-xs-100">
+                    {% if checkin.motorship.booking_discounts or checkin.motorship.social_discounts %}
+                        <div class="discountsPopups">
+                            <div class="discountsPopups-buttons">
+                                {% if checkin.motorship.booking_discounts %}
+                                    <div class="booking-discounts">
+                                        {{ booking_discounts_btn }}
+                                    </div>
+                                {% endif %}
+                                {% if checkin.motorship.social_discounts %}
+                                    <div class="social-discounts">
+                                        %
+                                    </div>
+                                {% endif %}
+                            </div>
+                        </div>
+                    {% endif %}
+                </div>
+                <div class="col-25 col-m-40 col-xs-100 mt-xs-15">
+                    <div class="shipButton">
+                        <button checkin-id="{{ checkin.id }}" href="#modalBooking" class="sbtn2 mbtn"><div>Наличие мест</div><div>Бронирование</div></button>
+                    </div>
+                </div>
+            </div>
+            <div class="discountsPopups-windows">
+                {% if checkin.motorship.booking_discounts %}
+                    <div>
+                        <div class="discountsPopups-h">Акция раннего бронирования</div>
+                        {{ checkin.motorship.booking_discounts|raw }}
+                    </div>
+                {% endif %}
+                {% if checkin.motorship.social_discounts %}
+                    <div>
+                        <div class="discountsPopups-h">Социальные скидки</div>
+                        {{ checkin.motorship.social_discounts|raw }}
+                    </div>
+                {% endif %}
+            </div>
+            {% if checkin.hot %}
+                <div class="hotOffer">{{ checkin.hot|raw|mutator }}</div>
+            {% endif %}
+            {#
+            <div class="mobile-booking">
+                <div class="shipButton">
+                    <button checkin-id="{{ checkin.id }}" href="#modalBooking" class="sbtn2 mbtn"><div>Наличие мест</div><div>Бронирование</div></button>
+                </div>
+            </div>
+            #}
+        </div>
+    </div>
+</div>

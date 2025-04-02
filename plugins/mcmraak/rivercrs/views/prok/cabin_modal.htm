@@ -1,0 +1,229 @@
+<div class="cabin-modal">
+
+    <div class="cabin-modal__gallery">
+        {% for image in cabin.images %}
+            <div class="cabin-modal__gallery__image" style="background-image: url({{ image.path }})"></div>
+        {% endfor %}
+    </div>
+    <div class="cabin-modal__desc">
+        <div class="cabin-modal__title">
+            Категория {{ cabin.category }} - {{ placenames[cabin.places_main_count] }}местная каюта
+        </div>
+
+
+        <div class="cabin-modal__option">
+            <div class="cabin-modal__option__name">Расположение:</div>
+            <div class="cabin-modal__option__value">
+                <ul>
+                    {% if room_data.deck_id %}
+                        {% for deck in cabin.decks_list if deck.id == room_data.deck_id %}
+                            <li>{{ deck.name }}</li>
+                        {% endfor %}
+                    {% else %}
+                        {% for deck in cabin.decks_list %}
+                            <li>{{ deck.name }}</li>
+                        {% endfor %}
+                    {% endif %}
+                </ul>
+            </div>
+        </div>
+
+        {% if cabin.comfort.name %}
+        <div class="cabin-modal__option">
+            <div class="cabin-modal__option__name">Комфорт:</div>
+            <div class="cabin-modal__option__value">
+                {{ cabin.comfort.name }}
+            </div>
+        </div>
+        {% endif %}
+
+        {% if cabin.bed.name %}
+        <div class="cabin-modal__option">
+            <div class="cabin-modal__option__name">Расположение кроватей:</div>
+            <div class="cabin-modal__option__value">
+                {{ cabin.bed.name }}
+            </div>
+        </div>
+        {% endif %}
+
+        {% if cabin.rooms_count %}
+        <div class="cabin-modal__option">
+            <div class="cabin-modal__option__name">Количество комнат:</div>
+            <div class="cabin-modal__option__value">
+                {{ cabin.rooms_count }}
+            </div>
+        </div>
+        {% endif %}
+
+        {% if cabin.space %}
+        <div class="cabin-modal__option">
+            <div class="cabin-modal__option__name">Площадь каюты в м2:</div>
+            <div class="cabin-modal__option__value">
+                {{ cabin.space }}
+            </div>
+        </div>
+        {% endif %}
+
+        {% if cabin.incabin_list %}
+        <div class="cabin-modal__option">
+            <div class="cabin-modal__option__name">В каюте имеются:</div>
+            <div class="cabin-modal__option__value">
+                {% for incabin in cabin.incabin_list %}
+                    {{ incabin.name }}{% if loop.last != 1 %}, {% endif %}
+                {% endfor %}
+            </div>
+        </div>
+        {% endif %}
+
+        {% if cabin.desc %}
+        <div class="cabin-modal__option">
+            <div class="cabin-modal__option__name">Описание:</div>
+            <div class="cabin-modal__option__value">
+                {{ cabin.desc|raw }}
+            </div>
+        </div>
+        {% endif %}
+
+    </div>
+</div>
+{% if room_data %}
+<div class="cabin-modal__info">
+    <div class="cabin-modal__info_title">Номер каюты: {{ room_data.room_number }}</div>
+    <div class="cabin-modal__info_status">
+        {% if room_data.free_status != 0 %}
+            Статус: <span class="cabin-modal__info__status-desc free">СВОБОДНА ДЛЯ БРОНИРОВАНИЯ</span>
+        {% else %}
+            Статус: <span class="cabin-modal__info__status-desc">ПОД ЗАПРОС</span>
+            <div class="cabin-modal__info__status__note">
+                Наличие каюты требует дополнительного подтверждения.
+                Оставьте заявку и мы уточним возможность бронирования данной каюты.
+            </div>
+        {% endif %}
+    </div>
+</div>
+{% endif %}
+
+{#
+<div class="cabinLeft">
+    <div class="bigImages owl-carousel">
+        {% for image in cabin.images %}
+            <a class="cabinImage" data-lightbox-gallery="cabGallery" href="{{ image.path }}">
+                <div class="imageItem" data-hash="cabin{{ loop.index }}" style="background-image: url({{ image.path|resize(350) }})"></div>
+            </a>
+        {% endfor %}
+    </div>
+    <div class="smallImages">
+        {% for image in cabin.images %}
+            <a href="#cabin{{ loop.index }}">
+                <div class="imageItem" style="background-image: url({{ image.path|resize(350) }})"></div>
+            </a>
+        {% endfor %}
+    </div>
+</div>
+<div class="cabinRight">
+    <div class="cabinName">
+        <span>Категория {{ cabin.category }} - {{ placenames[cabin.places_main_count] }}местная каюта</span>
+    </div>
+    <div class="cabinDescLine">
+        <span>Расположение:</span>
+        <span>
+            <ul>
+                {% if room_data.deck_id %}
+                    {% for deck in cabin.decks_list if deck.id == room_data.deck_id %}
+                        <li>{{ deck.name }}</li>
+                    {% endfor %}
+                {% else %}
+                    {% for deck in cabin.decks_list %}
+                        <li>{{ deck.name }}</li>
+                    {% endfor %}
+                {% endif %}
+            </ul>
+        </span>
+    </div>
+
+
+    <div class="cabinDescLine">
+        <span>Комфорт:</span>
+        <span>{{ cabin.comfort.name }}</span>
+    </div>
+    <div class="cabinDescLine">
+        <span>Расположение кроватей:</span>
+        <span>{{ cabin.bed.name }}</span>
+    </div>
+    <div class="cabinDescLine">
+        <span>Количество комнат:</span>
+        <span>{{ cabin.rooms_count }}</span>
+    </div>
+    {% if cabin.space %}
+        <div class="cabinDescLine">
+            <span>Площадь каюты в м2:</span>
+            <span>{{ cabin.space }}</span>
+        </div>
+    {% endif %}
+    <div class="cabinDescLine">
+        <span>В каюте имеются:</span>
+        <span>
+            {% for incabin in cabin.incabin_list %}
+                {{ incabin.name }}{% if loop.last != 1 %}, {% endif %}
+            {% endfor %}
+        </span>
+    </div>
+    <div class="cabinDescLine" style="font-size: 14px">
+        {{ cabin.desc|raw }}
+    </div>
+</div>
+
+<div class="bex-cabin-info">
+    <div class="bex-cabin-number">
+        Номер каюты: {{ room_data.room_number }}
+    </div>
+    <div class="bex-cabin-status">
+        {% if room_data.free_status != 0 %}
+            Статус: <span class="bex-free">СВОБОДНА ДЛЯ БРОНИРОВАНИЯ</span>
+        {% else %}
+            Статус: <span class="bex-onreq">ПОД ЗАПРОС</span>
+            <div class="bex-note">
+                Наличие каюты требует дополнительного подтверждения.
+                Оставьте заявку и мы уточним возможность бронирования данной каюты.
+            </div>
+        {% endif %}
+    </div>
+    <div class="bex-info-panel">
+        {% for price in room_data.cabin_data.prices %}
+            <div class="bex-cabin-price">
+                {% if room_data.main_places == price.price_places %}
+                    <div class="place">
+                        Цена 1 основ.места:
+                    </div>
+                    <div class="price">
+                        <span>{{ price.price_value|price_format }}</span> руб. за 1чел
+                    </div>
+                {% else %}
+                    <div class="place">
+
+                        {% if price.price_places == 1 %}
+                            {% set pl = price.price_places~'но' %}
+                        {% else %}
+                            {% set pl = price.price_places~'х' %}
+                        {% endif %}
+
+                        Цена основн.места при {{ pl }} местном размещении:
+                    </div>
+                    <div class="price">
+                        <span>{{ price.price_value|price_format }}</span> руб. за 1чел.
+                    </div>
+                {% endif %}
+            </div>
+        {% endfor %}
+        <div class="bex-button">
+            <button id="markCabin">
+                {% if room_data.check == 'true' %}
+                    Снять с бронирования
+                {% else %}
+                    Бронировать
+                {% endif %}
+            </button>
+        </div>
+    </div>
+</div>
+#}

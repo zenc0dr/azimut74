@@ -1,0 +1,10 @@
+name: Pages
+form: $/zen/dolphin/models/page/fields.yaml
+modelClass: Zen\Dolphin\Models\Page
+defaultRedirect: zen/dolphin/pages
+create:
+    redirect: 'zen/dolphin/pages/update/:id'
+    redirectClose: zen/dolphin/pages
+update:
+    redirect: zen/dolphin/pages
+    redirectClose: zen/dolphin/pages

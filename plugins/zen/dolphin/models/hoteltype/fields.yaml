@@ -1,0 +1,5 @@
+fields:
+    name:
+        label: 'Тип отеля'
+        span: full
+        type: text

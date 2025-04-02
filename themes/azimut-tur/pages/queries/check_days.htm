@@ -1,0 +1,32 @@
+title = "queries"
+url = "/queries/check_days"
+is_hidden = 0
+robot_index = "index"
+robot_follow = "follow"
+contentType = "html"
+force_show = 0
+==
+<?php
+function onStart()
+{
+    $items = \DB::table('mcmraak_rivercrs_checkins')->get();
+    foreach($items as $item){
+        
+        $start = strtotime($item->date);
+        $start = date('Y-m-d', $start);
+
+        $end = strtotime($item->dateb);
+        $end = date('Y-m-d', $end);
+
+        $start = Carbon\Carbon::parse($start);
+        $end = Carbon\Carbon::parse($end);
+        $diff = $end->diffInDays($start);
+        $diff++;
+        
+        if($diff <> $item->days) {
+            echo $item->id . " -- $diff <> {$item->days}<br>";
+        }
+    }
+}
+?>
+==

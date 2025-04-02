@@ -1,0 +1,10 @@
+columns:
+    id:
+        label: Номер
+        type: number
+    slmain:
+        label: 'Название слайда'
+        type: text
+    order:
+        label: Порядок
+        type: number

@@ -1,0 +1,18 @@
+columns:
+    id:
+        label: id
+        type: number
+        sortable: true
+    name:
+        label: 'Имя клиента'
+        type: text
+        searchable: true
+        sortable: true
+    date_time:
+        label: 'Дата и время'
+        type: text
+        sortable: true
+    stars:
+        label: Оценка
+        type: number
+        sortable: true

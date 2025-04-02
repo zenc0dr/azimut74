@@ -1,0 +1,43 @@
+{% if map %}
+<script src="//api-maps.yandex.ru/2.1/?lang=ru_RU" type="text/javascript"></script>
+<script>
+    ymaps.ready(init);
+    function init () {
+        var map = new ymaps.Map('blockmap', {
+                center: [{{ map.long }}, {{ map.lat }}],
+                zoom: {{ map.zoom }}
+            }, {
+                searchControlProvider: 'yandex#search'
+            });
+
+        {% for marker in map.markers %}
+        var BalloonContentLayout{{ loop.index }} = ymaps.templateLayoutFactory.createClass(
+                '<div style="margin: 10px;">' +
+                    '<img class="yandex-baloon-img" src="{{ marker.images|first.path|resize(300) }}">'+
+                '{{ marker.cleantext|raw }}'+
+                '</div>', {
+                    build: function () {
+                        BalloonContentLayout{{ loop.index }}.superclass.build.call(this);
+                    },
+                    clear: function () {
+                        BalloonContentLayout{{ loop.index }}.superclass.clear.call(this);
+                    }
+                });
+        {% endfor %}
+
+        {% for marker in map.markers %}
+            var placemark{{ loop.index }} = new ymaps.Placemark([{{ marker.long }}, {{ marker.lat }}],
+                {
+                   iconContent: '{{ marker.title }}',
+                },
+                {
+                   preset: 'islands#blueStretchyIcon',
+                   balloonContentLayout: BalloonContentLayout{{ loop.index }},
+                   balloonPanelMaxMapArea: 0
+                });
+            map.geoObjects.add(placemark{{ loop.index }});
+        {% endfor %}
+    }
+</script>
+<div id="blockmap" style="height: {{ map.h }}; width: {{ map.w }}"></div>
+{% endif %}

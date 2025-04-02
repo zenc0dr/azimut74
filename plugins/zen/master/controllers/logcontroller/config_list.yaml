@@ -1,0 +1,12 @@
+title: LogController
+modelClass: Zen\Master\Models\LogModel
+list: $/zen/master/models/logmodel/columns.yaml
+recordUrl: 'zen/master/logcontroller/update/:id'
+noRecordsMessage: 'backend::lang.list.no_records'
+recordsPerPage: 20
+showSetup: true
+showCheckboxes: true
+toolbar:
+    buttons: list_toolbar
+    search:
+        prompt: 'backend::lang.list.search_prompt'

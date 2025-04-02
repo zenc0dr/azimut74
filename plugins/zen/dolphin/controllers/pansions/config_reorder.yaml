@@ -1,0 +1,4 @@
+title: Pansions
+modelClass: Zen\Dolphin\Models\Pansion
+toolbar:
+    buttons: reorder_toolbar

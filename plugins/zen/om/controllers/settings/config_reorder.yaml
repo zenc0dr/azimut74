@@ -1,0 +1,4 @@
+title: Setting
+modelClass: Zen\Om\Models\Setting
+toolbar:
+    buttons: reorder_toolbar

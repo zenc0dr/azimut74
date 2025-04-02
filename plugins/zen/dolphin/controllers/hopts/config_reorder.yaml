@@ -1,0 +1,4 @@
+title: Hopts
+modelClass: Zen\Dolphin\Models\Hopt
+toolbar:
+    buttons: reorder_toolbar

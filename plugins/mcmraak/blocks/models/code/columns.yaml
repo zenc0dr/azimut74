@@ -1,0 +1,19 @@
+columns:
+    id:
+        label: id
+        type: number
+        sortable: true
+    code:
+        label: Код
+        type: text
+        searchable: true
+        sortable: true
+    replace:
+        label: Замена
+        type: text
+        searchable: true
+        sortable: true
+    active:
+        label: Активность
+        type: partial
+        sortable: true

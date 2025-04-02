@@ -1,0 +1,4 @@
+title: Offer
+modelClass: Mcmraak\Blocks\Models\Offer
+toolbar:
+    buttons: reorder_toolbar

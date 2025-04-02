@@ -1,0 +1,43 @@
+description = "Dolphin - Посадочная страница"
+
+[viewBag]
+==
+<meta id="dolphin-preset" content="{{ Dolphin.preset }}">
+<meta id="page-id" content="{{ Dolphin.page_id }}">
+<meta id="tour-name" content="{{ Dolphin.name }}">
+<meta id="admin" content="{{ Dolphin.admin }}">
+
+<section class="results my-4">
+    <div class="container">
+        <div class="d-flex flex-column flex-lg-row">
+            <section class="result-menu__categories col-12 col-lg-3">
+                {% partial 'blocks/page-groups' data=Dolphin.pageGroups sTitle="Направления и темы" %}
+            </section>
+            <div class="col-12 col-lg-9">
+                <div id="dolphin-ext-widget-app"></div>
+                <div id="dolphin-ext-results-app"></div>
+                <section class="wrapper-block-style">
+                    <section>
+                        {% partial 'dolphin/dolphin-reviews' class=' ' data=Dolphin.reviews_json %}
+                    </section>
+                    <section>
+                        {% if Dolphin.tinybox_title %}
+                        <div class="title-section">
+                            {{ Dolphin.tinybox_title|raw }}
+                        </div>
+                        {% endif %}
+                        {% partial 'dolphin/tinybox-gallery' data=Dolphin.tinybox_gallery %}
+                    </section>
+                    <section>
+                        {% partial 'dolphin/features' data=Dolphin.features %}
+                    </section>
+                    <section>
+                        <div class="mt-5">
+                            {{ Dolphin.text_field|raw }}
+                        </div>
+                    </section>
+                </section>
+            </div>
+        </div>
+    </div>
+</section>

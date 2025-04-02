@@ -1,0 +1,11 @@
+fields:
+    name:
+        label: 'Название вида питания'
+        oc.commentPosition: ''
+        span: auto
+        type: text
+    code:
+        label: 'Код вида питания'
+        oc.commentPosition: ''
+        span: auto
+        type: text

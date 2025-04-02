@@ -1,0 +1,9 @@
+scopes:
+  created_by:
+    label: Источник
+    type: group
+    conditions: created_by in (:filtered)
+    options:
+      local: Локально
+      dolphin: Дельфин
+      samotur: Самотур

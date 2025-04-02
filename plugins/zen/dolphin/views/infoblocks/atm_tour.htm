@@ -1,0 +1,148 @@
+<link rel="stylesheet" href="/plugins/zen/dolphin/assets/css/zen.dolphin.atm_tour.css">
+{% if manager_data %}
+    {% if manager_data.opeartor_name %}
+        <div class="manager-data__operator-name">оп: {{ manager_data.opeartor_name }}</div>
+    {% endif %}
+{% endif %}
+<div class="atm-tour">
+    <div class="atm-tour__name">{{ atm_tour.name }}</div>
+{#    <div class="atm-tour__header">#}
+{#        <div class="atm-tour__header-preview" style="background-image: url({{ atm_tour.image }})">#}
+
+{#        </div>#}
+{#        <div class="atm-tour_header-content">#}
+{#            {% set dt = atm_tour.date %}#}
+{#            <div class="atm-tour__dates"><b>Даты тура:</b> <span>с <b>{{ dt.d1 }}</b> ({{ dt.d1d }}) по <b>{{ dt.d2 }}</b> ({{ dt.d2d }})</span></div>#}
+{#            <div class="atm-tour__waybill"><b>Маршрут тура:</b>#}
+{#                {% for point in waybill %}#}
+{#                    <span>{{ point}}</span>#}
+{#                    {% if loop.last != true %}#}
+{#                        <span class="waybill_separator">-</span>#}
+{#                    {% endif %}#}
+{#                {% endfor %}#}
+{#            </div>#}
+{#        </div>#}
+{#    </div>#}
+
+{#    <h2>Описание гостиницы</h2>#}
+    {% if hotel.gallery %}
+    <h3 class="atm-tour__hotel-name">{{ hotel.type }} "{{ hotel.name }}"</h3>
+    <div class="atm-tour__hotel-gallery">
+        {{ hotel.gallery|raw }}
+    </div>
+    {% endif %}
+
+    {% if hotel.info %}
+        <div class="dhc-content-block">
+            <div class="dhccb-text">{{ hotel.info|raw }}</div>
+        </div>
+    {% endif %}
+
+    {% if hotel.address %}
+        <div class="dhc-content-block">
+            <div class="dhccb-title">Адрес</div>
+            <div class="dhccb-text">{{ hotel.address|raw }}</div>
+        </div>
+    {% endif %}
+
+    {% if hotel.to_sea %}
+        <div class="dhc-content-block">
+            <div class="dhccb-title">Расстояние до моря: {{ hotel.to_sea }} м.</div>
+        </div>
+    {% endif %}
+
+    {% if hotel.plages %}
+        <div class="dhc-content-block">
+            <div class="dhccb-title">Пляжи</div>
+            <div class="dhccb-text">
+                <ul>
+                    {% for item in hotel.plages %}
+                        <li>{{ item }}</li>
+                    {% endfor %}
+                </ul>
+            </div>
+        </div>
+    {% endif %}
+
+    {% if hotel.hopts %}
+        <div class="dhc-content-block">
+            <div class="dhccb-title">Характеристики гостиницы</div>
+            <div class="dhccb-text">
+                <ul>
+                    {% for item in hotel.hopts %}
+                        <li>{{ item }}</li>
+                    {% endfor %}
+                </ul>
+            </div>
+        </div>
+    {% endif %}
+
+    {% if hotel.hstructures %}
+        <div class="dhc-content-block">
+            <div class="dhccb-title">Инфраструктура гостиницы</div>
+            <div class="dhccb-text">
+                <ul>
+                    {% for item in hotel.hstructures %}
+                        <li>{{ item }}</li>
+                    {% endfor %}
+                </ul>
+            </div>
+        </div>
+    {% endif %}
+
+    {% if hotel.hservices %}
+        <div class="dhc-content-block">
+            <div class="dhccb-title">Услуги гостиницы</div>
+            <div class="dhccb-text">
+                <ul>
+                    {% for item in hotel.hservices %}
+                        <li>{{ item }}</li>
+                    {% endfor %}
+                </ul>
+            </div>
+        </div>
+    {% endif %}
+
+    {% if hotel.numbers_desc %}
+        <div class="dhc-content-block">
+            <div class="dhccb-title">Описание номеров</div>
+            <div class="dhccb-text">{{ hotel.numbers_desc|raw }}</div>
+        </div>
+    {% endif %}
+
+    {% if hotel.note %}
+        <div class="dhc-content-block">
+            <div class="dhccb-title">Примечание</div>
+            <div class="dhccb-text">{{ hotel.note|raw }}</div>
+        </div>
+    {% endif %}
+
+    <div class="atm-tour-map">
+        {% if map %}
+            {{ map|raw }}
+        {% endif %}
+    </div>
+
+    <h2 class="blue-color">Описание тура</h2>
+
+    <div class="dhc-content-block">
+        <div class="dhccb-title">Маршрут тура</div>
+        <div class="dhccb-text">
+            {{ waybill|join(' - ')|raw }}
+        </div>
+    </div>
+
+    <div class="dhc-content-block">
+        <div class="dhccb-title">Возможные даты заезда</div>
+        <div class="dhccb-text">
+            {{ tour_dates }}
+        </div>
+    </div>
+
+    {% if info %}
+        <div class="data">
+            <p>{{ info|raw }}</p>
+        </div>
+    {% endif %}
+
+</div>

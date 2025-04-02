@@ -1,0 +1,11 @@
+list: $/srw/azimut/models/directions/columns.yaml
+modelClass: Srw\Azimut\Models\Directions
+title: Directions
+noRecordsMessage: 'backend::lang.list.no_records'
+showSetup: true
+showCheckboxes: true
+toolbar:
+    buttons: list_toolbar
+    search:
+        prompt: 'backend::lang.list.search_prompt'
+recordUrl: 'srw/azimut/directions/update/:id'

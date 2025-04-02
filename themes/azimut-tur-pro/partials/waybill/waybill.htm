@@ -1,0 +1,14 @@
+description = "Маршрут тура"
+
+[viewBag]
+==
+{% if obData %}
+<div class="info-block waybill {{class}}">
+    <div class="info-block__title">
+        <span>{{ (sTitle) ? sTitle : 'Маршрут тура' }}</span><span></span>
+    </div>
+    <div class="info-block__html">
+        {{ obData|join(' — ') }}
+    </div>
+</div>
+{% endif %}

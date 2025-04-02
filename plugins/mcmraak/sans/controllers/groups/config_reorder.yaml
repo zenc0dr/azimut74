@@ -1,0 +1,4 @@
+title: Groups
+modelClass: Mcmraak\Sans\Models\Group
+toolbar:
+    buttons: reorder_toolbar

@@ -1,0 +1,50 @@
+columns:
+    id:
+        label: id
+        type: number
+        searchable: false
+        sortable: true
+    type_id:
+        label: Тип
+        type: partial
+        sortable: true
+        searchable: false
+        path: $/zen/history/controllers/links/_type_name_column.htm
+    inner_id:
+        label: 'id Модуля'
+        type: number
+        sortable: true
+    title:
+        label: Заголовок
+        type: text
+        searchable: true
+        sortable: true
+    url:
+        label: Ссылка
+        type: text
+        searchable: true
+        invisible: true
+        sortable: true
+        width: '100'
+    visiter_id:
+        label: Посетитель
+        type: text
+        searchable: true
+        sortable: true
+    is_delete:
+        label: Удалена
+        type: switch
+        sortable: true
+    created_at:
+        label: 'Дата создания'
+        type: datetime
+        sortable: true
+    updated_at:
+        label: 'Дата изменения'
+        type: datetime
+        invisible: true
+        sortable: true
+    days:
+        label: Дни
+        type: text
+        sortable: true

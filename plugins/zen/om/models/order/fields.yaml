@@ -1,0 +1,93 @@
+fields:
+    status:
+        label: 'zen.om::lang.orders.status'
+        oc.commentPosition: ''
+        nameFrom: name
+        descriptionFrom: description
+        span: auto
+        type: relation
+tabs:
+    fields:
+        order:
+            span: auto
+            path: $/zen/om/controllers/orders/order.php
+            type: partial
+            tab: 'zen.om::lang.orders.tab_main'
+        payment:
+            label: 'zen.om::lang.payments.payment'
+            oc.commentPosition: ''
+            nameFrom: name
+            descriptionFrom: description
+            span: right
+            type: relation
+            tab: 'zen.om::lang.orders.tab_main'
+        delivery:
+            label: 'zen.om::lang.deliveries.delivery'
+            oc.commentPosition: ''
+            nameFrom: name
+            descriptionFrom: description
+            span: right
+            type: relation
+            tab: 'zen.om::lang.orders.tab_main'
+        list:
+            span: auto
+            path: $/zen/om/controllers/orders/order_list.php
+            type: partial
+            tab: 'zen.om::lang.orders.tab_items'
+        bag:
+            label: 'zen.om::lang.orders.extra'
+            size: huge
+            oc.commentPosition: ''
+            span: full
+            type: textarea
+            tab: 'zen.om::lang.orders.extra'
+        user_id:
+            label: 'zen.om::lang.user.user_id'
+            oc.commentPosition: ''
+            span: auto
+            type: number
+            tab: 'zen.om::lang.orders.edit'
+        items:
+            label: 'zen.om::lang.orders.tab_items'
+            oc.commentPosition: ''
+            prompt: +
+            span: full
+            type: repeater
+            tab: 'zen.om::lang.orders.edit'
+            form:
+                fields:
+                    item_id:
+                        label: id
+                        oc.commentPosition: ''
+                        span: auto
+                        type: text
+                    item_qty:
+                        label: 'zen.om::lang.list.quantity'
+                        oc.commentPosition: ''
+                        span: auto
+                        type: number
+                    item_price:
+                        label: 'zen.om::lang.list.price'
+                        oc.commentPosition: ''
+                        span: auto
+                        type: number
+        comments:
+            label: 'zen.om::lang.plugin.comments'
+            oc.commentPosition: ''
+            prompt: +
+            span: auto
+            type: repeater
+            tab: 'zen.om::lang.plugin.comments'
+            form:
+                fields:
+                    com_user:
+                        label: 'zen.om::lang.user.title'
+                        oc.commentPosition: ''
+                        span: full
+                        type: text
+                    com_message:
+                        label: 'zen.om::lang.plugin.message'
+                        size: small
+                        oc.commentPosition: ''
+                        span: full
+                        type: textarea

@@ -1,0 +1,31 @@
+# ===================================
+#  Form Behavior Config
+# ===================================
+
+# Record name
+name: Stat
+
+# Model Form Field configuration
+form: $/zen/putpics/models/stat/fields.yaml
+
+# Model Class name
+modelClass: Zen\Putpics\Models\Stat
+
+# Default redirect location
+defaultRedirect: zen/putpics/stats
+
+# Create page
+create:
+    title: Create Stat
+    redirect: zen/putpics/stats/update/:id
+    redirectClose: zen/putpics/stats
+
+# Update page
+update:
+    title: Edit Stat
+    redirect: zen/putpics/stats
+    redirectClose: zen/putpics/stats
+
+# Preview page
+preview:
+    title: Preview Stat

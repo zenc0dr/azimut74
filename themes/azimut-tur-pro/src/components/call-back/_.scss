@@ -1,0 +1,119 @@
+.form-callback {
+    max-width: 500px;
+    margin: 0 auto;
+
+    h2 {
+        font-size: fs('h2');
+        @include m('sm') {
+            font-size: fs('h3')
+        }
+    }
+
+    .success-message {
+        font-size: 24px;
+        font-weight: bold;
+        color: #448740;
+    }
+
+    // .form-callback__form
+    &__form {
+
+    }
+
+    //.form-callback__input-error
+    &__input-error {
+        color: color('red-200');
+        position: absolute;
+        margin-top: 2px;
+    }
+
+    // .form-callback__wrap-input
+    &__wrap-input {
+        &.bad {
+            .form-callback__input-error {
+                display: block;
+            }
+
+            .form-callback__input_label {
+                color: color('red-200')
+            }
+
+            input,
+            textarea {
+                color: color('red-200');
+                border: 1px solid color('red-200');
+                @include placeholder {
+                    color: color('red-200');
+                }
+            }
+        }
+    }
+
+    // .form-callback__input_label
+    &__input_label {
+    }
+
+    // .form-callback__input
+    &__input {
+        padding: 9px 8px;
+        border-radius: 4px;
+        border: 1px solid color('gray-200');
+        width: 100%;
+        outline: none;
+        @include placeholder {
+            color: color('gray-200');
+        }
+    }
+
+    //.form-callback__input-textarea
+    &__input-textarea {
+        padding: 9px 8px;
+        border-radius: 4px;
+        border: 1px solid color('gray-200');
+        width: 100%;
+        outline: none;
+        min-height: 100px;
+        @include placeholder {
+            color: color('gray-200');
+        }
+    }
+
+    // .form-callback__check-wrapper
+    &__check-wrapper {
+        display: flex;
+    }
+
+    // .form-callback__check
+    &__check {
+    }
+
+    // .form-callback__check-text
+    &__check-text {
+    }
+
+    // .form-callback__check-link
+    &__check-link {
+    }
+
+    // .form-callback__btn
+    &__btn {
+        display: flex;
+        justify-content: center;
+
+        button {
+            @include clear-button();
+            cursor: pointer;
+            transition: 200ms;
+            border-radius: 4px;
+            background: color('red-200');
+            color: color('primary-100');
+        }
+        button[disabled] {
+            background: color('gray-200');
+        }
+    }
+
+    // .form-callback__bot-text
+    &__bot-text {
+    }
+}

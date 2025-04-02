@@ -1,0 +1,189 @@
+1.0.1:
+    - Подготовка
+    - dolphin_init.php
+1.0.2:
+    - Countries
+    - builder_table_create_zen_dolphin_countries.php
+1.0.3:
+    - Regions
+    - builder_table_create_zen_dolphin_regions.php
+1.0.4:
+    - Cities
+    - builder_table_create_zen_dolphin_cities.php
+1.0.5:
+    - Rooms
+    - builder_table_create_zen_dolphin_rooms.php
+1.0.6:
+    - 'Room Category'
+    - builder_table_create_zen_dolphin_roomsc.php
+1.0.7:
+    - Pansions
+    - builder_table_create_zen_dolphin_pansions.php
+1.0.8:
+    - Отели
+    - builder_table_create_zen_dolphin_hotels.php
+1.0.9:
+    - 'Типы отелей'
+    - builder_table_create_zen_dolphin_hotel_types.php
+1.0.10:
+    - 'Инфраструктуры гостиниц'
+    - builder_table_create_zen_dolphin_hstructures.php
+1.0.11:
+    - 'Инфраструктуры (Сводная)'
+    - builder_table_create_zen_dolphin_hstructures_pivot.php
+1.0.12:
+    - 'Услуги гостиницы (справочник)'
+    - builder_table_create_zen_dolphin_hservices.php
+1.0.13:
+    - 'Услуги гостиницы (Сводная)'
+    - builder_table_create_zen_dolphin_hservices_pivot.php
+1.0.14:
+    - 'Характеристики гостиниц (Справочник)'
+    - builder_table_create_zen_dolphin_hopts.php
+1.0.15:
+    - 'Характеристики гостиниц (Сводная)'
+    - builder_table_create_zen_dolphin_hopts_pivot.php
+1.0.16:
+    - 'Пляжи (Справочник)'
+    - builder_table_create_zen_dolphin_plages.php
+1.0.17:
+    - 'Пляжи (Сводная)'
+    - builder_table_create_zen_dolphin_plages_pivot.php
+1.0.18:
+    - Логи
+    - builder_table_create_zen_dolphin_log.php
+1.0.19:
+    - 'Расширенные туры (дельфин)'
+    - builder_table_create_zen_dolphin_extours.php
+1.0.20:
+    - 'Комфортность номеров (азимут)'
+    - builder_table_create_zen_dolphin_azcomforts.php
+1.0.21:
+    - 'Туроператоры (общие)'
+    - builder_table_create_zen_dolphin_operators.php
+1.0.22:
+    - 'Туры (общие)'
+    - builder_table_create_zen_dolphin_tours.php
+1.0.23:
+    - 'Условия по туру (список)'
+    - builder_table_create_zen_dolphin_conditions.php
+1.0.24:
+    - 'Типы питания (азимут)'
+    - builder_table_create_zen_dolphin_azpansions.php
+1.0.25:
+    - 'Тип номера (Азимут)'
+    - builder_table_create_zen_dolphin_azrooms.php
+1.0.26:
+    - 'Тарифы (Азимут)'
+    - builder_table_create_zen_dolphin_tarrifs.php
+1.0.27:
+    - 'Типы цен (Азимут)'
+    - builder_table_create_zen_dolphin_pricetypes.php
+1.0.28:
+    - 'Цены [pivot] (Азимут)'
+    - builder_table_create_zen_dolphin_prices.php
+1.0.29:
+    - Инфоблоки
+    - builder_table_create_zen_dolphin_blocks.php
+1.0.30:
+    - 'Категории инфоблоков'
+    - builder_table_create_zen_dolphin_folders.php
+1.0.31:
+    - 'Инфоблоки и Каталоги (pivot)'
+    - builder_table_create_zen_dolphin_blocks_folders_pivot.php
+1.0.32:
+    - Бронирования
+    - builder_table_create_zen_dolphin_orders.php
+1.0.33:
+    - 'Блоки меню (Для посадочных страниц)'
+    - builder_table_create_zen_dolphin_page_blocks.php
+1.0.34:
+    - 'Посадочные страницы'
+    - builder_table_create_zen_dolphin_pages.php
+1.0.35:
+    - 'Пункты SEO-меню'
+    - builder_table_create_zen_dolphin_seoitems.php
+1.0.36:
+    - 'Created table zen_dolphin_places'
+    - builder_table_create_zen_dolphin_places.php
+1.0.37:
+    - 'Created table zen_dolphin_labels'
+    - builder_table_create_zen_dolphin_labels.php
+1.0.38:
+    - 'Created table zen_dolphin_labels_tours'
+    - builder_table_create_zen_dolphin_labels_tours.php
+1.0.39:
+    - 'Created table zen_dolphin_atmlinks'
+    - builder_table_create_zen_dolphin_atmlinks.php
+1.0.40:
+    - 'Created table zen_dolphin_reducts'
+    - builder_table_create_zen_dolphin_reducts.php
+1.0.41:
+    - 'Created table zen_dolphin_activators'
+    - builder_table_create_zen_dolphin_activators.php
+1.0.42:
+    - 'Created table zen_dolphin_reducts_pivot'
+    - builder_table_create_zen_dolphin_reducts_pivot.php
+1.0.43:
+    - 'Updated table zen_dolphin_tarrifs'
+    - builder_table_update_zen_dolphin_tarrifs.php
+1.0.44:
+    - 'Updated table zen_dolphin_reducts'
+    - builder_table_update_zen_dolphin_reducts.php
+1.0.45:
+    - 'Updated table zen_dolphin_pages'
+    - builder_table_update_zen_dolphin_pages.php
+1.0.46:
+    - 'Updated table zen_dolphin_blocks'
+    - builder_table_update_zen_dolphin_blocks.php
+1.0.47:
+    - 'Created table zen_dolphin_page_groups'
+    - builder_table_create_zen_dolphin_page_groups.php
+1.0.48:
+    - 'Created table zen_dolphin_page_group_pivot'
+    - builder_table_create_zen_dolphin_page_group_pivot.php
+1.0.49:
+    - 'Updated table zen_dolphin_page_groups'
+    - builder_table_update_zen_dolphin_page_groups.php
+1.0.50:
+    - 'Created table zen_dolphin_reviews'
+    - builder_table_create_zen_dolphin_reviews.php
+1.0.51:
+    - 'Created table zen_dolphin_faq'
+    - builder_table_create_zen_dolphin_faq.php
+1.0.52:
+    - 'Updated table zen_dolphin_pages'
+    - builder_table_update_zen_dolphin_pages2.php
+1.0.53:
+    - 'Updated table zen_dolphin_pages'
+    - builder_table_update_zen_dolphin_pages3.php
+1.0.54:
+    - 'Created table zen_dolphin_page_galleries'
+    - builder_table_create_zen_dolphin_page_galleries.php
+1.0.55:
+    - 'Updated table zen_dolphin_pages'
+    - builder_table_update_zen_dolphin_pages_2.php
+1.0.56:
+    - 'Created table zen_dolphin_features'
+    - builder_table_create_zen_dolphin_features.php
+1.0.57:
+    - 'Updated table zen_dolphin_pages'
+    - builder_table_update_zen_dolphin_pages_3.php
+1.0.58:
+    - 'Updated table zen_dolphin_page_galleries'
+    - builder_table_update_zen_dolphin_page_galleries.php
+1.0.59:
+    - 'Created table zen_dolphin_page_reviews'
+    - builder_table_create_zen_dolphin_page_reviews.php
+1.0.60:
+    - 'Updated table zen_dolphin_pages'
+    - builder_table_update_zen_dolphin_pages_4.php
+1.0.61:
+    - 'Updated table zen_dolphin_tours'
+    - builder_table_update_zen_dolphin_tours.php
+1.0.62:
+    - 'Updated table zen_dolphin_pages'
+    - builder_table_update_zen_dolphin_pages_5.php
+1.0.63:
+    - 'Update zen_dolphin_tours - Добавление media_images'
+    - dolphin_tour_media_images.php

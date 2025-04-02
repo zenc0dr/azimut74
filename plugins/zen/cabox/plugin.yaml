@@ -1,0 +1,24 @@
+plugin:
+    name: 'zen.cabox::lang.plugin.name'
+    description: 'zen.cabox::lang.plugin.description'
+    author: 'Alexander Ablizin'
+    icon: oc-icon-cubes
+    homepage: ''
+navigation:
+    cabox-main:
+        label: CacheBox
+        url: zen/cabox/storages
+        icon: icon-cubes
+        permissions:
+            - zen.cabox
+        sideMenu:
+            cabox-storages:
+                label: Хранилища
+                url: zen/cabox/storages
+                icon: icon-archive
+                permissions:
+                    - zen.cabox
+permissions:
+    zen.cabox:
+        tab: CacheBox
+        label: 'Глобальный доступ к модулю'

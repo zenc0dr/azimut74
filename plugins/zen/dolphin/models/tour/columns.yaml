@@ -1,0 +1,27 @@
+columns:
+    id:
+        label: id
+        type: number
+        sortable: true
+    name:
+        label: Название
+        type: text
+        searchable: true
+        sortable: true
+    active:
+        label: Активность
+        type: partial
+        sortable: true
+    duration:
+        label: Дней
+        type: number
+        sortable: true
+    tarrifs_count:
+        label: Тарифов
+        type: number
+        sortable: false
+    operator_id:
+        label: Оператор
+        type: text
+        relation: operator
+        valueFrom: name

@@ -1,0 +1,337 @@
+<style>[v-cloak]{display:none}</style>
+<div id="Sans" class="s-sel" v-cloak>
+
+	<div class="s-sel__line">
+		<div class="s-sel__line-head">
+	        <span type-search="hotel">Подбор места отдыха</span>
+	    </div>
+
+	    <div class="r">
+
+            <div class="col-30 col-xxs-50">
+                <div class="s-sel__item">
+                    <label class="s-sel__label">Выбор курорта</label>
+                    <div class="s-sel__select s-sel__select_curort">
+                        <div class="s-sel__select-output" @click="resorts_options =! resorts_options">
+                            <span class="s-sel__select-value">${ resort_showed }</span>
+                        </div>
+                        <div v-html="resorts.options_html" v-if="resorts_options" class="sans-resors-html"></div>
+                    </div>
+                </div>
+            </div>
+
+	    	<div class="col-20 col-xxs-50">
+	    		<div class="s-sel__item">
+	    			<label class="s-sel__label">Взрослых</label>
+					<input class="s-sel__input s-sel__input_number" v-model="parents_count" type="number" min="1">
+    			</div>
+	    	</div>
+
+	    	<div class="col-15 col-xxs-50">
+	    		<div class="s-sel__item">
+	    			<label class="s-sel__label">Детей</label>
+
+					<!-- <div class="s-sel__select s-sel__select_children">
+			        	<div class="s-sel__select-output">
+			        		<span class="s-sel__select-value"></span>
+			        	</div>
+			        	<input v-model="childrens_count" class="s-sel__select s-sel__select_children" type="hidden">
+			        	<div class="s-sel__select-list">
+				        	<ul>
+				        		<li class="s-sel__select-list-item" data-value="0">0</li>
+				        		<li class="s-sel__select-list-item" data-value="1">1</li>
+				        		<li class="s-sel__select-list-item" data-value="2">2</li>
+				        	</ul>
+			        	</div>
+			        </div> -->
+			        <input v-model="childrens_count" class="s-sel__input s-sel__select_children s-sel__input_number" type="number" min="0">
+
+    			</div>
+	    	</div>
+
+	    	<div v-if="childrens_count > 0" class="col-35 col-xxs-50">
+	    		<div class="s-sel__item s-sel__item_children-age">
+		    		<label class="s-sel__label s-sel__label_children-age">Возраст детей</label>
+					<input class="s-sel__input s-sel__input_children-age  children-age" v-model="childrens_ages[index].value" v-for="(item, index) in childrens_ages" type="number" min="1">
+				</div>
+	    	</div>
+
+	    </div>
+
+	    <div class="r">
+	    	<div class="col-30 col-xxs-100">
+	    		<div class="s-sel__item">
+	    			<label class="s-sel__label">
+	    				Дата заезда
+	    			</label>
+	    			{#<input type="text" v-model="date">#}
+	    			<div @click="openDP()" class="dateSelect tsSmall tsDate">
+			            <input class="s-sel__input s-sel__input_date" >
+
+			            {#<input type="text" v-model="date">#}
+			        </div>
+	    		</div>
+	    	</div>
+	    	<div class="col-20 col-xs-40 col-xxs-50">
+	    		<div class="s-sel__item">
+	    			<label class="s-sel__label">Ночей отдыха</label>
+		    		<input class="s-sel__input s-sel__input_number" type="number" v-model="days_from" min="1">
+		    		<span style="color: #fff;">—</span>
+		    		<input class="s-sel__input s-sel__input_number" type="number" v-model="days_to" min="1">
+	    		</div>
+	    	</div>
+	    	<div class="col-50 col-xs-35 col-xxs-50">
+	    		<div class="s-sel__item plus_minus_input">
+	    			<label class="s-sel__label">Возможное смещение даты заезда (дней)</label>
+							<!-- <span class="plus_minus">+/-</span>/-->
+						<input class="s-sel__input s-sel__input_number plus_minus_input" v-model="date_delta_days" min="1" type="number">
+	    		</div>
+	    	</div>
+	    </div>
+
+	    <div class="r">
+	    	<div class="col-40 col-m-100 as-e">
+	    		<div class="s-sel__item s-sel__item_search">
+		    		<label class="s-sel__label">Поиск по названию</label>
+		    		<input class="s-sel__input s-sel__input_search" v-model="search_by_hotel_name">
+		    	</div>
+	    	</div>
+	    	<div class="col-60 col-m-100 col-xxs-100 as-e">
+	    		<div class="r jc-e">
+	    			<div class="col-50">
+	    				<div class="s-sel__button s-sel__button-send">
+			    			<button @click="sendData" class="btn tbtn btn_bg-red"><span>Подобрать</span></button>
+			    		</div>
+	    			</div>
+	    			<div class="col-50" v-if="second_panel">
+	    				<div class="s-sel__button s-sel__button-more">
+			    			<button class="btn tbtn btn_bg-blue"><span>Расширенный поиск</span></button>
+			    		</div>
+	    			</div>
+	    		</div>
+	    	</div>
+	    	<!--<div class="col-30 col-m-50 col-xxs-100" v-if="second_panel">
+	    		<div class="s-sel__button s-sel__button-more">
+	    			<button class="btn tbtn btn_bg-blue"><span>Расширенный поиск</span></button>
+	    		</div>
+	    	</div>-->
+	    </div>
+	</div>
+
+	<!--<div class="s-sel__line s-sel__line_dark active" v-if="second_panel">-->
+	<div class="s-sel__line s-sel__line_dark">
+		<div class="r">
+			<div class="col-33 col-xxs-100">
+				<div class="s-sel__item">
+					<label class="s-sel__label">Цена за тур, руб</label>
+					от <input class="s-sel__input s-sel__input_price price-range-input_one" v-model="second_filter.price_from">
+					<span class="price-range-input_one hidden">${ second_filter.price_from }</span>
+					до <input class="s-sel__input s-sel__input_price price-range-input_two" v-model="second_filter.price_to">
+					<span class="price-range-input_two hidden">${ second_filter.price_to }</span>
+				</div>
+				{#<div class="price-range"></div>#}
+			</div>
+			<div class="col-33 col-xxs-100">
+				<div class="s-sel__item">
+					<label class="s-sel__label">Уровень отеля</label>
+
+					<div class="s-sel__select s-sel__select_h-level">
+			        	<div class="s-sel__select-output" @click="levels_options=(levels_options)?false:true">
+			        		<span class="s-sel__select-value">${level_showed}</span>
+			        	</div>
+			        	{#<input class="s-sel__select s-sel__select_h-level" type="hidden" v-model="second_filter.hotel_levels.selected">#}
+			        	<div v-if="levels_options" class="s-sel__select-list">
+				        	<ul>
+				        		<li v-for="option in second_filter.hotel_levels.options"
+                                    class="s-sel__select-list-item"
+                                    @click="second_filter.hotel_levels.selected=option.value;levels_options=false;feelLevelsInput()"
+                                >${ option.name }</li>
+				        	</ul>
+			        	</div>
+			        </div>
+
+				</div>
+				<div class="s-sel__item">
+					<label class="s-sel__label">Тип отеля</label>
+
+					<div class="s-sel__select s-sel__select_h-type">
+			        	<div class="s-sel__select-output" @click="types_options=(types_options)?false:true">
+			        		<span class="s-sel__select-value">${type_showed}</span>
+			        	</div>
+			        	{#<input class="s-sel__select s-sel__select_h-type" type="hidden" v-model="second_filter.hotel_types.selected">#}
+			        	<div v-if="types_options" class="s-sel__select-list">
+				        	<ul>
+				        		<li class="s-sel__select-list-item"
+                                    v-for="option in second_filter.hotel_types.options"
+                                    @click="second_filter.hotel_types.selected=option.value;types_options=false;feelTypesInput()"
+                                >${ option.name }</li>
+				        	</ul>
+			        	</div>
+			        </div>
+
+				</div>
+				<div class="s-sel__item">
+					<label class="s-sel__label">Питание</label>
+
+					<div class="s-sel__select s-sel__select_h-food">
+			        	<div class="s-sel__select-output" @click="meals_options=(meals_options)?false:true">
+			        		<span class="s-sel__select-value">${meal_showed}</span>
+			        	</div>
+			        	{#<input class="s-sel__select s-sel__select_h-food" type="hidden" v-model="second_filter.meals.selected">#}
+			        	<div v-if="meals_options" class="s-sel__select-list">
+				        	<ul>
+				        		<li class="s-sel__select-list-item"
+                                    v-for="option in second_filter.meals.options"
+                                    @click="second_filter.meals.selected=option.value;meals_options=false;feelMealsInput()"
+                                >${ option.name }</li>
+				        	</ul>
+			        	</div>
+			        </div>
+
+				</div>
+			</div>
+			<div class="col-33 col-xxs-100">
+
+				<div class="s-sel__item s-sel__item-pool s-sel__item_switch" v-if="second_filter.pool_exist">
+					<label class="s-sel__label">Бассейн</label>
+					<span class="switcher"
+                          :class="[(second_filter.pool)?'active':'']"
+                          @click="second_filter.pool=(second_filter.pool)?false:true">
+                    </span>
+				</div>
+
+				<div class="s-sel__item s-sel__item-healing s-sel__item_switch" v-if="second_filter.medical_options.length > 0">
+					<label class="s-sel__label">Лечение</label>
+					<span class="switcher"
+                          :class="[(second_filter.medical)?'active':'']"
+                          @click="second_filter.medical=(second_filter.medical)?false:true"></span>
+				</div>
+
+				<div class="s-sel__item" v-if="second_filter.medical_options.length > 0 && second_filter.medical">
+					<label class="s-sel__label">Профиль заболевания</label>
+
+					<div class="s-sel__select s-sel__select_h-food s-sel__select-checking">
+			        	<div class="s-sel__select-output" @click="medicals_options=(medicals_options)?false:true">
+			        		<span class="s-sel__select-value">${medicalSelected}</span>
+			        	</div>
+			        	<div class="s-sel__select-list"
+							 :style="{opacity:[(medicals_options)?1:0],height:[(medicals_options)?'auto':0]}">
+				        	<ul>
+				        		<li @click="checkItem(item)"
+									class="s-sel__select-list-item"
+									v-for="item in second_filter.medical_options">
+                                    <span><i option="medical-value" :name="item" class="fa fa-square-o"></i></span>
+				        			<span>${item}</span>
+			        			</li>
+				        	</ul>
+			        	</div>
+			        </div>
+
+				</div>
+				{#<div class="s-sel__item">
+					<div class="s-sel__button s-sel__button-search">
+						<button @click="sendData" class="btn btbtn btn_bg-red"><span>Искать</span></button>
+					</div>
+				</div>#}
+			</div>
+		</div>
+	</div>
+</div>
+
+<!--ORIGIN-->
+<!-- <div id="Sans">
+
+    <div class="search_field">
+        <label>Выбор курорта</label>
+        <select v-model="resorts.selected">
+            <option v-for="option in resorts.options" :value="option.value">
+                ${ option.name }
+            </option>
+        </select>
+    </div>
+
+    <div class="search_field">
+        <input v-model="parents_count" type="number">
+    </div>
+    <div class="search_field">
+        <label>Детей</label>
+        <input v-model="childrens_count">
+    </div>
+    <div v-if="childrens_count > 0" class="search_field">
+        <label>Возраст детей</label>
+        <input class="children-age" v-for="item in childrens_ages">
+    </div>
+    <div class="search_field">
+        <label>Дата заезда</label>
+        <input v-model="date">
+    </div>
+    <div class="search_field">
+        <label>Возможное смещение даты заезда (дней)</label>
+        <input v-model="date_delta_days">
+    </div>
+    <div class="search_field">
+        <label>Дней отдыха (от)</label>
+        <input v-model="days_from">
+    </div>
+    <div class="search_field">
+        <label>Дней отдыха (до)</label>
+        <input v-model="days_to">
+    </div>
+    <div class="search_field">
+        <label>Поиск по названию</label>
+        <input v-model="search_by_hotel_name">
+    </div>
+    <hr>
+
+    <div v-if="second_panel">
+        <div class="search_field">
+            <label>Цена за тур ОТ</label>
+            <input v-model="second_filter.price_from">
+            <label>Цена за тур До</label>
+            <input v-model="second_filter.price_to">
+        </div>
+        <div class="search_field">
+            <label>Уровень отеля</label>
+            <select v-model="second_filter.hotel_levels.selected">
+                <option v-for="option in second_filter.hotel_levels.options" :value="option.value">
+                    ${ option.name }
+                </option>
+            </select>
+        </div>
+        <div class="search_field">
+            <label>Тип отеля</label>
+            <select v-model="second_filter.hotel_types.selected">
+                <option v-for="option in second_filter.hotel_types.options" :value="option.value">
+                    ${ option.name }
+                </option>
+            </select>
+        </div>
+        <div class="search_field">
+            <label>Питание</label>
+            <select v-model="second_filter.meals.selected">
+                <option v-for="option in second_filter.meals.options" :value="option.value">
+                    ${ option.name }
+                </option>
+            </select>
+        </div>
+        <div v-if="second_filter.pool_exist" class="search_field">
+            <label>Бассейн</label>
+            <input type="checkbox" v-model="second_filter.pool">
+        </div>
+        <div v-if="second_filter.medical_options.length > 0" class="search_field">
+            <label>Лечение</label>
+            <input type="checkbox" v-model="second_filter.medical">
+        </div>
+        <div v-if="second_filter.medical_options.length > 0 && second_filter.medical" class="search_field">
+            <label>Профиль заболевания</label>
+            <div v-for="item in second_filter.medical_options">
+                <input @click="getMedicals()" option="medical-value" :name="item" type="checkbox">${item}
+            </div>
+        </div>
+    </div>
+    <button @click="sendData">Искать</button>
+
+</div>-->
+
+<div id="SansResults"></div>
+<div id="Sanspreloader"></div>

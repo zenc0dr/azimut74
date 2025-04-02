@@ -1,0 +1,55 @@
+fields:
+    name:
+        label: Название
+        span: auto
+        oc.commentPosition: ''
+        type: text
+    slug:
+        label: 'Относительная ссылка (* в конце строки значит фрагмент)'
+        oc.commentPosition: ''
+        span: auto
+        type: text
+    long:
+        label: Долгота
+        oc.commentPosition: ''
+        span: auto
+        placeholder: ''
+        default: '51.540044'
+        type: number
+    lat:
+        label: Широта
+        oc.commentPosition: ''
+        span: auto
+        default: '46.004441'
+        type: number
+    zoom:
+        label: 'Степень приближения'
+        oc.commentPosition: ''
+        span: full
+        default: '17'
+        type: number
+    w:
+        label: Ширина
+        span: auto
+        default: 100%
+        type: text
+        comment: 'Например 100% или 150px'
+    h:
+        label: Высота
+        span: auto
+        default: 300px
+        type: text
+        comment: 'Например 100% или 150px'
+    maps_markers:
+        label: Маркеры
+        oc.commentPosition: ''
+        prompt: 'Добавить маркер'
+        span: auto
+        type: repeater
+        form:
+            fields:
+                markers:
+                    label: 'Выбор маркера'
+                    span: auto
+                    oc.commentPosition: ''
+                    type: dropdown

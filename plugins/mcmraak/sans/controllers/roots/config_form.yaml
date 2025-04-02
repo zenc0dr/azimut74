@@ -1,0 +1,10 @@
+name: Roots
+form: $/mcmraak/sans/models/root/fields.yaml
+modelClass: Mcmraak\Sans\Models\Root
+defaultRedirect: mcmraak/sans/roots
+create:
+    redirect: 'mcmraak/sans/roots/update/:id'
+    redirectClose: mcmraak/sans/roots
+update:
+    redirect: mcmraak/sans/roots
+    redirectClose: mcmraak/sans/roots

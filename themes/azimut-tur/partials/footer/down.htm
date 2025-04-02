@@ -1,0 +1,27 @@
+description = "Секция Copyright в дне"
+
+[viewBag]
+==
+<section class="footerDown">
+	<div class="c-p">
+		<div class="c-r">
+
+			<div class="col-42 col-s-100 as-c">
+				<div class="company">
+					<span>© 2012-{{ "now"|date("Y") }} Турагентство "Азимут-тур"</span>
+				</div>
+				<!--
+				<div class="reestr">
+					<a target="_parent" href="https://www.russiatourism.ru/operators/show.php?id=107271">Номер в реестре Ростуризма РТО 021653</a>
+				</div>
+				-->
+			</div>
+			<div class="col-58 col-s-100 as-c">
+				<div class="copyright">
+					{% component 'contenteditor' file="footer/copyright" %}
+				</div>
+			</div>
+
+		</div>
+	</div>
+</section>

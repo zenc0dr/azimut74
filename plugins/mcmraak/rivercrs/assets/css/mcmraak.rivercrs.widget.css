@@ -1,0 +1,313 @@
+/* vue component dropdown */
+.zendd {
+    font-size: 13px;
+    display: inline-block;
+    font-family: OpenSansRegular, sans-serif;
+    width: 179px;
+}
+
+.zendd div {
+    display: inline-block;
+    width: 100%;
+}
+
+.zendd .value {
+    background: #fff;
+    border: 1px solid #bcbcbc;
+    border-radius: 3px;
+}
+
+.zendd .value i {
+    color: #2e88e5;
+    font-size: 20px;
+    position: absolute;
+    margin-left: -5px;
+    margin-top: 7px;
+    cursor: pointer;
+}
+
+.zendd .options {
+    background: #fff;
+    position: absolute;
+    width: inherit;
+    z-index: 10;
+    margin-top: 36px;
+    max-height: 135px;
+    overflow-y: scroll;
+    overflow-x: hidden;
+}
+
+.zendd .popup {
+    height: 0;
+    width: inherit;
+}
+
+.zendd .option {
+    padding: 4px 7px;
+    cursor: pointer;
+}
+
+.zendd .option:hover {
+    background: #f1f1f1;
+}
+
+.zendd input {
+    border: none;
+    outline: none;
+    background: none;
+    padding: 9px 10px;
+    width: calc(100% - 24px);
+    margin-right: 7px;
+    color: #393939;
+}
+
+.pagination-wrap.pagination {
+    padding-top: 0;
+}
+
+#ship.zendd {
+    width: 220px;
+}
+
+#Result.process {
+    opacity: 0.4;
+}
+
+@keyframes walk {
+    from {
+        background-position: -1000px 100%, 0 0;
+    }
+
+    to {
+        background-position: 0 100%, 0 0;
+    }
+}
+
+.datepicker--cell.-selected- {
+    color: #3c606f;
+    font-weight: bold;
+}
+
+/*
+#RiverCRS_search.process {
+    background-image: url(/plugins/mcmraak/rivercrs/assets/images/waves.jpg);
+    animation: walk 10s linear infinite;
+    color: #000;
+}
+*/
+@keyframes rotation {
+    0% {
+        transform: rotate(0deg);
+    }
+
+    100% {
+        transform: rotate(360deg);
+    }
+}
+
+#RiverCRS_search.process {
+    background-color: #cd4749;
+}
+
+#RiverCRS_search.process i, i.process {
+    margin-right: 10px;
+    animation-name: rotation;
+    animation-duration: 1s;
+    animation-iteration-count: infinite;
+    animation-timing-function: linear;
+}
+
+@keyframes open-alert {
+    from {
+        opacity: 0;
+        transform: scale(0.3,0.3);
+    }
+
+    to {
+        opacity: 1;
+        transform: scale(1,1);
+    }
+}
+
+.widget-alerts {
+    display: inline-block;
+    width: 100%;
+    height: 30px;
+    text-align: center;
+    font-size: 14px;
+    margin-top: -3px;
+    margin-bottom: 10px;
+}
+
+.widget-alert {
+    width: 100%;
+    background: #80bff3;
+    color: #fff;
+    padding-top: 5px;
+    padding-bottom: 5px;
+    font-size: 14px;
+    /* margin-top: 10px; */
+    animation: open-alert 200ms;
+}
+
+/* MultiDrop */
+#ship.multi-drop {
+    width: 220px;
+    cursor: pointer;
+}
+
+.multi-drop {
+    font-size: 13px;
+    display: inline-block;
+    font-family: OpenSansRegular, sans-serif;
+    width: 179px;
+}
+
+.multi-drop .filter {
+    width: inherit;
+    position: absolute;
+    margin: 0;
+    margin-top: 36px;
+    background: #ffffff;
+    padding: 5px 8px;
+    border-left: 1px solid #bcbcbc;
+    border-right: 1px solid #bcbcbc;
+    z-index: 10;
+}
+
+.multi-drop .filter input {
+    border: 1px solid #519bee;
+    background: #fff;
+    width: 100%;
+    border-radius: 3px;
+    padding: 3px 5px;
+    color: #2f70b9;
+}
+
+.multi-drop div {
+    display: inline-block;
+    width: 100%;
+}
+
+.multi-drop .value {
+    background: #fff;
+    border: 1px solid #bcbcbc;
+    border-radius: 3px;
+}
+
+.multi-drop .value i {
+    color: #2e88e5;
+    font-size: 20px;
+    position: absolute;
+    margin-left: -5px;
+    margin-top: 7px;
+}
+
+.multi-drop .options {
+    background: #fff;
+    border: 1px solid #bcbcbc;
+    border-top: none;
+    position: absolute;
+    width: inherit;
+    z-index: 10;
+    margin-top: 94px;
+    max-height: 235px;
+    overflow-y: scroll;
+    overflow-x: hidden;
+    border-radius: 0 0 3px 3px;
+}
+
+.multi-drop .popup {
+    height: 0;
+    width: inherit;
+}
+
+.multi-drop .option {
+    padding: 4px 7px;
+    cursor: pointer;
+}
+
+.multi-drop .option.checked {
+    background: #cde8ff;
+}
+
+.multi-drop .option:hover {
+    background: #cde8ff;
+}
+
+.multi-drop .clean {
+    width: inherit;
+    position: absolute;
+    margin-top: 69px;
+    padding: 3px 0;
+    text-align: center;
+    background: #ff6c6d;
+    color: #fff;
+    transition: 300ms;
+    border: 1px solid #bcbcbc;
+    z-index: 9;
+    cursor: pointer;
+}
+
+.multi-drop .clean:hover {
+    text-align: center;
+    background: #cb2022;
+    color: #fff;
+}
+
+.multi-drop .clean:not(.active) {
+    background: #e0e0e0;
+    color: #adadad;
+}
+
+.multi-drop .option i {
+    display: none;
+    margin-left: 5px;
+    color: #27a839;
+}
+
+.multi-drop .option.checked i {
+    display: inline-block;
+}
+
+.multi-drop input {
+}
+
+.multi-drop .value span {
+    display: inline-block;
+    padding: 9px 10px;
+    width: calc(100% - 24px);
+    margin-right: 7px;
+    color: #393939;
+    min-height: 29px;
+}
+
+/* fixes */
+.mobile-booking {
+    display: none!important;
+}
+
+.cruise-h1 {
+    padding: 0;
+    margin: 0;
+    font-family: OpenSansBold, sans-serif;
+    font-size: 24px;
+    color: #000;
+    margin-top: 0;
+    margin-top: -5px;
+    margin-bottom: 35px;
+}
+
+@media only screen and (max-width : 767px) {
+    .zendd, .multi-drop {
+        width: 100%!important;
+    }
+
+    .zendd .options, .multi-drop .options {
+        width: calc(100% - 51px);
+    }
+
+    .multi-drop .filter {
+        width: calc(100% - 50px);
+    }
+}

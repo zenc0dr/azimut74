@@ -1,0 +1,96 @@
+description = "Фиксированная секция (меню)"
+
+[viewBag]
+==
+<section class="fixedNav">
+	<div class="c-p">
+		<div class="c-r">
+
+			<div class="col-8 as-c hidden-s-d">
+				<div class="fixedLogo">
+					<a href="/">
+						<img src="{{ this.theme.logotypesmall|media }}" alt="">	
+					</a>
+				</div>
+			</div>
+			
+			<div class="col-10 col-m-16 col-s-20 col-xs-40 as-c">
+				<div class="headMenu fixedMenu hidden-s-d">
+					
+					<ul>
+						<!-- <li><a href="{{ 'pages/credit'|page }}">Кредит и рассрочка</a></li>
+						<li><a href="{{ 'pages/paymethods'|page }}">Способы оплаты</a></li> -->
+						<li><a href="{{ 'pages/contacts'|page }}">Контакты</a></li>
+					</ul>
+					
+				</div>
+				
+				<div class="toggleButton toggleFixed hidden-m-u">
+					<div class="g-icon">
+						<span></span>
+						<span></span>
+						<span></span>
+					</div>
+					<div><span>Меню</span></div>
+				</div>
+
+			</div>
+			
+			<div class="col-42 col-m-30 as-c hidden-s-d">
+				<div class="all_phones">
+				    <div class="r">
+    				    <div class="col-50 col-m-100 as-c hidden-xs-d">
+        					<div class="p_number">
+        						<span>Москва</span> <a href="tel:84997050096">8 (499) 705 00 96</a>
+        					</div>
+        					<div class="p_number">
+        						<span>Казань</span> <a href="tel:88432085696">8 (843) 208 56 96</a>
+    						</div>
+    					</div>
+    					<div class="col-50 col-m-100 as-c hidden-xs-d">
+        					<div class="p_number">
+        						<span>Самара</span> <a href="tel:88462295796">8 (846) 229 57 96</a>
+        					</div>
+        					<div class="p_number">
+        						<span>Саратов</span> <a href="tel:88452255996">8 (8452) 25 59 96</a>
+        					</div>
+    					</div>
+    				</div>
+				</div>
+			</div>
+			
+			<div class="col-20 col-m-25 col-s-80 hidden-xs-d as-c">
+				<div class="phones f-phones">
+					<div class="r">
+						<!-- <div class="col-0">
+						    <div class="phone phone-test">
+						        <a href="tel:{{ this.theme.headerphone2|mutator }}">{{ this.theme.headerphone2|mutator }}</a>
+						    </div>
+						</div> -->
+						<div class="col-100">
+							<div class="phone">
+								<a href="tel:{{ this.theme.headerphone1|mutator }}">{{ this.theme.headerphone1|mutator }}</a><br>
+								<span class="free">{{ this.theme.headerphone1p|mutator }}</span>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+
+			<div class="col-15 col-m-20 col-s-100 mt-s-10 col-xs-60 mt-xs-0 as-c">
+				<div class="headButton">
+					<button href="#modalTour" class="hbtn mbtn">Подобрать тур</button>
+				</div>
+			</div>
+
+			<div class="col-s-100 hidden-m-u">
+				<div class="hiddenMenu hiddenFixed">
+					
+					{% partial 'template/menu' %}
+					
+				</div>
+			</div>
+			
+		</div>
+	</div>
+</section>

@@ -1,0 +1,15 @@
+columns:
+    id:
+        label: id
+        type: number
+        sortable: true
+    name:
+        label: 'Название скидки'
+        type: text
+        searchable: true
+        sortable: true
+    valid_until:
+        label: 'Действует ДО'
+        type: date
+        sortable: true
+        format: 'd.m.Y H:i'

@@ -1,0 +1,16 @@
+columns:
+    id:
+        label: Номер
+        type: number
+    category:
+        label: Категория
+        type: text
+    name:
+        label: Название
+        type: text
+    order:
+        label: Порядок
+        type: number
+    active:
+        label: Активно
+        type: partial

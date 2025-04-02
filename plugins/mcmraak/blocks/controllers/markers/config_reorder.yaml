@@ -1,0 +1,4 @@
+title: Markers
+modelClass: Mcmraak\Blocks\Models\Marker
+toolbar:
+    buttons: reorder_toolbar

@@ -1,0 +1,4 @@
+title: Beds
+modelClass: Mcmraak\Rivercrs\Models\Beds
+toolbar:
+    buttons: reorder_toolbar

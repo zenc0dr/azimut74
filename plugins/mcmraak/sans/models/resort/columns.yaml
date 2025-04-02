@@ -1,0 +1,33 @@
+columns:
+    id:
+        label: id
+        type: number
+        sortable: true
+    name:
+        label: Название
+        type: text
+        searchable: true
+    name_block:
+        label: name_block
+        type: number
+        sortable: true
+    cid:
+        label: cid
+        type: text
+        searchable: true
+        sortable: true
+    country_id:
+        label: country_id
+        type: number
+        sortable: false
+        relation: country
+        valueFrom: name
+    sort_order:
+        label: sort_order
+        type: number
+        sortable: true
+    group_id:
+        label: 'Группа курортов'
+        type: text
+        relation: group
+        valueFrom: name

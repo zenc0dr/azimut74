@@ -1,0 +1,47 @@
+title = "Страница теплохода"
+url = "/russia-river-cruises/motorship/:id"
+layout = "master"
+is_hidden = 0
+robot_index = "index"
+robot_follow = "follow"
+contentType = "html"
+force_show = 0
+==
+<?php
+function onInit()
+{
+    $this['page_css'] = mix('css/ship.css', 'themes/azimut-tur-pro/assets');
+    $this['page_js'] = mix('js/ship.js', 'themes/azimut-tur-pro/assets');
+}
+
+function onStart()
+{
+    $init_success = Mcmraak\Rivercrs\Classes\RivercrsCore::init($this);
+    if (!$init_success) {
+        $this->setStatusCode(404);
+        return $this->controller->run('404');
+    }
+}
+?>
+==
+{% put page_style %}
+<link rel="stylesheet" href="{{ page_css }}">
+{% endput %}
+{% put page_script %}
+<script src="{{ page_js }}"></script>
+{% endput %}
+
+{% partial 'ship/top-info' class='mt-5' %}
+
+<section class="tabs-group">
+	<div class="container">
+		<div class="tabs">
+			<div class="tab active" tab="1">Описание теплохода</div>
+			<div class="tab" tab="2">Круизы теплохода</div>
+		</div>
+		<div class="tab-content">
+      	{% partial 'cruise/tab-ship' class='active' tab='1' %}
+      	{% partial 'ship/ship-cruises' tab='2' %}
+		</div>
+	</div>
+</section>

@@ -1,0 +1,28 @@
+<meta name="storage_id" content="{{ model.id }}">
+<div id="CacheData" v-cloak>
+    <div class="cabox-filelist" :class="{process}">
+        <div class="cabox-filters">
+            <input v-model="filters.key" class="cabox-filter filter-key">
+            <input v-model="filters.time" class="cabox-filter filter-data">
+        </div>
+
+        <div class="cabox-file titles">
+            <div class="cabox-key">Ключ</div>
+            <div class="cabox-time">Время</div>
+        </div>
+        <div v-for="item in storage_items" class="cabox-file" @click="showDump(item.filename)">
+            <div class="cabox-key">${ item.key }</div>
+            <div class="cabox-time"><i @click.stop="deleteItem(item.key)" class="oc-icon-trash remove-cache"></i> ${ item.created_at }</div>
+        </div>
+    </div>
+
+    <div v-if="pages > 1" class="cabox-pagination">
+        <div @click="paginate(0)" class="cabox-pagination-arrow"><i class="oc-icon-chevron-left"></i></div>
+        <div class="cabox-pagination-text">
+            <select @click="loadItems()" v-model="page">
+                <option v-for="index in pages">${ index }</option>
+            </select> из ${ pages }</div>
+        <div @click="paginate(1)" class="cabox-pagination-arrow"><i class="oc-icon-chevron-right"></i></div>
+    </div>
+</div>
+<script src="/plugins/zen/cabox/assets/js/zen.cabox.cache_data.js"></script>

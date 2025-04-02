@@ -1,0 +1,659 @@
+html {
+    position: relative;
+    min-height: 100%
+}
+
+body {
+    min-width: 320px;
+    font-family: OpenSansRegular, sans-serif!important;
+    overflow-x: hidden;
+    background-color: #fff;
+    margin: auto!important;
+    /* margin-bottom: 641px */
+}
+
+strong, b {
+    font-family: OpenSansBold, sans-serif
+}
+
+section.headNav {
+    padding: 15px 0;
+    border-bottom: 1px solid #eaeaea
+}
+
+.headMenu {
+    display: inline-block;
+}
+
+.headMenu ul {
+    padding: 0;
+    margin: 0
+}
+
+.headMenu ul li {
+    display: inline-block
+}
+
+.headMenu ul li a {
+    font-size: 14px;
+    color: #000;
+    font-family: OpenSansBold, sans-serif;
+    text-transform: uppercase;
+    margin-right: 35px;
+    transition: all .15s ease-in-out
+}
+
+.headMenu ul li a:hover {
+    color: #cb2022
+}
+
+.headButton {
+    text-align: right
+}
+
+.headButton .hbtn {
+    background-color: #cb2022
+}
+
+.hbtn {
+    font-family: OpenSansBold, sans-serif;
+    color: #fff;
+    text-transform: uppercase;
+    border-radius: 20px;
+    padding: 10px 35px;
+    font-size: 14px;
+    transition: all .2s ease-in-out
+}
+
+.headButton .hbtn:hover {
+    background-color: #E12C2E
+}
+
+.slItem .slButtons .hbtn:hover {
+    background-color: #E12C2E
+}
+
+section.headContacts .logo {
+    text-align: center
+}
+
+section.headContacts .reestr {
+    font-size: 13px;
+    margin-top: 6px;
+    font-weight: bold;
+    color: #a2a2a2;
+    float: right;
+}
+
+section.headContacts {
+    padding: 15px 0
+}
+
+.address {
+    display: inline-block;
+    width: 100%;
+    text-align: center
+}
+
+.addrWrap {
+    display: inline-block;
+    text-align: left
+}
+
+.address .addrWrap span {
+    display: inline-block;
+    font-size: 16px
+}
+
+.address .addrWrap a {
+    font-size: 14px;
+    color: #1e88e5;
+    font-family: OpenSansBold, sans-serif;
+    text-align: left;
+    margin-top: 5px;
+    display: inline-block
+}
+
+.worktime {
+    display: inline-block;
+    width: 100%
+}
+
+.worktime .time {
+    display: inline-block;
+    width: 100%;
+    font-size: 0
+}
+
+.worktime .time span {
+    display: inline-block;
+    font-size: 14px
+}
+
+.worktime .time span:first-child {
+    width: 40%;
+    text-align: right;
+    font-family: OpenSansBold, sans-serif
+}
+
+.worktime .time span:last-child {
+    width: 60%;
+    padding-left: 5px;
+    color: #333
+}
+
+.all_phones {
+    display: inline-block;
+    width: 100%;
+    font-weight: bold
+}
+
+.all_phones .p_number {
+    display: inline-block;
+    width: 100%;
+    font-size: 0
+}
+
+.all_phones .p_number span, .all_phones .p_number a {
+    display: inline-block;
+    font-size: 14px
+}
+
+.all_phones .p_number span:first-child, .all_phones .p_number a:first-child {
+    width: 33%;
+    text-align: left;
+    font-family: OpenSansBold, sans-serif;
+    color: #1e88e5
+}
+
+.all_phones .p_number span:last-child, .all_phones .p_number a:last-child {
+    width: 67%;
+    padding-left: 5px;
+    color: #333
+}
+
+.phones {
+    display: inline-block;
+    width: 100%;
+    text-align: right
+}
+
+.phones div:nth-child(2) {
+    margin-top: 5px
+}
+
+.phones .phonesWrap {
+    display: inline-block;
+    text-align: left
+}
+
+.phones .phone a {
+    font-size: 24px;
+    display: inline-block;
+    font-family: OpenSansBold, sans-serif;
+    color: #000;
+}
+
+.phones .phone span.number {
+    font-size: 24px;
+    color: #000;
+    font-family: OpenSansRegular, sans-serif;
+    line-height: 1.2;
+}
+
+.phones .phone span.free {
+    font-size: 14px;
+    color: #9c9c9c;
+    display: inline-block
+}
+
+.phones .phoneButton {
+    display: inline-block;
+    width: 100%;
+    padding-top: 5px
+}
+
+.phones .phoneButton i {
+    display: inline-block;
+    color: #b6bfd1;
+    font-size: 20px;
+    vertical-align: middle
+}
+
+.phones .phoneButton button {
+    margin-left: 10px;
+    color: #cb2022;
+    border-bottom: 1px dashed #cb2022;
+    background: none;
+    font-size: 16px;
+    vertical-align: middle
+}
+
+section.slider {
+    position: relative;
+    width: 100%;
+    /* min-height: 251px; */
+    /* max-height: 251px; */
+    overflow: hidden;
+    /* display: none */
+}
+
+.sliderItems {
+    display: inline-block;
+    width: 100%
+}
+
+.slItem {
+    padding: 45px 0;
+    background-repeat: no-repeat;
+    background-position: center;
+    -webkit-background-size: cover;
+    background-size: cover;
+    position: relative;
+    z-index: 1;
+    min-height: 250px;
+}
+
+.slItem .slLine {
+    display: inline-block;
+    width: 100%
+}
+
+.slItem .slLine p {
+    margin: 0
+}
+
+.slItem .slHeading span {
+    background: linear-gradient(to bottom, #e31e24, #bf0e13);
+    font-size: 48px;
+    font-family: OpenSansBold, sans-serif;
+    -webkit-background-clip: text;
+    color: transparent;
+    text-transform: uppercase
+}
+
+.slItem .slTop span, .slItem .slTop span p {
+    font-size: 22px;
+    color: #000
+}
+
+.slItem .slButtons {
+    margin-top: 20px
+}
+
+.slItem .slButtons .slButton {
+    vertical-align: middle;
+    display: inline-block;
+    margin-left: 0
+}
+
+.slItem .slButtons .hbtn {
+    background-color: #cb2022;
+    padding: 10px 45px;
+    display: inline-block
+}
+
+.slItem .slButtons div:last-child {
+    font-family: OpenSansBold, sans-serif;
+    font-size: 40px;
+    color: #e31e24;
+    display: inline-block;
+    vertical-align: middle;
+    line-height: 1;
+    margin-left: 25px
+}
+
+.slItem .slButtons div span, .slItem .slButtons div span p {
+    font-family: OpenSansRegular, sans-serif;
+    font-size: 30px;
+    color: #000;
+    display: inline-block
+}
+
+.sliderNav .c-p {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    height: 100%;
+}
+
+.slider .sliderNav {
+    position: absolute;
+    width: 100%;
+    left: 0;
+    display: inline-block;
+    top: 0;
+    height: 100%
+}
+
+.slider .sliderNav .nav {
+    position: relative;
+    width: 30px;
+    height: 30px;
+    display: inline-block;
+    border-top: 3px solid #fff;
+    cursor: pointer;
+    opacity: 0.6;
+    transition: all .15s ease-in-out;
+    /* top: 43%; */
+    z-index: 2
+}
+
+.slider .sliderNav .nav:hover {
+    opacity: 1
+}
+
+.slider .sliderNav .prev {
+    left: -3vw;
+    border-left: 3px solid #fff;
+    transform: rotateZ(-45deg)
+}
+
+.slider .sliderNav .next {
+    right: -3vw;
+    border-right: 3px solid #fff;
+    transform: rotateZ(45deg)
+}
+
+section.headServices {
+    background-color: #1e88e5
+}
+
+.servicesMenu {
+    display: inline-block;
+    width: 100%;
+    vertical-align: top;
+}
+
+.servicesMenu > ul {
+    margin: 0;
+    padding: 0;
+    text-align: justify;
+    text-align-last: justify;
+    font-size: 0;
+}
+
+.servicesMenu > ul > li {
+    display: inline-block;
+    text-align: center;
+    text-align-last: center;
+    vertical-align: top;
+    position: relative;
+    font-size: 0;
+}
+
+.servicesMenu > ul > li .servLink {
+    display: inline-block;
+    /* padding: 25px 12px; */
+    padding: 25px 10px;
+    width: 100%;
+    font-size: 0;
+}
+
+.servicesMenu > ul > li .servLink span {
+    display: inline-block;
+    width: 100%;
+    font-size: 16px;
+    color: #fff;
+    text-align: center
+}
+
+.servicesMenu > ul > li .servLink span:last-child {
+    margin-top: 10px
+}
+
+.servicesMenu > ul > li .servLink span i {
+    font-size: 20px;
+    color: #fff
+}
+
+.servicesMenu > ul > li .servLink:hover, .servicesMenu > ul > li.active .servLink, .servicesMenu > ul > li .servLink.active {
+    background-color: #fff
+}
+
+.servicesMenu > ul > li .servLink:hover span, .servicesMenu > ul > li.active .servLink span, .servicesMenu > ul > li .servLink.active span {
+    color: #1e88e5
+}
+
+.servicesMenu > ul > li .servLink:hover .svg, .servicesMenu > ul > li.active .servLink .svg, .servicesMenu > ul > li .servLink.active .svg {
+    fill: #1e88e5;
+    stroke: #1e88e5
+}
+
+.servicesMenu .svg {
+    width: 35px;
+    height: 32px;
+    fill: #fff;
+    stroke: #fff
+}
+
+.servicesMenu > ul > li .servLink:hover span i, .servicesMenu > ul > li.active .servLink span i {
+    color: #1e88e5
+}
+
+.servicesMenu > ul > li > ul {
+    padding: 0;
+    margin: 0;
+    position: absolute;
+    background-color: #fff;
+    text-align-last: left;
+    text-align: left;
+    width: 260px;
+    left: 0;
+    z-index: 1045;
+    display: none;
+    box-shadow: 0px 5px 15px 0px rgba(0,0,0,0.25)
+}
+
+.servicesMenu > ul > li.active > ul {
+    display: block
+}
+
+.servicesMenu > ul > li > ul li, .servicesMenu > ul > ul {
+    display: inline-block;
+    width: 100%
+}
+
+.servicesMenu > ul > li > ul li a, .servicesMenu > ul > ul > li a {
+    padding: 12px 25px;
+    display: inline-block;
+    width: 100%;
+    color: #333;
+    font-size: 13px;
+    border: 1px solid #eef1f3;
+    background-color: #fff
+}
+
+.servicesMenu > ul > li > ul li a:hover, .servicesMenu > ul > ul > li a:hover {
+    background-color: #1e88e5;
+    color: #fff;
+    border-color: #1e88e5
+}
+
+.toggleButton {
+    display: inline-block;
+    width: 100%;
+    padding: 10px 0
+}
+
+.toggleButton div span {
+    font-size: 14px;
+    font-family: OpenSansBold, sans-serif;
+    text-transform: uppercase
+}
+
+.toggleButton div:last-child {
+    padding-left: 10px;
+    display: inline-block;
+    vertical-align: middle
+}
+
+.hiddenMenu {
+    display: none
+}
+
+.hiddenMenu ul {
+    padding-left: 0;
+    padding-top: 15px
+}
+
+.hiddenMenu ul li {
+    display: inline-block;
+    width: 100%
+}
+
+.hiddenMenu ul li a {
+    display: inline-block;
+    font-size: 14px;
+    padding: 15px 0;
+    color: #000;
+    width: 100%;
+    text-transform: uppercase;
+    font-family: OpenSansBold, sans-serif
+}
+
+.hiddenMenu ul li a:hover {
+    color: #cb2022
+}
+
+.servicesMenu > ul > ul {
+    background-color: #fff;
+    padding: 0;
+    margin: 0
+}
+
+.servicesMenu > ul > ul > li {
+    display: inline-block;
+    width: 100%
+}
+
+.servicesMenu > ul > ul {
+    display: none
+}
+
+html.locked section.fixedNav {
+    width: calc(100vw - 17px);
+    transition: none;
+}
+
+section.fixedNav {
+    position: fixed;
+    top: 0;
+    left: 0;
+    display: inline-block;
+    width: 100%;
+    background-color: #fff;
+    padding: 15px 0;
+    border-bottom: 1px solid #eaeaea;
+    z-index: 99998;
+    top: -500px;
+    transition: all 1s ease-in-out;
+    box-shadow: 0 0px 5px 0px rgba(0,0,0,0.2)
+}
+
+section.fixedNav.active {
+    top: 0
+}
+
+.fixedMenu ul li a {
+    margin-right: 20px
+}
+
+.sliderItems {
+    display: none
+}
+
+meetmodal {
+    position: fixed;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0,0,0,0.5);
+    align-items: center;
+    justify-content: center;
+    top: 0;
+    left: 0;
+    display: flex;
+    z-index: 1055;
+    overflow-y: auto!important;
+    transition: all .3s ease-in-out;
+    opacity: 0;
+    pointer-events: none;
+    font-size: 14px;
+}
+
+meetmodal.active {
+    opacity: 1;
+    pointer-events: all;
+}
+
+meetmodal.closed {
+    opacity: 0;
+    display: none;
+    pointer-events: none;
+}
+
+meetmodal .modalSecond {
+    width: 850px;
+    background-image: url(/storage/app/media/meeting.jpg);
+    background-size: cover;
+    background-repeat: no-repeat;
+    background-position: center;
+    padding: 3% 5%;
+    position: relative;
+    box-shadow: 0 0 10px 3px rgba(0,0,0,0.3);
+    font-size: 16px;
+    min-height: 40vh;
+}
+
+meetmodal .close {
+    font-size: 28px;
+    width: 44px;
+    height: 44px;
+    position: absolute;
+    right: 0;
+    top: 0;
+    cursor: pointer;
+    text-align: center;
+    color: #333;
+    opacity: 0.65;
+}
+
+meetmodal .close:hover {
+    opacity: 1
+}
+
+meetmodalbody {
+    font-size: 14px;
+}
+
+.meeting__wrap {
+    background-color: rgba(255,255,255,0.8);
+    padding: 15px 0;
+    text-align: center;
+}
+
+.meeting__logo {
+    padding: 25px 0;
+}
+
+.meeting__meet {
+    margin: 0 -25px;
+    background: linear-gradient(to right, #a2231f, #e31e24);
+    color: #fff;
+    font-size: 24px;
+    padding: 15px 20px;
+    font-family: OpenSansBold, sans-serif;
+}
+
+.meeting__text {
+    font-family: OpenSansBold, sans-serif;
+    font-size: 18px;
+    color: #000;
+    padding: 25px 0;
+}
+
+.servicesMenu > ul > ul {
+    position: absolute;
+    left: 0;
+    z-index: 99999;
+}

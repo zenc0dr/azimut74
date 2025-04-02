@@ -1,0 +1,107 @@
+fields:
+    active:
+        label: Активно
+        span: auto
+        type: switch
+    in_menu:
+        label: 'В меню'
+        span: auto
+        type: switch
+    in_footer:
+        label: 'В подвале'
+        span: right
+        type: switch
+    name:
+        label: Имя
+        span: auto
+        type: text
+    menu_item:
+        label: 'Пункт меню'
+        span: auto
+        type: text
+        comment: 'Если оставить пустым то повторит поле "Имя"'
+    slug:
+        label: 'Ссылка (Должна быть уникальной)'
+        span: auto
+        required: 1
+        preset:
+            field: name
+            type: slug
+        type: text
+    ktype_id:
+        label: 'Раздел меню'
+        showSearch: true
+        span: auto
+        type: dropdown
+    image:
+        label: Превью
+        mode: image
+        useCaption: true
+        thumbOptions:
+            mode: crop
+            extension: auto
+        span: auto
+        type: fileupload
+tabs:
+    fields:
+        town1:
+            label: 'Город отправления'
+            showSearch: true
+            span: auto
+            type: dropdown
+            tab: 'Настройки фильтра'
+        town2:
+            label: 'Город на маршруте'
+            showSearch: true
+            span: auto
+            type: dropdown
+            tab: 'Настройки фильтра'
+        date1:
+            label: 'Период отправления С'
+            mode: date
+            span: auto
+            type: datepicker
+            tab: 'Настройки фильтра'
+        date2:
+            label: 'Период отправления ПО'
+            mode: date
+            span: auto
+            type: datepicker
+            tab: 'Настройки фильтра'
+        days:
+            label: Продолжительность
+            span: auto
+            default: '1'
+            type: number
+            tab: 'Настройки фильтра'
+        ship_id:
+            label: Теплоход
+            showSearch: true
+            span: auto
+            type: dropdown
+            tab: 'Настройки фильтра'
+        data:
+            label: Контент
+            span: full
+            size: giant
+            type: richeditor
+            tab: Контент
+        slider:
+            label: Слайдер
+            prompt: Добавить
+            span: full
+            type: repeater
+            tab: Слайдер
+            form:
+                fields:
+                    image:
+                        label: Изображение
+                        mode: image
+                        span: full
+                        type: mediafinder
+                    html:
+                        label: html-контент
+                        size: large
+                        language: html
+                        span: full
+                        type: codeeditor

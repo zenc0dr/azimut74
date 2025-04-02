@@ -1,0 +1,53 @@
+description = "Левое меню (dolphin)"
+
+[viewBag]
+==
+<div class="leftBlock">
+    {% for menublock in dolphin.leftmenu %}
+	<div class="leftBlockItem">
+
+		{% set block_closed = false %}
+		{% if 'block' in menublock.options %}
+		{% set block_closed = true %}
+		{% endif %}
+
+		<div class="itemHead{% if block_closed %} closed{% endif %}">
+			<span>
+			    {{ menublock.name }}
+			</span>
+			<i class="fa fa-arrow-down arrow-s" aria-hidden="true"></i>
+		</div>
+		<div class="itemBody"{% if block_closed %} style="display:none"{% endif %}>
+			<ul>
+			    {% for menuitem in menublock.items %}
+			    {% set prefix = 'ex-tours/' ~ dolphin.root_scope %}
+                <li class="items-drop">
+					<a href="{{ menuitem.getUrl(prefix) }}">{{ menuitem.label }}</a>
+					{% if menuitem.items|length > 0 %}
+						{% set extra = false %}
+						<div class="item-drop{% if 'items' in menublock.options == false %} showed{% endif %}"></div>
+						<ul>
+						{% for subitem in menuitem.items %}
+							{% if loop.index == 6 %}
+								{% set extra = true %}
+								<div class="extra-items{% if 'extra' in menublock.options == false %} showed{% endif %}"> {# start of extra items #}
+							{% endif %}
+							<li>
+								<a href="{{ subitem.getUrl(prefix) }}">{{ subitem.label }}</a>
+							</li>
+						{% endfor %}
+						{% if extra == true %}
+								</div> {# ------------------ end of extra items #}
+							<div class="extra-items-close">
+								<div> > </div>
+							</div>
+						{% endif %}
+						</ul>
+                     {% endif %}
+                </li>
+                {% endfor %}
+			</ul>
+		</div>
+	</div>
+	{% endfor %}
+</div>

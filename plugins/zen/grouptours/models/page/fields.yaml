@@ -1,0 +1,65 @@
+fields:
+    active:
+        label: Активно
+        span: full
+        default: 1
+        type: switch
+    name:
+        label: Заголовок
+        span: auto
+        type: text
+    slug:
+        label: URL
+        span: auto
+        required: 1
+        preset:
+            field: name
+            type: slug
+        type: text
+    label:
+        label: 'Отображение в боковом меню'
+        span: auto
+        type: text
+    preset:
+        label: 'Поисковый пресет'
+        span: auto
+        type: text
+tabs:
+    fields:
+        meta_title:
+            label: 'Мета title'
+            span: auto
+            type: text
+            tab: Метатеги
+        meta_description:
+            label: 'Мета description'
+            size: small
+            span: auto
+            type: textarea
+            tab: Метатеги
+        gallery_block_id:
+            label: 'Блог галереи'
+            showSearch: true
+            span: auto
+            type: dropdown
+            tab: 'Доп. блоки'
+        features_block_id:
+            label: 'Блок с фишками'
+            showSearch: true
+            span: auto
+            type: dropdown
+            tab: 'Доп. блоки'
+        reviews_block_id:
+            label: 'Блок с отзывами'
+            showSearch: true
+            span: auto
+            type: dropdown
+            tab: 'Доп. блоки'
+secondaryTabs:
+    fields:
+        infoblock:
+            label: Инфоблок
+            size: huge
+            span: full
+            type: richeditor
+            tab: Инфоблоки

@@ -1,0 +1,136 @@
+name: Азимут-тур
+description: ''
+author: srw
+homepage: ''
+code: ''
+form:
+    tabs:
+        fields:
+            logotype:
+                label: 'Логотип'
+                oc.commentPosition: ''
+                mode: image
+                span: full
+                type: mediafinder
+                tab: 'Стайлинг'
+            logotypesmall:
+                label: 'Логотип Маленький'
+                oc.commentPosition: ''
+                mode: image
+                span: full
+                type: mediafinder
+                tab: 'Стайлинг'
+            headerphone1:
+                label: 'ШАПКА - Телефон 1'
+                span: full
+                type: text
+                tab: 'Стайлинг'
+            headerphone1p:
+                label: 'ШАПКА - Текст под телефоном 1'
+                span: full
+                type: text
+                tab: 'Стайлинг'
+            headerphone2:
+                label: 'ШАПКА - Телефон 2'
+                span: full
+                type: text
+                tab: 'Стайлинг'
+            contname1:
+                label: 'КОНТАКТЫ - Заголовок (колонка 1)'
+                span: full
+                type: text
+                tab: 'Стайлинг'
+            address:
+                label: Адрес
+                span: full
+                type: text
+                tab: 'Стайлинг'
+            graphic:
+                label: 'КОНТАКТЫ - График работы'
+                size: huge
+                oc.commentPosition: ''
+                span: full
+                type: richeditor
+                tab: 'Стайлинг'
+            email:
+                label: 'Электронная почта'
+                span: full
+                type: text
+                tab: 'Стайлинг'
+            conttext1:
+                label: 'КОНТАКТЫ - Свободный текст (колонка 1)'
+                size: huge
+                oc.commentPosition: ''
+                span: full
+                type: richeditor
+                tab: 'Стайлинг'
+            contname2:
+                label: 'КОНТАКТЫ - Заголовок (колонка 2)'
+                span: full
+                type: text
+                tab: 'Стайлинг'
+            phone1:
+                label: 'КОНТАКТЫ - Телефон 1'
+                span: full
+                type: text
+                tab: 'Стайлинг'
+            phone1p:
+                label: 'КОНТАКТЫ - Телефон 1 (подпись)'
+                span: full
+                type: text
+                tab: 'Стайлинг'
+            phone2:
+                label: 'КОНТАКТЫ - Телефон 2'
+                span: full
+                type: text
+                tab: 'Стайлинг'
+            phone2p:
+                label: 'КОНТАКТЫ - Телефон 2 (подпись)'
+                span: full
+                type: text
+                tab: 'Стайлинг'
+            phone3:
+                label: 'КОНТАКТЫ - Телефон 3'
+                span: full
+                type: text
+                tab: 'Стайлинг'
+            phone3p:
+                label: 'КОНТАКТЫ - Телефон 3 (подпись)'
+                span: full
+                type: text
+                tab: 'Стайлинг'
+            conttext2:
+                label: 'КОНТАКТЫ - Свободный текст (колонка 2)'
+                size: huge
+                oc.commentPosition: ''
+                span: full
+                type: richeditor
+                tab: 'Стайлинг'
+            contname3:
+                label: 'КОНТАКТЫ - Заголовок (колонка 3)'
+                span: full
+                type: text
+                tab: 'Стайлинг'
+            conttext3:
+                label: 'Свободный текст (колонка 3)'
+                size: huge
+                oc.commentPosition: ''
+                span: full
+                type: richeditor
+                tab: 'Стайлинг'
+            salutation:
+                label: 'Приветствие включено'
+                span: full
+                type: switch
+                tab: 'Приветствие'
+            salutation_time:
+                label: 'Время повторного показа  (сек)'
+                span: left
+                type: number
+                tab: 'Приветствие'
+            salutation_text:
+                label: 'Содержание приветсвия'
+                span: full
+                size: huge
+                type: richeditor
+                tab: 'Приветствие'

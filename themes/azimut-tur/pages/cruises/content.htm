@@ -1,0 +1,112 @@
+title = "Фрейм-контент"
+url = "/russia-river-cruises/content/:slug"
+layout = "general"
+is_hidden = 0
+robot_index = "index"
+robot_follow = "follow"
+contentType = "html"
+==
+<?php
+use \Mcmraak\Rivercrs\Models\Reference;
+use \Mcmraak\Rivercrs\Models\Cruises;
+use \Mcmraak\Rivercrs\Models\Transit;
+use \Mcmraak\Rivercrs\Models\Motorships;
+
+function onInit()
+{
+    $slug = $this->param('slug');
+
+    $this['frame'] = Cruises::where('slug', $slug)->first();
+    if(!$this['frame']) return \Response::make($this->controller->run('404'), 404);
+    
+    $this['references'] = Reference::orderBy('order')->get();
+    $this['cruises'] = Cruises::where('active', 1)->orderBy('sort_order')->get();
+    $this['motorships'] = Motorships::cleanNames();
+    $this['cruise'] = Cruises::where('slug', 'river-cruises')->first();
+     
+}
+?>
+==
+{#<div class="headText">
+	<h1 class="h1">{{ frame.name }}</h1>
+</div>#}
+
+<section class="cruises">
+
+	<div class="cruiseHead">
+		<div class="c-r">
+			<div class="col-30 col-xs-100">
+				<div class="cruiseImage">
+				    {% set image = frame.images|first %}
+					<img src="{{ image.path|resize(400) }}" {% if image.title %}alt="{{ image.title|mutator }}"{% endif %}>
+				</div>
+				<div class="socialWrap">
+					{% partial 'template/socialbuttons' %}
+				</div>
+			</div>
+			<div class="col-70 col-xs-100">
+				<div class="cruiseInfo">
+                    
+					<div class="cruiseExcerpt normalText">
+						{{ frame.text|raw|mutator }}
+					</div>
+					
+					{% if frame.seo_articles %}
+					<div class="cruiseButtons">
+                        {% for tag in frame.seo_articles %}
+                        	{% if tag.seo_hash %}
+							<a class="crbtn" href="#{{ tag.seo_hash }}">{{ tag.seo_title|mutator }}</a>
+							{% endif %}
+                        {% endfor %}
+					</div>
+					{% endif %}
+
+				</div>
+			</div>
+		</div>
+	</div>
+
+	<div class="cruiseData">
+		<div class="c-r">
+			<div class="col-25 col-s-100 as-s">
+				{% partial 'rivercrs/leftmenu' %}
+			</div>
+
+			<div class="col-75 col-s-100 as-s">
+				<div class="rightBlock">
+                  <div class="cruiseExcerpt textBlock">
+                        {{ frame.frame_text|raw|mutator }}
+                        
+                        {% if frame.frame_link %}
+                            <iframe
+                                style="width:100%;height:600px"
+                                src="{{ frame.frame_link }}"
+                            frameborder="0"></iframe>
+                        {% endif %}
+                        {% if frame.frame_code %}
+                        {{ frame.frame_code|raw|mutator }}!!!
+                        {% endif %}
+                  </div>                       
+				</div>
+			</div>
+		</div>
+	</div>
+	
+	<div class="cruiseArticles">
+
+		<div class="col-100">
+    		{% for article in frame.seo_articles %}
+    			<div class="crArticle" id="{{ article.seo_hash }}">
+    				<div class="data">
+    				    <h2>{{ article.seo_title|mutator }}</h2>
+    					{{ article.seo_text|raw|mutator }}
+    				</div>
+    			</div>
+    		{% endfor %}
+		</div>
+
+	</div>
+	
+	{% partial 'rivercrs/relinks' %}
+	
+</section>

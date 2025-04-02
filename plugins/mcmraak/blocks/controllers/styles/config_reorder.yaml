@@ -1,0 +1,4 @@
+title: Styles
+modelClass: Mcmraak\Blocks\Models\Style
+toolbar:
+    buttons: reorder_toolbar

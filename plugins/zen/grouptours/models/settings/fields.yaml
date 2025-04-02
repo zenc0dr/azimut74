@@ -1,0 +1,44 @@
+fields:
+    main_picture:
+        label: 'Картинка в блоке "Направления, темы туров"'
+        mode: image
+        imageWidth: '500'
+        span: auto
+        type: mediafinder
+tabs:
+    fields:
+        results_limit:
+            label: 'Количество результатов на страницу (пагинация)'
+            span: auto
+            default: '10'
+            type: number
+            tab: Поиск
+        message:
+            label: 'Сообщение для уведомлений'
+            span: full
+            type: text
+            comment: '#id - id, #name - имя'
+            tab: Уведомления
+        emails:
+            label: 'Почта для уведомлений'
+            prompt: 'Добавить email'
+            style: default
+            span: auto
+            type: repeater
+            tab: Уведомления
+            form:
+                fields:
+                    email:
+                        label: email
+                        span: full
+                        type: text
+        files:
+            label: 'Файлы для публикации'
+            mode: file
+            useCaption: true
+            thumbOptions:
+                mode: crop
+                extension: auto
+            span: full
+            type: fileupload
+            tab: Документы

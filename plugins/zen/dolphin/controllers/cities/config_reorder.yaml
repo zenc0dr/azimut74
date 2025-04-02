@@ -1,0 +1,4 @@
+title: Cities
+modelClass: Zen\Dolphin\Models\City
+toolbar:
+    buttons: reorder_toolbar

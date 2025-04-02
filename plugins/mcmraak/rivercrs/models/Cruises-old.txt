@@ -1,0 +1,146 @@
+<?php namespace Mcmraak\Rivercrs\Models;
+
+use Model;
+use DB;
+
+/**
+ * Model
+ */
+class Cruises extends Model
+{
+    use \October\Rain\Database\Traits\Validation;
+    
+    /*
+     * Disable timestamps by default.
+     * Remove this line if timestamps are defined in the database table.
+     */
+    public $timestamps = false;
+
+    /*
+     * Validation
+     */
+    public $rules = [
+    ];
+
+    /**
+     * @var string The database table used by the model.
+     */
+    public $table = 'mcmraak_rivercrs_cruises';
+
+    public $tagsDump, $linksDump;
+
+    public $attachMany = [
+        'images' => ['System\Models\File', 'order' => 'sort_order', 'delete' => true],
+    ];
+
+    public static function toLinks($slug)
+    {
+        $from_id = Cruises::where('slug', $slug)->first();
+        return CruisesLinks::where('cruise_id', $from_id->id)->orderBy('order')->get();
+    }
+
+    public static function tags($slug)
+    {
+        $from_id = Cruises::where('slug', $slug)->first();
+        return CruisesTags::where('cruise_id', $from_id->id)->orderBy('order')->get();
+    }
+
+    public function getTagsAttribute()
+    {
+        $attributes = CruisesTags::where('cruise_id', $this->id)->orderBy('order')->get();
+        if(!$attributes) return;
+        $repeater = [];
+        foreach ($attributes as $value) {
+            $repeater[] = ['tag_name' => $value->name, 'tag_url' => $value->url];
+        }
+        return $repeater;
+    }
+
+    public function setTagsAttribute($value)
+    {
+        $this->tagsDump = $value;
+    }
+
+    public function tagsSave()
+    {
+        CruisesTags::where('cruise_id', $this->id)->delete();
+
+        $insert = [];
+        foreach ($this->tagsDump as $key => $value) {
+            $insert[] =
+                [
+                    'cruise_id' => $this->id,
+                    'name' => $value['tag_name'],
+                    'url' => $value['tag_url'],
+                    'order' => $key,
+                ];
+        }
+        CruisesTags::insert($insert);
+    }
+
+    public function getCruisetoIdOptions()
+    {
+        return self::orderBy('order')->lists('name', 'id');
+    }
+
+    public function getFromtoLinksAttribute()
+    {
+        $attributes = CruisesLinks::where('cruise_id', $this->id)->orderBy('order')->get();
+        if(!$attributes) return;
+        $repeater = [];
+        foreach ($attributes as $value) {
+            $repeater[] = ['link_name' => $value->name, 'cruiseto_id' => $value->cruiseto_id];
+        }
+        return $repeater;
+    }
+
+    public function setFromtoLinksAttribute($value)
+    {
+        $this->linksDump = $value;
+    }
+
+    public function linksSave()
+    {
+        CruisesLinks::where('cruise_id', $this->id)->delete();
+
+        $insert = [];
+        foreach ($this->linksDump as $key => $value) {
+            $insert[] =
+                [
+                    'cruise_id' => $this->id,
+                    'cruiseto_id' => $value['cruiseto_id'],
+                    'name' => $value['link_name'],
+                    'order' => $key,
+                ];
+        }
+        CruisesLinks::insert($insert);
+    }
+
+    public function getTown1Options()
+    {
+        return [0 => 'Не выбрано'] + Towns::lists('name', 'id');
+    }
+    public function getTown2Options()
+    {
+        return [0 => 'Не выбрано'] + Towns::lists('name', 'id');
+    }
+
+    public function getRelinksJsonAttribute($value)
+    {
+        return json_decode($value, true);
+    }
+
+    public function setRelinksJsonAttribute($value)
+    {
+        $this->attributes['relinks_json'] = json_encode ($value, JSON_UNESCAPED_UNICODE);
+    }
+
+    /* Events */
+    public function afterSave()
+    {
+        $this->tagsSave();
+        $this->linksSave();
+    }
+
+
+}

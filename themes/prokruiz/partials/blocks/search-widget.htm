@@ -1,0 +1,77 @@
+<section class="search-widget result-page">
+    <div class="widget-wrapper custom-container">
+        <div class="widget-content">
+            <div class="container">
+                <h1>Круизы по Волге</h1>
+                <div class="widget-form">
+                    <div class="widget-form-input col-12 col-lg-auto">
+                        <div class="w-form-label">Город отправления</div>
+                        <div class="w-form-input">
+                            <span class="w-form-input-value">Москва</span>
+                            <div class="w-form-input-suffix">
+                                {% partial 'common/svg/daw-down' %}
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="widget-form-input col-12 col-lg-6 ">
+                        <div class="w-form-label">Период отправления</div>
+                        <div class="w-form-inputs">
+                            <div class="w-form-input">
+                                <span class="w-form-input-prefix">с</span>
+                                <span class="w-form-input-value">04.05.2021</span>
+                                <div class="w-form-input-suffix">
+                                    {% partial 'common/svg/calendar' %}
+                                </div>
+                            </div>
+                            <div class="w-form-input">
+                                <span class="w-form-input-prefix">по</span>
+                                <span class="w-form-input-value">04.05.2022</span>
+                                <div class="w-form-input-suffix">
+                                    {% partial 'common/svg/calendar' %}
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="widget-form-input col-6 col-lg-auto ">
+                        <div class="w-form-label">Продолжительность</div>
+                        <div class="w-form-input">
+                            <span class="w-form-input-value">1 год</span>
+                            <div class="w-form-input-suffix">
+                                {% partial 'common/svg/daw-down' %}
+                            </div>
+                        </div>
+                    </div>
+                    <div class="widget-form-input col-6 col-lg-auto">
+                        <div class="w-form-label">Город на пути</div>
+                        <div class="w-form-input">
+                            <span class="w-form-input-value">Волгоград</span>
+                            <div class="w-form-input-suffix">
+                                {% partial 'common/svg/daw-down' %}
+                            </div>
+                        </div>
+                    </div>
+                    <div class="widget-form-input col-12 col-lg-6">
+                        <div class="w-form-label">Теплоход</div>
+                        <div class="w-form-input">
+                            <span class="w-form-input-value">Две столицы</span>
+                            <div class="w-form-input-suffix">
+                                {% partial 'common/svg/daw-down' %}
+                            </div>
+                        </div>
+                    </div>
+                    <div class="widget-form-button col-12 col-lg-auto">
+                        <button class="btn red white-text">Найти круиз
+                            {% partial 'common/svg/ship-wheel' %}
+                        </button>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+{% partial 'blocks/search-widget-result' %}
+

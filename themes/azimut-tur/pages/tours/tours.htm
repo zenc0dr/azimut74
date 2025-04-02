@@ -1,0 +1,470 @@
+title = "Горящие туры"
+url = "/tours-off/:slug?*"
+layout = "general"
+description = "Страница горящих туров"
+meta_title = "Купить дешевые путевки и горящие туры в Саратове от всех туроператоров на сайте Азимут-Тур"
+is_hidden = 0
+seo_keywords = "Горящие, горячие, туры, Саратов, официальный, сайт, туроператоры, турагентства, турфирма, цена, стоимость, купить, бронировать, поиск, подбор"
+robot_index = "index"
+robot_follow = "follow"
+contentType = "html"
+force_show = 0
+
+[Catalog]
+==
+<?php
+function onStart ()
+{
+	App::setLocale('ru');
+	$nowDate = date('Y-m-d H:i:s');
+	$pags = \Srw\Catalog\Models\Items::where('time_start','<', $nowDate)->where('time_end','>', $nowDate)->where('active',1)->orderBy('order')->paginate(12);
+	$rounders = \Srw\Catalog\Models\Items::where('time_start','<', $nowDate)->where('time_end','>', $nowDate)->where('active',1)->get();
+	
+	$this['toursitems'] = $pags;
+	
+	//$items = \Srw\Catalog\Models\Items::get();
+	//$this['catitems'] = $items;
+	$this['catitems'] = $rounders;
+	/*$this->controller->vars['stars'];*/
+	/*$this['stars'] = $this->controller->vars['stars'];*/
+	/*$this->addJs('themes/azimut/assets/js/jquery.downCount.js');*/
+	
+	$max = count($rounders);
+	$rnd = rand(1, $max);
+	if($rnd > ($max - 4)) $rnd = $max - 4;
+	$this['rnd'] = $rnd;
+}
+?>
+==
+{% if catalogitems %}
+
+{% put breadcrumbs %}
+	{% partial 'template/breadcrumbs' %}
+{% endput %}
+
+<section class="tours">
+
+	<div class="headText">
+		<span>Горящие туры</span>
+	</div>
+	
+	<div class="tourBlock toursBlock">
+		<div class="c-r">
+			
+			{% for record in toursitems %}
+			
+			{% if record.tourimage is empty %}
+			{% set image_url = '/themes/azimut-tur/assets/img/no_image.png' %}
+			{% else %}
+			{% set image_url = record.tourimage|media %}
+			{% endif %}
+			
+			<div class="col-25 col-m-33 col-s-50 col-xs-100">
+				<div class="tourItem">
+					<div class="tourImg" style="background-image: url({{ image_url }});"></div>
+					
+					<div class="tourCard">
+						<div class="tourName"><span>{{ record.name|mutator }}</span></div>
+						{% if record.routes %}
+						<div class="tourWay">
+							<i class="fa fa-map-marker" aria-hidden="true"></i>
+							{{ record.routes|raw|mutator }}
+						</div>
+						{% endif %}
+						<div class="tourHotel">
+							<div class="hotelName">
+								<span>{{ record.tourhotel|mutator }}</span>
+							</div>
+							<div class="hotelRate">
+								{% for i in range(1, record.stars) %}
+								    <div class="star">
+										<i class="fa fa-star" aria-hidden="true"></i>
+									</div>
+								{% endfor %}
+							</div>
+						</div>
+						<div class="tourStart">
+							c <span>{{ record.created_at|date('d F') }}</span>, <span>{{ record.duration|mutator }} ночей</span>
+						</div>
+						<div class="tourPrice">
+							<div class="priceButton">
+								<a target="_blank" href="/tours{{slug}}{{ record.slug }}" class="pbtn">Подробнее</a>
+							</div>
+							<div class="price">
+								{% if record.oldprice %}
+								<div class="oldPrice">
+									<span>{{ record.oldprice|mutator }} р.</span>
+								</div>
+								{% endif %}
+								<div class="currentPrice">
+									<span>{{ record.newprice|mutator }}</span>
+									<span>руб.<br>чел.</span>
+								</div>
+							</div>
+						</div>
+					</div>
+	
+					<div class="tourTimer">
+						<div class="timeText">
+							<span>
+								{% partial 'svg/timer' %}
+							</span>
+							<span>Акция: </span>
+						</div>
+						<!-- 05/7/2017 12:00:00 -->
+						<div class="timeTimer countdown" endtime="{{ record.time_end|date('m/d/Y H:i:s') }}">
+							<div class="number">
+								<span class="days"></span>
+								<span>день</span>
+							</div>
+							<div class="colon"><span>:</span></div>
+							<div class="number">
+								<span class="hours"></span>
+								<span>час</span>
+							</div>
+							<div class="colon"><span>:</span></div>
+							<div class="number">
+								<span class="minutes"></span>
+								<span>мин</span>
+							</div>
+						</div>
+	
+					</div>
+	
+				</div>
+			</div>
+			
+			{% endfor %}
+
+			{% if toursitems.render %}
+			<div class="pagination">
+				{{ toursitems.render|raw }}
+			</div>
+			{% endif %}
+			
+		</div>
+	</div>	
+	
+</section>
+	
+<section class="article">
+	<div class="c-r">
+		<div class="col-100">
+			
+			<div class="articleData">
+				<div class="data">
+					{% component 'contenteditor' file='tours/article' %}
+				</div>
+			</div>
+			
+		</div>
+	</div>
+</section>
+{% endif %}
+
+{% if catalog_card %}
+    {% if catalog_card.images is empty %}
+    {% set big_image = '/themes/azimut-tur/assets/img/no_image.png' %}
+    {% else %}
+    {% set big_image = catalog_card.images|first %}
+    {% set big_image = big_image.path %}
+    {% endif %}
+    
+	{% put breadcrumbs %}
+		{% partial 'template/cardbreadcrumbs' %}
+	{% endput %}
+
+	<section class="card">
+	
+		<div class="cardHead">
+			<div class="c-r">
+		
+				<div class="col-50 col-xs-100">
+					<div class="cardImages">
+		
+						<div class="mainImages">
+		
+							<div class="sliderNav">
+								<div class="prev">
+									<div></div>
+									<i class="fa fa-angle-left" aria-hidden="true"></i>
+								</div>
+								<div class="next">
+									<div></div>
+									<i class="fa fa-angle-right" aria-hidden="true"></i>
+								</div>
+							</div>
+		
+							<div class="images owl-carousel">
+								{% for item in catalog_card.images %}
+									<a class="gal" data-lightbox-gallery="toursGallery{{ catalog_card.id }}" href="{{ item.path }}">
+										<div class="bigItem" data-hash="{{ item.file_name }}" style="background-image: url({{ item.path }})"></div>
+									</a>
+								{% endfor %}
+							</div>
+							
+						</div>
+		
+						<div class="smallImages">
+							{% for item in catalog_card.images %}
+								<a href="#{{ item.file_name }}">
+									<div class="imageItem" style="background-image: url({{ item.path }});">
+									</div>
+								</a>
+							{% endfor %}
+						</div>
+		
+					</div>
+				</div>
+		
+				<div class="col-50 col-xs-100">
+					<div class="cardData">
+		
+						{% partial 'template/socialbuttons' %}
+		
+						<div class="identity">
+							<span>ID {{ catalog_card.id }}</span>
+						</div>
+						
+						<div class="cardInfo">
+							<div class="cardName">
+								<span>{{ catalog_card.name|mutator }}</span>
+							</div>
+							<div class="cardAddress">
+								<span>{{ catalog_card.address|mutator }}</span>
+							</div>
+							<div class="cardHotel">
+								<div class="hotelName">
+									<span>{{ catalog_card.tourhotel|mutator }}</span>
+								</div>
+								<div class="hotelRate">
+									{% for i in range(1, catalog_card.stars) %}
+									    <div class="star">
+											<i class="fa fa-star" aria-hidden="true"></i>
+										</div>
+									{% endfor %}
+								</div>
+							</div>
+		
+							<div class="cardStart">
+								<span>
+									{% partial 'svg/cardstart' %}
+								</span>
+								<span>c {{ catalog_card.created_at|date('d F') }}, {{ catalog_card.duration|mutator }} ночей</span>
+							</div>
+		
+							<div class="cardPricing">
+								<div class="prices">
+									<div><span>Цена:</span></div>
+									<div>
+										{% if catalog_card.oldprice %}
+										<div class="oldPrice">
+											<span>{{ catalog_card.oldprice|mutator }} р</span>
+										</div>
+										{% endif %}
+										<div class="currentPrice">
+											<span>{{ catalog_card.newprice|mutator }}</span>
+											<span>руб.<br>чел.</span>
+										</div>
+									</div>
+								</div>
+								<div class="manager">
+									<div>
+										<span>
+											{% partial 'svg/manager' %}
+										</span>
+									</div>
+									<div>
+										<span>Консультант по туру:</span>
+										{{ catalog_card.consultant|raw|mutator }}
+									</div>
+								</div>
+							</div>
+		
+							<div class="cardOrders">
+								<div class="cardButton">
+									<button tourid="{{ catalog_card.name }}" href="#modalCallTour" class="hbtn mbtn">Заказать тур</button>
+								</div>
+								<div class="cardTimer">
+									<div>
+										<span>
+											{% partial 'svg/timer' %}
+										</span>
+									</div>
+									<div>
+										<div><span>До конца акции:</span></div>
+										<div class="timeTimer countdown" endtime="{{ catalog_card.time_end|date('m/d/Y H:i:s') }}">
+											<div class="number">
+												<span class="days"></span>
+												<span>день</span>
+											</div>
+											<div class="colon"><span>:</span></div>
+											<div class="number">
+												<span class="hours"></span>
+												<span>час</span>
+											</div>
+											<div class="colon"><span>:</span></div>
+											<div class="number">
+												<span class="minutes"></span>
+												<span>мин</span>
+											</div>
+										</div>
+										
+									</div>
+								</div>
+		
+							</div>
+						</div>
+					</div>
+		
+				</div>
+		
+			</div>
+		</div>
+		
+		<div class="cardDesc">
+			<div class="c-r">
+			
+				<div class="col-100">
+		
+					<div class="headText">
+						<span>Описание тура</span>
+					</div>
+		
+					<div class="descInfo">
+						
+						{% if catalog_card.routes %}
+						<div class="line">
+							<div class="leftCol">
+								<span>Маршрут тура</span>
+							</div>
+							<div class="rightCol routes">
+								{{ catalog_card.routes|raw|mutator }}
+							</div>
+						</div>
+						{% endif %}
+		
+						<div class="line">
+							<div class="leftCol">
+								<span>Описание</span>
+							</div>
+							<div class="rightCol">
+								{{ catalog_card.sdesc|raw|mutator }}
+							</div>
+						</div>	
+		
+						<div class="line">
+							<div class="leftCol">
+								<span>В стоимость входит</span>
+							</div>
+							<div class="rightCol">
+								{{ catalog_card.fdesc|raw|mutator }}
+							</div>
+						</div>	
+		
+					</div>
+				</div>
+			</div>
+		</div>
+		
+		<div class="cardOther">
+			<div class="headText">
+				<span>Другие спецпредложения</span>
+			</div>
+		
+			{% if catitems %}
+			<div class="tourBlock toursBlock">
+				<div class="c-r">
+					{% for record in catitems|slice(rnd,4) %}
+					
+					{% if record.tourimage is empty %}
+					{% set image_url = '/themes/azimut-tur/assets/img/no_image.png' %}
+					{% else %}
+					{% set image_url = record.tourimage|media %}
+					{% endif %}
+					
+					<div class="col-25 col-m-33 col-s-50 col-xs-100">
+						<div class="tourItem">
+							<div class="tourImg" style="background-image: url({{ image_url }});"></div>
+							<div class="tourCard">
+								<div class="tourName"><span>{{ record.name|mutator }}</span></div>
+								<div class="tourWay">
+									<i class="fa fa-map-marker" aria-hidden="true"></i>
+									{{ record.routes|raw|mutator }}
+								</div>
+								<div class="tourHotel">
+									<div class="hotelName">
+										<span>{{ record.tourhotel|mutator }}</span>
+									</div>
+									<div class="hotelRate">
+										{% for i in range(1, record.stars) %}
+										    <div class="star">
+												<i class="fa fa-star" aria-hidden="true"></i>
+											</div>
+										{% endfor %}
+									</div>
+								</div>
+								<div class="tourStart">
+									c <span>{{ record.created_at|date('d F') }}</span>, <span>{{ record.duration|mutator }} ночей</span>
+								</div>
+								<div class="tourPrice">
+									<div class="priceButton">
+										<a href="/tours{{ record.slug }}" class="pbtn">Подробнее</a>
+									</div>
+									<div class="price">
+										{% if record.oldprice %}
+										<div class="oldPrice">
+											<span>{{ record.oldprice|mutator }} р.</span>
+										</div>
+										{% endif %}
+										<div class="currentPrice">
+											<span>{{ record.newprice|mutator }}</span>
+											<span>руб.<br>чел.</span>
+										</div>
+									</div>
+								</div>
+							</div>
+			
+							<div class="tourTimer">
+								<div class="timeText">
+									<span>
+										{% partial 'svg/timer' %}
+									</span>
+									<span>Акция: </span>
+								</div>
+			
+								<div class="timeTimer countdown" endtime="{{ record.time_end|date('m/d/Y H:i:s') }}">
+									<div class="number">
+										<span class="days"></span>
+										<span>день</span>
+									</div>
+									<div class="colon"><span>:</span></div>
+									<div class="number">
+										<span class="hours"></span>
+										<span>час</span>
+									</div>
+									<div class="colon"><span>:</span></div>
+									<div class="number">
+										<span class="minutes"></span>
+										<span>мин</span>
+									</div>
+								</div>
+			
+							</div>
+			
+						</div>
+					</div>
+						
+					{% endfor %}
+						
+				</div>
+			</div>
+			
+			{% endif %}
+		
+			</div>
+		</div>	
+	</div>
+</section>
+				
+{% endif %}

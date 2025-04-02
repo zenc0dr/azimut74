@@ -1,0 +1,4 @@
+title: Techs
+modelClass: Mcmraak\Rivercrs\Models\Techs
+toolbar:
+    buttons: reorder_toolbar

@@ -1,0 +1,16 @@
+name: Настройки
+modelClass: Mcmraak\Rivercrs\Models\Settings
+form: $/mcmraak/rivercrs/models/settings/fields.yaml
+defaultRedirect: mcmraak/rivercrs/settings
+create:
+    title: Создать
+    redirect: 'mcmraak/rivercrs/settings/update/:id'
+    redirectClose: mcmraak/rivercrs/settings
+    flashSave: Создано
+update:
+    title: Изменить
+    redirect: mcmraak/rivercrs/settings
+    redirectClose: mcmraak/rivercrs/settings
+    flashSave: Сохранено
+    flashDelete: Удалено
+preview: {  }

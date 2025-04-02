@@ -1,0 +1,130 @@
+<style>
+    .dp-note {
+        position: absolute;
+        background: #3e9def;
+        width: 16px;
+        height: 3px;
+        /* border-radius: 50%; */
+        left: 50%;
+        bottom: 4px;
+        -webkit-transform: translateX(-50%);
+        transform: translateX(-50%);
+    }
+</style>
+<div id="Selector" class="tourSelection">
+
+    <div class="tsHead">
+        <span>Подбор речного круиза</span>
+    </div>
+
+    <div class="tsItem">
+        <label>Город отправления</label>
+        <select name="town" class="tsBig"></select>
+    </div>
+
+    <div class="tsItem tsItemDate">
+        <div>
+            <label><span>Период отправления</span></label>
+            <div class="tsYearSwitcher">
+                <div class="tsYear active">
+                    <span></span>
+                </div>
+                <div class="tsYear">
+                    <span></span>
+                </div>
+            </div>
+        </div>
+        <div class="dateSelect tsSmall tsDate">
+            <input type="text" name="date-1"></input>
+        </div>
+        <div class="dateSelect tsSmall tsDate">
+            <input type="text" name="date-2"></input>
+        </div>
+    </div>
+
+    <div class="tsItem">
+        <label>Продолжительность</label>
+        <select name="days" class="tsBig tsSelect"></select>
+    </div>
+
+    <div class="tsItem">
+        <label>Город на маршруте</label>
+        <select name="dest" class="tsBig tsSelect"></select>
+    </div>
+
+    <div class="tsItem tourSelectPad">
+        <label>Теплоход</label>
+        <select name="ship" class="tsBig tsSelect"></select>
+    </div>
+
+    <div class="tsItem tsButton">
+        <button class="tbtn" id="FilterGo"><span>Найти круиз</span></button>
+    </div>
+
+</div>
+
+{% if jquery %}
+<script src="/plugins/mcmraak/rivercrs/assets/js/jquery-2.2.4.min.js"></script>
+{% endif %}
+{% if ion %}
+<script src="/plugins/mcmraak/rivercrs/assets/js/octo-ion.js"></script>
+{% endif %}
+
+<div id="Result"></div>
+<div class="hidden">
+    <div id="modalCabin" class="modalFade">
+        <div class="modalWrap modalCabin">
+            <div class="modalContent">
+                <button title="Close (Esc)" type="button" class="mfp-close">×</button>
+                <div class="modalLine">
+                    <span style="font-size: 20px">Загрузка...</span>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div id="modalGraphic" class="modalFade">
+        <div class="modalWrap modalGraphic">
+			<button title="Close (Esc)" type="button" class="mfp-close">×</button>
+            <div class="modalContent">
+                <span style="font-size: 20px">Загрузка...</span>
+            </div>
+        </div>
+    </div>
+
+    <div id="modalBooking" class="modalFade">
+        <div class="modalWrap modalWrapBook">
+        	
+        	<div class="modalDone">
+				<button title="Close (Esc)" type="button" class="mfp-close">×</button>
+	
+				<div class="modalHead">
+					<span>Заявка отправлена!</span>
+					<span>Менеджер свяжется с Вами в ближайшее время</span>
+				</div>
+			</div>
+
+            <div class="modalContent">
+                <span style="font-size: 20px">Загрузка...</span>
+            </div>
+
+        </div>
+        <!--<topmodal>
+			<div class="modalSecond">
+				<div class="modalLine">
+					<div class="close">×</div>
+		    		<modalbody></modalbody>
+				</div>
+			</div>
+		</topmodal>-->
+		<ofmodal>
+			<div class="modalSecond">
+				<div class="modalLine">
+					<div class="close">×</div>
+		    		<ofmodalbody></ofmodalbody>
+				</div>
+			</div>
+		</ofmodal>
+    </div>
+
+</div>

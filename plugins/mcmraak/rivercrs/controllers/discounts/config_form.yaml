@@ -1,0 +1,10 @@
+name: Discounts
+form: $/mcmraak/rivercrs/models/discount/fields.yaml
+modelClass: Mcmraak\Rivercrs\Models\Discount
+defaultRedirect: mcmraak/rivercrs/discounts
+create:
+    redirect: 'mcmraak/rivercrs/discounts/update/:id'
+    redirectClose: mcmraak/rivercrs/discounts
+update:
+    redirect: mcmraak/rivercrs/discounts
+    redirectClose: mcmraak/rivercrs/discounts

@@ -1,0 +1,23 @@
+title = "Лечение и оздоровление"
+url = "/therapy"
+layout = "general"
+description = "Лечение и оздоровление"
+meta_title = "Лечение и оздоровление"
+is_hidden = 0
+robot_index = "index"
+robot_follow = "follow"
+contentType = "html"
+==
+<section class="beach">
+					
+	<div class="headText">
+		<span>{{ this.page.title|mutator }}</span>
+	</div>
+
+	<div class="pageData">
+		<div class="data">
+			{% component 'contenteditor' file="therapy/main" %}
+		</div>
+	</div>
+
+</section>

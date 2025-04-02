@@ -1,0 +1,4 @@
+title: Seoitems
+modelClass: Zen\Dolphin\Models\Seoitem
+toolbar:
+    buttons: reorder_toolbar

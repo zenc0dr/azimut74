@@ -1,0 +1,8 @@
+[viewBag]
+==
+<section class="cruize-article d-flex flex-column {{class}} fs-s fs-xxl-def">
+    {% if article.title %}
+        <h2>{{ article.title }}</h2>
+    {% endif %}
+    {{ article.text|raw }}
+</section>

@@ -1,0 +1,18 @@
+fields:
+    phones:
+        label: 'Чёрный список'
+        prompt: Добавить
+        style: default
+        span: full
+        type: repeater
+        form:
+            fields:
+                phone:
+                    label: Телефон
+                    span: full
+                    type: text
+                active:
+                    label: 'Блокировка активна'
+                    span: full
+                    default: 1
+                    type: switch

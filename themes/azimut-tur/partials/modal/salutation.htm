@@ -1,0 +1,34 @@
+description = "Приветствие"
+
+[viewBag]
+==
+<?php
+function onStart(){
+    
+    if($this->theme->salutation) {
+        $salution_start = Session::get('salution_start');
+        
+        if($salution_start == null) {
+            $this['salutation'] = $this->theme->salutation_text;
+            Session::put('salution_start', time());
+            return;
+        }
+        
+        if(!(time() - $salution_start < $this->theme->salutation_time)) {
+            $this['salutation'] = $this->theme->salutation_text;
+            Session::put('salution_start', time());
+        }
+    
+    }
+}
+?>
+==
+{% if salutation %}
+<link rel="stylesheet" href="/themes/azimut-tur/assets/css/salutation.css">
+<div id="_Salutation" onclick="$('#_Salutation').remove()">
+    <div>
+        <div>{{ salutation|raw }}</div>
+        <div>Понятно</div>
+    </div>
+</div>
+{% endif %}

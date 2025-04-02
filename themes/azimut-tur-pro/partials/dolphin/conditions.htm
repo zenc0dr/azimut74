@@ -1,0 +1,35 @@
+description = "Условия тура"
+
+[viewBag]
+==
+{% if Dolphin.conditions or Dolphin.hotels %}
+<div class="info-block">
+    <div class="info-block__title">
+        Условия тура
+    </div>
+    <div class="info-block__html">
+        {% for condition in Dolphin.conditions %}
+        <div class="info-block__html__block">
+            <div class="info-block__html__block__title">
+                {{ condition.name }}
+            </div>
+            <div class="info-block__html__block__text">
+                {{ condition.text|raw }}
+            </div>
+        </div>
+        {% endfor %}
+        {% if Dolphin.hotels %}
+        <div class="info-block__html__block">
+            <div class="info-block__html__block__title">
+                Отели
+            </div>
+            <div class="info-block__html__block__text">
+                {% partial 'dolphin/hotels' %}
+            </div>
+        </div>
+        {% endif %}
+
+
+    </div>
+</div>
+{% endif %}

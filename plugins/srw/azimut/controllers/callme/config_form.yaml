@@ -1,0 +1,10 @@
+name: Callme
+form: $/srw/azimut/models/callme/fields.yaml
+modelClass: Srw\Azimut\Models\Callme
+defaultRedirect: srw/azimut/callme
+create:
+    redirect: 'srw/azimut/callme/update/:id'
+    redirectClose: srw/azimut/callme
+update:
+    redirect: srw/azimut/callme
+    redirectClose: srw/azimut/callme

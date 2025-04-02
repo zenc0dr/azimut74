@@ -1,0 +1,19 @@
+columns:
+    id:
+        label: id
+        type: number
+        sortable: true
+    name:
+        label: Заголовок
+        type: text
+        searchable: true
+        invisible: false
+        sortable: true
+    scope:
+        label: 'Область отображения'
+        type: text
+        sortable: true
+    sort_order:
+        label: Порядок
+        type: number
+        sortable: true

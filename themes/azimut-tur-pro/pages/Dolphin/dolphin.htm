@@ -1,0 +1,46 @@
+title = "Стартовая / Посадочная"
+url = "/ex-tours/:?*"
+layout = "master"
+is_hidden = 0
+robot_index = "index"
+robot_follow = "follow"
+contentType = "html"
+force_show = 0
+==
+<?php
+function onInit()
+{
+    # Если это стартовая страница
+    if (!isset(request()->segments()[2])) {
+        $this['start_page'] = true;
+        $this['page_css'] = mix('css/dolphin-start-page.css', 'themes/azimut-tur-pro/assets');
+        $this['page_js'] = mix('js/dolphin-start-page.js', 'themes/azimut-tur-pro/assets');
+    } else {
+        $this['page_css'] = mix('css/dolphin-page.css', 'themes/azimut-tur-pro/assets');
+        $this['page_js'] = mix('js/dolphin-page.js', 'themes/azimut-tur-pro/assets');
+    }
+}
+
+function onStart()
+{
+    $init_success = Zen\Dolphin\Classes\DolphinFrontend::init($this);
+    if (!$init_success) {
+        $this->setStatusCode(404);
+        return $this->controller->run('404');
+    }
+}
+?>
+==
+{% put page_style %}
+<link rel="stylesheet" href="{{ page_css }}">
+{% endput %}
+{% put page_script %}
+<script src="{{ page_js }}"></script>
+{% endput %}
+
+{# Подгружается контент стартовой страницы #}
+{% if start_page %}
+{% partial 'dolphin/start-page' %}
+{% else %}
+{% partial 'dolphin/landing' %}
+{% endif %}

@@ -1,0 +1,39 @@
+columns:
+    id:
+        label: id
+        type: number
+        sortable: true
+    category:
+        label: 'Категория каюты'
+        type: text
+        searchable: true
+        sortable: true
+    waterway_name:
+        label: Водоходъ
+        type: text
+    volga_name:
+        label: Волга
+        type: text
+        searchable: true
+    gama_name:
+        label: Гама
+        type: text
+        searchable: true
+    germes_name:
+        label: Гермес
+        type: text
+        searchable: true
+    infoflot_name:
+        label: Инфофлот
+        type: text
+        searchable: true
+    motorship_id:
+        label: Теплоход
+        type: text
+        searchable: false
+        relation: motorship
+        valueFrom: name
+    order:
+        label: 'Порядок в XLS'
+        type: number
+        sortable: true

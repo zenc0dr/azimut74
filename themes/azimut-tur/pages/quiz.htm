@@ -1,0 +1,19 @@
+title = "Тестовая страница"
+url = "/quiz"
+layout = "general"
+is_hidden = 0
+robot_index = "index"
+robot_follow = "follow"
+contentType = "html"
+force_show = 0
+==
+<?php
+function onEnd() {
+     $this['page_css'] = '/plugins/zen/quiz/frontend/assets/css/quiz.css';
+     $this['page_js'] = '/plugins/zen/quiz/frontend/assets/js/quiz-app.js';
+}
+?>
+==
+<link rel="stylesheet" href="{{ page_css }}">
+<div id="QuizApp"></div>
+<script src="{{ page_js }}"></script>

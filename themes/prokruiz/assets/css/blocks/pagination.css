@@ -1,0 +1,106 @@
+.pro-kruiz-pagination {
+    margin-top: 15px;
+}
+.pro-kruiz-pagination .pagination {
+    display: flex;
+    justify-content: center;
+    list-style: none;
+    padding-left: 0;
+    margin-top: 0;
+    margin-bottom: 16px;
+}
+
+.pro-kruiz-pagination .pagination li {
+    font-size: 24px;
+    font-weight: bold;
+    color: #000;
+    align-items: center;
+    line-height: normal;
+    display: flex;
+}
+
+.pro-kruiz-pagination .pagination .pagination-item {
+    margin: 0 5px;
+    width: 40px;
+    height: 40px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.pro-kruiz-pagination .pagination .pagination-item.active:hover,
+.pro-kruiz-pagination .pagination-control.active{
+    cursor: pointer;
+}
+
+.pro-kruiz-pagination .pagination .pagination-item.active {
+    background-color: var(--red-color-text);
+    border-radius: 50%;
+    color: #fff;
+}
+
+
+.pro-kruiz-pagination .pagination li.control-arrow,
+.pro-kruiz-pagination .pagination li.control-arrow {
+    padding: 0 30px;
+}
+
+.pro-kruiz-pagination .pagination-control {
+    padding-top: 18px;
+
+}
+
+.pro-kruiz-pagination .pagination-control svg path {
+    fill: var(--gray-color-text);
+}
+
+.pro-kruiz-pagination .pagination-control:not(.active):hover svg path {
+    cursor: not-allowed;
+}
+
+
+.pro-kruiz-pagination .pagination li span {
+    color: var(--gray-color-text);
+    cursor: default;
+}
+
+.pro-kruiz-pagination .pagination li span.pagination-item {
+    color: #000;
+}
+
+.pro-kruiz-pagination .pagination li span.pagination-item:not(.active):hover {
+    color: var(--red-color-text);
+    cursor: pointer;
+}
+
+
+.pro-kruiz-pagination .pagination-control.active:hover svg path {
+    fill: var(--red-color-text);
+}
+
+
+.pro-kruiz-pagination .pagination-control.active svg path {
+    fill: #000;
+}
+
+@media (max-width: 425px) {
+    .pro-kruiz-pagination .pagination li {
+        font-size: 21px;
+    }
+
+    .pro-kruiz-pagination .pagination li:first-child {
+        padding-left: 0;
+        padding-right: 10px;
+    }
+
+    .pro-kruiz-pagination .pagination li:last-child {
+        padding-right: 0;
+        padding-left: 10px;
+    }
+
+    .pro-kruiz-pagination .pagination .pagination-item {
+        margin: 0 5px;
+        width: 34px;
+        height: 34px;
+    }
+}

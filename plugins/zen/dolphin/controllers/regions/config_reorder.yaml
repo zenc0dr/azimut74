@@ -1,0 +1,4 @@
+title: Regions
+modelClass: Zen\Dolphin\Models\Region
+toolbar:
+    buttons: reorder_toolbar

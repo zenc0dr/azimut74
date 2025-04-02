@@ -1,0 +1,43 @@
+description = "Верхняя секция (меню)"
+
+[viewBag]
+==
+<section class="headNav">
+	<div class="c-p">
+		<div class="c-r">
+
+			<div class="col-75 col-m-80 col-s-50 as-c">
+				<div class="headMenu hidden-s-d">
+					
+					{% partial 'template/menu' %}
+					
+				</div>
+
+				<div class="toggleButton toggleMain hidden-m-u">
+					<div class="g-icon">
+						<span></span>
+						<span></span>
+						<span></span>
+					</div>
+					<div><span>Меню</span></div>
+				</div>
+
+			</div>
+
+			<div class="col-25 col-m-20 col-s-50 as-c">
+				<div class="headButton">
+					<button href="#modalTour" class="hbtn mbtn">Подобрать тур</button>
+				</div>
+			</div>
+
+			<div class="col-s-100">
+				<div class="hiddenMenu hiddenMain">
+					
+					{% partial 'template/menu' %}
+					
+				</div>
+			</div>
+
+		</div>
+	</div>
+</section>

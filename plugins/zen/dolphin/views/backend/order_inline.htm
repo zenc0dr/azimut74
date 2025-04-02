@@ -1,0 +1,62 @@
+{# Generated https://templates.mailchimp.com/resources/inline-css/ #}
+
+<h2>Заявка на бронирование №{{ order.id }}
+    {% if order.data.scope == 'exp' %}
+        Экскурсионный тур
+        {% if order.data.source == 'a' %}
+            (Азимут)
+        {% elseif order.data.source == 'd' %}
+            (Дельфин)
+        {% endif %}
+    {% endif %}
+    {% if order.data.scope == 'atp' %}
+        Автобусный тур
+    {% endif %}
+</h2>
+<h4>Персональные данные</h4>
+<table id="order-table" style="border-collapse: collapse;width: 100%;max-width: 800px;margin-bottom: 40px;">
+    <tbody>
+    <tr style="border: 1px solid #d1d1d1;padding: 5px 7px;"><td class="order-title" style="background: #e3e3e3;font-weight: bold;padding: 5px 7px;">Имя:</td><td style="padding: 5px 7px;">{{ order.data.name }}</td></tr>
+    <tr style="border: 1px solid #d1d1d1;padding: 5px 7px;"><td class="order-title" style="background: #e3e3e3;font-weight: bold;padding: 5px 7px;">Телефон:</td><td style="padding: 5px 7px;">{{ order.data.phone }}</td></tr>
+    <tr style="border: 1px solid #d1d1d1;padding: 5px 7px;"><td class="order-title" style="background: #e3e3e3;font-weight: bold;padding: 5px 7px;">email:</td><td style="padding: 5px 7px;">{{ order.data.email }}</td></tr>
+    <tr style="border: 1px solid #d1d1d1;padding: 5px 7px;"><td class="order-title" style="background: #e3e3e3;font-weight: bold;padding: 5px 7px;">Комментарий:</td><td style="padding: 5px 7px;">{{ order.data.desc }}</td></tr>
+    </tbody>
+</table>
+<h4>Ифнормация о бронировании</h4>
+<table id="order-table">
+    <tbody>
+    <tr><td class="order-title" style="background: #e3e3e3;font-weight: bold;">Название тура:</td><td>{{ order.data.tour_name }}</td></tr>
+    {% if order.data.tarrif_name %}
+    <tr><td class="order-title" style="background: #e3e3e3;font-weight: bold;">Тариф:</td><td>{{ order.data.tarrif_name }}</td></tr>
+    {% endif %}
+    {% if order.data.hotel_name %}
+    <tr><td class="order-title" style="background: #e3e3e3;font-weight: bold;">Отель:</td><td>{{ order.data.hotel_name }}</td></tr>
+    {% endif %}
+    <tr><td class="order-title" style="background: #e3e3e3;font-weight: bold;">Период:</td><td>{{ order.data.date_of }} - {{ order.data.date_to }}</td></tr>
+    {% if order.data.nights %}
+    <tr><td class="order-title" style="background: #e3e3e3;font-weight: bold;">Ночей:</td><td>{{ order.data.nights }}</td></tr>
+    {% endif %}
+    {% if order.data.days %}
+    <tr><td class="order-title" style="background: #e3e3e3;font-weight: bold;">Дней:</td><td>{{ order.data.days }}</td></tr>
+    {% endif %}
+    {% if order.data.pansion %}
+    <tr><td class="order-title" style="background: #e3e3e3;font-weight: bold;">Питание:</td><td>{{ order.data.pansion }}</td></tr>
+    {% endif %}
+    {% if order.data.room %}
+    <tr><td class="order-title" style="background: #e3e3e3;font-weight: bold;">Тип номера:</td><td>{{ order.data.room }}</td></tr>
+    {% endif %}
+    {% if order.data.roomc %}
+    <tr><td class="order-title" style="background: #e3e3e3;font-weight: bold;">Категория номера:</td><td>{{ order.data.roomc }}</td></tr>
+    {% endif %}
+    <tr><td class="order-title" style="background: #e3e3e3;font-weight: bold;">Взрослых:</td><td>{{ order.data.adults }}</td></tr>
+    <tr><td class="order-title" style="background: #e3e3e3;font-weight: bold;">Детей:</td>
+        <td>
+            {{ order.data.children_ages|length }}
+            {% if order.data.children_ages %}
+                ({{ order.data.children_ages|join(', ') }})
+            {% endif %}
+        </td>
+    </tr>
+    <tr><td class="order-title" style="background: #e3e3e3;font-weight: bold;">Цена:</td><td>{{ order.data.price }} руб.</td></tr>
+    </tbody>
+</table>

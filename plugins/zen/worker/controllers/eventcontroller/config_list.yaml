@@ -1,0 +1,15 @@
+title: EventController
+modelClass: Zen\Worker\Models\Event
+list: $/zen/worker/models/event/columns.yaml
+recordUrl: 'zen/worker/eventcontroller/update/:id'
+noRecordsMessage: 'backend::lang.list.no_records'
+recordsPerPage: 20
+showSetup: true
+showCheckboxes: true
+defaultSort:
+    column: id
+    direction: desc
+toolbar:
+    buttons: list_toolbar
+    search:
+        prompt: 'backend::lang.list.search_prompt'

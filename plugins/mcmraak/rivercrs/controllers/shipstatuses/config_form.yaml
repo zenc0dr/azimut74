@@ -1,0 +1,15 @@
+name: 'Редактировать статус'
+modelClass: Mcmraak\Rivercrs\Models\ShipStatus
+form: $/mcmraak/rivercrs/models/shipstatus/fields.yaml
+defaultRedirect: mcmraak/rivercrs/shipstatuses
+create:
+    title: 'Создание статуса'
+    redirect: 'mcmraak/rivercrs/shipstatuses/update/:id'
+    redirectClose: mcmraak/rivercrs/shipstatuses
+update:
+    title: 'Редактирование статуса'
+    redirect: mcmraak/rivercrs/shipstatuses
+    redirectClose: mcmraak/rivercrs/shipstatuses
+    flashSave: 'Статус сохранён'
+    flashDelete: 'Статус удалён'
+preview: {  }

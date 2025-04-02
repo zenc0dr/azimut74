@@ -1,0 +1,95 @@
+tabs:
+    fields:
+        title:
+            label: 'Заголовок'
+            span: full
+            type: text
+            tab: 'Категории клиентов'
+        subtitle:
+            label: 'Подзаголовок'
+            span: full
+            type: text
+            tab: 'Категории клиентов'
+        button:
+            label: 'Кнопка'
+            size: large
+            language: html
+            span: full
+            type: codeeditor
+            tab: 'Категории клиентов'
+        blocks:
+            label: 'Блоки'
+            prompt: 'Добавить блок'
+            span: full
+            type: repeater
+            form:
+                fields:
+                    picture:
+                        label: 'Изображение'
+                        mode: image
+                        span: auto
+                        type: mediafinder
+                        tab: 'Хедер'
+                    text:
+                        label: 'Текст'
+                        span: auto
+                        type: textarea
+                        size: large
+            tab: 'Категории клиентов'
+        reviews_title:
+            label: 'Заголовок'
+            span: full
+            type: text
+            tab: 'Отзывы'
+        reviews_subtitle:
+            label: 'Подпись'
+            span: full
+            type: codeeditor
+            size: small
+            language: html
+            tab: 'Отзывы'
+        reviews:
+            label: 'Отзывы'
+            prompt: 'Добавить отзыв'
+            span: full
+            type: repeater
+            form:
+                fields:
+                    name:
+                        label: 'ФИО'
+                        span: auto
+                        type: text
+                    avatar:
+                        label: 'Ссылка на аватар'
+                        span: auto
+                        type: text
+                    date:
+                        label: 'Дата отзыва'
+                        span: auto
+                        type: text
+                    text:
+                        label: 'Текст отзыва'
+                        span: full
+                        type: textarea
+                        size: large
+            tab: 'Отзывы'
+        quiz_video:
+            label: 'Код видео'
+            span: full
+            type: codeeditor
+            size: large
+            language: html
+            tab: 'Квиз'
+        quiz_button_code:
+            label: 'Код квиза'
+            span: full
+            type: codeeditor
+            size: large
+            language: html
+            tab: 'Квиз'
+        quiz_desc:
+            label: 'Текстовый блок'
+            span: full
+            type: textarea
+            size: large
+            tab: 'Квиз'

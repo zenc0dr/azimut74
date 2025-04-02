@@ -1,0 +1,94 @@
+<div class="result-item">
+    <div class="result-item-left">
+        <div class="result-item-img" style="background-image: url({{ ship_pic }})"></div>
+        {% if ship_video %}
+        <a modal=".youtube-content" class="result-item-youtube">
+            <svg width="58" height="42" viewBox="0 0 58 42" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <path fill-rule="evenodd" clip-rule="evenodd" d="M23.0115 28.5864V12.2908L38.6812 20.4664L23.0115 28.5864ZM57.42 9.46571C57.42 9.46571 56.8521 5.46854 55.1145 3.70921C52.9081 1.39888 50.4358 1.38921 49.3024 1.25388C41.1872 0.666626 29.0121 0.666626 29.0121 0.666626H28.9879C28.9879 0.666626 16.8127 0.666626 8.69758 1.25388C7.56175 1.38679 5.09192 1.39888 2.88308 3.70921C1.1455 5.46854 0.58 9.46571 0.58 9.46571C0.58 9.46571 0 14.1613 0 18.852V23.2552C0 27.9484 0.58 32.6415 0.58 32.6415C0.58 32.6415 1.1455 36.6363 2.88308 38.398C5.09192 40.7084 7.9895 40.6359 9.28 40.8775C13.92 41.3222 29 41.46 29 41.46C29 41.46 41.1872 41.443 49.3024 40.8558C50.4382 40.7205 52.9081 40.7084 55.1145 38.398C56.8545 36.6363 57.42 32.6415 57.42 32.6415C57.42 32.6415 58 27.9484 58 23.2528V18.8545C58 14.1613 57.42 9.46571 57.42 9.46571Z" fill="#DC0505"/>
+            </svg>
+        </a>
+        <div class="youtube-content" style="display: none">
+            <iframe  src="{{ ship_video }}" frameborder="0" allowfullscreen=""></iframe>
+        </div>
+        {% endif %}
+        {% if ship_status %}
+            <span class="ship-type premium">{{ ship_status }}</span>
+        {% endif %}
+    </div>
+    <div class="result-center-right">
+        <div class="result-item-center">
+            <div class="result-center-name">
+                <svg width="45" viewBox="0 0 45 45" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M31.8694 37.5C30.1838 37.5 29.4544 36.9169 28.3519 36.0356C27.0769 35.0175 25.4925 33.75 22.4888 33.75C19.4869 33.75 17.9025 35.0175 16.6294 36.0375C15.5288 36.9169 14.8012 37.5 13.1156 37.5C11.4337 37.5 10.7063 36.9169 9.60563 36.0375C8.3325 35.0175 6.75187 33.75 3.75 33.75V37.5C5.43375 37.5 6.16125 38.0831 7.26187 38.9625C8.535 39.9825 10.1175 41.25 13.1156 41.25C16.1175 41.25 17.7 39.9825 18.9731 38.9644C20.0756 38.0831 20.8031 37.5 22.4888 37.5C24.1763 37.5 24.9469 38.115 26.01 38.9644C27.2831 39.9825 28.8675 41.25 31.8694 41.25C34.8713 41.25 36.4556 39.9825 37.7287 38.9644C38.7919 38.115 39.5625 37.5 41.25 37.5V33.75C38.2463 33.75 36.6619 35.0175 35.3869 36.0356C34.2844 36.9169 33.555 37.5 31.8694 37.5ZM11.25 15.9375L7.5 16.875L11.25 31.875H13.1156C16.1175 31.875 17.7 30.6075 18.9731 29.5894C20.0756 28.7081 20.8031 28.125 22.4888 28.125C24.1763 28.125 24.9469 28.74 26.01 29.5894C27.2831 30.6075 28.8675 31.875 31.8694 31.875H33.75L33.8006 31.6744L34.3875 29.3269L37.5 16.875L33.75 15.9375V9.37687C33.7502 8.94325 33.6 8.52298 33.3252 8.1876C33.0503 7.85223 32.6677 7.62249 32.2425 7.5375L24.375 5.96438V3.75H20.625V5.96438L12.7575 7.5375C12.3323 7.62249 11.9497 7.85223 11.6748 8.1876C11.4 8.52298 11.2498 8.94325 11.25 9.37687V15.9375ZM15 10.9106L22.5 9.41062L30 10.9106V15L22.5 13.125L15 15V10.9106Z" fill="#4F4F4F"/>
+                </svg>
+                <a href="/ship/{{ ship_id }}">{{ ship_name }}</a>
+                {% if ship_status %}
+                    <span class="ship-type premium">{{ ship_status }}</span>
+                {% endif %}
+            </div>
+            <div class="result-center-date">
+                <div class="result-date-left">
+                    <div>
+                        <svg width="20" viewBox="0 0 21 20" fill="none" xmlns="http://www.w3.org/2000/svg">
+                            <path d="M6.80518 9.16668H8.47184V10.8333H6.80518V9.16668ZM6.80518 12.5H8.47184V14.1667H6.80518V12.5ZM10.1385 9.16668H11.8052V10.8333H10.1385V9.16668ZM10.1385 12.5H11.8052V14.1667H10.1385V12.5ZM13.4718 9.16668H15.1385V10.8333H13.4718V9.16668ZM13.4718 12.5H15.1385V14.1667H13.4718V12.5Z" fill="#F0280D"/>
+                            <path d="M5.13883 18.3333H16.8055C17.7247 18.3333 18.4722 17.5858 18.4722 16.6667V5.00001C18.4722 4.08085 17.7247 3.33335 16.8055 3.33335H15.1388V1.66668H13.4722V3.33335H8.47216V1.66668H6.8055V3.33335H5.13883C4.21967 3.33335 3.47217 4.08085 3.47217 5.00001V16.6667C3.47217 17.5858 4.21967 18.3333 5.13883 18.3333ZM16.8055 6.66668L16.8063 16.6667H5.13883V6.66668H16.8055Z" fill="#F0280D"/>
+                        </svg>
+                        <b>{{ date.d1 }}</b>, {{ date.d1d }} ({{ date.t1 }})  <span>—</span> <b>{{ date.d2 }}</b>, {{ date.d2d }} ({{ date.t2 }})
+                    </div>
+                    <div>Время московское</div>
+                </div>
+                <div class="result-date-right">
+                    <svg width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <path d="M10 2C14.42 2 18 5.58 18 10C18 14.42 14.42 18 10 18C5.58 18 2 14.42 2 10C2 5.58 5.58 2 10 2ZM10 16C13.31 16 16 13.31 16 10C16 6.69 13.31 4 10 4C6.69 4 4 6.69 4 10C4 13.31 6.69 16 10 16ZM9.29 10.71C9.36 10.76 9.43 10.81 9.52 10.86L9.5 10.88L14 13L10.97 9.81L10 5L9.03 9.81H9.04C9.04 9.83 9.03 9.86 9.02 9.9C9.01 9.94 9 9.97 9 10C9 10.28 9.1 10.52 9.29 10.71Z" fill="#FF0000"/>
+                    </svg>
+                    {{ days }}
+                </div>
+            </div>
+            <div class="result-center-route">
+                {{ waybill|raw }}
+            </div>
+        </div>
+        <div class="result-item-right">
+            <div class="result-item-top">
+                {% for discount in temporary_discounts %}
+                    <div class="result-item-sale">
+                        {% if discount.image %}
+                            <div>
+                                <pic class="discount-image" style="background-image: url({{ discount.image|media }})"></pic>
+                            </div>
+                        {% else %}
+                            <div>
+                                <pic class="discount-image" style="background-image: url(/themes/prokruiz/assets/img/svg/discount.svg)"></pic>
+                            </div>
+                        {% endif %}
+                        <div>
+                            {{ discount.title }}
+                        </div>
+                    </div>
+                {% endfor %}
+                {% for discount in permanent_discounts %}
+                    <div class="result-item-sale">
+                        {% if discount.image %}
+                            <div>
+                                <pic class="discount-image" style="background-image: url({{ discount.image|media }})"></pic>
+                            </div>
+                        {% else %}
+                            <div>
+                                <pic class="discount-image" style="background-image: url(/themes/prokruiz/assets/img/svg/discount.svg)"></pic>
+                            </div>
+                        {% endif %}
+                        <div>
+                            {{ discount.title }}
+                        </div>
+                    </div>
+                {% endfor %}
+            </div>
+            <div class="result-item-bottom">
+                <span class="booking-btn btn red" href="#">
+                    <div>от <span>{{ price_start }}</span> р./чел</div>
+                    <div>без учёта скидок</div>
+                </span>
+            </div>
+        </div>
+    </div>
+</div>

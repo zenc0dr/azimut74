@@ -1,0 +1,1 @@
+import '@components/result-menu/_';

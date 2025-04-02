@@ -1,0 +1,21 @@
+title = "test"
+url = "/testtt"
+is_hidden = 0
+robot_index = "index"
+robot_follow = "follow"
+contentType = "html"
+force_show = 0
+==
+<?php
+
+function onStart() {
+    $link = [
+      'url' => 'http://az.loc/',
+      'title' => 'Главная страница',
+      'visiter_id' => 'z1tgn1oejj',
+      'type_id' => 1
+    ];
+    Zen\History\Models\Link::create($link);
+}
+?>
+==

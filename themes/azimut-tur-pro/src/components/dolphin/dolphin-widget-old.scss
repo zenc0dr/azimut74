@@ -1,0 +1,88 @@
+/*
+    Общие правила для всех типов виджетов
+    Типы виджетов:
+        - Экскурсионный поиск (Стартовый и основной виды)
+        - Экскурсионный варианты цен
+        - Автобусный поиск (Стартовый и основной виды)
+        - Автобусный варианты цен
+*/
+@import 'ext-results'; // Стили для результатов поиска присутствуют везде где есть виджет
+@import '~vue2-datepicker/index.css';
+.dolphin-widget {
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    color: #000;
+    .widget-form {
+        @include m('lg') {
+            width: 60vw;
+            margin: 0 auto;
+        }
+        @include m('md') {
+            width: 100%;
+        }
+    }
+    .w-form-label {
+        @include m('lg') {
+            position: absolute;
+            left: 10px;
+            top: 10px;
+            z-index: 3;
+        }
+        @include m('sm') {
+            top: 7px;
+        }
+        @include m('380px') {
+            font-size: 11px;
+        }
+    }
+    .w-form-input input:disabled {
+        background-color: transparent;
+        color: color('gray-200');
+        -webkit-text-fill-color: color('gray-200');
+        opacity: 1;
+    }
+
+    .w-form-input input {
+        width: 100%;
+        border: none;
+        outline: none;
+        box-shadow: none;
+        @include m('sm') {
+            padding: 0;
+            height: auto;
+        }
+    }
+
+    .widget-form-input,
+    .widget-form-button {
+        position: relative;
+    }
+
+    .w-form-input {
+        height: 36px;
+        @include m('lg') {
+            padding: 30px 10px 20px!important;
+            height: auto;
+        }
+        @include m('sm') {
+            padding: 25px 10px 15px !important;
+        }
+
+        @include m('380px') {
+            padding: 22px 11px 12px !important;
+        }
+    }
+
+    /* Поле мультивыбора городов */
+    .zen-tree-multi-select {
+        width: 100%;
+        min-width: 270px;
+    }
+
+    /* Поле мультивыбора даты */
+    .zen-date-picker {
+        max-width: 120px;
+    }
+}

@@ -1,0 +1,4 @@
+title: Decks
+modelClass: Mcmraak\Rivercrs\Models\Decks
+toolbar:
+    buttons: reorder_toolbar

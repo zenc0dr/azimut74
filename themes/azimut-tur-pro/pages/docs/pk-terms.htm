@@ -1,0 +1,41 @@
+title = "Docs"
+url = "/pk-terms"
+layout = "master"
+description = "Пользовательское соглашение"
+is_hidden = 0
+robot_index = "index"
+robot_follow = "follow"
+contentType = "html"
+force_show = 0
+==
+<?php
+function onStart()
+{
+    $this['offer_text'] = Cache::get('mcmraak_blocks_offer_1', function() {
+        return DB::table('mcmraak_blocks_offer')->find(1)->offertext;
+    });
+}
+?>
+==
+<div class="docs">
+    <div>
+        {{ offer_text|raw }}
+    </div>
+</div>
+<style>
+    .docs {
+        display: flex;
+        justify-content: center;
+    }
+    .docs > div {
+        max-width: 1000px;
+        border-radius: 5px;
+        box-shadow: 0 0 12px 0 #00000012;
+        color: #404040;
+        padding: 45px 70px;
+        font-size: 15px;
+        line-height: 21px;
+        margin-top: 50px;
+        margin-bottom: 50px
+    }
+</style>

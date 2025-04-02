@@ -1,0 +1,50 @@
+title = "Страница круиза"
+url = "/russia-river-cruises/cruise/:id"
+layout = "master"
+is_hidden = 0
+robot_index = "index"
+robot_follow = "follow"
+contentType = "html"
+force_show = 0
+==
+<?php
+function onInit()
+{
+    $this['page_css'] = mix('css/cruise.css', 'themes/azimut-tur-pro/assets');
+    $this['page_js'] = mix('js/cruise.js', 'themes/azimut-tur-pro/assets');
+}
+
+function onStart()
+{
+    $init_success = Mcmraak\Rivercrs\Classes\RivercrsCore::init($this);
+    if (!$init_success) {
+        $this->setStatusCode(404);
+        return $this->controller->run('404');
+    }
+}
+?>
+==
+{% put page_style %}
+<link rel="stylesheet" href="{{ page_css }}">
+{% endput %}
+{% put page_script %}
+<script src="{{ page_js }}"></script>
+{% endput %}
+
+{% partial 'cruise/top-info' class='mt-5' %}
+
+<section class="tabs-group">
+   <div class="container">
+      <div class="tabs">
+         <div class="tab active" tab="1">Цены, бронирование</div>
+         <div class="tab" tab="2">Маршрут</div>
+         <div class="tab" tab="3">Теплоход</div>
+      </div>
+      <div class="tab-content">
+         {% partial 'cruise/tab-booking-zen' class='active' tab='1' %}
+         {% partial 'cruise/tab-route' class='' tab='2' %}
+         {% partial 'cruise/tab-ship' class='' tab='3' %}
+      </div>
+   </div>
+
+</section>

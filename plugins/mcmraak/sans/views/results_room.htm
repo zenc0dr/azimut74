@@ -1,0 +1,129 @@
+{% if results %}
+	<div class="s-sel__result">
+		<div class="s-sel__count">
+			Мы подобрали для вас подходящие варианты комнат
+		</div>
+{% for item in hash|splitArray('room_type') %}
+								  	 
+	<div class="s-card__booking-wrap">
+	
+	    <div class="s-card__booking-wrap-name mbtn">
+	
+			{{ item|first.room_type }}
+		</div>
+						
+	<div class="s-card__booking">
+		
+			
+			{% for record in item %}
+		
+			<div class="s-card__booking-line">
+				<div class="r">
+					<div class="col-45 col-xs-50 as-c">
+				
+					    	<div class="s-card__booking-col data_nomer t-l">
+						    
+							{{ record.tour_date|rusDate }} –  {{ record.tour_date|rusDate(record.nights)}}, {{ record.nights }} ночей	 
+						
+						</div>
+							 <div class="s-card__booking-col descr_nomer">
+				        {#    {{record.town_name}}#}
+				       
+				            {{record.tour_name|findAndDel(record.town_name~'.', '')|lower}}
+				           
+				        </div>
+			
+					
+					</div>
+					<div class="col-25 col-xs-50 as-c">
+						<div class="s-card__booking-col upperFront t-c t-xs-r">
+							{{ record.price }} р.
+						</div>
+					</div>
+					<div class="col-30 col-xs-100 mt-xs-10 as-c no-padr">
+						<div class="s-card__booking-col t-r t-xs-c ">
+							<button booking-key="{{ query_key }}::{{ record.hash }}" href="#modalBooking--sans" class="btn btn_bg-transparent btn_bg-hover-red btn_txt-red btn_txt-bold btn_bdr-red mbtn">
+								Забронировать
+							</button>
+						</div>
+					</div>
+				</div>
+			</div>
+			{% endfor %}
+		</div>
+		<div class="s-card__booking-technicals">
+			<div class="data">
+				<table>
+					<tbody>
+					    {% if item.Quantity or item.Building %}
+						<tr>
+						    {% if item.Building %}
+							<td>Корпус: {{item.Building }} </td>
+							{% endif %}
+							{% if  item.Quantity  %}
+							<td>Количество комнат: {{ item.Quantity }}</td>
+							{% endif %}
+						</tr>
+						{% endif %}
+						
+						{% if item.RoomArea or item.Quantity %}
+						<tr>
+						    {% if item.RoomArea %}
+							  <td>Площадь номера: {{ item.RoomArea }}</td>
+						    {% endif %}
+						    {% if item.Quantity %}
+						        <td>Количеcтво основных мест: {{ item.Quantity }}</td>
+						    {% endif %}
+						</tr>
+						{% endif %}
+						{% if item.RoomTypeName or item.ExtSeatQuantity %}
+						<tr>
+						    {% if item.RoomTypeName %}
+						        <td>Тип номера: {{ item.RoomTypeName }}</td>
+							{% endif %}
+							{% if item.ExtSeatQuantity %}
+							    <td>Количество дополнительных мест: {{ item.ExtSeatQuantity }}</td>
+							{% endif %}
+						</tr>
+						{% endif %}
+					</tbody>
+				</table>
+			</div>
+		</div>
+
+		<div class="s-card__excerpt s-card__excerpt_attention mt-xs-20 parent_s-card__flex">
+		    <div class="parent-flex_card col-100">
+				<div class="price_booking">
+					Цена указана за номер (на всех проживающих в номере)
+				</div>
+				<div class="s-card__booking-col">
+					<button class="mtbtn btn_bg-transparent btn_bg-blue btn_txt-blue btn_txt-bold btn_bdr-blue btn_bg-hover-blue" onclick="smoothScroll('number_fond_scroll')">
+						Описание номеров
+					</button>
+				</div>
+			</div>
+			<div class="last_line_scard">Напоминаем, что мы работаем исключительно по ценам гостиниц и санаториев и не делаем наценку</div>
+		</div>
+	</div>
+{% endfor %}
+{% else %}
+    По заданным параметрам ничего не найдено
+{% endif %}
+</div>
+
+<script>
+$(document).ready(function(){
+    $('.mbtn').magnificPopup({
+        type: 'inline',
+        preloader: false,
+        callbacks: {
+            afterClose: function() {
+                $('ofmodal').fadeOut(300);
+            },
+            open: function() {
+		    	$('.modalWrap').addClass('active');
+		  	},
+        }
+    });
+});
+</script>

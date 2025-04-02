@@ -1,0 +1,13 @@
+fields:
+    name:
+        label: 'Название шаблона'
+        oc.commentPosition: ''
+        span: full
+        type: text
+    code:
+        label: 'Код шаблона'
+        oc.commentPosition: ''
+        size: giant
+        language: twig
+        span: full
+        type: codeeditor

@@ -1,0 +1,19 @@
+columns:
+    id:
+        label: id
+        type: number
+        sortable: true
+    name:
+        label: 'Название баннера'
+        type: text
+        searchable: true
+        sortable: true
+    url_entry:
+        label: 'Вхождение URL'
+        type: text
+        searchable: true
+        sortable: true
+    active:
+        label: Активность
+        type: partial
+        sortable: true

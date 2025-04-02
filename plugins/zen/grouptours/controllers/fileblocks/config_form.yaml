@@ -1,0 +1,10 @@
+name: FileBlocks
+form: $/zen/grouptours/models/fileblock/fields.yaml
+modelClass: Zen\GroupTours\Models\FileBlock
+defaultRedirect: zen/grouptours/fileblocks
+create:
+    redirect: 'zen/grouptours/fileblocks/update/:id'
+    redirectClose: zen/grouptours/fileblocks
+update:
+    redirect: zen/grouptours/fileblocks
+    redirectClose: zen/grouptours/fileblocks

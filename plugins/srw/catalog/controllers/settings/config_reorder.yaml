@@ -1,0 +1,4 @@
+title: Settings
+modelClass: Srw\Catalog\Models\Settings
+toolbar:
+    buttons: reorder_toolbar

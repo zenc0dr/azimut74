@@ -1,0 +1,96 @@
+<style>
+    [v-cloak] {
+        display:none
+    }
+</style>
+<meta name="outer_result_container" content="{{ outer_result_container }}">
+<div id="RiverSearch" v-cloak>
+    <div id="Selector" class="tourSelection">
+        <div class="loaded-wrap" v-if="loaded">
+            <div class="tsHead">
+                <span>Подбор речного круиза</span>
+            </div>
+
+            <div class="tsItem">
+                <label>Город отправления</label>
+                <mdropdown id="town" :opt="form.town"></mdropdown>
+            </div>
+
+            <div class="tsItem tsItemDate">
+                <div>
+                    <label><span>Период отправления</span></label>
+                    {#
+                    <div class="tsYearSwitcher">
+                        <div @click="setActiveYear(item)" v-for="item in years" class="tsYear" :class="{'active':item.active}">
+                            <span>${ item.value }</span>
+                        </div>
+                    </div>
+                    #}
+                </div>
+
+                {#
+                <div @click="openAirRange()" class="tsSmall tsDate">
+                    <input v-model="form.date_range" name="date-range" data-range="true" data-multiple-dates-separator=" - ">
+                </div>
+                #}
+
+                {#
+                <div @click="openDR()" class="tsSmall tsDate">
+                    <input v-model="form.date_range" name="date-range">
+                </div>
+                #}
+
+                <div @click="openDP(1)" class="dateSelect tsSmall tsDate">
+                    <input v-model="form.date_1" name="date-1">
+                </div>
+                <div @click="openDP(2)" class="dateSelect tsSmall tsDate">
+                    <input v-model="form.date_2" name="date-2">
+                </div>
+
+            </div>
+
+            <div class="tsItem">
+                <label>Продолжительность</label>
+                <mdropdown id="days" :opt="form.days"></mdropdown>
+            </div>
+
+            <div class="tsItem">
+                <label>Город на маршруте</label>
+                <mdropdown id="dest" :opt="form.dest"></mdropdown>
+            </div>
+
+            <div v-if="!ship_fix" class="tsItem tourSelectPad">
+                <label>Теплоход</label>
+                <mdropdown id="ship" :opt="form.ship"></mdropdown>
+            </div>
+
+            <div class="tsItem tsButton">
+                <button id="RiverCRS_search" :class="{process:process}" class="tbtn" @click="search()">
+                    <span v-if="process"><i class="fa fa-refresh"></i>Загрузка результатов...</span>
+                    <span v-else>Найти круиз</span>
+                </button>
+            </div>
+            <div class="message" v-if="message">${ message }</div>
+        </div>
+        <div class="widget-preloader" v-else><span>Загрузка данных...</span></div>
+    </div>
+    <div class="widget-alerts">
+        <div v-if="alert" class="widget-alert">${ alert }</div>
+    </div>
+{#
+<div class="filterloader">
+    <span>
+        Не уходите, идёт поиск
+    </span>
+        <span>
+        <img src="/storage/app/media/uploaded-files/preloader_clear.svg" alt="Подождите...">
+    </span>
+</div>
+:class="{process:process}"
+#}
+<template v-if="!outer_result_container">
+    <template v-if="result"><pagination :page="page" :pages_count="pages_count"></pagination></template>
+    <div id="Result" :class="{process:process}" v-html="result"></div>
+    <template v-if="result"><pagination :page="page" :pages_count="pages_count"></pagination></template>
+</template>
+</div>

@@ -1,0 +1,15 @@
+name: Тэги
+modelClass: Zen\GroupTours\Models\Tag
+form: $/zen/grouptours/models/tag/fields.yaml
+defaultRedirect: zen/grouptours/tags
+create:
+    title: 'Создание тега'
+    redirect: 'zen/grouptours/tags/update/:id'
+    redirectClose: zen/grouptours/tags
+    flashSave: 'Сохранение тега'
+update:
+    title: 'Обновление тега'
+    redirect: zen/grouptours/tags
+    redirectClose: zen/grouptours/tags
+    flashSave: 'Тег сохранён'
+    flashDelete: 'Тэг удалён'

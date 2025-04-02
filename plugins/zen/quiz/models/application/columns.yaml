@@ -1,0 +1,44 @@
+columns:
+    id:
+        label: id
+        type: number
+        sortable: true
+    phone:
+        label: Телефон
+        type: text
+        searchable: true
+        sortable: true
+    email:
+        label: Email
+        type: text
+        searchable: true
+        sortable: true
+    date_from:
+        label: 'Дата ОТ'
+        type: date
+        searchable: true
+        sortable: true
+    date_to:
+        label: 'Дата ДО'
+        type: date
+        searchable: true
+        sortable: true
+    city_id:
+        label: Город
+        type: text
+        sortable: true
+        relation: city
+        valueFrom: name
+    active:
+        label: Обработан
+        type: partial
+        sortable: true
+    created_at:
+        label: Создан
+        type: datetime
+        searchable: true
+        sortable: true
+    updated_at:
+        label: Обновлен
+        type: datetime
+        sortable: true

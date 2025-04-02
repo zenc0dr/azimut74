@@ -1,0 +1,4 @@
+title: RoomCategories
+modelClass: Zen\Dolphin\Models\RoomCategory
+toolbar:
+    buttons: reorder_toolbar

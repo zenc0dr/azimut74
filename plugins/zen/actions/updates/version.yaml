@@ -1,0 +1,7 @@
+1.0.1:
+    - 'Initialize plugin.'
+1.0.2:
+    - 'Created table zen_actions_items'
+    - builder_table_create_zen_actions_items.php
+1.0.3:
+    - 'Автовысота iframe выходных данных'

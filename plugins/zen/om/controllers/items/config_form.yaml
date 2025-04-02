@@ -1,0 +1,16 @@
+name: 'zen.om::lang.items.item'
+modelClass: Zen\Om\Models\Item
+form: $/zen/om/models/item/fields.yaml
+defaultRedirect: zen/om/items
+create:
+    title: 'zen.om::lang.items.create'
+    redirect: 'zen/om/items/update/:id'
+    redirectClose: zen/om/items
+    flashSave: 'zen.om::lang.items.created'
+update:
+    title: 'zen.om::lang.items.update'
+    redirect: zen/om/items
+    redirectClose: zen/om/items
+    flashSave: 'zen.om::lang.items.updated'
+    flashDelete: 'zen.om::lang.items.deleted'
+preview: {  }

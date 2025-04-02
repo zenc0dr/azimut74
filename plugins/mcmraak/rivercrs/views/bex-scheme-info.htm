@@ -1,0 +1,16 @@
+<div class="bex-scheme-info">
+    <div>
+        {% for item in statuses %}
+            <div>
+                <div class="{{ item.class }}"></div>
+                <div>{{ item.title }}</div>
+            </div>
+            {% if item.hint|trim is not empty %}
+                <div class="bex-hint">
+                    <i style="background-color: {{ item.bg_color }}" class="fa fa-question-circle-o"></i>
+                    <div>{{ item.hint|raw }}</div>
+                </div>
+            {% endif %}
+        {% endfor %}
+    </div>
+</div>

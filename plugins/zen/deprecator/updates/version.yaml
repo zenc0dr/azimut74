@@ -1,0 +1,8 @@
+1.0.1:
+    - 'Initialize plugin.'
+1.0.2:
+    - 'Created rules'
+    - builder_table_create_zen_deprecator_rules.php
+1.0.3:
+    - 'Created attempts'
+    - builder_table_create_zen_deprecator_attempts.php

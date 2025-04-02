@@ -1,0 +1,13 @@
+title: Hotels
+modelClass: Mcmraak\Sans\Models\Hotel
+list: $/mcmraak/sans/models/hotel/columns.yaml
+recordUrl: 'mcmraak/sans/hotels/update/:id'
+noRecordsMessage: 'backend::lang.list.no_records'
+recordsPerPage: 20
+showSetup: true
+showCheckboxes: true
+toolbar:
+    buttons: list_toolbar
+    search:
+        prompt: 'backend::lang.list.search_prompt'
+filter: config_filter.yaml

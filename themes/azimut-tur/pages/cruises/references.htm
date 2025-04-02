@@ -1,0 +1,82 @@
+title = "Справочная информация"
+url = "/russia-river-cruises/references/:slug"
+layout = "general"
+meta_title = "Справочная информация"
+meta_description = "Справочная информация"
+is_hidden = 0
+seo_keywords = "Справочная информация"
+robot_index = "index"
+robot_follow = "follow"
+contentType = "html"
+==
+<?php
+use \Mcmraak\Rivercrs\Models\Reference;
+use \Mcmraak\Rivercrs\Models\Cruises;
+use \Mcmraak\Rivercrs\Models\Transit;
+use \Mcmraak\Rivercrs\Models\Motorships;
+
+function onInit()
+{
+    $slug = $this->param('slug');
+    $this['reference'] = Reference::where('slug',$slug)->first();
+    if(!$this['reference']) return \Response::make($this->controller->run('404'), 404);
+    
+    $this['references'] = Reference::orderBy('order')->get();
+    $this['cruises'] = Cruises::where('active', 1)->orderBy('sort_order')->get();
+    $this['motorships'] = Motorships::cleanNames();
+     
+    /*
+    $cruise_id = get('from_cruise');
+    $transit_id = get('from_transit');
+    
+    if($cruise_id)
+    {
+        $this['cruise'] = Cruises::find($cruise_id);
+    }
+    elseif ($transit_id)
+    {
+        $this['cruise'] = Transit::find($transit_id);
+    }
+    else
+    {
+        $this['cruise'] = Cruises::where('slug', 'river-cruises')->first();
+    }
+    */
+    
+    $this['cruise'] = Cruises::where('slug', 'river-cruises')->first();
+    
+}
+?>
+==
+{#<div class="headText">
+	<h1 class="h1">{{ reference.name }}</h1>
+</div>#}
+
+<section class="cruises">
+
+	{#<i class="fa fa-calendar" aria-hidden="true"></i>#}
+
+	<div class="cruiseData">
+		<div class="c-r">
+			<div class="col-25 col-s-100 as-s">
+				{% partial 'rivercrs/leftmenu' %}
+			</div>
+
+			<div class="col-75 col-s-100 as-s">
+				<div class="rightBlock">
+                  <div class="cruiseExcerpt textBlock">
+                        {{ reference.text|raw|mutator }}
+                  </div>                       
+				</div>
+			</div>
+		</div>
+	</div>
+	
+	{% partial 'rivercrs/relinks' %}
+	
+	<!-- <div class="cruiseLinks">
+		<div class="col-wrap">
+		{# MOD LINKS #}
+		</div>
+	</div> -->
+</section>

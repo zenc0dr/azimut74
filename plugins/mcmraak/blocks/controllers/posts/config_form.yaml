@@ -1,0 +1,16 @@
+name: Записи
+modelClass: Mcmraak\Blocks\Models\Post
+form: $/mcmraak/blocks/models/post/fields.yaml
+defaultRedirect: mcmraak/blocks/posts
+create:
+    title: 'Создать запись'
+    redirect: 'mcmraak/blocks/posts/update/:id'
+    redirectClose: mcmraak/blocks/posts
+    flashSave: 'Запись создана'
+update:
+    title: 'Изменить запись'
+    redirect: mcmraak/blocks/posts
+    redirectClose: mcmraak/blocks/posts
+    flashSave: 'Запись изменена'
+    flashDelete: 'Запись удалена'
+preview: {  }

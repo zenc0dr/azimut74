@@ -1,0 +1,26 @@
+description = "Главное меню"
+
+[viewBag]
+==
+<?php
+function onStart() {
+    require_once base_path('themes/azimut-tur-pro/scripts/topmenu_json_output.php');
+    $theme = \Cms\Classes\Theme::getEditTheme();
+    $menus = \RainLab\Pages\Classes\Menu::listInTheme($theme, true);
+    $top_menu_obj = $menus['top-menu.yaml'];
+    $this['top_menu_obj'] = $top_menu_obj->items;
+    $this['top_menu_json'] = menuToJson($top_menu_obj->items);
+}
+?>
+==
+<meta name="top-menu" content="{{ top_menu_json }}" />
+
+<div class="header__top-menu bg-blue-300 {{class}}">
+    <div class="container header__container">
+        <div id="top-menu-app"></div>
+    </div>
+</div>
+
+
+
+

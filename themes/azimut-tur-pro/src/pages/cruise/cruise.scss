@@ -1,0 +1,26 @@
+// general variables (подключаем на любой странице)
+@import "@src/components/!common/_";
+
+@import  'swiper/css/bundle';
+
+// почему-то не завелся
+@import "~@fancyapps/ui/dist/fancybox.css";
+
+
+@import "@src/components/cruise/top-info";
+
+@import '@src/components/blocks/tabs/_';
+
+//@import "@src/components/cruise/tab-booking-2";
+@import "@src/components/cruise/tab-booking";
+@import "@src/components/cruise/tab-route";
+@import "@src/components/cruise/tab-ship";
+@import "@src/components/cruise/sale-item";
+
+
+
+@import '@src/components/sliders/slider-thumbs';
+
+
+
+

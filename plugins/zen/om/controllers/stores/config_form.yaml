@@ -1,0 +1,16 @@
+name: 'zen.om::lang.store.title'
+modelClass: Zen\Om\Models\Store
+form: $/zen/om/models/store/fields.yaml
+defaultRedirect: zen/om/stores
+create:
+    title: 'zen.om::lang.store.create'
+    redirect: 'zen/om/stores/update/:id'
+    redirectClose: zen/om/stores
+    flashSave: 'zen.om::lang.store.created'
+update:
+    title: 'zen.om::lang.store.update'
+    redirect: zen/om/stores
+    redirectClose: zen/om/stores
+    flashSave: 'zen.om::lang.store.updated'
+    flashDelete: 'zen.om::lang.store.deleted'
+preview: {  }

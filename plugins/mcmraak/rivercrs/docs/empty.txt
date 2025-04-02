@@ -1,0 +1,2 @@
+# Пример запроса который не возвращает данные
+https://restapi.infoflot.com/cruises/286009?key=b5262f5d8de5be65b201bb5e3f5e544a245b6082

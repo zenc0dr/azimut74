@@ -1,0 +1,12 @@
+{% for record in categoryitems %}
+<div class="col-lg-4 col-md-6 col-sm-6 col-xs-12">
+    <a href="/catalog{{slug}}{{ record.slug }}">
+    	<div class="goodsItem goodsCatItem">
+    		<div class="goodsImg" style="background-image: url({{ record.image|media }});"></div>
+    		<div class="goodsCatName">
+    			{{ record.name }}
+    		</div>
+    	</div>
+    </a>
+</div>
+{% endfor %}

@@ -1,0 +1,13 @@
+.DS_Store
+/3rdparty/*
+/backups/*
+*.log
+*.zip
+.idea/
+.vscode/
+/node_modules
+/storage
+!index.htm
+.env
+server_errors.log
+sync.ffs_gui

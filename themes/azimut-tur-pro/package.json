@@ -1,0 +1,49 @@
+{
+  "name": "azimut-tur-pro",
+  "version": "1.0.0",
+  "description": "Professional theme for Azimut-tur",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "Alex Blaze",
+  "license": "MIT",
+  "devDependencies": {
+    "bootstrap": "^5.1.3",
+    "bootstrap-icons": "^1.7.2",
+    "clean-webpack-plugin": "^4.0.0",
+    "font-awesome": "4.7",
+    "jquery": "^3.6.0",
+    "jquery-ui": "^1.13.1",
+    "laravel-mix": "^6.0.39",
+    "laravel-mix-purgecss": "^6.0.0",
+    "laravel-mix-versionhash": "^2.0.1",
+    "popper.js": "^1.16.1",
+    "postcss": "^8.4.5",
+    "postcss-loader": "^6.2.1",
+    "resolve-url-loader": "^4.0.0",
+    "sass": "^1.47.0",
+    "sass-loader": "^12.4.0",
+    "vue": "^2.6.14",
+    "vue-loader": "^15.9.8",
+    "vue-template-compiler": "^2.6.14"
+  },
+  "dependencies": {
+    "@fancyapps/fancybox": "^3.5.7",
+    "@fancyapps/ui": "^4.0.23",
+    "alpinejs": "^3.9.6",
+    "axios": "^0.25.0",
+    "clipboard-copy": "^4.0.1",
+    "lightgallery": "^2.4.0",
+    "moment": "^2.29.3",
+    "opensans-npm-webfont": "^1.0.0",
+    "owl.carousel": "^2.3.4",
+    "primeicons": "^5.0.0",
+    "primevue": "^2.9.1",
+    "swiper": "^8.0.3",
+    "vue-masked-input": "^0.5.2",
+    "vue-tinybox": "^1.3.0",
+    "vue2-datepicker": "^3.10.4",
+    "vue2-swiper": "^0.0.13"
+  }
+}

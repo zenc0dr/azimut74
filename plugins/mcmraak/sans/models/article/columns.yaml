@@ -1,0 +1,33 @@
+columns:
+    id:
+        label: id
+        type: number
+        sortable: true
+    name:
+        label: name
+        type: text
+        searchable: true
+        sortable: true
+    slug:
+        label: Ссылка
+        type: text
+        searchable: true
+        sortable: true
+    root_id:
+        label: 'Базовая группа'
+        type: text
+        relation: root
+        valueFrom: name
+    group_id:
+        label: 'Группа курортов'
+        type: text
+        relation: group
+        valueFrom: name
+    active:
+        label: Активность
+        type: partial
+        sortable: true
+    sort_order:
+        label: Порядок
+        type: number
+        sortable: true

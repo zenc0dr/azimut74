@@ -1,0 +1,27 @@
+description = "Временный каталог (элементы категории)"
+
+[viewBag]
+==
+{% for item in items %}
+
+	{% if item.images is empty %}
+	{% set image_url = '/themes/azimut-tur/assets/img/no_image.png' %}
+	{% else %}
+	{% set image_url = item.images|first %}
+	{% set image_url = image_url.path %}
+	{% endif %}
+			
+	<div class="col-33 col-s-50 col-xs-100">
+		<a href="{% if item.category.parent.slug %}/{{ item.category.parent.slug }}{% endif %}/{{ item.category.slug }}/{{ item.slug }}">
+			<div class="tourItem">
+			
+				<div class="tourImg" style="background-image: url({{ image_url }});"></div>
+				
+				<div class="tourCard">
+					<div class="tourName"><span>{{ item.name|mutator }}</span></div>
+				</div>
+		
+			</div>
+		</a>
+	</div>
+{% endfor %}

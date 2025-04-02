@@ -1,0 +1,39 @@
+<form id="VolgaUploads" data-request="onUploadXls" data-request-files>
+    <div class="row">
+        <div class="col-sm-3">
+            <div>Список точек-стоянок XLS </div>
+            <input name="file1" type="file">
+            <div style="color:red;margin-top:10px">Внимание! Таблица Excel должна иметь только один лист!</div>
+        </div>
+        <div class="col-sm-9">
+            <strong>Пример:</strong><br>
+            <img src="/plugins/mcmraak/rivercrs/assets/images/volga_points.png">
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-sm-3">
+            <div>Сводная таблица</div>
+            <input name="file2" type="file">
+        </div>
+        <div class="col-sm-9">
+            <strong>Пример:</strong><br>
+            <img src="/plugins/mcmraak/rivercrs/assets/images/volga_pivot.png">
+        </div>
+    </div>
+    <button type="submit" class="btn btn-primary oc-icon-upload">Загрузить XLS</button>
+</form>
+<style>
+    #VolgaUploads div[class|='col'] {
+        border: 1px solid #dbdbdb;
+        padding: 10px;
+        background: #fff;
+        margin-bottom: 20px;
+        height: 170px;
+    }
+    #VolgaUploads div[class|='col']:first-child {
+        min-width: 300px;
+    }
+    #VolgaUploads button {
+        margin-top: 10px;
+    }
+</style>

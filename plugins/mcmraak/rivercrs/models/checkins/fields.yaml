@@ -1,0 +1,101 @@
+fields:
+    active:
+        label: 'Заезд активен'
+        span: auto
+        default: 1
+        type: switch
+    stats:
+        span: full
+        path: $/mcmraak/rivercrs/controllers/checkins/stats.php
+        type: partial
+tabs:
+    fields:
+        motorship:
+            label: Теплоход
+            oc.commentPosition: ''
+            span: full
+            required: 1
+            type: dropdown
+            tab: 'Основные данные'
+        date:
+            label: 'Дата и время отправления'
+            oc.commentPosition: ''
+            mode: datetime
+            span: auto
+            required: 1
+            type: datepicker
+            tab: 'Основные данные'
+        dateb:
+            label: 'Дата и время прибытия'
+            oc.commentPosition: ''
+            mode: datetime
+            span: right
+            required: 1
+            type: datepicker
+            tab: 'Основные данные'
+        pricing:
+            span: left
+            path: $/mcmraak/rivercrs/partials/pricing.php
+            type: partial
+            tab: 'Основные данные'
+        duplicator:
+            label: 'Скопировать маршрут'
+            span: full
+            type: dropdown
+            comment: 'Внимание!!! При выборе данной опции, нужно нажимать только "Создать и закрыть" или "Сохранить и закрыть"'
+            tab: 'Составление маршрута'
+        waybill_id:
+            label: 'Контрольные точки'
+            oc.commentPosition: ''
+            prompt: Добавить
+            span: full
+            type: repeater
+            tab: 'Составление маршрута'
+            form:
+                fields:
+                    town:
+                        label: Город
+                        oc.commentPosition: ''
+                        span: left
+                        type: dropdown
+                    excursion:
+                        label: 'Описание экскурсии'
+                        size: small
+                        oc.commentPosition: ''
+                        span: right
+                        type: richeditor
+                    bold:
+                        label: 'Важный контрольный пункт'
+                        span: auto
+                        type: checkbox
+        desc_1:
+            label: 'График движения и экскурсии'
+            size: huge
+            oc.commentPosition: ''
+            span: full
+            type: richeditor
+            tab: Описание
+        desc_2:
+            label: 'Подробнее о рейсе'
+            span: full
+            size: huge
+            oc.commentPosition: ''
+            type: richeditor
+            tab: Описание
+        hot:
+            label: 'Горячее предложение'
+            span: full
+            size: huge
+            oc.commentPosition: ''
+            type: richeditor
+            tab: Описание
+        special:
+            label: 'Специальное оформление'
+            span: auto
+            type: switch
+            tab: Описание
+        exist_debug:
+            span: full
+            path: $/mcmraak/rivercrs/controllers/checkins/exist_debug.php
+            type: partial
+            tab: Отладка

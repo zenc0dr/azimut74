@@ -1,0 +1,80 @@
+@import "@fancyapps/fancybox/dist/jquery.fancybox.min.css";
+
+.slider-thumbs {
+    display: flex;
+    flex-direction: column;
+    height: 600px;
+    overflow: hidden;
+    position: relative;
+    @include m('700px') {
+        height: 70vh;
+    }
+    @include m('sm') {
+        height: 60vh;
+    }
+}
+
+.slider-thumbs .swiper-container {
+    width: 100%;
+    height: 100%;
+}
+
+.slider-thumbs .swiper-slide {
+    text-align: center;
+    font-size: fs(h3);
+    background: color(primary-100);
+    display: -webkit-box;
+    display: -ms-flexbox;
+    display: -webkit-flex;
+    display: flex;
+    -webkit-box-pack: center;
+    -ms-flex-pack: center;
+    -webkit-justify-content: center;
+    justify-content: center;
+    -webkit-box-align: center;
+    -ms-flex-align: center;
+    -webkit-align-items: center;
+    align-items: center;
+}
+
+
+.slider-thumbs .swiper-slide img {
+    display: block;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.slider-thumbs .swiper-slide {
+    background-size: cover;
+    background-position: center;
+}
+
+.slider-thumbs .shipSlide {
+    height: 75%;
+    width: 100%;
+    position: relative;
+}
+
+.slider-thumbs .swiper-slide {
+    border-radius: 4px;
+    overflow: hidden;
+}
+
+.slider-thumbs .thumbSlider {
+    height: 25%;
+    box-sizing: border-box;
+    padding: 10px 0;
+    position: relative;
+}
+
+
+.thumbSlider .swiper-slide {
+    width: 25%;
+    height: 100%;
+    opacity: 0.4;
+}
+
+.thumbSlider .swiper-slide-thumb-active {
+    opacity: 1;
+}

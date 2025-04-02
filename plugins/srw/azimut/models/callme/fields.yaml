@@ -1,0 +1,32 @@
+fields:
+    name:
+        label: Имя
+        oc.commentPosition: ''
+        span: auto
+        type: text
+    phone:
+        label: Телефон
+        oc.commentPosition: ''
+        span: auto
+        type: text
+    email:
+        label: 'Электронная почта'
+        oc.commentPosition: ''
+        span: auto
+        type: text
+    message:
+        label: 'Сообщение (вопросы и пожелания)'
+        size: ''
+        oc.commentPosition: ''
+        span: auto
+        type: textarea
+    ide:
+        label: 'Идентификатор формы'
+        oc.commentPosition: ''
+        span: auto
+        type: text
+    tour:
+        label: 'Идентификатор тура'
+        oc.commentPosition: ''
+        span: auto
+        type: text

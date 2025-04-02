@@ -1,0 +1,51 @@
+description = "Фиксированная секция (меню) старая"
+
+[viewBag]
+==
+<section class="fixedNav">
+	<div class="c-p">
+		<div class="c-r">
+
+			<div class="col-10 hidden-s-d">
+				<div class="fixedLogo">
+					<a href="/">
+						<img src="{{ this.theme.logotypesmall|media }}" alt="">	
+					</a>
+				</div>
+			</div>
+			
+			<div class="col-70 col-m-70 col-s-50 as-c">
+				<div class="headMenu fixedMenu hidden-s-d">
+					
+					{% partial 'template/menu' %}
+					
+				</div>
+				
+				<div class="toggleButton toggleFixed hidden-m-u">
+					<div class="g-icon">
+						<span></span>
+						<span></span>
+						<span></span>
+					</div>
+					<div><span>Меню</span></div>
+				</div>
+
+			</div>
+
+			<div class="col-20 col-m-20 col-s-50 as-c">
+				<div class="headButton">
+					<button href="#modalTour" class="hbtn mbtn">Подобрать тур</button>
+				</div>
+			</div>
+
+			<div class="col-s-100">
+				<div class="hiddenMenu hiddenFixed">
+					
+					{% partial 'template/menu' %}
+					
+				</div>
+			</div>
+			
+		</div>
+	</div>
+</section>

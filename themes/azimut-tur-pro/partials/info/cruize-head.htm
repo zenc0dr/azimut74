@@ -1,0 +1,14 @@
+<section class="cruize-head d-flex {{class}} flex-column flex-lg-row">
+    <div class="cryize-head__left col-12 col-lg-4">
+        {% set image = cruise.images|first %}
+        <img class="cryize-head__left-img h-100 rounded"
+             {% if image.title %}alt="{{ image.title|mutator }}"{% endif %}
+             src="{{ image.path|resize(400) }}" alt="img">
+    </div>
+    <div class="cryize-head__right col-12 col-lg-8 pt-4 px-0 p-lg-4">
+        <div class="cryize-head__text fs-s  fs-xxl-def">
+            {{ cruise.text|raw|mutator }}
+        </div>
+        {% partial 'blocks/social' class="py-3" %}
+    </div>
+</section>

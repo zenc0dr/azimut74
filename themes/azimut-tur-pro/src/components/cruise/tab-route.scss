@@ -1,0 +1,201 @@
+.tabs-vertical > .tab-item > .tab-name.route-title {
+    margin: 0;
+}
+
+.ship-place {
+    font-size: fs('h20');
+    margin-bottom: 20px;
+    font-weight: bold;
+    @include m('md') {
+       font-size: fs('h3');
+    }
+    @include m('425px') {
+      font-size: fs('def');
+      margin-bottom: 10px;
+    }
+}
+
+.time-stop-ship {
+    display: flex;
+    @include m('390px') {
+       flex-direction: column;
+    }
+    i {
+         margin-right: 10px;
+         color: color('red-300');
+         @include m('390px') {
+               margin-bottom: 5px;
+        text-align: center;
+         }
+    }
+}
+
+.time-in-ship {
+    text-transform: uppercase;
+    font-weight: bold;
+    font-size: fs('h3');
+}
+   
+
+
+.time-out-ship {
+    text-transform: uppercase;
+    font-weight: bold;
+    font-size: fs('h3');
+    @include m('md') {
+      margin-bottom: 0;
+      font-size: fs('def');
+    }
+    @include m('590px') {
+      margin-bottom: 0;
+      font-size: fs('ss');
+    }
+    @include m('390px') {
+       font-size: rem(11px)
+    }
+}
+
+
+
+// нужно перменную цвета
+.tab-name.route-title {
+    width: 100%;
+    background-color: color('blue-300');
+    color: color('primary-100');
+    padding: 19px 37px;
+    border-radius: 4px;
+    justify-content: space-between;
+    @include m('590px') {
+       padding: 13px 20px;
+    }
+    @include m('425px') {
+        padding: 9px 13px;
+    }
+    @include m('390px') {
+       padding: 9px;
+    }
+    h2 {
+       width: 250px;
+       @include m('lg') {
+         font-size: fs('h20');
+         width: 288px;
+       }
+       @include m('590px') {
+         font-size: fs('def');
+       }
+    }
+}
+
+// нужно перменную цвета
+.ship-place-left {
+   display: flex;
+   width: 250px;
+   flex-direction: column;
+   padding: 19px 37px;
+   background-color: #e8e8e8;
+
+   @include m('lg') {
+      padding: 19px 35px;
+      width: 288px;
+   }
+   @include m('md') {
+      width: 100%;
+      flex-direction: row;
+      justify-content: space-between;
+   }
+   @include m('590px') {
+      padding: 13px 20px;
+   }
+   @include m('425px') {
+       padding: 9px 13px;
+   }
+   @include m('390px') {
+      padding: 9px;
+   }
+
+   & > div:not(:last-child) {
+      margin-bottom: 15px;
+      font-size: fs('h3');
+      @include m('md') {
+         margin-bottom: 0;
+         font-size: fs('def');
+      }
+      @include m('590px') {
+         margin-bottom: 0;
+        font-size: fs('ss');
+      }
+      @include m('390px') {
+         font-size: rem(11px);
+         display: flex;
+         flex-direction: column;
+      }
+   }
+
+   & > div > div {
+      margin-bottom: 15px;
+      @include m('md') {
+         margin-bottom: 5px;
+      }
+      @include m('390px') {
+         text-align: center;
+      }
+   }
+}
+
+
+.ship-place-right {
+    padding: 19px 29px;
+    @include m('590px') {
+       padding: 13px 20px;
+    }
+    @include m('425px') {
+       padding: 9px 13px;
+    }
+    @include m('390px') {
+       padding: 9px;
+    }
+}
+
+
+.route-date {
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    @include m('590px') {
+       font-size: fs('s');
+    }
+    @include m('425px') {
+       font-size: fs('s');
+    }
+    span {
+      text-transform: uppercase;
+    }
+}
+
+
+.day-number-route {
+    text-transform: uppercase;
+}
+
+
+.tabs-vertical .tab-item.route-tab > .tab-content {
+   @include m('md') {
+      flex-direction: column;
+   }
+}
+
+
+.tabs-vertical .tab-item.route-tab:not(:last-child) {
+   @include m('590px') {
+      margin-bottom: 15px;
+   }
+}
+
+.place-descr {
+   @include m('590px') {
+      font-size: fs('s');
+   }
+   @include m('425px') {
+      font-size: fs('s');
+   }
+}

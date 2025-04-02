@@ -1,0 +1,10 @@
+columns:
+    id:
+        label: id
+        type: number
+    active:
+        label: 'zen.om::lang.settings.active'
+        type: text
+    name:
+        label: 'zen.om::lang.settings.name'
+        type: text

@@ -1,0 +1,49 @@
+<div v-if="modals.scheme" id="bex-scheme" class="v-modal" @clik.self="modals.scheme = false">
+    <div>
+        <div class="cabin-modal-wrap__close-panel">
+            <div @click="modals.scheme = false" class="cabin-modal-wrap__close">×</div>
+        </div>
+        <div class="bex-ship-scheme">
+            {% if checkin.motorship.exist_scheme %}
+            {% endif %}
+            <div v-for="point in rooms"
+                 v-if="point.n != 'Под запрос'"
+                 @click="openCabin(point)"
+                 class="bex-point"
+                 :class="getPointClass(point)"
+                 :style="'width:'+point.w+'px;height:'+point.h+'px;margin-left:'+point.x+'px;margin-top:'+point.y+'px;'">
+                <div class="bex-point-name" :style="'height:'+point.h+'px'">
+                    ${ point.n }
+                </div>
+            </div>
+            {% if checkin.motorship.exist_scheme %}
+            <img src="{{ checkin.motorship.exist_scheme|media }}">
+            {% else %}
+            <img src="{{ checkin.motorship.scheme|first.path }}">
+            {% endif %}
+        </div>
+    </div>
+
+    <div class="cabin-modal-wrap" v-if="modal_cabin" @click.self="modal_cabin = null">
+        <div class="cabin-modal-wrap__body">
+            <div class="cabin-modal-wrap__close-panel">
+                <div @click="modal_cabin = null" class="cabin-modal-wrap__close">×</div>
+            </div>
+            <div class="cabin-modal-wrap__content">
+                <div class="cabin-modal-wrap__body_html" v-html="modal_cabin"></div>
+            </div>
+            <div class="cabin-modal-button">
+                <div class="booking-btn btn" :class="{success:!selected_cabin.check}" @click="selected_cabin.check = !selected_cabin.check || markCabin()">
+                    <template v-if="selected_cabin.check">
+                        Снять с бронирования
+                    </template>
+                    <template v-else>
+                        Бронировать
+                    </template>
+                </div>
+                <div v-if="selected_cabin.check" @click="goToBooking" class="booking-btn btn red">Перейти к бронированию</div>
+            </div>
+        </div>
+    </div>
+
+</div>

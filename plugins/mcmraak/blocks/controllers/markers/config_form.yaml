@@ -1,0 +1,16 @@
+name: Маркеры
+modelClass: Mcmraak\Blocks\Models\Marker
+form: $/mcmraak/blocks/models/marker/fields.yaml
+defaultRedirect: mcmraak/blocks/markers
+create:
+    title: 'Создать маркер'
+    redirect: 'mcmraak/blocks/markers/update/:id'
+    redirectClose: mcmraak/blocks/markers
+    flashSave: 'Маркер сохранён'
+update:
+    title: 'Изменить маркер'
+    redirect: mcmraak/blocks/markers
+    redirectClose: mcmraak/blocks/markers
+    flashSave: 'Маркер изменён'
+    flashDelete: 'Маркер удалён'
+preview: {  }

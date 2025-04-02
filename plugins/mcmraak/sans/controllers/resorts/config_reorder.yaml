@@ -1,0 +1,4 @@
+title: Resorts
+modelClass: Mcmraak\Sans\Models\Resort
+toolbar:
+    buttons: reorder_toolbar

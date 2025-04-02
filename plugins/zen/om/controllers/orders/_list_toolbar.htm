@@ -1,0 +1,28 @@
+<h3><?= e(trans('zen.om::lang.orders.title')) ?></h3>
+<div data-control="toolbar">
+        <!--<a href="<?php#= Backend::url('zen/om/orders/create') ?>" class="btn btn-primary oc-icon-plus"><?php#= e(trans('backend::lang.form.create')) ?></a>-->
+    <button
+        class="btn btn-default oc-icon-trash-o"
+        disabled="disabled"
+        onclick="$(this).data('request-data', {
+            checked: $('.control-list').listWidget('getChecked')
+        })"
+        data-request="onDelete"
+        data-request-confirm="<?= e(trans('backend::lang.list.delete_selected_confirm')) ?>"
+        data-trigger-action="enable"
+        data-trigger=".control-list input[type=checkbox]"
+        data-trigger-condition="checked"
+        data-request-success="$(this).prop('disabled', true)"
+        data-stripe-load-indicator>
+        <?= e(trans('backend::lang.list.delete_selected')) ?>
+    </button>
+    <a href="<?= Backend::url('zen/om/statuses') ?>" class="btn btn-primary oc-icon-check-square-o">
+        <?= e(trans('zen.om::lang.statuses.title')) ?>
+    </a>
+    <a href="<?= Backend::url('zen/om/payments') ?>" class="btn btn-primary oc-icon-usd">
+        <?= e(trans('zen.om::lang.payments.title')) ?>
+    </a>
+    <a href="<?= Backend::url('zen/om/deliveries') ?>" class="btn btn-primary oc-icon-archive">
+        <?= e(trans('zen.om::lang.deliveries.title')) ?>
+    </a>
+</div>

@@ -1,0 +1,9 @@
+fields:
+    processed:
+        label: Обработано
+        span: full
+        type: switch
+    id:
+        span: full
+        path: $/mcmraak/rivercrs/controllers/booking/info.php
+        type: partial

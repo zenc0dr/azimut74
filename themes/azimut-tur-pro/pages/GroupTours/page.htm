@@ -1,0 +1,46 @@
+title = "Посадочная страница"
+url = "/group-tours/:?*"
+layout = "master"
+description = "Базовая страница групповых туров"
+is_hidden = 0
+robot_index = "index"
+robot_follow = "follow"
+contentType = "html"
+force_show = 0
+==
+<?php
+function onStart()
+{
+
+    $init_success = Zen\GroupTours\Classes\Frontend::init($this);
+
+    if (!$init_success) {
+        $this->setStatusCode(404);
+        return $this->controller->run('404');
+    }
+
+    $page_type = $this['GroupTours']['type'];
+    if ($page_type == 'page') {
+        $this['page_css'] = mix('css/group-tours-page.css', 'themes/azimut-tur-pro/assets');
+        $this['page_js'] = mix('js/group-tours-page.js', 'themes/azimut-tur-pro/assets');
+    }
+    if ($page_type == 'tour') {
+        $this['page_css'] = mix('css/group-tours-tour.css', 'themes/azimut-tur-pro/assets');
+        $this['page_js'] = mix('js/group-tours-tour.js', 'themes/azimut-tur-pro/assets');
+    }
+}
+?>
+==
+{% put page_style %}
+<link rel="stylesheet" href="{{ page_css }}">
+{% endput %}
+{% put page_script %}
+<script src="{{ page_js }}"></script>
+{% endput %}
+
+{% if GroupTours.type == 'page' %}
+    {% partial 'group-tours/page' %}
+{% endif %}
+{% if GroupTours.type == 'tour' %}
+    {% partial 'group-tours/tour' %}
+{% endif %}

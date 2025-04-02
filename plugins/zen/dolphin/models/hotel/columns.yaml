@@ -1,0 +1,44 @@
+columns:
+    id:
+        label: id
+        type: number
+        searchable: true
+        sortable: true
+    name:
+        label: Название
+        type: text
+        searchable: true
+        sortable: true
+    type_id:
+        label: Тип
+        type: text
+        searchable: true
+        sortable: true
+        relation: type
+        valueFrom: name
+    geo_name:
+        label: geo-объект
+        type: text
+    gps:
+        label: 'GPS координаты'
+        type: text
+        searchable: true
+        sortable: true
+    created_by:
+        label: Источник
+        type: text
+        sortable: true
+    eid:
+        label: id-источника
+        type: text
+        searchable: true
+        sortable: true
+    sort_order:
+        label: Порядок
+        type: number
+    operator_id:
+        label: Туроператор
+        type: text
+        relation: operator
+        valueFrom: name
+        sortable: false

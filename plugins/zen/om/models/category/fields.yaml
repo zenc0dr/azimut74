@@ -1,0 +1,190 @@
+tabs:
+    fields:
+        active:
+            label: 'Активность тизера'
+            span: full
+            default: 1
+            type: switch
+            tab: 'zen.om::lang.tabs.basic_data'
+        lb_active:
+            label: 'Отображение в левом меню'
+            span: full
+            type: switch
+            tab: 'zen.om::lang.tabs.basic_data'
+        images:
+            label: 'Изображение карточки'
+            oc.commentPosition: ''
+            mode: image
+            useCaption: true
+            thumbOptions:
+                mode: crop
+                extension: auto
+            span: auto
+            type: fileupload
+            tab: 'zen.om::lang.tabs.basic_data'
+        name:
+            label: 'zen.om::lang.list.name'
+            oc.commentPosition: ''
+            span: full
+            type: text
+            tab: 'zen.om::lang.tabs.basic_data'
+        category_title:
+            label: 'Заголовок H1'
+            oc.commentPosition: ''
+            span: full
+            type: text
+            tab: 'zen.om::lang.tabs.basic_data'
+        slug:
+            label: 'zen.om::lang.categories.link'
+            oc.commentPosition: ''
+            span: full
+            preset:
+                field: name
+                type: slug
+            type: text
+            tab: 'zen.om::lang.tabs.basic_data'
+        url_cache:
+            label: 'Полная ссылка'
+            oc.commentPosition: ''
+            span: full
+            type: text
+            tab: 'zen.om::lang.tabs.basic_data'
+        frame_link:
+            label: 'Дополнительная ссылка (для фреймов)'
+            oc.commentPosition: ''
+            span: full
+            type: text
+            tab: 'zen.om::lang.tabs.basic_data'
+        parent_id:
+            label: 'zen.om::lang.categories.parent'
+            oc.commentPosition: ''
+            span: full
+            type: dropdown
+            tab: 'zen.om::lang.tabs.basic_data'
+        store_id:
+            label: 'zen.om::lang.store.store'
+            oc.commentPosition: ''
+            span: full
+            type: dropdown
+            tab: 'zen.om::lang.tabs.basic_data'
+        sort_order:
+            label: 'Порядок сортировки'
+            oc.commentPosition: ''
+            span: full
+            default: '100'
+            type: number
+            tab: 'zen.om::lang.tabs.basic_data'
+        cat_links:
+            label: 'Сторонние ссылки'
+            oc.commentPosition: ''
+            prompt: 'Добавить ссылку в категорию'
+            span: full
+            type: repeater
+            tab: 'zen.om::lang.tabs.basic_data'
+            form:
+                fields:
+                    cat_name:
+                        label: Название
+                        oc.commentPosition: ''
+                        span: full
+                        type: text
+                    cat_url:
+                        label: 'Относительная ссылка'
+                        oc.commentPosition: ''
+                        span: full
+                        type: text
+                    linkmargin:
+                        label: 'Отступ СНИЗУ ссылки'
+                        span: full
+                        type: switch
+                    linkleftmargin_1:
+                        label: 'Отступ у ссылки СЛЕВА 1 уровень'
+                        span: full
+                        type: switch
+                    linkleftmargin_2:
+                        label: 'Отступ у ссылки СЛЕВА 2 уровень'
+                        span: full
+                        type: switch
+        catmargin:
+            label: 'Вертикальный отступ в левом меню, после категории'
+            span: full
+            type: switch
+            tab: 'zen.om::lang.tabs.basic_data'
+        leftmargin_1:
+            label: 'Отступ СЛЕВА 1 уровня'
+            span: full
+            type: switch
+            tab: 'zen.om::lang.tabs.basic_data'
+        leftmargin_2:
+            label: 'Отступ СЛЕВА 2 уровня'
+            span: full
+            type: switch
+            tab: 'zen.om::lang.tabs.basic_data'
+        headingup:
+            label: 'Заголовок над категорией'
+            oc.commentPosition: ''
+            span: full
+            type: text
+            tab: 'zen.om::lang.tabs.basic_data'
+        itemlink:
+            span: full
+            path: $/zen/om/controllers/items/_itemlink.htm
+            type: partial
+            tab: 'zen.om::lang.tabs.basic_data'
+        seo_title:
+            label: title
+            oc.commentPosition: ''
+            span: full
+            type: text
+            tab: SEO
+        seo_description:
+            label: description
+            size: small
+            oc.commentPosition: ''
+            span: full
+            type: textarea
+            tab: SEO
+        seo_keywords:
+            label: keywords
+            span: full
+            size: small
+            oc.commentPosition: ''
+            type: textarea
+            tab: SEO
+        category_table:
+            label: 'Текст над тизерами'
+            size: giant
+            oc.commentPosition: ''
+            span: full
+            type: richeditor
+            tab: 'Текстовые данные'
+        client_text:
+            label: 'Текст под тизерами'
+            size: giant
+            oc.commentPosition: ''
+            span: full
+            type: richeditor
+            tab: 'Текстовые данные'
+        seo_text:
+            label: SEO-текст
+            size: giant
+            oc.commentPosition: ''
+            span: full
+            type: richeditor
+            tab: 'Текстовые данные'
+        catframeup:
+            label: 'Frames над тизерами'
+            size: giant
+            language: php
+            span: full
+            type: codeeditor
+            comment: 'Frames над тизерами'
+            tab: 'Текстовые данные'
+        catframe:
+            label: 'Frames под тизерами'
+            size: giant
+            language: php
+            span: full
+            type: codeeditor
+            comment: 'Frames под тизерами'
+            tab: 'Текстовые данные'

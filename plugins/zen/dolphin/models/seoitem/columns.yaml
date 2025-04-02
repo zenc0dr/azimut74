@@ -1,0 +1,17 @@
+columns:
+    id:
+        label: id
+        type: number
+        sortable: true
+    name:
+        label: 'Название пункта'
+        type: text
+        sortable: false
+    scope:
+        label: 'Область отображения'
+        type: text
+        sortable: false
+    sort_order:
+        label: Порядок
+        type: number
+        sortable: true

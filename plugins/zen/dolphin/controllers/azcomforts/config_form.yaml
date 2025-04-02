@@ -1,0 +1,10 @@
+name: Comforts
+form: $/zen/dolphin/models/azcomfort/fields.yaml
+modelClass: Zen\Dolphin\Models\Azcomfort
+defaultRedirect: zen/dolphin/azcomforts
+create:
+    redirect: 'zen/dolphin/azcomforts/update/:id'
+    redirectClose: zen/dolphin/azcomforts
+update:
+    redirect: zen/dolphin/azcomforts
+    redirectClose: zen/dolphin/azcomforts

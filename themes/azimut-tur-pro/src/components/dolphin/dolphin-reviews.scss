@@ -1,0 +1,107 @@
+.dolphin-reviews {
+    margin-bottom: 40px;
+    padding: 0 10px;
+
+    .item {
+        display: flex;
+        flex-direction: row;
+        justify-content: space-between;
+        margin-bottom: 35px;
+
+        @include m('500px') {
+            display: flex;
+            flex-direction: column;
+        }
+        .side {
+            flex: 1 0 0;
+            &:first-child {
+                @include m('991px') {
+                    display: none;
+                }
+            }
+            &:last-child  .text {
+                @include m('991px') {
+                    max-height: 110px;
+                }
+                @include m('500px') {
+                    max-height: 100%;
+                }
+            }
+            .image {
+                height: 270px;
+                background-size: cover;
+                border-radius: 5px;
+            }
+            .header {
+                font-weight: bold;
+                font-size: 15px;
+                display: flex;
+                flex-direction: row;
+                align-items: flex-end;
+                margin-bottom: 5px;
+                @include m('500px') {
+                    flex-direction: column;
+                    align-items: flex-start;
+                }
+                > div {
+                    margin-right: 7px;
+                }
+                .stars {
+                    font-size: 20px;
+                    i {
+                        color: #ff7c09;
+                        margin-right: 3px;
+                    }
+                }
+                .info {
+                    display: flex;
+                    > div {
+                        margin-right: 7px;
+                    }
+                }
+                .date {}
+                .time {
+                    color: #4580d4;
+                }
+                .link {
+                    i {
+                        font-size: 20px;
+                    }
+                }
+            }
+            .text {
+                font-size: 15px;
+                line-height: 22px;
+                max-height: 237px;
+                overflow-y: auto;
+                @include m('500px') {
+                    max-height: auto;
+                }
+            }
+        }
+        .side-center {
+            width: 200px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            .name {
+                text-align: center;
+            }
+            @include m('500px') {
+                width: 100%;
+                margin-bottom: 30px;
+            }
+            .avatar {
+                width: 150px;
+                height: 150px;
+                background-size: cover;
+                border-radius: 50%;
+                margin-bottom: 15px;
+                @include m('500px') {
+                    width: 100px;
+                    height: 100px;
+                }
+            }
+        }
+    }
+}

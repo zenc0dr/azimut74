@@ -1,0 +1,10 @@
+name: Ktypes
+form: $/mcmraak/rivercrs/models/ktype/fields.yaml
+modelClass: Mcmraak\Rivercrs\Models\Ktype
+defaultRedirect: mcmraak/rivercrs/ktypes
+create:
+    redirect: 'mcmraak/rivercrs/ktypes/update/:id'
+    redirectClose: mcmraak/rivercrs/ktypes
+update:
+    redirect: mcmraak/rivercrs/ktypes
+    redirectClose: mcmraak/rivercrs/ktypes

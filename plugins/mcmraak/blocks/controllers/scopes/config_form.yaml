@@ -1,0 +1,10 @@
+name: Scopes
+form: $/mcmraak/blocks/models/scope/fields.yaml
+modelClass: Mcmraak\Blocks\Models\Scope
+defaultRedirect: mcmraak/blocks/scopes
+create:
+    redirect: 'mcmraak/blocks/scopes/update/:id'
+    redirectClose: mcmraak/blocks/scopes
+update:
+    redirect: mcmraak/blocks/scopes
+    redirectClose: mcmraak/blocks/scopes

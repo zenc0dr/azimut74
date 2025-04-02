@@ -1,0 +1,118 @@
+<footer class="bc-gray-100 {{class}}">
+    <div class="footer__top bg-blue-100">
+        <div class="footer__top-wrapper container d-flex flex-column flex-xl-row ">
+            <div class="footer__left col-12 col-lg-6 col-xxl-5 p-2 p-sm-3 p-xl-4 mb-4 mb-lg-0 mt-4 mt-sm-2 mt-lg-0">
+                <h2 class="fs-h2 fs-sm-h1 c-primary-100 fw-bolder text-uppercase mb-3">Контакты</h2>
+
+
+                <div class="footer__phones-2">
+                    {% if is_rivercrs == false %}
+                    <div class="footer__phones-2__big">
+                        <a href="tel:88452990819">
+                            8 (8452) 99 08 19
+                        </a>
+                    </div>
+                    {% endif %}
+                    <div class="footer__phones-2__mid">
+                        <span>Круизный отдел</span>
+                        <a href="tel:88452990819">
+                            8 (8452) 99 08 19
+                        </a>
+                    </div>
+                    <div class="footer__phones-2__big" style="margin-top: 5px">
+                        <a href="tel:88001004959">
+                            8 (800) 100 49 59
+                        </a>
+                        <div style="color:#fff">Звонок бесплатный</div>
+                    </div>
+                </div>
+
+                <div class="footer__email d-flex mb-3">
+                    <a href="mailto:azimut-kruiz@yandex.ru"
+                        class="text-decoration-none fw-bolder c-blue-400">azimut-kruiz@yandex.ru
+                    </a>
+                </div>
+                <style>
+                    .email-pill {
+                        display: flex;
+                        flex-direction: column;
+                    }
+                    .email-pill__title {
+                        color: #fff;
+                        font-weight: bold;
+                        margin-bottom: 4px;
+                    }
+                </style>
+                <div class="footer__email email-pill d-flex mb-3">
+                    <div class="email-pill__title">Отдел школьных и групповых туров</div>
+                    <a href="mailto:azimut.operator@yandex.ru"
+                       class="text-decoration-none fw-bolder c-blue-400">azimut.operator@yandex.ru
+                    </a>
+                </div>
+                <div class="footer__work-time d-flex flex-column c-primary-100 fs-s mb-3">
+                    {#
+                    <div>Понедельник–пятница — <b>с 10:00 до 19:00</b></div>
+                    <div>Суббота — <b>с 11:00 до 15:00</b></div>
+                    <div>Воскресенье — <b>выходной</b></div>
+                    #}
+                    <span style="font-size:17px;font-weight:bold">
+                        Ежедневно с 10:00 до 19:00
+                    </span>
+                </div>
+                <div class="footer__address fw-bolder c-primary-100 fs-def fs-sm-h3 mb-2">
+                    Фактический адрес: 410012, г.Саратов, ул.Яблочкова 13
+                </div>
+                <a class="footer__reestor d-flex bg-blue-400 text-decoration-none align-items-center justify-content-between p-2 p-sm-3 rounded mb-3"
+                    href="https://tourism.gov.ru/operators/show.php?id=107271" target="_blank">
+                    <div class="footer__reestor-img me-2 me-sm-0">
+                        <img width="64px" src="{{ 'assets/images/components/footer/gerb.png'|theme }}" alt="gerb">
+                    </div>
+                    <div class="footer__reestor-text c-primary-100">
+                        <div class="fw-bolder pb-1 fs-s fs-sm-def">Мы в реестре туроператоров</div>
+                        <div class="fs-s fs-sm-def">ООО "Азимут" РТО 021653</div>
+                    </div>
+                </a>
+                <div class="footer__recall d-flex flex-column flex-sm-row align-items-center">
+                    <button onclick="CallBack.open()" class="btn footer__recall-btn fw-bolder text-uppercase mb-3 mb-sm-0">Заказать звонок</button>
+                    <div class="footer__recall-text d-flex flex-column c-primary-100 ps-4 fs-s">
+                        <span>Вам некогда?</span>
+                        <span>Мы перезвоним!</span>
+                    </div>
+                </div>
+                <div class="footer__policy d-flex flex-column flex-sm-row align-items-center">
+
+                    <div class="footer__policy-text d-flex flex-column c-primary-100 pt-3 fs-s">
+                        <a href="/politika-konfidencialnosti" class="c-primary-100" target="_blank">Политика обработки персональных данных </a>
+                    </div>
+                </div>
+            </div>
+            <div class="footer__right col">
+                <div id="map" class="h-100 mb-5 mb-xl-0">
+                    <script type="text/javascript" charset="utf-8" async
+                        src="https://api-maps.yandex.ru/services/constructor/1.0/js/?um=constructor%3A915b93a63609a712000aedf9e80a0ff3a649eb91445f1526c5ffeb53435c7fc6&amp;width=100%&amp;height=100%&amp;lang=ru_RU&amp;scroll=true"></script>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+    <div class="footer__bottom container d-flex flex-column flex-xl-row fs-s py-4 py-sm-2 py-xl-0">
+        <div
+            class="footer__bottom-left order-1  fs-s fs-sm-def text-center text-xl-start order-xl-0 col-12 col-xl-6 col-xxl-5 p-2 p-sm-3 p-xl-4">
+            © 2012-{{ "now"|date("Y") }} Турагентство "Азимут-тур"
+        </div>
+        <div class="footer__bottom-right col p-2 p-sm-3 p-xl-4 fs-ss fs-sm-s fs-xl-def mb-3 mb-lg-0 c-gray-200">
+            <p>
+                Использование материалов сайта www.азимут-тур.рф любым способом без письменного разрешения руководства
+                компании ООО
+                «Азимут» ЗАПРЕЩЕНО и влечет ответственность, предусмотренную законодательством РФ о защите авторских
+                прав.
+            </p>
+            <p class="mb-0">
+                Внимание! Все материалы и цены, размещенные на сайте, носят справочный характер и не являются публичной
+                офертой,
+                определяемой положениями Статьи 437 (2) Гражданского кодекса Российской Федерации
+            </p>
+        </div>
+    </div>
+</footer>

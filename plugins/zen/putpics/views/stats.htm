@@ -1,0 +1,11 @@
+{% for stat in stats %}
+<div class="stats__raw">
+    <div><b>Пользователь: </b>{{ stat.user }} </div>
+    <div style="margin-left: 10px" ><b>Заполнено: </b>{{ stat.count }}</div>
+</div>
+{% endfor %}
+<style>
+    .stats__raw {
+        display: flex;
+    }
+</style>

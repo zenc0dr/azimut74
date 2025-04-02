@@ -1,0 +1,4 @@
+title: Cruises
+modelClass: Mcmraak\Rivercrs\Models\Cruises
+toolbar:
+    buttons: reorder_toolbar

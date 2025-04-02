@@ -1,0 +1,27 @@
+<div v-if="modals.scheme" id="bex-scheme" class="v-modal">
+    <div>
+        <div class="bex-modal-pan">
+            <div @click="modals.scheme = false" class="v-close">×</div>
+        </div>
+        <div class="bex-ship-scheme">
+            {% if checkin.motorship.exist_scheme %}
+            {% include 'mcmraak.rivercrs::bex-scheme-info' %}
+            {% endif %}
+            <div v-for="point in rooms"
+                 v-if="point.n != 'Под запрос'"
+                 @click="openCabin(point)"
+                 class="bex-point"
+                 :class="getPointClass(point)"
+                 :style="'width:'+point.w+'px;height:'+point.h+'px;margin-left:'+point.x+'px;margin-top:'+point.y+'px;'">
+                <div class="bex-point-name" :style="'height:'+point.h+'px'">
+                    ${ point.n }
+                </div>
+            </div>
+            {% if checkin.motorship.exist_scheme %}
+            <img src="{{ checkin.motorship.exist_scheme|media }}">
+            {% else %}
+            <img src="{{ checkin.motorship.scheme|first.path }}">
+            {% endif %}
+        </div>
+    </div>
+</div>

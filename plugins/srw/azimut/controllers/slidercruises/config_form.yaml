@@ -1,0 +1,10 @@
+name: SliderCruises
+form: $/srw/azimut/models/slidercruises/fields.yaml
+modelClass: Srw\Azimut\Models\SliderCruises
+defaultRedirect: srw/azimut/slidercruises
+create:
+    redirect: 'srw/azimut/slidercruises/update/:id'
+    redirectClose: srw/azimut/slidercruises
+update:
+    redirect: srw/azimut/slidercruises
+    redirectClose: srw/azimut/slidercruises

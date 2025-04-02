@@ -1,0 +1,18 @@
+columns:
+    id:
+        label: id
+        type: number
+        sortable: true
+    name:
+        label: 'Название сайта'
+        type: text
+        searchable: true
+        sortable: true
+    url:
+        label: 'URL сайта'
+        type: text
+        searchable: true
+        sortable: true
+    active:
+        label: Активно
+        type: partial

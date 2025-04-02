@@ -1,0 +1,7 @@
+fields:
+    php_path:
+        label: 'Адрес интерпритатора php'
+        span: full
+        default: 'php'
+        type: text
+        comment: 'ex: php || /usr/bin/php || /usr/bin/php7.3 ...'

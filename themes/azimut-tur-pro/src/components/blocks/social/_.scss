@@ -1,0 +1,37 @@
+
+
+.social__link:hover {
+    box-shadow: 2px 2px 2px 1px rgba(color('primary-200'),.3)
+}
+
+.social__link:not(:last-child) {
+    margin-right: 0.5rem;
+}
+
+.social__img {
+    height: 40px;
+    width: 40px;
+    background-size: 35px 35px;
+    background-repeat: no-repeat;
+    background-position: center;
+}
+
+.social__img-vk {
+    background-image: url('/themes/azimut-tur-pro/assets/images/components/social/vk.svg');
+}
+
+.social__img-fb {
+    background-image: url('/themes/azimut-tur-pro/assets/images/components/social/fb.svg');
+}
+
+.social__img-mm {
+    background-image: url('/themes/azimut-tur-pro/assets/images/components/social/mm.svg');
+}
+
+.social__img-ok {
+    background-image: url('/themes/azimut-tur-pro/assets/images/components/social/ok.svg');
+}
+
+.social__img-twitter {
+    background-image: url('/themes/azimut-tur-pro/assets/images/components/social/twitter.svg');
+}

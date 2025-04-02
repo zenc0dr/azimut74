@@ -1,0 +1,66 @@
+fields:
+    is_delete:
+        label: 'Удалена пользователем'
+        span: full
+        readOnly: 1
+        type: switch
+    visiter_id:
+        label: Посетитель
+        span: auto
+        readOnly: 1
+        type: text
+        tab: Данные
+    created_at:
+        label: 'Дата создания'
+        mode: datetime
+        span: auto
+        context:
+            - update
+            - preview
+        type: datepicker
+tabs:
+    fields:
+        type_id:
+            label: Тип
+            span: auto
+            default: 1
+            readOnly: 1
+            type: balloon-selector
+            tab: Данные
+        url:
+            label: Ссылка
+            span: auto
+            readOnly: 1
+            type: text
+            tab: Данные
+        section1:
+            label: ''
+            span: full
+            type: section
+            tab: Данные
+        title:
+            label: Заголовок
+            span: auto
+            readOnly: 1
+            type: text
+            tab: Данные
+        inner_id:
+            label: 'Внутренний id'
+            span: auto
+            type: text
+            readOnly: 1
+            tab: Данные
+        days:
+            label: Дни
+            span: auto
+            readOnly: 1
+            type: text
+            comment: 'Либо даты либо кол-во дней'
+            tab: Данные
+        transform_data:
+            label: 'Преобразованные данные'
+            size: small
+            language: php
+            span: full
+            type: codeeditor
+            tab: Данные

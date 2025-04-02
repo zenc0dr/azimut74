@@ -1,0 +1,58 @@
+<!doctype html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport"
+          content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Таблица отелей</title>
+    <style>
+        .row {
+            display: flex;
+            flex-direction: row;
+            width: 1000px;
+            justify-content: space-between;
+            border-bottom: 1px solid #c9c9c9;
+        }
+        .cell {
+            padding: 3px 6px;
+        }
+        .cell:not(:last-child) {
+            border-right: 1px solid #c9c9c9;
+        }
+        .cell.id {
+            width: 100px;
+        }
+        .cell.eid {
+            width: 100px;
+        }
+        .cell.name {
+            flex: 1 0 0;
+        }
+        .cell.geo {
+            width: 300px;
+        }
+        .row.titles .cell {
+            background: #c0c0c0;
+            text-align: center;
+        }
+    </style>
+</head>
+<body>
+<div class="row titles">
+    <div class="cell id">id</div>
+    <div class="cell eid">eid</div>
+    <div class="cell name">Название</div>
+    <div class="cell geo">гео-объект</div>
+</div>
+{% for hotel in hotels %}
+    <div class="row">
+        <div class="cell id">{{ hotel.id }}</div>
+        <div class="cell eid">{{ hotel.eid }}</div>
+        <div class="cell name">{{ hotel.name }}</div>
+        <div class="cell geo">{{ hotel.geo_object.name }}</div>
+    </div>
+{% endfor %}
+</body>
+</html>
+

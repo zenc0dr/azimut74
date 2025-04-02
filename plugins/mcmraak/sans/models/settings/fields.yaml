@@ -1,0 +1,61 @@
+tabs:
+  fields:
+      hotel_cache:
+          label: 'Время жизни кеша отеля (в минутах)'
+          span: auto
+          default: 10080
+          type: number
+          tab: Кэш
+      search_cache:
+          label: 'Время жизни кеша поиска (в минутах)'
+          span: auto
+          default: 10080
+          type: number
+          tab: Кэш
+      results:
+          label: 'Количество результатов поиска (AleanAPI)'
+          span: auto
+          default: 50
+          type: number
+          tab: 'Поиск'
+      separator_sms:
+          label: 'Уведомления по sms'
+          type: section
+          span: full
+          tab: 'Уведомления'
+      sms:
+          label: 'Отправлять SMS при бронировании'
+          span: auto
+          default: 1
+          type: switch
+          tab: 'Уведомления'
+      sms_prifile:
+          label: 'Код профиля Zen.Sms'
+          span: auto
+          type: text
+          tab: 'Уведомления'
+      sms_text:
+          label: 'Текст сообщения sms (где $id = Номер бронирования)'
+          span: auto
+          type: text
+          default: 'Бронирование #$id оформлено. Менеджер свяжется с Вами.'
+          tab: 'Уведомления'
+      separator_emails:
+          label: 'Уведомления по email'
+          type: section
+          span: full
+          tab: 'Уведомления'
+      booking_emails:
+          label: 'Адреса email для уведомлений о бронировании'
+          oc.commentPosition: ''
+          prompt: 'Добавить e-mail'
+          span: auto
+          type: repeater
+          form:
+              fields:
+                  email:
+                      label: email
+                      span: full
+                      oc.commentPosition: ''
+                      type: text
+          tab: 'Уведомления'

@@ -1,0 +1,48 @@
+#Wraps {
+
+}
+.wrap-type-box {
+    display: block;
+    float: left;
+    margin-right: 10px;
+    padding: 21px;
+    background: #d0d9dd;
+}
+.wrap-type-box .label {
+    background: #34495d;
+    text-align:  center;
+    color: #fff;
+    padding: 5px 13px;
+    margin-top: -21px;
+    margin-left: -21px;
+    margin-right: -21px;
+    margin-bottom: 20px;
+}
+.wrap-type-box .options {}
+.wrap-type-box .option {
+    padding: 10px 25px;
+    background: #fff;
+    margin-bottom: 10px;
+    cursor: pointer;
+}
+.wrap-type-box .option:hover {
+    background: #deffe2;
+}
+.wrap-type-box .selected {
+    background: #27aa2a;
+    color: #fff;
+}
+.wrap-type-box .selected:hover {
+    background: #27aa2a;
+    color: #fff;
+}
+.wrap-type-box .add {}
+.wrap-type-box input {
+    width: 100%;
+    margin-top: 20px;
+    padding: 5px 7px;
+}
+.wrap-type-box .addbtn {
+    margin-top: 10px;
+    float: right;
+}

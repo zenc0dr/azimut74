@@ -1,0 +1,13 @@
+columns:
+    id:
+        label: id
+        type: number
+        sortable: true
+    name:
+        label: 'Название типа'
+        type: text
+        sortable: true
+    sort_order:
+        label: Порядок
+        type: number
+        sortable: true

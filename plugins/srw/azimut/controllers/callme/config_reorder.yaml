@@ -1,0 +1,4 @@
+title: Callme
+modelClass: Srw\Azimut\Models\Callme
+toolbar:
+    buttons: reorder_toolbar

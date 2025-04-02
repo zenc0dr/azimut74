@@ -1,0 +1,10 @@
+name: PageBlocks
+form: $/zen/dolphin/models/pageblock/fields.yaml
+modelClass: Zen\Dolphin\Models\PageBlock
+defaultRedirect: zen/dolphin/pageblocks
+create:
+    redirect: 'zen/dolphin/pageblocks/update/:id'
+    redirectClose: zen/dolphin/pageblocks
+update:
+    redirect: zen/dolphin/pageblocks
+    redirectClose: zen/dolphin/pageblocks

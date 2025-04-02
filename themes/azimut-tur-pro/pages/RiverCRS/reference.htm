@@ -1,0 +1,44 @@
+title = "Информационная страница"
+url = "/russia-river-cruises/references/:id"
+layout = "master"
+is_hidden = 0
+robot_index = "index"
+robot_follow = "follow"
+contentType = "html"
+force_show = 0
+==
+<?php
+function onInit()
+{
+    $this['page_css'] = mix('css/references.css', 'themes/azimut-tur-pro/assets');
+    $this['page_js'] = mix('js/references.js', 'themes/azimut-tur-pro/assets');
+}
+
+function onStart()
+{
+    $init_success = Mcmraak\Rivercrs\Classes\RivercrsCore::init($this);
+    if (!$init_success) {
+        $this->setStatusCode(404);
+        return $this->controller->run('404');
+    }
+}
+?>
+==
+{% put page_style %}
+<link rel="stylesheet" href="{{ page_css }}">
+{% endput %}
+{% put page_script %}
+<script src="{{ page_js }}"></script>
+{% endput %}
+
+<div class="container d-flex flex-column mt-5">
+        <div class="d-flex flex-column flex-lg-row">
+            <section class="result-menu__categories col-12 col-lg-3 ">
+                {% set left_menu = RiverCRS.leftMenu %}
+                {% partial 'search/left-menu' %}
+            </section>
+            <div class="reference-page bg-primary-100 p-4">
+                {{ RiverCRS.html|raw }}
+            </div>
+        </div>
+</div>

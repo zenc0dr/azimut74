@@ -1,0 +1,15 @@
+{% if group.groups %}
+    <ul>
+        {% for group in group.groups %}
+            <li class="deep-{{ group.nest_depth }}" value="group_id:{{ group.id }}">{{ group.name }}</li>
+            {% if group.resorts %}
+                <ul>
+                    {% for resort in group.resorts %}
+                        <li class="resort" value="{{ resort.id }}">{{ resort.name }}</li>
+                    {% endfor %}
+                </ul>
+            {% endif %}
+            {% include 'mcmraak.sans::resorts_for' %}
+        {% endfor %}
+    </ul>
+{% endif %}

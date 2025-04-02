@@ -1,0 +1,18 @@
+plugin:
+    name: 'zen.history::lang.plugin.name'
+    description: 'Плагин для сохранения истории поиска и добавления карточек в избранное'
+    author: 'October Studio'
+    icon: oc-icon-search
+    homepage: ''
+navigation:
+    main-menu-item:
+        label: История|Избранное
+        url: zen/history/links
+        icon: icon-asterisk
+        permissions:
+            - zen.history.main
+        sideMenu:
+            side-menu-item:
+                label: Ссылки
+                url: zen/history/links
+                icon: icon-sitemap

@@ -1,0 +1,4 @@
+title: Checkins
+modelClass: Mcmraak\Rivercrs\Models\Checkins
+toolbar:
+    buttons: reorder_toolbar

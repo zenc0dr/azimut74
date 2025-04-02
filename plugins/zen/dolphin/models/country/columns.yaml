@@ -1,0 +1,27 @@
+columns:
+    id:
+        label: id
+        type: number
+        sortable: true
+    name:
+        label: Страна
+        type: text
+        searchable: true
+    sort_order:
+        label: Порядок
+        type: number
+        sortable: true
+    created_at:
+        label: Создано
+        type: datetime
+        searchable: false
+        sortable: true
+        format: 'd.m.Y H:i:s'
+    created_by:
+        label: Автор
+        type: text
+    eid:
+        label: id-источника
+        type: text
+        searchable: true
+        sortable: true

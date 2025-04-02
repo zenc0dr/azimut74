@@ -1,0 +1,45 @@
+fields:
+    name:
+        label: 'Название скидки'
+        span: full
+        type: text
+    desc:
+        label: 'Описание скидки'
+        size: small
+        span: full
+        type: richeditor
+    activators:
+        label: Активаторы
+        prompt: 'Добавить активатор'
+        span: full
+        type: repeater
+        form:
+            fields:
+                before_of:
+                    label: 'Кол-во дней до начала тура, когда скидка начинает действовать (дальняя дата)'
+                    span: auto
+                    type: number
+                before_to:
+                    label: 'Кол-во дней до тура, когда скидка прекращает действовать (ближняя дата)'
+                    span: auto
+                    type: number
+                title:
+                    label: 'Надпись на кнопке'
+                    span: auto
+                    type: text
+                decrement:
+                    label: 'Декремент (сколько отнять от цены)'
+                    span: auto
+                    default: '0'
+                    type: number
+                desc:
+                    label: 'Описание скидки'
+                    size: small
+                    language: html
+                    span: auto
+                    type: codeeditor
+                    comment: 'Переменная $D заменяется на количество оставшихся дней'
+                accent:
+                    label: Акцент
+                    span: auto
+                    type: switch

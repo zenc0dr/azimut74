@@ -1,0 +1,129 @@
+.ship {
+   & > div {
+      height: 100%;
+   }
+   // .ship__top
+   &__top {
+   }
+   // .ship__item
+   &__item {
+      min-height: 325px;
+      background-color: color('primary-100');
+         box-shadow: 0px 2px 5px #0000001a;
+      position: relative;
+   }
+   // .ship__item-left
+   &__item-left {
+      width: 45%;
+      position: relative;
+      flex-shrink: 0;
+      height: auto;
+      @include m('xxl') {
+         width: 40%;
+      }
+      @include m('xl') {
+         width: 45%;
+      }
+      @include m('lg') {
+         width: 100%;
+      }
+
+      .ship-type {
+          cursor: pointer;
+         @include m('md') {
+            position: absolute;
+            bottom: 15px;
+            right: 15px;
+         }
+      }
+   }
+   // .ship__item-left_img
+   &__item-left_img {
+      border-radius: 4px 0 0 4px;
+      width: 100%;
+      background-size: cover;
+      background-position: center;
+      background-repeat: no-repeat;
+      height: 100%;
+      @include m('lg') {
+         height: 300px;
+         border-radius: 4px 4px 0 0;
+      }
+      @include m('390px') {
+         height: 260px;
+      }
+      @include m('340px') {
+         height: 240px;
+      }
+   }
+   // .ship__item-left_youtube
+   &__item-left_youtube {
+      position: absolute;
+      bottom: 15px;
+      left: 15px;
+   }
+   // .ship__item-right
+   &__item-right {
+      width: 100%;
+   }
+
+   // .ship__item-params
+   &__item-params {
+      margin-top: 26px;
+      height: 100%;
+      overflow: hidden;
+      p {
+         margin-top: 0;
+         margin-bottom: 5px;
+      }
+   }
+   // .ship__item-right_center
+   &__item-right_center {
+      width: 100%;
+   }
+   // .ship__item-name
+   &__item-name {
+      a {
+         font-weight: bold;
+         color: color('primary-200');
+         text-decoration: none;
+         @include m('md') {
+            color: color('blue-400');
+            font-size: fs('h1');
+         }
+         @include m('450px') {
+            font-size: fs('h3');
+         }
+      }
+      img {
+         @include m('xl') {
+            width: 35px;
+         }
+         @include m('md') {
+            filter: invert(1) sepia(1) saturate(111) hue-rotate(193deg);
+         }
+      }
+
+      @include m('md') {
+         position: absolute;
+         top: 0;
+         width: 100%;
+         left: 0;
+         padding: 14px;
+         display: flex;
+         align-items: center;
+         justify-content: center;
+         background-color: rgba(color('primary-100'),.6)
+      }
+   }
+   // .ship__item-right_end
+   &__item-right_end {
+      border-left: 0;
+      border-top: 2px dashed color('gray-200');
+      width: 100%;
+   }
+   // .ship__item-right_end-top
+   &__item-right_end-top {
+   }
+
+}

@@ -1,0 +1,16 @@
+name: Питание
+modelClass: Zen\Dolphin\Models\Pansion
+form: $/zen/dolphin/models/pansion/fields.yaml
+defaultRedirect: zen/dolphin/pansions
+create:
+    title: 'Добавить питание'
+    redirect: 'zen/dolphin/pansions/update/:id'
+    redirectClose: zen/dolphin/pansions
+    flashSave: 'Питание сохранено'
+update:
+    title: 'Изменить питание'
+    redirect: zen/dolphin/pansions
+    redirectClose: zen/dolphin/pansions
+    flashSave: 'Питание изменено'
+    flashDelete: 'Питание удалено'
+preview: {  }

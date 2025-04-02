@@ -1,0 +1,818 @@
+title = 404
+url = "/404"
+layout = "general"
+is_hidden = 0
+robot_index = "index"
+robot_follow = "follow"
+contentType = "html"
+==
+<?php
+function onStart()
+{
+	return Response::make($this->attributes['markup'], 404);
+}
+?>
+==
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+
+	<meta charset="UTF-8">
+	<title>404</title>
+
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge">
+
+	<link rel="shortcut icon" href="/themes/azimut-tur/assets/img/favicon/favicon.ico" type="image/x-icon">
+
+	<link rel="stylesheet" href="/themes/azimut-tur/assets/css/aline.min.css">
+	<link rel="stylesheet" href="/themes/azimut-tur/assets/css/aline.btns.css">
+	<link rel="stylesheet" href="/themes/azimut-tur/assets/css/font-awesome.min.css">
+	<link rel="stylesheet" href="/themes/azimut-tur/assets/css/fonts.css">
+	<link rel="stylesheet" href="/themes/azimut-tur/assets/css/owl.carousel.min.css">
+	<link rel="stylesheet" href="/themes/azimut-tur/assets/css/magnific-popup.css">
+	<link rel="stylesheet" href="../../plugins/aleksandrablizin/ion/assets/css/ion.css">
+
+	<link rel="stylesheet" href="/themes/azimut-tur/assets/css/header.css">
+	<link rel="stylesheet" href="/themes/azimut-tur/assets/css/main.css">
+	<link rel="stylesheet" href="/themes/azimut-tur/assets/css/cruises.css">
+	<link rel="stylesheet" href="/themes/azimut-tur/assets/css/media.css">
+
+</head>
+<body>
+
+	<header class="header">
+
+		<section class="headNav">
+			<div class="c-p">
+				<div class="c-r">
+
+					<div class="col-75 col-m-80 col-s-50 as-c">
+						<div class="headMenu hidden-s-d">
+							<ul>
+								<li><a href="/about">О нас</a></li>
+								<li><a href="/vacancy">Вакансии</a></li>
+								<li><a href="/credit">Кредит и рассрочка</a></li>
+								<li><a href="/paymethods">Способы оплаты</a></li>
+								<li><a href="/departure">Отправление</a></li>
+								<li><a href="/contacts">Контакты</a></li>
+							</ul>
+						</div>
+
+						<div class="toggleButton toggleMain hidden-m-u">
+							<div class="g-icon">
+								<span></span>
+								<span></span>
+								<span></span>
+							</div>
+							<div><span>Меню</span></div>
+						</div>
+
+					</div>
+
+					<div class="col-25 col-m-20 col-s-50 as-c">
+						<div class="headButton">
+							<button href="#modalTour" class="hbtn mbtn">Подобрать тур</button>
+						</div>
+					</div>
+
+					<div class="col-s-100">
+						<div class="hiddenMenu hiddenMain">
+							<ul>
+								<li><a href="/about">О нас</a></li>
+								<li><a href="/vacancy">Вакансии</a></li>
+								<li><a href="/credit">Кредит и рассрочка</a></li>
+								<li><a href="/paymethods">Способы оплаты</a></li>
+								<li><a href="/departure">Отправление</a></li>
+								<li><a href="/contacts">Контакты</a></li>
+							</ul>
+						</div>
+					</div>
+
+				</div>
+			</div>
+
+		</section>
+
+		<section class="fixedNav">
+			<div class="c-p">
+				<div class="c-r">
+
+					<div class="col-8 as-c hidden-s-d">
+						<div class="fixedLogo">
+							<a href="/">
+								<img src="/themes/azimut-tur/assets/img/logo/azlogosmall.png" alt="">
+							</a>
+						</div>
+					</div>
+
+					<div class="col-42 col-m-25 col-s-20 col-xs-40 as-c">
+						<div class="headMenu fixedMenu hidden-s-d">
+
+							<ul>
+								<li><a href="/credit">Кредит и рассрочка</a></li>
+								<li><a href="/paymethods">Способы оплаты</a></li>
+								<li><a href="/contacts">Контакты</a></li>
+							</ul>
+
+						</div>
+
+						<div class="toggleButton toggleFixed hidden-m-u">
+							<div class="g-icon">
+								<span></span>
+								<span></span>
+								<span></span>
+							</div>
+							<div><span>Меню</span></div>
+						</div>
+
+					</div>
+
+					<div class="col-35 col-m-45 col-s-80 hidden-xs-d as-c">
+						<div class="phones f-phones">
+							<div class="r">
+								<div class="col-50">
+									<div class="phone phone-test">
+										<a href="tel:8 (8452) 990-819">8 (8452) 990-819</a>
+									</div>
+								</div>
+								<div class="col-50">
+									<div class="phone">
+										<a href="tel:8 800 100 49 59">8 800 100 49 59</a><br>
+										<span class="free">Круизный отдел (бесплатно)</span>
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
+
+					<div class="col-15 col-m-20 col-s-100 mt-s-10 col-xs-60 mt-xs-0 as-c">
+						<div class="headButton">
+							<button href="#modalTour" class="hbtn mbtn">Подобрать тур</button>
+						</div>
+					</div>
+
+					<div class="col-s-100 hidden-m-u">
+						<div class="hiddenMenu hiddenFixed">
+							<ul>
+								<li><a href="/about">О нас</a></li>
+								<li><a href="/vacancy">Вакансии</a></li>
+								<li><a href="/credit">Кредит и рассрочка</a></li>
+								<li><a href="/paymethods">Способы оплаты</a></li>
+								<li><a href="/departure">Отправление</a></li>
+								<li><a href="/contacts">Контакты</a></li>
+							</ul>
+						</div>
+					</div>
+				</div>
+			</div>
+		</section>
+
+		<section class="headContacts">
+			<div class="c-p">
+				<div class="c-r">
+					<div class="col-25 col-m-100 as-c">
+						<div class="logo">
+							<a href="/">
+								<img src="/themes/azimut-tur/assets/img/logo/azlogo.png" alt="">
+							</a>
+							<div class="reestr">
+								Номер в реестре Ростуризма РТО 021653
+							</div>
+						</div>
+					</div>
+
+					<div class="col-34 col-m-33 col-xs-100 as-c">
+						<div class="address">
+							<div class="addrWrap">
+								<span>Саратов, ул. П.Н.Яблочкова, д.13</span><br>
+								<a href="mailto:azimut-kruiz@yandex.ru">azimut-kruiz@yandex.ru</a>
+							</div>
+						</div>
+					</div>
+
+					<div class="col-16 col-m-33 as-c hidden-xs-d">
+						<div class="worktime">
+							<div class="time">
+								<span>Пн-Пт:</span> <span>c 10:00 до 19:00</span>
+							</div>
+							<div class="time">
+								<span>Сб:</span> <span>c 11:00 до 15:00</span>
+							</div>
+							<div class="time">
+								<span>Вс:</span> <span>выходной</span>
+							</div>
+						</div>
+					</div>
+
+					<div class="col-25 col-m-33 col-xs-100 as-c">
+						<div class="phones">
+							<div class="phonesWrap">
+								<div class="phone">
+									<a href="tel:8 800 100 49 59">8 800 100 49 59</a><br>
+									<span class="free">Круизный отдел (бесплатно)</span>
+								</div>
+								<div class="phone">
+									<a href="tel:8 (8452) 990-819">8 (8452) 990-819</a>
+								</div>
+								<div class="phoneButton">
+									<i class="fa fa-mobile" aria-hidden="true"></i>
+									<button href="#modalCall" class="mbtn">Заказать звонок</button>
+								</div>
+							</div>
+						</div>
+					</div>
+
+				</div>
+			</div>
+		</section>
+
+		<!-- <section class="headServices">
+			<div class="c-p">
+
+				<div class="servicesMenu">
+					<ul>
+						<li>
+							<span class="servLink">
+								<span>
+									<svg version="1.1" class="svg" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink"
+										viewBox="0 0 399.8 348" xml:space="preserve">
+										<path class="st0" d="M395.9,335.7c-4.5-2.1-8.8-4.9-13.4-7.8c-9.9-6.4-20.2-13-33.4-13c-10.2,0-19,5.5-27.4,10.9
+										c-7.7,4.9-15,9.4-22.4,9.4c-0.5,0-1.1-0.1-1.6-0.1l49.2-131.8l0,0l0,0c0.3-0.7,0.4-1.5,0.4-2.3l-0.6-43.2c0-2.9-2.1-5.4-4.9-6.1
+										l-45.1-10.3V90.9c0-2.3-1.9-4.2-4.2-4.2h-17.4V57.4c0-2.3-1.9-4.2-4.2-4.2h-48.3V20.9c0-5.7-2.3-11-6.6-15s-10.1-6.1-16-5.8
+										c-5.9-0.3-11.8,1.8-16,5.8s-6.6,9.3-6.6,15v32.3H129c-2.3,0-4.2,1.9-4.2,4.2v29.3h-17.4c-2.3,0-4.2,1.9-4.2,4.2v50.5L58,151.6
+										c-2.9,0.6-4.9,3.2-4.9,6.1l-0.6,43.2c0,0.7,0.1,1.4,0.3,2.1l0,0l0,0l0,0l0,0l0,0l0,0l0,0l0,0l0,0l0,0l0,0l0,0l0,0l0,0l0,0l0,0l0,0
+										l0,0l0,0l0,0l0,0l0,0l0,0l0,0L102,334.9c-0.7,0.1-1.4,0.2-2.1,0.2c-7.2,0-14.4-4.6-22.1-9.4c-8.5-5.4-17.4-10.9-27.6-10.9
+										c-13.2,0-23.4,6.6-33.3,13.1c-4.6,3-8.9,5.8-13.4,7.8c-3.2,1.5-4.6,5.2-3.1,8.4c1.1,2.3,3.4,3.7,5.8,3.7c0.9,0,1.8-0.2,2.7-0.6
+										c5.3-2.4,10.2-5.6,14.9-8.7c8.7-5.7,16.9-11,26.4-11c6.5,0,13.5,4.4,20.8,9c8.8,5.6,18,11.3,28.8,11.3c3.6,0,6.9-0.7,10.2-1.7
+										c0.2,0,0.3,0.1,0.5,0.1c0.7,0,1.5-0.1,2.2-0.4c0.9-0.3,1.7-0.9,2.3-1.6c4.6-2.1,8.9-4.8,13.1-7.5c7.4-4.7,14.4-9.2,21.5-9.2
+										s14.3,4.5,21.8,9.2c8.6,5.4,17.5,11.1,28.1,11.1c10.7,0,19.4-5.9,27.1-11.2c6.9-4.7,13.4-9.1,20.4-9.1c7.1,0,14.6,4.5,22.6,9.2
+										c5,3,10.1,6,15.5,8.1c0.5,0.4,1,0.7,1.6,0.9c0.7,0.3,1.4,0.4,2.1,0.4c3.3,1,6.7,1.7,10.3,1.7c11.1,0,20.7-6.1,29.2-11.4
+										c7.3-4.6,14.1-8.9,20.7-8.9c9.5,0,17.8,5.4,26.5,11c4.8,3.1,9.7,6.3,15,8.7c3.2,1.5,7,0.1,8.4-3.1
+										C400.5,340.9,399.1,337.1,395.9,335.7L395.9,335.7z M185.7,20.8c0-3.3,1.4-6.5,3.9-8.8c2.7-2.5,6.2-3.8,10-3.5c0.2,0,0.4,0,0.5,0
+										c3.8-0.3,7.3,1,10,3.5c2.5,2.3,3.9,5.5,3.9,8.8v32.3h-28.3L185.7,20.8L185.7,20.8z M133.2,61.5h133.2v25.1H133.2V61.5z
+										M111.6,95.1H288v44.3l-86.2-19.6c-0.7-0.2-1.4-0.2-2-0.1c-0.7-0.1-1.4-0.1-2.1,0.1l-86.2,19.6L111.6,95.1L111.6,95.1z
+										M65.7,162.8l134.1-30.6l134.1,30.6l0.4,30l-133-32.6c-0.1,0-0.2,0-0.2,0c-0.2,0-0.4-0.1-0.7-0.1c-0.2,0-0.4,0-0.6,0
+										c-0.2,0-0.4,0-0.6,0c-0.2,0-0.4,0-0.6,0.1c-0.1,0-0.2,0-0.3,0l-133,32.6L65.7,162.8z M149.6,314.8c-10.8,0-19.7,5.7-28.3,11.2
+										c-2.5,1.6-5,3.2-7.5,4.6L67.2,205.4L195.6,174v160.6c-5.6-1.2-11.4-4.8-17.4-8.6C169.5,320.5,160.4,314.8,149.6,314.8L149.6,314.8
+										z M247,314.8c-10.9,0-19.8,6-27.6,11.3c-5.3,3.6-10.3,7-15.4,8.3V174l128.3,31.5l-46.9,125.6c-3.1-1.6-6.2-3.4-9.4-5.3
+										C267,320.4,257.6,314.8,247,314.8L247,314.8z"/>
+										</svg>
+								</span>
+								<span>Круизы</span>
+							</span>
+
+							<ul class="hidden-s-d">
+								<li>
+									<a href="/russia-river-cruises">Речные круизы по России</a>
+								</li>
+								<li>
+									<a href="/sea-cruises">Морские круизы</a>
+								</li>
+								<li>
+									<a href="/europe-river-cruises">Речные круизы по Европе</a>
+								</li>
+								<li>
+									<a href="/spb-sea-cruises">Паромы из Санкт-Петербурга</a>
+								</li>
+							</ul>
+
+						</li>
+
+						<ul class="hidden-m-u">
+							<li>
+								<a href="/cruises/river-in-russia">Речные круизы по России</a>
+							</li>
+							<li>
+								<a href="/cruises/sea">Морские круизы</a>
+							</li>
+							<li>
+								<a href="/cruises/river-in-europe">Речные круизы по Европе</a>
+							</li>
+							<li>
+								<a href="/cruises/ferryboats">Паромы из Санкт-Петербурга</a>
+							</li>
+						</ul>
+
+						<li>
+							<span class="servLink">
+								<span>
+									<svg class="svg" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 217.59 228">
+									<path d="M220.93,164.74,183,202.63H35.12a5.94,5.94,0,0,0-4.85,2.51L17,223.82a5.95,5.95,0,1,0,9.7,6.88l11.48-16.18H179v12.74a5.95,5.95,0,0,0,11.89,0V211.62l38.47-38.47a5.95,5.95,0,0,0-8.41-8.41Zm0,0" transform="translate(-14.71 -5.21)"/><path d="M231.88,98a92.63,92.63,0,0,0-7.24-28.1,98.74,98.74,0,0,0-15.71-25,110.45,110.45,0,0,0-22.69-20,117.66,117.66,0,0,0-26.93-13.26,123.47,123.47,0,0,0-15.81-4.26h-.07a127.14,127.14,0,0,0-14.07-2,74.5,74.5,0,0,0-11.75,0,127.1,127.1,0,0,0-14.07,2h-.07a123.57,123.57,0,0,0-15.8,4.26A117.66,117.66,0,0,0,60.76,25,110.41,110.41,0,0,0,38.07,45a98.63,98.63,0,0,0-15.71,25A92.7,92.7,0,0,0,15.12,98a93.69,93.69,0,0,0-.39,10.78.41.41,0,0,0,0,.05v.32a5.94,5.94,0,0,0,4.09,5.47L47.31,124a9.34,9.34,0,0,0,1.86.3A9.21,9.21,0,0,0,51,124l24.6-8.12,24.6,8.12a6,6,0,0,0,3.21.14l14.1-3.29v65.59a5.95,5.95,0,0,0,11.89,0V120.88l14.1,3.29a5.94,5.94,0,0,0,3.21-.14l24.6-8.12L196,124a5.95,5.95,0,0,0,3.72,0l28.49-9.37a6,6,0,0,0,4.09-5.47v-.32a.39.39,0,0,0,0-.05A93.16,93.16,0,0,0,231.88,98ZM50.43,75.43a168.49,168.49,0,0,0-6.78,34.87l-17-5.59c0-1.87.16-3.72.33-5.54a80.82,80.82,0,0,1,6.32-24.5,86.79,86.79,0,0,1,13.82-22A98.45,98.45,0,0,1,67.34,34.87q3.33-2.22,6.86-4.17C63.87,42.86,55.83,57.92,50.43,75.43Zm44.8,10.69A141.62,141.62,0,0,0,95,109.77L77.5,104a5.95,5.95,0,0,0-3.73,0l-18.15,6a157.28,157.28,0,0,1,6.17-31c8.63-28,23.76-48.14,45-60q4.75-.91,9.6-1.42C101.66,45,96.71,69.6,95.23,86.12Zm44.71,24L125.66,104a6.4,6.4,0,0,0-2.16-.5,5.52,5.52,0,0,0-1.93.45l-14.51,6.24a117.49,117.49,0,0,1,.06-23.51,166.67,166.67,0,0,1,16.38-57,166.68,166.68,0,0,1,16.38,57,117.47,117.47,0,0,1,.06,23.52ZM173.23,104a5.95,5.95,0,0,0-3.73,0L152,109.77a141.55,141.55,0,0,0-.23-23.64C150.29,69.6,145.34,45,130.65,17.52q4.85.51,9.6,1.42c21.2,11.86,36.33,32,45,60a157.35,157.35,0,0,1,6.17,31Zm30.13,6.31a168.49,168.49,0,0,0-6.78-34.87c-5.4-17.51-13.45-32.57-23.78-44.73,2.35,1.31,4.64,2.69,6.86,4.17A98.45,98.45,0,0,1,199.9,52.7a86.69,86.69,0,0,1,13.82,22A80.79,80.79,0,0,1,220,99.16c.17,1.82.28,3.67.33,5.54Zm0,0" transform="translate(-14.71 -5.21)"/>
+									</svg>
+								</span>
+								<span>Пляжный отдых</span>
+							</span>
+
+							<ul class="hidden-s-d">
+								<li>
+									<a href="/beach/bus-to-sea">Автобусом к морю</a>
+								</li>
+								<li>
+									<a href="/beach/krasnorarskyi">Краснодарский край</a>
+								</li>
+								<li>
+									<a href="/beach/crimea">Крым</a>
+								</li>
+								<li>
+									<a href="/beach/abkhazia">Абхазия</a>
+								</li>
+								<li>
+									<a href="/beach/zagranica">Заграница</a>
+								</li>
+							</ul>
+
+						</li>
+
+						<ul class="hidden-m-u">
+							<li>
+								<a href="/beach/bus-to-sea">Автобусом к морю</a>
+							</li>
+							<li>
+								<a href="/beach/krasnorarskyi">Краснодарский край</a>
+							</li>
+							<li>
+								<a href="/beach/crimea">Крым</a>
+							</li>
+							<li>
+								<a href="/beach/abkhazia">Абхазия</a>
+							</li>
+							<li>
+								<a href="/beach/zagranica">Заграница</a>
+							</li>
+						</ul>
+
+						<li>
+							<a class="servLink" href="/tours">
+								<span>
+									<svg class="svg" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 237.6 237.6"><path d="M73.05,28.22a7.89,7.89,0,1,0,14.59-6l-.24-.57a7.89,7.89,0,0,0-14.6,6Zm0,0" transform="translate(-4 -5)"/><path d="M162.25,32.52a7.89,7.89,0,0,0,10.3-4.29l.24-.57a7.89,7.89,0,0,0-14.6-6l-.24.57a7.9,7.9,0,0,0,4.29,10.31Zm0,0" transform="translate(-4 -5)"/>
+									<path d="M172.55,219.37a7.89,7.89,0,0,0-14.6,6l.24.57a7.89,7.89,0,1,0,14.6-6Zm0,0" transform="translate(-4 -5)"/><path d="M83.35,215.09a7.89,7.89,0,0,0-10.3,4.29l-.24.57a7.89,7.89,0,1,0,14.6,6l.24-.57a7.89,7.89,0,0,0-4.29-10.3Zm0,0" transform="translate(-4 -5)"/><path d="M233.71,115.91H191.86a69.12,69.12,0,0,0-2.19-11.11l14-5.78a7.89,7.89,0,1,0-6-14.6l-14.07,5.79a69.69,69.69,0,0,0-6.45-9.64L206.8,51A7.89,7.89,0,1,0,195.64,39.8L166,69.41a69.38,69.38,0,0,0-9.39-6.3l5.85-14A7.89,7.89,0,0,0,147.92,43l-5.84,14a68.85,68.85,0,0,0-11.38-2.27V12.9a7.89,7.89,0,1,0-15.79,0V54.74a69.55,69.55,0,0,0-11.1,2.19L98,42.89a7.89,7.89,0,0,0-14.6,6L89.21,63a70.06,70.06,0,0,0-9.64,6.44L50,39.8A7.89,7.89,0,1,0,38.8,51L68.41,80.57A69.15,69.15,0,0,0,62.1,90l-14-5.85A7.89,7.89,0,0,0,42,98.68l14,5.84a69,69,0,0,0-2.27,11.38H11.89a7.89,7.89,0,1,0,0,15.79H53.74a69.43,69.43,0,0,0,2.19,11.1l-14,5.78a7.9,7.9,0,0,0,6,14.6L62,157.39A69.57,69.57,0,0,0,68.41,167L38.8,196.64A7.89,7.89,0,0,0,50,207.81l29.61-29.61A70,70,0,0,0,89,184.5l-5.85,14a7.89,7.89,0,1,0,14.57,6.07l5.84-14a69.37,69.37,0,0,0,11.38,2.27v41.85a7.89,7.89,0,1,0,15.79,0V192.86a69,69,0,0,0,11.11-2.19l5.78,14a7.89,7.89,0,1,0,14.6-6l-5.79-14.07a69.72,69.72,0,0,0,9.64-6.45l29.61,29.61a7.89,7.89,0,0,0,11.16-11.16L177.19,167a69.64,69.64,0,0,0,6.3-9.39l14,5.85a7.89,7.89,0,0,0,6.07-14.57l-14-5.84a69,69,0,0,0,2.27-11.38h41.85a7.89,7.89,0,0,0,0-15.79ZM122.8,177.52a53.72,53.72,0,1,1,53.72-53.72,53.78,53.78,0,0,1-53.72,53.72Zm0,0" transform="translate(-4 -5)"/><path d="M21.21,159l-.57.24a7.89,7.89,0,1,0,6,14.59l.57-.23a7.89,7.89,0,1,0-6-14.6Zm0,0" transform="translate(-4 -5)"/><path d="M20.64,88.41l.57.24a7.89,7.89,0,1,0,6-14.6l-.57-.24a7.89,7.89,0,0,0-6,14.6Zm0,0" transform="translate(-4 -5)"/><path d="M221.39,89.24a7.85,7.85,0,0,0,3-.6l.57-.24a7.89,7.89,0,1,0-6-14.6l-.57.24a7.89,7.89,0,0,0,3,15.19Zm0,0" transform="translate(-4 -5)"/><path d="M225,159.19l-.57-.24a7.89,7.89,0,0,0-6,14.6l.57.23a7.89,7.89,0,1,0,6-14.59Zm0,0" transform="translate(-4 -5)"/>
+									</svg>
+								</span>
+								<span>Горящие туры</span>
+							</a>
+						</li>
+
+						<li>
+							<span class="servLink">
+								<span>
+									<svg class="svg" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 226 236.39"><path d="M123,114.91a55.85,55.85,0,1,0,55.85,55.85A55.91,55.91,0,0,0,123,114.91Zm0,103.91a48.06,48.06,0,1,1,48.06-48.06A48.11,48.11,0,0,1,123,218.82Zm0,0" transform="translate(-10 -5.8)"/><path d="M123,135.69a35.07,35.07,0,1,0,35.07,35.07A35.11,35.11,0,0,0,123,135.69ZM123,198a27.28,27.28,0,1,1,27.28-27.28A27.31,27.31,0,0,1,123,198Zm0,0" transform="translate(-10 -5.8)"/><path d="M211.32,99.32H157.47l-2.95-17.67a16.52,16.52,0,0,0-15.94-13.51H107.41A16.52,16.52,0,0,0,91.47,81.66L88.53,99.32H34.68A24.71,24.71,0,0,0,10,124v93.52A24.71,24.71,0,0,0,34.68,242.2H211.32A24.71,24.71,0,0,0,236,217.52V124a24.71,24.71,0,0,0-24.68-24.68ZM99.16,82.94a8.79,8.79,0,0,1,8.25-7h31.17a8.79,8.79,0,0,1,8.25,7l2.73,16.38H96.43Zm129,134.58a16.9,16.9,0,0,1-16.89,16.89H34.68a16.9,16.9,0,0,1-16.89-16.89V124a16.9,16.9,0,0,1,16.89-16.89H211.32A16.9,16.9,0,0,1,228.21,124Zm0,0" transform="translate(-10 -5.8)"/><path d="M41.17,91.53H58.32a3.9,3.9,0,1,0,0-7.79H41.17a3.9,3.9,0,0,0,0,7.79Zm0,0" transform="translate(-10 -5.8)"/><path d="M200.93,120.1a14.29,14.29,0,1,0,14.29,14.29,14.3,14.3,0,0,0-14.29-14.29Zm0,20.78a6.49,6.49,0,1,1,6.49-6.49,6.5,6.5,0,0,1-6.49,6.49Zm0,0" transform="translate(-10 -5.8)"/><path d="M77.09,83.38a3.9,3.9,0,1,0,5.43-5.59l-15-14.56,19.14-8.57a3.9,3.9,0,0,0,2.29-4L86.77,29.83l20.17,5.74A3.9,3.9,0,0,0,111.24,34L123,16.65,134.76,34a3.9,3.9,0,0,0,4.29,1.56l20.17-5.74L157.08,50.7a3.9,3.9,0,0,0,2.28,4l19.14,8.57-15,14.56a3.9,3.9,0,0,0,5.43,5.59l19.14-18.57a3.89,3.89,0,0,0-1.12-6.35l-21.82-9.77,2.45-23.78a3.9,3.9,0,0,0-4.94-4.15l-23,6.54L126.22,7.51a3.9,3.9,0,0,0-6.45,0L106.37,27.3l-23-6.54a3.9,3.9,0,0,0-4.94,4.15l2.45,23.78L59.06,58.46a3.89,3.89,0,0,0-1.12,6.35Zm0,0" transform="translate(-10 -5.8)"/>
+									</svg>
+								</span>
+								<span>Экскурсионные туры</span>
+							</span>
+
+							<ul class="hidden-s-d">
+								<li>
+									<a href="/extours/from-saratov">Выезд из Саратова</a>
+								</li>
+								<li>
+									<a href="/extours/pilgrim">Паломнические туры</a>
+								</li>
+								<li>
+									<a href="/extours/russia">По России</a>
+								</li>
+								<li>
+									<a href="/extours/zarubezhnye">Зарубежные</a>
+								</li>
+							</ul>
+
+						</li>
+
+						<ul class="hidden-m-u">
+							<li>
+								<a href="/extours/from-saratov">Выезд из Саратова</a>
+							</li>
+							<li>
+								<a href="/extours/pilgrim">Паломнические туры</a>
+							</li>
+							<li>
+								<a href="/extours/russia">По России</a>
+							</li>
+							<li>
+								<a href="/extours/zarubezhnye">Зарубежные</a>
+							</li>
+						</ul>
+
+						<li>
+							<span class="servLink">
+								<span>
+									<svg class="svg" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 265.66 243.52"><path d="M176.32,112.13A27.18,27.18,0,1,0,149.14,85a27.21,27.21,0,0,0,27.17,27.17Zm0-42.14a15,15,0,1,1-15,15,15,15,0,0,1,15-15Zm0,0"/><path d="M241.52,23.48a80.16,80.16,0,0,0-109-4,80.16,80.16,0,0,0-109,117.37L128.16,241.56a6.11,6.11,0,0,0,8.64,0L241.52,136.83A80.25,80.25,0,0,0,241.52,23.48Zm-109,205.12L74.33,170.45a88.49,88.49,0,0,1,116.2.1ZM238.63,121.67l-.06-.05a103.35,103.35,0,0,1-8.18,9.07L199.18,161.9a99.94,99.94,0,0,0-66.81-25.36,101.78,101.78,0,0,0-17.3,1.47c-.77-12.94-9.72-51.25-24.84-69.84l.35-.21a9.14,9.14,0,0,1,13.06,4,6.11,6.11,0,0,0,11.12-5.07,21.36,21.36,0,0,0-11.13-10.82,18.18,18.18,0,0,1,12.34,2,6.11,6.11,0,0,0,6-10.64,30.36,30.36,0,0,0-35.81,4.4A21.34,21.34,0,0,0,69.2,38.49l-2.74-.38a6.11,6.11,0,1,0-1.68,12.1l2.74.38a9,9,0,0,1,6.35,4c.15.22.27.44.4.67a30.36,30.36,0,0,0-34.36,18l-1.7,4.07a6.11,6.11,0,0,0,3.29,8,6,6,0,0,0,2.34.47A6.11,6.11,0,0,0,49.48,82L51.18,78A18.16,18.16,0,0,1,74,67.82a30.34,30.34,0,0,0-3.64,23.72,6.11,6.11,0,0,0,11.83-3.05,18.18,18.18,0,0,1,.29-10.11c9.67,10.69,19.87,46.22,20.54,62.5A99.87,99.87,0,0,0,65.67,161.8L43.29,139.41l0,0-1.17-1.23L26.28,121.52l0,0-.24-.33-1.06-1.12.15-.13A67.94,67.94,0,0,1,128.16,32.12a6.11,6.11,0,0,0,8.64,0,67.94,67.94,0,0,1,101.83,89.56Z"/>
+									</svg>
+								</span>
+								<span>Лечение и оздоровление</span>
+							</span>
+
+							<ul class="hidden-s-d">
+								<li>
+									<a href="/therapy/kmv">КМВ</a>
+								</li>
+								<li>
+									<a href="/therapy/krasnodarskiy">Краснодарский край</a>
+								</li>
+								<li>
+									<a href="/therapy/belarus">Белоруссия</a>
+								</li>
+								<li>
+									<a href="/therapy/near-moscow">Подмосковье</a>
+								</li>
+							</ul>
+
+						</li>
+
+						<ul class="hidden-m-u">
+							<li>
+								<a href="/therapy/kmv">КМВ</a>
+							</li>
+							<li>
+								<a href="/therapy/krasnodarskiy">Краснодарский край</a>
+							</li>
+							<li>
+								<a href="/therapy/belarus">Белоруссия</a>
+							</li>
+							<li>
+								<a href="/therapy/near-moscow">Подмосковье</a>
+							</li>
+						</ul>
+
+						<li>
+							<a class="servLink" href="/extours/holidays">
+								<span>
+									<svg class="svg" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" viewBox="0 0 348.27 348.27"><path d="M342.24,180.44c-1.5-2.06-3-4.17-4.41-6.3,1.44-2.13,2.91-4.24,4.41-6.3a30.93,30.93,0,0,0-31-48.52c-3.25.64-6.5,1.33-9.74,2q4.21-2.67,8.34-5.43a30.93,30.93,0,0,0-12.43-56.21c-2.51-.4-5-.84-7.57-1.33-.49-2.51-.94-5-1.33-7.57a30.94,30.94,0,0,0-56.21-12.42q-2.77,4.13-5.43,8.33c.72-3.24,1.41-6.49,2-9.73A30.35,30.35,0,0,0,215.22,5a30.33,30.33,0,0,0-34.79,1c-2.07,1.51-4.18,3-6.29,4.42C172,9,169.9,7.53,167.84,6a30.32,30.32,0,0,0-34.78-1,30.35,30.35,0,0,0-13.74,32c.64,3.25,1.33,6.5,2,9.73-1.78-2.8-3.59-5.59-5.43-8.33A30.93,30.93,0,0,0,59.72,50.81c-.4,2.53-.84,5.06-1.33,7.57-2.53.49-5.06.94-7.57,1.33a30.93,30.93,0,0,0-12.43,56.21c2.75,1.84,5.53,3.65,8.33,5.43q-4.86-1.08-9.74-2A30.35,30.35,0,0,0,5,133.06a30.32,30.32,0,0,0,1,34.78c1.5,2.06,3,4.17,4.42,6.31C9,176.27,7.52,178.38,6,180.43A30.32,30.32,0,0,0,5,215.21a30.27,30.27,0,0,0,25.78,14.36A32.16,32.16,0,0,0,37,229c3.25-.64,6.5-1.33,9.74-2q-4.2,2.67-8.33,5.43a30.93,30.93,0,0,0,12.43,56.2c2.47.39,5,.84,7.57,1.34.49,2.52.93,5,1.33,7.58A30.32,30.32,0,0,0,83.56,322.8a32.65,32.65,0,0,0,7,.78,30.25,30.25,0,0,0,25.35-13.7q2.77-4.12,5.44-8.33-1.08,4.86-2.05,9.73a30.93,30.93,0,0,0,48.54,31c2-1.47,4.12-2.95,6.28-4.41,2.16,1.46,4.26,2.93,6.3,4.42a30.93,30.93,0,0,0,48.53-31c-.64-3.25-1.33-6.49-2.05-9.73,1.78,2.8,3.59,5.59,5.44,8.34a30.26,30.26,0,0,0,25.35,13.7,32.36,32.36,0,0,0,7-.78,30.32,30.32,0,0,0,23.84-25.34c.4-2.53.84-5.06,1.33-7.57,2.51-.49,5-.93,7.57-1.34a30.93,30.93,0,0,0,12.43-56.2q-4.12-2.77-8.34-5.43,4.86,1.08,9.74,2a32.15,32.15,0,0,0,6.23.61,31,31,0,0,0,24.73-49.13ZM174.13,218.11a44,44,0,0,1,0-87.94h0a44,44,0,0,1,44,43.93s0,0,0,0,0,0,0,0a44,44,0,0,1-44,43.92ZM243.63,46a17.33,17.33,0,0,1,31.48,6.94c.67,4.24,1.46,8.51,2.37,12.67a6.8,6.8,0,0,0,5.22,5.2c4.2.91,8.45,1.69,12.65,2.35a17.34,17.34,0,0,1,7,31.49,398,398,0,0,1-78.37,40.66,57.29,57.29,0,0,0-4.59-6.75l29.23-29.23A6.8,6.8,0,1,0,239,99.7l-29.23,29.23a59,59,0,0,0-6.75-4.59A397.56,397.56,0,0,1,243.63,46ZM140.36,16.44a17,17,0,0,1,19.47.58c3.45,2.52,7,5,10.61,7.28a6.8,6.8,0,0,0,7.37,0C181.39,22,185,19.55,188.43,17a17.33,17.33,0,0,1,27.17,17.36A397.21,397.21,0,0,1,189,118.51a57.35,57.35,0,0,0-8-1.53V75.66a6.8,6.8,0,0,0-13.6,0V117a57.18,57.18,0,0,0-8,1.53,397.53,397.53,0,0,1-26.64-84.14,17,17,0,0,1,7.7-17.93ZM38.75,86.51A17,17,0,0,1,52.93,73.15c4.19-.66,8.45-1.45,12.65-2.35a6.8,6.8,0,0,0,5.21-5.2c.9-4.16,1.7-8.43,2.36-12.67A17.33,17.33,0,0,1,104.64,46a397.57,397.57,0,0,1,40.66,78.36,58.25,58.25,0,0,0-6.76,4.59L109.3,99.7a6.8,6.8,0,1,0-9.62,9.62l29.24,29.24a58,58,0,0,0-4.59,6.75A397.38,397.38,0,0,1,46,104.64a17,17,0,0,1-7.23-18.13Zm-4.38,129.1A17.33,17.33,0,0,1,17,188.44c2.5-3.45,5-7,7.27-10.61a6.79,6.79,0,0,0,0-7.38c-2.32-3.6-4.77-7.17-7.28-10.62a17.33,17.33,0,0,1,17.34-27.18,397.17,397.17,0,0,1,84.14,26.66,57.4,57.4,0,0,0-1.53,8H75.65a6.8,6.8,0,0,0,0,13.6H117a56.61,56.61,0,0,0,1.53,8,397.1,397.1,0,0,1-84.14,26.66Zm70.27,86.68a17.33,17.33,0,0,1-31.49-6.94c-.66-4.24-1.46-8.51-2.36-12.67a6.8,6.8,0,0,0-5.21-5.21c-4.3-.93-8.55-1.72-12.65-2.36A17.33,17.33,0,0,1,46,243.64,397.49,397.49,0,0,1,124.34,203a57.53,57.53,0,0,0,4.59,6.74L99.69,239a6.8,6.8,0,1,0,9.62,9.62l29.24-29.24a57.4,57.4,0,0,0,6.75,4.6,397.41,397.41,0,0,1-40.66,78.36Zm103.27,29.54a17,17,0,0,1-19.46-.57c-3.37-2.47-7-4.93-10.64-7.29a6.8,6.8,0,0,0-7.37,0c-3.69,2.38-7.27,4.84-10.61,7.28a17.33,17.33,0,0,1-27.18-17.35,397.76,397.76,0,0,1,26.65-84.14,57.18,57.18,0,0,0,8,1.53v41.32a6.8,6.8,0,1,0,13.6,0V231.29a57.29,57.29,0,0,0,8-1.53,397.12,397.12,0,0,1,26.66,84.14,17,17,0,0,1-7.7,17.93Zm101.61-70.07a17,17,0,0,1-14.19,13.36c-4.25.67-8.5,1.47-12.63,2.36a6.8,6.8,0,0,0-5.22,5.21c-.9,4.16-1.7,8.43-2.37,12.67a17.33,17.33,0,0,1-31.48,6.94A397.59,397.59,0,0,1,203,223.93a58.15,58.15,0,0,0,6.75-4.59L239,248.58a6.8,6.8,0,0,0,9.61-9.62l-29.23-29.23a58,58,0,0,0,4.59-6.75,397.49,397.49,0,0,1,78.37,40.66,17,17,0,0,1,7.22,18.13Zm22.3-53.86a17,17,0,0,1-17.93,7.71A397.08,397.08,0,0,1,229.76,189a57.35,57.35,0,0,0,1.53-8H272.6a6.8,6.8,0,1,0,0-13.6H231.29a57.35,57.35,0,0,0-1.53-8,397.22,397.22,0,0,1,84.14-26.65,17.33,17.33,0,0,1,17.34,27.18c-2.5,3.44-4.95,7-7.28,10.61a6.81,6.81,0,0,0,0,7.38c2.32,3.6,4.77,7.17,7.28,10.62a17,17,0,0,1,.58,19.46Zm0,0" transform="translate(0 0)"/><path d="M174.13,138.33a35.81,35.81,0,1,0,35.81,35.81,35.85,35.85,0,0,0-35.81-35.81Zm0,58a22.21,22.21,0,1,1,22.21-22.21,22.23,22.23,0,0,1-22.21,22.21Zm0,0" transform="translate(0 0)"/>
+									</svg>
+								</span>
+								<span>Майские праздники</span>
+							</a>
+						</li>
+					</ul>
+				</div>
+
+			</div>
+		</section> -->
+
+	</header>
+
+	<main class="main">
+		<div class="c-p">
+			<div class="pageWrap">
+				<section class="alert">
+					<div class="headText">
+						<span>Страница не найдена</span>
+					</div>
+					<div class="alertDesc">
+						<span>Начните с <a href="/">главной страницы</a></span>
+					</div>
+				</section>
+			</div>
+		</div>
+	</main>
+
+	<footer class="footer">
+		<section class="contacts">
+			<div class="c-p">
+				<div class="c-r">
+
+					<div class="col-42 col-s-50 col-xs-100">
+
+						<div class="headText">
+							<span>Контакты</span>
+						</div>
+
+						<div class="address">
+							410012, г. Саратов, ул. П.Н.Яблочкова, д.13
+						</div>
+						<!-- <div class="workTime">
+							<div>Понедельник — <b>с 10:00 до 19:00</b></div>
+							<div>Суббота — <b>c 11:00 до 15:00</b></div>
+							<div>Воскресенье — выходной</div>
+						</div> -->
+						<div class="workTime">
+							<p>Понедельник–пятница —<strong>с 10:00 до 19:00</strong>
+							<br>Суббота —<strong>с 11:00 до 15:00</strong>
+							<br>Воскресенье — выходной</p>
+						</div>
+						<div class="number">
+							<a href="8 800 511 00 96">
+								<b>8 800 511 00 96</b>
+								<span>Круизный отдел (бесплатно)</span>
+							</a>
+							<a href="8 (8452) 255-996">
+								8 (8452) 255-996
+							</a>
+						</div>
+						<div class="mail">
+							<a href="mailto:azimut-kruiz@yandex.ru">azimut-kruiz@yandex.ru</a>
+						</div>
+						<div class="ros-reestr-block" onclick="window.open('https://www.russiatourism.ru/operators/show.php?id=107271')">
+							<div>Мы в реестре туроператоров</div>
+							<div>ООО "Азимут" РТО 021653</div>
+						</div>
+						<div class="conButtons">
+							<div class="conButton">
+								<button href="#modalCall" class="cbtn mbtn">Заказать звонок</button>
+							</div>
+							<div class="conText">
+								<span>Вам некогда?</span>
+								<span>Мы перезвоним!</span>
+							</div>
+						</div>
+
+					</div>
+
+				</div>
+			</div>
+
+			<div id="map"></div>
+		</section>
+
+		<section class="footerDown">
+			<div class="c-p">
+				<div class="c-r">
+
+					<div class="col-42 col-s-100 as-c">
+						<div class="company">
+							<span>© 2012-2018 Турагентство "Азимут-тур"</span>
+						</div>
+						<!--
+						<div class="reestr">
+							<a target="_parent" href="https://www.russiatourism.ru/operators/show.php?id=107271">Номер в реестре Ростуризма РТО 021653</a>
+						</div>
+						-->
+					</div>
+					<div class="col-58 col-s-100 as-c">
+						<div class="copyright">
+							<p>
+								Использование материалов сайта www.азимут-тур.рф любым способом без письменного разрешения руководства компании ООО «Азимут» ЗАПРЕЩЕНО и влечет ответственность, предусмотренную законодательством РФ о защите авторских прав.
+							</p>
+							<p>
+								Внимание! Все материалы и цены, размещенные на сайте, носят справочный характер и не являются публичной офертой, определяемой положениями Статьи 437 (2) Гражданского кодекса Российской Федерации
+							</p>
+						</div>
+					</div>
+
+				</div>
+			</div>
+		</section>
+
+	</footer>
+
+	<div class="hidden">
+
+		<div id="modalTour" class="modalFade">
+			<div class="modalWrap">
+
+				<div class="modalDone">
+					<button title="Close (Esc)" type="button" class="mfp-close">×</button>
+
+					<div class="modalHead">
+						<span>Спасибо за заявку!</span>
+						<span>Специалист позвонит вам в ближайшее время</span>
+					</div>
+				</div>
+
+				<div class="modalContent">
+
+					<button title="Close (Esc)" type="button" class="mfp-close">×</button>
+
+					<div class="modalHead">
+						<span>Подобрать тур</span>
+					</div>
+
+					<div class="modalDesc">
+						<span>Никакого спама, только реальный расчет стоимости тура!</span>
+					</div>
+
+					<div class="fLine">
+						<label for="">Ваше имя</label>
+						<input class="order-tour order" id="#name" name="name" type="text" placeholder="Ваше имя">
+					</div>
+
+					<div class="fLine">
+						<label for="">Ваш e-mail</label>
+						<input class="order-tour order" name="email" type="text" placeholder="Ваша электронная почта">
+					</div>
+
+					<div class="fLine">
+						<label for="">Ваш телефон</label>
+						<input class="phone order-tour order" name="phone" type="text" placeholder="+7(___)___-__-__">
+					</div>
+
+					<div class="fLine">
+						<label for="">Параметры тура</label>
+						<textarea class="order-tour order" name="message" type="text" placeholder="Cтрана, курорт, даты тура, питание, кол-во взрослых детей.
+						Вопросы и пожелания"></textarea>
+					</div>
+
+					<input type="hidden" name="ide" class="order-tour hidden" value="Подбор тура">
+
+					<div class="offerItem" style="padding: 20px 0 0 0">
+			            <span class="check" id="#OfferCheck"><i class="fa fa-check" aria-hidden="true"></i></span>
+			            <span>Я принимаю <a class="offerLink" href="#modalOffer">договор оферты</a></span>
+			        </div>
+
+					<div class="modalButton disabled">
+						<button data-ion="data=.order-tour;ajax=/callback/send;prepend=#SystemMessages;" class="hbtn">Подобрать тур</button>
+					</div>
+
+					<div class="modalDesc">
+						<span>Мы гарантируем конфиденциальность введенных данных</span>
+					</div>
+
+				</div>
+			</div>
+
+			<ofmodal>
+				<div class="modalSecond">
+					<div class="modalLine">
+						<div class="close">×</div>
+			    		<ofmodalbody></ofmodalbody>
+					</div>
+				</div>
+			</ofmodal>
+		</div>
+		<div id="modalCall" class="modalFade">
+			<div class="modalWrap">
+
+				<div class="modalDone">
+					<button title="Close (Esc)" type="button" class="mfp-close">×</button>
+
+					<div class="modalHead">
+						<span>Спасибо за заявку!</span>
+						<span>Специалист позвонит вам в ближайшее время</span>
+					</div>
+				</div>
+
+				<div class="modalContent">
+
+					<button title="Close (Esc)" type="button" class="mfp-close">×</button>
+
+					<div class="modalHead">
+						<span>Специалист позвонит вам в ближайшее время</span>
+					</div>
+
+					<div class="fLine">
+						<label for="">Ваше имя</label>
+						<input class="order-call order" name="name" id="#name" type="text" placeholder="Ваше имя">
+					</div>
+
+					<div class="fLine">
+						<label for="">Ваш e-mail</label>
+						<input class="order-call order" name="email" type="text" placeholder="Ваша электронная почта">
+					</div>
+
+					<div class="fLine">
+						<label for="">Ваш телефон</label>
+						<input class="phone order-call order" name="phone" placeholder="+7(___)___-__-__">
+					</div>
+
+					<div class="fLine">
+						<label for="">Если у Ваc остались вопросы, мы с удовольствием на них ответим</label>
+						<textarea class="order-call order" name="message" type="text" placeholder="Вопросы и пожелания"></textarea>
+					</div>
+
+					<input type="hidden" name="ide" class="order-call hidden" value="Заказ звонка">
+
+					<div class="offerItem" style="padding: 20px 0 0 0">
+			            <span class="check" id="#OfferCheck"><i class="fa fa-check" aria-hidden="true"></i></span>
+			            <span>Я принимаю <a class="offerLink" href="#modalOffer">договор оферты</a></span>
+			        </div>
+
+					<div class="modalButton disabled">
+						<button data-ion="data=.order-call;ajax=/callback/send;prepend=#SystemMessages;" class="hbtn">Перезвоните мне</button>
+					</div>
+
+					<div class="modalDesc">
+						<span>Мы гарантируем конфиденциальность введенных данных</span>
+					</div>
+
+				</div>
+			</div>
+
+			<ofmodal>
+				<div class="modalSecond">
+					<div class="modalLine">
+						<div class="close">×</div>
+			    		<ofmodalbody></ofmodalbody>
+					</div>
+				</div>
+			</ofmodal>
+		</div>
+
+		<div id="modalCallTour" class="modalFade">
+			<div class="modalWrap">
+
+				<div class="modalDone">
+					<button title="Close (Esc)" type="button" class="mfp-close">×</button>
+
+					<div class="modalHead">
+						<span>Спасибо за заявку!</span>
+						<span>Специалист позвонит вам в ближайшее время</span>
+					</div>
+				</div>
+
+				<div class="modalContent">
+
+					<button title="Close (Esc)" type="button" class="mfp-close">×</button>
+
+					<div class="modalHead">
+						<span>Заказать тур</span>
+					</div>
+
+					<div class="modalDesc">
+						<span>Заказ тура ни к чему вас не обязывает. Мы уточним наличие мест и свяжемся с вами в ближайшее время</span>
+					</div>
+
+					<div class="fLine">
+						<label for="">Ваше имя</label>
+						<input class="order-ctour order" name="name" id="#name" type="text" placeholder="Ваше имя">
+					</div>
+
+					<div class="fLine">
+						<label for="">Ваш e-mail</label>
+						<input class="order-ctour order" name="email" type="text" placeholder="Ваша электронная почта">
+					</div>
+
+					<div class="fLine">
+						<label for="">Ваш телефон</label>
+						<input class="phone order-ctour order" name="phone" type="text" placeholder="+7(___)___-__-__">
+					</div>
+
+					<div class="fLine">
+						<label for="">Параметры тура</label>
+						<textarea class="order-ctour order" name="message" type="text" placeholder="Вопросы и пожелания"></textarea>
+					</div>
+
+					<input type="hidden" name="ide" class="order-ctour hidden" value="Заказ тура">
+
+					<input type="hidden" id="tourid" name="tour" class="order-ctour hidden" value="None">
+
+					<div class="offerItem" style="padding: 20px 0 0 0">
+			            <span class="check" id="#OfferCheck"><i class="fa fa-check" aria-hidden="true"></i></span>
+			            <span>Я принимаю <a class="offerLink" href="#modalOffer">договор оферты</a></span>
+			        </div>
+
+					<div class="modalButton disabled">
+						<button data-ion="data=.order-ctour;ajax=/callback/send;prepend=#SystemMessages;" class="hbtn">Заказать тур</button>
+					</div>
+
+					<div class="modalDesc">
+						<span>Мы гарантируем конфиденциальность введенных данных</span>
+					</div>
+
+				</div>
+			</div>
+
+			<ofmodal>
+				<div class="modalSecond">
+					<div class="modalLine">
+						<div class="close">×</div>
+			    		<ofmodalbody></ofmodalbody>
+					</div>
+				</div>
+			</ofmodal>
+
+		</div>
+
+	</div>
+
+
+	<!-- System messages -->
+	<div id="SystemMessagesWrapper">
+	    <div id="SystemMessages"></div>
+	</div>
+
+	<script src="/themes/azimut-tur/assets/js/jquery.min.js"></script>
+	<script src="/themes/azimut-tur/assets/js/owl.carousel.min.js"></script>
+	<script src="/themes/azimut-tur/assets/js/jquery.magnific-popup.min.js"></script>
+	<script src="/themes/azimut-tur/assets/js/jquery.inputmask.bundle.js"></script>
+	<script src="/themes/azimut-tur/assets/js/ion.js"></script>
+	<script src="/themes/azimut-tur/assets/js/jquery.downCount.js"></script>
+	<script src="../../plugins/aleksandrablizin/ion/assets/js/octo-ion.js"></script>
+	<script src="/themes/azimut-tur/assets/js/common.js"></script>
+
+	<script src="https://api-maps.yandex.ru/2.1/?lang=ru_RU" type="text/javascript"></script>
+
+	<script type="text/javascript">
+  		ymaps.ready(init);
+    	var myMap, myPlacemark, latitude, longitude;
+    	latitude = 51.536941;
+	    longitude = 46.011472;
+
+	    function init(){
+	        myMap = new ymaps.Map ("map", {
+	            center: [latitude, longitude],
+	            zoom: 15,
+	            controls: ['zoomControl']
+	        });
+
+	        myPlacemark = new ymaps.Placemark([latitude, longitude],
+	        	{ hintContent: 'Азимут-Тур', balloonContent: 'Турагентство "Азимут-Тур"<br>410012, г.Саратов, ул.Большая Казачья 108<br>(8452) 255-996, 53-66-74' },
+	        	{ preset: 'islands#dotIcon', iconColor: '#3b5998'}
+	        );
+
+	        myMap.geoObjects.add(myPlacemark);
+	    }
+	</script>
+
+</body>
+</html>

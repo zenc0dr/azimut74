@@ -1,0 +1,93 @@
+<section class="cruise__top {{class}}">
+	<div class="container">
+		<div class="cruise__item d-flex flex-column flex-lg-row justify-content-between mb-4 rounded">
+			<div class="cruise__item-left">
+				<div class="cruise__item-left_img" style="background-image: url({{ RiverCRS.ship_pic }})"></div>
+				<a class="cruise__item-left_youtube" href="{{ RiverCRS.ship_video }}" modal=".youtube-content">
+					<img src="{{'assets/images/components/cruise/youtube.svg'|theme}}" alt="youtube"/>
+				</a>
+				<div class="youtube-content" style="display: none">
+					<iframe loading="lazy" src="{{ RiverCRS.ship_video }}" frameborder="0" allowfullscreen=""></iframe>
+
+				</div>
+
+                {% if RiverCRS.ship_status %}
+
+
+						<a tabindex="0"
+							class="ship-type text-decoration-none premium d-block d-md-none bg-gold-200 px-2 px-xxl-3  ms-2 py-2 py-xxl-2 c-primary-100 rounded-pill fw-bolder d-flex align-items-center justify-content-center"
+							role="button" data-bs-toggle="popover" data-bs-trigger="focus" data-bs-placement="bottom"
+							data-bs-content="{{ RiverCRS.ship_status_desc }}">{{ RiverCRS.ship_status }}
+						</a>
+                {% endif %}
+			</div>
+
+			<div class="cruise__item-right fs-s fs-xl-def">
+				<div class="cruise__item-right_center d-flex justify-content-between px-2 px-sm-3 py-2 py-sm-3 flex-column">
+					<div class="cruise__item-name d-flex align-items-center">
+						<img src="{{'assets/images/components/cruise/ship.svg'|theme}}" alt="ship"/>
+							<a class="ms-2 fs-h3 fs-xl-h2" href="/russia-river-cruises/ship/{{ RiverCRS.ship_id }}">{{ RiverCRS.ship_name }}</a>
+
+							{% if RiverCRS.ship_status %}
+								<a tabindex="0" class="ship-type text-decoration-none premium d-none d-md-block bg-gold-200 px-2 px-xxl-3  ms-2 py-2 py-xxl-2 c-primary-100 rounded-pill fw-bolder d-flex align-items-center justify-content-center" role="button" data-bs-toggle="popover" data-bs-trigger="focus"
+									data-bs-placement="bottom"
+									data-bs-content="{{ RiverCRS.ship_status_desc }}">{{ RiverCRS.ship_status }}
+								</a>
+							{% endif %}
+					</div>
+					<div class="cruise__item-date my-3 d-flex flex-column flex-sm-row align-items-baseline">
+						<div class="cruise__item-date_left d-flex align-items-center flex-column">
+                            {% set dt = RiverCRS.date %}
+							<div class="d-flex align-items-center">
+								<img class="me-1 me-md-2" src="{{'assets/images/components/cruise/calendar.svg'|theme}}" alt="calendar"/>
+								<b>{{ dt.d1 }}</b>, {{ dt.d1d }} ({{ dt.t1 }})
+								<span class="mx-1 mx-md-2">—</span>
+								<b>{{ dt.d2 }}</b>, {{ dt.d2d }} ({{ dt.t2 }})
+							</div>
+							<div class="fs-ss fs-xl-s">Время московское</div>
+						</div>
+						<div class="cruise__item-date_right ms-0 ms-sm-5 d-flex align-items-center">
+							<img class="me-1 me-md-2" src="{{'assets/images/components/cruise/clock.svg'|theme}}" alt="clock"/>
+							{{ RiverCRS.days }}
+						</div>
+					</div>
+					<div class="cruise__item-route">
+                        {{ RiverCRS.waybill|raw }}
+					</div>
+				</div>
+				<div class="cruise__item-right_end px-3 py-3">
+					{#если нет скидок скрывать!#}
+
+
+
+
+					{% for discount in RiverCRS.temporary_discounts %}
+					<div class="cruise__item-right_end-top mb-3">
+						<div class="cruise__item-sale d-flex align-items-center">
+							<div>
+								<img src="{{'assets/images/components/cruise/sale.svg'|theme}}" alt="sale"/>
+							</div>
+							<div class="ms-2" >
+								<b>{{ discount.title }}</b>
+                                {# https://azimut-tour.atlassian.net/browse/RR-97 #}
+								{# discount.text|raw #}
+							</div>
+						</div>
+					</div>
+					{% endfor %}
+
+					<div class="cruise__item-right_end-bottom d-flex flex-column align-items-center justify-content-end">
+						<div class="booking-price">
+						</div>
+						<a class="booking-btn btn red" href="#">
+							<div>от
+								<span>{{ RiverCRS.price_start|price_format }}</span>
+								р./чел</div>
+							<div>без учёта скидок</div>
+						</a>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+</section>

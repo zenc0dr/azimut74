@@ -1,0 +1,108 @@
+<div class="cabin-modal">
+
+    <div class="cabin-modal__gallery zen-gallery-container">
+        {% for image in cabin.images %}
+            <div class="cabin-modal__gallery__image zen-gallery-item"
+                 onclick="ZenGallery.gallery(this)"
+                 src="{{ image.path }}"
+                 style="background-image: url({{ image.path }})">
+            </div>
+        {% endfor %}
+    </div>
+    <div class="cabin-modal__desc">
+        <div class="cabin-modal__title">
+            Категория {{ cabin.category }} - {{ placenames[cabin.places_main_count] }}местная каюта
+        </div>
+
+
+        <div class="cabin-modal__option">
+            <div class="cabin-modal__option__name">Расположение:</div>
+            <div class="cabin-modal__option__value">
+                <ul>
+                    {% if room_data.deck_id %}
+                        {% for deck in cabin.decks_list if deck.id == room_data.deck_id %}
+                            <li>{{ deck.name }}</li>
+                        {% endfor %}
+                    {% else %}
+                        {% for deck in cabin.decks_list %}
+                            <li>{{ deck.name }}</li>
+                        {% endfor %}
+                    {% endif %}
+                </ul>
+            </div>
+        </div>
+
+        {% if cabin.comfort.name %}
+        <div class="cabin-modal__option">
+            <div class="cabin-modal__option__name">Комфорт:</div>
+            <div class="cabin-modal__option__value">
+                {{ cabin.comfort.name }}
+            </div>
+        </div>
+        {% endif %}
+
+        {% if cabin.bed.name %}
+        <div class="cabin-modal__option">
+            <div class="cabin-modal__option__name">Расположение кроватей:</div>
+            <div class="cabin-modal__option__value">
+                {{ cabin.bed.name }}
+            </div>
+        </div>
+        {% endif %}
+
+        {% if cabin.rooms_count %}
+        <div class="cabin-modal__option">
+            <div class="cabin-modal__option__name">Количество комнат:</div>
+            <div class="cabin-modal__option__value">
+                {{ cabin.rooms_count }}
+            </div>
+        </div>
+        {% endif %}
+
+        {% if cabin.space %}
+        <div class="cabin-modal__option">
+            <div class="cabin-modal__option__name">Площадь каюты в м2:</div>
+            <div class="cabin-modal__option__value">
+                {{ cabin.space }}
+            </div>
+        </div>
+        {% endif %}
+
+        {% if cabin.incabin_list %}
+        <div class="cabin-modal__option">
+            <div class="cabin-modal__option__name">В каюте имеются:</div>
+            <div class="cabin-modal__option__value">
+                {% for incabin in cabin.incabin_list %}
+                    {{ incabin.name }}{% if loop.last != 1 %}, {% endif %}
+                {% endfor %}
+            </div>
+        </div>
+        {% endif %}
+
+        {% if cabin.desc %}
+        <div class="cabin-modal__option">
+            <div class="cabin-modal__option__name">Описание:</div>
+            <div class="cabin-modal__option__value">
+                {{ cabin.desc|raw }}
+            </div>
+        </div>
+        {% endif %}
+
+    </div>
+</div>
+{% if room_data %}
+<div class="cabin-modal__info">
+    <div class="cabin-modal__info_title">Номер каюты: {{ room_data.room_number }}</div>
+    <div class="cabin-modal__info_status">
+        {% if room_data.free_status != 0 %}
+            Статус: <span class="cabin-modal__info__status-desc free">СВОБОДНА ДЛЯ БРОНИРОВАНИЯ</span>
+        {% else %}
+            Статус: <span class="cabin-modal__info__status-desc">ПОД ЗАПРОС</span>
+            <div class="cabin-modal__info__status__note">
+                Наличие каюты требует дополнительного подтверждения.
+                Оставьте заявку и мы уточним возможность бронирования данной каюты.
+            </div>
+        {% endif %}
+    </div>
+</div>
+{% endif %}

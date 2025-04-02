@@ -1,0 +1,11 @@
+fields:
+    name:
+        label: 'Название категории'
+        oc.commentPosition: ''
+        span: auto
+        type: text
+    cid:
+        label: CID
+        span: auto
+        oc.commentPosition: ''
+        type: text

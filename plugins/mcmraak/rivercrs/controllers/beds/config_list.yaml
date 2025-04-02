@@ -1,0 +1,12 @@
+title: 'Расположения кроватей'
+modelClass: Mcmraak\Rivercrs\Models\Beds
+list: $/mcmraak/rivercrs/models/beds/columns.yaml
+recordUrl: 'mcmraak/rivercrs/beds/update/:id'
+noRecordsMessage: 'backend::lang.list.no_records'
+recordsPerPage: '30'
+showSetup: true
+showCheckboxes: true
+toolbar:
+    buttons: list_toolbar
+    search:
+        prompt: 'backend::lang.list.search_prompt'

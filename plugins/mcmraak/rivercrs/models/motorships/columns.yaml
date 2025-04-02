@@ -1,0 +1,24 @@
+columns:
+    id:
+        label: id
+        type: number
+        sortable: true
+    name:
+        label: 'Название теплохода'
+        type: text
+        searchable: true
+    techsc:
+        label: 'Технических характеристик'
+        type: text
+        sortable: false
+    onboardsc:
+        label: 'Отметок "На борту"'
+        type: text
+        sortable: false
+    waybillscount:
+        label: Заезды
+        type: text
+        sortable: false
+    sort_order:
+        label: Порядок
+        type: number

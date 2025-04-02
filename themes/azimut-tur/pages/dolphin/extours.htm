@@ -1,0 +1,89 @@
+title = "Экскурсионные туры"
+url = "/ex-tours/:?*"
+layout = "general"
+description = "Экскурсионные туры (dolphin)"
+is_hidden = 0
+robot_index = "index"
+robot_follow = "follow"
+contentType = "html"
+force_show = 0
+
+[DolphinWidget]
+==
+<?php
+function onStart()
+{
+	# Данные выводятся в переменную dolphin
+	Zen\Dolphin\Classes\Frontend::make($this);
+
+	# Редирект
+	if(@$this['dolphin']['redirect']) return Redirect::to($this['dolphin']['redirect']);
+
+	# 404
+	if(@$this['dolphin']['404']) {
+		$this->setStatusCode(404);
+		return $this->controller->run('404');
+	}
+
+	$this->addJs('/plugins/zen/dolphin/assets/js/zen.dolphin.frontend.js');
+}
+?>
+==
+<link rel="stylesheet" href="/plugins/zen/dolphin/assets/css/zen.dolphin.frontend.css">
+<meta id="dolphin-preset" content="{{ dolphin.page.preset }}">
+<section class="cruises dolphin-css">
+	{#
+	<div class="cruiseHead">
+		<div class="c-r">
+			<div class="col-30 col-xs-100">
+				<div class="cruiseImage">
+					<img src="{{ dolphin.page.preview }}">
+				</div>
+				<div class="socialWrap">
+					{% partial 'template/socialbuttons' %}
+				</div>
+			</div>
+			<div class="col-70 col-xs-100">
+				<div class="cruiseInfo">
+					<div class="cruiseExcerpt normalText">
+						<h1>{{ dolphin.page.name }}</h1>
+						{{ dolphin.page.text|raw }}
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+	#}
+	<h1>{{ dolphin.page.name }}</h1>
+	<div class="cruiseData">
+		<div class="c-r">
+			<div class="col-25 col-s-100 as-s">
+				{% partial 'dolphin/leftmenu' %}
+			</div>
+
+			<div class="col-75 col-s-100 as-s">
+				<div class="rightBlock">
+
+					{# Карточка тура ДО виджета #}
+					{% if dolphin.infoblock %}
+						{% partial 'dolphin/tour_page_before' %}
+					{% endif %}
+
+				    {# Поисковый виджет  #}
+					{%  component 'DolphinWidget' %}
+
+					{# Карточка тура ПОСЛЕ виджета #}
+					{% if dolphin.infoblock %}
+						{% partial 'dolphin/tour_page_after' %}
+					{% endif %}
+
+				</div>
+			</div>
+		</div>
+	</div>
+	<div class="cruiseData">
+	    {% partial 'dolphin/page_text' %}
+	    {% partial 'dolphin/seo_text' %}
+	    {% partial 'dolphin/seo_menu' %}
+	</div>
+</section>

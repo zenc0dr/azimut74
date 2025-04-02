@@ -1,0 +1,10 @@
+name: Bookings
+form: $/mcmraak/sans/models/booking/fields.yaml
+modelClass: Mcmraak\Sans\Models\Booking
+defaultRedirect: mcmraak/sans/bookings
+create:
+    redirect: 'mcmraak/sans/bookings/update/:id'
+    redirectClose: mcmraak/sans/bookings
+update:
+    redirect: mcmraak/sans/bookings
+    redirectClose: mcmraak/sans/bookings

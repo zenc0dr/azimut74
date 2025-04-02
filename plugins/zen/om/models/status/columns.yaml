@@ -1,0 +1,15 @@
+columns:
+    id:
+        label: id
+        type: number
+        sortable: true
+    name:
+        label: 'zen.om::lang.statuses.name'
+        type: text
+        searchable: true
+        sortable: false
+    sort_order:
+        label: 'zen.om::lang.plugin.sort_order'
+        type: number
+        invisible: true
+        sortable: true

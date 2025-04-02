@@ -1,0 +1,4 @@
+title: Payments
+modelClass: Zen\Om\Models\Payment
+toolbar:
+    buttons: reorder_toolbar

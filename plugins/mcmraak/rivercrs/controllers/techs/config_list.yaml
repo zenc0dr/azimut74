@@ -1,0 +1,12 @@
+title: Techs
+modelClass: Mcmraak\Rivercrs\Models\Techs
+list: $/mcmraak/rivercrs/models/techs/columns.yaml
+recordUrl: 'mcmraak/rivercrs/techs/update/:id'
+noRecordsMessage: 'backend::lang.list.no_records'
+recordsPerPage: '30'
+showSetup: true
+showCheckboxes: true
+toolbar:
+    buttons: list_toolbar
+    search:
+        prompt: 'backend::lang.list.search_prompt'

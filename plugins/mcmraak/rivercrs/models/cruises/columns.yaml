@@ -1,0 +1,13 @@
+columns:
+    name:
+        label: Название
+        type: text
+        searchable: true
+        sortable: true
+    slug:
+        label: URL
+        type: text
+        searchable: true
+    sort_order:
+        label: Порядок
+        type: number

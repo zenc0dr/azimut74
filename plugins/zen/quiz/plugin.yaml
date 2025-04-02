@@ -1,0 +1,20 @@
+plugin:
+    name: 'zen.quiz::lang.plugin.name'
+    description: 'zen.quiz::lang.plugin.description'
+    author: 'Alex Blaze'
+    icon: oc-icon-mobile-phone
+    homepage: ''
+navigation:
+    main-menu-item:
+        label: Квиз
+        url: zen/quiz/applications
+        icon: icon-life-ring
+        sideMenu:
+            side-menu-item:
+                label: Заявки
+                url: zen/quiz/applications
+                icon: icon-trello
+            side-menu-item2:
+                label: Города
+                url: zen/quiz/cities
+                icon: icon-skyatlas

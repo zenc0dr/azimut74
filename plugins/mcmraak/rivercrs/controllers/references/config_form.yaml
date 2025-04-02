@@ -1,0 +1,16 @@
+name: Справка
+modelClass: Mcmraak\Rivercrs\Models\Reference
+form: $/mcmraak/rivercrs/models/reference/fields.yaml
+defaultRedirect: mcmraak/rivercrs/references
+create:
+    title: Создание
+    redirect: 'mcmraak/rivercrs/references/update/:id'
+    redirectClose: mcmraak/rivercrs/references
+    flashSave: 'Статья создана'
+update:
+    title: Изменение
+    redirect: mcmraak/rivercrs/references
+    redirectClose: mcmraak/rivercrs/references
+    flashSave: 'Статья сохранена'
+    flashDelete: 'Статья удалена'
+preview: {  }

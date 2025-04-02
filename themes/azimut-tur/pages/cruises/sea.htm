@@ -1,0 +1,29 @@
+title = "Морские круизы"
+url = "/sea-cruises"
+layout = "general"
+description = "Морские круизы"
+meta_title = "Морские круизы"
+is_hidden = 0
+robot_index = "index"
+robot_follow = "follow"
+contentType = "html"
+==
+{% put slider %}
+	{% partial 'header/slidercruises' %}
+{% endput %}
+
+<section class="cruises">
+					
+	<div class="headText">
+		<span>{{ this.page.title|mutator }}</span>
+	</div>
+
+	<div class="pageData">
+		<div class="data">
+			{% component 'contenteditor' file="cruises/sea" %}
+		</div>
+	</div>
+	
+	{% partial 'rivercrs/relinks' %}
+
+</section>

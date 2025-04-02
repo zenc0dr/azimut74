@@ -1,0 +1,212 @@
+description = "Лечение"
+
+[viewBag]
+==
+{% if hotel_info.hotel_bag.MedicalService %}
+<div class="s-card__switcher-content s-card__switch-el sw--healing">
+	<div class="s-card__switcher-line s-card__healing">
+		<div class="s-card__heading">
+			Лечение
+		</div>
+	{#	{{d(hotel_info.hotel_bag.MedicalService)}}#}
+		<div class="s-card__data s-card__healing-data">
+		{#{% if hotel_info.hotel_bag.MedicalService.Description %}
+			<div class="data">
+		        {{ hotel_info.hotel_bag.MedicalService.Description|raw }}
+			</div>
+    	{% endif %}#}
+			<div class="s-card__healing-details">
+				<div class="r">
+					<div class="col-30 as-s">
+						<div class="s-card__room-details-col t-r">
+							<strong>Описание:</strong>
+						</div>
+					</div>
+					<div class="col-70 as-s">
+						<div class="s-card__room-details-col data">
+							{{ hotel_info.hotel_bag.MedicalService.Description|raw }}
+						</div>
+					</div>
+				</div>
+			     {% if hotel_info.hotel_bag.MedicalService.MedicalProfileList %}
+				<div class="r">
+					<div class="col-30 as-s">
+						<div class="s-card__room-details-col t-r">
+							<strong>Профили лечения:</strong>
+						</div>
+					</div>
+					<div class="col-70 as-s">
+					<div class="s-card__room-details-col">
+					    {% for record in hotel_info.hotel_bag.MedicalService.MedicalProfileList %}
+    						
+    						{#{{d(record)}}#}
+    							<p>
+    								<i>{{ record.Name }}</i>
+    							</p>
+    							{% if record.ContentList|length > 0 %}
+    							<ul>
+    							{% for item in record.ContentList %}
+        							  <li>{{item.Name}}
+        							      {% if item.ContentList|length > 0 %}
+        							      <ul>
+        							      {% for i in item.ContentList %}
+        							          <li>{{ i.Name }}</li>
+        							      {% endfor %}
+        							      </ul>
+        							      {% endif %} 
+        							  </li>	
+    							{% endfor %}
+    							</ul>
+    							{% endif %}
+    						
+						{% endfor %}
+						</div>
+					</div>
+				</div>
+			    {% endif %}
+			    {% if hotel_info.hotel_bag.MedicalService.DiagnosticDepartmentList %}
+				<div class="r">
+					<div class="col-30 as-s">
+						<div class="s-card__room-details-col t-r">
+							<strong>Диагностическая база:</strong>
+						</div>
+					</div>
+					<div class="col-70 as-s">
+					<div class="s-card__room-details-col">
+					    {% for record in hotel_info.hotel_bag.MedicalService.DiagnosticDepartmentList %}
+						
+									<p>
+    								<i>{{ record.Name }}</i>
+    							</p>
+    							{% if record.ContentList|length > 0 %}
+    							<ul>
+    							{% for item in record.ContentList %}
+        							  <li>{{item.Name}}
+        							      {% if item.ContentList|length > 0 %}
+        							      <ul>
+        							      {% for i in item.ContentList %}
+        							          <li>{{ i.Name }}</li>
+        							      {% endfor %}
+        							      </ul>
+        							      {% endif %} 
+        							  </li>	
+    							{% endfor %}
+    							</ul>
+    							{% endif %}
+						
+						{% endfor %}
+						</div>
+					</div>
+				</div>
+				{% endif %}
+			   {% if hotel_info.hotel_bag.MedicalService.MedicalDepartmentList %}
+				<div class="r">
+					<div class="col-30 as-s">
+						<div class="s-card__room-details-col t-r">
+							<strong>Лечебная база:</strong>
+						</div>
+					</div>
+					<div class="col-70 as-s">
+					<div class="s-card__room-details-col">
+						{% for record in hotel_info.hotel_bag.MedicalService.MedicalDepartmentList %}
+						
+									<p>
+    								<i>{{ record.Name }}</i>
+    							</p>
+    							{% if record.ContentList|length > 0 %}
+    							<ul>
+    							{% for item in record.ContentList %}
+        							  <li>{{item.Name}}
+        							      {% if item.ContentList|length > 0 %}
+        							      <ul>
+        							      {% for i in item.ContentList %}
+        							          <li>{{ i.Name }}</li>
+        							      {% endfor %}
+        							      </ul>
+        							      {% endif %} 
+        							  </li>	
+    							{% endfor %}
+    							</ul>
+    							{% endif %}
+						
+						{% endfor %}
+						</div>
+					</div>
+				</div>
+				{% endif %}
+				  {% if hotel_info.hotel_bag.MedicalService.TreatmentMethodList %}
+				<div class="r">
+					<div class="col-30 as-s">
+						<div class="s-card__room-details-col t-r">
+							<strong>Методы лечения:</strong>
+						</div>
+					</div>
+					<div class="col-70 as-s">
+					<div class="s-card__room-details-col">
+							{% for record in hotel_info.hotel_bag.MedicalService.TreatmentMethodList %}
+						
+									<p>
+    								<i>{{ record.Name }}</i>
+    							</p>
+    							{% if record.ContentList|length > 0 %}
+    							<ul>
+    							{% for item in record.ContentList %}
+        							  <li>{{item.Name}}
+        							      {% if item.ContentList|length > 0 %}
+        							      <ul>
+        							      {% for i in item.ContentList %}
+        							          <li>{{ i.Name }}</li>
+        							      {% endfor %}
+        							      </ul>
+        							      {% endif %} 
+        							  </li>	
+    							{% endfor %}
+    							</ul>
+    							{% endif %}
+					
+						{% endfor %}
+							</div>
+					</div>
+				</div>
+				{% endif %}
+				{% if hotel_info.hotel_bag.MedicalService.SpecialistList %}
+				<div class="r">
+					<div class="col-30 as-s">
+						<div class="s-card__room-details-col t-r">
+							<strong>Медицинские специалисты:</strong>
+						</div>
+					</div>
+					<div class="col-70 as-s">
+						<div class="s-card__room-details-col">
+						{% for record in hotel_info.hotel_bag.MedicalService.SpecialistList %}
+					
+									<p>
+    								<i>{{ record.Name }}</i>
+    							</p>
+    							{% if record.ContentList|length > 0 %}
+    							<ul>
+    							{% for item in record.ContentList %}
+        							  <li>{{item.Name}}
+        							      {% if item.ContentList|length > 0 %}
+        							      <ul>
+        							      {% for i in item.ContentList %}
+        							          <li>{{ i.Name }}</li>
+        							      {% endfor %}
+        							      </ul>
+        							      {% endif %} 
+        							  </li>	
+    							{% endfor %}
+    							</ul>
+    							{% endif %}
+						
+						{% endfor %}
+						</div>
+					</div>
+				</div>
+				{% endif %}
+	
+			</div>
+		</div>
+	</div>
+</div>
+{% endif %}

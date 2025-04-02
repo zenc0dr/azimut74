@@ -1,0 +1,27 @@
+title = "Автобусом к морю"
+url = "/beach/bus-to-sea"
+layout = "general"
+description = "Автобусом к морю"
+meta_title = "Автобусом к морю"
+is_hidden = 0
+robot_index = "index"
+robot_follow = "follow"
+contentType = "html"
+==
+{% put slider %}
+	{% partial 'header/sliderbeach' %}
+{% endput %}
+
+<section class="beach">
+					
+	<div class="headText">
+		<span>{{ this.page.title }}</span>
+	</div>
+
+	<div class="pageData">
+		<div class="data">
+			{% component 'contenteditor' file="beach/bus-to-sea" %}
+		</div>
+	</div>
+
+</section>

@@ -1,0 +1,47 @@
+columns:
+    id:
+        label: id
+        type: number
+    name:
+        label: Заголовок
+        type: text
+        searchable: true
+        sortable: false
+    label:
+        label: 'Пункт меню'
+        type: text
+        searchable: true
+        sortable: false
+    pageblock_id:
+        label: 'Группирующий блок'
+        type: text
+        relation: page_block
+        valueFrom: name
+    parent_id:
+        label: 'Родительская страница'
+        type: text
+        relation: parent
+        valueFrom: name
+    scope:
+        label: 'Область отображения'
+        type: text
+        sortable: false
+    created_at:
+        label: Создано
+        type: datetime
+        sortable: false
+        format: 'd.m.Y H:i'
+    active:
+        label: Активно
+        type: partial
+        sortable: false
+    group_sort_order:
+        label: 'Порядок группы'
+        type: number
+        searchable: true
+        sortable: true
+    slug:
+        label: URL
+        type: text
+        searchable: true
+        sortable: true

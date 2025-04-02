@@ -1,0 +1,16 @@
+name: Метка
+modelClass: Zen\Dolphin\Models\Label
+form: $/zen/dolphin/models/label/fields.yaml
+defaultRedirect: zen/dolphin/labels
+create:
+    title: 'Создание метки'
+    redirect: 'zen/dolphin/labels/update/:id'
+    redirectClose: zen/dolphin/labels
+    flashSave: 'Метка создана'
+update:
+    title: 'Изменение метки'
+    redirect: zen/dolphin/labels
+    redirectClose: zen/dolphin/labels
+    flashSave: 'Метка сохранена'
+    flashDelete: 'Метка удалена'
+preview: {  }

@@ -1,0 +1,10 @@
+name: Seoitems
+form: $/zen/dolphin/models/seoitem/fields.yaml
+modelClass: Zen\Dolphin\Models\Seoitem
+defaultRedirect: zen/dolphin/seoitems
+create:
+    redirect: 'zen/dolphin/seoitems/update/:id'
+    redirectClose: zen/dolphin/seoitems
+update:
+    redirect: zen/dolphin/seoitems
+    redirectClose: zen/dolphin/seoitems

@@ -1,0 +1,10 @@
+name: Articles
+form: $/mcmraak/sans/models/article/fields.yaml
+modelClass: Mcmraak\Sans\Models\Article
+defaultRedirect: mcmraak/sans/articles
+create:
+    redirect: 'mcmraak/sans/articles/update/:id'
+    redirectClose: mcmraak/sans/articles
+update:
+    redirect: mcmraak/sans/articles
+    redirectClose: mcmraak/sans/articles

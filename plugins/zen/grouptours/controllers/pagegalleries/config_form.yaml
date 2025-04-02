@@ -1,0 +1,15 @@
+name: Галерея
+modelClass: Zen\GroupTours\Models\PageGallery
+form: $/zen/grouptours/models/pagegallery/fields.yaml
+defaultRedirect: zen/grouptours/pagegalleries
+create:
+    title: 'Создать галерею'
+    redirect: 'zen/grouptours/pagegalleries/update/:id'
+    redirectClose: zen/grouptours/pagegalleries
+    flashSave: 'Галерея создана'
+update:
+    title: 'Изменить галерею'
+    redirect: zen/grouptours/pagegalleries
+    redirectClose: zen/grouptours/pagegalleries
+    flashSave: 'Галерея сохранена'
+    flashDelete: 'Галерея удалена'

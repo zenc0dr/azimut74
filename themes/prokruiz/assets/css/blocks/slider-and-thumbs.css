@@ -1,0 +1,90 @@
+.slider-and-thumbs .swiper-container {
+    width: 100%;
+    height: 100%;
+}
+
+.slider-and-thumbs .swiper-slide {
+    text-align: center;
+    font-size: 18px;
+    background: #fff;
+
+    /* Center slide text vertically */
+    display: -webkit-box;
+    display: -ms-flexbox;
+    display: -webkit-flex;
+    display: flex;
+    -webkit-box-pack: center;
+    -ms-flex-pack: center;
+    -webkit-justify-content: center;
+    justify-content: center;
+    -webkit-box-align: center;
+    -ms-flex-align: center;
+    -webkit-align-items: center;
+    align-items: center;
+}
+
+.slider-and-thumbs .swiper-slide img {
+    display: block;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+
+.slider-and-thumbs {
+    display: flex;
+    flex-direction: column;
+    height: 600px;
+}
+
+
+.slider-and-thumbs .swiper-slide {
+    background-size: cover;
+    background-position: center;
+}
+
+.slider-and-thumbs .shipSlide {
+    height: 75%;
+    width: 100%;
+}
+
+.slider-and-thumbs .swiper-slide {
+    border-radius: 4px;
+    overflow: hidden;
+}
+
+.slider-and-thumbs .thumbSlider {
+    height: 25%;
+    box-sizing: border-box;
+    padding: 10px 0;
+}
+
+.thumbSlider .swiper-slide {
+    width: 25%;
+    height: 100%;
+    opacity: 0.4;
+}
+
+.thumbSlider .swiper-slide-thumb-active {
+    opacity: 1;
+}
+
+.slider-and-thumbs .swiper-slide img {
+    display: block;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+
+@media (max-width: 700px) {
+    .slider-and-thumbs {
+        height: 70vh;
+    }
+}
+
+@media (max-width: 576px) {
+    .slider-and-thumbs {
+        height: 60vh;
+    }
+}

@@ -1,0 +1,13 @@
+title: Города
+modelClass: Mcmraak\Rivercrs\Models\Towns
+list: $/mcmraak/rivercrs/models/towns/columns.yaml
+recordUrl: 'mcmraak/rivercrs/towns/update/:id'
+noRecordsMessage: 'backend::lang.list.no_records'
+recordsPerPage: '30'
+showSetup: true
+showCheckboxes: true
+toolbar:
+    buttons: list_toolbar
+    search:
+        prompt: 'backend::lang.list.search_prompt'
+filter: config_filter.yaml

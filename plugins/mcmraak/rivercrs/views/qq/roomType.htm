@@ -1,0 +1,9 @@
+{#
+cabin (obj) - Каюта
+decks (string) - Список палуб
+price (arr)
+    price_places (int) - Мест размещения
+    price_value (int) - Цена
+#}
+Категория: {{ cabin.category }}: {{cabin.places_main_count}}-местная каюта, {{price.price_places}}-местное размещение;
+Палубы: {{ decks }}; Расположение кровати: {{cabin.bed.name}}; Удобства: {{ cabin.comfort.name }}

@@ -1,0 +1,59 @@
+name: Pro-kruiz
+description: 'Создана специально для сайта pro-kruiz.ru по индивидуальному заказу'
+author: october-studio
+homepage: 'https://october-studio.ru'
+code: ''
+form:
+    tabs:
+        fields:
+            main_title:
+                label: 'Заголовок виджета на главной'
+                span: full
+                type: text
+                tab: 'Главная страница'
+            pk_terms:
+                label: 'Пользовательское соглашение'
+                size: huge
+                span: full
+                type: richeditor
+                tab: 'Соглашения'
+            pk_offer:
+                label: 'Соглашение о персональных данных'
+                size: huge
+                span: full
+                type: richeditor
+                tab: 'Соглашения'
+            info_card_1:
+                label: 'Инфокарта 1'
+                size: huge
+                span: full
+                type: richeditor
+                tab: 'Инфокарты'
+            info_card_2:
+                label: 'Инфокарта 2'
+                size: huge
+                span: full
+                type: richeditor
+                tab: 'Инфокарты'
+            info_card_3:
+                label: 'Инфокарта 3'
+                size: huge
+                span: full
+                type: richeditor
+                tab: 'Инфокарты'
+            info_card_4:
+                label: 'Инфокарта 4'
+                size: huge
+                span: full
+                type: richeditor
+                tab: 'Инфокарты'
+            footer_phone:
+                label: 'Контактный телефон'
+                span: auto
+                type: text
+                tab: 'Подвал'
+            footer_email:
+                label: 'email'
+                span: auto
+                type: text
+                tab: 'Подвал'

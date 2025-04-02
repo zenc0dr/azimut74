@@ -1,0 +1,125 @@
+description = "Левое меню речных круизов"
+
+[viewBag]
+
+[Block]
+
+[Block Block2]
+==
+<?php
+/*
+Модуль рисует левое меню на странице с круизами
+
+На вход модуль ожидает получить:
+    cruises - Все круизы \Mcmraak\Rivercrs\Models\Cruises
+    cruise - Один круиз \Mcmraak\Rivercrs\Models\Cruises::find(...)
+    references - Коллекция модели "справочная инфорамация" \Mcmraak\Rivercrs\Models\Reference
+    transit_exist = (true/false) - Является ли страница городом-следования
+*/
+?>
+==
+{% component 'Block' %}
+<div class="leftBlock">
+	<div class="leftBlockItem">
+		<div class="itemHead">
+			<span>
+				Круизы
+			</span>
+			<i class="fa fa-arrow-down arrow-s" aria-hidden="true"></i>
+		</div>
+		<div class="itemBody">
+			<ul>
+                {% for cruise in cruises %}
+                    
+                    {% if cruise.frame == 0 %}
+                    
+                        {% if cruise.link == '' %}
+    					    <li><a href="/russia-river-cruises/{{ cruise.slug }}">{{ cruise.name|mutator }}</a></li>
+    					{% else %}
+    					    <li><a href="{{ cruise.link }}">{{ cruise.name|mutator }}</a></li>
+    					{% endif %}
+					
+					{% else %}
+					
+					<li><a href="/russia-river-cruises/content/{{ cruise.slug }}">{{ cruise.name|mutator }}</a></li>
+					
+					{% endif %}
+                {% endfor %}
+			</ul>
+		</div>
+	</div>
+	
+	<div class="leftBlockItem">
+	{% component 'Block2' %}
+		<div class="itemHead">
+			<span>
+				Полезная информация
+			</span>
+			<i class="fa fa-arrow-down arrow-s" aria-hidden="true"></i>
+		</div>
+		<div class="itemBody">
+			<ul>
+    			{% for reference in references %}
+    			    {% if reference.menu %}
+        				{% if reference.link == '' %}
+        					<li>
+            					<a href="/russia-river-cruises/references/{{ reference.slug }}">
+            					    {{ reference.name|mutator }}
+            					</a>
+        					</li>
+        				{% else %}
+        				    <li><a href="{{ reference.link }}">{{ reference.name|mutator }}</a></li>
+        				{% endif %}
+    				{% endif %}
+    			{% endfor %}
+			</ul>
+		</div>
+	</div>
+	<div class="leftBlockItem">
+		<div class="itemHead">
+			<span>
+			{% if transit_exist %}
+			    {{ cruise.cruise.menu_title|mutator }}
+			{% else %}
+				{{ cruise.menu_title|mutator }}
+			{% endif %}
+			</span>
+			<i class="fa fa-arrow-down arrow-s" aria-hidden="true"></i>
+		</div>
+		<div class="itemBody">
+			<ul>
+			{% if transit_exist %}
+			    {% for transit in cruise.cruise.transits %}
+					{% if transit.menu %}
+						<li><a href="/russia-river-cruises/{{ transit.slug }}">{{ transit.menu_title|mutator }}</a></li>
+					{% endif %}
+                {% endfor %}
+			{% else %}
+                {% for transit in cruise.transits %}
+					{% if transit.menu %}
+						<li><a href="/russia-river-cruises/{{ transit.slug }}">{{ transit.menu_title|mutator }}</a></li>
+					{% endif %}
+                {% endfor %}
+            {% endif %}
+			</ul>
+		</div>
+	</div>
+	<div class="leftBlockItem">
+		<div class="itemHead">
+			<span>
+				Теплоходы
+			</span>
+			<i class="fa fa-arrow-down arrow-s" aria-hidden="true"></i>
+		</div>
+		<div class="itemBody">
+			<ul>
+                {% for motorship in motorships %}
+					<li><a href="/russia-river-cruises/motorship/{{ motorship.id }}">{{ motorship.name|mutator }}</a></li>
+                {% endfor %}
+			</ul>
+            <div class="more-items">
+                Смотреть все теплоходы <i class="fa fa-chevron-down"></i>
+            </div>
+		</div>
+	</div>
+</div>

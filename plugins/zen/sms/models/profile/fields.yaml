@@ -1,0 +1,20 @@
+fields:
+    name:
+        label: 'Название профиля'
+        span: auto
+        type: text
+    code:
+        label: 'Код профиля'
+        span: auto
+        preset:
+            field: name
+            type: slug
+        type: text
+    from:
+        label: Отправитель
+        span: auto
+        type: text
+    key:
+        label: 'sms.ru api key'
+        span: auto
+        type: text

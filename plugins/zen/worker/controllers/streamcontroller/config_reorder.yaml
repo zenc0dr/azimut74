@@ -1,0 +1,4 @@
+title: StreamController
+modelClass: Zen\Worker\Models\Stream
+toolbar:
+    buttons: reorder_toolbar

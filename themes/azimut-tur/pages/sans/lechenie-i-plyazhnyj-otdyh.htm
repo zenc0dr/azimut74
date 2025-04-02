@@ -1,0 +1,552 @@
+title = "Лечение и пляжный отдых"
+url = "/lechenie-i-plyazhnyj-otdyh"
+layout = "general"
+is_hidden = 0
+robot_index = "index"
+robot_follow = "follow"
+contentType = "html"
+==
+<section class="cruises">
+
+	{#<i class="fa fa-calendar" aria-hidden="true"></i>#}
+	<div class="cruiseHead">
+		<div class="c-r">
+			<div class="col-30 col-xs-100">
+				<div class="cruiseImage">
+				    {% set image = cruise.images|first %}
+					<img src="{{ image.path|resize(400) }}" {% if image.title %}alt="{{ image.title }}"{% endif %}>
+				</div>
+				<div class="socialWrap">
+					{% partial 'template/socialbuttons' %}
+				</div>
+			</div>
+			<div class="col-70 col-xs-100">
+				<div class="cruiseInfo">
+                    {#{% partial 'template/socialbuttons' %}#}
+					<div class="cruiseExcerpt normalText">
+						{{ cruise.text|raw }}
+					</div>
+					
+					{% if cruise.seo_articles %}
+					<div class="cruiseButtons">
+                        {% for tag in cruise.seo_articles %}
+                        	{% if tag.seo_hash %}
+							<a class="crbtn" href="#{{ tag.seo_hash }}">{{ tag.seo_title }}</a>
+							{% endif %}
+                        {% endfor %}
+					</div>
+					{% endif %}
+
+				</div>
+			</div>
+		</div>
+	</div>
+
+	<div class="cruiseBene">
+
+	</div>
+
+	<div class="cruiseData">
+		<div class="c-r">
+			<div class="col-25 col-s-100 as-s">
+				{% partial 'sans/leftmenu' %}
+			</div>
+
+			<div class="col-75 col-s-100 as-s">
+				<div class="rightBlock">
+					
+					<div id="Selector" class="s-sel">
+						
+						<div class="s-sel__line">
+							<div class="s-sel__line-head">
+						        <span>Подбор места отдыха</span>
+						    </div>
+						    
+						    <div class="r">
+						    	
+						    	<div class="col-30 col-xxs-50">
+						    		<div class="s-sel__item">
+								        <label class="s-sel__label">Выбор курорта</label>
+								        {#<input class="s-sel__select s-sel__select_curort" type="hidden">#}
+								        
+								        <div class="s-sel__select s-sel__select_curort">
+								        	<div class="s-sel__select-output">
+								        		<span class="s-sel__select-value">Курортинг</span>
+								        	</div>
+								        	<input class="s-sel__select s-sel__select_curort" type="hidden">
+								        	<div class="s-sel__select-list">
+									        	<ul>
+									        		<li class="s-sel__select-list-item" data-value="Курортинг1">Курортинг1</li>
+									        		<li class="s-sel__select-list-item" data-value="Курортинг2">Курортинг2</li>
+									        		<li class="s-sel__select-list-item" data-value="Курортинг3">Курортинг3</li>
+									        		<li class="s-sel__select-list-item" data-value="Курортинг4">Курортинг4</li>
+									        		<li class="s-sel__select-list-item" data-value="Курортинг5">Курортинг5</li>
+									        	</ul>	
+								        	</div>
+								        </div>
+								        
+								        <!-- <select class="s-sel__select s-sel__select_curort" v-model="resorts.selected">
+								            <option v-for="option in resorts.options" :value="option.value">
+								                ${ option.name }
+								            </option>
+								        </select> -->
+								    </div>
+						    	</div>
+						    	
+						    	<div class="col-20 col-xxs-50">
+						    		<div class="s-sel__item">
+						    			<label class="s-sel__label">Взрослых</label>
+	        							<input class="s-sel__input s-sel__input_number" v-model="parents_count">
+					    			</div>
+						    	</div>
+						    	
+						    	<div class="col-15 col-xxs-50">
+						    		<div class="s-sel__item">
+						    			<label class="s-sel__label">Детей</label>
+						    			
+	        							<div class="s-sel__select s-sel__select_children">
+								        	<div class="s-sel__select-output">
+								        		<span class="s-sel__select-value"></span>
+								        	</div>
+								        	<input class="s-sel__select s-sel__select_children" type="hidden">
+								        	<div class="s-sel__select-list">
+									        	<ul>
+									        		<li class="s-sel__select-list-item" data-value="1">1</li>
+									        		<li class="s-sel__select-list-item" data-value="2">2</li>
+									        	</ul>	
+								        	</div>
+								        </div>
+								        
+					    			</div>
+						    	</div>
+						    	
+						    	<div class="col-35 col-xxs-50">
+						    		<div class="s-sel__item s-sel__item_children-age">
+							    		<label class="s-sel__label s-sel__label_children-age">Возраст детей</label>
+		        						<input class="s-sel__input s-sel__input_children-age" :value="item.value" class="children-age" v-for="item in childrens_ages">
+	        						</div>
+						    	</div>
+						    	
+						    </div>
+						    
+						    <div class="r">
+						    	<div class="col-25 col-xxs-100">
+						    		<div class="s-sel__item">
+						    			<label class="s-sel__label">
+						    				Дата заезда
+						    			</label>
+						    			<div class="dateSelect tsSmall tsDate">
+								            <input class="s-sel__input s-sel__input_date" type="text" name="date-1"></input>
+								        </div>
+						    		</div>
+						    	</div>
+						    	<div class="col-25 col-xs-40 col-xxs-50">
+						    		<div class="s-sel__item">
+						    			<label class="s-sel__label">Дней отдыха</label>
+							    		<input class="s-sel__input s-sel__input_number" v-model="days_from">
+							    		<span style="color: #fff;">—</span>
+							    		<input class="s-sel__input s-sel__input_number" v-model="days_to">
+						    		</div>
+						    	</div>
+						    	<div class="col-50 col-xs-35 col-xxs-50">
+						    		<div class="s-sel__item">
+						    			<label class="s-sel__label">Возможное смещение даты заезда (дней)</label>
+	        							<input class="s-sel__input s-sel__input_number" v-model="date_delta_days">
+						    		</div>
+						    	</div>
+						    </div>
+						    
+						    <div class="r">
+						    	<div class="col-40 col-m-100">
+						    		<div class="s-sel__item">
+							    		<label class="s-sel__label">Поиск по названию</label>
+							    		<input class="s-sel__input" v-model="search_by_hotel_name">
+							    	</div>
+						    	</div>
+						    	<div class="col-30 col-m-50 col-xxs-100">
+						    		<div class="s-sel__button s-sel__button-send">
+						    			<button @click="sendData" class="btn tbtn btn_bg-red"><span>Подобрать</span></button>
+						    		</div>
+						    		
+						    	</div>
+						    	<div class="col-30 col-m-50 col-xxs-100">
+						    		<div class="s-sel__button s-sel__button-more">
+						    			<button class="btn tbtn btn_bg-blue"><span>Расширенный поиск</span></button>
+						    		</div>
+						    		
+						    	</div>
+						    	
+						    </div>
+						</div>
+						
+						<div class="s-sel__line s-sel__line_dark">
+							<div class="r">
+								<div class="col-33 col-xxs-100">
+									<div class="s-sel__item">
+										<label class="s-sel__label">Цена за тур, руб</label>
+										от <input class="s-sel__input s-sel__input_price price-range-input_one" v-model="second_filter.price_from">
+										до <input class="s-sel__input s-sel__input_price price-range-input_two" v-model="second_filter.price_to">
+									</div>
+									<div class="price-range"></div>
+								</div>
+								<div class="col-33 col-xxs-100">
+									<div class="s-sel__item">
+										<label class="s-sel__label">Уровень отеля</label>
+										
+										<div class="s-sel__select s-sel__select_h-level">
+								        	<div class="s-sel__select-output">
+								        		<span class="s-sel__select-value">Эконом</span>
+								        	</div>
+								        	<input class="s-sel__select s-sel__select_h-level" type="hidden">
+								        	<div class="s-sel__select-list">
+									        	<ul>
+									        		<li class="s-sel__select-list-item" data-value="Эконом">Эконом</li>
+									        		<li class="s-sel__select-list-item" data-value="Эконом2">Эконом2</li>
+									        		<li class="s-sel__select-list-item" data-value="Эконом3">Эконом3</li>
+									        		<li class="s-sel__select-list-item" data-value="Эконом4">Эконом4</li>
+									        		<li class="s-sel__select-list-item" data-value="Эконом5">Эконом5</li>
+									        	</ul>	
+								        	</div>
+								        </div>
+								        
+										<!-- <select class="s-sel__select" v-model="second_filter.hotel_levels.selected">
+																	                <option v-for="option in second_filter.hotel_levels.options" :value="option.value">
+																	                    ${ option.name }
+																	                </option>
+																	            </select> -->
+									</div>
+									<div class="s-sel__item">
+										<label class="s-sel__label">Тип отеля</label>
+										
+										<div class="s-sel__select s-sel__select_h-type">
+								        	<div class="s-sel__select-output">
+								        		<span class="s-sel__select-value">Тип отеля</span>
+								        	</div>
+								        	<input class="s-sel__select s-sel__select_h-type" type="hidden">
+								        	<div class="s-sel__select-list">
+									        	<ul>
+									        		<li class="s-sel__select-list-item" data-value="Пансионат">Пансионат</li>
+									        		<li class="s-sel__select-list-item" data-value="Пансионат1">Пансионат1</li>
+									        		<li class="s-sel__select-list-item" data-value="Пансионат2">Пансионат2</li>
+									        		<li class="s-sel__select-list-item" data-value="Пансионат3">Пансионат3</li>
+									        		<li class="s-sel__select-list-item" data-value="Пансионат4">Пансионат4</li>
+									        	</ul>	
+								        	</div>
+								        </div>
+								        
+										<!-- <select class="s-sel__select" v-model="second_filter.hotel_types.selected">
+																	                <option v-for="option in second_filter.hotel_types.options" :value="option.value">
+																	                    ${ option.name }
+																	                </option>
+																	            </select> -->
+									</div>
+									<div class="s-sel__item">
+										<label class="s-sel__label">Питание</label>
+										
+										<div class="s-sel__select s-sel__select_h-food">
+								        	<div class="s-sel__select-output">
+								        		<span class="s-sel__select-value">Шведский столешник</span>
+								        	</div>
+								        	<input class="s-sel__select s-sel__select_h-food" type="hidden">
+								        	<div class="s-sel__select-list">
+									        	<ul>
+									        		<li class="s-sel__select-list-item" data-value="Шведский столешник">Шведский столешник</li>
+									        		<li class="s-sel__select-list-item" data-value="Шведский столешник">Шведский столешник</li>
+									        		<li class="s-sel__select-list-item" data-value="Шведский столешник2">Шведский столешник2</li>
+									        		<li class="s-sel__select-list-item" data-value="Шведский столешник3">Шведский столешник3</li>
+									        		<li class="s-sel__select-list-item" data-value="Шведский столешник4">Шведский столешник4</li>
+									        		<li class="s-sel__select-list-item" data-value="Шведский столешник4">Шведский столешник4</li>
+									        		<li class="s-sel__select-list-item" data-value="Шведский столешник4">Шведский столешник4</li>
+									        		<li class="s-sel__select-list-item" data-value="Шведский столешник4">Шведский столешник4</li>
+									        		<li class="s-sel__select-list-item" data-value="Шведский столешник4">Шведский столешник4</li>
+									        	</ul>	
+								        	</div>
+								        </div>
+								        
+							            <!-- <select class="s-sel__select" v-model="second_filter.meals.selected">
+							                <option v-for="option in second_filter.meals.options" :value="option.value">
+							                    ${ option.name }
+							                </option>
+							            </select> -->
+									</div>
+								</div>
+								<div class="col-33 col-xxs-100">
+									<div class="s-sel__item s-sel__item-pool s-sel__item_switch">
+										<label class="s-sel__label">Бассейн</label>
+										<span class="switcher"></span>
+										<input type="checkbox" class="hidden s-sel__item-pool">
+            							{#<input class="s-sel__input" type="checkbox" v-model="second_filter.pool">#}
+									</div>
+									<div class="s-sel__item s-sel__item-healing s-sel__item_switch">
+										<label class="s-sel__label">Лечение</label>
+										<span class="switcher"></span>
+										<input type="checkbox" class="hidden s-sel__item-pool s-sel__item-healing">
+            							{#<input class="s-sel__input" type="checkbox" v-model="second_filter.medical">#}
+									</div>
+									<div class="s-sel__item">
+										<label class="s-sel__label">Профиль заболевания</label>
+										
+										<div class="s-sel__select s-sel__select_h-food s-sel__select-checking">
+								        	<div class="s-sel__select-output">
+								        		<span class="s-sel__select-value">Выберите профиль</span>
+								        	</div>
+								        	<input class="s-sel__select s-sel__select_h-food" type="hidden">
+								        	<div class="s-sel__select-list">
+									        	<ul>
+									        		<li class="s-sel__select-list-item" data-value="Системы кровообращения">
+									        			<input class="s-sel__input" @click="getMedicals()" option="medical-value" :name="item" type="checkbox"> 
+									        			<span>Системы кровообращения</span>
+								        			</li>
+								        			<li class="s-sel__select-list-item" data-value="Нервной системы">
+									        			<input class="s-sel__input" @click="getMedicals()" option="medical-value" :name="item" type="checkbox"> 
+									        			<span>Нервной системы</span>
+								        			</li>
+								        			<li class="s-sel__select-list-item" data-value="ЛОР-органов">
+									        			<input class="s-sel__input" @click="getMedicals()" option="medical-value" :name="item" type="checkbox"> 
+									        			<span>ЛОР-органов</span>
+								        			</li>
+								        			<li class="s-sel__select-list-item" data-value="Органов дыхания">
+									        			<input class="s-sel__input" @click="getMedicals()" option="medical-value" :name="item" type="checkbox"> 
+									        			<span>Органов дыхания</span>
+								        			</li>
+								        			<li class="s-sel__select-list-item" data-value="Органов дыхания">
+									        			<input class="s-sel__input" @click="getMedicals()" option="medical-value" :name="item" type="checkbox"> 
+									        			<span>Органов дыхания</span>
+								        			</li>
+								        			<li class="s-sel__select-list-item" data-value="Органов дыхания">
+									        			<input class="s-sel__input" @click="getMedicals()" option="medical-value" :name="item" type="checkbox"> 
+									        			<span>Органов дыхания</span>
+								        			</li>
+								        			<li class="s-sel__select-list-item" data-value="Органов дыхания">
+									        			<input class="s-sel__input" @click="getMedicals()" option="medical-value" :name="item" type="checkbox"> 
+									        			<span>Органов дыхания</span>
+								        			</li>
+								        			<li class="s-sel__select-list-item" data-value="Органов дыхания">
+									        			<input class="s-sel__input" @click="getMedicals()" option="medical-value" :name="item" type="checkbox"> 
+									        			<span>Органов дыхания</span>
+								        			</li>
+								        			<li class="s-sel__select-list-item" data-value="Органов дыхания">
+									        			<input class="s-sel__input" @click="getMedicals()" option="medical-value" :name="item" type="checkbox"> 
+									        			<span>Органов дыхания</span>
+								        			</li>
+								        			<li class="s-sel__select-list-item" data-value="Органов дыхания">
+									        			<input class="s-sel__input" @click="getMedicals()" option="medical-value" :name="item" type="checkbox"> 
+									        			<span>Органов дыхания</span>
+								        			</li>
+									        	</ul>	
+								        	</div>
+								        </div>
+								        
+							            <!-- <div v-for="item in second_filter.medical_options">
+							                <input class="s-sel__input" @click="getMedicals()" option="medical-value" :name="item" type="checkbox">${item}
+							            </div> -->
+									</div>
+									<div class="s-sel__item">
+										<div class="s-sel__button s-sel__button-search">
+											<button @click="sendData" class="btn btbtn btn_bg-red"><span>Искать</span></button>
+										</div>
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
+			
+					ВЫДАЧА:
+					
+					<div class="s-sel__result">
+						<div class="s-sel__count">
+							Мы подобрали для вас 127 подходящих вариантов
+						</div>
+						
+						<div class="s-sel__card">
+							<a href="">
+								<div class="s-sel__card-name">
+									Armas Green Fugla Beach (ex. Club Green Fugla Beach)
+								</div>
+							</a>
+							<div class="s-sel__card-data">
+								<div class="r">
+									<div class="col-35 col-xs-100">
+										<div class="s-sel__card-image" style="background-image: url(/storage/app/media/290339.jpg);"></div>
+									</div>
+									<div class="col-65 col-xs-100 mt-xs-20">
+										<div class="s-sel__card-line">
+											<div class="r">
+												<div class="col-50 col-xs-100">
+													<div class="s-sel__card-address s-sel__card-address_icon">
+														Анапа, Пионерский проспект
+													</div>
+												</div>
+												<div class="col-50 col-xs-100 mt-xs-10">
+													<div class="s-sel__card-rating">
+														<b>Оценка:</b>
+														<span class="s-sel__card-rate">4.5 из 5</span>
+														<a href="" class="s-sel__card-reviews">123 отзыва</a>
+													</div>
+												</div>
+											</div>
+										</div>
+										<div class="s-sel__card-line s-sel__card-line_properties">
+											<div class="c-r se-5 colp-5">
+												<div class="col-40 col-xs-100">
+													<div class="s-sel__card-property-wrap">
+														Уровень: 
+														<span class="s-sel__card-property s-sel__card-property_bold">эконом</span>
+													</div>
+												</div>
+												<div class="col-40 col-xs-100">
+													<div class="s-sel__card-property-wrap">
+														До моря: 
+														<span class="s-sel__card-property s-sel__card-property_bold">500 м</span>
+													</div>
+												</div>
+												<div class="col-20 col-xs-100">
+													<div class="s-sel__card-property-wrap">
+														Бассейн: 
+														<span class="s-sel__card-property s-sel__card-property_yes">
+															<i class="fa fa-check-circle" aria-hidden="true"></i>
+														</span>
+													</div>
+												</div>
+												<div class="col-40 col-xs-100">
+													<div class="s-sel__card-property-wrap">
+														Тип отеля: 
+														<span class="s-sel__card-property s-sel__card-property_bold">пансионат</span>
+													</div>
+												</div>
+												<div class="col-40 col-xs-100">
+													<div class="s-sel__card-property-wrap">
+														Питание: 
+														<span class="s-sel__card-property s-sel__card-property_bold">трехразовое</span>
+													</div>
+												</div>
+												<div class="col-20 col-xs-100">
+													<div class="s-sel__card-property-wrap">
+														Лечение: 
+														<span class="s-sel__card-property s-sel__card-property_no">
+															<i class="fa fa-minus-circle" aria-hidden="true"></i>
+														</span>
+													</div>
+												</div>
+											</div>
+										</div>
+										<div class="s-sel__card-line s-sel__card-button">
+											<a href="" class="btn btn_bg-red btn_size-m btn_txt-white btn_txt-bold">
+												от 123 000 руб. <i class="fa fa-long-arrow-right" aria-hidden="true"></i>
+											</a>
+										</div>
+									</div>
+								</div>
+							</div>
+						</div>
+						
+						<div class="s-sel__card">
+							<a href="">
+								<div class="s-sel__card-name">
+									Armas Green Fugla Beach (ex. Club Green Fugla Beach)
+								</div>
+							</a>
+							<div class="s-sel__card-data">
+								<div class="r">
+									<div class="col-35 col-xs-100">
+										<div class="s-sel__card-image" style="background-image: url(/storage/app/media/290339.jpg);"></div>
+									</div>
+									<div class="col-65 col-xs-100 mt-xs-20">
+										<div class="s-sel__card-line">
+											<div class="r">
+												<div class="col-50 col-xs-100">
+													<div class="s-sel__card-address s-sel__card-address_icon">
+														Анапа, Пионерский проспект
+													</div>
+												</div>
+												<div class="col-50 col-xs-100 mt-xs-10">
+													<div class="s-sel__card-rating">
+														<b>Оценка:</b>
+														<span class="s-sel__card-rate">4.5 из 5</span>
+														<a href="" class="s-sel__card-reviews">123 отзыва</a>
+													</div>
+												</div>
+											</div>
+										</div>
+										<div class="s-sel__card-line s-sel__card-line_properties">
+											<div class="c-r se-5 colp-5">
+												<div class="col-40 col-xs-100">
+													<div class="s-sel__card-property-wrap">
+														Уровень: 
+														<span class="s-sel__card-property s-sel__card-property_bold">эконом</span>
+													</div>
+												</div>
+												<div class="col-40 col-xs-100">
+													<div class="s-sel__card-property-wrap">
+														До моря: 
+														<span class="s-sel__card-property s-sel__card-property_bold">500 м</span>
+													</div>
+												</div>
+												<div class="col-20 col-xs-100">
+													<div class="s-sel__card-property-wrap">
+														Бассейн: 
+														<span class="s-sel__card-property s-sel__card-property_yes">
+															<i class="fa fa-check-circle" aria-hidden="true"></i>
+														</span>
+													</div>
+												</div>
+												<div class="col-40 col-xs-100">
+													<div class="s-sel__card-property-wrap">
+														Тип отеля: 
+														<span class="s-sel__card-property s-sel__card-property_bold">пансионат</span>
+													</div>
+												</div>
+												<div class="col-40 col-xs-100">
+													<div class="s-sel__card-property-wrap">
+														Питание: 
+														<span class="s-sel__card-property s-sel__card-property_bold">трехразовое</span>
+													</div>
+												</div>
+												<div class="col-20 col-xs-100">
+													<div class="s-sel__card-property-wrap">
+														Лечение: 
+														<span class="s-sel__card-property s-sel__card-property_no">
+															<i class="fa fa-minus-circle" aria-hidden="true"></i>
+														</span>
+													</div>
+												</div>
+											</div>
+										</div>
+										<div class="s-sel__card-line s-sel__card-button">
+											<a href="" class="btn btn_bg-red btn_size-m btn_txt-white btn_txt-bold">
+												от 123 000 руб. <i class="fa fa-long-arrow-right" aria-hidden="true"></i>
+											</a>
+										</div>
+									</div>
+								</div>
+							</div>
+						</div>
+						
+					</div>
+					
+				</div>
+			</div>
+	
+			{#{% for tag in cruise.seo_articles %}
+				<a class="crbtn" href="#{{ tag.seo_hash }}">{{ tag.seo_title }}</a>
+		    {% endfor %}#}
+
+			<div class="cruiseArticles">
+				<div class="col-100">
+		    		{% for article in cruise.seo_articles %}
+		    			<div class="crArticle" id="{{ article.seo_hash }}">
+		    				<div class="data">
+		    				    <h2>{{ article.seo_title }}</h2>
+		    					{{ article.seo_text|raw }}
+		    				</div>
+		    			</div>
+		    		{% endfor %}
+				</div>
+			</div>
+			
+		</div>
+	</div>
+
+	{#{% partial 'rivercrs/relinks' %}#}
+
+</section>

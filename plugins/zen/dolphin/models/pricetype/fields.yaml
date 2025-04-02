@@ -1,0 +1,9 @@
+fields:
+    name:
+        label: Название
+        span: auto
+        type: text
+    code:
+        label: 'Код (сокращение)'
+        span: auto
+        type: text

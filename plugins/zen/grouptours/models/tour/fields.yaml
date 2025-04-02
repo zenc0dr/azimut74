@@ -1,0 +1,139 @@
+fields:
+    active:
+        label: Активность
+        span: full
+        default: 1
+        type: switch
+    name:
+        label: 'Название тура'
+        span: full
+        type: text
+    tags:
+        label: Тэги
+        mode: relation
+        separator: comma
+        customTags: true
+        useKey: false
+        span: full
+        type: taglist
+    days:
+        label: Дней
+        span: auto
+        default: '1'
+        type: number
+    price:
+        label: Цена
+        span: auto
+        default: '0'
+        type: number
+tabs:
+    fields:
+        preview:
+            label: Превью
+            mode: image
+            useCaption: true
+            thumbOptions:
+                mode: crop
+                extension: auto
+            span: auto
+            type: fileupload
+            tab: Медиа
+        youtube_link:
+            label: 'Ссылка на ролик в yotube.com'
+            span: full
+            type: text
+            tab: Медиа
+            clean_images:
+                span: full
+                path: $/zen/dolphin/controllers/tours/_button.htm
+                type: partial
+                tab: Медиа
+        images:
+            label: 'Галерея (Аттачмент)'
+            mode: image
+            useCaption: true
+            thumbOptions:
+                mode: crop
+                extension: auto
+            span: full
+            type: fileupload
+            tab: Медиа
+        media_images:
+            label: 'Галерея (Медиафайлы)'
+            prompt: 'Добавить изображение'
+            style: default
+            span: full
+            type: repeater
+            tab: Медиа
+            form:
+                fields:
+                    src:
+                        label: Изображение
+                        mode: image
+                        span: full
+                        type: mediafinder
+                    title:
+                        label: 'Подпись к фото'
+                        span: full
+                        type: text
+        waybill:
+            label: 'Маршрут тура'
+            prompt: 'Добавить геообъект'
+            style: default
+            span: auto
+            type: repeater
+            tab: Маршрут
+            form:
+                fields:
+                    geo:
+                        label: Гео-объект
+                        showSearch: true
+                        span: full
+                        type: dropdown
+        important_info:
+            label: 'Важная информация'
+            size: large
+            span: auto
+            type: richeditor
+            tab: Информация
+        announcement:
+            label: 'Анонс тура'
+            size: large
+            span: auto
+            type: richeditor
+            tab: Информация
+        tour_program:
+            label: 'Программа тура'
+            prompt: 'Добавить день'
+            span: full
+            type: repeater
+            tab: 'Программа тура'
+            form:
+                fields:
+                    title:
+                        label: Заголовок
+                        span: full
+                        type: text
+                    text:
+                        label: Описание
+                        size: large
+                        span: full
+                        type: richeditor
+        conditions:
+            label: 'Условия по туру'
+            prompt: 'Добавить условие'
+            span: full
+            type: repeater
+            tab: Условия
+            form:
+                fields:
+                    condition_id:
+                        label: Условие
+                        showSearch: true
+                        span: full
+                        type: dropdown
+                    text:
+                        label: Описание
+                        size: large
+                        span: full
+                        type: richeditor

@@ -1,0 +1,4 @@
+title: Fields
+modelClass: Zen\Om\Models\Field
+toolbar:
+    buttons: reorder_toolbar

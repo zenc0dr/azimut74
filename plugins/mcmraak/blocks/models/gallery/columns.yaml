@@ -1,0 +1,23 @@
+columns:
+    id:
+        label: id
+        type: number
+        sortable: true
+    name:
+        label: 'Имя галереи'
+        type: text
+        searchable: true
+        invisible: false
+        sortable: true
+    code:
+        label: 'Код галереи'
+        type: text
+        searchable: true
+    active:
+        label: Активность
+        type: text
+        sortable: true
+    sort_order:
+        label: Порядок
+        type: number
+        sortable: true

@@ -1,0 +1,28 @@
+<link rel="stylesheet" href="/plugins/mcmraak/rivercrs/assets/css/rivercrs.logs.css">
+{% if show_all %}
+    <a class="show-all" href="/rivercrs/debug/Service@getParserLog?eds={{ eds_code }}">Показать только ошибки</a>
+{% else %}
+    <a class="show-all" href="/rivercrs/debug/Service@getParserLog?eds={{ eds_code }}&show_all">Показать всё (не только ошибки)</a>
+{% endif %}
+<table id="Logs">
+    <tbody>
+        <tr>
+            <th>id</th>
+            <th>Время</th>
+            <th>Заголовок</th>
+            <th>Метод</th>
+            <th>Запрос</th>
+            <th>Описание</th>
+        </tr>
+    {% for item in items %}
+        <tr>
+            <td>#{{ item.id }}</td>
+            <td>{{ item.created_at|date('d.m.Y H:i:s') }}</td>
+            <td>{{ item.title }}</td>
+            <td>{{ item.method }}</td>
+            <td><a href="{{ item.url }}">{{ item.url }}</a></td>
+            <td>{{ item.text }}</td>
+        </tr>
+    {% endfor %}
+    </tbody>
+</table>

@@ -1,0 +1,6 @@
+plugin:
+    name: 'zen.grinder::lang.plugin.name'
+    description: 'zen.grinder::lang.plugin.description'
+    author: Zen
+    icon: oc-icon-cogs
+    homepage: ''

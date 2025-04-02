@@ -1,0 +1,8 @@
+fields:
+    items:
+        label: 'Выбор товара'
+        oc.commentPosition: ''
+        nameFrom: name
+        descriptionFrom: description
+        span: auto
+        type: relation

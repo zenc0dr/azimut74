@@ -1,0 +1,14 @@
+.tour-labels {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    margin: 0 -3px 15px -3px;
+    > div {
+        padding: 5px 10px;
+        background: #d6eafa;
+        color: #010101;
+        border-radius: 7px;
+        margin: 3px;
+        font-size: rem(13px);
+    }
+}

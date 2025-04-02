@@ -1,0 +1,10 @@
+name: Regions
+form: $/zen/dolphin/models/region/fields.yaml
+modelClass: Zen\Dolphin\Models\Region
+defaultRedirect: zen/dolphin/regions
+create:
+    redirect: 'zen/dolphin/regions/update/:id'
+    redirectClose: zen/dolphin/regions
+update:
+    redirect: zen/dolphin/regions
+    redirectClose: zen/dolphin/regions

@@ -1,0 +1,132 @@
+<div class="cabinLeft">
+    <div class="bigImages owl-carousel">
+        {% for image in cabin.images %}
+            <a class="cabinImage" data-lightbox-gallery="cabGallery" href="{{ image.path }}">
+                <div class="imageItem" data-hash="cabin{{ loop.index }}" style="background-image: url({{ image.path|resize(350) }})"></div>
+            </a>
+        {% endfor %}
+    </div>
+    <div class="smallImages">
+        {% for image in cabin.images %}
+            <a href="#cabin{{ loop.index }}">
+                <div class="imageItem" style="background-image: url({{ image.path|resize(350) }})"></div>
+            </a>
+        {% endfor %}
+    </div>
+</div>
+<div class="cabinRight">
+    <div class="cabinName">
+        <span>Категория {{ cabin.category|mutator }} - {{ placenames[cabin.places_main_count] }}местная каюта</span>
+    </div>
+    <div class="cabinDescLine">
+        <span>Расположение:</span>
+        <span>
+            <ul>
+                {% if room_data.deck_id %}
+                    {% for deck in cabin.decks_list if deck.id == room_data.deck_id %}
+                        <li>{{ deck.name|mutator }}</li>
+                    {% endfor %}
+                {% else %}
+                    {% for deck in cabin.decks_list %}
+                        <li>{{ deck.name|mutator }}</li>
+                    {% endfor %}
+                {% endif %}
+            </ul>
+        </span>
+    </div>
+   
+
+    <div class="cabinDescLine">
+        <span>Комфорт:</span>
+        <span>{{ cabin.comfort.name|mutator }}</span>
+    </div>
+    <div class="cabinDescLine">
+        <span>Расположение кроватей:</span>
+        <span>{{ cabin.bed.name|mutator }}</span>
+    </div>
+    <div class="cabinDescLine">
+        <span>Количество комнат:</span>
+        <span>{{ cabin.rooms_count|mutator }}</span>
+    </div>
+    {% if cabin.space %}
+        <div class="cabinDescLine">
+            <span>Площадь каюты в м2:</span>
+            <span>{{ cabin.space|mutator }}</span>
+        </div>
+    {% endif %}
+    <div class="cabinDescLine">
+        <span>В каюте имеются:</span>
+        <span>
+            {% for incabin in cabin.incabin_list %}
+                {{ incabin.name|mutator }}{% if loop.last != 1 %}, {% endif %}
+            {% endfor %}
+        </span>
+    </div>
+    <div class="cabinDescLine" style="font-size: 14px">
+        {{ cabin.desc|raw|mutator }}
+    </div>
+</div>
+
+<div class="bex-cabin-info">
+    <div class="bex-cabin-number">
+        Номер каюты: {{ room_data.room_number }}
+    </div>
+    <div class="bex-cabin-status">
+        {% if room_data.free_status != 0 %}
+            Статус: <span class="bex-free">СВОБОДНА ДЛЯ БРОНИРОВАНИЯ</span>
+        {% else %}
+            Статус: <span class="bex-onreq">ПОД ЗАПРОС</span>
+            <div class="bex-note">
+                Наличие каюты требует дополнительного подтверждения.
+                Оставьте заявку и мы уточним возможность бронирования данной каюты.
+            </div>
+        {% endif %}
+    </div>
+    <div class="bex-info-panel">
+        {% for price in room_data.cabin_data.prices %}
+        <div class="bex-cabin-price">
+            {% if room_data.main_places == price.price_places %}
+                <div class="place">
+                    Цена 1 основ.места:
+                </div>
+                <div class="price">
+                    <span>{{ price.price_value|price_format }}</span> руб. за 1чел
+                </div>
+            {% else %}
+                <div class="place">
+
+                    {% if price.price_places == 1 %}
+                        {% set pl = price.price_places~'но' %}
+                    {% else %}
+                        {% set pl = price.price_places~'х' %}
+                    {% endif %}
+
+                    Цена основн.места при {{ pl }} местном размещении:
+                </div>
+                <div class="price">
+                    <span>{{ price.price_value|price_format }}</span> руб. за 1чел.
+                </div>
+            {% endif %}
+        </div>
+        {% endfor %}
+        <div class="bex-button">
+            <button id="markCabin">
+                {% if room_data.check == 'true' %}
+                    Снять с бронирования
+                {% else %}
+                    Бронировать
+                {% endif %}
+            </button>
+        </div>
+    </div>
+</div>
+
+<script>
+    $(document).ready(function(){
+        $('.bigImages .cabinImage').nivoLightbox();
+    });
+    $('#markCabin').click(function () {
+        BEX.markCabin();
+        $(this).closest('.modalLine').find('.close').click();
+    });
+</script>

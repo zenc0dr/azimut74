@@ -1,0 +1,10 @@
+name: storages
+form: $/zen/cabox/models/storage/fields.yaml
+modelClass: Zen\Cabox\Models\Storage
+defaultRedirect: zen/cabox/storages
+create:
+    redirect: 'zen/cabox/storages/update/:id'
+    redirectClose: zen/cabox/storages
+update:
+    redirect: zen/cabox/storages
+    redirectClose: zen/cabox/storages

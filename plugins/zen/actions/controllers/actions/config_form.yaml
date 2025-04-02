@@ -1,0 +1,15 @@
+name: Actions
+modelClass: Zen\Actions\Models\Action
+form: $/zen/actions/models/action/fields.yaml
+defaultRedirect: zen/actions/actions
+create:
+    title: 'Создание action'
+    redirect: 'zen/actions/actions/update/:id'
+    redirectClose: zen/actions/actions
+    flashSave: 'Action создан'
+update:
+    title: 'Изменение action'
+    redirect: zen/actions/actions
+    redirectClose: zen/actions/actions
+    flashSave: 'Action сохранён'
+    flashDelete: 'Action удалён'

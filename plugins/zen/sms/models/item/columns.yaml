@@ -1,0 +1,22 @@
+columns:
+    id:
+        label: id
+        type: number
+        sortable: true
+    phone:
+        label: Телефон
+        type: text
+        searchable: true
+        sortable: true
+    profile_id:
+        label: Профиль
+        type: number
+        relation: profile
+        valueFrom: name
+    balance:
+        label: Баланс
+        type: text
+    created_at:
+        label: 'Дата отсправления'
+        type: datetime
+        sortable: true

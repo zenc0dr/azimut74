@@ -1,0 +1,37 @@
+tabs:
+    fields:
+        name:
+            label: Наименование
+            oc.commentPosition: ''
+            span: auto
+            type: text
+            tab: 'Основные данные'
+        slug:
+            label: Ссылка
+            oc.commentPosition: ''
+            span: auto
+            preset:
+                field: name
+                type: slug
+            type: text
+            tab: 'Основные данные'
+        groups:
+            label: 'Группы курортов'
+            oc.commentPosition: ''
+            prompt: 'Добавить группу курортов'
+            span: auto
+            type: repeater
+            tab: 'Группы курортов'
+            form:
+                fields:
+                    group_id:
+                        label: Dropdown
+                        span: full
+                        oc.commentPosition: ''
+                        type: dropdown
+        default_group_id:
+            label: 'Группа по умолчанию'
+            oc.commentPosition: ''
+            span: auto
+            type: dropdown
+            tab: 'Группы курортов'

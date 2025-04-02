@@ -1,0 +1,70 @@
+.multi-check-dd {
+    cursor: pointer;
+    user-select: none;
+}
+.multi-check-dd__dropdown {
+    position: absolute;
+    background: #fff;
+    z-index: 10;
+    color: #000;
+    display: flex;
+    flex-direction: column;
+    align-content: space-between;
+    margin-top: -3px;
+    max-height: 255px;
+    overflow-y: auto;
+    border-radius: 0 0 4px 4px;
+}
+.multi-check-dd__dropdown__item {
+    padding: 5px 10px;
+    cursor: pointer;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+.multi-check-dd__dropdown__item:hover {
+    background: #d9eeff;
+}
+
+.multi-check-dd__dropdown__item i {
+    font-weight: bold;
+    font-size: 22px;
+    margin-top: -7px;
+    margin-bottom: -7px;
+    color: #288410;
+}
+
+.multi-check-dd__filter {
+    display: flex;
+    margin-bottom: 7px;
+    margin-left: 8px;
+}
+
+.multi-check-dd__filter input {
+    width: calc(100% - 33px);
+    border: 1px solid #86c5fb;
+    border-radius: 4px;
+    padding: 4px 5px;
+}
+
+.multi-check-dd__filter input:focus {
+    outline: none;
+}
+
+.multi-check-dd__dropdown__clear {
+    text-align: right;
+}
+.multi-check-dd__dropdown__clear i:hover {
+    background: red;
+    color: #fff;
+}
+.multi-check-dd__dropdown__clear i {
+    position: absolute;
+    margin-top: 6px;
+    margin-left: -60px;
+    padding: 3px;
+    background: #ffe4e4;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: 200ms;
+}

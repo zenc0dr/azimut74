@@ -1,0 +1,51 @@
+<div data-control="toolbar">
+        <a href="<?= Backend::url('zen/keeper/backups/create') ?>" class="btn btn-primary oc-icon-plus"><?= e(trans('backend::lang.form.create')) ?></a>
+            <button
+        class="btn btn-default oc-icon-trash-o"
+        disabled="disabled"
+        onclick="$(this).data('request-data', {
+            checked: $('.control-list').listWidget('getChecked')
+        })"
+        data-request="onDelete"
+        data-request-confirm="<?= e(trans('backend::lang.list.delete_selected_confirm')) ?>"
+        data-trigger-action="enable"
+        data-trigger=".control-list input[type=checkbox]"
+        data-trigger-condition="checked"
+        data-request-success="$(this).prop('disabled', true)"
+        data-stripe-load-indicator>
+        <?= e(trans('backend::lang.list.delete_selected')) ?>
+    </button>
+    <?php $bs = $this->getBackupsSize(); ?>
+    <div class="progress-wrap">
+        <div>
+            <div class="progress">
+                <div class="progress-bar" role="progressbar" aria-valuemin="0" aria-valuemax="100" style="width: <?=$bs->progress?>%;"></div>
+            </div>
+            <div class="progress-label"><?=$bs->of?> из <?=$bs->to?></div>
+        </div>
+    </div>
+
+</div>
+<style>
+    .progress-wrap {
+        display: inline-block;
+        vertical-align: middle;
+        margin-left: 50px;
+    }
+    .progress-wrap > div {
+        display: flex;
+        height: 27px;
+        align-items: center;
+    }
+    .progress {
+        display: inline-block;
+        width: 300px;
+        margin-bottom: 0;
+    }
+    .progress-label {
+        display: inline-block;
+        color: #26709e;
+        font-size: 14px;
+        margin-left: 13px;
+    }
+</style>

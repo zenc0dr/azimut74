@@ -1,0 +1,365 @@
+tabs:
+    fields:
+        strict:
+            label: '"Строгий" режим (Не хранит пустые запросы в кеше)'
+            span: full
+            type: switch
+            default: 0
+            tab: 'Парсеры - кэш'
+        ids_memory:
+            label: 'Время жизни идентификаторов (в минутах)'
+            span: auto
+            type: text
+            default: '180'
+            tab: 'Парсеры - кэш'
+        filter_cache:
+            label: 'Время жизни кэша виджета (в минутах)'
+            span: auto
+            type: text
+            default: '180'
+            tab: 'Парсеры - кэш'
+        days_diff:
+            label: 'Минимальная продолжительность заезда в днях'
+            span: auto
+            type: number
+            default: 1
+            tab: 'Парсеры - кэш'
+        section1:
+            label: 'Водоходъ'
+            span: full
+            type: section
+            tab: 'Парсеры - кэш'
+        waterway_motorships:
+            label: 'Теплоходы: /rivercrs/api/v2/cache/debug/waterway-motorships'
+            span: auto
+            type: text
+            default: '1440'
+            tab: 'Парсеры - кэш'
+        waterway_cruises:
+            label: 'Круизы: /rivercrs/api/v2/cache/debug/waterway-cruises'
+            span: auto
+            type: text
+            default: '1440'
+            tab: 'Парсеры - кэш'
+        waterway_prices:
+            label: 'Цены на круизы: /rivercrs/api/v2/cache/debug/waterway-prices/{id}'
+            span: auto
+            type: text
+            default: '1440'
+            tab: 'Парсеры - кэш'
+        waterway_route:
+            label: 'Расписание круиза: /rivercrs/api/v2/cache/debug/waterway-route/{id}'
+            span: auto
+            type: text
+            default: '1440'
+            tab: 'Парсеры - кэш'
+        section2:
+            label: 'VolgaВолга'
+            span: full
+            type: section
+            tab: 'Парсеры - кэш'
+        volgawolga_database:
+            label: 'База данных: /rivercrs/api/v2/cache/debug/volgawolga-database'
+            span: auto
+            type: text
+            default: '1440'
+            tab: 'Парсеры - кэш'
+        section3:
+            label: 'Гама'
+            span: full
+            type: section
+            tab: 'Парсеры - кэш'
+        gama_cruises:
+            label: 'Информация о круизах: /rivercrs/api/v2/cache/debug/gama-cruises'
+            span: auto
+            type: text
+            default: '1440'
+            tab: 'Парсеры - кэш'
+        gama_towns:
+            label: 'Справочник городов: /rivercrs/api/v2/cache/debug/gama-towns'
+            span: auto
+            type: text
+            default: '1440'
+            tab: 'Парсеры - кэш'
+        gama_cabins:
+            label: 'Справочник категорий кают: /rivercrs/api/v2/cache/debug/gama-cabins'
+            span: auto
+            type: text
+            default: '1440'
+            tab: 'Парсеры - кэш'
+        gama_paths:
+            label: 'Маршруты всех теплоходов: /rivercrs/api/v2/cache/debug/gama-paths'
+            span: auto
+            type: text
+            default: '1440'
+            tab: 'Парсеры - кэш'
+        gama_countries:
+            label: 'Справочник стран: /rivercrs/api/v2/cache/debug/gama-countries'
+            span: auto
+            type: text
+            default: '1440'
+            tab: 'Парсеры - кэш'
+        gama_cruise:
+            label: 'Информация о круизе: /rivercrs/api/v2/cache/debug/gama-cruise/{id}'
+            span: auto
+            type: text
+            default: '1440'
+            tab: 'Парсеры - кэш'
+        gama_ships:
+            label: 'Справочник теплоходов: /rivercrs/api/v2/cache/debug/gama-ships'
+            span: auto
+            type: text
+            default: '1440'
+            tab: 'Парсеры - кэш'
+        gama_deck:
+            label: 'Информация о палубе: /rivercrs/api/v2/cache/debug/gama-deck/{id}'
+            span: auto
+            type: text
+            default: '1440'
+            tab: 'Парсеры - кэш'
+        section4:
+            label: 'Гермес'
+            span: full
+            type: section
+            tab: 'Парсеры - кэш'
+        germes_ships:
+            label: 'Справочник теплоходов: /rivercrs/api/v2/cache/debug/germes-ships'
+            span: auto
+            type: text
+            default: '1440'
+            tab: 'Парсеры - кэш'
+        germes_sity:
+            label: 'Справочник городов отправления: /rivercrs/api/v2/cache/debug/germes-sity'
+            span: auto
+            type: text
+            default: '1440'
+            tab: 'Парсеры - кэш'
+        germes_cruises:
+            label: 'Справочник круизов: /rivercrs/api/v2/cache/debug/germes-cruises'
+            span: auto
+            type: text
+            default: '1440'
+            tab: 'Парсеры - кэш'
+        germes_cabins:
+            label: 'Справочник категорий кают: /rivercrs/api/v2/cache/debug/germes-cabins'
+            span: auto
+            type: text
+            default: '1440'
+            tab: 'Парсеры - кэш'
+        germes_status:
+            label: 'Справочник кают тура со статусами и ценами: /rivercrs/api/v2/cache/debug/germes-status/{id}'
+            span: auto
+            type: text
+            default: '1440'
+            tab: 'Парсеры - кэш'
+        germes_trace:
+            label: 'Список городов следования в туре: /rivercrs/api/v2/cache/debug/germes-trace/{id}'
+            span: auto
+            type: text
+            default: '1440'
+            tab: 'Парсеры - кэш'
+        germes_excursion:
+            label: 'Список экскурсий: /rivercrs/api/v2/cache/debug/germes-excursion/{id}'
+            span: auto
+            type: text
+            default: '1440'
+            tab: 'Парсеры - кэш'
+        section5:
+            label: 'Инфофлот'
+            span: full
+            type: section
+            tab: 'Парсеры - кэш'
+        infoflot_ships:
+            label: 'Список теплоходов: /rivercrs/api/v2/cache/debug/infoflot-ships'
+            span: auto
+            type: text
+            default: '1440'
+            tab: 'Парсеры - кэш'
+        infoflot_towns:
+            label: 'Список городов: /rivercrs/api/v2/cache/debug/infoflot-towns'
+            span: auto
+            type: text
+            default: '1440'
+            tab: 'Парсеры - кэш'
+        infoflot_tours:
+            label: 'Список круизов: /rivercrs/api/v2/cache/debug/infoflot-tours/{id}'
+            span: auto
+            type: text
+            default: '1440'
+            tab: 'Парсеры - кэш'
+        infoflot_routes:
+            label: 'Детальные маршруты круизов: /rivercrs/api/v2/cache/debug/infoflot-routes/{ship_id}/{cruise_id}'
+            span: auto
+            type: text
+            default: '1440'
+            tab: 'Парсеры - кэш'
+        infoflot_cabins:
+            label: 'Список кают: /rivercrs/api/v2/cache/debug/infoflot-cabins/{ship_id}'
+            span: auto
+            type: text
+            default: '1440'
+            tab: 'Парсеры - кэш'
+        booking_discounts_btn:
+            label: 'Надпись кнопки "Акция раннего бронирования"'
+            span: auto
+            type: text
+            default: 'Акция раннего бронирования'
+            tab: 'Надписи'
+        booking_modal_info:
+            label: 'Информация в окне бронирования'
+            span: full
+            size: huge
+            type: richeditor
+            default: ''
+            tab: 'Надписи'
+        anchor_assistant:
+            label: 'Всплывающий якорь в форме бронирования'
+            span: auto
+            type: text
+            tab: 'Надписи'
+        separator1:
+            label: 'Исключение теплоходов'
+            span: full
+            type: section
+            tab: Исключения
+        not_let_motorships_notice:
+            label: 'Заметка для исключений теплоходов'
+            span: full
+            size: large
+            type: richeditor
+            tab: Исключения
+        not_let_motorships:
+            label: 'Исключение теплоходов'
+            prompt: Добавить
+            span: full
+            type: repeater
+            tab: Исключения
+            form:
+                fields:
+                    eds:
+                        label: 'Код источника'
+                        span: full
+                        type: text
+                    name:
+                        label: 'Имена теплоходов'
+                        span: full
+                        type: textarea
+                        size: large
+        separator2:
+            label: 'Исключения кают'
+            span: full
+            type: section
+            tab: Исключения
+        not_let_cabins_notice:
+            label: 'Заметка для исключений кают'
+            span: full
+            size: large
+            type: richeditor
+            tab: Исключения
+        not_let_cabins_hint:
+            span: full
+            path: $/mcmraak/rivercrs/classes/cachesettings/not_let_cabins_hint.htm
+            type: hint
+            tab: Исключения
+        not_let_cabins:
+            label: 'Исключение кают'
+            prompt: Добавить
+            span: full
+            type: repeater
+            tab: Исключения
+            form:
+                fields:
+                    name:
+                        label: 'Вхождение категории каюты'
+                        span: full
+                        type: text
+        volga_ex_separator:
+            label: 'Исключения ВолгаВолга'
+            span: full
+            type: section
+            tab: Исключения
+        volga_ex_cruises_notice:
+            label: 'Заметка для исключений круизов'
+            span: full
+            size: large
+            type: richeditor
+            tab: Исключения
+        volga_ex_cruises_hint:
+            span: full
+            path: $/mcmraak/rivercrs/classes/cachesettings/volga_ex_cruises_hint.htm
+            type: hint
+            tab: Исключения
+        volga_ex_cruises:
+            label: 'Исключения круизов'
+            prompt: 'Добавить маску исключения'
+            span: full
+            type: repeater
+            tab: Исключения
+            form:
+              fields:
+                ex:
+                  label: 'Правило фильтрации'
+                  span: full
+                  type: text
+        eds_names:
+            label: 'Соответствия кодам'
+            prompt: Добавить
+            span: full
+            type: repeater
+            tab: Источники
+            form:
+                fields:
+                    eds_code:
+                        label: 'Код источника'
+                        span: auto
+                        type: text
+                    eds_name:
+                        label: 'Имя источника'
+                        span: auto
+                        type: text
+        dash_towns_hint:
+            span: full
+            path: $/mcmraak/rivercrs/classes/cachesettings/dash_towns_hint.htm
+            type: hint
+            tab: Города
+        dash_towns:
+            label: 'Города чере тире'
+            prompt: Добавить
+            span: auto
+            type: repeater
+            tab: Города
+            form:
+                fields:
+                    name:
+                        label: 'Город с тире'
+                        span: full
+                        type: text
+        cabin_statuses:
+                label: 'Статусы кают'
+                prompt: 'Добавить статус'
+                span: full
+                type: repeater
+                tab: Оформление
+                form:
+                    fields:
+                        title:
+                            label: 'Подпись статуса'
+                            span: auto
+                            type: text
+                        class:
+                            label: 'Класс статуса'
+                            span: auto
+                            type: text
+                        bg_color:
+                            label: 'Цвет фона'
+                            span: auto
+                            type: colorpicker
+                        tx_color:
+                            label: 'Цвет текста'
+                            span: auto
+                            type: colorpicker
+                        hint:
+                            label: Подсказка
+                            size: large
+                            span: full
+                            type: richeditor

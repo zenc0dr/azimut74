@@ -1,0 +1,30 @@
+fields:
+    name:
+        label: 'Название города'
+        span: left
+        type: text
+    country_id:
+        label: Страна
+        showSearch: true
+        span: auto
+        type: dropdown
+    region_id:
+        label: Регион
+        showSearch: true
+        span: right
+        dependsOn:
+            - country_id
+        attributes: {  }
+        type: dropdown
+tabs:
+    fields:
+        snippets:
+            label: 'Изображения сниппетов'
+            mode: image
+            useCaption: true
+            thumbOptions:
+                mode: crop
+                extension: auto
+            span: full
+            type: fileupload
+            tab: Сниппеты

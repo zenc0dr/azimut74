@@ -1,0 +1,45 @@
+title = "Встречающее окно"
+url = "/meeting-window"
+description = "Встречающее окно"
+is_hidden = 0
+robot_index = "index"
+robot_follow = "follow"
+contentType = "html"
+force_show = 0
+==
+<?php
+function onStart() {
+	#$this['offers'] = Mcmraak\Blocks\Models\Offer::get();
+}
+?>
+==
+<div class="meeting__wrap">
+	<style>
+		/*.managers {*/
+		/*	width: 400px;*/
+		/*	margin: 0 auto;*/
+		/*	margin-top: 20px;*/
+		/*}*/
+		/*.managers li {*/
+		/*	text-align: left;*/
+		/*}*/
+		/*.managers li a {*/
+		/*	margin-right: 10px;*/
+		/*}*/
+	</style>
+	<div class="meeting__logo">
+		<img src="/storage/app/media/logotypes/azlogo.png" alt="АЗИМУТ-ТУР">
+	</div>
+	<div class="meeting__meet">
+		Внимание!
+	</div>
+	<div class="meeting__text">
+	    <h3>Уважаемые клиенты!</h3>
+
+        Офис Азимут-Тур переехал и теперь находится по адресу<br>
+        Саратов, Яблочкова 13.<br>
+        Телефон тот же: 88452 255-996 <br><br>
+        
+        Ждем Вас в нашем новом офисе!
+	</div>
+</div>

@@ -1,0 +1,5 @@
+fields:
+    name:
+        label: 'Название характеристики'
+        span: full
+        type: text

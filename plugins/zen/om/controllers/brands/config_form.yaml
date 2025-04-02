@@ -1,0 +1,16 @@
+name: Brands
+modelClass: Zen\Om\Models\Brand
+form: $/zen/om/models/brand/fields.yaml
+defaultRedirect: zen/om/brands
+create:
+    title: 'zen.om::lang.brands.create'
+    redirect: 'zen/om/brands/update/:id'
+    redirectClose: zen/om/brands
+    flashSave: 'zen.om::lang.brands.created'
+update:
+    title: 'zen.om::lang.brands.update'
+    redirect: zen/om/brands
+    redirectClose: zen/om/brands
+    flashSave: 'zen.om::lang.brands.updated'
+    flashDelete: 'zen.om::lang.brands.deleted'
+preview: {  }

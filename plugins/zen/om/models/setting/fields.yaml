@@ -1,0 +1,30 @@
+fields:
+    active:
+        label: 'zen.om::lang.settings.active'
+        span: full
+        type: switch
+    name:
+        label: 'zen.om::lang.settings.name'
+        oc.commentPosition: ''
+        span: auto
+        type: text
+tabs:
+    fields:
+        item_htmlfix:
+            label: 'zen.om::lang.settings.item_htmlfix'
+            span: auto
+            type: switch
+            tab: SEO
+        category_htmlfix:
+            label: 'zen.om::lang.settings.category_htmlfix'
+            span: auto
+            type: switch
+            tab: SEO
+        identifier:
+            label: 'zen.om::lang.settings.identifier'
+            oc.commentPosition: ''
+            span: auto
+            default: id
+            required: 1
+            type: text
+            tab: 'zen.om::lang.settings.system'

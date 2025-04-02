@@ -1,0 +1,4 @@
+title: Galleries
+modelClass: Mcmraak\Blocks\Models\Gallery
+toolbar:
+    buttons: reorder_toolbar

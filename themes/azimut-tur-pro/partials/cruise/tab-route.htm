@@ -1,0 +1,73 @@
+<div class="tab-container {{ class }}" tab="{{ tab }}">
+    <div class="tabs-vertical open no-border no-padding">
+        <div class="tab-item open">
+            <div class="tab-name">
+                <h2>Маршрут</h2>
+            </div>
+            <div class="tabs-vertical open no-border ">
+                <div class="warning-messages d-flex flex-column mb-4">
+                    <div class="warning-message d-flex bg-gray-100 c-red-200 fw-bolder p-3 mb-3 rounded">
+                        <i class="bi bi-exclamation-triangle me-2"></i>
+                        <span class="">Внимание! Расписание теплоходов, стоимость и экскурсионная программа являются предварительными и могут быть изменены!</span>
+                    </div>
+                    <div class="warning-message d-flex bg-gray-100 c-red-200 fw-bolder p-3 mb-3 rounded">
+                        <i class="bi bi-exclamation-triangle me-2"></i>
+                        <span>Внимание! Время отправления и прибытия - московское</span>
+                    </div>
+                </div>
+                {% for day in RiverCRS.schedule %}
+                    <div class="tab-item open close-mobile route-tab">
+                        <div class="tab-name route-title">
+                            {% if day.day %}
+                                <h2>День {{ day.day }}</h2>
+                            {% endif %}
+                            <div class="route-date">
+                                <span>Дата</span>
+                                <strong>{{ day.date|date('d.m.Y') }}, {{ day.dof.f }}</strong>
+                            </div>
+                            <i class="bi bi-chevron-down"/></i>
+                        </div>
+                        <div class="tab-content">
+                            <div class="ship-place-left">
+                                <div class="day-time-route">
+                                    {% if day.day %}
+                                        <div class="day-number-route">
+                                            День {{ day.day }}
+                                        </div>
+                                    {% endif %}
+                                    <div>
+                                        {{ day.time_arrive }} ({{ day.dof.s }})
+                                    </div>
+                                </div>
+                                {% if day.time_arrive %}
+                                    <div class="time-in-ship">
+                                        <div>Прибытие:</div>
+                                        <div>{{ day.time_arrive }}</div>
+                                    </div>
+                                {% endif %}
+                                {% if day.time_diff %}
+                                    <div class="time-stop-ship">
+                                        <i class="bi bi-clock"/></i>
+                                        <div>{{ day.time_diff }} мин.</div>
+                                    </div>
+                                {% endif %}
+                                {% if day.time_depart %}
+                                    <div class="time-out-ship">
+                                        <div>Отправление:</div>
+                                        <div>{{ day.time_depart }}</div>
+                                    </div>
+                                {% endif %}
+                            </div>
+                            <div class="ship-place-right">
+                                <div class="ship-place">{{ day.town }}</div>
+                                <div class="place-descr">
+                                    {{ day.desc|raw }}
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                {% endfor %}
+            </div>
+        </div>
+    </div>
+</div>

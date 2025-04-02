@@ -1,0 +1,444 @@
+<style>
+    {% for item in statuses %}
+    .{{ item.class }} {
+        background-color: {{ item.bg_color }};
+        color: {{ item.tx_color }};
+    }
+    {% endfor %}
+</style>
+
+<meta name="checkin-data" content="{{ json_data }}">
+<meta name="checkin-prices" content="{{ checkin_prices }}">
+
+<section class="cruise-section">
+    <div class="custom-container">
+        {% include 'mcmraak.rivercrs::prok.ship_header' %}
+    </div>
+</section>
+
+<section id="BookingExistVueWrap" class="tabs-group">
+    <div class="custom-container">
+        <div class="tabs">
+            <div class="tab active" tab="1">Цены, бронирование</div>
+            <div class="tab" tab="2">Маршрут</div>
+            <div class="tab" tab="3">Теплоход</div>
+        </div>
+        <div class="tab-content">
+            <div class="tab-container active" tab="1">
+                <div class="tabs-vertical open no-border no-padding">
+                    <div class="tab-item open tab-booking-table">
+                        <div class="tab-name">
+                            <h2>Цены, бронирование</h2>
+                        </div>
+                        <div class="tab-content">
+                            <div id="BookingExist" checkin-id="{{ checkin.id }}" v-cloak>
+                                <div class="bex-scheme-info">
+                                    <div>
+                                        {% for item in statuses %}
+                                            <div>
+                                                <div class="{{ item.class }}"></div>
+                                                <div>{{ item.title }}</div>
+                                            </div>
+                                            {% if item.hint|trim is not empty %}
+                                                <div class="bex-hint">
+                                                    <i onclick="$(this).next().show()" style="background-color: {{ item.bg_color }}" class="fa fa-question-circle-o"></i>
+                                                    <div class="popup-window" style="display: none">{{ item.hint|raw }}</div>
+                                                </div>
+                                            {% endif %}
+                                        {% endfor %}
+                                    </div>
+                                    <div>
+                                        Представленные цены - это базовый тариф, не включающий в себя возможные скидки
+                                    </div>
+                                </div>
+                                <div v-if="exist_preloader" class="prices-preloader">
+                                    Уточняем наличие кают <img src="/themes/azimut-tur-pro/assets/images/preloaders/cubesline_preloader.gif" alt="Загрузка...">
+                                </div>
+                                <table class="bex-board" border="0" cellpadding="0" cellspacing="0">
+                                    <tbody>
+                                    <tr>
+                                        <th class="bex-rooms-col">Тип каюты</th>
+                                        <th class="bex-places-col">Размещение</th>
+                                        <th class="bex-prices-col tariff-name">
+                                            <div class="tariff-name-name desc" onclick="$(this).next().show()">
+                                                Базовый тариф
+                                                <svg width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                                    <g clip-path="url(#clip0)">
+                                                        <path d="M6.95001 0.435C7.53001 -0.145 8.47001 -0.145 9.05001 0.435L15.565 6.951C16.145 7.531 16.145 8.47 15.565 9.049L9.05001 15.565C8.47001 16.145 7.53101 16.145 6.95201 15.565L0.435015 9.05C0.297078 8.91234 0.187644 8.74884 0.112978 8.56883C0.0383112 8.38883 -0.00012207 8.19587 -0.00012207 8.001C-0.00012207 7.80613 0.0383112 7.61317 0.112978 7.43317C0.187644 7.25316 0.297078 7.08966 0.435015 6.952L6.95001 0.435ZM8.35001 1.135C8.25719 1.04218 8.13129 0.990036 8.00001 0.990036C7.86874 0.990036 7.74284 1.04218 7.65001 1.135L1.13401 7.65C1.04119 7.74283 0.98905 7.86873 0.98905 8C0.98905 8.13127 1.04119 8.25717 1.13401 8.35L7.65001 14.866C7.74284 14.9588 7.86874 15.011 8.00001 15.011C8.13129 15.011 8.25719 14.9588 8.35001 14.866L14.866 8.35C14.9588 8.25717 15.011 8.13127 15.011 8C15.011 7.86873 14.9588 7.74283 14.866 7.65L8.35001 1.134V1.135Z" fill="black"></path>
+                                                        <path d="M5.25497 5.786C5.2536 5.81829 5.25886 5.85053 5.2704 5.88072C5.28195 5.91091 5.29956 5.93841 5.32213 5.96155C5.3447 5.98468 5.37177 6.00296 5.40167 6.01524C5.43156 6.02753 5.46366 6.03357 5.49597 6.033H6.32097C6.45897 6.033 6.56897 5.92 6.58697 5.783C6.67697 5.127 7.12697 4.649 7.92897 4.649C8.61497 4.649 9.24297 4.992 9.24297 5.817C9.24297 6.452 8.86897 6.744 8.27797 7.188C7.60497 7.677 7.07197 8.248 7.10997 9.175L7.11297 9.392C7.11402 9.45761 7.14083 9.52017 7.1876 9.5662C7.23437 9.61222 7.29736 9.63801 7.36297 9.638H8.17397C8.24028 9.638 8.30387 9.61166 8.35075 9.56478C8.39763 9.51789 8.42397 9.4543 8.42397 9.388V9.283C8.42397 8.565 8.69697 8.356 9.43397 7.797C10.043 7.334 10.678 6.82 10.678 5.741C10.678 4.23 9.40197 3.5 8.00497 3.5C6.73797 3.5 5.34997 4.09 5.25497 5.786V5.786ZM6.81197 11.549C6.81197 12.082 7.23697 12.476 7.82197 12.476C8.43097 12.476 8.84997 12.082 8.84997 11.549C8.84997 10.997 8.42997 10.609 7.82097 10.609C7.23697 10.609 6.81197 10.997 6.81197 11.549Z" fill="black"></path>
+                                                    </g>
+                                                    <defs>
+                                                        <clipPath id="clip0">
+                                                            <rect width="16" height="16" fill="white"></rect>
+                                                        </clipPath>
+                                                    </defs>
+                                                </svg>
+                                            </div>
+                                            <div class="tariff-name-desc popup-window"><b v-html="tariff_price1_title.name"></b>
+                                                <div v-html="tariff_price1_title.desc"></div>
+                                            </div>
+                                        </th>
+                                        <th class="bex-prices-col tariff-name">
+                                            <div class="tariff-name-name desc" onclick="$(this).next().show()">
+                                                Расширенный тариф
+                                                <svg width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                                    <g clip-path="url(#clip0)">
+                                                        <path d="M6.95001 0.435C7.53001 -0.145 8.47001 -0.145 9.05001 0.435L15.565 6.951C16.145 7.531 16.145 8.47 15.565 9.049L9.05001 15.565C8.47001 16.145 7.53101 16.145 6.95201 15.565L0.435015 9.05C0.297078 8.91234 0.187644 8.74884 0.112978 8.56883C0.0383112 8.38883 -0.00012207 8.19587 -0.00012207 8.001C-0.00012207 7.80613 0.0383112 7.61317 0.112978 7.43317C0.187644 7.25316 0.297078 7.08966 0.435015 6.952L6.95001 0.435ZM8.35001 1.135C8.25719 1.04218 8.13129 0.990036 8.00001 0.990036C7.86874 0.990036 7.74284 1.04218 7.65001 1.135L1.13401 7.65C1.04119 7.74283 0.98905 7.86873 0.98905 8C0.98905 8.13127 1.04119 8.25717 1.13401 8.35L7.65001 14.866C7.74284 14.9588 7.86874 15.011 8.00001 15.011C8.13129 15.011 8.25719 14.9588 8.35001 14.866L14.866 8.35C14.9588 8.25717 15.011 8.13127 15.011 8C15.011 7.86873 14.9588 7.74283 14.866 7.65L8.35001 1.134V1.135Z" fill="black"></path>
+                                                        <path d="M5.25497 5.786C5.2536 5.81829 5.25886 5.85053 5.2704 5.88072C5.28195 5.91091 5.29956 5.93841 5.32213 5.96155C5.3447 5.98468 5.37177 6.00296 5.40167 6.01524C5.43156 6.02753 5.46366 6.03357 5.49597 6.033H6.32097C6.45897 6.033 6.56897 5.92 6.58697 5.783C6.67697 5.127 7.12697 4.649 7.92897 4.649C8.61497 4.649 9.24297 4.992 9.24297 5.817C9.24297 6.452 8.86897 6.744 8.27797 7.188C7.60497 7.677 7.07197 8.248 7.10997 9.175L7.11297 9.392C7.11402 9.45761 7.14083 9.52017 7.1876 9.5662C7.23437 9.61222 7.29736 9.63801 7.36297 9.638H8.17397C8.24028 9.638 8.30387 9.61166 8.35075 9.56478C8.39763 9.51789 8.42397 9.4543 8.42397 9.388V9.283C8.42397 8.565 8.69697 8.356 9.43397 7.797C10.043 7.334 10.678 6.82 10.678 5.741C10.678 4.23 9.40197 3.5 8.00497 3.5C6.73797 3.5 5.34997 4.09 5.25497 5.786V5.786ZM6.81197 11.549C6.81197 12.082 7.23697 12.476 7.82197 12.476C8.43097 12.476 8.84997 12.082 8.84997 11.549C8.84997 10.997 8.42997 10.609 7.82097 10.609C7.23697 10.609 6.81197 10.997 6.81197 11.549Z" fill="black"></path>
+                                                    </g>
+                                                    <defs>
+                                                        <clipPath id="clip0">
+                                                            <rect width="16" height="16" fill="white"></rect>
+                                                        </clipPath>
+                                                    </defs>
+                                                </svg>
+                                            </div>
+                                            <div class="tariff-name-desc popup-window"><b v-html="tariff_price2_title.name"></b>
+                                                <div v-html="tariff_price2_title.desc"></div>
+                                            </div>
+                                        </th>
+                                        <th></th>
+                                    </tr>
+
+                                    <template v-for="deck in decks">
+                                        <tr class="desc-type">
+                                            <td class="bex-deck-title">${ deck.name }</td>
+                                            <td></td>
+                                            <td></td>
+                                            <td></td>
+                                            <td></td>
+                                        </tr>
+                                        <tr v-for="cabin in deck.cabins">
+                                            <td>
+                                                <div class="bex-category-top-wrap">
+                                                    <div class="bex-category-mobile">${ deck.name }</div>
+                                                    <div class="bex-category-title" @click="openInfo(cabin)">
+                                                        ${ cabin.name }
+                                                    </div>
+                                                    <div class="cabin-on-scheme" @click="showScheme(cabin.id)">(Каюта на схеме)</div>
+                                                </div>
+                                                <div class="bex-rooms">
+                                                    <div>
+                                                        Свободные каюты:
+                                                    </div>
+
+                                                    <div v-for="room in rooms"
+                                                         v-if="room.f == 1 && room.c == cabin.id && room.d == deck.id"
+                                                         class="bex-room"
+                                                         :class="room.check?'is-selected':(room.n != 'Под запрос')?'is-actual':'on-request'">
+                                                        <input type="checkbox" v-model="room.check">
+                                                        <div>${ (room.n == 'Под запрос') ? '?' : room.n }</div>
+                                                    </div>
+
+                                                </div>
+                                            </td>
+                                            <td>
+                                                <div class="bex-places">
+                                                    <div class="bex-title-mobile">
+                                                        Размещение
+                                                    </div>
+                                                    <div class="bex-title-dotted">
+                                                    </div>
+                                                    <div v-for="place in cabin.prices" class="bex-place">
+                                                        ${ place.price_places }-местное
+                                                    </div>
+                                                </div>
+                                            </td>
+                                            <td>
+                                                <div class="bex-prices">
+                                                    <div class="bex-title-mobile">Базовый тариф</div>
+                                                    <div class="bex-title-dotted"></div>
+                                                    <div v-for="price in cabin.prices" class="bex-price">
+                                                        ${ price.price_value|priceFormat }
+                                                    </div>
+                                                </div>
+                                            </td>
+                                            <td>
+                                                <div class="bex-prices">
+                                                    <div class="bex-title-mobile">Расширенный тариф</div>
+                                                    <div class="bex-title-dotted"></div>
+                                                    <div v-if="price.price2_value" v-for="price in cabin.prices" class="bex-price">
+                                                        ${ price.price2_value|priceFormat }
+                                                    </div>
+                                                </div>
+                                            </td>
+
+                                            <td class="bex-rooms-mobile">
+                                                <div class="bex-rooms">
+                                                    <div>
+                                                        Свободные каюты:
+                                                    </div>
+                                                    <div v-for="room in rooms"
+                                                         v-if="room.f == 1 && room.c == cabin.id && room.d == deck.id"
+                                                         class="bex-room"
+                                                         :class="room.check?'is-selected':(room.n != 'Под запрос')?'is-actual':'on-request'">
+                                                        <input type="checkbox" v-model="room.check">
+                                                        <div>${ (room.n == 'Под запрос') ? '?' : room.n }</div>
+                                                    </div>
+                                                </div>
+                                            </td>
+                                            <td>
+                                                <!-- Формирование метки для сервиса QQ -->
+                                                <div v-for="item in cabin.QQ" class="qq-btn-place" :data-value="item"></div>
+                                            </td>
+                                        </tr>
+                                    </template>
+                                    </tbody>
+                                </table>
+                                {% include 'mcmraak.rivercrs::prok.scheme' %}
+
+                                <div class="wrapper-btn-order" :class="(selected.length) ? 'active' : ''">
+                                    <button @click="scrollBooking()" class="btn red">Перейти к бронированию</button>
+                                </div>
+
+
+                                <div class="cabin-modal-wrap" v-if="modal_cabin_info" @click.self="modal_cabin_info = null">
+                                    <div class="cabin-modal-wrap__body">
+                                        <div class="cabin-modal-wrap__close-panel">
+                                            <div @click="modal_cabin_info = null" class="cabin-modal-wrap__close">×</div>
+                                        </div>
+                                        <div class="cabin-modal-wrap__content">
+                                            <div class="cabin-modal-wrap__body_html" v-html="modal_cabin_info"></div>
+                                        </div>
+                                    </div>
+                                </div>
+
+
+                            </div>
+                        </div>
+                    </div>
+                    {% if temporary_discounts or permanent_discounts %}
+                    <div class="tab-item open close-mobile">
+                        <div class="tab-name"><h2>Действующие скидки</h2></div>
+                        <div class="tab-content">
+                            <div class="wrapper-sales">
+                                {% if temporary_discounts %}
+                                <div class="sales-content-top">
+                                    <div class="sale-items">
+                                        {% for discount in temporary_discounts %}
+                                        <div class="sale-item tab-item open close-mobile">
+                                            <div class="sale-item-title tab-name">{{ discount.title }}</div>
+                                            <div class="sale-item-content tab-content">
+                                                {{ discount.text|raw }}
+                                            </div>
+                                        </div>
+                                        {% endfor %}
+                                    </div>
+                                </div>
+                                {% endif %}
+                                {% if permanent_discounts %}
+                                <div class="sales-content-bot">
+                                    <div class="sale-items">
+                                        {% for discount in permanent_discounts %}
+                                            <div class="sale-item tab-item open close-mobile">
+                                                <div class="sale-item-title tab-name">{{ discount.title }}</div>
+                                                <div class="sale-item-content tab-content">
+                                                    {{ discount.text|raw }}
+                                                </div>
+                                            </div>
+                                        {% endfor %}
+                                    </div>
+                                </div>
+                                {% endif %}
+                            </div>
+                        </div>
+                    </div>
+                    {% endif %}
+                    <div class="tab-item close-mobile">
+                        <div class="tab-name"><h2>В стоимость входит</h2></div>
+                        <div class="tab-content">
+                            <div class="wrapper-tab-content">
+                                {{ price_contains|raw }}
+                            </div>
+
+                        </div>
+                    </div>
+                    <div class="tab-item close-mobile">
+                        <div class="tab-name"><h2>Дополнительно оплачивается</h2></div>
+                        <div class="tab-content">
+                            <div class="wrapper-tab-content">
+                                {{ additionally_paid|raw }}
+                            </div>
+                        </div>
+                    </div>
+                    <div class="tab-item open booking-tab">
+                        <input booking-name="checkin_id" type="hidden" value="{{ checkin.id }}">
+                        <div class="tab-name"><h2>Бронирование круиза</h2></div>
+                        <div class="tab-content">
+                            <div class="wrapper-tab-content booking">
+                                <div class="top-booking">
+                                    <div class="form-booking-top">
+                                        <div class="form-title-section">
+                                            Выбранные каюты
+                                        </div>
+                                        <div class="form-content">
+                                            <div class="form-cabins" v-if="selected.length">
+                                                <div v-for="item in selected" class="form-cabin">
+                                                    <div class="bex-room" :class="(item.num == 'Под запрос') ? 'on-request':'is-actual'">
+                                                        <div v-if="item.num != 'Под запрос'">${ item.num }</div>
+                                                        <div v-else>?</div>
+                                                    </div>
+                                                    <div class="form-cabin-descr">
+                                                        ${ item.name } (${ item.deck })
+                                                    </div>
+                                                    <i @click="uncheckRoom(item)" class="fa fa-times-circle" title="удалить"></i>
+                                                </div>
+                                            </div>
+                                            <div v-else class="wrapper-btn-order active" >
+                                                <div>Для продолжения бронирования выберите каюты</div>
+                                                <button @click="scrollTable()" class="btn light-red">Выбрать каюты</button>
+                                            </div>
+                                            <div class="form-count-people">
+                                                <div><span>Количество человек</span></div>
+                                                <div>
+                                                    <button @click="form.peoples--" class="countBtn countMinus" :disabled="(form.peoples < 2)">
+                                                        <i aria-hidden="true" class="fa fa-minus"></i>
+                                                    </button>
+                                                    <span class="countInput orderBook">${ form.peoples }</span>
+                                                    <button @click="form.peoples++" class="countBtn countPlus" :disabled="(form.peoples > 3)">
+                                                        <i aria-hidden="true" class="fa fa-plus"></i></button>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="form-booking-bottom">
+                                        <div class="form-title-section">
+                                            Данные о пассажирах
+                                        </div>
+                                        <div class="dataLineForm">
+                                            <div class="dataLineLeft">
+                                                <div class="dLine">
+                                                    <div><span class="req-input">Имя</span></div>
+                                                    <div><input
+                                                                v-model="form.name"
+                                                                :class="{bad:wrong('name')}"
+                                                                placeholder="Введите ФИО" class="order orderBook"></div>
+                                                </div>
+                                                <div class="dLine">
+                                                    <div><span class="req-input">Телефон</span></div>
+                                                    <div><input
+                                                                v-model="form.phone"
+                                                                :class="{bad:wrong('phone')}"
+                                                                placeholder="Ваш телефон" class="order phone orderBook">
+                                                    </div>
+                                                </div>
+                                                <div class="dLine">
+                                                    <div><span>E-mail</span></div>
+                                                    <div><input
+                                                                v-model="form.email"
+                                                                :class="{bad:wrong('email')}"
+                                                                placeholder="Ваш e-mail" class="order orderBook"></div>
+                                                </div>
+                                            </div>
+                                            <div class="dataLineRight">
+                                                <div>
+                                                    <textarea
+                                                            v-model="form.desc"
+                                                            :class="{bad:wrong('desc')}"
+                                                            placeholder="Дополнительная информация" class="order orderBook"></textarea>
+                                                </div>
+                                                <div>* Поля, отмеченные звездочкой, обязательны для заполнения.</div>
+
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="bottom-booking">
+                                    <div v-if="alerts.length" class="respond-alerts">
+                                        <div :class="alert.type" v-for="(alert, key) in alerts">
+                                            <div>${alert.text}</div>
+                                            <div class="respond-alerts-close">
+                                                <i @click="alerts.splice(key,1)" class="fa fa-times-circle"></i></div>
+
+                                        </div>
+                                    </div>
+                                    <div class="accept-check">
+                                        <span @click="form.confirm = !form.confirm" class="check">
+                                            <i class="fa" :class="(form.confirm) ? 'fa-check-square' : 'fa-square'" aria-hidden="true"></i></span>
+                                        <span>Принимаю
+                                            <a target="_blank" href="/pk-terms" class="bex-offerLink">пользовательское соглашение</a>
+                                            и
+                                            <a target="_blank" href="/pk-offer" class="bex-offerLink">согласен на обработку персональных данных</a>
+                                        </span>
+                                    </div>
+
+                                    <button class="btn red" @click="sendBooking()" :disabled="!form.confirm">
+                                        <span v-if="process"><i class="process fa fa-refresh"></i> Обработка...</span>
+                                        <span v-else>Бронировать</span>
+                                    </button>
+                                </div>
+                            </div>
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="tab-container" tab="2">
+                <h2>Маршрут</h2>
+                <div class="cruise__waybill-attention">
+                    <i class="fa fa-exclamation-triangle"></i>
+                    Внимание! Расписание теплоходов, стоимость и экскурсионная программа являются предварительными и могут быть изменены!
+                </div>
+                <div class="cruise__waybill-attention">
+                    <i class="fa fa-exclamation-triangle"></i>
+                    Внимание! Время отправления и прибытия - московское
+                </div>
+                <div class="tabs-vertical open no-border ">
+                    {% for day in schedule %}
+                    <div class="tab-item open close-mobile route-tab">
+                        <div class="tab-name route-title">
+                            {% if day.day %}
+                            <h2>День {{ day.day }}</h2>
+                            {% endif %}
+                            <div class="route-date">
+                                <span>Дата</span>
+                                <strong>{{ day.date|date('d.m.Y') }}, {{ day.dof.f }}</strong>
+                            </div>
+                        </div>
+                        <div class="tab-content">
+                            <div class="ship-place-left">
+                                <div class="day-time-route">
+                                    {% if day.day %}
+                                    <div class="day-number-route">
+                                        День {{ day.day }}
+                                    </div>
+                                    {% endif %}
+                                    <div>
+                                        {{ day.time_arrive }} ({{ day.dof.s }})
+                                    </div>
+                                </div>
+
+                                {% if day.time_arrive %}
+                                <div class="time-in-ship">
+                                    <div>Прибытие:</div>
+                                    <div>{{ day.time_arrive }}</div>
+                                </div>
+                                {% endif %}
+                                {% if day.time_diff %}
+                                <div class="time-stop-ship">
+                                    <i class="fa fa-clock-o" aria-hidden="true"></i>
+                                    <div>{{ day.time_diff }} мин.</div>
+                                </div>
+                                {% endif %}
+                                {% if day.time_depart %}
+                                <div class="time-out-ship">
+                                    <div>Отправление:</div>
+                                    <div>{{ day.time_depart }}</div>
+                                </div>
+                                {% endif %}
+                            </div>
+                            <div class="ship-place-right">
+                                <div class="ship-place">{{ day.town }}</div>
+                                <div class="place-descr">{{ day.desc|raw }}</div>
+                            </div>
+                        </div>
+                    </div>
+                    {% endfor %}
+                </div>
+            </div>
+            <div class="tab-container " tab="3">
+                {% include 'mcmraak.rivercrs::prok.ship_block' %}
+            </div>
+        </div>
+    </div>
+</section>

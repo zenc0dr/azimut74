@@ -1,0 +1,136 @@
+#Sans {
+    font-size: 15px;
+}
+
+#Sans .search_field {
+    border: 1px solid #f9acff;
+    padding: 12px;
+    margin-bottom: 10px;
+}
+
+/* #Sans button {
+    background: #1f87e5;
+    color: #fff;
+    padding: 10px 47px;
+} */
+#SansResults {
+    font-size: 15px;
+    margin-top: 10px;
+}
+
+.result_box {
+    border: 1px solid #a9d6ff;
+    margin-bottom: 3px;
+    padding: 10px;
+}
+
+.result_box .rbrow {
+}
+
+.rbrow.medical {
+}
+
+.result_box .rbrow .var {
+    font-weight: bold;
+    color: #1a5185;
+    margin-right: 5px;
+}
+
+.result_box .rbrow .val {
+}
+
+.sans.pagination {
+    margin-top: 30px;
+    margin-bottom: 30px;
+}
+
+.sans.pagination li.active a {
+    background: #1f87e5;
+    color: #fff;
+}
+
+.results-count {
+    text-align: center;
+    margin-bottom: 10px;
+}
+
+#Sans hr {
+    margin-top: 20px;
+    margin-bottom: 20px;
+    border-top: 3px solid #1f87e5;
+}
+
+#Sanspreloader {
+    display: none;
+    /* background-image: url(/plugins/mcmraak/sans/assets/images/preloader_big.gif); */
+    background-image: url(data:image/svg+xml;base64,PHN2ZyB4bWxuczpzdmc9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIiB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHhtbG5zOnhsaW5rPSJodHRwOi8vd3d3LnczLm9yZy8xOTk5L3hsaW5rIiB2ZXJzaW9uPSIxLjAiIHdpZHRoPSI2NHB4IiBoZWlnaHQ9IjY0cHgiIHZpZXdCb3g9IjAgMCAxMjggMTI4IiB4bWw6c3BhY2U9InByZXNlcnZlIj48ZyB0cmFuc2Zvcm09InJvdGF0ZSg0NSA2NCA2NCkiPjxwYXRoIGQ9Ik0zOC41MiAzMy4zN0wyMS4zNiAxNi4yQTYzLjYgNjMuNiAwIDAgMSA1OS41LjE2djI0LjNhMzkuNSAzOS41IDAgMCAwLTIwLjk4IDguOTJ6IiBmaWxsPSIjMzMzMzMzIi8+PHBhdGggZD0iTTM4LjUyIDMzLjM3TDIxLjM2IDE2LjJBNjMuNiA2My42IDAgMCAxIDU5LjUuMTZ2MjQuM2EzOS41IDM5LjUgMCAwIDAtMjAuOTggOC45MnoiIGZpbGw9IiNjZGNkY2QiIHRyYW5zZm9ybT0icm90YXRlKDQ1IDY0IDY0KSIvPjxwYXRoIGQ9Ik0zOC41MiAzMy4zN0wyMS4zNiAxNi4yQTYzLjYgNjMuNiAwIDAgMSA1OS41LjE2djI0LjNhMzkuNSAzOS41IDAgMCAwLTIwLjk4IDguOTJ6IiBmaWxsPSIjY2RjZGNkIiB0cmFuc2Zvcm09InJvdGF0ZSg5MCA2NCA2NCkiLz48cGF0aCBkPSJNMzguNTIgMzMuMzdMMjEuMzYgMTYuMkE2My42IDYzLjYgMCAwIDEgNTkuNS4xNnYyNC4zYTM5LjUgMzkuNSAwIDAgMC0yMC45OCA4LjkyeiIgZmlsbD0iI2NkY2RjZCIgdHJhbnNmb3JtPSJyb3RhdGUoMTM1IDY0IDY0KSIvPjxwYXRoIGQ9Ik0zOC41MiAzMy4zN0wyMS4zNiAxNi4yQTYzLjYgNjMuNiAwIDAgMSA1OS41LjE2djI0LjNhMzkuNSAzOS41IDAgMCAwLTIwLjk4IDguOTJ6IiBmaWxsPSIjY2RjZGNkIiB0cmFuc2Zvcm09InJvdGF0ZSgxODAgNjQgNjQpIi8+PHBhdGggZD0iTTM4LjUyIDMzLjM3TDIxLjM2IDE2LjJBNjMuNiA2My42IDAgMCAxIDU5LjUuMTZ2MjQuM2EzOS41IDM5LjUgMCAwIDAtMjAuOTggOC45MnoiIGZpbGw9IiNjZGNkY2QiIHRyYW5zZm9ybT0icm90YXRlKDIyNSA2NCA2NCkiLz48cGF0aCBkPSJNMzguNTIgMzMuMzdMMjEuMzYgMTYuMkE2My42IDYzLjYgMCAwIDEgNTkuNS4xNnYyNC4zYTM5LjUgMzkuNSAwIDAgMC0yMC45OCA4LjkyeiIgZmlsbD0iI2NkY2RjZCIgdHJhbnNmb3JtPSJyb3RhdGUoMjcwIDY0IDY0KSIvPjxwYXRoIGQ9Ik0zOC41MiAzMy4zN0wyMS4zNiAxNi4yQTYzLjYgNjMuNiAwIDAgMSA1OS41LjE2djI0LjNhMzkuNSAzOS41IDAgMCAwLTIwLjk4IDguOTJ6IiBmaWxsPSIjY2RjZGNkIiB0cmFuc2Zvcm09InJvdGF0ZSgzMTUgNjQgNjQpIi8+PGFuaW1hdGVUcmFuc2Zvcm0gYXR0cmlidXRlTmFtZT0idHJhbnNmb3JtIiB0eXBlPSJyb3RhdGUiIHZhbHVlcz0iMCA2NCA2NDs0NSA2NCA2NDs5MCA2NCA2NDsxMzUgNjQgNjQ7MTgwIDY0IDY0OzIyNSA2NCA2NDsyNzAgNjQgNjQ7MzE1IDY0IDY0IiBjYWxjTW9kZT0iZGlzY3JldGUiIGR1cj0iNzIwbXMiIHJlcGVhdENvdW50PSJpbmRlZmluaXRlIi8+PC9nPjwvc3ZnPg==);
+    position: fixed;
+    background-color: #ffffff87;
+    background-repeat: no-repeat;
+    background-position: center;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    z-index: 100000;
+    background-size: 2%;
+}
+
+#Sans .sans-resors-html {
+    position: absolute;
+    display: inline-block;
+    background: #fff;
+    z-index: 10;
+    color: #000;
+    max-height: 420px;
+    overflow-y:  auto;
+    padding: 0 8px;
+    font-size: 13px;
+}
+
+#Sans .sans-resors-html ul {
+    padding-left: 8px;
+}
+
+#Sans .sans-resors-html li {
+    list-style: none;
+    cursor: pointer;
+    padding: 3px 8px;
+}
+#Sans .sans-resors-html>ul {
+    padding: 0;
+    margin-top: 8px;
+}
+#Sans .sans-resors-html li:hover {}
+
+#Sans .sans-resors-html [class|='deep'] {
+    background: #e9e9e9;
+    border-bottom: 1px solid #c4c4c4;
+}
+#Sans .sans-resors-html [class|='deep']::after {
+    content: "\f0d7";
+    font-family: FontAwesome;
+    float: right;
+}
+#Sans .sans-resors-html [class|='deep']:hover {
+    background: #86bdf1;
+}
+#Sans .sans-resors-html .resort {
+    background: #e4f1fd;
+    border-bottom: 1px solid #86bdf1;
+}
+#Sans .sans-resors-html .resort:hover {
+    background: #cce3f7;
+}
+
+#Sans .sans-resors-html [class|='deep']:not(.deep-0)+ul{
+    display: none;
+}
+#Sans .sans-resors-html input {
+    width: 100%;
+    display:  inline-block;
+    border: 1px solid #519bee;
+    margin-top: 6px;
+    padding: 5px 7px;
+    font-size: 15px;
+}

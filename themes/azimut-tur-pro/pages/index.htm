@@ -1,0 +1,28 @@
+title = "Главная страница"
+url = "/"
+layout = "master"
+meta_title = "Речные круизы по России от компании Азимут-Тур"
+meta_description = "Комфортные круизы по рекам России на теплоходах. Цены, расписание билетов на речные путешествия на сайте Азимут-Тур. Большой выбор школьных туров."
+is_hidden = 0
+robot_index = "index"
+robot_follow = "follow"
+contentType = "html"
+force_show = 0
+==
+<?php
+function onInit()
+{
+    $this['page_css'] = mix('css/index.css', 'themes/azimut-tur-pro/assets');
+    $this['page_js'] = mix('js/index.js', 'themes/azimut-tur-pro/assets');
+    $this['directions'] = \Srw\Azimut\Models\Directions::where('active', '1')->orderBy('order')->get();
+}
+?>
+==
+{% put page_style %}
+<link rel="stylesheet" href="{{ page_css }}">
+{% endput %}
+{% put page_script %}
+<script src="{{ page_js }}"></script>
+{% endput %}
+
+{% partial 'info/popular-direction'  class="mb-5" %}

@@ -1,0 +1,68 @@
+
+.project-pagination .pagination {
+    list-style: none;
+}
+
+
+.project-pagination .pagination .pagination-item {
+    width: 35px;
+    height: 35px;
+    @include m('xs') {
+        margin: 0 5px;
+        width: 34px;
+        height: 34px;
+    }
+}
+
+.project-pagination .pagination .pagination-item.active:hover,
+.project-pagination .pagination-control.active{
+    cursor: pointer;
+}
+
+.project-pagination .pagination .pagination-item.active {
+    background-color:  color('blue-200');
+    border-radius: 32%;
+    color: color('primary-100');
+}
+
+.project-pagination .pagination li.control-arrow {
+    padding: 0 30px;
+}
+
+.project-pagination .pagination li.control-arrow img {
+   height: 28px;
+   width: auto;
+}
+
+.project-pagination .pagination-control:not(.active):hover img {
+    cursor: not-allowed;
+}
+
+.project-pagination .pagination li span {
+    color:  color('primary-200');
+    cursor: default;
+}
+
+.project-pagination .pagination li span.pagination-item {
+    color: color('primary-200');
+}
+
+.project-pagination .pagination li span.pagination-item:not(.active):hover {
+    color: color('blue-400');
+    cursor: pointer;
+}
+
+
+.project-pagination .pagination li:first-child {
+    @include m('xs') {
+        padding-left: 0;
+        padding-right: 10px;
+    }
+}
+
+.project-pagination .pagination li:last-child {
+    @include m('xs') {
+        padding-right: 0;
+        padding-left: 10px;
+    }
+}

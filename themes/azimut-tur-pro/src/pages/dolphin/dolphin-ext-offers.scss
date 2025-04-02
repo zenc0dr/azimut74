@@ -1,0 +1,37 @@
+@import "dolphin";
+@import "~font-awesome/scss/font-awesome";
+@import "@components/dolphin/ExtOffersWidget";
+@import "@components/send-form/_";
+@import "@components/dolphin/faq";
+
+@import "@components/print-btn/_";
+@import "@components/labels/_";
+@import "@components/blocks/page-groups/_";
+@import '@components/info-block/_';
+@import "@components/waybill/_";
+
+@import "@components/hotels/_";
+
+@import "@components/blocks/tabs/_";
+
+
+@import  'swiper/css/bundle';
+@import '@components/sliders/slider-thumbs';
+
+
+.wrapper-title-bottom {
+    display: flex;
+    justify-content: space-between;
+    padding-bottom: 10px;
+}
+
+.wrapper-overflow__hidden {
+    overflow: hidden;
+}
+
+.result-right__content {
+    overflow: hidden;
+}
+
+
+

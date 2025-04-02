@@ -1,0 +1,60 @@
+title = "Отзывы о речных круизах"
+url = "/russia-river-cruises/cruises-reviews"
+layout = "general"
+description = "Отзывы о круизах"
+meta_title = "Отзывы о речных круизах и теплоходах"
+meta_description = "Реальные впечатления и отзывы туристов о речных круизах, об отдыхе на теплоходах, обслуживании, питании и анимации на борту"
+is_hidden = 0
+seo_keywords = "отзыв о речных круизах, отзыв о теплоходе, отзыв о речном отдыхе"
+robot_index = "index"
+robot_follow = "follow"
+contentType = "html"
+==
+<?php
+use \Mcmraak\Rivercrs\Models\Cruises;
+use \Mcmraak\Rivercrs\Models\Transit;
+use \Mcmraak\Rivercrs\Models\Reference;
+use \Mcmraak\Rivercrs\Models\Motorships;
+use \Mcmraak\Rivercrs\Models\Review;
+
+function onInit()
+{
+    $this['reviewsSwitcher'] = true;
+    $this['cruises'] = Cruises::where('active', 1)->orderBy('sort_order')->get();
+    $this['cruise'] = Cruises::where('slug', 'river-cruises')->first();
+    //$this['ship'] = Motorships::where('id','>',0)->first();
+    //$this['reviews'] = Review::where('motorship_id', $this['ship']->id)->where('active',1)->get();
+    $this['ship'] = 0;
+    $this['reviews'] = Review::where('active',1)->orderBy('created_at', 'desc')->paginate(15);
+	$this['references'] = Reference::orderBy('order')->get();
+	$this['motorships'] = Motorships::cleanNames();
+}
+?>
+==
+{% put breadcrumbs %}
+	{% partial 'template/breadcrumbs' %}
+{% endput %}
+
+<section class="cruises">			
+	<div class="headText">
+		<h1 class="h1">{{ this.page.title|mutator }}</h1>
+	</div>
+	<div class="cruiseData">
+		<div class="c-r">
+			<div class="col-25 col-s-100 as-s">
+				{% partial 'rivercrs/leftmenu' %}
+			</div>
+			
+			<div class="col-75 col-s-100 as-s">
+				<div class="rightBlock">
+                {# SELECTOR #}
+				{% partial 'rivercrs/reviews' %}		
+				</div>
+					
+			</div>
+		</div>
+	</div>
+	
+	{% partial 'rivercrs/relinks' %}
+		
+</section>

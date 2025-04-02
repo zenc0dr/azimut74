@@ -1,0 +1,10 @@
+name: 'Расположения кровати'
+modelClass: Mcmraak\Rivercrs\Models\Beds
+form: $/mcmraak/rivercrs/models/beds/fields.yaml
+defaultRedirect: mcmraak/rivercrs/beds
+create:
+    redirect: 'mcmraak/rivercrs/beds/update/:id'
+    redirectClose: mcmraak/rivercrs/beds
+update:
+    redirect: mcmraak/rivercrs/beds
+    redirectClose: mcmraak/rivercrs/beds

@@ -1,0 +1,82 @@
+tabs:
+    fields:
+        logo:
+            label: 'Логотип'
+            mode: image
+            span: full
+            type: mediafinder
+            tab: 'Хедер'
+        logo_mobile:
+            label: 'Логотип (для мобильных)'
+            mode: image
+            span: full
+            type: mediafinder
+            tab: 'Хедер'
+        poster1:
+            label: 'Постер 1'
+            mode: image
+            span: auto
+            type: mediafinder
+            tab: 'Постер'
+        poster2:
+            label: 'Постер 2'
+            mode: image
+            span: auto
+            type: mediafinder
+            tab: 'Постер'
+        title:
+            label: 'Заголовок'
+            span: full
+            type: codeeditor
+            size: small
+            language: twig
+            tab: 'Контент'
+        subtitle:
+            label: 'Подзаголовок'
+            span: full
+            type: codeeditor
+            size: small
+            language: twig
+            tab: 'Контент'
+        edge1:
+            label: 'Приемущество 1'
+            span: full
+            type: codeeditor
+            size: small
+            language: twig
+            tab: 'Контент'
+        edge2:
+            label: 'Приемущество 2'
+            span: full
+            type: codeeditor
+            size: small
+            language: twig
+            tab: 'Контент'
+        edge3:
+            label: 'Приемущество 3'
+            span: full
+            type: codeeditor
+            size: small
+            language: twig
+            tab: 'Контент'
+        button:
+            label: 'Кнопка'
+            size: large
+            language: html
+            span: full
+            type: codeeditor
+            tab: 'Логика'
+        style:
+            label: 'Стили'
+            size: giant
+            language: css
+            span: full
+            type: codeeditor
+            tab: 'Шаблон'
+        template:
+            label: 'Код шаблона'
+            size: giant
+            language: twig
+            span: full
+            type: codeeditor
+            tab: 'Шаблон'

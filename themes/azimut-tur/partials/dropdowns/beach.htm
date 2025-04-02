@@ -1,0 +1,39 @@
+description = "Выпадающий список Пляжный отдых"
+
+[viewBag]
+
+[om_static]
+==
+{% for category in om_static.get({category_id:2}) %}
+<li>
+	<a href="/eksursionnye-tury/{{store.slug}}{{ category.slug }}">{{ category.name|mutator }}</a>
+</li>
+{% endfor %}
+{#<li>
+	<a href="{{ 'beach/krasnorarskyi'|page }}">Краснодарский край</a>
+</li>
+<li>
+	<a href="{{ 'beach/crimea'|page }}">Крым</a>
+</li>
+<li>
+	<a href="{{ 'beach/abkhazia'|page }}">Абхазия</a>
+</li>
+<li>
+	<a href="{{ 'beach/zagranica'|page }}">Заграница</a>
+</li>#}
+
+{#<li>
+	<a href="{{ 'beach/bus-to-sea'|page }}">Автобусом к морю</a>
+</li>
+<li>
+	<a href="{{ 'beach/krasnorarskyi'|page }}">Краснодарский край</a>
+</li>
+<li>
+	<a href="{{ 'beach/crimea'|page }}">Крым</a>
+</li>
+<li>
+	<a href="{{ 'beach/abkhazia'|page }}">Абхазия</a>
+</li>
+<li>
+	<a href="{{ 'beach/zagranica'|page }}">Заграница</a>
+</li>#}

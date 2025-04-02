@@ -1,0 +1,11 @@
+<?php
+
+$obTypes = $record->type;
+if (!empty($obTypes)) {
+?>
+
+<div class="zen-badge"<?php if (!empty($obTypes->color)) { ?> style="background-color: <?= e($obTypes->color) ?>"<?php } ?>>
+    <?= e($obTypes->name); ?>
+</div>
+
+<?php } ?>

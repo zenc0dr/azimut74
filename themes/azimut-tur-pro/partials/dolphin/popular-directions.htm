@@ -1,0 +1,27 @@
+description = "Популярные направления"
+
+[viewBag]
+==
+{% if Dolphin.popular_directions %}
+<div class="popular-directions container">
+    <div class="popular-directions__h fs-h1 text-center py-4">
+        {{ Dolphin.popular_directions_title }}
+    </div>
+    <div class="popular-directions__items row">
+        {% for item in Dolphin.popular_directions %}
+        <div class="popular-directions__item col-sm-6 col-md-3 col-lg-3">
+            <div class="popular-directions__image" style="background-image:url({{ item.image }})">
+                <div class="popular-directions__title">
+                    {{ item.name }}
+                </div>
+            </div>
+            <div class="popular-directions__links">
+                {% for direction in item.items %}
+                <a href="{{ direction.url }}">{{ direction.name }}</a>
+                {% endfor %}
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+</div>
+{% endif %}

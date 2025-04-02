@@ -1,0 +1,12 @@
+list: $/zen/fetcher/models/pool/columns.yaml
+modelClass: Zen\Fetcher\Models\Pool
+title: Pools
+noRecordsMessage: 'backend::lang.list.no_records'
+showSetup: true
+showCheckboxes: true
+recordsPerPage: 20
+toolbar:
+    buttons: list_toolbar
+    search:
+        prompt: 'backend::lang.list.search_prompt'
+recordUrl: 'zen/fetcher/pools/update/:code'

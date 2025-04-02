@@ -1,0 +1,10 @@
+name: Meals
+form: $/mcmraak/sans/models/meal/fields.yaml
+modelClass: Mcmraak\Sans\Models\Meal
+defaultRedirect: mcmraak/sans/meals
+create:
+    redirect: 'mcmraak/sans/meals/update/:id'
+    redirectClose: mcmraak/sans/meals
+update:
+    redirect: mcmraak/sans/meals
+    redirectClose: mcmraak/sans/meals

@@ -1,0 +1,20 @@
+fields:
+    name:
+        label: 'zen.om::lang.storage.name'
+        oc.commentPosition: ''
+        span: auto
+        type: text
+    slug:
+        label: 'zen.om::lang.storage.code'
+        oc.commentPosition: ''
+        span: auto
+        preset:
+            field: name
+            type: slug
+        type: text
+    desc:
+        label: 'zen.om::lang.storage.description'
+        span: full
+        size: large
+        oc.commentPosition: ''
+        type: richeditor

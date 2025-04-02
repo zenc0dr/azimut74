@@ -1,0 +1,19 @@
+<div class="inject-clients">
+    <div class="inject-clients-title">
+        {{ title }}
+    </div>
+    <div class="inject-clients-subtitle">
+        {{ subtitle }}
+    </div>
+    <div class="inject-clients-blocks">
+        {% for block in blocks %}
+            <div class="inject-clients-block">
+                <img class="inject-clients-picture" src="{{ block.picture|media }}">
+                <div class="inject-clients-text">{{ block.text }}</div>
+            </div>
+        {% endfor %}
+    </div>
+    <div class="inject-clients-button">
+        {{ button|raw }}
+    </div>
+</div>

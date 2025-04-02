@@ -1,0 +1,101 @@
+description = "Левый блок"
+
+[viewBag]
+
+[om_static]
+==
+<?php
+#function onStart() {
+    #ограничение на вывод
+    #$segments_url = Request::segments();
+    #$last_url = array_pop($segments_url);
+    #$twoFirstLetters = substr($last_url, 0, 2);
+    
+    
+   # dd($test);
+#}
+?>
+==
+<div class="col-25 col-s-100 va-top">
+	<div class="leftBlock">
+		{#Группы курортов#}
+		
+		<div class="leftBlockItem">
+			<div class="itemHead">
+				<span>
+		
+    			    {% if sans_page.root_id == 1 %} 
+    			        Пляжный отдых
+    			    {% else %}
+    			        Лечение и оздоровление
+    			    {% endif %}
+				</span>
+				<i class="fa fa-arrow-down arrow-s" aria-hidden="true"></i>
+			</div>
+			<div class="itemBody">
+				<ul>
+					{% for item in sans_page.resortGroups %}
+						<li><a href="gr_{{ item.slug }}">{{ item.name }}</a></li>
+					{% endfor %}
+					{% if  sans_page.root_id == 1 %}
+					    {% set store = om_static.get({shop_id:2}) %}
+					{% else %}
+					    {% set store = om_static.get({shop_id:3}) %}
+					{% endif %}
+					{% for category in store %}
+    					<li>
+    						<a target="no_blank" href="/{{ category.slug }}{% if category.frame_link %}{{category.frame_link}}{% endif %}">{{ category.name|mutator }}</a>
+    					</li>
+    				{% endfor %}
+				</ul>
+			 </div>
+		</div>
+
+        {% set curectArticle = 0 %}
+        {% for item in sans_page.articles() %}
+                {% if sans_page.resorts[item.resort_id] %}
+				    {% set curectArticle = 1 %}
+				{% endif %}
+        {% endfor %}
+
+        {# Блок - Меню статей #}
+		{% if sans_page.articles.count() %}
+		<div class="leftBlockItem">
+			<div class="itemHead">
+				<span>
+					Полезная информация
+				</span>
+				<i class="fa fa-arrow-down arrow-s" aria-hidden="true"></i>
+			</div>
+			<div class="itemBody">
+				<ul>
+				  {#  {% if sans_page.resorts[item.resort_id]=537 %} #}
+                    {% for item in sans_page.articles %} {#<li><a href="">краснодар</a></li>#}
+    					    <li><a href="/sans-pages/article_{{ item.slug }}">{{ item.name }}</a></li>
+                  {% endfor %} 
+                    {#	{% endif %} #}
+				</ul>
+			</div>
+		</div>
+		{% endif %}
+        {# / Блок - Меню статей #}
+
+
+        <div class="leftBlockItem">
+            <div class="itemHead">
+				<span>
+					Курорты
+				</span>
+                <i class="fa fa-arrow-down arrow-s" aria-hidden="true"></i>
+            </div>
+            <div class="itemBody">
+                <ul>                
+                    {% for item in sans_page.resorts %}
+                        <li><a href="page_{{ item.slug }}">{{ item.name|mutator }}</a></li>
+                    {% endfor %}                    
+                </ul>
+            </div>
+        </div>
+
+	</div>
+</div>

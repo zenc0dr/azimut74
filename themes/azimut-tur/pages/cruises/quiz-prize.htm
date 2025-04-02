@@ -1,0 +1,65 @@
+title = "Квиз-Приз"
+url = "/kviz-prize"
+layout = "general"
+is_hidden = 0
+robot_index = "noindex"
+robot_follow = "nofollow"
+contentType = "html"
+force_show = 0
+==
+<?php
+function onStart()
+{
+    Session::put('quize_passed', true);
+}
+?>
+==
+<style>
+    .kviz-prize {
+        display: flex;
+        flex-direction: row;
+        flex-wrap: wrap;
+        justify-content: center;
+        margin-bottom: 40px;
+    }
+    .kviz-prize iframe {
+        min-width: 490px;
+        max-width: 560px;
+        padding: 10px;
+        width: 100%;
+        height: 315px;
+    }
+    .kviz-prize h1 {
+        text-align: center;
+    }
+
+    .kviz-prize-btn {
+        display: inline-block;
+        border: 2px solid #cc3a29;
+        color: #cc3a29;
+        padding: 15px 26px;
+        font-family: OpenSansBold, sans-serif;
+        border-radius: 10px;
+        text-transform: uppercase;
+        transition: 200ms;
+    }
+
+    .kviz-prize-btn:hover {
+        background: #cc3a29;
+        color: #fff;
+    }
+    .kviz-prize-control {
+        text-align: center;
+    }
+</style>
+<div class="kviz-prize">
+    <h1>Ответы на важные вопросы о круизах</h1>
+    <iframe src="https://www.youtube.com/embed/D9fSwTFkVb8" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+    <iframe src="https://www.youtube.com/embed/WY4mkeTY3V0" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+    <iframe src="https://www.youtube.com/embed/jhvAmd7AVeg" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+    <iframe src="https://www.youtube.com/embed/S_rPE2DPXk4" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+    <iframe src="https://www.youtube.com/embed/S9pusHIt9LY" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+</div>
+<div class="kviz-prize-control">
+    <a class="kviz-prize-btn" href="/russia-river-cruises" target="_blank">Вернуться к подбору круиза</a>
+</div>

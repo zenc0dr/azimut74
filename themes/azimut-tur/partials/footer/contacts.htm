@@ -1,0 +1,136 @@
+description = "Секция Контакты в дне"
+
+[viewBag]
+==
+<section class="contacts">
+	<div class="c-p">
+		<div class="c-r">
+
+			<div class="col-42 col-s-50 col-xs-100">
+
+				<div class="headText">
+					<span>Контакты</span>
+				</div>
+				<div class="all_phones">
+                    <div class="footer__phones-2">
+                        <div class="footer__phones-2__big">
+                            <a href="tel:88452990819">
+                                8 (8452) 99 08 19
+                            </a>
+                        </div>
+                        <div class="footer__phones-2__mid">
+                            <span>Круизный отдел</span>
+                            <a href="tel:88452990819">
+                                8 (8452) 99 08 19
+                            </a>
+                        </div>
+                        <div class="footer__phones-2__big" style="margin-top: 5px">
+                            <a href="tel:88001004959">
+                                8 (800) 100 49 59
+                            </a>
+                            <div style="color:#fff">Звонок бесплатный</div>
+                        </div>
+                    </div>
+				</div>
+                <style>
+                    .footer__phones-2 a {
+                        color: #fff;
+                    }
+                    .footer__phones-2 {
+                        max-width: 360px;
+                        border-radius: 7px;
+                        margin-bottom: 15px;
+                    }
+                    .footer__phones-2__big {
+                        margin-bottom: 8px;
+                    }
+                    .footer__phones-2__big a {
+                        font-weight: bold;
+                        font-size: 26px;
+                    }
+                    .footer__phones-2__mid {
+                        display: flex;
+                        flex-direction: column;
+                    }
+                    .footer__phones-2__mid span {
+                        font-weight: bold;
+                    }
+                    .footer__phones-2__mid a {
+                        font-size: 23px;
+                    }
+                </style>
+				{% if this.theme.email %}
+				<div class="mail">
+					<a href="mailto:{{ this.theme.email|mutator }}">{{ this.theme.email|mutator }}</a>
+				</div>
+				{% endif %}
+
+                <style>
+                    .email-pill {
+                        display: flex;
+                        flex-direction: column;
+                        margin-top: 10px;
+                        margin-bottom: 10px;
+                    }
+                    .email-pill__title {
+                        color: #fff;
+                        font-weight: bold;
+                        margin-bottom: 4px;
+                    }
+                    .email-pill a {
+                        font-weight: bold;
+                        color: #09005f;
+                    }
+                </style>
+                <div class="email-pill">
+                    <div class="email-pill__title">Отдел школьных и групповых туров</div>
+                    <a href="mailto:azimut.operator@yandex.ru">azimut.operator@yandex.ru
+                    </a>
+                </div>
+
+
+				{% if this.theme.graphic %}
+				<!-- <div class="workTime">
+					<div>Понедельник — <b>с 10:00 до 19:00</b></div>
+					<div>Суббота — <b>c 11:00 до 15:00</b></div>
+					<div>Воскресенье — выходной</div>
+				</div> -->
+				<div class="workTime">
+					{{ this.theme.graphic|raw|mutator }}
+				</div>
+				{% endif %}
+				{% if this.theme.address %}
+				<div class="address">
+					{{ this.theme.address|mutator }}
+				</div>
+				{% endif %}
+				<div class="ros-reestr-block" onclick="window.open('https://www.russiatourism.ru/operators/show.php?id=107271')">
+					<div>Мы в реестре туроператоров</div>
+					<div>ООО "Азимут" РТО 021653</div>
+				</div>
+				<div class="conButtons">
+					<div class="conButton">
+						<button onclick="CallBack.open()" class="cbtn mbtn">Заказать звонок</button>
+					</div>
+					<div class="conText">
+						<span>Вам некогда?</span>
+						<span>Мы перезвоним!</span>
+					</div>
+				</div>
+				<div class="footer__policy d-flex flex-column flex-sm-row align-items-center">
+
+					<div class="footer__policy-text d-flex flex-column c-primary-100 pt-3 fs-s">
+						<a href="/politika-konfidencialnosti" class="c-primary-100" target="_blank">Политика обработки персональных данных
+						</a>
+					</div>
+				</div>
+
+			</div>
+
+		</div>
+	</div>
+	{% if this.environment != 'dev' %}
+	{% partial 'template/map' %}
+	{% endif %}
+
+</section>

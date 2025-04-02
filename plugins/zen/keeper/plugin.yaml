@@ -1,0 +1,26 @@
+plugin:
+    name: 'zen.keeper::lang.plugin.name'
+    description: 'zen.keeper::lang.plugin.description'
+    author: Zen
+    icon: oc-icon-lock
+    homepage: ''
+navigation:
+    keeper-main:
+        label: Keeper
+        url: zen/keeper/sites
+        icon: icon-lock
+        permissions:
+            - zen.keeper
+        sideMenu:
+            keeper-sites:
+                label: Сайты
+                url: zen/keeper/sites
+                icon: icon-cloud
+            keeper-backups:
+                label: Бекапы
+                url: zen/keeper/backups
+                icon: icon-briefcase
+permissions:
+    zen.keeper:
+        tab: Keeper
+        label: 'Глобальный доступ к модулю'

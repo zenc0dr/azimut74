@@ -1,0 +1,10 @@
+name: ErrorLogController
+form: $/zen/worker/models/errorlog/fields.yaml
+modelClass: Zen\Worker\Models\ErrorLog
+defaultRedirect: zen/worker/errorlogcontroller
+create:
+    redirect: 'zen/worker/errorlogcontroller/update/:id'
+    redirectClose: zen/worker/errorlogcontroller
+update:
+    redirect: zen/worker/errorlogcontroller
+    redirectClose: zen/worker/errorlogcontroller

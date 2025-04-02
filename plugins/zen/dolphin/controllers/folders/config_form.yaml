@@ -1,0 +1,10 @@
+name: Folders
+form: $/zen/dolphin/models/folder/fields.yaml
+modelClass: Zen\Dolphin\Models\Folder
+defaultRedirect: zen/dolphin/folders
+create:
+    redirect: 'zen/dolphin/folders/update/:id'
+    redirectClose: zen/dolphin/folders
+update:
+    redirect: zen/dolphin/folders
+    redirectClose: zen/dolphin/folders

@@ -1,0 +1,10 @@
+name: LogController
+form: $/zen/master/models/logmodel/fields.yaml
+modelClass: Zen\Master\Models\LogModel
+defaultRedirect: zen/master/logcontroller
+create:
+    redirect: 'zen/master/logcontroller/update/:id'
+    redirectClose: zen/master/logcontroller
+update:
+    redirect: zen/master/logcontroller
+    redirectClose: zen/master/logcontroller

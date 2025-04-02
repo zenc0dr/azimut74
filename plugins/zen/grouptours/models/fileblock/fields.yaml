@@ -1,0 +1,19 @@
+fields:
+    name:
+        label: Название
+        span: full
+        type: text
+    desc:
+        label: Описание
+        size: large
+        span: full
+        type: richeditor
+    files:
+        label: Файлы
+        mode: file
+        useCaption: true
+        thumbOptions:
+            mode: crop
+            extension: auto
+        span: full
+        type: fileupload

@@ -1,0 +1,57 @@
+towns // Это первые города
+    14 => "Волгоград"
+checkins
+    2413 => array:3 [▼
+        "ship_id" => 27
+        "date" => 1556136000
+        "days" => 6
+      ]
+ships
+    27 => "Александр Невский"
+dests
+    0 => array:4 [▼
+        "parent" => 14 // id города с order=0 т.е. первый
+        "id" => 57 // id города
+        "name" => "Романовская"
+        "checkin_id" => 2413
+      ]
+start_id
+    63
+soft
+    0 => "203:20"
+    1 => "246:20"
+    2 => "269:77"
+    3 => "268:27"
+
+
+
+1) towns - Первые в маршрутах города
+    id
+    name
+2) dests - Города в маршрутах кроме первых
+    id
+    name
+    checkin_id
+3) checkins - заезды
+    ship_id
+    date
+    days
+
+
+# Предлагаю
+checkins[id]
+    ship_id
+    date
+    days
+ways[0]
+    checkin_id
+    town_id
+    start(bool) // Начальный город маршрута
+towns[id]
+    name
+ships[id]
+    name
+soft[id_town_a]
+    id_town_b
+start_id
+    63

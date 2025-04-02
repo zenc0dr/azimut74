@@ -1,0 +1,64 @@
+title = "Посадочная страница"
+url = "/russia-river-cruises/:?*"
+layout = "master"
+description = "Стартовая точка RiverCRS"
+is_hidden = 0
+robot_index = "index"
+robot_follow = "follow"
+contentType = "html"
+force_show = 0
+==
+<?php
+function onStart()
+{
+    $init_success = Mcmraak\Rivercrs\Classes\RivercrsCore::init($this);
+    if (!$init_success) {
+        $this->setStatusCode(404);
+        return $this->controller->run('404');
+    }
+    $this['page_css'] = mix('css/cruises.css', 'themes/azimut-tur-pro/assets');
+    $this['page_js'] = mix('js/cruises.js', 'themes/azimut-tur-pro/assets');
+
+    $this['quiz_css'] = '/plugins/zen/quiz/frontend/assets/css/quiz.css';
+    $this['quiz_js'] = '/plugins/zen/quiz/frontend/assets/js/quiz-app.js';
+}
+?>
+==
+{% put page_style %}
+<link rel="stylesheet" href="{{ page_css }}">
+{% endput %}
+{% put page_script %}
+<script src="{{ page_js }}"></script>
+{% endput %}
+<meta name="search-preset" content="{{ RiverCRS.searchPreset }}" />
+<section class="results my-4">
+    <div class="container d-flex flex-column">
+        <div class="d-flex flex-column flex-lg-row">
+            {% set left_menu = RiverCRS.leftMenu %}
+            <section class="result-menu__categories col-12 col-lg-3 ">
+                {% partial 'search/left-menu' %}
+            </section>
+            <meta name="widget-title" content="{{ RiverCRS.cruise.h1|mutator }}" />
+
+
+            {# Квиз "Подберите мне круиз" #}
+            <link rel="stylesheet" href="{{ quiz_css }}">
+            <div id="QuizApp"></div>
+            <script src="{{ quiz_js }}"></script>
+
+
+            <div id="search-widget-app"></div>
+        </div>
+        <section class="info-wrapper bg-primary-100  rounded  mt-4">
+            {% partial 'info/cruize-head' cruise=RiverCRS.cruise class="p-2 p-sm-3 p-xl-4 col-12 mb-3" %}
+            {% for article in RiverCRS.articles %}
+            {% partial 'info/cruize-article' article=article class="p-2 p-sm-3 p-xl-4 col-12 c-gray-300" %}
+            {% endfor %}
+            <section class="cruize-links d-flex flex-wrap p-2 p-sm-4">
+                {% for link in RiverCRS.seoLinks %}
+                {% partial 'info/cruize-link' class="" link=link.relinks_link text=link.relinks_name %}
+                {% endfor %}
+            </section>
+        </section>
+    </div>
+</section>

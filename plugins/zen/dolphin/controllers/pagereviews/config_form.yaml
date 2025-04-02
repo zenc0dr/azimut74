@@ -1,0 +1,16 @@
+name: 'Блок отзывов'
+modelClass: Zen\Dolphin\Models\PageReview
+form: $/zen/dolphin/models/pagereview/fields.yaml
+defaultRedirect: zen/dolphin/pagereviews
+create:
+    title: 'Создание отзывов'
+    redirect: 'zen/dolphin/pagereviews/update/:id'
+    redirectClose: zen/dolphin/pagereviews
+    flashSave: 'Отзывы сохранены'
+update:
+    title: 'Отзывы обновлены'
+    redirect: zen/dolphin/pagereviews
+    redirectClose: zen/dolphin/pagereviews
+    flashSave: 'Отзывы сохранены'
+    flashDelete: 'Отзывы удалены'
+preview: {  }

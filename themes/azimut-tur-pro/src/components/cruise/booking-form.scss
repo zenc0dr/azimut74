@@ -1,0 +1,391 @@
+.wrapper-tab-content.booking {
+    background-color: color('blue-400');
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    color: color('primary-100');
+    padding: 25px 100px;
+    @include m('1300px') {
+        padding: 25px 58px;
+    }
+    @include m('lg') {
+        padding: 25px 20px;
+    }
+    @include m('425px') {
+       padding: 25px 10px;
+    }
+}
+
+
+.dLine {
+   display: flex;
+   justify-content: space-between;
+   margin-bottom: 15px;
+   align-items: center;
+   input,textarea {
+      background-color: color('primary-100');
+      border-radius: 4px;
+      padding: 7px 14px;
+      outline: none;
+      width: 100%;
+      border: none;
+   }
+   input:-ms-input-placeholder,
+   input:-moz-placeholder,
+   input::-webkit-input-placeholder {
+      color: #909090;
+   }
+
+   & > div:first-child {
+      @include m('425px') {
+        font-size: fs('s');
+      }
+   }
+   & > div:last-child {
+      flex-shrink: 0;
+      width: 70%;
+   }
+   .req-input::after {
+      content: '*';
+      display: inline-block;
+      color: color('primary-100');
+      vertical-align: top;
+      padding-left: 3px;
+   }
+}
+
+.dataLineRight {
+   .bottom-form-text {
+      font-size: fs('ss')!important;
+   }
+   div:last-child {
+      font-size: fs('s');
+      width: 100%;
+      @include m('xl') {
+        font-size: fs('ss');
+      }
+      @include m('390px') {
+         font-size: rem(9px)
+      }
+    }
+   textarea {
+      width: 100%;
+      height: 150px;
+      border: none;
+      outline: none;
+      padding: 20px;
+      border-radius: 4px;
+      &::-moz-placeholder,
+      &::-webkit-input-placeholder,
+      &::-ms-input-placeholder {
+         color: #909090;
+      }
+   }
+}
+
+.form-title-section {
+    margin-bottom: 40px;
+    text-align: center;
+    font-size: fs('h2');
+    font-weight: bold;
+    @include m('md') {
+       text-align: left;
+    }
+    @include m('425px') {
+       font-size: fs('h3');
+    }
+}
+
+
+input.bad {
+    box-shadow: 0 0 0px 2px rgba(color('red-200'), 0.8);
+}
+
+textarea.bad {
+    box-shadow: 0 0 0px 2px rgba(color('red-200'), 0.8);
+}
+
+// нужно перменную цвета
+.alerts {
+    display: inline-block;
+    width: 100%;
+    background: #ffd1d1;
+    padding: 19px;
+    color: color('red-200');
+    margin-top: 20px;
+    animation: respond-fadein 200ms;
+    &.success {
+      background: #b1ffc4;
+      color: #005608;
+    }
+}
+
+.respond-alerts {
+    display: inline-block;
+    width: 100%;
+    margin-top: 15px;
+    margin-bottom: 15px;
+    & > div {
+      background: #b1ffc4;
+      color: #005608;
+      animation: respond-fadein 200ms;
+      margin-bottom: 5px;
+      border-radius: 5px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 8px 20px;
+      @include m('425px') {
+          padding: 7px 10px;
+      }
+    }
+
+    & > div.danger {
+      background: #ffd1d1;
+      color: color('red-200');
+    }
+
+    & > div.info {
+      background: #8ddfff;
+      color: #444444;
+    }
+    & > div.warning {
+      background: #fffcd1;
+      color: #4a4a4a;
+   }
+   & > div > div {
+      @include m('425px') {
+         text-align: left;
+         font-size: rem(11px)
+      }
+   }
+}
+
+
+.accept-check {
+    margin-bottom: 20px;
+    a {
+      color: color('primary-100');
+      }
+}
+
+.wrapper-btn-order {
+    display: none;
+    align-items: center;
+    justify-content: center;
+    position: sticky;
+    position: -webkit-sticky;
+    bottom: 15px;
+    margin-top: 20px;
+    flex-direction: column;
+    div {
+       margin-bottom: 20px;
+    }
+    &.active {
+       display: flex;
+    }
+}
+
+.countInput {
+    font-size: fs('h2');
+    margin: 0 5px;
+    font-weight: bold;
+}
+
+
+
+.form-booking-bottom {
+   width: 40%;
+   flex-shrink: 0;
+   @include m('xl') {
+      width: 47%;
+   }
+   @include m('md') {
+       width: 100%;
+   }
+}
+
+
+.form-content {
+       padding: 0 80px;
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+    justify-content: space-between;
+   @include m('xl') {
+      padding: 0 30px;
+   }
+   @include m('md') {
+      align-items: flex-start;
+      padding: 0;
+   }
+}
+
+.bottom-booking {
+       margin-top: 40px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+   div {
+      @include m('lg') {
+         font-size: fs('s');
+      }
+      @include m('425px') {
+         font-size: fs('s');
+        text-align: center;
+        padding: 0 10px;
+      }
+   }
+}
+
+.form-count-people {
+   height: 50%;
+   display: flex;
+   flex-direction: column;
+   align-items: center;
+   justify-content: center;
+   @include m('md') {
+      margin-top: 20px;
+   }
+   @include m('425px') {
+      margin-top: 25px;
+      width: 100%;
+      margin-bottom: 22px;
+   }
+   div:first-child {
+      margin-bottom: 20px;
+      font-weight: bold;
+      font-size: fs('h3');
+      @include m('lg') {
+         font-size: fs('def');
+      }
+   }
+   div:last-child {
+      display: flex;
+      align-items: center;
+   }
+   input, .countBtn {
+      background-color: color('primary-100');
+      border-radius: 4px;
+      padding: 7px 14px;
+      outline: none;
+      display: flex;
+      align-items: center;
+      width: 40px;
+      border: none;
+      justify-content: center;
+      text-align: center;
+   }
+   .countBtn {
+      color: color('primary-100');
+      background-color: color('red-300');
+      margin: 0 6px;
+      &[disabled] {
+         background-color: color('red-200');
+      }
+      &:not([disabled]):hover {
+         cursor: pointer;
+      }
+   }
+}
+
+.top-booking {
+   display: flex;
+   @include m('md') {
+      flex-direction: column;
+   }
+}
+
+.form-booking-top {
+   width: 100%;
+   order: 1;
+   display: flex;
+   flex-direction: column;
+   @include m('md') {
+      order: 0;
+      margin-bottom: 30px;
+   }
+}
+
+.cruise-section a.booking-btn.btn {
+   @include m('425px') {
+      width: 90%;
+   }
+}
+
+.form-cabins {
+       display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    justify-content: center;
+   > div:not(:last-child) {
+      margin-bottom: 15px;
+      @include m('425px') {
+         margin-bottom: 7px;
+      }
+   }
+   .bex-room {
+      @include m('390px') {
+         font-size: rem(10px);
+         width: 21px;
+         height: 24px;
+      }
+   }
+}
+
+
+.form-cabin-descr {
+   margin-left: 5px;
+   max-width: 260px;
+   font-size: fs('s');
+   @include m('425px') {
+      font-size: fs('ss');
+   }
+}
+
+.dataLineForm {
+    display: flex;
+    flex-direction: column;
+}
+
+.bex-offerLink {
+    text-decoration: underline;
+    &:hover {
+       cursor: pointer;
+    }
+}
+
+.form-cabin {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    .bex-room {
+      font-size: fs('s');
+      border: none;
+      border-radius: 4px;
+      width: 35px;
+      height: 35px;
+      display: flex;
+      align-items: center;
+      flex-direction: column;
+      margin: 0;
+      justify-content: center;
+      @include m('lg') {
+         font-size: fs('s');
+         width: 30px;
+         height: 30px;
+      }
+      &.is-actual {
+         font-weight: bold;
+         color: color('primary-100');
+      }
+    }
+    i {
+      color: color('primary-100');
+      margin-left: 10px;
+      &:hover {
+         cursor: pointer;
+      }
+    }
+}

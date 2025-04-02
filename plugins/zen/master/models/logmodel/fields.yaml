@@ -1,0 +1,5 @@
+fields:
+    partial1:
+        span: auto
+        path: $/zen/master/models/logmodel/log_record.php
+        type: partial

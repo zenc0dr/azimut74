@@ -1,0 +1,1 @@
+$template['operator_name'] = @$input['operator_name'];

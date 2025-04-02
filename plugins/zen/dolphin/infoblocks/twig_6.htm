@@ -1,0 +1,24 @@
+<style>
+    .waybill {
+        
+    }
+    .waybill h2 {
+        font-size: 22px;
+    }
+    .waybill__body {
+        margin-bottom: 20px;
+    }
+    .waybill_separator {
+        
+    }
+</style>
+<div class="waybill">
+    <div class="waybill__body">
+        {% for point in waybill %}
+        <span>{{ point}}</span>
+        {% if loop.last != true %}
+            <span class="waybill_separator">-</span>
+        {% endif %}
+    {% endfor %}
+    </div>
+</div>

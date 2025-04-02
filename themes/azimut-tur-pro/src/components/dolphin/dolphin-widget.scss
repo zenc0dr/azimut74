@@ -1,0 +1,88 @@
+@import '~vue2-datepicker/index.css';
+
+.dolphin-widget {
+    padding: 15px;
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+    background-color: #1a81db;
+    border-radius: 5px;
+    margin-bottom: 5px;
+    flex-wrap: wrap;
+    color: #000;
+    position: sticky;
+    top: -14px;
+    z-index: 10;
+    @include m(992px) {
+        position: initial;
+    }
+    .input-block {
+        display: flex;
+        flex-direction: column;
+        flex: 1 1 0;
+        margin: 5px;
+        &__label {
+            color: #fff;
+            font-size: 12px;
+            margin-bottom: 5px;
+            padding-left: 5px;
+            font-weight: bold;
+        }
+        &__wrap.widget-submit {
+            display: flex;
+            padding-top: 17px;
+        }
+    }
+    .btn-submit {
+        background-color: #e0292c;
+        color: #fff;
+        border: none;
+        padding: 12px 22px;
+        border-radius: 5px;
+        font-size: 12px;
+        font-weight: bold;
+        text-transform: uppercase;
+        flex: 1 0 0;
+    }
+}
+
+.dolphin-widget__title {
+    font-size: 18px;
+    font-weight: bold;
+    width: 100%;
+    margin-bottom: 11px;
+    margin-left: 5px;
+    color: #fff;
+}
+.admin-cog {
+    cursor: pointer;
+    &:hover {
+        color: #ffcd00;
+    }
+}
+
+.search-widget-preloader {
+    text-align: center;
+    margin-top: 50px;
+}
+
+.banner__integration .dolphin-widget {
+    background: rgb(0 0 0 / 42%);
+    position: relative;
+    top: auto;
+}
+
+/* Поле мультивыбора городов */
+.zen-tree-multi-select {
+    width: 100%;
+    min-width: 270px;
+}
+
+/* Поле мультивыбора даты */
+
+@media (max-width: 991px) {
+    .dolphin-widget {
+        top: 36px;
+    }
+}
