@@ -11,11 +11,14 @@ class Volga extends Exist
     public $query_type;
     public function getExist($checkin, $realtime)
     {
-
         #$this->query_type = ($realtime)?'array_now':'array'; #TODO:НА время отключено
         $this->query_type = 'array';
 
         $this->dump = $this->parser->cacheWarmUp('volgawolga-database', $this->query_type);
+
+
+        //dd($this->dump['free']['cruise'][0]);
+
         $cruise_id = $checkin->eds_id;
         $this->checkin = $checkin;
 
@@ -50,6 +53,7 @@ class Volga extends Exist
         # free считать занятыми.
         $rooms = [];
         $tariff_price2 = false;
+
         foreach ($this->dump['free']['cruise'] as $cruise) {
             if($cruise['@attributes']['id'] == $cruise_id) {
                 if(!isset($cruise['cabin'])) continue;

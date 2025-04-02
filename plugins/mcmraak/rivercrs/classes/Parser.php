@@ -389,11 +389,12 @@ class Parser
 
         # ВолгаWolga - База данных [ /rivercrs/api/v2/cache/debug/volgawolga-database ]+
         if($method == 'volgawolga-database') {
+
             $answer = $this->get('xml',
                 //'http://www.volgawolga.ru/php/xml/index-tst.php',
                 self::getDomain().'/rivercrs/debug/Service@getVolgaDB',
                 null,
-                ($type=='array_now')?0:CacheSettings::get('volgawolga_database')
+                0
             );
             //dd($answer['cruises']['cruise']);
         }

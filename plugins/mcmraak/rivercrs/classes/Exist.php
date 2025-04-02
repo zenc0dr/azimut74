@@ -451,8 +451,6 @@ class Exist
         # Номер кают забитые вручную
         $ev_rooms = $this->checkin->motorship->exist_rooms;
         $ev_rooms = json_decode($ev_rooms, 1);
-
-
         $ex_rooms = $this->exist_data['rooms'] ?? [];
 
         if (!$ev_rooms) {
