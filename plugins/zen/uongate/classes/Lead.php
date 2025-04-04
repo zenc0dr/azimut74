@@ -1,5 +1,7 @@
 <?php namespace Zen\Uongate\Classes;
 
+use phpDocumentor\Reflection\Types\Void_;
+
 class Lead extends Core
 {
     public static function push($data)
@@ -21,7 +23,8 @@ class Lead extends Core
 //            'u_phone_mobile' => $data['phone'],
 //            'u_email' => $data['email'],
 //            'note' => $data['note'],
-            'Amo.Integration' => $data['Amo.Integration']
+            'Amo.Integration' => $data['Amo.Integration'],
+            'Calltouch.Integration' => $data['Calltouch.Integration'],
         ];
 
         //file_put_contents(storage_path('lead.json'), json_encode([], 128 | 256));
@@ -62,10 +65,16 @@ class Lead extends Core
         self::artisanExec("uongate:lead_push --key=$key");
     }
 
+    /**
+     * Сюда приходят данные сверху
+     * @param $data
+     * @return void
+     */
     public static function query($data)
     {
 
         $amo_integration = $data['Amo.Integration'];
+        $calltouch_integration = $data['Calltouch.Integration'];
         unset($data['Amo.Integration']);
 
         #self::store('Uon')->get()->query('lead/create.json', $data);
@@ -83,10 +92,52 @@ class Lead extends Core
             $amo_integration
         );
 
+        master()->log(
+            'Данные отправленные в Calltouch',
+            $calltouch_integration
+        );
+
         # Дополнительно посылаем данные в AMO
         \Http::post('https://tglk.ru/in/4PVwZs6rrSd6QRB5', function ($http) use ($amo_integration) {
             $http->data($amo_integration);
         });
+
+        # Отправка в Calltouch
+        self::registerCalltouch(
+            $calltouch_integration['name'],
+            $calltouch_integration['phone'],
+            $calltouch_integration['email']
+        );
+    }
+
+    private static function registerCalltouch($name, $phone, $mail)
+    {
+        $call_value = $_COOKIE['_ct_session_id'] ?? null;
+        $ct_site_id = '73880';
+        $url = 'https://api.calltouch.ru/calls-service/RestAPI/requests/' . $ct_site_id . '/register/';
+
+        $data = [
+            'fio'         => $name,
+            'phoneNumber' => $phone,
+            'email'       => $mail,
+            'subject'     => 'Заявка с сайта'
+        ];
+
+        if ($call_value && $call_value !== 'undefined') {
+            $data['sessionId'] = $call_value;
+        }
+
+        \Http::post($url, function ($http) use ($call_value, $data) {
+            $http->header('Content-Type', 'application/x-www-form-urlencoded;charset=utf-8');
+            $http->data($data);
+        });
+
+        $data['url'] = $url;
+
+        master()->log(
+            'Данные отправлены в Calltouch',
+            $data
+        );
     }
 
     private static function getSourceName($source_code)
