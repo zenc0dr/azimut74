@@ -50,8 +50,8 @@
                         </div>
                     </div>
                     <div class="d-flex flex-column text-center">
-                        <div class="fs-ss mb-1">Круизный отдел</div>
-                        <a href="tel:88452990819" class="text-decoration-none c-primary-200 fs-def fw-bolder">
+                        <div style="display:none" class="fs-ss mb-1">Круизный отдел</div>
+                        <a style="display:none" href="tel:88452990819" class="text-decoration-none c-primary-200 fs-def fw-bolder">
                             8 (8452) 99 08 19
                         </a>
                         <a href="tel:88001004959" class="text-decoration-none c-primary-200 fs-def fw-bolder">

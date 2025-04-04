@@ -1,6 +1,6 @@
 /*libs*/
 import '@src/js/zen-modal.js'
-import '@src/components/call-back/call-back.js'
+import '@src/components/call-back/call-back.js' // Модуль обратной связи откл: https://8ber.kaiten.ru/space/45609/boards/card/48106455
 //import '@fancyapps/fancybox/dist/jquery.fancybox.min'
 
 
