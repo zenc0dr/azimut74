@@ -8,6 +8,9 @@ class Lead extends Core
     {
         //$source = self::getSourceName($data['source']);
 
+
+        $call_touch = $data['Calltouch.Integration'] ?? null;
+
         $data['Amo.Integration']['source'] = $data['source']; # По проз
 
         # todo Для отладки
@@ -24,7 +27,7 @@ class Lead extends Core
 //            'u_email' => $data['email'],
 //            'note' => $data['note'],
             'Amo.Integration' => $data['Amo.Integration'],
-            'Calltouch.Integration' => $data['Calltouch.Integration'],
+            'Calltouch.Integration' => $call_touch,
         ];
 
         //file_put_contents(storage_path('lead.json'), json_encode([], 128 | 256));
@@ -74,8 +77,9 @@ class Lead extends Core
     {
 
         $amo_integration = $data['Amo.Integration'];
-        $calltouch_integration = $data['Calltouch.Integration'];
-        unset($data['Amo.Integration']);
+        $calltouch_integration = $data['Calltouch.Integration'] ?? null;
+        #unset($data['Amo.Integration']);
+        #unset($data['Calltouch.Integration']);
 
         #self::store('Uon')->get()->query('lead/create.json', $data);
 
@@ -102,16 +106,19 @@ class Lead extends Core
             $http->data($amo_integration);
         });
 
-        # Отправка в Calltouch
-        self::registerCalltouch(
-            $calltouch_integration['name'],
-            $calltouch_integration['phone'],
-            $calltouch_integration['email']
-        );
+        if ($calltouch_integration && is_array($calltouch_integration)) {
+            # Отправка в Calltouch
+            self::registerCalltouch(
+                $calltouch_integration['name'] ?? null,
+                $calltouch_integration['phone']?? null,
+                $calltouch_integration['email']?? null
+            );
+        }
     }
 
-    private static function registerCalltouch($name, $phone, $mail)
+    private static function registerCalltouch(?string $name, ?string $phone, ?string $mail)
     {
+
         $call_value = $_COOKIE['_ct_session_id'] ?? null;
         $ct_site_id = '73880';
         $url = 'https://api.calltouch.ru/calls-service/RestAPI/requests/' . $ct_site_id . '/register/';
