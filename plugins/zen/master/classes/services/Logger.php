@@ -9,7 +9,7 @@ class Logger
 {
     use SingletonTrait;
 
-    public function add(string $name, array $data)
+    public function add(?string $name = null, ?array $data = [])
     {
         LogModel::create([
             'event_name' => $name,
