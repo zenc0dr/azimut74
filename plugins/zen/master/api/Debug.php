@@ -9,6 +9,7 @@ class Debug
     # http://azimut.dc/master.api.Debug.test
     public function test()
     {
+        dd($_COOKIE['_ct_session_id']);
         //master()->telegram()->sendMessage('Ваша лодка готова капитан!');
     }
 

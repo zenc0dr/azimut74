@@ -53,6 +53,14 @@ class Lead extends Core
 //            json_encode($data, 128 | 256)
 //        );
 
+        if (isset($data['Amo.Integration']) && isset($_COOKIE['_ct_session_id'])) {
+            $data['Calltouch.Integration'] = $data['Amo.Integration'];
+            $data['Calltouch.Integration']['session_id'] = $_COOKIE['_ct_session_id'];
+        }
+
+
+
+
         $data = self::json($data, true);
         $key = md5($data);
         $path = temp_path('uongate/leads');
@@ -75,19 +83,6 @@ class Lead extends Core
     {
 
         $amo_integration = $data['Amo.Integration'];
-        //$calltouch_integration = $data['Calltouch.Integration'] ?? null;
-        #unset($data['Amo.Integration']);
-        #unset($data['Calltouch.Integration']);
-
-        #self::store('Uon')->get()->query('lead/create.json', $data);
-
-        #TODO(zenc0rd):DEBUG
-//        $time = now()->format('d.m.Y H:i:s');
-//        file_put_contents(
-//            storage_path('logs/amo_queries.log'),
-//            "$time: Отправлены данные в АМО" . PHP_EOL,
-//            FILE_APPEND
-//        );
 
         master()->log(
             'Данные отправленные в AMO',
@@ -99,17 +94,19 @@ class Lead extends Core
             $http->data($amo_integration);
         });
 
-        self::registerCalltouch(
-            $amo_integration['name'],
-            $amo_integration['phone'],
-            $amo_integration['email']
-        );
+        # Отправляем данные в Calltouch
+        if (isset($data['Calltouch.Integration'])) {
+            self::registerCalltouch(
+                $data['Calltouch.Integration']['name'],
+                $data['Calltouch.Integration']['phone'],
+                $data['Calltouch.Integration']['email'],
+                $data['Calltouch.Integration']['session_id']
+            );
+        }
     }
 
-    private static function registerCalltouch(?string $name, ?string $phone, ?string $mail)
+    private static function registerCalltouch(?string $name, ?string $phone, ?string $mail, string $session_id)
     {
-
-        $call_value = $_COOKIE['_ct_session_id'] ?? null;
         $ct_site_id = '73880';
         $url = 'https://api.calltouch.ru/calls-service/RestAPI/requests/' . $ct_site_id . '/register/';
 
@@ -120,11 +117,11 @@ class Lead extends Core
             'subject'     => 'Заявка с сайта'
         ];
 
-        if ($call_value && $call_value !== 'undefined') {
-            $data['sessionId'] = $call_value;
+        if ($session_id && $session_id !== 'undefined') {
+            $data['sessionId'] = $session_id;
         }
 
-        \Http::post($url, function ($http) use ($call_value, $data) {
+        \Http::post($url, function ($http) use ($session_id, $data) {
             $http->header('Content-Type', 'application/x-www-form-urlencoded;charset=utf-8');
             $http->data($data);
         });
