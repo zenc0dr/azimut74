@@ -30,6 +30,8 @@ class Lead extends Core
             'Calltouch.Integration' => $call_touch,
         ];
 
+        master()->log('Анализ Lead::push', $data);
+
         //file_put_contents(storage_path('lead.json'), json_encode([], 128 | 256));
         self::stream($data);
     }
