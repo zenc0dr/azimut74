@@ -8,9 +8,6 @@ class Lead extends Core
     {
         //$source = self::getSourceName($data['source']);
 
-
-        $call_touch = $data['Calltouch.Integration'] ?? null;
-
         $data['Amo.Integration']['source'] = $data['source']; # По проз
 
         # todo Для отладки
@@ -27,7 +24,6 @@ class Lead extends Core
 //            'u_email' => $data['email'],
 //            'note' => $data['note'],
             'Amo.Integration' => $data['Amo.Integration'],
-            'Calltouch.Integration' => $call_touch,
         ];
 
         master()->log('Анализ Lead::push', $data);
@@ -79,7 +75,7 @@ class Lead extends Core
     {
 
         $amo_integration = $data['Amo.Integration'];
-        $calltouch_integration = $data['Calltouch.Integration'] ?? null;
+        //$calltouch_integration = $data['Calltouch.Integration'] ?? null;
         #unset($data['Amo.Integration']);
         #unset($data['Calltouch.Integration']);
 
@@ -98,26 +94,16 @@ class Lead extends Core
             $amo_integration
         );
 
-        if ($calltouch_integration) {
-            master()->log(
-                'Данные отправленные в Calltouch',
-                $calltouch_integration
-            );
-        }
-
         # Дополнительно посылаем данные в AMO
         \Http::post('https://tglk.ru/in/4PVwZs6rrSd6QRB5', function ($http) use ($amo_integration) {
             $http->data($amo_integration);
         });
 
-        if ($calltouch_integration && is_array($calltouch_integration)) {
-            # Отправка в Calltouch
-            self::registerCalltouch(
-                $calltouch_integration['name'] ?? null,
-                $calltouch_integration['phone']?? null,
-                $calltouch_integration['email']?? null
-            );
-        }
+        self::registerCalltouch(
+            $amo_integration['name'],
+            $amo_integration['phone'],
+            $amo_integration['email']
+        );
     }
 
     private static function registerCalltouch(?string $name, ?string $phone, ?string $mail)

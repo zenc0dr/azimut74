@@ -125,11 +125,6 @@ class RivercrsCallback
                 'desc' => $parameters,
                 'yandex_id' => request('yandex_id'),
                 'utm' => \Cache::get('utm_' . \Session::getId())
-            ],
-            'Calltouch.Integration' => [
-                'name' => $name,
-                'phone' => $phone,
-                'email' => $email,
             ]
         ]);
 

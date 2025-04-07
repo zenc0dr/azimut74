@@ -199,11 +199,6 @@ class Booking extends Controller
                 'price_level' => $price_level,
                 'yandex_id' => request('yandex_id'),
                 'utm' => $utm
-            ],
-            'Calltouch.Integration' => [
-                'name' => $name,
-                'phone' => $phone,
-                'email' => $email,
             ]
         ]);
 
