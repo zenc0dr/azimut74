@@ -24,7 +24,7 @@
                     </div>
 
                     <div class="col-auto col-auto d-flex align-items-center justify-content-center">
-                        <div class="whats-app-btn kruiz_injector3 only-river-crs" onclick="window.open('https://wa.me/79271149850?text=Меня интересуют речные круизы')"></div>
+                        <!--<div class="whats-app-btn kruiz_injector3 only-river-crs" onclick="window.open('https://wa.me/79271149850?text=Меня интересуют речные круизы')"></div>-->
                         <i class="bi bi-telephone-inbound fs-h1 text-white" @click="clickContacts()" style="cursor:pointer"></i>
                     </div>
 
