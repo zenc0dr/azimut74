@@ -24,7 +24,7 @@ class JobProcessor
         $exception = null;
         try {
             $call = $job->call;
-            if (preg_match('/^[a-zA-Z]+@[a-zA-Z]+$/', $call)) {
+            if (preg_match('/^[a-zA-Z0-9]+@[a-zA-Z0-9]+$/', $call)) {
                 $call = 'Zen\Worker\Pools\\' . $call;
             }
 

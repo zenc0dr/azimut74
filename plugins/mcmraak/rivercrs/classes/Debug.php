@@ -3,6 +3,7 @@
 use Mcmraak\Rivercrs\Classes\ExistTest;
 use Mcmraak\Rivercrs\Console\Check;
 use Mcmraak\Rivercrs\Models\Booking;
+use Mcmraak\Rivercrs\Models\Motorships;
 use Mcmraak\Rivercrs\Models\Checkins;
 use Mcmraak\Rivercrs\Classes\ExistTurbo;
 use Input;
@@ -17,16 +18,13 @@ class Debug
     # http://azimut.dc/rivercrs/debug/Debug@test
     public function test()
     {
-        dd(
-            request()->only([
-                'utm_source',
-                'utm_medium',
-                'utm_campaign',
-                'utm_content',
-                'utm_term',
-                'yclid'
-            ])
-        );
+        $ships = Motorships::get();
+        foreach ($ships as $ship) {
+            if (!isset($ship->scheme[0])) {
+                dd($ship->id);
+            }
+        }
+        dd('no');
     }
 
     # http://azimut.dc/rivercrs/debug/Debug@exTest?id=5009

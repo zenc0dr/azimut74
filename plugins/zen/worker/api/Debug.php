@@ -15,9 +15,22 @@ use Zen\Worker\Pools\Volga;
 use Zen\Worker\Pools\Waterway;
 use Zen\Worker\Pools\WaterwayCruises;
 use Http as OctoberHttp;
+use zen\worker\pools\GamaV2;
+use Illuminate\Support\Facades\Response;
 
 class Debug
 {
+    # http://azimut.dc/zen/worker/api/debug:gamaTest
+    public function gamaTest()
+    {
+        // Response::make($xmlContent, 200)->header('Content-Type', 'application/xml');
+
+        $gama = new GamaV2();
+        $xml_content =  $gama->getGamaRouteData(30644);
+        return Response::make($xml_content, 200)->header('Content-Type', 'application/xml');
+    }
+
+
     # http://azimut.dc/zen/worker/api/debug:testGo
     function testGo()
     {
@@ -61,6 +74,9 @@ class Debug
 //        $stream->cache = new Cabox('worker');
 //        $stream->work();
     }
+
+
+
 
     # http://azimut.dc/zen/worker/api/debug:debugMethod
     function debugMethod()

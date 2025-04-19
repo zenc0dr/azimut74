@@ -85,6 +85,11 @@ class Motorships extends Model
         if (!$schemes) {
             return null;
         }
+
+        if (!isset($schemes[0]) || !isset($schemes[0]->path)) {
+            return null;
+        }
+
         return $schemes[0]->path;
     }
 
