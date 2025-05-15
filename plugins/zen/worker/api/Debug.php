@@ -23,11 +23,13 @@ class Debug
     # http://azimut.dc/zen/worker/api/debug:gamaTest
     public function gamaTest()
     {
+        $gama = new GamaV2();
+        $gama->runGammaParser();
         // Response::make($xmlContent, 200)->header('Content-Type', 'application/xml');
 
-        $gama = new GamaV2();
-        $xml_content =  $gama->getGamaRouteData(30644);
-        return Response::make($xml_content, 200)->header('Content-Type', 'application/xml');
+//        $gama = new GamaV2();
+//        $xml_content =  $gama->getGamaRouteData(29676);
+//        return Response::make($xml_content, 200)->header('Content-Type', 'application/xml');
     }
 
 

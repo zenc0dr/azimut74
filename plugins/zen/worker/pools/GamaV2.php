@@ -1,6 +1,6 @@
 <?php
 
-namespace zen\worker\pools;
+namespace Zen\Worker\Pools;
 
 use phpDocumentor\Reflection\Types\Integer;
 use Zen\Worker\Classes\Convertor;
@@ -11,7 +11,22 @@ class GamaV2
 {
     private static string $key = 'gIOZhOWvGDa177aLNh0rofIO';
 
-    public function getGamaArchive()
+
+    /**
+     * Диспетчер
+     * @return void
+     */
+    public function runGammaParser()
+    {
+        # $this->getGamaArchive();
+        $this->handleCruises();
+    }
+
+    /**
+     * Делает запрос к Гама и скачивает xml-файлы
+     * @return void
+     */
+    public function getGamaArchives(): void
     {
         $zip_url = 'https://gama-nn.ru/satellite/xml/zip/?key=' . self::$key;
         $storage_path = base_path('storage/gama_arc');
@@ -21,6 +36,11 @@ class GamaV2
         shell_exec("unzip -o " . escapeshellarg($zip_file) . " -d " . escapeshellarg($storage_path));
     }
 
+    /**
+     * По идентификатору маршрута получает дополнительные данные
+     * @param int $route_id
+     * @return mixed
+     */
     public function getGamaRouteData(int $route_id)
     {
         $cache_key = "gamma_route:$route_id";
@@ -31,28 +51,23 @@ class GamaV2
         });
     }
 
-    public function gamaCruises()
+    /** Прочитывает содержимое xml-файла и возвращает массив
+     * @param string $file_name
+     * @return mixed
+     */
+    public function getGamaFileData(string $file_name)
     {
-//        $base = Convertor::xmlToArr(
-//            file_get_contents(
-//                base_path('storage/gama_arc/dir_generic.xml')
-//            )
-//        );
-
-        //$xml_url = 'https://gama-nn.ru/satellite/route/30644/?key=gIOZhOWvGDa177aLNh0rofIO';
-
-        $navigation = Convertor::xmlToArr(
+        return Convertor::xmlToArr(
             file_get_contents(
-                base_path('storage/gama_arc/navigation.xml')
+                base_path("storage/gama_arc/$file_name")
             )
         );
+    }
 
+    public function handleCruises()
+    {
+        $navigation = $this->getGamaFileData('navigation.xml');
+        //$navigation = $navigation['NavigationList']['Navigation'];
         dd($navigation);
-
-        $navigation = $navigation['NavigationList']['Navigation'];
-
-        foreach ($navigation as $ship_nav) {
-            dd($ship_nav);
-        }
     }
 }
