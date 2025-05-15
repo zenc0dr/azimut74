@@ -4,6 +4,7 @@ namespace Zen\Master\Classes;
 
 use Zen\Master\Traits\SingletonTrait;
 use Zen\Master\Models\Settings;
+use Carbon\Carbon;
 
 class Master
 {
@@ -74,6 +75,13 @@ class Master
             return null;
         }
         return \Zen\Master\Classes\Services\Logger::getInstance();
+    }
+
+    public function carbon($date = null, $format = null): Carbon
+    {
+        return $format
+            ? \Carbon\Carbon::createFromFormat($format, $date)
+            : \Carbon\Carbon::parse($date ?? now());
     }
 
     /**

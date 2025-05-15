@@ -14,6 +14,9 @@ use Mcmraak\Rivercrs\Classes\Search;
 
 class RiverCrs
 {
+    private array $cache = [];
+
+
     public function riverQuery($url, $format = 'json', $data = null, $key = null)
     {
         if ($key) {
@@ -131,8 +134,11 @@ class RiverCrs
 
     public function getTownId($name, $eds_code = null)
     {
+        if (isset($this->cache["town:$name:$eds_code"])) {
+            return $this->cache["town:$name:$eds_code"];
+        }
         $getter = new Getter;
-        return $getter->getTownId($name, $eds_code);
+        return $this->cache["town:$name:$eds_code"] = $getter->getTownId($name, $eds_code);
     }
 
     public function checkSeparator($string = null)
@@ -143,6 +149,12 @@ class RiverCrs
 
     public function getShortWaybillIds($string): array
     {
+        $key = md5($string);
+
+        if (isset($this->cache["wb:$key"])) {
+            return $this->cache["wb:$key"];
+        }
+
         $string = $this->checkSeparator($string);
         $array = explode('-', $string);
         $ids = [];
@@ -151,7 +163,7 @@ class RiverCrs
             $value = str_replace('⏹', '-', $value);
             $ids[] = $this->getTownId($value);
         }
-        return $ids;
+        return $this->cache["wb:$key"] = $ids;
     }
 
     public function updateCabinPriceQueries($del_q, $ins_q)

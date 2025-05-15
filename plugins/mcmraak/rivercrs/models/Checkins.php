@@ -405,6 +405,7 @@ class Checkins extends Model
         }
 
         $ship = $checkin->motorship;
+
         $result = [
             'id' => $checkin->id,
             'image' => $ship->pic,
