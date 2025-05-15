@@ -85,6 +85,11 @@ class GamaV2 extends RiverCrs
                 continue;
             }
 
+            ProcessLog::add("Запрос цен...");
+            $prices = $this->getCruisePrices($navigation['@attributes']['id'], $ship, $gama_ship_id);
+            dd($prices);
+            ProcessLog::add("Цены получены: " . count($prices) . 'шт. ');
+
             # Маршрут $waybill, дата отправления $date_s, дата прибытия $date_f
             $waybill = null;
             foreach ($navigation['RouteList']['Route'] as $route) {
@@ -140,9 +145,6 @@ class GamaV2 extends RiverCrs
 
                 ProcessLog::add("Круиз добавлен в базу. Обработка цен...");
 
-                # Тут сохранили круиз
-                $prices = $this->getCruisePrices($navigation['@attributes']['id'], $ship, $gama_ship_id);
-
                 $insert_prices = [];
                 foreach ($prices as $price) {
                     $insert_prices[] = [
@@ -158,6 +160,7 @@ class GamaV2 extends RiverCrs
 
                 DB::table('mcmraak_rivercrs_pricing')
                     ->insert($insert_prices);
+
                 ProcessLog::add("Обработка круиза завершена.");
             }
         }
@@ -171,14 +174,8 @@ class GamaV2 extends RiverCrs
      */
     public function getCruisePrices(int $gama_cruise_id, $ship, $gama_ship_id): array
     {
-        $result = [];
-
         // Чтение XML-файла навигации по круизу
         $cruise_data = $this->getGamaFileData("navigation_{$gama_cruise_id}_available.xml");
-
-        if (empty($cruise_data['Navigation']['RouteList']['Route'])) {
-            return $result;
-        }
 
         $routes = $cruise_data['Navigation']['RouteList']['Route'];
 
@@ -187,6 +184,7 @@ class GamaV2 extends RiverCrs
             $routes = [$routes];
         }
 
+        ProcessLog::add("Обработка маршрутов");
         $category_prices = [];
         foreach ($routes as $route) {
             $cabins = $route['CabinList']['Cabin'] ?? [];
@@ -195,6 +193,7 @@ class GamaV2 extends RiverCrs
             if (isset($cabins['@attributes'])) {
                 $cabins = [$cabins];
             }
+            ProcessLog::add("Обработка категорий кают");
 
             foreach ($cabins as $cabin) {
                 $attrs = $cabin['@attributes'] ?? [];
@@ -211,7 +210,9 @@ class GamaV2 extends RiverCrs
                     continue;
                 }
 
+                ProcessLog::add("Обработана каюта: $category_name [id: $cabin_id]");
                 $deck = $this->getDeckId($gama_ship_id, $category_id);
+                ProcessLog::add("Получена палуба {$deck->name}");
                 $this->deckPivotCheck($cabin_id, $deck->id);
 
                 $costs = $cabin['Cost'] ?? [];
@@ -219,67 +220,26 @@ class GamaV2 extends RiverCrs
                     $costs = [$costs];
                 }
 
+                ProcessLog::add("Получение цен");
                 foreach ($costs as $cost) {
-                    $cost_attr = $cost['@attributes'] ?? [];
-
-                    # Сохранить коллекцию цен для анализа
-                    $path = storage_path('gama_cost.json');
-                    if (file_exists($path)) {
-                        $mem_prices = master()->fromJson(file_get_contents($path));
-                    } else {
-                        $mem_prices = [];
-                    }
-                    $mem_prices = array_merge($mem_prices, $cost_attr);
-                    file_put_contents($path, master()->toJson($mem_prices, true));
-
-
+                    $cost_attr = $cost['@attributes'];
                     $persons = (int)($cost_attr['persons'] ?? 0);
+
+                    # Пропускаем только двухместные
                     if ($persons !== 2) {
                         continue;
                     }
 
-                    $std = isset($cost_attr['std_3']) ? (int)$cost_attr['std_3'] : null;
-                    $extra_std = isset($cost_attr['extra_std_3']) ? (int)$cost_attr['extra_std_3'] : null;
-
-                    if (!$std) {
-                        continue;
-                    }
-
-                    // Сохраняем минимальные цены по каждой категории
-                    if (!isset($category_prices[$cabin_id])) {
-                        $category_prices[$cabin_id] = [
-                            'price_1' => $std,
-                            'price_2' => $extra_std,
-                        ];
-                    } else {
-                        $category_prices[$cabin_id]['price_1'] = min(
-                            $category_prices[$cabin_id]['price_1'],
-                            $std
-                        );
-                        if ($extra_std) {
-                            if (!isset($category_prices[$cabin_id]['price_2'])) {
-                                $category_prices[$cabin_id]['price_2'] = $extra_std;
-                            } else {
-                                $category_prices[$cabin_id]['price_2'] = min(
-                                    $category_prices[$cabin_id]['price_2'],
-                                    $extra_std
-                                );
-                            }
-                        }
-                    }
+                    $price = (int) $cost_attr['std_3'];
+                    $category_prices[$cabin_id] = [
+                        'cabin_id' => $cabin_id,
+                        'price_1' => $price,
+                    ];
                 }
             }
         }
 
-        // Преобразуем в итоговый массив
-        foreach ($category_prices as $cabin_id => $prices) {
-            $row = ['cabin_id' => $cabin_id];
-            $row['price_1'] = $prices['price_1'] ?? 0;
-            $row['price_2'] = $prices['price_2'] ?? 0;
-            $result[] = $row;
-        }
-
-        return $result;
+        return array_values($category_prices);
     }
 
 

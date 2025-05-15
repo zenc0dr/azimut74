@@ -100,6 +100,12 @@ class RiverCrs
 
     public function getCabinCategoryId(string $category_name, int $motorship_id, string $eds_code): int
     {
+        $key = "cabin:$category_name:$motorship_id:$eds_code";
+
+        if (isset($this->cache[$key])) {
+            return $this->cache[$key];
+        }
+
         $cabin = Cabin::where($eds_code . '_name', $category_name)
             ->where('motorship_id', $motorship_id)
             ->first();
@@ -123,7 +129,7 @@ class RiverCrs
         $cabin->desc = '';
         $cabin->save();
 
-        return $cabin->id;
+        return $this->cache[$key] = $cabin->id;
     }
 
     public function isCabinNotLet($cabin_name, $motorship_id, $not_let = null)
