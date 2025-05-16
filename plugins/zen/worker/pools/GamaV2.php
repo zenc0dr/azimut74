@@ -14,7 +14,12 @@ use Zen\Worker\Classes\ProcessLog;
 class GamaV2 extends RiverCrs
 {
     private static string $key = 'gIOZhOWvGDa177aLNh0rofIO';
-
+    private static array $stats = [
+        'navigations' => [],
+        'cruises' => 0,
+        'ships' => [],
+        'cabins' => 0,
+    ];
 
     /**
      * Диспетчер
@@ -22,8 +27,9 @@ class GamaV2 extends RiverCrs
      */
     public function runGammaParser()
     {
-        //$this->getGamaArchives();
+        $this->getGamaArchives();
         $this->handleCruises();
+        //dd(self::$stats);
     }
 
     /**
@@ -74,7 +80,9 @@ class GamaV2 extends RiverCrs
     {
         ProcessLog::add('Обработка навигаций');
         $navigation_data = $this->getGamaFileData('navigation.xml');
+
         foreach ($navigation_data['NavigationList']['Navigation'] as $navigation) {
+            $navigation_id = $navigation['@attributes']['id'];
             $gama_ship_id = $navigation['@attributes']['ship_id'];
             $gama_ship_name = $navigation['@attributes']['ship_name'];
             ProcessLog::add("Обработка теплохода $gama_ship_name");
@@ -82,19 +90,22 @@ class GamaV2 extends RiverCrs
             # Теплоход
             $ship = $this->getMotorship($gama_ship_name, 'gama', $gama_ship_id);
             if (!$ship) {
+                ProcessLog::add("Теплоход $gama_ship_name исключён");
                 continue;
             }
-
-            ProcessLog::add("Запрос цен...");
-            $prices = $this->getCruisePrices($navigation['@attributes']['id'], $ship, $gama_ship_id);
-            dd($prices);
-            ProcessLog::add("Цены получены: " . count($prices) . 'шт. ');
 
             # Маршрут $waybill, дата отправления $date_s, дата прибытия $date_f
             $waybill = null;
             foreach ($navigation['RouteList']['Route'] as $route) {
                 $cruise_id = $route['@attributes']['id'];
                 ProcessLog::add("Обработка круиза gama:$cruise_id...");
+
+                $prices = $this->getCruisePrices($navigation_id, $cruise_id, $ship, $gama_ship_id);
+
+                if (!$prices) {
+                    ProcessLog::add("Для круиза gama:$cruise_id нет цен!!!!!!!!!!!!!!!!!!!!!!!!!!!!");
+                    continue;
+                }
 
                 $gama_short_waybill_ids = $this->getShortWaybillIds($route['@attributes']['name']);
                 $date_s = $route['@attributes']['s'];
@@ -109,6 +120,12 @@ class GamaV2 extends RiverCrs
                     $path_f_id,
                     $gama_short_waybill_ids
                 );
+
+                if (!$waybill) {
+                    ProcessLog::add("Ошибка данных! --- cruise_id:$cruise_id - Отсутствует маршрут");
+                    continue;
+                }
+
                 ProcessLog::add("Маршрут получен");
 
                 # Расписание в виде таблицы table
@@ -119,11 +136,6 @@ class GamaV2 extends RiverCrs
                 );
 
                 ProcessLog::add("Таблица расписания получена");
-
-                # Не сохранять маршрут менее 2х дней
-                if (count($waybill) < 2) {
-                    return;
-                }
 
                 $checkin = Checkin::where('eds_code', 'gama')
                     ->where('eds_id', $cruise_id)
@@ -142,6 +154,8 @@ class GamaV2 extends RiverCrs
                 $checkin->eds_id = $cruise_id; // Идентификатор круиза в таблице mcmraak_rivercrs_checkins
                 $checkin->waybill_id = $waybill; // Маршрут, описание будет ниже
                 $checkin->save();
+
+                $this->fixCheckin($checkin->id);
 
                 ProcessLog::add("Круиз добавлен в базу. Обработка цен...");
 
@@ -163,19 +177,15 @@ class GamaV2 extends RiverCrs
 
                 ProcessLog::add("Обработка круиза завершена.");
             }
+
+            self::$stats['navigations'][] = $navigation_id;
         }
     }
 
-    /**
-     * @param int $gama_cruise_id
-     * @param $ship
-     * @param $gama_ship_id
-     * @return array
-     */
-    public function getCruisePrices(int $gama_cruise_id, $ship, $gama_ship_id): array
+    public function getCruisePrices($navigation_id, $gama_cruise_id, $ship, $gama_ship_id): array
     {
         // Чтение XML-файла навигации по круизу
-        $cruise_data = $this->getGamaFileData("navigation_{$gama_cruise_id}_available.xml");
+        $cruise_data = $this->getGamaFileData("navigation_{$navigation_id}_available.xml");
 
         $routes = $cruise_data['Navigation']['RouteList']['Route'];
 
@@ -186,7 +196,13 @@ class GamaV2 extends RiverCrs
 
         ProcessLog::add("Обработка маршрутов");
         $category_prices = [];
+
         foreach ($routes as $route) {
+            $cruise_id = $route['@attributes']['id'];
+            if ($cruise_id !== $gama_cruise_id) {
+                continue;
+            }
+
             $cabins = $route['CabinList']['Cabin'] ?? [];
 
             // Приводим к массиву, если одна каюта
@@ -197,23 +213,27 @@ class GamaV2 extends RiverCrs
 
             foreach ($cabins as $cabin) {
                 $attrs = $cabin['@attributes'] ?? [];
-                $category_name = $attrs['name'] ?? null;
-                $category_id = $attrs['id'] ?? null;
 
-                if (!$category_name || !$category_id) {
+                $category = $this->getCategory($attrs['id'], $gama_ship_id);
+                $category_name = $category['name'];
+                $deck_name = $category['deck_name'];
+                ProcessLog::add("Обработка категории: $category_name");
+                $places = $category['places'];
+
+                if (!$category['name']) {
+                    ProcessLog::add("Ошибка: не найдена категория каюты");
                     continue;
                 }
 
                 // Имя категории в Gama — например "239"
-                $cabin_id = $this->getCabinCategoryId($category_name, $ship->id, 'gama');
-                if (!$cabin_id) {
+                $category_id = $this->getCabinCategoryId($category_name, $ship->id, 'gama');
+                if (!$category_id) {
+                    ProcessLog::add("Исключение: Категория каюты запрещена.");
                     continue;
                 }
 
-                ProcessLog::add("Обработана каюта: $category_name [id: $cabin_id]");
-                $deck = $this->getDeckId($gama_ship_id, $category_id);
-                ProcessLog::add("Получена палуба {$deck->name}");
-                $this->deckPivotCheck($cabin_id, $deck->id);
+                $deck = $this->getDeck($deck_name);
+                $this->deckPivotCheck($category_id, $deck->id);
 
                 $costs = $cabin['Cost'] ?? [];
                 if (isset($costs['@attributes'])) {
@@ -221,27 +241,77 @@ class GamaV2 extends RiverCrs
                 }
 
                 ProcessLog::add("Получение цен");
+                $price_count = 0;
                 foreach ($costs as $cost) {
                     $cost_attr = $cost['@attributes'];
                     $persons = (int)($cost_attr['persons'] ?? 0);
 
+                    file_put_contents(
+                        storage_path('gama_costs.log'),
+                        $cruise_id . '|' . json_encode($cost_attr) . "\n",
+                        FILE_APPEND
+                    );
+
                     # Пропускаем только двухместные
-                    if ($persons !== 2) {
+                    if ($persons !== $places) {
                         continue;
                     }
 
-                    $price = (int) $cost_attr['std_3'];
-                    $category_prices[$cabin_id] = [
-                        'cabin_id' => $cabin_id,
+                    $price = (int) $cost_attr['std_3'] ?? 0;
+
+                    if (!$price) {
+                        continue;
+                    }
+
+                    ProcessLog::add("Цена [$category_name]: $price");
+                    $category_prices[$category_id] = [
+                        'cabin_id' => $category_id,
                         'price_1' => $price,
                     ];
+                    $price_count++;
                 }
+                ProcessLog::add("Цен получено: $price_count");
             }
         }
 
         return array_values($category_prices);
     }
 
+    private function getCategory($cabin_id, $gama_ship_id): array
+    {
+        $generic_data = $this->getGamaFileData('dir_generic.xml');
+        foreach ($generic_data['ShipList']['Ship'] as $ship) {
+            $ship_id = $ship['@attributes']['id'];
+            if ($ship_id === $gama_ship_id) {
+                foreach ($ship['DeckList']['Deck'] as $deck) {
+                    $deck_name = $deck['@attributes']['name'];
+                    if (!isset($deck['CabinList']['Cabin'])) {
+                        ProcessLog::add("Ошибка --- Для палубы $deck_name отсутствуют каюты");
+                        continue;
+                    }
+                    foreach ($deck['CabinList']['Cabin'] as $cabin) {
+                        $gama_cabin_id = $cabin['@attributes']['id'];
+                        if ($cabin_id === $gama_cabin_id) {
+                            $category_id = $cabin['@attributes']['category_id'];
+                            $places = $cabin['@attributes']['places'];
+                            $category_name = null;
+                            foreach ($generic_data['CategoryList']['Category'] as $category) {
+                                if ($category['@attributes']['id'] === $category_id) {
+                                    $category_name = $category['@attributes']['name'];
+                                }
+                            }
+                            return [
+                                'name' => $category_name,
+                                'deck_name' => $deck_name,
+                                'places' => $places,
+                            ];
+                        }
+                    }
+                }
+            }
+        }
+        return [];
+    }
 
     /**
      * Получить маршрут гаммы
@@ -350,22 +420,22 @@ class GamaV2 extends RiverCrs
         return View::make('mcmraak.rivercrs::gama_schedule', ['table' => $table_data])->render();
     }
 
-    public function getDeckId($gama_ship_id, $gama_cabin_id)
-    {
-        $generic_data = $this->getGamaFileData('dir_generic.xml');
-        foreach ($generic_data['ShipList']['Ship'] as $ship) {
-            $ship_id = $ship['@attributes']['id'];
-            if ($ship_id === $gama_ship_id) {
-                foreach ($ship['DeckList']['Deck'] as $deck) {
-                    //$gama_deck_id = $deck['@attributes']['id'];
-                    foreach ($deck['CabinList']['Cabin'] as $cabin) {
-                        $id = $cabin['@attributes']['id'];
-                        if ($gama_cabin_id === $id) {
-                            return $this->getDeck($deck['@attributes']['name']);
-                        }
-                    }
-                }
-            }
-        }
-    }
+//    public function getDeckId($gama_ship_id, $gama_cabin_id)
+//    {
+//        $generic_data = $this->getGamaFileData('dir_generic.xml');
+//        foreach ($generic_data['ShipList']['Ship'] as $ship) {
+//            $ship_id = $ship['@attributes']['id'];
+//            if ($ship_id === $gama_ship_id) {
+//                foreach ($ship['DeckList']['Deck'] as $deck) {
+//                    //$gama_deck_id = $deck['@attributes']['id'];
+//                    foreach ($deck['CabinList']['Cabin'] as $cabin) {
+//                        $id = $cabin['@attributes']['id'];
+//                        if ($gama_cabin_id === $id) {
+//                            return $this->getDeck($deck['@attributes']['name']);
+//                        }
+//                    }
+//                }
+//            }
+//        }
+//    }
 }

@@ -33,7 +33,9 @@
         "laravel/framework": "~5.5.40",
         "maatwebsite/excel": "^3.1",
         "ext-json": "*",
-        "ext-gd": "*"
+        "ext-gd": "*",
+        "ext-libxml": "*",
+        "ext-simplexml": "*"
     },
     "require-dev": {
         "fzaninotto/faker": "~1.7",

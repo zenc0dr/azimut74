@@ -22,7 +22,7 @@ class JobProcessor
     {
         $job = $this->model;
         $exception = null;
-        //try {
+        try {
             $call = $job->call;
             if (preg_match('/^[a-zA-Z0-9]+@[a-zA-Z0-9]+$/', $call)) {
                 $call = 'Zen\Worker\Pools\\' . $call;
@@ -39,32 +39,32 @@ class JobProcessor
 
             # Удаление задачи
             $job->delete();
-//        } catch (Exception $ex) {
-//            $exception = $ex;
-//            $this->attempts++;
-//            $line = $ex->getLine();
-//            $message = $ex->getMessage();
-//            $file = $ex->getFile();
-//            $job->error = "Ошибка: $message в файле $file:$line";
-//            $job->save();
-//
-//            if ($this->attempts > $this->pool_state->attempts) {
-//                ProcessLog::add("Задача не может быть обработана и будет пропущена");
-//                $error_job = new ErrorLog;
-//                $error_job->fill($job->makeHidden('id')->toArray());
-//                $error_job->save();
-//            } else {
-//                $pause = @$this->pool_state->pause ?? 5;
-//                $file = str_replace(base_path(), '', $file);
-//                ProcessLog::add("Задача завершилась с ошибкой: $message в файле $file:$line");
-//                ProcessLog::add("Дополнительная попытка [{$this->attempts} из {$this->pool_state->attempts}] через $pause сек.");
-//
-//                if ($pause) {
-//                    sleep($pause);
-//                }
-//                $this->work();
-//            }
-//        }
+        } catch (Exception $ex) {
+            $exception = $ex;
+            $this->attempts++;
+            $line = $ex->getLine();
+            $message = $ex->getMessage();
+            $file = $ex->getFile();
+            $job->error = "Ошибка: $message в файле $file:$line";
+            $job->save();
+
+            if ($this->attempts > $this->pool_state->attempts) {
+                ProcessLog::add("Задача не может быть обработана и будет пропущена");
+                $error_job = new ErrorLog;
+                $error_job->fill($job->makeHidden('id')->toArray());
+                $error_job->save();
+            } else {
+                $pause = @$this->pool_state->pause ?? 5;
+                $file = str_replace(base_path(), '', $file);
+                ProcessLog::add("Задача завершилась с ошибкой: $message в файле $file:$line");
+                ProcessLog::add("Дополнительная попытка [{$this->attempts} из {$this->pool_state->attempts}] через $pause сек.");
+
+                if ($pause) {
+                    sleep($pause);
+                }
+                $this->work();
+            }
+        }
 
         return $exception;
     }

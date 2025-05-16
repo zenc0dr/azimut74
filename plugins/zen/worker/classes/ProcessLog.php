@@ -2,13 +2,17 @@
 
 class ProcessLog
 {
-    static function add($message)
+    public static function add($message)
     {
-       $time = date('d.m.Y H:i:s');
-       $message = "$time >> $message\n";
-       echo $message;
+        if (request('debug')) {
+            return;
+        }
 
-       $log_path = storage_path('logs/worker.log');
-       file_put_contents($log_path, $message, FILE_APPEND);
+        $time = date('d.m.Y H:i:s');
+        $message = "$time >> $message\n";
+        echo $message;
+
+        $log_path = storage_path('logs/worker.log');
+        file_put_contents($log_path, $message, FILE_APPEND);
     }
 }
