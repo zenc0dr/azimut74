@@ -5,6 +5,8 @@ use Mcmraak\Rivercrs\Models\Cabins as Cabin;
 use Mcmraak\Rivercrs\Classes\Exist;
 use Log;
 
+use Zen\Worker\Pools\GamaV2;
+
 class Gama extends Exist
 {
 

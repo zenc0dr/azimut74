@@ -27,7 +27,7 @@ class GamaV2 extends RiverCrs
      */
     public function runGammaParser()
     {
-        $this->getGamaArchives();
+        //$this->getGamaArchives();
         $this->handleCruises();
         //dd(self::$stats);
     }
@@ -218,7 +218,7 @@ class GamaV2 extends RiverCrs
                 $category_name = $category['name'];
                 $deck_name = $category['deck_name'];
                 ProcessLog::add("Обработка категории: $category_name");
-                $places = $category['places'];
+                $places = intval($category['places']);
 
                 if (!$category['name']) {
                     ProcessLog::add("Ошибка: не найдена категория каюты");
@@ -246,11 +246,11 @@ class GamaV2 extends RiverCrs
                     $cost_attr = $cost['@attributes'];
                     $persons = (int)($cost_attr['persons'] ?? 0);
 
-                    file_put_contents(
-                        storage_path('gama_costs.log'),
-                        $cruise_id . '|' . json_encode($cost_attr) . "\n",
-                        FILE_APPEND
-                    );
+//                    file_put_contents(
+//                        storage_path('gama_costs.log'),
+//                        $cruise_id . '|' . json_encode($cost_attr) . "\n",
+//                        FILE_APPEND
+//                    );
 
                     # Пропускаем только двухместные
                     if ($persons !== $places) {

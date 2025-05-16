@@ -148,7 +148,7 @@ class Exist
 
         if ($cached) {
             try {
-                if ($checkin->eds_code) {
+                if ($checkin->eds_code && $checkin->eds_code !== 'gama') {
                     $class_name = mb_convert_case($checkin->eds_code, MB_CASE_TITLE, "UTF-8");
                     if (file_exists(base_path() . "/plugins/mcmraak/rivercrs/classes/exist/$class_name.php")) {
                         $exist_data = App::call("Mcmraak\Rivercrs\Classes\Exist\\$class_name@getExist", [

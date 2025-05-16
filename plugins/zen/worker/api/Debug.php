@@ -20,7 +20,7 @@ use Illuminate\Support\Facades\Response;
 
 class Debug
 {
-    # http://azimut.dc/zen/worker/api/debug:gamaTest
+    # http://azimut.dc/zen/worker/api/debug:gamaTest?debug=1
     public function gamaTest()
     {
         $gama = new GamaV2();
