@@ -103,7 +103,7 @@ class GamaV2 extends RiverCrs
                 $prices = $this->getCruisePrices($navigation_id, $cruise_id, $ship, $gama_ship_id);
 
                 if (!$prices) {
-                    ProcessLog::add("Для круиза gama:$cruise_id нет цен!!!!!!!!!!!!!!!!!!!!!!!!!!!!");
+                    ProcessLog::add("Для круиза gama:$cruise_id отсутствуют цены, круиз игнорирован.");
                     continue;
                 }
 
@@ -122,7 +122,7 @@ class GamaV2 extends RiverCrs
                 );
 
                 if (!$waybill) {
-                    ProcessLog::add("Ошибка данных! --- cruise_id:$cruise_id - Отсутствует маршрут");
+                    ProcessLog::add("Ошибка данных! --- cruise_id:$cruise_id - Отсутствует маршрут круиз игнорирован.");
                     continue;
                 }
 
@@ -419,23 +419,4 @@ class GamaV2 extends RiverCrs
 
         return View::make('mcmraak.rivercrs::gama_schedule', ['table' => $table_data])->render();
     }
-
-//    public function getDeckId($gama_ship_id, $gama_cabin_id)
-//    {
-//        $generic_data = $this->getGamaFileData('dir_generic.xml');
-//        foreach ($generic_data['ShipList']['Ship'] as $ship) {
-//            $ship_id = $ship['@attributes']['id'];
-//            if ($ship_id === $gama_ship_id) {
-//                foreach ($ship['DeckList']['Deck'] as $deck) {
-//                    //$gama_deck_id = $deck['@attributes']['id'];
-//                    foreach ($deck['CabinList']['Cabin'] as $cabin) {
-//                        $id = $cabin['@attributes']['id'];
-//                        if ($gama_cabin_id === $id) {
-//                            return $this->getDeck($deck['@attributes']['name']);
-//                        }
-//                    }
-//                }
-//            }
-//        }
-//    }
 }
