@@ -26,6 +26,10 @@ class Debug
         $gama = new GamaV2();
         $gama->runGammaParser();
 
+//        dd(
+//            $gama->getGamaRouteData('29440')
+//        );
+
 
         //$gama->runGammaParser();
         // Response::make($xmlContent, 200)->header('Content-Type', 'application/xml');

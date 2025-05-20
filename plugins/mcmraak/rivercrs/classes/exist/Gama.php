@@ -9,51 +9,54 @@ use Zen\Worker\Pools\GamaV2;
 
 class Gama extends Exist
 {
-
-    public $query_type;
-
     public function getExist($checkin, $realtime)
     {
-        $this->query_type = ($realtime)?'array_now':'array';
+        $gama = new GamaV2();
 
-        $this->checkin = $checkin;
-        $cruise = $this->parser->cacheWarmUp('gama-cruise', $this->query_type, ['id' => $checkin->eds_id]); // 14953
+        $gama_route_data = $gama->getGamaRouteData($checkin->eds_id);
 
-        if(!count($cruise['cabins'])) return;
+        if (!$gama_route_data) {
+            return;
+        }
 
-        $rooms = [];
+        $navigation_id = $gama_route_data['Route']['@attributes']['navigation_id'];
+        $cruise_data = $gama->getGamaFileData("navigation_{$navigation_id}_available.xml");
 
-        foreach ($cruise['cabins']['cabin'] as $cabin) {
+        $gama_ship_id = $cruise_data['Navigation']['@attributes']['ship_id'];
 
-            $room_num = $this->getGamaParam($cabin, 'name');
-            $eds_deck_id = $this->getGamaParam($cabin, 'deck');
-            $eds_deck_name = $this->getGamaDeckName($eds_deck_id);
+        if (isset($gama_route_data['Route']['CabinList']['Cabin']['@attributes'])) {
+            $gama_route_data['Route']['CabinList']['Cabin'] = [
+                $gama_route_data['Route']['CabinList']['Cabin']
+            ];
+        }
 
-            $eds_cabin_category_name = $this->getGamaParam($cabin, 'category_name');
-            $eds_cabin_category_id = $this->getGamaParam($cabin, 'category_iid');
-            $eds_cabin_category_name .= '|'.$eds_cabin_category_id;
+        foreach ($gama_route_data['Route']['CabinList']['Cabin'] as $cabin) {
+            $gama_cabin_id = $cabin['@attributes']['id'];
+            $gama_cabin_num = $cabin['@attributes']['name'];
+            $places = $cabin['@attributes']['places'];
 
-            if(!isset($cabin['cost'])) continue;
-
-            foreach ($cabin['cost'] as $price) {
-                $price_value = intval($this->getGamaParam($price, 'std3'));
-                if($price_value) {
-                    $price_places = intval($this->getGamaParam($price, 'inCabin'));
-
-
-                    $record = $this->addRecord([
-                        'deck_name' => $eds_deck_name,
-                        'cabin_name' => $eds_cabin_category_name,
-                        'price_places' => $price_places,
-                        'price_value' => $price_value,
-                        'eds' => true
-                    ]);
-
-                    $rooms[] = [
-                        'n' => $room_num,
-                        'd' => $record['deck_id']
-                    ];
+            foreach ($cabin['Cost'] as $cost) {
+                if (isset($cost['@attributes'])) {
+                    $cost = $cost['@attributes'];
                 }
+
+                if ($cost['persons'] !== $places) {
+                    continue;
+                }
+
+                $category_data = $gama->getGamaCategory($gama_cabin_id, $gama_ship_id);
+                $record = $this->addRecord([
+                    'deck_name' => $category_data['deck_name'],
+                    'cabin_name' => $category_data['name'],
+                    'price_places' => intval($places),
+                    'price_value' => $cost['std_3'],
+                    'eds' => true
+                ]);
+
+                $rooms[] = [
+                    'n' => $gama_cabin_num,
+                    'd' => $record['deck_id']
+                ];
             }
         }
 
@@ -61,21 +64,5 @@ class Gama extends Exist
             'decks' => $this->records,
             'rooms' => $rooms
         ];
-    }
-
-    public function getGamaDeckName($gama_deck_id) {
-        $deck = $this->parser->cacheWarmUp('gama-deck', 'array', ['id' => $gama_deck_id]);
-        if(!isset($deck['deck'])) return;
-        return $this->getGamaParam($deck['deck'], 'name');
-    }
-
-    public function getGamaParam($arr, $param_name) {
-        if (isset($arr['@attributes'][$param_name])) {
-            return trim($arr['@attributes'][$param_name]);
-        }
-        if (isset($arr[$param_name])) {
-            return trim($arr[$param_name]);
-        }
-        return false;
     }
 }

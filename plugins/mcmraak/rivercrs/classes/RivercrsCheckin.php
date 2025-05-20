@@ -10,6 +10,7 @@ class RivercrsCheckin
         $ship = $checkin->motorship;
         $checkin_prices = app('Mcmraak\Rivercrs\Classes\Exist')->get($checkin, 'array');
 
+
         $data = [
             'meta_title' => $checkin->metatitle ?? $ship->metatitle,
             'meta_description' => $ship->metadesc,

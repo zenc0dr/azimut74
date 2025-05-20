@@ -98,7 +98,7 @@ class RiverCrs
         $getter->deckPivotCheck($cabin_id, $deck_id);
     }
 
-    public function getCabinCategoryId(string $category_name, int $motorship_id, string $eds_code): int
+    public function getCabinCategoryId(string $category_name, int $motorship_id, string $eds_code, int $places = 1): int
     {
         $key = "cabin:$category_name:$motorship_id:$eds_code";
 
@@ -111,6 +111,10 @@ class RiverCrs
             ->first();
 
         if ($cabin) {
+            if ($cabin->places_main_count !== $places) {
+                $cabin->places_main_count = $places;
+                $cabin->save();
+            }
             return $cabin->id;
         }
 
@@ -126,6 +130,7 @@ class RiverCrs
         $cabin->motorship_id = $motorship_id;
         $cabin->category = $category_name;
         $cabin->{$eds_code . '_name'} = $category_name;
+        $cabin->places_main_count = $places;
         $cabin->desc = '';
         $cabin->save();
 

@@ -40,9 +40,10 @@ let BEX = new Vue({
 
         this.checkin_id = $('#BookingExist[checkin-id]').attr('checkin-id')
         this.checkin_data = JSON.parse($('meta[name="checkin-data"]').attr('content'))
+        // {"town_id":46}
 
-        //this.loadData()
-        this.loadDataFromJson()
+        this.loadDataFromJson() // Парсинг с meta@name='checkin-prices'
+        // Всё попадает в data
 
         let $this = this
         $('.order.phone.orderBook').inputmask('+7(999) 999-99-99', {

@@ -27,7 +27,7 @@ class GamaV2 extends RiverCrs
      */
     public function runGammaParser()
     {
-        //$this->getGamaArchives();
+        $this->getGamaArchives();
         $this->handleCruises();
         //dd(self::$stats);
     }
@@ -43,9 +43,10 @@ class GamaV2 extends RiverCrs
         $storage_path = base_path('storage/gama_arc');
         $zip_file = $storage_path . '/gama.zip';
         master()->files()->chekFileDir($zip_file);
+        shell_exec("rm -rf " . escapeshellarg($storage_path) . "/*");
         shell_exec("wget -O " . escapeshellarg($zip_file) . " " . escapeshellarg($zip_url));
         shell_exec("unzip -o " . escapeshellarg($zip_file) . " -d " . escapeshellarg($storage_path));
-        ProcessLog::add('Архивы скачаны');
+        ProcessLog::add('Архивы скачаны и распакованы');
     }
 
     /**
@@ -57,9 +58,13 @@ class GamaV2 extends RiverCrs
     {
         $cache_key = "gamma_route:$route_id";
         return Cache::remember($cache_key, 50, function () use ($route_id) {
-            $xml_url = "https://gama-nn.ru/satellite/route/$route_id/?key=" . self::$key;
-            $response = Http::get($xml_url);
-            return Convertor::xmlToArr($response->body);
+            try {
+                $xml_url = "https://gama-nn.ru/satellite/route/$route_id/?key=" . self::$key;
+                $response = Http::get($xml_url);
+                return Convertor::xmlToArr($response->body);
+            } catch (\Throwable $e) {
+                return null;
+            }
         });
     }
 
@@ -98,6 +103,11 @@ class GamaV2 extends RiverCrs
             $waybill = null;
             foreach ($navigation['RouteList']['Route'] as $route) {
                 $cruise_id = $route['@attributes']['id'];
+
+//                if ($cruise_id !== '29440') {
+//                    continue;
+//                }
+
                 ProcessLog::add("Обработка круиза gama:$cruise_id...");
 
                 $prices = $this->getCruisePrices($navigation_id, $cruise_id, $ship, $gama_ship_id);
@@ -213,20 +223,22 @@ class GamaV2 extends RiverCrs
 
             foreach ($cabins as $cabin) {
                 $attrs = $cabin['@attributes'] ?? [];
+                $cabin_id = $attrs['id'];
 
-                $category = $this->getCategory($attrs['id'], $gama_ship_id);
-                $category_name = $category['name'];
-                $deck_name = $category['deck_name'];
+                $gama_cabin_category = $this->getGamaCategory($cabin_id, $gama_ship_id);
+
+                $category_name = $gama_cabin_category['name'];
+                $deck_name = $gama_cabin_category['deck_name'];
                 ProcessLog::add("Обработка категории: $category_name");
-                $places = intval($category['places']);
+                $places = intval($gama_cabin_category['places']);
 
-                if (!$category['name']) {
+                if (!$gama_cabin_category['name']) {
                     ProcessLog::add("Ошибка: не найдена категория каюты");
                     continue;
                 }
 
                 // Имя категории в Gama — например "239"
-                $category_id = $this->getCabinCategoryId($category_name, $ship->id, 'gama');
+                $category_id = $this->getCabinCategoryId($category_name, $ship->id, 'gama', $places);
                 if (!$category_id) {
                     ProcessLog::add("Исключение: Категория каюты запрещена.");
                     continue;
@@ -277,11 +289,12 @@ class GamaV2 extends RiverCrs
         return array_values($category_prices);
     }
 
-    private function getCategory($cabin_id, $gama_ship_id): array
+    public function getGamaCategory($cabin_id, $gama_ship_id): array
     {
         $generic_data = $this->getGamaFileData('dir_generic.xml');
         foreach ($generic_data['ShipList']['Ship'] as $ship) {
             $ship_id = $ship['@attributes']['id'];
+
             if ($ship_id === $gama_ship_id) {
                 foreach ($ship['DeckList']['Deck'] as $deck) {
                     $deck_name = $deck['@attributes']['name'];
@@ -301,6 +314,7 @@ class GamaV2 extends RiverCrs
                                 }
                             }
                             return [
+                                'id' => $category_id,
                                 'name' => $category_name,
                                 'deck_name' => $deck_name,
                                 'places' => $places,

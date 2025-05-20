@@ -26,6 +26,8 @@ class Exist
         $deck_cache = [],
         $cabins_cache = [];
 
+    public static $static_checkin;
+
 
     public $exist_data, $exist_mix;
 
@@ -111,6 +113,7 @@ class Exist
 
         $cached = boolval(Input::get('cached'));
 
+        # todo открыть
         if ($type == 'json') {
             # Вернуть кеш если он есть
             if (Cache::has($cache_key)) {
@@ -124,10 +127,8 @@ class Exist
             }
         }
 
-
-
         if (!$checkin) {
-            $checkin = Checkin::find($checkin_id);
+            $this->checkin = self::$static_checkin = $checkin = Checkin::find($checkin_id);
         }
 
         if (!$checkin) {
@@ -145,10 +146,10 @@ class Exist
             $cached = true;
         }
 
-
         if ($cached) {
+
             try {
-                if ($checkin->eds_code && $checkin->eds_code !== 'gama') {
+                if ($checkin->eds_code) { // && $checkin->eds_code !== 'gama'
                     $class_name = mb_convert_case($checkin->eds_code, MB_CASE_TITLE, "UTF-8");
                     if (file_exists(base_path() . "/plugins/mcmraak/rivercrs/classes/exist/$class_name.php")) {
                         $exist_data = App::call("Mcmraak\Rivercrs\Classes\Exist\\$class_name@getExist", [
@@ -168,6 +169,7 @@ class Exist
             ];
         }
 
+
         $this->checkin = $checkin;
         $this->exist_data = $exist_data;
         $this->records = $this->exist_data['decks'];
@@ -177,7 +179,6 @@ class Exist
 
         # Сортировка по палубам
         $mix_data = $this->reorderDescks($mix_data);
-
 
         $mix_data = [
             'decks' => $mix_data,
@@ -385,10 +386,12 @@ class Exist
     # Добавить каюту (для addRecord)
     public function addCabin(&$cabins)
     {
+
         $cabin_name = (isset($this->vals['cabin_name'])) ? $this->vals['cabin_name'] : null;
         $cabin_id = (isset($this->vals['cabin_id'])) ? $this->vals['cabin_id'] : null;
 
         $cabin = $this->getCabinCache($cabin_name, $cabin_id);
+
         if (!$cabin) {
             return;
         }
@@ -466,7 +469,7 @@ class Exist
             }
             $this->roomsChecker(null, $ex_rooms);
             return $return;
-        };
+        }
 
         # Записывает в базу какие каюты он не нашёл (не добавили на схему)
         $this->roomsChecker($ev_rooms, $ex_rooms);
@@ -658,6 +661,10 @@ class Exist
 
     public function getCabinCache($eds_cabin_name, $cabin_id = null)
     {
+        if (!$this->checkin) {
+            $this->checkin = self::$static_checkin;
+        }
+
         if ($cabin_id) {
             foreach ($this->cabins_cache as $id => $item) {
                 if ($id == $cabin_id) {
@@ -681,6 +688,7 @@ class Exist
         $cabin_object = Cabin::where($this->checkin->eds_code . '_name', $eds_cabin_name)
             ->where('motorship_id', $this->checkin->motorship_id)
             ->first();
+
 
         if (!$cabin_object) {
             # Каюта не найдена, она могла быть добавлена в исключения
@@ -763,7 +771,6 @@ class Exist
                 'pricing.price_b as price2_value',
             )
             ->get();
-
 
         foreach ($mix as $record) {
             $record = (object) $record;
