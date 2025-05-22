@@ -227,6 +227,7 @@ class GamaV2 extends RiverCrs
 
                 $gama_cabin_category = $this->getGamaCategory($cabin_id, $gama_ship_id);
 
+                $gama_category_id = $gama_cabin_category['id'];
                 $category_name = $gama_cabin_category['name'];
                 $deck_name = $gama_cabin_category['deck_name'];
                 ProcessLog::add("Обработка категории: $category_name");
@@ -237,8 +238,15 @@ class GamaV2 extends RiverCrs
                     continue;
                 }
 
-                // Имя категории в Gama — например "239"
-                $category_id = $this->getCabinCategoryId($category_name, $ship->id, 'gama', $places);
+                # Имя категории в Gama — например "239"
+                $category_id = $this->getCabinCategoryId(
+                    $category_name,
+                    $ship->id,
+                    'gama',
+                    $places,
+                    $gama_category_id // <-- Обязательно для нейминга
+                );
+
                 if (!$category_id) {
                     ProcessLog::add("Исключение: Категория каюты запрещена.");
                     continue;

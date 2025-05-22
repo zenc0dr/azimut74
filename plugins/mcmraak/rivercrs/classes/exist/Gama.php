@@ -46,7 +46,7 @@ class Gama extends Exist
                 $category_data = $gama->getGamaCategory($gama_cabin_id, $gama_ship_id);
                 $record = $this->addRecord([
                     'deck_name' => $category_data['deck_name'],
-                    'cabin_name' => $category_data['name'],
+                    'cabin_name' => $category_data['name'] . '|' . $gama_cabin_id,
                     'price_places' => intval($places),
                     'price_value' => $cost['std_3'],
                     'eds' => true

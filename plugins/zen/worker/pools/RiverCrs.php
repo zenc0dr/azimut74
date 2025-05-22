@@ -98,8 +98,26 @@ class RiverCrs
         $getter->deckPivotCheck($cabin_id, $deck_id);
     }
 
-    public function getCabinCategoryId(string $category_name, int $motorship_id, string $eds_code, int $places = 1): int
-    {
+    /**
+     * Тут происходит создание категории каюты
+     * @param string $category_name
+     * @param int $motorship_id
+     * @param string $eds_code
+     * @param int $places
+     * @return int
+     */
+    public function getCabinCategoryId(
+        string $category_name,
+        int $motorship_id,
+        string $eds_code,
+        int $places = 1,
+        string $eds_id = null
+    ): int {
+        # Супер-костыль специально для Гама
+        if ($eds_code === 'gama') {
+            $category_name = "$category_name|$eds_id";
+        }
+
         $key = "cabin:$category_name:$motorship_id:$eds_code";
 
         if (isset($this->cache[$key])) {
