@@ -9,14 +9,13 @@ use Zen\Worker\Pools\GamaV2;
 
 class Gama extends Exist
 {
-    public function getExist($checkin, $realtime)
+    public function getExist($checkin, $realtime): ?array
     {
         $gama = new GamaV2();
-
         $gama_route_data = $gama->getGamaRouteData($checkin->eds_id);
 
         if (!$gama_route_data) {
-            return;
+            return null;
         }
 
         $navigation_id = $gama_route_data['Route']['@attributes']['navigation_id'];
