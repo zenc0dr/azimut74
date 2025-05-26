@@ -198,7 +198,6 @@ class GamaV2 extends RiverCrs
         $cruise_data = $this->getGamaFileData("navigation_{$navigation_id}_available.xml");
 
         $routes = $cruise_data['Navigation']['RouteList']['Route'];
-
         // Приводим к массиву, если пришёл один Route
         if (isset($routes['@attributes'])) {
             $routes = [$routes];
@@ -227,16 +226,15 @@ class GamaV2 extends RiverCrs
 
                 $gama_cabin_category = $this->getGamaCategory($cabin_id, $gama_ship_id);
 
-                $gama_category_id = $gama_cabin_category['id'];
+                if (!$gama_cabin_category) {
+                    ProcessLog::add("Ошибка: не найдена категория каюты");
+                    continue;
+                }
+
                 $category_name = $gama_cabin_category['name'];
                 $deck_name = $gama_cabin_category['deck_name'];
                 ProcessLog::add("Обработка категории: $category_name");
                 $places = intval($gama_cabin_category['places']);
-
-                if (!$gama_cabin_category['name']) {
-                    ProcessLog::add("Ошибка: не найдена категория каюты");
-                    continue;
-                }
 
                 # Имя категории в Gama — например "239"
                 $category_id = $this->getCabinCategoryId(
@@ -244,7 +242,6 @@ class GamaV2 extends RiverCrs
                     $ship->id,
                     'gama',
                     $places,
-                    $gama_category_id // <-- Обязательно для нейминга
                 );
 
                 if (!$category_id) {
@@ -297,11 +294,12 @@ class GamaV2 extends RiverCrs
         return array_values($category_prices);
     }
 
-    public function getGamaCategory($cabin_id, $gama_ship_id): array
+    # Единственный метод получения имени категории каюты
+    public function getGamaCategory(int $cabin_id, int $gama_ship_id): array
     {
         $generic_data = $this->getGamaFileData('dir_generic.xml');
         foreach ($generic_data['ShipList']['Ship'] as $ship) {
-            $ship_id = $ship['@attributes']['id'];
+            $ship_id = intval($ship['@attributes']['id']);
 
             if ($ship_id === $gama_ship_id) {
                 foreach ($ship['DeckList']['Deck'] as $deck) {
@@ -310,20 +308,36 @@ class GamaV2 extends RiverCrs
                         ProcessLog::add("Ошибка --- Для палубы $deck_name отсутствуют каюты");
                         continue;
                     }
-                    foreach ($deck['CabinList']['Cabin'] as $cabin) {
-                        $gama_cabin_id = $cabin['@attributes']['id'];
+
+                    $cabins = $deck['CabinList']['Cabin'];
+                    if (!is_array($cabins) || !isset($cabins[0])) {
+                        $cabins = [$cabins];
+                    }
+
+                    foreach ($cabins as $cabin) {
+                        $gama_cabin_id = intval($cabin['@attributes']['id']);
                         if ($cabin_id === $gama_cabin_id) {
-                            $category_id = $cabin['@attributes']['category_id'];
+                            $category_id = intval($cabin['@attributes']['category_id']);
                             $places = $cabin['@attributes']['places'];
                             $category_name = null;
+
+                            if (!isset($generic_data['CategoryList']['Category'])) {
+                                ProcessLog::add("Для категории gama:$category_id не обнаружен массив кают");
+                                return [];
+                            }
+
                             foreach ($generic_data['CategoryList']['Category'] as $category) {
-                                if ($category['@attributes']['id'] === $category_id) {
+                                if (intval($category['@attributes']['id']) === $category_id) {
                                     $category_name = $category['@attributes']['name'];
                                 }
                             }
+
+                            if (is_null($category_name)) {
+                                ProcessLog::add("Категория $category_id не найдена для каюты $gama_cabin_id");
+                            }
+
                             return [
-                                'id' => $category_id,
-                                'name' => $category_name,
+                                'name' => "$category_name|$category_id",
                                 'deck_name' => $deck_name,
                                 'places' => $places,
                             ];
@@ -332,6 +346,7 @@ class GamaV2 extends RiverCrs
                 }
             }
         }
+        ProcessLog::add("Каюта $cabin_id не найдена на судне $gama_ship_id");
         return [];
     }
 
