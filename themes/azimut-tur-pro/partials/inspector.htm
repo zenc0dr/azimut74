@@ -5,30 +5,37 @@
 <style>[v-cloak] { display: none; }</style>
 
 <div id="cookie-app" v-cloak>
-    <div v-if="!consentGiven" class="fixed inset-0 z-50 bg-black bg-opacity-50 flex items-center justify-center">
-        <div class="bg-white rounded-xl shadow-xl p-6 max-w-lg w-full text-center space-y-4">
-            <h2 class="text-xl font-semibold text-gray-800">🍪 Мы используем cookies</h2>
-            <p class="text-gray-600 text-sm">Этот сайт использует cookies для улучшения работы. Пожалуйста, выбери категории, которые разрешаешь.</p>
+    <div v-if="!consentGiven"
+         class="fixed bottom-0 left-0 right-0 z-50 h-[200px] bg-white shadow-2xl border-t border-gray-200 flex items-center justify-center">
+        <div class="max-w-4xl w-full px-6">
+            <div class="text-center space-y-4">
+                <h2 class="text-2xl font-semibold text-gray-800">🍪 Мы используем cookies</h2>
+                <p class="text-gray-600 text-sm">
+                    Этот сайт применяет cookies для улучшения пользовательского опыта. Выберите категории, которые разрешаете.
+                </p>
 
-            <div class="space-y-2 text-left">
-                <label class="flex items-center space-x-2">
-                    <input type="checkbox" disabled checked class="accent-blue-500">
-                    <span class="text-sm">Обязательные cookies</span>
-                </label>
-                <label class="flex items-center space-x-2">
-                    <input type="checkbox" v-model="analytics" class="accent-green-500">
-                    <span class="text-sm">Аналитика</span>
-                </label>
-                <label class="flex items-center space-x-2">
-                    <input type="checkbox" v-model="marketing" class="accent-pink-500">
-                    <span class="text-sm">Маркетинг</span>
-                </label>
+                <div class="flex flex-col sm:flex-row justify-center gap-6 text-left text-sm items-start sm:items-center mt-4">
+                    <label class="flex items-center space-x-2">
+                        <input type="checkbox" disabled checked class="accent-blue-500">
+                        <span>Обязательные cookies</span>
+                    </label>
+                    <label class="flex items-center space-x-2">
+                        <input type="checkbox" v-model="analytics" class="accent-green-500">
+                        <span>Аналитика</span>
+                    </label>
+                    <label class="flex items-center space-x-2">
+                        <input type="checkbox" v-model="marketing" class="accent-pink-500">
+                        <span>Маркетинг</span>
+                    </label>
+                </div>
+
+                <div class="mt-6">
+                    <button @click="acceptCookies"
+                            class="bg-blue-600 hover:bg-blue-700 text-white font-semibold py-2 px-6 rounded-xl transition">
+                        Сохранить настройки
+                    </button>
+                </div>
             </div>
-
-            <button @click="acceptCookies"
-                    class="bg-blue-600 hover:bg-blue-700 text-white font-semibold py-2 px-4 rounded-xl w-full transition">
-                Сохранить настройки
-            </button>
         </div>
     </div>
 </div>
@@ -53,8 +60,6 @@
                     if (parsed.necessary === true) {
                         this.consentGiven = true;
                         console.log('[mounted] consentGiven установлен в true');
-                    } else {
-                        console.log('[mounted] Обязательное согласие отсутствует');
                     }
                 } else {
                     console.log('[mounted] Нет записи в localStorage');
@@ -80,14 +85,6 @@
                     console.log('[acceptCookies] consentGiven теперь true');
                 } catch (e) {
                     console.error('[acceptCookies] Ошибка при сохранении в localStorage:', e);
-                }
-
-                // Пример условной инициализации
-                if (this.analytics) {
-                    console.log('[acceptCookies] Аналитика разрешена');
-                }
-                if (this.marketing) {
-                    console.log('[acceptCookies] Маркетинг разрешён');
                 }
             }
         }
