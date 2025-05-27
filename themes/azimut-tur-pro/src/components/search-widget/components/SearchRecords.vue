@@ -187,6 +187,13 @@ export default {
     methods: {
         getDays(item) {
             console.log('Обработка записи', item)
+
+            if (item.date && item.date.d1 !== undefined) {
+                console.log('Свойство d1 существует');
+            } else {
+                console.log('Свойство d1 не существует', item);
+            }
+
             return `${ item.date.d1 }, ${ item.date.d1d } (${ item.date.t1 }) — ${ item.date.d2 }, ${ item.date.d2d } (${ item.date.t2 })`
         },
         hasDiscounts(record) {
