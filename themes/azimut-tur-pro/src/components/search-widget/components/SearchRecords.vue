@@ -49,9 +49,11 @@
                                 <div class="d-flex align-items-end">
                                     <img class="me-1 me-xl-2"
                                          src="/themes/azimut-tur-pro/assets/images/components/result-item/calendar.svg">
-                                    <b>{{ record.date.d1 }}</b>, {{ record.date.d1d }} ({{ record.date.t1 }}) <span
-                                    class="px-1">—</span> <b>{{ record.date.d2 }}</b>, {{ record.date.d2d }}
-                                    ({{ record.date.t2 }})
+                                    <template v-if="record.date && record.date.d1">
+                                        <b>{{ record.date.d1 }}</b>, {{ record.date.d1d }} ({{ record.date.t1 }}) <span
+                                        class="px-1">—</span> <b>{{ record.date.d2 }}</b>, {{ record.date.d2d }}
+                                        ({{ record.date.t2 }})
+                                    </template>
                                 </div>
                                 <div class="fs-ss fs-xxl-s c-red-200">Время московское</div>
 
@@ -187,6 +189,7 @@ export default {
     methods: {
         getDays(item) {
             if (!item.date || item.date.d1 === undefined) {
+                console.log('getDays вернул null')
                 return ''
             }
 
