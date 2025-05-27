@@ -721,16 +721,19 @@ export default {
                 this.form.dest.value = preset.t2
                 this.form.days.value = preset.days
                 this.form.ship.value = preset.ship
+
+                console.log('Поисковый пресет получен', preset)
                 callback()
                 return
             }
-            console.log('test')
             let search_preset = $('meta[name="search-preset"]')
             if (!search_preset.length) {
                 return
             }
 
             search_preset = JSON.parse(search_preset.attr('content'))
+
+            console.log('Поисковый пресет считан из мета-тега', search_preset)
 
             if (search_preset.d1) {
                 this.form.date_1 = search_preset.d1
