@@ -1,53 +1,51 @@
-<!-- Vue 3 и Tailwind -->
-<script src="https://unpkg.com/vue@3/dist/vue.global.prod.js"></script>
-<script src="https://cdn.tailwindcss.com"></script>
-
-<style>[v-cloak] { display: none; }</style>
-
-<div id="cookie-app" v-cloak>
-    <div v-if="!consentGiven"
-         class="fixed bottom-0 left-0 right-0 z-50 h-[200px] bg-white shadow-2xl border-t border-gray-200 flex items-center justify-center px-4">
-        <div class="max-w-4xl w-full text-center space-y-4">
-            <p class="text-gray-700 text-sm sm:text-base">
-                Пользуясь нашим сайтом, вы соглашаетесь с тем, что мы используем cookies
-            </p>
-
-            <button @click="acceptCookies"
-                    class="bg-blue-600 hover:bg-blue-700 text-white font-semibold py-2 px-6 rounded-xl transition">
-                Соглашаюсь
-            </button>
+<div id="cookie-banner" style="display: none;">
+    <div style="
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    z-index: 9999;
+    background: #ffffff;
+    border-top: 1px solid #ddd;
+    padding: 16px;
+    font-family: sans-serif;
+    font-size: 14px;
+    color: #333;
+    box-shadow: 0 -2px 6px rgba(0,0,0,0.1);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 12px;
+  ">
+        <div style="max-width: 720px; text-align: center;">
+            Пользуясь нашим сайтом, вы соглашаетесь с тем, что мы используем cookies
         </div>
+        <button id="cookie-accept" style="
+      background: #2563eb;
+      color: white;
+      border: none;
+      padding: 8px 16px;
+      border-radius: 6px;
+      cursor: pointer;
+      font-weight: bold;
+    ">
+            Соглашаюсь
+        </button>
     </div>
 </div>
 
 <script>
-    const app = Vue.createApp({
-        data() {
-            return {
-                consentGiven: false
-            };
-        },
-        mounted() {
-            try {
-                const savedConsent = localStorage.getItem('cookieConsent');
-                if (savedConsent === 'true') {
-                    this.consentGiven = true;
-                }
-            } catch (e) {
-                console.warn('[mounted] Ошибка при чтении localStorage:', e);
-            }
-        },
-        methods: {
-            acceptCookies() {
-                try {
-                    localStorage.setItem('cookieConsent', 'true');
-                    this.consentGiven = true;
-                } catch (e) {
-                    console.error('[acceptCookies] Ошибка при сохранении в localStorage:', e);
-                }
-            }
-        }
-    });
+    (function () {
+        const banner = document.getElementById('cookie-banner');
+        const acceptBtn = document.getElementById('cookie-accept');
 
-    app.mount('#cookie-app');
+        if (localStorage.getItem('cookieConsent') !== 'true') {
+            banner.style.display = 'block';
+        }
+
+        acceptBtn?.addEventListener('click', () => {
+            localStorage.setItem('cookieConsent', 'true');
+            banner.style.display = 'none';
+        });
+    })();
 </script>
