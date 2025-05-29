@@ -1,3 +1,9 @@
+<!-- Vue 3 и Tailwind -->
+<script src="https://unpkg.com/vue@3/dist/vue.global.prod.js"></script>
+<script src="https://cdn.tailwindcss.com"></script>
+
+<style>[v-cloak] { display: none; }</style>
+
 <div id="cookie-app" v-cloak>
     <div v-if="!consentGiven"
          class="fixed inset-0 sm:bottom-0 sm:inset-x-0 sm:h-auto sm:inset-y-auto z-50 bg-white shadow-2xl border-t border-gray-200 flex items-center justify-center sm:items-end">
@@ -33,3 +39,56 @@
         </div>
     </div>
 </div>
+
+<script>
+    const app = Vue.createApp({
+        data() {
+            return {
+                analytics: false,
+                marketing: false,
+                consentGiven: false
+            };
+        },
+        mounted() {
+            console.log('[mounted] Проверяем localStorage...');
+            try {
+                const savedConsent = localStorage.getItem('cookieConsent');
+                if (savedConsent) {
+                    const parsed = JSON.parse(savedConsent);
+                    console.log('[mounted] Найдено согласие:', parsed);
+
+                    if (parsed.necessary === true) {
+                        this.consentGiven = true;
+                        console.log('[mounted] consentGiven установлен в true');
+                    }
+                } else {
+                    console.log('[mounted] Нет записи в localStorage');
+                }
+            } catch (e) {
+                console.warn('[mounted] Ошибка при чтении localStorage:', e);
+            }
+        },
+        methods: {
+            acceptCookies() {
+                console.log('[acceptCookies] Кнопка нажата');
+                const consent = {
+                    necessary: true,
+                    analytics: this.analytics,
+                    marketing: this.marketing,
+                    timestamp: new Date().toISOString()
+                };
+
+                try {
+                    localStorage.setItem('cookieConsent', JSON.stringify(consent));
+                    console.log('[acceptCookies] Согласие сохранено:', consent);
+                    this.consentGiven = true;
+                    console.log('[acceptCookies] consentGiven теперь true');
+                } catch (e) {
+                    console.error('[acceptCookies] Ошибка при сохранении в localStorage:', e);
+                }
+            }
+        }
+    });
+
+    app.mount('#cookie-app');
+</script>
