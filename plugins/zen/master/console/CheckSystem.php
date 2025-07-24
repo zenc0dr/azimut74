@@ -15,8 +15,10 @@ class CheckSystem extends Command
         $min = 1000;
         $size_mb = $this->getFreeSize();
         if ($size_mb < $min) {
-            $text = "Внимание! На диске осталось менее $min mb";
+            $text = "Внимание! На диске осталось менее $min mb приступаю к очистке...";
             master()->telegram()->sendMessage($text);
+            $this->clearCache();
+            master()->telegram()->sendMessage("Кэш очищен, место освобождено");
         }
     }
 
@@ -30,5 +32,10 @@ class CheckSystem extends Command
         $size_mb = trim($size_mb);
         $size_mb = intval($size_mb);
         return $size_mb;
+    }
+
+    private function clearCache(): void
+    {
+        shell_exec("php /app/artisan cache:clear");
     }
 }
