@@ -111,6 +111,7 @@
 <script>
 import axios from "axios";
 import clipboardCopy from 'clipboard-copy';
+import LZString from 'lz-string';
 import MultiCheckDD from "../vue-components/MultiCheckDD";
 import DatePicker from "../vue-components/DatePicker";
 import Pagination from "./components/Pagination";
@@ -158,22 +159,40 @@ export default {
         window.SearchApi = {
             onSearch: (preset) => {},
             search: (preset) => {
-                preset = JSON.parse(preset)
-                this.form.date_1 = preset.d1
-                this.form.date_2 = preset.d2
-                this.form.town.value = preset.t1
-                this.form.dest.value = preset.t2
-                this.form.days.value = preset.days
-                this.form.ship.value = preset.ship
-
-                this.search()
+                // поддержка старого формата (json) и нового (lz-string)
+                let parsedPreset
+                try {
+                    parsedPreset = JSON.parse(preset)
+                } catch (e) {
+                    // возможно, это lz-string
+                    try {
+                        parsedPreset = JSON.parse(LZString.decompressFromEncodedURIComponent(preset))
+                    } catch (e2) {
+                        parsedPreset = null
+                    }
+                }
+                if (parsedPreset) {
+                    this.form.date_1 = parsedPreset.d1
+                    this.form.date_2 = parsedPreset.d2
+                    this.form.town.value = parsedPreset.t1
+                    this.form.dest.value = parsedPreset.t2
+                    this.form.days.value = parsedPreset.days
+                    this.form.ship.value = parsedPreset.ship
+                    this.search()
+                }
             }
         }
 
-        if (window.location.hash != '' &&  window.location.hash.indexOf("s=",0)) {
-            let preset = window.location.hash.substring(3)
-            let decode = decodeURI(preset)
-            this.preset = decode
+        if (window.location.hash && window.location.hash.startsWith('#s=')) {
+            let compressed = window.location.hash.substring(3)
+            try {
+                let decoded = LZString.decompressFromEncodedURIComponent(compressed)
+                this.preset = decoded
+            } catch (e) {
+                // fallback: возможно, это старый формат
+                let decode = decodeURI(compressed)
+                this.preset = decode
+            }
         }
 
         this.getInjectorBlocks(()=>{
@@ -843,9 +862,9 @@ export default {
             }
         },
         getSearchLink() {
-            // Генерируем ссылку с hash
-            const preset = encodeURI(JSON.stringify(this.getSearchPreset()))
-            return `${window.location.origin}${window.location.pathname}#s=${preset}`
+            // Генерируем ссылку с hash (lz-string compress)
+            const compressed = LZString.compressToEncodedURIComponent(JSON.stringify(this.getSearchPreset()))
+            return `${window.location.origin}${window.location.pathname}#s=${compressed}`
         },
         async copySearchLink() {
             const link = this.getSearchLink()

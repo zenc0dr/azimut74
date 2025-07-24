@@ -35,6 +35,7 @@
     "axios": "^0.25.0",
     "clipboard-copy": "^4.0.1",
     "lightgallery": "^2.4.0",
+    "lz-string": "^1.5.0",
     "moment": "^2.29.3",
     "opensans-npm-webfont": "^1.0.0",
     "owl.carousel": "^2.3.4",
