@@ -1,51 +1,103 @@
-<div id="cookie-banner" style="display: none;">
-    <div style="
-    position: fixed;
-    bottom: 0;
-    left: 0;
-    right: 0;
-    z-index: 9999;
-    background: #ffffff;
-    border-top: 1px solid #ddd;
-    padding: 16px;
-    font-family: sans-serif;
-    font-size: 14px;
-    color: #333;
-    box-shadow: 0 -2px 6px rgba(0,0,0,0.1);
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    gap: 12px;
-  ">
-        <div style="max-width: 720px; text-align: center;">
-            Пользуясь нашим сайтом, вы соглашаетесь с тем, что мы используем cookies
-        </div>
-        <button id="cookie-accept" style="
-      background: #2563eb;
-      color: white;
-      border: none;
-      padding: 8px 16px;
-      border-radius: 6px;
-      cursor: pointer;
-      font-weight: bold;
-    ">
-            Соглашаюсь
-        </button>
+[viewBag]
+==
+<div id="cookie-block">
+    <div class="cookie-block__inner">
+        <div class="cookie-block__content">
+            <div class="cookie-block__text">
+                Мы используем файлы cookie, чтобы обеспечить корректную работу сайта, а также для аналитики и маркетинга. Вы можете принять все файлы cookie или отказаться от необязательных.
+                <br> Подробнее в <a href="/politika-konfidencialnosti" target="_blank" class="cookie-block__link">Политике конфиденциальности.</a>
+            </div>
+            <div class="cookie-block__btns">
+                <button id="cookie-accept">Принять всё</button>
+                <button id="cookie-reject">Отклонить</button>
+            </div>
+        </div>  
     </div>
+<style>
+    #cookie-block {
+        display: none;
+    }
+
+    #cookie-block a {
+        color: #333;
+        text-decoration-color: #333;
+        text-decoration: underline
+    }
+
+    #cookie-block .cookie-block__inner {
+        position: fixed;
+        bottom: 0;
+        left: 0;
+        right: 0;
+        z-index: 9999;
+        background: #fff;
+        border-top: 1px solid #ddd;
+        padding: 16px;
+        font: 14px/1.1 sans-serif;
+        color: #333;
+        box-shadow: 0 -2px 6px rgba(0, 0, 0, 0.1);
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        gap: 12px;
+    }
+
+    #cookie-block .cookie-block__btns {
+        display: flex;
+        width: 100%;
+    }
+
+    #cookie-block .cookie-block__content {
+        max-width: 720px;
+    }
+
+    #cookie-block .cookie-block__text {
+        text-align: left;
+        margin-bottom: 25px;
+    }
+
+    #cookie-accept,
+    #cookie-reject {
+        padding: 8px 16px;
+        border-radius: 6px;
+        cursor: pointer;
+        font-weight: bold;
+    }
+
+    #cookie-accept {
+        background: #fff;
+        color: #333;
+        border: 1px solid #333;
+        margin-right: 30px;
+    }
+
+    #cookie-reject {
+        background: none;
+        border: none;
+        text-decoration: underline;
+    }
+
+    #cookie-block button:hover {
+        opacity: .75;
+    }
+</style>
 </div>
 
 <script>
     (function () {
-        const banner = document.getElementById('cookie-banner');
+        const block = document.getElementById('cookie-block');
         const acceptBtn = document.getElementById('cookie-accept');
-
-        if (localStorage.getItem('cookieConsent') !== 'true') {
-            banner.style.display = 'block';
+        const rejectBtn = document.getElementById('cookie-reject');
+        const hideCookieBlock = () => {
+            localStorage.setItem('cookieConsent', 'true');
+            block.style.display = 'none';
         }
 
-        acceptBtn?.addEventListener('click', () => {
-            localStorage.setItem('cookieConsent', 'true');
-            banner.style.display = 'none';
-        });
+        if (localStorage.getItem('cookieConsent') !== 'true') {
+            block.style.display = 'block';
+        }
+
+        rejectBtn?.addEventListener('click', hideCookieBlock)
+        acceptBtn?.addEventListener('click', hideCookieBlock);
     })();
 </script>

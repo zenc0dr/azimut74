@@ -42,9 +42,4 @@ class CheckSystem extends Command
         $size_mb = intval($size_mb);
         return $size_mb;
     }
-
-    private function clearCache(): void
-    {
-        shell_exec("php /app/artisan cache:clear");
-    }
 }
