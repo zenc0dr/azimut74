@@ -71,6 +71,15 @@
                         </div>
                         <div class="widget-count__result d-flex justify-content-center align-items-center">
                             <div class="mt-0 mt-lg-2 fw-bolder fs-s">Круизов найдено: {{ find_count }}</div>
+                            <!-- Кнопка копирования ссылки -->
+                            <span
+                                class="copy-link"
+                                @click="copySearchLink"
+                                title="Скопировать ссылку на этот поиск"
+                                style="cursor:pointer; margin-left: 10px; font-size: 1.2em;"
+                            >
+                              🔗
+                            </span>
                         </div>
                     </div>
                 </div>
@@ -91,6 +100,7 @@
                 </template>
             </section>
             <meta name="result-page" :content="page + 1">
+            <span v-if="copySuccess" class="copy-success" style="color:green; margin-left:5px;">Скопировано!</span>
         </template>
         <div v-else class="search-widget-preloader">
             <img src="/themes/azimut-tur-pro/assets/images/preloaders/cubesline_preloader.gif" alt="Loading...">
@@ -100,6 +110,7 @@
 
 <script>
 import axios from "axios";
+import clipboardCopy from 'clipboard-copy';
 import MultiCheckDD from "../vue-components/MultiCheckDD";
 import DatePicker from "../vue-components/DatePicker";
 import Pagination from "./components/Pagination";
@@ -136,7 +147,8 @@ export default {
             per_page: 15,
             result: null, // items
             blocks: null, // Блоки инъектора
-            preset: null
+            preset: null,
+            copySuccess: false,
         }
     },
     mounted() {
@@ -818,6 +830,34 @@ export default {
                 return null;
             }
             ym(13605125,'reachGoal', target)
+        },
+        getSearchPreset() {
+            // Собираем текущие параметры поиска в объект
+            return {
+                d1: this.form.date_1,
+                d2: this.form.date_2,
+                t1: this.form.town.value,
+                t2: this.form.dest.value,
+                days: this.form.days.value,
+                ship: this.form.ship.value
+            }
+        },
+        getSearchLink() {
+            // Генерируем ссылку с hash
+            const preset = encodeURI(JSON.stringify(this.getSearchPreset()))
+            return `${window.location.origin}${window.location.pathname}#s=${preset}`
+        },
+        async copySearchLink() {
+            const link = this.getSearchLink()
+            clipboardCopy(link)
+                .then(() => {
+                    this.copySuccess = true
+                    setTimeout(() => { this.copySuccess = false }, 1500)
+                })
+                .catch(e => {
+                    console.error('Ошибка копирования ссылки:', e)
+                    alert('Ошибка копирования: ' + (e && e.message ? e.message : e))
+                })
         }
     }
 }

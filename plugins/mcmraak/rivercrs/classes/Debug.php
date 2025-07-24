@@ -18,13 +18,45 @@ class Debug
     # http://azimut.dc/rivercrs/debug/Debug@test
     public function test()
     {
-        $ships = Motorships::get();
-        foreach ($ships as $ship) {
-            if (!isset($ship->scheme[0])) {
-                dd($ship->id);
-            }
+
+
+    }
+
+
+    # http://azimut.dc/rivercrs/debug/Debug@generateCheckinsVector
+    public function generateCheckinsVector()
+    {
+        $checkins = Checkins::where('eds_code', 'waterway')->get();
+
+        # https://xn----7sbveuzmbgd.xn--p1ai/russia-river-cruises/cruise/{id}
+
+        $lines = [];
+        $ships = [];
+        foreach ($checkins as $checkin) {
+
+            $ships[$checkin->motorship->id] = $checkin->motorship->name;
+
+            $line = [
+                'checkin_id' => $checkin->id,
+                'date_from' => $checkin->date,
+                'date_to' => $checkin->dateb,
+                'ship_id' => $checkin->motorship->id,
+                //'source' => $checkin->eds_name,
+            ];
+
+            $lines[] = join("|", $line);
         }
-        dd('no');
+
+        $output = [
+            'Формирование ссылки на круиз' => 'https://xn----7sbveuzmbgd.xn--p1ai/russia-river-cruises/cruise/{id} (id первый столбец в списке cruises)',
+            'ships' => $ships,
+            'cruises' => $lines,
+        ];
+
+        file_put_contents(
+            storage_path('temp/checkins.json'),
+            json_encode($output, JSON_PRETTY_PRINT)
+        );
     }
 
     # http://azimut.dc/rivercrs/debug/Debug@exTest?id=5009

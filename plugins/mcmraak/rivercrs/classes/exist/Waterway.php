@@ -18,64 +18,8 @@ class Waterway extends Exist
         $ww_cruise_id = $this->checkin->eds_id;
 
         $ww = new WaterwayPool();
-        //$ww_cruise = $ww->wwQuery("json.v3.cruise?id=$ww_cruise_id", null, "waterway.cruise.$ww_cruise_id");
         $ww_rooms = $ww->wwQuery("json.v3.cabins?id=$ww_cruise_id", null, "waterway.cabins.$ww_cruise_id");
 
-//        #dd($ww_rooms);
-//
-//        #echo json_encode($ww_cruise, 128|256);
-//        #exit(1);
-//
-///*
-//        $data = $this->parser->cacheWarmUp('waterway-prices', $this->query_type, [
-//            'pauth' => 'kefhjkdRgwFdkVHpRHGs',
-//            'id' => $checkin->eds_id
-//        ]);
-//*/
-//
-//        # Оставляем тариф взрослый
-//        #$prices = $this->getTariff($data);
-//
-//        # Тариф Взрослый расширенный
-//        # $prices2 = $this->getTariffEx($data);
-//
-//        # Массив с массивами с числами номеров
-//        #$available_list = $data['room_availability'];
-//        $rooms = [];
-//
-//        $tariff_price2 = false;
-//        $ic = 0;
-//        foreach ($prices as $key => $price) {
-////            $price2_o = (isset($prices2[$ic]))?$prices2[$ic]:null;
-//            $price2 = null;
-////            if($price2_o && $price2_o['rt_name'] == $price['rt_name']) {
-////                $price2 = $price2_o['price_value'];
-////                $tariff_price2 = true;
-////            }
-//
-//            $record = $this->addRecord([
-//                'deck_name' => $price['deck_name'], # Имя палубы
-//                'cabin_name' => $price['rt_name'], # Имя каюты
-//                'price_places' => $this->getWwPlaces($price['rp_name']), # Кол-во мест
-//                'price_value' => $price['price_value'], # Цена 1
-//                'price2_value' => $price2, # Цена 2
-//                'eds' => true
-//            ]);
-//
-//            if (isset($available_list[$key])) {
-//                $this->addWwRooms($rooms, $available_list[$key], $record['deck_id']);
-//            }
-//
-//            $ic++;
-//        }
-
-        //dd($ww_cruise, $ww_rooms);
-
-
-        //echo json_encode($ww_rooms, JSON_UNESCAPED_UNICODE | JSON_PRETTY_PRINT);
-        //exit(0);
-
-        //dd($ww_rooms['result']['data'][0]);
         $tariff_price2 = false;
         $rooms = [];
 
