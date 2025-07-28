@@ -185,13 +185,32 @@ export default {
 
         if (window.location.hash && window.location.hash.startsWith('#s=')) {
             let compressed = window.location.hash.substring(3)
+            
+            // Проверяем наличие переопределений дат
+            let dateOverrides = null
+            if (compressed.includes('|')) {
+                let parts = compressed.split('|')
+                compressed = parts[0]
+                dateOverrides = parts[1]
+            }
+            
             try {
                 let decoded = LZString.decompressFromEncodedURIComponent(compressed)
                 this.preset = decoded
+                
+                // Применяем переопределения дат если они есть
+                if (dateOverrides) {
+                    this.applyDateOverrides(dateOverrides)
+                }
             } catch (e) {
                 // fallback: возможно, это старый формат
                 let decode = decodeURI(compressed)
                 this.preset = decode
+                
+                // Применяем переопределения дат если они есть
+                if (dateOverrides) {
+                    this.applyDateOverrides(dateOverrides)
+                }
             }
         }
 
@@ -211,6 +230,9 @@ export default {
                         }
                     })
                 }
+                
+                // Применяем переопределения дат после всех инициализаций
+                this.checkAndApplyDateOverrides()
             })
         })
     },
@@ -230,18 +252,16 @@ export default {
                 api_url = domain + '/rivercrs/api/' + opts.method
             }
 
-            console.log(api_url, data) // todo:debug
             // Если нет данных то запрос GET
             if (!data) {
                 axios.get(api_url)
                     .then((response) => {
                         this.process = false
                         opts.then(response.data)
-                        console.log(response) // todo:debug
                     })
                     .catch((error) => {
                         this.process = false
-                        console.log(error) // todo:debug
+                        console.log(error)
                     })
             }
             // Если есть data то запрос POST
@@ -250,11 +270,10 @@ export default {
                     .then((response) => {
                         this.process = false
                         opts.then(response.data)
-                        console.log(response) // todo:debug
                     })
                     .catch((error) => {
                         this.process = false
-                        console.log(error) // todo:debug
+                        console.log(error)
                     })
             }
         },
@@ -690,7 +709,6 @@ export default {
                             ship: this.form.ship.value
                         }
 
-                        //console.log('this.form.town', this.form.town)
                         SearchApi.onSearch(JSON.stringify(preset))
                     }
                 }
@@ -753,7 +771,6 @@ export default {
                 this.form.days.value = preset.days
                 this.form.ship.value = preset.ship
 
-                console.log('Поисковый пресет получен', preset)
                 callback()
                 return
             }
@@ -763,8 +780,6 @@ export default {
             }
 
             search_preset = JSON.parse(search_preset.attr('content'))
-
-            console.log('Поисковый пресет считан из мета-тега', search_preset)
 
             if (search_preset.d1) {
                 this.form.date_1 = search_preset.d1
@@ -784,6 +799,7 @@ export default {
             if (parseInt(search_preset.s)) {
                 this.form.ship.value = [parseInt(search_preset.s)]
             }
+            
             callback()
         },
         // Преобразовать объект в массив
@@ -877,6 +893,71 @@ export default {
                     console.error('Ошибка копирования ссылки:', e)
                     alert('Ошибка копирования: ' + (e && e.message ? e.message : e))
                 })
+        },
+        applyDateOverrides(overrides) {
+            console.log('applyDateOverrides вызван с:', overrides)
+            
+            // Парсим переопределения дат в формате |n или |n-n2
+            if (!overrides || overrides.trim() === '') {
+                console.log('overrides пустые, выходим')
+                return
+            }
+            
+            let parts = overrides.split('-')
+            let daysFrom = parseInt(parts[0])
+            let daysTo = parts.length > 1 ? parseInt(parts[1]) : null
+            
+            console.log('daysFrom:', daysFrom, 'daysTo:', daysTo)
+            
+            // Если первое число невалидное, игнорируем
+            if (isNaN(daysFrom)) {
+                console.log('daysFrom невалидное, выходим')
+                return
+            }
+            
+            // Если есть второе число и оно валидное
+            if (daysTo !== null && !isNaN(daysTo)) {
+                // Переопределяем обе даты
+                let newDate1 = this.calculateDateFromToday(daysFrom)
+                let newDate2 = this.calculateDateFromToday(daysTo)
+                this.form.date_1 = newDate1
+                this.form.date_2 = newDate2
+                console.log('Переопределены обе даты:', newDate1, newDate2)
+            } else {
+                // Переопределяем только дату от
+                let newDate1 = this.calculateDateFromToday(daysFrom)
+                this.form.date_1 = newDate1
+                console.log('Переопределена только дата от:', newDate1)
+            }
+            
+            console.log('Текущие значения формы:', this.form.date_1, this.form.date_2)
+        },
+        calculateDateFromToday(days) {
+            let today = new Date()
+            let targetDate = new Date(today.getTime() + (days * 24 * 60 * 60 * 1000))
+            
+            let dd = targetDate.getDate()
+            if (dd < 10) {
+                dd = '0' + dd
+            }
+            let mm = targetDate.getMonth() + 1
+            if (mm < 10) {
+                mm = '0' + mm
+            }
+            let yyyy = targetDate.getFullYear()
+            
+            return dd + '.' + mm + '.' + yyyy
+        },
+        checkAndApplyDateOverrides() {
+            const hash = window.location.hash;
+            if (hash && hash.startsWith('#s=') && hash.includes('|')) {
+                const parts = hash.substring(3).split('|');
+                if (parts.length > 1) {
+                    const overrides = parts[1];
+                    this.applyDateOverrides(overrides);
+                    console.log('Переопределения дат применены из URL:', overrides);
+                }
+            }
         }
     }
 }
