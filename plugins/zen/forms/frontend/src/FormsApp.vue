@@ -126,8 +126,12 @@ export default {
                     info: this.info
                 },
                 then: response => {
+                    if (response && Object.prototype.hasOwnProperty.call(response, 'success')) {
+                        this.alertType = response.success ? 'success' : 'error'
+                    } else if (response.alert) {
+                        this.alertType = 'success'
+                    }
                     if (response.alert) {
-                        this.alertType = (response && response.success === false) ? 'error' : 'success'
                         this.showAlert(response.alert)
                     }
                     if (response.success) {

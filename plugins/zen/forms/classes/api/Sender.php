@@ -19,7 +19,8 @@ class Sender
 
         if (!$filled) {
             return forms()->response([
-                'alert' => 'Форма не отправлена, не все данные заполнены'
+                'alert' => 'Форма не отправлена, не все данные заполнены',
+                'success' => false
             ]);
         }
 
