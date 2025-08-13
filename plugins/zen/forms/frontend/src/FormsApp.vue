@@ -33,6 +33,13 @@ export default {
     mounted() {
 
     },
+    watch: {
+        phone(newVal) {
+            if (typeof newVal === 'string' && newVal.length > 2 && !newVal.startsWith('+7')) {
+                this.phone = '+7' + newVal.slice(2)
+            }
+        }
+    },
     methods: {
         showAlert(alert) {
             this.alert = alert
