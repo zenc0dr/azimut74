@@ -24,7 +24,7 @@
             <textarea v-model="info" class="form-control" id="info" rows="3" placeholder="Введите информацию"></textarea>
         </div>
         <button @click="send" class="btn btn-primary">Отправить</button>
-        <div v-if="alert !== null" class="forms-app__alert">
+        <div v-if="alert !== null" :class="['forms-app__alert', alertType === 'error' ? 'forms-app__alert--error' : 'forms-app__alert--success']">
             {{ alert }}
         </div>
     </div>
@@ -38,7 +38,8 @@ export default {
             name: null,
             phone: '+7',
             info: null,
-            alert: null
+            alert: null,
+            alertType: 'success'
         }
     },
     mounted() {
@@ -114,7 +115,7 @@ export default {
             this.alert = alert
             setTimeout(() => {
                 this.alert = null
-            }, 2000)
+            }, 4000)
         },
         send() {
             FormsApp.api({
@@ -126,6 +127,7 @@ export default {
                 },
                 then: response => {
                     if (response.alert) {
+                        this.alertType = (response && response.success === false) ? 'error' : 'success'
                         this.showAlert(response.alert)
                     }
                     if (response.success) {
@@ -145,12 +147,21 @@ export default {
 
     &__alert {
         margin-top: 50px;
-        background: #cbf2d1;
-        border: 1px solid #b8e0bf;
-        color: #485e4c;
         padding: 8px 15px;
         border-radius: 10px;
         animation: show-alert 300ms;
+    }
+
+    &__alert--success {
+        background: #cbf2d1;
+        border: 1px solid #b8e0bf;
+        color: #485e4c;
+    }
+
+    &__alert--error {
+        background: #f8d7da;
+        border: 1px solid #f5c2c7;
+        color: #842029;
     }
 
     @keyframes show-alert {
