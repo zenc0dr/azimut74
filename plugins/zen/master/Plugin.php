@@ -69,5 +69,6 @@ class Plugin extends PluginBase
     public function register()
     {
         $this->registerConsoleCommand('master:check', 'Zen\Master\Console\CheckSystem');
+        $this->registerConsoleCommand('master:dbdump', 'Zen\Master\Console\DatabaseDump');
     }
 }

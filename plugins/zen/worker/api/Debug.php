@@ -16,6 +16,7 @@ use Zen\Worker\Pools\Waterway;
 use Zen\Worker\Pools\WaterwayCruises;
 use Http as OctoberHttp;
 use zen\worker\pools\GamaV2;
+use Zen\Worker\Pools\GamaV3;
 use Illuminate\Support\Facades\Response;
 
 class Debug
@@ -23,8 +24,8 @@ class Debug
     # http://azimut.dc/zen/worker/api/debug:gamaTest?debug=1
     public function gamaTest()
     {
-        $gama = new GamaV2();
-        $gama->runGammaParser();
+        $gama = new GamaV3();
+        $gama->fillGamaCruises();
 
 //        dd(
 //            $gama->getGamaRouteData('29440')
