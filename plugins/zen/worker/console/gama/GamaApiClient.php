@@ -1,6 +1,7 @@
 <?php namespace Zen\Worker\Console\gama;
 
 use Zen\Worker\Classes\Http;
+use Zen\Worker\Classes\ProcessLog;
 use Cache;
 use Exception;
 
@@ -87,10 +88,23 @@ class GamaApiClient
             throw new Exception("Ошибка получения данных маршрута #$routeId: " . $http_query->error);
         }
 
-        // Сохраняем в кеш на 6 часов
-        Cache::put($cacheKey, $http_query->response, 360);
+        // Проверяем содержимое ответа на "Sub expired"
+        $responseContent = $http_query->response;
+        ProcessLog::add("Ответ API для круиза $routeId: " . substr($responseContent, 0, 100) . "...");
         
-        return $http_query->response;
+        if (is_string($responseContent) && strpos($responseContent, 'Sub expired') !== false) {
+            // "Sub expired" означает что для этого круиза нет данных в данный момент
+            // Возвращаем null вместо исключения
+            ProcessLog::add("Круиз $routeId: нет данных в данный момент (Sub expired)");
+            return null;
+        }
+
+        // Сохраняем в кеш на 6 часов только если есть валидные данные
+        if ($responseContent) {
+            Cache::put($cacheKey, $responseContent, 360);
+        }
+        
+        return $responseContent;
     }
 
     /**

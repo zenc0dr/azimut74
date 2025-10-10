@@ -44,13 +44,21 @@ class GamaDataProcessor
             $navigations = [$navigations];
         }
 
+        // Собираем все теплоходы для batch сохранения
+        $ships = [];
+        $cruises = [];
+        
         foreach ($navigations as $navigation) {
             $navigationId = $navigation['@attributes']['id'];
             $gamaShipId = $navigation['@attributes']['ship_id'];
             $gamaShipName = $navigation['@attributes']['ship_name'];
             
-            // Сохраняем теплоход
-            $this->db->saveShip($gamaShipId, $gamaShipName);
+            // Добавляем теплоход в batch
+            $ships[$gamaShipId] = [
+                'id' => $gamaShipId,
+                'name' => $gamaShipName,
+                'description' => ''
+            ];
             
             // Обрабатываем маршруты
             if (isset($navigation['RouteList']['Route'])) {
@@ -60,16 +68,31 @@ class GamaDataProcessor
                 }
                 
                 foreach ($routes as $route) {
-                    $this->processRoute($navigation, $route, $gamaShipId, $navigationId);
+                    $cruiseData = $this->prepareCruiseData($navigation, $route, $gamaShipId, $navigationId);
+                    if ($cruiseData) {
+                        $cruises[] = $cruiseData;
+                    }
                 }
             }
+        }
+        
+        // Batch сохранение теплоходов
+        if (!empty($ships)) {
+            $this->db->saveShipsBatch(array_values($ships));
+            ProcessLog::add("Сохранено теплоходов: " . count($ships));
+        }
+        
+        // Batch сохранение круизов
+        if (!empty($cruises)) {
+            $this->db->saveCruisesBatch($cruises);
+            ProcessLog::add("Сохранено круизов: " . count($cruises));
         }
     }
 
     /**
-     * Обработка маршрута
+     * Подготовка данных круиза для batch сохранения
      */
-    private function processRoute($navigation, $route, $gamaShipId, $navigationId)
+    private function prepareCruiseData($navigation, $route, $gamaShipId, $navigationId)
     {
         $cruiseId = $route['@attributes']['id'];
         $routeName = $route['@attributes']['name'];
@@ -93,8 +116,7 @@ class GamaDataProcessor
             $pathFId
         );
         
-        // Сохраняем круиз
-        $cruiseData = [
+        return [
             'gama_cruise_id' => $cruiseId,
             'gama_ship_id' => $gamaShipId,
             'name' => $routeName,
@@ -106,11 +128,18 @@ class GamaDataProcessor
             'waybill_data' => json_encode($waybill),
             'schedule_html' => $scheduleHtml
         ];
-        
-        $this->db->saveCruise($cruiseData);
-        
-        // Сохраняем путевой лист
-        $this->saveWaybill($cruiseId, $waybill);
+    }
+
+    /**
+     * Обработка маршрута (старый метод для совместимости)
+     */
+    private function processRoute($navigation, $route, $gamaShipId, $navigationId)
+    {
+        $cruiseData = $this->prepareCruiseData($navigation, $route, $gamaShipId, $navigationId);
+        if ($cruiseData) {
+            $this->db->saveCruise($cruiseData);
+            $this->saveWaybill($cruiseData['gama_cruise_id'], json_decode($cruiseData['waybill_data'], true));
+        }
     }
 
     /**
@@ -212,7 +241,7 @@ class GamaDataProcessor
     }
 
     /**
-     * Обработка круизов и цен (упрощенная версия)
+     * Обработка круизов и цен (оптимизированная версия)
      */
     public function processCruisesData()
     {
@@ -229,19 +258,35 @@ class GamaDataProcessor
         
         $processed = 0;
         $totalCruises = count($cruises);
+        $batchSize = 100; // Обрабатываем по 100 круизов за раз
+        $allPrices = [];
         
         ProcessLog::add("📊 Найдено круизов для обработки цен: $totalCruises");
         
-        foreach ($cruises as $cruise) {
-            $this->processCruisePricesPrivate($cruise);
-            $processed++;
+        for ($i = 0; $i < $totalCruises; $i += $batchSize) {
+            $batch = array_slice($cruises, $i, $batchSize);
+            $batchPrices = [];
             
-            // Логируем каждые 50 круизов
-            if ($processed % 50 == 0) {
-                ProcessLog::add("📊 Обработано круизов: $processed из $totalCruises");
-                set_time_limit(0);
-                ini_set('max_execution_time', 0);
+            foreach ($batch as $cruise) {
+                $prices = $this->processCruisePricesPrivate($cruise, true); // Возвращаем цены вместо сохранения
+                if ($prices) {
+                    $batchPrices = array_merge($batchPrices, $prices);
+                }
+                $processed++;
             }
+            
+            // Batch сохранение цен для этой группы
+            if (!empty($batchPrices)) {
+                $this->db->savePricesBatch($batchPrices);
+                ProcessLog::add("📊 Сохранено цен: " . count($batchPrices) . " для круизов " . ($i + 1) . "-" . min($i + $batchSize, $totalCruises));
+            }
+            
+            // Логируем прогресс
+            ProcessLog::add("📊 Обработано круизов: $processed из $totalCruises");
+            
+            // Сбрасываем время выполнения
+            set_time_limit(0);
+            ini_set('max_execution_time', 0);
         }
         
         ProcessLog::add("✅ Обработка круизов завершена: $processed из $totalCruises");
@@ -258,7 +303,7 @@ class GamaDataProcessor
     /**
      * Обработка цен круиза через API в реальном времени
      */
-    private function processCruisePricesPrivate($cruise)
+    private function processCruisePricesPrivate($cruise, $returnPrices = false)
     {
         try {
             // Сбрасываем время выполнения перед каждым запросом
@@ -268,9 +313,14 @@ class GamaDataProcessor
             // Получаем данные о ценах через API
             $routeData = $this->apiClient->getGamaRouteData($cruise['gama_cruise_id']);
             
+            // Если API вернул null (Sub expired или нет данных), просто пропускаем круиз
+            if ($routeData === null) {
+                return $returnPrices ? [] : null;
+            }
+            
             if (!isset($routeData['Route']['CabinList']['Cabin'])) {
                 ProcessLog::add("Нет данных о каютах для круиза {$cruise['gama_cruise_id']}");
-                return;
+                return $returnPrices ? [] : null;
             }
             
             $cabins = $routeData['Route']['CabinList']['Cabin'];
@@ -279,32 +329,40 @@ class GamaDataProcessor
             }
             
             $pricesProcessed = 0;
+            $allPrices = [];
+            
             foreach ($cabins as $cabin) {
-                $pricesProcessed += $this->processCabinPricesFromApi($cabin, $cruise['id'], $cruise['gama_ship_id']);
+                $cabinPrices = $this->processCabinPricesFromApi($cabin, $cruise['id'], $cruise['gama_ship_id'], $returnPrices);
+                if ($returnPrices && $cabinPrices) {
+                    $allPrices = array_merge($allPrices, $cabinPrices);
+                }
+                $pricesProcessed += is_array($cabinPrices) ? count($cabinPrices) : $cabinPrices;
             }
             
             if ($pricesProcessed > 0) {
                 ProcessLog::add("Обработано цен для круиза {$cruise['gama_cruise_id']}: $pricesProcessed");
             }
             
+            return $returnPrices ? $allPrices : null;
+            
         } catch (Exception $e) {
             ProcessLog::add("Ошибка API для круиза {$cruise['gama_cruise_id']}: " . $e->getMessage());
             // Если API недоступен, пробуем файловый способ
-            $this->processCruisePricesFromFile($cruise);
+            return $this->processCruisePricesFromFile($cruise, $returnPrices);
         }
     }
 
     /**
      * Обработка цен каюты из API
      */
-    private function processCabinPricesFromApi($cabin, $cruiseId, $gamaShipId)
+    private function processCabinPricesFromApi($cabin, $cruiseId, $gamaShipId, $returnPrices = false)
     {
         $cabinId = $cabin['@attributes']['id'];
         $places = $cabin['@attributes']['places'];
         $available = $cabin['@attributes']['available'] ?? 0;
         
         if (!$available) {
-            return 0; // Каюта недоступна
+            return $returnPrices ? [] : 0; // Каюта недоступна
         }
         
         // Получаем информацию о категории каюты
@@ -312,11 +370,11 @@ class GamaDataProcessor
         
         if (!$categoryInfo) {
             ProcessLog::add("Не найдена категория для каюты $cabinId на теплоходе $gamaShipId");
-            return 0;
+            return $returnPrices ? [] : 0;
         }
         
         if (!isset($cabin['Cost'])) {
-            return 0;
+            return $returnPrices ? [] : 0;
         }
         
         $costs = $cabin['Cost'];
@@ -325,6 +383,8 @@ class GamaDataProcessor
         }
         
         $pricesAdded = 0;
+        $prices = [];
+        
         foreach ($costs as $cost) {
             $costAttr = $cost['@attributes'];
             $persons = (int)($costAttr['persons'] ?? 0);
@@ -332,12 +392,22 @@ class GamaDataProcessor
             $price2 = (int)($costAttr['child_3'] ?? 0);
             
             if ($price1 > 0 && $persons == $places) {
-                $this->db->savePrice($cruiseId, $categoryInfo['category_id'], $price1, $price2, $persons);
+                if ($returnPrices) {
+                    $prices[] = [
+                        'cruise_id' => $cruiseId,
+                        'cabin_category_id' => $categoryInfo['category_id'],
+                        'price_a' => $price1,
+                        'price_b' => $price2,
+                        'persons' => $persons
+                    ];
+                } else {
+                    $this->db->savePrice($cruiseId, $categoryInfo['category_id'], $price1, $price2, $persons);
+                }
                 $pricesAdded++;
             }
         }
         
-        return $pricesAdded;
+        return $returnPrices ? $prices : $pricesAdded;
     }
 
     /**
