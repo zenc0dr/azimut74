@@ -9,7 +9,7 @@ use Exception;
 class GamaParse extends Command
 {
     protected $name = 'worker:gama-parse';
-    protected $description = 'Парсинг круизов Gama с сохранением в SQLite';
+    protected $description = 'Парсинг круизов Gama с сохранением в SQLite (Фаза 1)';
 
     private $timeout = 30;
     private $processed = 0;
@@ -35,8 +35,6 @@ class GamaParse extends Command
         
         $this->timeout = $this->option('timeout');
         $clear = $this->option('clear');
-        $phase2 = $this->option('phase2');
-        $importOnly = $this->option('import-only');
         $limit = $this->option('limit');
         
         $this->info('🚢 Начинаем парсинг круизов Gama...');
@@ -45,18 +43,6 @@ class GamaParse extends Command
         
         try {
             $this->db = new GamaDatabase();
-            
-            // Если запущена только фаза 2
-            if ($phase2) {
-                $this->runPhase2();
-                return 0;
-            }
-
-            // Если запущен только импорт
-            if ($importOnly) {
-                $this->runImportOnly();
-                return 0;
-            }
             
             if ($clear) {
                 $this->info('🧹 Очистка существующих данных...');
@@ -87,11 +73,8 @@ class GamaParse extends Command
             // Выводим статистику
             $this->displayStats();
             
-            // По умолчанию запускаем фазу 2, но можно отключить флагом --no-phase2
-            if (!$this->option('no-phase2')) {
-                $this->info('🔄 Запуск фазы 2 (импорт в основную БД)...');
-                $this->runPhase2();
-            }
+            $this->info('✅ Фаза 1 завершена! Данные сохранены в SQLite.');
+            $this->info('💡 Для импорта в основную БД используйте Zen\Worker с пулом GamaV3');
             
         } catch (Exception $e) {
             $this->error('❌ Критическая ошибка: ' . $e->getMessage());
@@ -180,53 +163,6 @@ class GamaParse extends Command
      * Get the console command options.
      * @return array
      */
-    /**
-     * Запуск фазы 2 - импорт из SQLite в основную БД
-     */
-    private function runPhase2()
-    {
-        $this->info('🔄 Фаза 2: Импорт данных из SQLite в основную БД...');
-        
-        try {
-            $importer = new GamaMainDbImporter($this->db);
-            $limit = $this->option('limit');
-            if ($limit) {
-                $importer->setLimit((int)$limit);
-            }
-            $stats = $importer->importAll();
-            
-            $this->info('✅ Фаза 2 завершена!');
-            $this->displayImportStats($stats);
-            
-        } catch (Exception $e) {
-            $this->error('❌ Ошибка фазы 2: ' . $e->getMessage());
-            ProcessLog::add('Ошибка фазы 2: ' . $e->getMessage());
-        }
-    }
-
-    /**
-     * Запуск только импорта (без парсинга)
-     */
-    private function runImportOnly()
-    {
-        $this->info('📥 Импорт данных из SQLite в основную БД...');
-        
-        try {
-            $importer = new GamaMainDbImporter($this->db);
-            $limit = $this->option('limit');
-            if ($limit) {
-                $importer->setLimit((int)$limit);
-            }
-            $stats = $importer->importAll();
-            
-            $this->info('✅ Импорт завершен!');
-            $this->displayImportStats($stats);
-            
-        } catch (Exception $e) {
-            $this->error('❌ Ошибка импорта: ' . $e->getMessage());
-            ProcessLog::add('Ошибка импорта: ' . $e->getMessage());
-        }
-    }
 
     /**
      * Очистка круизов без цен (конец фазы 1)
@@ -249,29 +185,13 @@ class GamaParse extends Command
         }
     }
 
-    /**
-     * Отображение статистики импорта
-     */
-    private function displayImportStats($stats)
-    {
-        $this->info("\n=== СТАТИСТИКА ИМПОРТА ===");
-        $this->info("  Теплоходов импортировано: {$stats['ships']}");
-        $this->info("  Категорий кают импортировано: {$stats['cabins']}");
-        $this->info("  Круизов импортировано: {$stats['cruises']}");
-        $this->info("  Цен импортировано: {$stats['prices']}");
-        $this->info("  Путевых листов импортировано: {$stats['waybills']}");
-        $this->info("  Ошибок: {$stats['errors']}");
-    }
 
     protected function getOptions()
     {
         return [
             ['timeout', 't', InputOption::VALUE_OPTIONAL, 'Таймаут для HTTP запросов в секундах', 30],
             ['clear', 'c', InputOption::VALUE_NONE, 'Очистить существующие данные перед парсингом'],
-            ['phase2', 'p', InputOption::VALUE_NONE, 'Запустить только фазу 2 (импорт из SQLite в основную БД)'],
-            ['import-only', 'i', InputOption::VALUE_NONE, 'Импортировать только новые данные (без парсинга)'],
             ['limit', 'l', InputOption::VALUE_OPTIONAL, 'Ограничить количество записей для тестирования', null],
-            ['no-phase2', null, InputOption::VALUE_NONE, 'Не запускать фазу 2 автоматически после парсинга'],
         ];
     }
 }

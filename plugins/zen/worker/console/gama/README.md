@@ -1,12 +1,12 @@
 # Gama Parser Console Commands
 
-Консольный парсер для импорта круизов Gama с двухфазным процессом.
+Консольный парсер для импорта круизов Gama (Фаза 1 - парсинг в SQLite).
 
 ## Архитектура
 
-### Двухфазный процесс:
+### Процесс:
 - **Фаза 1**: Парсинг данных из API Gama → сохранение в SQLite
-- **Фаза 2**: Импорт данных из SQLite → основная БД MySQL
+- **Фаза 2**: Импорт данных из SQLite → основная БД MySQL (выполняется через Zen\Worker с пулом GamaV3)
 
 ### Правильная схема SQLite:
 - `ships.id` = `gama_ship_id` (идентификатор теплохода в источнике)
@@ -17,58 +17,41 @@
 
 ## Использование
 
-### Тестирование фазы 1 (парсинг в SQLite):
+### Парсинг данных в SQLite (Фаза 1):
 ```bash
 # Полный парсинг с очисткой данных
-docker exec azimut74 php app/artisan worker:gama-parse --clear --no-phase2
+docker exec azimut74 php app/artisan worker:gama-parse --clear
 
 # С ограничением количества записей для тестирования
-docker exec azimut74 php app/artisan worker:gama-parse --clear --limit=10 --no-phase2
+docker exec azimut74 php app/artisan worker:gama-parse --clear --limit=10
 ```
 
-### Тестирование фазы 2 (импорт в MySQL):
+### Импорт в MySQL (Фаза 2):
 ```bash
-# Импорт из SQLite в основную БД
-docker exec azimut74 php app/artisan worker:gama-parse --phase2
-
-# С ограничением количества заездов
-docker exec azimut74 php app/artisan worker:gama-parse --phase2 --limit=5
-```
-
-### Полный цикл:
-```bash
-# Парсинг + импорт
-docker exec azimut74 php app/artisan worker:gama-parse --clear
+# Используйте Zen\Worker с пулом GamaV3
+# Настройте поток в админке Zen\Worker
 ```
 
 ## Особенности реализации
 
-### Фаза 1:
+### Фаза 1 (консольный парсер):
 1. **Скачивание данных** из API Gama
 2. **Сохранение в SQLite** с правильной схемой
 3. **Очистка круизов без цен** в конце фазы 1
 
-### Фаза 2:
+### Фаза 2 (Zen\Worker с пулом GamaV3):
 1. **Последовательная обработка** заездов (один за раз)
 2. **Полная валидация** каждого заезда
 3. **Остановка при ошибке** с детальным логированием
 4. **Использование методов из RiverCrs** как в GamaV2.php
 
-### Валидация заезда:
-- ✅ Теплоход найден и не в черном списке
-- ✅ Категории кают обработаны
-- ✅ Есть цены для заезда
-- ✅ Заезд создан/обновлен в MySQL
-- ✅ Цены импортированы в `mcmraak_rivercrs_pricing`
-- ✅ Путевой лист импортирован в `mcmraak_rivercrs_waybills`
-
 ## Структура файлов
 
-- `GamaParse.php` - основная консольная команда
+- `GamaParse.php` - основная консольная команда (фаза 1)
 - `GamaApiClient.php` - работа с API Gama
 - `GamaDataProcessor.php` - обработка данных (фаза 1)
 - `GamaDatabase.php` - работа с SQLite
-- `GamaMainDbImporter.php` - импорт в MySQL (фаза 2)
+- `GamaV3.php` - пул для Zen\Worker (фаза 2)
 
 ## Проверка результатов
 
@@ -84,7 +67,7 @@ SELECT COUNT(*) FROM prices;
 SELECT COUNT(*) FROM cabin_categories;
 ```
 
-### MySQL (после фазы 2):
+### MySQL (после фазы 2 через Zen\Worker):
 ```bash
 # В tinker
 docker exec azimut74 php app/artisan tinker
@@ -101,7 +84,7 @@ Mcmraak\Rivercrs\Models\Pricing::whereHas('checkin', function($q) { $q->where('e
 ## Обработка ошибок
 
 - **Фаза 1**: Ошибки логируются, но не останавливают процесс
-- **Фаза 2**: При любой ошибке процесс останавливается с детальным описанием
+- **Фаза 2 (Zen\Worker)**: При любой ошибке процесс останавливается с детальным описанием
 
 ## Кеширование
 

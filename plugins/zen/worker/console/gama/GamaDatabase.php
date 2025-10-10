@@ -139,6 +139,25 @@ class GamaDatabase
     }
 
     /**
+     * Batch сохранение теплоходов
+     */
+    public function saveShipsBatch($ships)
+    {
+        $this->pdo->beginTransaction();
+        
+        $stmt = $this->pdo->prepare("
+            INSERT OR REPLACE INTO ships (id, name, description, updated_at) 
+            VALUES (?, ?, ?, CURRENT_TIMESTAMP)
+        ");
+        
+        foreach ($ships as $ship) {
+            $stmt->execute([$ship['id'], $ship['name'], $ship['description'] ?? '']);
+        }
+        
+        $this->pdo->commit();
+    }
+
+    /**
      * Получение теплохода по Gama ID
      */
     public function getShipByGamaId($gamaShipId)
@@ -176,6 +195,39 @@ class GamaDatabase
     }
 
     /**
+     * Batch сохранение круизов
+     */
+    public function saveCruisesBatch($cruises)
+    {
+        $this->pdo->beginTransaction();
+        
+        $stmt = $this->pdo->prepare("
+            INSERT OR REPLACE INTO cruises (
+                id, ship_id, name, route_name, 
+                date_start, date_end, path_s_id, path_f_id, 
+                waybill_data, schedule_html, updated_at
+            ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, CURRENT_TIMESTAMP)
+        ");
+        
+        foreach ($cruises as $cruise) {
+            $stmt->execute([
+                $cruise['gama_cruise_id'],
+                $cruise['gama_ship_id'],
+                $cruise['name'],
+                $cruise['route_name'],
+                $cruise['date_start'],
+                $cruise['date_end'],
+                $cruise['path_s_id'],
+                $cruise['path_f_id'],
+                $cruise['waybill_data'],
+                $cruise['schedule_html']
+            ]);
+        }
+        
+        $this->pdo->commit();
+    }
+
+    /**
      * Сохранение палубы (id = gama_deck_id)
      */
     public function saveDeck($gamaDeckId, $name, $shipId)
@@ -210,6 +262,35 @@ class GamaDatabase
             VALUES (?, ?, ?, ?, ?)
         ");
         return $stmt->execute([$cruiseId, $cabinCategoryId, $priceA, $priceB, $persons]);
+    }
+
+    /**
+     * Batch сохранение цен
+     */
+    public function savePricesBatch($prices)
+    {
+        if (empty($prices)) {
+            return;
+        }
+        
+        $this->pdo->beginTransaction();
+        
+        $stmt = $this->pdo->prepare("
+            INSERT INTO prices (cruise_id, cabin_category_id, price_a, price_b, persons) 
+            VALUES (?, ?, ?, ?, ?)
+        ");
+        
+        foreach ($prices as $price) {
+            $stmt->execute([
+                $price['cruise_id'],
+                $price['cabin_category_id'],
+                $price['price_a'],
+                $price['price_b'] ?? null,
+                $price['persons'] ?? null
+            ]);
+        }
+        
+        $this->pdo->commit();
     }
 
     /**
