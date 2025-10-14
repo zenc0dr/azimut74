@@ -88,23 +88,35 @@ class GamaApiClient
             throw new Exception("Ошибка получения данных маршрута #$routeId: " . $http_query->error);
         }
 
-        // Проверяем содержимое ответа на "Sub expired"
+        // Содержимое ответа
         $responseContent = $http_query->response;
-        ProcessLog::add("Ответ API для круиза $routeId: " . substr($responseContent, 0, 100) . "...");
-        
+
+        // Безопасное логирование
+        if (is_string($responseContent)) {
+            ProcessLog::add("Ответ API для круиза $routeId: " . substr($responseContent, 0, 100) . "...");
+        } else {
+            ProcessLog::add("Ответ API для круиза $routeId: тип=" . gettype($responseContent));
+        }
+
+        // Если строка и содержит "Sub expired" — данных нет
         if (is_string($responseContent) && strpos($responseContent, 'Sub expired') !== false) {
-            // "Sub expired" означает что для этого круиза нет данных в данный момент
-            // Возвращаем null вместо исключения
             ProcessLog::add("Круиз $routeId: нет данных в данный момент (Sub expired)");
             return null;
         }
 
-        // Сохраняем в кеш на 6 часов только если есть валидные данные
-        if ($responseContent) {
-            Cache::put($cacheKey, $responseContent, 360);
+        // Нормализуем ответ к массиву
+        if (is_string($responseContent)) {
+            $responseArray = $this->xmlToArray($responseContent);
+        } else {
+            $responseArray = $responseContent;
+        }
+
+        // Кэшируем массив
+        if ($responseArray) {
+            Cache::put($cacheKey, $responseArray, 360);
         }
         
-        return $responseContent;
+        return $responseArray;
     }
 
     /**
