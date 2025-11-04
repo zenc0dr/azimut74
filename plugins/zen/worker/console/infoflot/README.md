@@ -5,10 +5,12 @@
 ## Архитектура
 
 ### Процесс:
+
 - **Фаза 1**: Парсинг данных из API Infoflot → сохранение в SQLite
 - **Фаза 2**: Импорт данных из SQLite → основная БД MySQL (выполняется через Zen\Worker с пулом InfoflotV2)
 
 ### Правильная схема SQLite:
+
 - `ships.id` = `infoflot_ship_id` (идентификатор судна в источнике)
 - `cruises.id` = `infoflot_cruise_id` (идентификатор заезда в источнике)
 - `cruises.ship_id` = `ships.id` (связь с судном)
@@ -18,6 +20,7 @@
 ## Использование
 
 ### Парсинг данных в SQLite (Фаза 1):
+
 ```bash
 # Полный парсинг с очисткой данных
 docker exec azimut74 php app/artisan worker:infoflot-parse --clear --api-key=b5262f5d8de5be65b201bb5e3f5e544a245b6082
@@ -27,6 +30,7 @@ docker exec azimut74 php app/artisan worker:infoflot-parse --clear --limit=10 --
 ```
 
 ### Импорт в MySQL (Фаза 2):
+
 ```bash
 # Используйте Zen\Worker с пулом InfoflotV2
 # Настройте поток в админке Zen\Worker
@@ -35,6 +39,7 @@ docker exec azimut74 php app/artisan worker:infoflot-parse --clear --limit=10 --
 ## Особенности реализации
 
 ### Фаза 1 (консольный парсер):
+
 1. **Получение списка судов** из API Infoflot
 2. **Получение круизов** для каждого судна
 3. **Получение цен кают** для каждого круиза
@@ -42,6 +47,7 @@ docker exec azimut74 php app/artisan worker:infoflot-parse --clear --limit=10 --
 5. **Очистка круизов без цен** в конце фазы 1
 
 ### Фаза 2 (Zen\Worker с пулом InfoflotV2):
+
 1. **Последовательная обработка** заездов (один за раз)
 2. **Полная валидация** каждого заезда
 3. **Остановка при ошибке** с детальным логированием
@@ -58,16 +64,19 @@ docker exec azimut74 php app/artisan worker:infoflot-parse --clear --limit=10 --
 ## API Infoflot
 
 ### Эндпоинты:
+
 - `/ships` - список судов
 - `/cruises` - список круизов (с фильтром по судну)
 - `/cruises/{id}/cabins` - цены кают для круиза
 
 ### API ключ:
+
 `b5262f5d8de5be65b201bb5e3f5e544a245b6082`
 
 ## Проверка результатов
 
 ### SQLite (после фазы 1):
+
 ```bash
 # Подключение к SQLite
 sqlite3 /aum/projects/azimut74/ocms/plugins/zen/worker/console/infoflot/infoflot_data.sqlite
@@ -80,6 +89,7 @@ SELECT COUNT(*) FROM cabin_categories;
 ```
 
 ### MySQL (после фазы 2 через Zen\Worker):
+
 ```bash
 # В tinker
 docker exec azimut74 php app/artisan tinker
@@ -101,4 +111,3 @@ Mcmraak\Rivercrs\Models\Pricing::whereHas('checkin', function($q) { $q->where('e
 ## Кеширование
 
 API запросы кешируются на 6 часов для оптимизации производительности.
-

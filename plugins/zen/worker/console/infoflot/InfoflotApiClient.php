@@ -93,14 +93,25 @@ class InfoflotApiClient
             ->query($url, 'json');
 
         if ($http_query->error) {
-            // Если "Not found" - это нормально, значит нет круизов
-            if (strpos($http_query->error, 'Not found') !== false) {
+            // Если "Not found" или "Resource not found" - это нормально, значит нет круизов
+            if (strpos($http_query->error, 'Not found') !== false || 
+                strpos($http_query->error, 'Resource not found') !== false) {
                 return null;
             }
             throw new Exception("Ошибка получения круизов для судна $shipId (страница $page): " . $http_query->error);
         }
 
         $response = $http_query->response;
+        
+        // Проверяем структуру ответа
+        if (!is_array($response)) {
+            return null;
+        }
+        
+        // Если ответ содержит ошибку
+        if (isset($response['status']) && $response['status'] == 404) {
+            return null;
+        }
         
         // Кешируем на 6 часов
         Cache::put($cacheKey, $response, 21600);

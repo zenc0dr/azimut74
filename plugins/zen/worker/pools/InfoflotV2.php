@@ -174,11 +174,27 @@ class InfoflotV2 extends RiverCrs
                 continue;
             }
             
-            $categoryName = $price['category_name'] ?? $price['type_name'] ?? '';
+            // Получаем название категории: сначала из category_name, потом из type_name
+            $categoryName = '';
+            if (!empty($price['category_name'])) {
+                $categoryName = $price['category_name'];
+            } elseif (!empty($price['type_name'])) {
+                $categoryName = $price['type_name'];
+            }
+            
+            // Если название пустое, используем только ID
+            if (empty($categoryName)) {
+                ProcessLog::add("Предупреждение: для категории $cabinCategoryId отсутствует название, используем только ID");
+                $categoryName = $cabinCategoryId;
+            } else {
+                // Используем название с ID для уникальности
+                $categoryName = $categoryName . '|' . $cabinCategoryId;
+            }
+            
             $places = $price['places'] ?? 1;
             
             $cabinId = $this->getCabinCategoryId(
-                $categoryName . '|' . $cabinCategoryId,
+                $categoryName,
                 $shipId,
                 'infoflot',
                 $places

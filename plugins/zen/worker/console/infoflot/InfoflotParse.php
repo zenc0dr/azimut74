@@ -28,64 +28,66 @@ class InfoflotParse extends Command
         ini_set('memory_limit', '512M');
         ini_set('max_execution_time', 0);
         ini_set('max_input_time', -1);
-        
+
         // Дополнительные настройки для консольного скрипта
         if (function_exists('ignore_user_abort')) {
             ignore_user_abort(true);
         }
-        
+
         $this->timeout = $this->option('timeout');
         $clear = $this->option('clear');
         $limit = $this->option('limit');
-        $this->apiKey = $this->option('api-key');
-        
+
+        #$this->apiKey = $this->option('api-key');
+        $this->apiKey = 'b5262f5d8de5be65b201bb5e3f5e544a245b6082';
+
         if (!$this->apiKey) {
             $this->error('❌ API ключ не указан! Используйте --api-key=YOUR_KEY');
             return 1;
         }
-        
+
         $this->info('🚢 Начинаем парсинг круизов Infoflot...');
         $this->info("⏱️  Таймаут: {$this->timeout} сек");
         $this->info("🔄 Ограничение времени выполнения: отключено");
-        
+
         try {
             $this->db = new InfoflotDatabase();
-            
+
             if ($clear) {
                 $this->info('🧹 Очистка существующих данных...');
                 $this->db->clearAll();
                 $this->info('✅ Данные очищены');
             }
-            
+
             $this->info('📥 Скачивание данных с API Infoflot...');
             $this->showProgress('Обработка данных о судах...', 25);
-            
+
             $dataProcessor = new InfoflotDataProcessor($this->db, $this->apiKey, $this->timeout, $limit);
-            
+
             $this->showProgress('Обработка данных о судах...', 25);
             $this->processShipsData($dataProcessor);
-            
+
             $this->showProgress('Обработка круизов и цен...', 75);
             $this->processCruisesData($dataProcessor);
-            
+
             $this->showProgress('Очистка круизов без цен...', 90);
             $this->cleanCruisesWithoutPrices();
-            
+
             $this->showProgress('Завершение обработки...', 100);
             $this->line('');
-            
+
             // Выводим статистику
             $this->displayStats();
-            
+
             $this->info('✅ Фаза 1 завершена! Данные сохранены в SQLite.');
             $this->info('💡 Для импорта в основную БД используйте Zen\Worker с пулом InfoflotV2');
-            
+
         } catch (Exception $e) {
             $this->error('❌ Критическая ошибка: ' . $e->getMessage());
             ProcessLog::add('Критическая ошибка парсинга Infoflot: ' . $e->getMessage());
             return 1;
         }
-        
+
         return 0;
     }
 
@@ -95,17 +97,17 @@ class InfoflotParse extends Command
     private function showProgress($message, $percent)
     {
         $this->info("🔄 $message");
-        
+
         // Создаем анимацию загрузки
         $spinner = ['⠋', '⠙', '⠹', '⠸', '⠼', '⠴', '⠦', '⠧', '⠇', '⠏'];
         $spinnerIndex = 0;
-        
+
         for ($i = 0; $i < 10; $i++) {
             $this->output->write("\r" . $spinner[$spinnerIndex] . " " . $message . " (" . $percent . "%)");
             $spinnerIndex = ($spinnerIndex + 1) % count($spinner);
             usleep(100000); // 0.1 секунды
         }
-        
+
         $this->line('');
     }
 
@@ -135,7 +137,7 @@ class InfoflotParse extends Command
     private function displayStats()
     {
         $stats = $this->db->getStats();
-        
+
         $this->info('📈 === СТАТИСТИКА ФАЗЫ 1 ===');
         $this->info("🚢 Судов: {$stats['ships']}");
         $this->info("🎫 Круизов: {$stats['cruises']}");
@@ -159,15 +161,15 @@ class InfoflotParse extends Command
     private function cleanCruisesWithoutPrices()
     {
         $this->info('🧹 Очистка круизов без цен...');
-        
+
         try {
             $result = $this->db->cleanCruisesWithoutPrices();
-            
+
             $this->info("✅ Очистка завершена:");
             $this->info("  Всего круизов: {$result['total']}");
             $this->info("  Удалено без цен: {$result['deleted']}");
             $this->info("  Осталось с ценами: {$result['remaining']}");
-            
+
         } catch (Exception $e) {
             $this->error('❌ Ошибка при очистке: ' . $e->getMessage());
             ProcessLog::add('Ошибка при очистке круизов без цен: ' . $e->getMessage());
