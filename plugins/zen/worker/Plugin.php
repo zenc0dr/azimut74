@@ -19,5 +19,7 @@ class Plugin extends PluginBase
         $this->registerConsoleCommand('worker:go', 'Zen\Worker\Console\Go');
         $this->registerConsoleCommand('worker:gama-parse', 'Zen\Worker\Console\gama\GamaParse');
         $this->registerConsoleCommand('worker:infoflot-parse', 'Zen\Worker\Console\infoflot\InfoflotParse');
+        $this->registerConsoleCommand('worker:infoflot-check-ships', 'Zen\Worker\Console\infoflot\CheckShips');
+        $this->registerConsoleCommand('worker:infoflot-check-ship', 'Zen\Worker\Console\infoflot\CheckSingleShip');
     }
 }

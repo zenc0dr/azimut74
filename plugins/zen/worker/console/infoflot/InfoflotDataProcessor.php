@@ -35,32 +35,32 @@ class InfoflotDataProcessor
         $page = 1;
         $limit = 100;
         $ships = [];
+        $totalShipsInApi = null;
         
-        // Получаем первую страницу для определения количества страниц
-        $firstPage = $this->apiClient->getShips($page, $limit);
-        $totalPages = $firstPage['pagination']['pages']['total'] ?? 1;
-        
-        // Обрабатываем первую страницу
-        if (isset($firstPage['data'])) {
-            foreach ($firstPage['data'] as $ship) {
-                $ships[] = [
-                    'id' => (int)$ship['id'],
-                    'name' => $ship['name'],
-                    'type' => $ship['typeName'] ?? null,
-                    'operator_name' => $ship['operatorName'] ?? null,
-                    'description' => $ship['description'] ?? ''
-                ];
-            }
-        }
-        
-        // Обрабатываем остальные страницы
-        for ($page = 2; $page <= $totalPages; $page++) {
-            ProcessLog::add("Обработка страницы судов: $page из $totalPages");
-            
-            $response = $this->apiClient->getShips($page, $limit);
-            
-            if (isset($response['data'])) {
-                foreach ($response['data'] as $ship) {
+        while (true) {
+            try {
+                ProcessLog::add("Обработка страницы судов: $page");
+                
+                $response = $this->apiClient->getShips($page, $limit);
+                
+                // Получаем общее количество теплоходов из API (только один раз)
+                if ($totalShipsInApi === null && isset($response['pagination']['records']['total'])) {
+                    $totalShipsInApi = (int)$response['pagination']['records']['total'];
+                    ProcessLog::add("Всего теплоходов в API Infoflot: $totalShipsInApi");
+                }
+                
+                if (!isset($response['data']) || !is_array($response['data'])) {
+                    ProcessLog::add("Нет данных на странице $page");
+                    break;
+                }
+
+                $shipsPage = $response['data'];
+                if (empty($shipsPage)) {
+                    ProcessLog::add("Пустая страница $page");
+                    break;
+                }
+
+                foreach ($shipsPage as $ship) {
                     $ships[] = [
                         'id' => (int)$ship['id'],
                         'name' => $ship['name'],
@@ -69,11 +69,43 @@ class InfoflotDataProcessor
                         'description' => $ship['description'] ?? ''
                     ];
                 }
-            }
-            
-            // Ограничение для тестирования
-            if ($this->limit && count($ships) >= $this->limit) {
-                $ships = array_slice($ships, 0, $this->limit);
+                
+                ProcessLog::add("Загружено теплоходов со страницы $page: " . count($shipsPage) . " (всего: " . count($ships) . ")");
+
+                // Ограничение для тестирования
+                if ($this->limit && count($ships) >= $this->limit) {
+                    $ships = array_slice($ships, 0, $this->limit);
+                    ProcessLog::add("Достигнут лимит тестирования: " . $this->limit . " теплоходов");
+                    break;
+                }
+
+                // Проверяем, есть ли ещё страницы
+                // Структура API: pagination.pages.next.number или null
+                $hasNextPage = false;
+                if (isset($response['pagination']['pages']['next'])) {
+                    $nextPageInfo = $response['pagination']['pages']['next'];
+                    if (is_array($nextPageInfo) && isset($nextPageInfo['number'])) {
+                        $hasNextPage = true;
+                        $page = (int)$nextPageInfo['number'];
+                    } elseif (isset($response['pagination']['pages']['next']['number'])) {
+                        $hasNextPage = true;
+                        $page = (int)$response['pagination']['pages']['next']['number'];
+                    }
+                }
+                
+                if (!$hasNextPage) {
+                    ProcessLog::add("Все страницы теплоходов обработаны");
+                    break;
+                }
+                
+                // Защита от бесконечного цикла
+                if ($page > 100) {
+                    ProcessLog::add("Достигнут лимит страниц (100), остановка");
+                    break;
+                }
+
+            } catch (\Exception $e) {
+                ProcessLog::add("Ошибка при обработке страницы $page: " . $e->getMessage());
                 break;
             }
         }
@@ -81,7 +113,7 @@ class InfoflotDataProcessor
         // Сохраняем суда
         if (!empty($ships)) {
             $this->db->saveShipsBatch($ships);
-            ProcessLog::add("Сохранено судов: " . count($ships));
+            ProcessLog::add("Сохранено судов в SQLite: " . count($ships));
         }
         
         return $ships;
@@ -164,7 +196,6 @@ class InfoflotDataProcessor
                     $cruisesCount = count($cruises);
                     ProcessLog::add("Найдено круизов для судна $shipId, страница $page: $cruisesCount");
                     
-                    $totalPages = $cruisesResponse['pagination']['pages']['total'] ?? 1;
                     $skippedPast = 0;
                     $skippedNoPrices = 0;
                     $cruiseIndex = 0;
@@ -287,12 +318,29 @@ class InfoflotDataProcessor
                         ProcessLog::add("Пропущено круизов без цен: $skippedNoPrices");
                     }
                     
-                    // Проверяем, есть ли еще страницы
-                    if ($page >= $totalPages) {
+                    // Проверяем, есть ли ещё страницы
+                    // Структура API: pagination.pages.next.number или null
+                    $hasNextPage = false;
+                    if (isset($cruisesResponse['pagination']['pages']['next'])) {
+                        $nextPageInfo = $cruisesResponse['pagination']['pages']['next'];
+                        if (is_array($nextPageInfo) && isset($nextPageInfo['number'])) {
+                            $hasNextPage = true;
+                            $page = (int)$nextPageInfo['number'];
+                        } elseif (isset($cruisesResponse['pagination']['pages']['next']['number'])) {
+                            $hasNextPage = true;
+                            $page = (int)$cruisesResponse['pagination']['pages']['next']['number'];
+                        }
+                    }
+                    
+                    if (!$hasNextPage) {
                         break;
                     }
                     
-                    $page++;
+                    // Защита от бесконечного цикла
+                    if ($page > 100) {
+                        ProcessLog::add("Достигнут лимит страниц круизов (100) для судна $shipId");
+                        break;
+                    }
                     
                 } catch (Exception $e) {
                     // Если "Not found" или "Resource not found" - это нормально, значит нет круизов для этого судна
@@ -311,10 +359,18 @@ class InfoflotDataProcessor
             }
         }
         
-        ProcessLog::add("=== ИТОГИ ===");
-        ProcessLog::add("Обработано судов: $totalShips");
+        ProcessLog::add("=== ИТОГИ ОБРАБОТКИ КРУИЗОВ ===");
+        ProcessLog::add("Всего судов в SQLite: $totalShips");
         ProcessLog::add("Обработано круизов: $processedCruises");
         ProcessLog::add("Обработано цен: $processedPrices");
+        
+        // Получаем статистику из базы для проверки
+        $dbStats = $this->db->getStats();
+        ProcessLog::add("=== СТАТИСТИКА SQLITE ===");
+        ProcessLog::add("Теплоходов в базе: " . ($dbStats['ships'] ?? 0));
+        ProcessLog::add("Круизов в базе: " . ($dbStats['cruises'] ?? 0));
+        ProcessLog::add("Цен в базе: " . ($dbStats['prices'] ?? 0));
+        ProcessLog::add("Категорий кают в базе: " . ($dbStats['cabin_categories'] ?? 0));
     }
 
     /**
