@@ -207,10 +207,12 @@ class InfoflotV2 extends RiverCrs
                 $cabinMapping[$cabinCategoryId] = $cabinId;
 
                 // Работа с палубами
-                if (isset($price['deck_name']) && !isset($processedDecks[$cabinId])) {
+                if (isset($price['deck_name']) && !empty($price['deck_name']) && !isset($processedDecks[$cabinId])) {
                     $deck = $this->getDeck($price['deck_name']);
-                    $this->deckPivotCheck($cabinId, $deck->id);
-                    $processedDecks[$cabinId] = true;
+                    if ($deck) {
+                        $this->deckPivotCheck($cabinId, $deck->id);
+                        $processedDecks[$cabinId] = true;
+                    }
                 }
             }
         }
@@ -245,12 +247,80 @@ class InfoflotV2 extends RiverCrs
             DB::table('mcmraak_rivercrs_pricing')
                 ->insert($insert_prices);
 
+            // Восстанавливаем связи кают с палубами для всех кают с ценами
+            $this->restoreDeckLinksForCheckin($checkinId, $shipId, $cabinMapping);
+
             ProcessLog::add("Цены для заезда $infoflotCruiseId: добавлено " . count($insert_prices) . " цен");
             return true; // Цены успешно импортированы
         }
 
         ProcessLog::add("Валидных цен для заезда $infoflotCruiseId не найдено");
         return false; // Валидных цен не найдено
+    }
+
+    /**
+     * Восстановление связей кают с палубами для заезда
+     * Создаёт связи для всех кают с ценами, используя данные из SQLite или эталонную палубу
+     */
+    private function restoreDeckLinksForCheckin($checkinId, $shipId, $cabinMapping)
+    {
+        // Получаем все уникальные cabin_id из цен
+        $cabinIdsWithPrices = DB::table('mcmraak_rivercrs_pricing')
+            ->where('checkin_id', $checkinId)
+            ->distinct()
+            ->pluck('cabin_id')
+            ->toArray();
+
+        if (empty($cabinIdsWithPrices)) {
+            return;
+        }
+
+        // Находим эталонную палубу (первую палубу, связанную с любой каютой этого теплохода)
+        $referenceDeck = DB::table('mcmraak_rivercrs_decks_pivot')
+            ->join('mcmraak_rivercrs_cabins', 'mcmraak_rivercrs_cabins.id', '=', 'mcmraak_rivercrs_decks_pivot.cabin_id')
+            ->where('mcmraak_rivercrs_cabins.motorship_id', $shipId)
+            ->select('mcmraak_rivercrs_decks_pivot.deck_id')
+            ->first();
+
+        $referenceDeckId = $referenceDeck ? $referenceDeck->deck_id : null;
+
+        // Если нет эталонной палубы, пытаемся найти первую палубу теплохода
+        if (!$referenceDeckId) {
+            $firstDeck = DB::table('mcmraak_rivercrs_decks')
+                ->where('motorship_id', $shipId)
+                ->orderBy('id')
+                ->first();
+            $referenceDeckId = $firstDeck ? $firstDeck->id : null;
+        }
+
+        $restoredCount = 0;
+        foreach ($cabinIdsWithPrices as $cabinId) {
+            // Проверяем, есть ли уже связь для этой каюты
+            $hasLink = DB::table('mcmraak_rivercrs_decks_pivot')
+                ->where('cabin_id', $cabinId)
+                ->exists();
+
+            if (!$hasLink) {
+                // Если есть эталонная палуба, используем её
+                if ($referenceDeckId) {
+                    try {
+                        DB::table('mcmraak_rivercrs_decks_pivot')->insert([
+                            'cabin_id' => $cabinId,
+                            'deck_id' => $referenceDeckId
+                        ]);
+                        $restoredCount++;
+                    } catch (\Exception $e) {
+                        // Игнорируем ошибки дубликатов
+                    }
+                } else {
+                    ProcessLog::add("Предупреждение: не удалось создать связь для cabin_id=$cabinId - нет доступных палуб для теплохода $shipId");
+                }
+            }
+        }
+
+        if ($restoredCount > 0) {
+            ProcessLog::add("Восстановлено связей кают с палубами для заезда $checkinId: $restoredCount");
+        }
     }
 }
 
