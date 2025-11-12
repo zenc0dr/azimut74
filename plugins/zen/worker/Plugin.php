@@ -21,5 +21,6 @@ class Plugin extends PluginBase
         $this->registerConsoleCommand('worker:infoflot-parse', 'Zen\Worker\Console\infoflot\InfoflotParse');
         $this->registerConsoleCommand('worker:infoflot-check-ships', 'Zen\Worker\Console\infoflot\CheckShips');
         $this->registerConsoleCommand('worker:infoflot-check-ship', 'Zen\Worker\Console\infoflot\CheckSingleShip');
+        $this->registerConsoleCommand('worker:volga-parse', 'Zen\Worker\Console\volga\VolgaParse');
     }
 }
