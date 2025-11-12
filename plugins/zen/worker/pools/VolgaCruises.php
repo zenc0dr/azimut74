@@ -300,4 +300,15 @@ class VolgaCruises extends Volga
 //            }
         }
     }
+
+    /**
+     * Импорт заездов из SQLite базы (VolgaV2)
+     * Вызывается после парсинга данных в SQLite через worker:volga-parse
+     */
+    public function fillVolgaCruises()
+    {
+        $volgaV2 = new VolgaV2();
+        $volgaV2->stream = $this->stream;
+        $volgaV2->fillVolgaCruises();
+    }
 }
