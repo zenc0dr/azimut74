@@ -37,6 +37,18 @@ class Booking extends Controller
 
     public function sendBooking($prok = false)
     {
+        // Сохраняем все данные из запроса в файл storage/booking_data.json
+//        $inputData = request()->all();
+//        $jsonPath = base_path() . '/storage/booking_data.json';
+//        file_put_contents($jsonPath, json_encode($inputData, JSON_UNESCAPED_UNICODE | JSON_PRETTY_PRINT));
+
+        /**
+         * Для отладки: Метод, который достаёт ранее сохранённые данные и подставляет их в request.
+         * Вызовите $this->injectBookingDebugData(); перед созданием объекта $api
+         */
+        //$this->injectBookingDebugData();
+
+
         $api = new Api;
         $checkin_id = $api->input('checkin_id', 'trim');
         $name = $api->input('name', 'trim');
@@ -176,7 +188,7 @@ class Booking extends Controller
             return;
         }
 
-        Lead::push([
+        $push_data = [
             'source' => $prok ? 'prok' : 'rivercrs',
             'name' => $name,
             'phone' => $phone,
@@ -200,7 +212,9 @@ class Booking extends Controller
                 'yandex_id' => request('yandex_id'),
                 'utm' => $utm
             ]
-        ]);
+        ];
+
+        Lead::push($push_data);
 
         if (NotifySettings::get('sms')) {
             Sms::send($phone, $notify_text, NotifySettings::get('sms_profile'));
@@ -214,5 +228,32 @@ class Booking extends Controller
 
         $return['success'] = true;
         $api->json($return);
+    }
+
+    /**
+     * Для отладки: Загружает сохранённые данные из файла и подставляет их в request
+     * Вызывайте этот метод ПЕРЕД созданием объекта $api = new Api
+     */
+    private function injectBookingDebugData()
+    {
+        $jsonPath = base_path() . '/storage/booking_data.json';
+
+        if (!file_exists($jsonPath)) {
+            return; // Файл не существует, ничего не делаем
+        }
+
+        $data = json_decode(file_get_contents($jsonPath), true);
+
+        if (!is_array($data) || empty($data)) {
+            return; // Данные некорректны или пусты
+        }
+
+        // Подставляем данные в request (работает для Laravel 5.x / OctoberCMS v1)
+        request()->merge($data);
+
+        // Также подставляем в Input для совместимости со старым кодом
+        if (class_exists('Input')) {
+            \Input::merge($data);
+        }
     }
 }

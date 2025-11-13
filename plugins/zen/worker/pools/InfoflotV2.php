@@ -5,8 +5,12 @@ namespace Zen\Worker\Pools;
 use Mcmraak\Rivercrs\Models\Checkins as Checkin;
 use Zen\Worker\Console\infoflot\InfoflotDatabase;
 use Zen\Worker\Classes\ProcessLog;
+use Zen\Worker\Models\ErrorLog;
+use Zen\Worker\Models\Stream;
 use DB;
 use Carbon\Carbon;
+use Exception;
+use Yaml;
 
 class InfoflotV2 extends RiverCrs
 {
@@ -16,8 +20,15 @@ class InfoflotV2 extends RiverCrs
 
         $db = new InfoflotDatabase();
         $cruises = $db->getAllCruises();
+        $totalCruises = count($cruises);
 
-        ProcessLog::add("Найдено заездов для обработки: " . count($cruises));
+        ProcessLog::add("Найдено заездов для обработки: " . $totalCruises);
+        
+        // Инициализация файла состояния
+        $this->initStateFile($totalCruises);
+        
+        $errorsCount = 0;
+        $processedCount = 0;
 
         foreach ($cruises as $cruise) {
             $infoflot_ship_id = $cruise['infoflot_ship_id'];
@@ -25,7 +36,17 @@ class InfoflotV2 extends RiverCrs
             $infoflot_ship = $db->getShipByInfoflotId($infoflot_ship_id);
 
             if (!$infoflot_ship) {
+                $this->logError(
+                    "Теплоход с ID $infoflot_ship_id не найден в SQLite",
+                    [
+                        'infoflot_ship_id' => $infoflot_ship_id,
+                        'infoflot_cruise_id' => $infoflot_cruise_id
+                    ]
+                );
                 ProcessLog::add("Теплоход с ID $infoflot_ship_id не найден в SQLite");
+                $errorsCount++;
+                $processedCount++;
+                $this->updateStateFile($processedCount, $totalCruises, $errorsCount, false);
                 continue;
             }
 
@@ -33,9 +54,11 @@ class InfoflotV2 extends RiverCrs
 
             $ship = $this->getMotorship($infoflot_ship['name'], 'infoflot_id', $infoflot_ship_id);
 
-            // Проверка исключения теплохода
+            // Проверка исключения теплохода (не считается ошибкой, просто пропускаем)
             if (!$ship) {
                 ProcessLog::add("Теплоход {$infoflot_ship['name']} исключён");
+                $processedCount++;
+                $this->updateStateFile($processedCount, $totalCruises, $errorsCount, false);
                 continue;
             }
 
@@ -72,7 +95,21 @@ class InfoflotV2 extends RiverCrs
             }
 
             if (!$dateStart || !$dateEnd) {
+                $this->logError(
+                    "Отсутствуют даты для круиза infoflot:$infoflot_cruise_id",
+                    [
+                        'infoflot_cruise_id' => $infoflot_cruise_id,
+                        'infoflot_ship_id' => $infoflot_ship_id,
+                        'date_start_raw' => $cruise['date_start'] ?? null,
+                        'date_end_raw' => $cruise['date_end'] ?? null,
+                        'date_start_timestamp' => $cruise['date_start_timestamp'] ?? null,
+                        'date_end_timestamp' => $cruise['date_end_timestamp'] ?? null
+                    ]
+                );
                 ProcessLog::add("Ошибка данных! --- cruise_id:$infoflot_cruise_id - Отсутствуют даты, заезд игнорирован.");
+                $errorsCount++;
+                $processedCount++;
+                $this->updateStateFile($processedCount, $totalCruises, $errorsCount, false);
                 continue;
             }
 
@@ -81,7 +118,20 @@ class InfoflotV2 extends RiverCrs
 
             // Проверка валидности маршрута
             if (!$waybill || empty($waybill) || count($waybill) < 2) {
+                $this->logError(
+                    "Отсутствует или некорректный маршрут для круиза infoflot:$infoflot_cruise_id",
+                    [
+                        'infoflot_cruise_id' => $infoflot_cruise_id,
+                        'infoflot_ship_id' => $infoflot_ship_id,
+                        'route' => $cruise['route'] ?? null,
+                        'route_short' => $cruise['route_short'] ?? null,
+                        'waybill_points_count' => $waybill ? count($waybill) : 0
+                    ]
+                );
                 ProcessLog::add("Ошибка данных! --- cruise_id:$infoflot_cruise_id - Отсутствует маршрут, заезд игнорирован.");
+                $errorsCount++;
+                $processedCount++;
+                $this->updateStateFile($processedCount, $totalCruises, $errorsCount, false);
                 continue;
             }
 
@@ -106,13 +156,29 @@ class InfoflotV2 extends RiverCrs
 
             // Если цены не найдены, деактивируем заезд
             if (!$pricesImported) {
+                $this->logError(
+                    "Отсутствуют цены для заезда infoflot:$infoflot_cruise_id, заезд деактивирован",
+                    [
+                        'infoflot_cruise_id' => $infoflot_cruise_id,
+                        'checkin_id' => $checkin->id,
+                        'motorship_id' => $ship->id
+                    ]
+                );
                 ProcessLog::add("Для заезда infoflot:$infoflot_cruise_id отсутствуют цены, заезд деактивирован.");
                 $checkin->active = 0;
                 $checkin->save();
             } else {
                 ProcessLog::add("Обработка заезда infoflot:$infoflot_cruise_id завершена.");
             }
+            
+            // Обновляем прогресс после обработки каждого круиза
+            $processedCount++;
+            $this->updateStateFile($processedCount, $totalCruises, $errorsCount, false);
         }
+        
+        // Финальное обновление состояния - успешное завершение
+        $this->updateStateFile($processedCount, $totalCruises, $errorsCount, true);
+        ProcessLog::add("Обработка всех заездов Infoflot завершена. Обработано: $processedCount из $totalCruises, ошибок: $errorsCount");
     }
 
     /**
@@ -166,7 +232,6 @@ class InfoflotV2 extends RiverCrs
         $cabinDeckMapping = []; // Маппинг cabinId => deck_name из SQLite (точные данные)
 
         foreach ($prices as $price) {
-            $typeId = $price['type_id'];
             $cabinCategoryId = $price['cabin_category_id'];
 
             // Если уже обработали эту категорию, пропускаем
@@ -326,6 +391,89 @@ class InfoflotV2 extends RiverCrs
         if ($restoredCount > 0) {
             ProcessLog::add("Восстановлено связей кают с палубами для заезда $checkinId: $restoredCount");
         }
+    }
+
+    /**
+     * Логирование ошибки в таблицу zen_worker_errors
+     */
+    private function logError($errorMessage, $cruiseData = [])
+    {
+        try {
+            // Получаем stream_id по code='Infoflot'
+            $stream = Stream::where('code', 'Infoflot')->first();
+            
+            if (!$stream) {
+                // Если stream не найден, просто логируем в ProcessLog
+                ProcessLog::add("Не удалось записать ошибку в ErrorLog: stream 'Infoflot' не найден. Ошибка: $errorMessage");
+                return;
+            }
+            
+            $errorLog = new ErrorLog;
+            $errorLog->stream_id = $stream->id;
+            $errorLog->call = 'InfoflotV2@fillInfoflotCruises';
+            $errorLog->data = $cruiseData; // Автоматически JSON через setDataAttribute
+            $errorLog->error = $errorMessage;
+            $errorLog->save();
+            
+        } catch (\Exception $e) {
+            // Если не удалось записать в ErrorLog, хотя бы логируем в ProcessLog
+            ProcessLog::add("Ошибка при записи в ErrorLog: " . $e->getMessage());
+        }
+    }
+
+    /**
+     * Инициализация файла состояния
+     */
+    private function initStateFile($totalCruises)
+    {
+        $statePath = storage_path('worker/InfoflotState.yaml');
+        $stateDir = dirname($statePath);
+        
+        // Создаём директорию если не существует
+        if (!is_dir($stateDir)) {
+            mkdir($stateDir, 0777, true);
+        }
+        
+        $state = [
+            [
+                'progress_of' => $totalCruises,
+                'progress_to' => 0,
+                'errors_count' => 0,
+                'success' => false,
+                'updated_at' => time()
+            ]
+        ];
+        
+        $yaml = Yaml::render($state);
+        file_put_contents($statePath, $yaml);
+        
+        ProcessLog::add("Файл состояния инициализирован: $totalCruises заездов для обработки");
+    }
+
+    /**
+     * Обновление файла состояния
+     */
+    private function updateStateFile($progressOf, $progressTo, $errorsCount, $success)
+    {
+        $statePath = storage_path('worker/InfoflotState.yaml');
+        
+        if (!file_exists($statePath)) {
+            // Если файл не существует, создаём его
+            $this->initStateFile($progressOf);
+        }
+        
+        $state = [
+            [
+                'progress_of' => $progressTo,
+                'progress_to' => $progressOf,
+                'errors_count' => $errorsCount,
+                'success' => $success,
+                'updated_at' => time()
+            ]
+        ];
+        
+        $yaml = Yaml::render($state);
+        file_put_contents($statePath, $yaml);
     }
 }
 
