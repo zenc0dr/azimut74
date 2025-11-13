@@ -75,6 +75,17 @@ class GamaV3 extends RiverCrs
                 $checkin->active = 0;
                 $checkin->save();
             } else {
+                // Очищаем кеш, созданный преждевременно в afterSave()
+                // и пересоздаём его с правильными данными (цены и связи уже есть)
+                $cabox = new \Zen\Cabox\Classes\Cabox('rivercrs');
+                $cabox->del('rcrs:' . $checkin->id);
+                $cabox->del('exist_array:' . $checkin->id);
+                
+                // Пересоздаём кеш с правильными данными
+                Checkin::getResult($checkin->id, true);
+                $checkin->cachePrices();
+                
+                ProcessLog::add("Кеш для заезда {$checkin->id} обновлён после импорта цен");
                 ProcessLog::add("Обработка заезда gama:$gama_cruise_id завершена.");
             }
 

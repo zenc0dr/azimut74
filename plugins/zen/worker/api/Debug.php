@@ -19,7 +19,7 @@ use zen\worker\pools\GamaV2;
 use Zen\Worker\Pools\GamaV3;
 use Illuminate\Support\Facades\Response;
 
-class Debug
+class Debug extends Core
 {
     # http://azimut.dc/zen/worker/api/debug:gamaTest?debug=1
     public function gamaTest()
@@ -205,5 +205,53 @@ class Debug
     {
         $states = Core::getStates();
         dd($states);
+    }
+
+    # http://azimut.dc/zen/worker/api/debug:cursorDump?id=cursor_xxx
+    public function cursorDump()
+    {
+        $dumpId = $this->input('id');
+        
+        if (!$dumpId) {
+            $this->json(['error' => 'Dump ID required']);
+            return;
+        }
+        
+        $dumpFile = storage_path("cursor_dumps/{$dumpId}.json");
+        
+        if (!file_exists($dumpFile)) {
+            $this->json(['error' => 'Dump not found', 'id' => $dumpId]);
+            return;
+        }
+        
+        $dumpData = json_decode(file_get_contents($dumpFile), true);
+        $this->json($dumpData);
+    }
+
+    # http://azimut.dc/zen/worker/api/debug:cursorList
+    public function cursorList()
+    {
+        $dumpDir = storage_path('cursor_dumps');
+        $files = is_dir($dumpDir) ? glob($dumpDir . '/cursor_*.json') : [];
+        
+        $dumps = [];
+        foreach ($files as $file) {
+            $data = json_decode(file_get_contents($file), true);
+            if ($data) {
+                $dumps[] = [
+                    'id' => $data['id'],
+                    'timestamp' => $data['timestamp'],
+                    'label' => $data['label'] ?? null,
+                    'vars_count' => count($data['vars'] ?? [])
+                ];
+            }
+        }
+        
+        // Сортируем по времени (новые первыми)
+        usort($dumps, function($a, $b) {
+            return strcmp($b['timestamp'], $a['timestamp']);
+        });
+        
+        $this->json(['dumps' => $dumps, 'total' => count($dumps)]);
     }
 }

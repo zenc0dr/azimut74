@@ -24,6 +24,12 @@ class Plugin extends PluginBase
         $this->registerConsoleCommand('worker:volga-parse', 'Zen\Worker\Console\volga\VolgaParse');
     }
 
+    public function boot()
+    {
+        // Подключаем хелпер функцию cursor()
+        require_once __DIR__ . '/init.php';
+    }
+
     public function registerReportWidgets()
     {
         return [

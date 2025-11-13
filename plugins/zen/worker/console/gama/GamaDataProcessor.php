@@ -311,11 +311,14 @@ class GamaDataProcessor
             ini_set('max_execution_time', 0);
             
             // Получаем данные о ценах через API
+            ProcessLog::add("Запрос данных маршрута {$cruise['gama_cruise_id']} через API...");
             $routeData = $this->apiClient->getGamaRouteData($cruise['gama_cruise_id']);
             
             // Если API вернул null (Sub expired или нет данных), просто пропускаем круиз
             if ($routeData === null) {
-                return $returnPrices ? [] : null;
+                ProcessLog::add("API вернул null для круиза {$cruise['gama_cruise_id']}, переходим на файловый способ");
+                // Переходим на файловый способ, если API не вернул данные
+                return $this->processCruisePricesFromFile($cruise, $returnPrices);
             }
             
             if (!isset($routeData['Route']['CabinList']['Cabin'])) {

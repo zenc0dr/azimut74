@@ -35,6 +35,7 @@ class GamaParse extends Command
         
         $this->timeout = $this->option('timeout');
         $clear = $this->option('clear');
+        $clearCache = $this->option('clear_cache');
         $limit = $this->option('limit');
         
         $this->info('🚢 Начинаем парсинг круизов Gama...');
@@ -43,6 +44,14 @@ class GamaParse extends Command
         
         try {
             $this->db = new GamaDatabase();
+            
+            // Очистка кеша API (если указан флаг)
+            if ($clearCache) {
+                $this->info('🧹 Очистка кеша API...');
+                $cache = new GamaCache();
+                $cache->clear();
+                $this->info('✅ Кеш очищен');
+            }
             
             if ($clear) {
                 $this->info('🧹 Очистка существующих данных...');
@@ -191,6 +200,7 @@ class GamaParse extends Command
         return [
             ['timeout', 't', InputOption::VALUE_OPTIONAL, 'Таймаут для HTTP запросов в секундах', 30],
             ['clear', 'c', InputOption::VALUE_NONE, 'Очистить существующие данные перед парсингом'],
+            ['clear_cache', null, InputOption::VALUE_NONE, 'Очистить кеш API перед парсингом'],
             ['limit', 'l', InputOption::VALUE_OPTIONAL, 'Ограничить количество записей для тестирования', null],
         ];
     }

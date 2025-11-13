@@ -2,7 +2,6 @@
 
 use Zen\Worker\Classes\Http;
 use Zen\Worker\Classes\ProcessLog;
-use Cache;
 use Exception;
 
 class GamaApiClient
@@ -11,6 +10,7 @@ class GamaApiClient
     private $key = 'gIOZhOWvGDa177aLNh0rofIO';
     private $baseUrl = 'https://gama-nn.ru/satellite/xml/';
     private $routeUrl = 'https://gama-nn.ru/satellite/route/';
+    private $cache;
 
     public function __construct($timeout = 30)
     {
@@ -20,6 +20,7 @@ class GamaApiClient
         ini_set('max_input_time', -1);
         
         $this->timeout = $timeout;
+        $this->cache = new GamaCache();
     }
 
     /**
@@ -68,10 +69,11 @@ class GamaApiClient
         // Создаем ключ кеша для этого маршрута
         $cacheKey = "gama_route_{$routeId}";
         
-        // Проверяем кеш (6 часов)
-        $cachedData = Cache::get($cacheKey);
-        if ($cachedData) {
-            return $cachedData;
+        // Проверяем кеш в JSON файлах
+        if ($this->cache->has($cacheKey)) {
+            $cachedData = $this->cache->get($cacheKey);
+            ProcessLog::add("Данные маршрута $routeId загружены из кеша");
+            return $cachedData; // Может быть null, если был сохранён null
         }
         
         // Сбрасываем время выполнения перед каждым HTTP запросом
@@ -79,12 +81,14 @@ class GamaApiClient
         ini_set('max_execution_time', 0);
         
         $url = $this->routeUrl . $routeId . '/?key=' . $this->key;
+        ProcessLog::add("Запрос к API Gama для маршрута $routeId: $url");
         
         $http = new Http();
         $http_query = $http->setTimout($this->timeout)
             ->query($url, 'xml');
 
         if ($http_query->error) {
+            ProcessLog::add("Ошибка HTTP запроса для маршрута $routeId: " . $http_query->error);
             throw new Exception("Ошибка получения данных маршрута #$routeId: " . $http_query->error);
         }
 
@@ -101,6 +105,8 @@ class GamaApiClient
         // Если строка и содержит "Sub expired" — данных нет
         if (is_string($responseContent) && strpos($responseContent, 'Sub expired') !== false) {
             ProcessLog::add("Круиз $routeId: нет данных в данный момент (Sub expired)");
+            // Сохраняем null в кеш, чтобы не запрашивать повторно
+            $this->cache->put($cacheKey, null);
             return null;
         }
 
@@ -111,9 +117,17 @@ class GamaApiClient
             $responseArray = $responseContent;
         }
 
-        // Кэшируем массив
-        if ($responseArray) {
-            Cache::put($cacheKey, $responseArray, 360);
+        // Кэшируем массив в JSON файл (вечный кеш)
+        // Сохраняем даже если массив пустой, чтобы не запрашивать повторно
+        try {
+            $this->cache->put($cacheKey, $responseArray);
+            if ($responseArray && !empty($responseArray)) {
+                ProcessLog::add("Данные маршрута $routeId сохранены в кеш");
+            } else {
+                ProcessLog::add("Пустой ответ для маршрута $routeId сохранён в кеш");
+            }
+        } catch (Exception $e) {
+            ProcessLog::add("Ошибка сохранения кеша для маршрута $routeId: " . $e->getMessage());
         }
         
         return $responseArray;
