@@ -34,6 +34,7 @@ class Checkins extends Model
     public $waybillDump; // for saving after create
     public $duplicatorId;
     public $pricingTableDump;
+    public $createCache = true; // Флаг для создания кеша в afterSave()
 
     /**
      * @var string The database table used by the model.
@@ -477,12 +478,14 @@ class Checkins extends Model
         $this->savePricingTable();
 
         # Изготовление кеша результата запроса
-        /*
-        if(DB::table('mcmraak_rivercrs_pricing')->where('checkin_id', $this->id)->count())
-            app('\Mcmraak\Rivercrs\Classes\Search')->renderCheckin($this,['update' => true]);
-        */
-        self::getResult($this->id, true);
-        $this->cachePrices();
+        if ($this->createCache) {
+            /*
+            if(DB::table('mcmraak_rivercrs_pricing')->where('checkin_id', $this->id)->count())
+                app('\Mcmraak\Rivercrs\Classes\Search')->renderCheckin($this,['update' => true]);
+            */
+            self::getResult($this->id, true);
+            $this->cachePrices();
+        }
     }
 
     public function afterDelete()

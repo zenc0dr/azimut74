@@ -148,6 +148,7 @@ class VolgaV2 extends Volga
             $checkin->eds_code = 'volga';
             $checkin->eds_id = $volga_cruise_id;
             $checkin->waybill_id = $waybill;
+            $checkin->createCache = false; // Отключаем кеширование до импорта цен
             $checkin->save();
 
             $this->fixCheckin($checkin->id);
@@ -169,9 +170,13 @@ class VolgaV2 extends Volga
                 );
                 ProcessLog::add("Для заезда volga:$volga_cruise_id отсутствуют цены, заезд деактивирован.");
                 $checkin->active = 0;
+                $checkin->createCache = false; // Кеш не нужен для деактивированного заезда
                 $checkin->save();
             } else {
-                ProcessLog::add("Обработка заезда volga:$volga_cruise_id завершена.");
+                // Создаём кеш после импорта цен и связей кают с палубами
+                Checkin::getResult($checkin->id, true);
+                $checkin->cachePrices();
+                ProcessLog::add("Обработка заезда volga:$volga_cruise_id завершена. Кеш создан.");
             }
             
             // Обновляем прогресс после обработки каждого круиза
