@@ -61,10 +61,22 @@ class Cabox extends Core
 
         if(!file_exists($file_name)) {
             if(!file_exists(dirname($file_name)))
-                mkdir(dirname($file_name), 0777, true);
+                mkdir(dirname($file_name), 0775, true);
             file_put_contents($file_name, $value);
+            // Установка правильных прав на файл (775 для директорий, 664 для файлов)
+            @chmod($file_name, 0664);
+            // Попытка установить владельца, если возможно
+            if (function_exists('posix_getuid') && posix_getuid() === 0) {
+                // Если запущено от root, пытаемся установить владельца zen:zen
+                $zenUid = @posix_getpwnam('zen');
+                if ($zenUid !== false && isset($zenUid['uid'])) {
+                    @chown($file_name, $zenUid['uid']);
+                    @chgrp($file_name, $zenUid['gid']);
+                }
+            }
         } else {
             file_put_contents($file_name, $value);
+            @chmod($file_name, 0664);
         }
     }
 

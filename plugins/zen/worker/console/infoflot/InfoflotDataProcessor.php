@@ -61,11 +61,22 @@ class InfoflotDataProcessor
                 }
 
                 foreach ($shipsPage as $ship) {
+                    $shipName = $ship['name'] ?? '';
+                    $shipType = $ship['typeName'] ?? '';
+                    $operatorName = $ship['operatorName'] ?? '';
+                    
+                    // РАННЯЯ ФИЛЬТРАЦИЯ: Пропускаем морские суда сразу при загрузке
+                    // Это экономит время, так как мы не будем запрашивать круизы для них
+                    if ($this->isMarineShip($shipName, $shipType, $operatorName)) {
+                        ProcessLog::add("Пропуск морского судна при загрузке: $shipName (ID: {$ship['id']}, тип: $shipType)");
+                        continue;
+                    }
+                    
                     $ships[] = [
                         'id' => (int)$ship['id'],
-                        'name' => $ship['name'],
-                        'type' => $ship['typeName'] ?? null,
-                        'operator_name' => $ship['operatorName'] ?? null,
+                        'name' => $shipName,
+                        'type' => $shipType,
+                        'operator_name' => $operatorName,
                         'description' => $ship['description'] ?? ''
                     ];
                 }
@@ -135,26 +146,13 @@ class InfoflotDataProcessor
         
         foreach ($ships as $ship) {
             $currentShipIndex++;
-            // Пропускаем морские суда (они не имеют речных круизов)
-            // Фильтруем по названиям, которые содержат морские круизы
+            // Морские суда уже отфильтрованы в processShipsData(), но проверка на всякий случай
             $shipName = $ship['name'] ?? '';
             $shipType = $ship['type'] ?? '';
+            $operatorName = $ship['operator_name'] ?? '';
             
-            // Морские суда обычно имеют тип "Круизный лайнер" или названия типа "MSC", "Celebrity", "Royal Caribbean"
-            if (stripos($shipType, 'лайнер') !== false || 
-                stripos($shipName, 'MSC') !== false ||
-                stripos($shipName, 'Celebrity') !== false ||
-                stripos($shipName, 'Royal Caribbean') !== false ||
-                stripos($shipName, 'Allure') !== false ||
-                stripos($shipName, 'Anthem') !== false ||
-                stripos($shipName, 'Freedom') !== false ||
-                stripos($shipName, 'Harmony') !== false ||
-                stripos($shipName, 'Independence') !== false ||
-                stripos($shipName, 'Jewel') !== false ||
-                stripos($shipName, 'Liberty') !== false ||
-                stripos($shipName, 'Brilliance') !== false ||
-                stripos($shipName, 'Costa') !== false) {
-                ProcessLog::add("Пропуск морского судна: $shipName (ID: {$ship['id']})");
+            if ($this->isMarineShip($shipName, $shipType, $operatorName)) {
+                ProcessLog::add("Пропуск морского судна (дополнительная проверка): $shipName (ID: {$ship['id']})");
                 continue;
             }
             
@@ -627,6 +625,91 @@ class InfoflotDataProcessor
         }
         
         return $prices;
+    }
+
+    /**
+     * Проверка, является ли судно морским (не речным)
+     * Морские суда нужно пропускать, так как мы обрабатываем только речные круизы
+     * 
+     * @param string $shipName Название судна
+     * @param string $shipType Тип судна из API
+     * @param string $operatorName Название оператора
+     * @return bool true если судно морское и его нужно пропустить
+     */
+    private function isMarineShip($shipName, $shipType, $operatorName = '')
+    {
+        $shipName = trim($shipName);
+        $shipType = trim($shipType);
+        $operatorName = trim($operatorName);
+        
+        // Проверка по типу судна
+        if (!empty($shipType)) {
+            $marineTypes = [
+                'лайнер',
+                'liner',
+                'cruise',
+                'круизный',
+                'ocean',
+                'морской'
+            ];
+            
+            foreach ($marineTypes as $marineType) {
+                if (stripos($shipType, $marineType) !== false) {
+                    return true;
+                }
+            }
+        }
+        
+        // Проверка по названию оператора
+        if (!empty($operatorName)) {
+            $marineOperators = [
+                'MSC',
+                'Celebrity',
+                'Royal Caribbean',
+                'Costa',
+                'Norwegian',
+                'Princess',
+                'Holland America',
+                'Carnival'
+            ];
+            
+            foreach ($marineOperators as $operator) {
+                if (stripos($operatorName, $operator) !== false) {
+                    return true;
+                }
+            }
+        }
+        
+        // Проверка по названию судна
+        $marineNames = [
+            'MSC',
+            'Celebrity',
+            'Royal Caribbean',
+            'Allure',
+            'Anthem',
+            'Freedom',
+            'Harmony',
+            'Independence',
+            'Jewel',
+            'Liberty',
+            'Brilliance',
+            'Costa',
+            'Norwegian',
+            'Princess',
+            'Holland America',
+            'Carnival',
+            'AIDA',
+            'TUI',
+            'Marella'
+        ];
+        
+        foreach ($marineNames as $marineName) {
+            if (stripos($shipName, $marineName) !== false) {
+                return true;
+            }
+        }
+        
+        return false;
     }
 
 }

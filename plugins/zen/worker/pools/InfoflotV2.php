@@ -163,7 +163,7 @@ class InfoflotV2 extends RiverCrs
 
         // Создаем маппинг категорий кают и обрабатываем палубы
         $cabinMapping = [];
-        $processedDecks = [];
+        $cabinDeckMapping = []; // Маппинг cabinId => deck_name из SQLite (точные данные)
 
         foreach ($prices as $price) {
             $typeId = $price['type_id'];
@@ -187,12 +187,6 @@ class InfoflotV2 extends RiverCrs
                 ProcessLog::add("Предупреждение: для категории $cabinCategoryId отсутствует название, используем только ID");
                 $categoryName = $cabinCategoryId;
             }
-            /*
-            else {
-                // Используем название с ID для уникальности
-                $categoryName = $categoryName . '|' . $cabinCategoryId;
-            }
-            */
 
             $places = $price['places'] ?? 1;
 
@@ -206,12 +200,14 @@ class InfoflotV2 extends RiverCrs
             if ($cabinId) {
                 $cabinMapping[$cabinCategoryId] = $cabinId;
 
-                // Работа с палубами
-                if (isset($price['deck_name']) && !empty($price['deck_name']) && !isset($processedDecks[$cabinId])) {
+                // Работа с палубами - используем точные данные из SQLite
+                if (isset($price['deck_name']) && !empty($price['deck_name'])) {
                     $deck = $this->getDeck($price['deck_name']);
                     if ($deck) {
                         $this->deckPivotCheck($cabinId, $deck->id);
-                        $processedDecks[$cabinId] = true;
+                        // Сохраняем точную информацию о палубе для этой каюты
+                        $cabinDeckMapping[$cabinId] = $price['deck_name'];
+                        ProcessLog::add("Создана связь каюты $cabinId ({$categoryName}) с палубой {$deck->id} ({$price['deck_name']})");
                     }
                 }
             }
@@ -247,8 +243,8 @@ class InfoflotV2 extends RiverCrs
             DB::table('mcmraak_rivercrs_pricing')
                 ->insert($insert_prices);
 
-            // Восстанавливаем связи кают с палубами для всех кают с ценами
-            $this->restoreDeckLinksForCheckin($checkinId, $shipId, $cabinMapping);
+            // Восстанавливаем связи кают с палубами для всех кают с ценами, используя точные данные из SQLite
+            $this->restoreDeckLinksForCheckin($checkinId, $shipId, $cabinMapping, $cabinDeckMapping);
 
             ProcessLog::add("Цены для заезда $infoflotCruiseId: добавлено " . count($insert_prices) . " цен");
             return true; // Цены успешно импортированы
@@ -260,9 +256,10 @@ class InfoflotV2 extends RiverCrs
 
     /**
      * Восстановление связей кают с палубами для заезда
-     * Создаёт связи для всех кают с ценами, используя данные из SQLite или эталонную палубу
+     * Использует ТОЧНЫЕ данные из SQLite о палубах для каждой категории кают
+     * Если точных данных нет, использует эталонную палубу как fallback
      */
-    private function restoreDeckLinksForCheckin($checkinId, $shipId, $cabinMapping)
+    private function restoreDeckLinksForCheckin($checkinId, $shipId, $cabinMapping, $cabinDeckMapping = [])
     {
         // Получаем все уникальные cabin_id из цен
         $cabinIdsWithPrices = DB::table('mcmraak_rivercrs_pricing')
@@ -275,7 +272,7 @@ class InfoflotV2 extends RiverCrs
             return;
         }
 
-        // Находим эталонную палубу (первую палубу, связанную с любой каютой этого теплохода)
+        // Находим эталонную палубу (fallback, если нет точных данных из SQLite)
         $referenceDeck = DB::table('mcmraak_rivercrs_decks_pivot')
             ->join('mcmraak_rivercrs_cabins', 'mcmraak_rivercrs_cabins.id', '=', 'mcmraak_rivercrs_decks_pivot.cabin_id')
             ->where('mcmraak_rivercrs_cabins.motorship_id', $shipId)
@@ -283,15 +280,6 @@ class InfoflotV2 extends RiverCrs
             ->first();
 
         $referenceDeckId = $referenceDeck ? $referenceDeck->deck_id : null;
-
-        // Если нет эталонной палубы, пытаемся найти первую палубу теплохода
-        if (!$referenceDeckId) {
-            $firstDeck = DB::table('mcmraak_rivercrs_decks')
-                ->where('motorship_id', $shipId)
-                ->orderBy('id')
-                ->first();
-            $referenceDeckId = $firstDeck ? $firstDeck->id : null;
-        }
 
         $restoredCount = 0;
         foreach ($cabinIdsWithPrices as $cabinId) {
@@ -301,7 +289,23 @@ class InfoflotV2 extends RiverCrs
                 ->exists();
 
             if (!$hasLink) {
-                // Если есть эталонная палуба, используем её
+                // ПРИОРИТЕТ 1: Используем точные данные из SQLite (если есть)
+                if (isset($cabinDeckMapping[$cabinId]) && !empty($cabinDeckMapping[$cabinId])) {
+                    $deckName = $cabinDeckMapping[$cabinId];
+                    $deck = $this->getDeck($deckName);
+                    if ($deck) {
+                        try {
+                            $this->deckPivotCheck($cabinId, $deck->id);
+                            $restoredCount++;
+                            ProcessLog::add("Восстановлена связь каюты $cabinId с палубой {$deck->id} ({$deckName}) из SQLite");
+                        } catch (\Exception $e) {
+                            // Игнорируем ошибки дубликатов
+                        }
+                        continue;
+                    }
+                }
+
+                // ПРИОРИТЕТ 2: Используем эталонную палубу (fallback)
                 if ($referenceDeckId) {
                     try {
                         DB::table('mcmraak_rivercrs_decks_pivot')->insert([
@@ -309,6 +313,7 @@ class InfoflotV2 extends RiverCrs
                             'deck_id' => $referenceDeckId
                         ]);
                         $restoredCount++;
+                        ProcessLog::add("Восстановлена связь каюты $cabinId с эталонной палубой $referenceDeckId (fallback)");
                     } catch (\Exception $e) {
                         // Игнорируем ошибки дубликатов
                     }

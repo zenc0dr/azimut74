@@ -36,6 +36,8 @@ class VolgaDataProcessor
         $this->processDecksData($dump);
         $this->processCabinCategoriesData($dump);
         $this->processCabinsData($dump);
+        // Обновляем связи ship_id и deck_id для категорий кают на основе кают
+        $this->updateCabinCategoriesRelations();
         $this->processCruisesData($dump);
         $this->processPricesData($dump);
         

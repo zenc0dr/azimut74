@@ -355,13 +355,10 @@ class InfoflotDatabase
             SELECT p.*, cc.name as category_name, cc.places, d.name as deck_name
             FROM prices p
             LEFT JOIN cabin_categories cc ON p.cabin_category_id = cc.id
-            LEFT JOIN cabins c ON c.type_id = cc.id AND c.ship_id = (
-                SELECT ship_id FROM cruises WHERE id = ?
-            )
-            LEFT JOIN decks d ON c.deck_id = d.id
+            LEFT JOIN decks d ON cc.deck_id = d.id
             WHERE p.cruise_id = ?
         ");
-        $stmt->execute([$cruiseId, $cruiseId]);
+        $stmt->execute([$cruiseId]);
         return $stmt->fetchAll(PDO::FETCH_ASSOC);
     }
 

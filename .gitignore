@@ -3,6 +3,7 @@
 /backups/*
 *.log
 *.zip
+*.sqlite
 .idea/
 .vscode/
 /node_modules
