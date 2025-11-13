@@ -11,7 +11,44 @@ class VolgaDatabase
     public function __construct()
     {
         $this->dbPath = __DIR__ . '/volga_data.sqlite';
+        $this->ensureDatabasePermissions();
         $this->initDatabase();
+    }
+
+    /**
+     * Проверка и исправление прав доступа к базе данных
+     */
+    private function ensureDatabasePermissions()
+    {
+        $dir = dirname($this->dbPath);
+        
+        // Убеждаемся, что директория существует и доступна для записи
+        if (!is_dir($dir)) {
+            mkdir($dir, 0775, true);
+        }
+        
+        // Если файл существует, проверяем и исправляем права
+        if (file_exists($this->dbPath)) {
+            // Проверяем, доступен ли файл для записи
+            if (!is_writable($this->dbPath)) {
+                // Пытаемся исправить права
+                @chmod($this->dbPath, 0664);
+                
+                // Если всё ещё не доступен для записи, пробуем через chown
+                if (!is_writable($this->dbPath)) {
+                    // Получаем текущего пользователя
+                    $currentUser = posix_getpwuid(posix_geteuid());
+                    if ($currentUser && isset($currentUser['name'])) {
+                        @chown($this->dbPath, $currentUser['name']);
+                    }
+                }
+            }
+        } else {
+            // Если файла нет, убеждаемся, что директория доступна для записи
+            if (!is_writable($dir)) {
+                @chmod($dir, 0775);
+            }
+        }
     }
 
     /**
@@ -20,6 +57,21 @@ class VolgaDatabase
     private function initDatabase()
     {
         try {
+            // Проверяем права доступа перед подключением
+            if (file_exists($this->dbPath) && !is_writable($this->dbPath)) {
+                $owner = fileowner($this->dbPath);
+                $currentUser = posix_geteuid();
+                $ownerInfo = posix_getpwuid($owner);
+                $currentUserInfo = posix_getpwuid($currentUser);
+                
+                throw new Exception(
+                    "База данных недоступна для записи. " .
+                    "Файл принадлежит пользователю: " . ($ownerInfo['name'] ?? $owner) . " (UID: $owner), " .
+                    "текущий пользователь: " . ($currentUserInfo['name'] ?? 'unknown') . " (UID: $currentUser). " .
+                    "Исправьте права доступа командой: chown " . ($currentUserInfo['name'] ?? 'zen') . ":" . ($currentUserInfo['name'] ?? 'zen') . " " . $this->dbPath . " && chmod 664 " . $this->dbPath
+                );
+            }
+            
             $this->pdo = new PDO("sqlite:" . $this->dbPath);
             $this->pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
             $this->createTables();
@@ -48,9 +100,7 @@ class VolgaDatabase
             CREATE TABLE IF NOT EXISTS decks (
                 id INTEGER PRIMARY KEY,
                 name TEXT NOT NULL,
-                ship_id INTEGER,
-                created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
-                FOREIGN KEY (ship_id) REFERENCES ships(id)
+                created_at DATETIME DEFAULT CURRENT_TIMESTAMP
             )
         ");
 
@@ -188,13 +238,13 @@ class VolgaDatabase
     /**
      * Сохранение палубы (id = volga_deck_id)
      */
-    public function saveDeck($volgaDeckId, $name, $shipId)
+    public function saveDeck($volgaDeckId, $name)
     {
         $stmt = $this->pdo->prepare("
-            INSERT OR REPLACE INTO decks (id, name, ship_id) 
-            VALUES (?, ?, ?)
+            INSERT OR REPLACE INTO decks (id, name) 
+            VALUES (?, ?)
         ");
-        return $stmt->execute([$volgaDeckId, $name, $shipId]);
+        return $stmt->execute([$volgaDeckId, $name]);
     }
 
     /**
@@ -205,12 +255,12 @@ class VolgaDatabase
         $this->pdo->beginTransaction();
         
         $stmt = $this->pdo->prepare("
-            INSERT OR REPLACE INTO decks (id, name, ship_id) 
-            VALUES (?, ?, ?)
+            INSERT OR REPLACE INTO decks (id, name) 
+            VALUES (?, ?)
         ");
         
         foreach ($decks as $deck) {
-            $stmt->execute([$deck['id'], $deck['name'], $deck['ship_id']]);
+            $stmt->execute([$deck['id'], $deck['name']]);
         }
         
         $this->pdo->commit();

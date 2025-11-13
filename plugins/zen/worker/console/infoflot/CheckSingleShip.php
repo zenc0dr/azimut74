@@ -361,8 +361,8 @@ class CheckSingleShip extends Command
                 }
 
                 try {
-                    $this->db->savePrice($cruiseId, $typeId, $typeName, $adultPrice, $deckId);
-                    $prices[] = ['type_id' => $typeId, 'price' => $adultPrice];
+                    $this->db->savePrice($cruiseId, $typeId, $typeName, $adultPrice);
+                    $prices[] = ['cabin_category_id' => $typeId, 'price' => $adultPrice];
                 } catch (\Exception $e) {
                     // Игнорируем ошибки сохранения цен
                 }

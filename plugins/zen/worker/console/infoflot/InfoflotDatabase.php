@@ -33,6 +33,8 @@ class InfoflotDatabase
      */
     private function createTables()
     {
+        // Применяем миграцию, если база уже существует со старой структурой
+        $this->applyMigrationIfNeeded();
         // Таблица теплоходов (id = infoflot_ship_id)
         $this->pdo->exec("
             CREATE TABLE IF NOT EXISTS ships (
@@ -100,7 +102,6 @@ class InfoflotDatabase
                 id INTEGER PRIMARY KEY AUTOINCREMENT,
                 cruise_id INTEGER,
                 cabin_category_id INTEGER,
-                type_id INTEGER,
                 type_name TEXT,
                 price_adult INTEGER,
                 price_default INTEGER,
@@ -110,28 +111,10 @@ class InfoflotDatabase
             )
         ");
 
-        // Таблица кают (для связи с категориями)
-        $this->pdo->exec("
-            CREATE TABLE IF NOT EXISTS cabins (
-                id INTEGER PRIMARY KEY,
-                ship_id INTEGER,
-                deck_id INTEGER,
-                type_id INTEGER,
-                name TEXT,
-                places_main INTEGER,
-                places_additional INTEGER,
-                created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
-                FOREIGN KEY (ship_id) REFERENCES ships(id),
-                FOREIGN KEY (deck_id) REFERENCES decks(id),
-                FOREIGN KEY (type_id) REFERENCES cabin_categories(id)
-            )
-        ");
-
         // Создаем индексы для быстрого поиска
         $this->pdo->exec("CREATE INDEX IF NOT EXISTS idx_cruises_ship_id ON cruises(ship_id)");
         $this->pdo->exec("CREATE INDEX IF NOT EXISTS idx_prices_cruise_id ON prices(cruise_id)");
         $this->pdo->exec("CREATE INDEX IF NOT EXISTS idx_cabin_categories_ship_id ON cabin_categories(ship_id)");
-        $this->pdo->exec("CREATE INDEX IF NOT EXISTS idx_cabins_ship_id ON cabins(ship_id)");
     }
 
     /**
@@ -275,13 +258,13 @@ class InfoflotDatabase
     /**
      * Сохранение цены
      */
-    public function savePrice($cruiseId, $cabinCategoryId, $typeId, $typeName, $priceAdult, $priceDefault = null)
+    public function savePrice($cruiseId, $cabinCategoryId, $typeName, $priceAdult, $priceDefault = null)
     {
         $stmt = $this->pdo->prepare("
-            INSERT INTO prices (cruise_id, cabin_category_id, type_id, type_name, price_adult, price_default) 
-            VALUES (?, ?, ?, ?, ?, ?)
+            INSERT INTO prices (cruise_id, cabin_category_id, type_name, price_adult, price_default) 
+            VALUES (?, ?, ?, ?, ?)
         ");
-        return $stmt->execute([$cruiseId, $cabinCategoryId, $typeId, $typeName, $priceAdult, $priceDefault]);
+        return $stmt->execute([$cruiseId, $cabinCategoryId, $typeName, $priceAdult, $priceDefault]);
     }
 
     /**
@@ -296,15 +279,14 @@ class InfoflotDatabase
         $this->pdo->beginTransaction();
         
         $stmt = $this->pdo->prepare("
-            INSERT INTO prices (cruise_id, cabin_category_id, type_id, type_name, price_adult, price_default) 
-            VALUES (?, ?, ?, ?, ?, ?)
+            INSERT INTO prices (cruise_id, cabin_category_id, type_name, price_adult, price_default) 
+            VALUES (?, ?, ?, ?, ?)
         ");
         
         foreach ($prices as $price) {
             $stmt->execute([
                 $price['cruise_id'],
                 $price['cabin_category_id'],
-                $price['type_id'],
                 $price['type_name'],
                 $price['price_adult'],
                 $price['price_default'] ?? null
@@ -314,17 +296,6 @@ class InfoflotDatabase
         $this->pdo->commit();
     }
 
-    /**
-     * Сохранение каюты
-     */
-    public function saveCabin($infoflotCabinId, $shipId, $deckId, $typeId, $name, $placesMain, $placesAdditional = 0)
-    {
-        $stmt = $this->pdo->prepare("
-            INSERT OR REPLACE INTO cabins (id, ship_id, deck_id, type_id, name, places_main, places_additional) 
-            VALUES (?, ?, ?, ?, ?, ?, ?)
-        ");
-        return $stmt->execute([$infoflotCabinId, $shipId, $deckId, $typeId, $name, $placesMain, $placesAdditional]);
-    }
 
     /**
      * Получение всех круизов с теплоходами
@@ -389,12 +360,100 @@ class InfoflotDatabase
     }
 
     /**
+     * Применение миграции к существующей базе данных
+     * Проверяет наличие старой структуры и применяет изменения
+     */
+    private function applyMigrationIfNeeded()
+    {
+        try {
+            // Проверяем, существует ли таблица prices со старым полем type_id
+            $stmt = $this->pdo->query("PRAGMA table_info(prices)");
+            $columns = $stmt->fetchAll(PDO::FETCH_ASSOC);
+            
+            $hasTypeId = false;
+            $hasCabinsTable = false;
+            
+            foreach ($columns as $column) {
+                if ($column['name'] === 'type_id') {
+                    $hasTypeId = true;
+                    break;
+                }
+            }
+            
+            // Проверяем наличие таблицы cabins
+            $stmt = $this->pdo->query("SELECT name FROM sqlite_master WHERE type='table' AND name='cabins'");
+            if ($stmt->fetch()) {
+                $hasCabinsTable = true;
+            }
+            
+            // Если есть старая структура, применяем миграцию
+            if ($hasTypeId || $hasCabinsTable) {
+                $this->migrateDatabase();
+            }
+        } catch (\Exception $e) {
+            // Если таблицы еще нет, это нормально - она будет создана ниже
+            // Игнорируем ошибку
+        }
+    }
+
+    /**
+     * Выполнение миграции базы данных
+     * Удаляет поле type_id из prices и таблицу cabins
+     */
+    private function migrateDatabase()
+    {
+        try {
+            $this->pdo->beginTransaction();
+            
+            // Шаг 1: Создание новой таблицы prices без поля type_id
+            $this->pdo->exec("
+                CREATE TABLE IF NOT EXISTS prices_new (
+                    id INTEGER PRIMARY KEY AUTOINCREMENT,
+                    cruise_id INTEGER,
+                    cabin_category_id INTEGER,
+                    type_name TEXT,
+                    price_adult INTEGER,
+                    price_default INTEGER,
+                    created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
+                    FOREIGN KEY (cruise_id) REFERENCES cruises(id),
+                    FOREIGN KEY (cabin_category_id) REFERENCES cabin_categories(id)
+                )
+            ");
+            
+            // Шаг 2: Копирование данных из старой таблицы prices (без type_id)
+            $this->pdo->exec("
+                INSERT INTO prices_new (id, cruise_id, cabin_category_id, type_name, price_adult, price_default, created_at)
+                SELECT id, cruise_id, cabin_category_id, type_name, price_adult, price_default, created_at
+                FROM prices
+            ");
+            
+            // Шаг 3: Удаление старой таблицы prices
+            $this->pdo->exec("DROP TABLE IF EXISTS prices");
+            
+            // Шаг 4: Переименование новой таблицы в prices
+            $this->pdo->exec("ALTER TABLE prices_new RENAME TO prices");
+            
+            // Шаг 5: Восстановление индекса
+            $this->pdo->exec("CREATE INDEX IF NOT EXISTS idx_prices_cruise_id ON prices(cruise_id)");
+            
+            // Шаг 6: Удаление неиспользуемой таблицы cabins
+            $this->pdo->exec("DROP TABLE IF EXISTS cabins");
+            
+            $this->pdo->commit();
+        } catch (\Exception $e) {
+            $this->pdo->rollBack();
+            // Не бросаем исключение, чтобы не сломать создание новой базы
+            // Просто логируем ошибку
+            error_log("Ошибка миграции базы данных Infoflot: " . $e->getMessage());
+        }
+    }
+
+    /**
      * Очистка всех данных
      */
     public function clearAll()
     {
         $this->pdo->exec("DELETE FROM prices");
-        $this->pdo->exec("DELETE FROM cabins");
         $this->pdo->exec("DELETE FROM cabin_categories");
         $this->pdo->exec("DELETE FROM decks");
         $this->pdo->exec("DELETE FROM cruises");
@@ -425,6 +484,38 @@ class InfoflotDatabase
         $stmt = $this->pdo->prepare("SELECT * FROM ships ORDER BY name");
         $stmt->execute();
         return $stmt->fetchAll(PDO::FETCH_ASSOC);
+    }
+
+    /**
+     * Обновление deck_id в cabin_categories на основе данных из кают
+     * Используется для восстановления связей после обработки круизов
+     */
+    public function updateCabinCategoriesDeckId($typeToDeckMap)
+    {
+        if (empty($typeToDeckMap)) {
+            return;
+        }
+        
+        $this->pdo->beginTransaction();
+        
+        try {
+            $stmt = $this->pdo->prepare("
+                UPDATE cabin_categories 
+                SET deck_id = ? 
+                WHERE id = ? AND (deck_id IS NULL OR deck_id = 0)
+            ");
+            
+            foreach ($typeToDeckMap as $typeId => $deckId) {
+                if ($deckId !== null && $deckId > 0) {
+                    $stmt->execute([$deckId, $typeId]);
+                }
+            }
+            
+            $this->pdo->commit();
+        } catch (\Exception $e) {
+            $this->pdo->rollBack();
+            throw $e;
+        }
     }
 
     /**

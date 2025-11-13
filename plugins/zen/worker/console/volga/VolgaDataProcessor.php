@@ -36,10 +36,14 @@ class VolgaDataProcessor
         $this->processDecksData($dump);
         $this->processCabinCategoriesData($dump);
         $this->processCabinsData($dump);
-        // Обновляем связи ship_id и deck_id для категорий кают на основе кают
-        $this->updateCabinCategoriesRelations();
         $this->processCruisesData($dump);
         $this->processPricesData($dump);
+        
+        // Обновляем ship_id для кают на основе круизов через цены (после обработки цен)
+        $this->updateCabinsShipIdFromCruises();
+        
+        // Обновляем ship_id и deck_id для категорий кают на основе кают (после всех обновлений)
+        $this->updateCabinCategoriesRelations();
         
         ProcessLog::add("Обработка данных Volga завершена");
     }
@@ -96,12 +100,10 @@ class VolgaDataProcessor
 
         foreach ($items as $item) {
             $data = $item['@attributes'] ?? $item;
-            // В Volga палубы могут быть связаны с теплоходами через каюты
-            // Пока сохраняем без ship_id, потом обновим через каюты
+            // В Volga палубы связаны с теплоходами через категории кают
             $decks[] = [
                 'id' => (int)$data['id'],
-                'name' => $data['name'],
-                'ship_id' => null // Будет обновлено через каюты
+                'name' => $data['name']
             ];
         }
 
@@ -257,7 +259,7 @@ class VolgaDataProcessor
                 try {
                     $waybill = $this->volgaWay($data);
                     if (is_array($waybill) && count($waybill) >= 2) {
-                        $waybillData = json_encode($waybill);
+                        $waybillData = json_encode($waybill, JSON_UNESCAPED_UNICODE);
                         
                         // Сохраняем путевой лист для batch сохранения
                         foreach ($waybill as $index => $point) {
@@ -307,15 +309,6 @@ class VolgaDataProcessor
         if (!empty($shipCabinMapping)) {
             $this->updateCabinsShipId($shipCabinMapping);
         }
-        
-        // Обновляем ship_id для кают на основе круизов через цены
-        $this->updateCabinsShipIdFromCruises();
-        
-        // Обновляем ship_id для палуб на основе кают
-        $this->updateDecksShipId();
-        
-        // Обновляем ship_id и deck_id для категорий кают на основе кают
-        $this->updateCabinCategoriesRelations();
     }
 
     /**
@@ -449,47 +442,13 @@ class VolgaDataProcessor
     }
 
     /**
-     * Обновление ship_id для палуб на основе кают
-     */
-    private function updateDecksShipId()
-    {
-        $pdo = $this->db->getPdo();
-        
-        // Обновляем ship_id для палуб на основе кают
-        $stmt = $pdo->prepare("
-            UPDATE decks 
-            SET ship_id = (
-                SELECT c.ship_id 
-                FROM cabins c 
-                WHERE c.deck_id = decks.id 
-                AND c.ship_id IS NOT NULL 
-                LIMIT 1
-            )
-            WHERE (ship_id IS NULL OR ship_id = 0)
-            AND EXISTS (
-                SELECT 1 
-                FROM cabins c 
-                WHERE c.deck_id = decks.id 
-                AND c.ship_id IS NOT NULL
-            )
-        ");
-        
-        $stmt->execute();
-        $updated = $stmt->rowCount();
-        
-        if ($updated > 0) {
-            ProcessLog::add("Обновлено ship_id для палуб: $updated");
-        }
-    }
-
-    /**
      * Обновление ship_id и deck_id для категорий кают на основе кают
      */
     private function updateCabinCategoriesRelations()
     {
         $pdo = $this->db->getPdo();
         
-        // Обновляем ship_id и deck_id для категорий кают на основе кают
+        // Обновляем ship_id для категорий кают (только если не заполнен)
         $stmt = $pdo->prepare("
             UPDATE cabin_categories 
             SET ship_id = (
@@ -498,22 +457,29 @@ class VolgaDataProcessor
                 WHERE c.class_id = cabin_categories.id 
                 AND c.ship_id IS NOT NULL 
                 LIMIT 1
-            ),
-            deck_id = (
+            )
+            WHERE ship_id IS NULL
+        ");
+        $stmt->execute();
+        $updatedShip = $stmt->rowCount();
+        
+        // Обновляем deck_id для категорий кают (только если не заполнен)
+        $stmt = $pdo->prepare("
+            UPDATE cabin_categories 
+            SET deck_id = (
                 SELECT c.deck_id 
                 FROM cabins c 
                 WHERE c.class_id = cabin_categories.id 
                 AND c.deck_id IS NOT NULL 
                 LIMIT 1
             )
-            WHERE (ship_id IS NULL OR deck_id IS NULL)
+            WHERE deck_id IS NULL
         ");
-        
         $stmt->execute();
-        $updated = $stmt->rowCount();
+        $updatedDeck = $stmt->rowCount();
         
-        if ($updated > 0) {
-            ProcessLog::add("Обновлено связей для категорий кают: $updated");
+        if ($updatedShip > 0 || $updatedDeck > 0) {
+            ProcessLog::add("Обновлено связей для категорий кают: ship_id=$updatedShip, deck_id=$updatedDeck");
         }
     }
 

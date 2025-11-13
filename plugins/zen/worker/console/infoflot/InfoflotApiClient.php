@@ -2,7 +2,6 @@
 
 use Zen\Worker\Classes\Http;
 use Zen\Worker\Classes\ProcessLog;
-use Cache;
 use Exception;
 
 class InfoflotApiClient
@@ -10,6 +9,7 @@ class InfoflotApiClient
     private $timeout;
     private $apiKey;
     private $baseUrl = 'https://restapi.infoflot.com';
+    private $cache;
 
     public function __construct($apiKey, $timeout = 30)
     {
@@ -20,6 +20,7 @@ class InfoflotApiClient
         
         $this->timeout = $timeout;
         $this->apiKey = $apiKey;
+        $this->cache = new InfoflotCache();
     }
 
     /**
@@ -29,9 +30,9 @@ class InfoflotApiClient
     {
         $cacheKey = "infoflot_ships_page_{$page}_limit_{$limit}";
         
-        // Проверяем кеш (6 часов)
-        $cachedData = Cache::get($cacheKey);
-        if ($cachedData) {
+        // Проверяем файловый кеш
+        $cachedData = $this->cache->get($cacheKey);
+        if ($cachedData !== null) {
             return $cachedData;
         }
         
@@ -54,8 +55,8 @@ class InfoflotApiClient
 
         $response = $http_query->response;
         
-        // Кешируем на 6 часов
-        Cache::put($cacheKey, $response, 21600);
+        // Сохраняем в файловый кеш (вечный)
+        $this->cache->put($cacheKey, $response);
         
         return $response;
     }
@@ -71,9 +72,9 @@ class InfoflotApiClient
         
         $cacheKey = "infoflot_cruises_ship_{$shipId}_page_{$page}_date_{$date}";
         
-        // Проверяем кеш (6 часов)
-        $cachedData = Cache::get($cacheKey);
-        if ($cachedData) {
+        // Проверяем файловый кеш
+        $cachedData = $this->cache->get($cacheKey);
+        if ($cachedData !== null) {
             return $cachedData;
         }
         
@@ -113,8 +114,8 @@ class InfoflotApiClient
             return null;
         }
         
-        // Кешируем на 6 часов
-        Cache::put($cacheKey, $response, 21600);
+        // Сохраняем в файловый кеш (вечный)
+        $this->cache->put($cacheKey, $response);
         
         return $response;
     }
@@ -126,9 +127,9 @@ class InfoflotApiClient
     {
         $cacheKey = "infoflot_cruise_{$cruiseId}_cabins";
         
-        // Проверяем кеш (6 часов)
-        $cachedData = Cache::get($cacheKey);
-        if ($cachedData) {
+        // Проверяем файловый кеш
+        $cachedData = $this->cache->get($cacheKey);
+        if ($cachedData !== null) {
             return $cachedData;
         }
         
@@ -154,8 +155,8 @@ class InfoflotApiClient
 
         $response = $http_query->response;
         
-        // Кешируем на 6 часов
-        Cache::put($cacheKey, $response, 21600);
+        // Сохраняем в файловый кеш (вечный)
+        $this->cache->put($cacheKey, $response);
         
         return $response;
     }

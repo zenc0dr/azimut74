@@ -393,8 +393,8 @@ class InfoflotDataProcessor
         ProcessLog::add("Обработка палуб и кают для судна $shipId: найдено $cabinsCount кают");
         
         $decks = [];
-        $cabins = [];
         $cabinCategories = [];
+        $typeToDeckMap = []; // Маппинг type_id => deck_id для обновления категорий
         $savedDecksCount = 0;
         
         // Обрабатываем каюты (может быть как массив, так и объект)
@@ -479,13 +479,31 @@ class InfoflotDataProcessor
                     $placesMain = $cabin['places']['main'] ?? 1;
                 }
                 
-                if (!isset($cabinCategories[$typeId])) {
-                    $deckId = null;
-                    if (isset($cabin['deck']) && is_array($cabin['deck']) && isset($cabin['deck']['id'])) {
-                        $deckId = (int)$cabin['deck']['id'];
+                // Получаем deck_id для категории кают
+                $deckId = null;
+                if (isset($cabin['deck_id'])) {
+                    $deckId = (int)$cabin['deck_id'];
+                } elseif (isset($cabin['deck']) && is_array($cabin['deck']) && isset($cabin['deck']['id'])) {
+                    $deckId = (int)$cabin['deck']['id'];
+                } elseif (isset($cabin['deck']) && is_string($cabin['deck'])) {
+                    // Если deck это строка, ищем палубу по названию
+                    $deckName = $cabin['deck'];
+                    $stmt = $this->db->getPdo()->prepare("SELECT id FROM decks WHERE name = ? AND ship_id = ? LIMIT 1");
+                    $stmt->execute([$deckName, $shipId]);
+                    $deckRow = $stmt->fetch(\PDO::FETCH_ASSOC);
+                    if ($deckRow) {
+                        $deckId = (int)$deckRow['id'];
                     }
+                }
+                
+                // Сохраняем маппинг type_id => deck_id для последующего обновления
+                if ($deckId !== null && $deckId > 0) {
+                    $typeToDeckMap[$typeId] = $deckId;
+                }
+                
+                if (!isset($cabinCategories[$typeId])) {
                     try {
-                        // Если название пустое, попробуем получить из цен позже
+                        // Сохраняем категорию с deck_id, если он известен
                         $this->db->saveCabinCategory($typeId, $typeName, $placesMain, $deckId, $shipId);
                         $cabinCategories[$typeId] = true;
                     } catch (\Exception $e) {
@@ -506,36 +524,19 @@ class InfoflotDataProcessor
                     }
                 }
             }
-            
-            // Сохраняем каюту
-            if (isset($cabin['id'])) {
-                $cabinId = (int)$cabin['id'];
-                $cabinName = $cabin['name'] ?? '';
-                $typeId = isset($cabin['type_id']) ? (int)$cabin['type_id'] : null;
-                $deckId = null;
-                // Получаем deck_id из разных источников
-                if (isset($cabin['deck_id'])) {
-                    $deckId = (int)$cabin['deck_id'];
-                } elseif (isset($cabin['deck']) && is_array($cabin['deck']) && isset($cabin['deck']['id'])) {
-                    $deckId = (int)$cabin['deck']['id'];
-                }
-                $placesMain = 1;
-                $placesAdditional = 0;
-                if (isset($cabin['places']) && is_array($cabin['places'])) {
-                    $placesMain = $cabin['places']['main'] ?? 1;
-                    $placesAdditional = $cabin['places']['additional'] ?? 0;
-                }
-                
-                try {
-                    $this->db->saveCabin($cabinId, $shipId, $deckId, $typeId, $cabinName, $placesMain, $placesAdditional);
-                } catch (\Exception $e) {
-                    // Игнорируем ошибки сохранения каюты (возможно уже существует)
-                }
-            }
         }
         
         if ($savedDecksCount > 0) {
             ProcessLog::add("Сохранено палуб для судна $shipId: $savedDecksCount");
+        }
+        
+        // Обновляем deck_id в категориях кают на основе собранного маппинга
+        if (!empty($typeToDeckMap)) {
+            try {
+                $this->db->updateCabinCategoriesDeckId($typeToDeckMap);
+            } catch (\Exception $e) {
+                ProcessLog::add("Ошибка обновления deck_id для категорий кают судна $shipId: " . $e->getMessage());
+            }
         }
     }
 
@@ -616,7 +617,6 @@ class InfoflotDataProcessor
                 $prices[] = [
                     'cruise_id' => (int)$cruiseId,
                     'cabin_category_id' => $cabinCategoryId,
-                    'type_id' => $typeIdInt,
                     'type_name' => $typeName,
                     'price_adult' => $priceAdult,
                     'price_default' => $priceDefault

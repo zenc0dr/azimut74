@@ -5,9 +5,12 @@ namespace Zen\Worker\Pools;
 use Mcmraak\Rivercrs\Models\Checkins as Checkin;
 use Zen\Worker\Console\volga\VolgaDatabase;
 use Zen\Worker\Classes\ProcessLog;
+use Zen\Worker\Models\ErrorLog;
+use Zen\Worker\Models\Stream;
 use DB;
 use Carbon\Carbon;
 use Exception;
+use Yaml;
 
 class VolgaV2 extends Volga
 {
@@ -17,8 +20,15 @@ class VolgaV2 extends Volga
         
         $db = new VolgaDatabase();
         $cruises = $db->getAllCruises();
+        $totalCruises = count($cruises);
         
-        ProcessLog::add("Найдено заездов для обработки: " . count($cruises));
+        ProcessLog::add("Найдено заездов для обработки: " . $totalCruises);
+        
+        // Инициализация файла состояния
+        $this->initStateFile($totalCruises);
+        
+        $errorsCount = 0;
+        $processedCount = 0;
         
         foreach ($cruises as $cruise) {
             $volga_ship_id = $cruise['volga_ship_id'];
@@ -26,7 +36,17 @@ class VolgaV2 extends Volga
             $volga_ship = $db->getShipByVolgaId($volga_ship_id);
             
             if (!$volga_ship) {
+                $this->logError(
+                    "Теплоход с ID $volga_ship_id не найден в SQLite",
+                    [
+                        'volga_ship_id' => $volga_ship_id,
+                        'volga_cruise_id' => $volga_cruise_id
+                    ]
+                );
                 ProcessLog::add("Теплоход с ID $volga_ship_id не найден в SQLite");
+                $errorsCount++;
+                $processedCount++;
+                $this->updateStateFile($processedCount, $totalCruises, $errorsCount, false);
                 continue;
             }
             
@@ -34,9 +54,11 @@ class VolgaV2 extends Volga
             
             $ship = $this->getMotorship($volga_ship['name'], 'volga', $volga_ship_id);
             
-            // Проверка исключения теплохода
+            // Проверка исключения теплохода (не считается ошибкой, просто пропускаем)
             if (!$ship) {
                 ProcessLog::add("Теплоход {$volga_ship['name']} исключён");
+                $processedCount++;
+                $this->updateStateFile($processedCount, $totalCruises, $errorsCount, false);
                 continue;
             }
 
@@ -79,7 +101,19 @@ class VolgaV2 extends Volga
             }
 
             if (!$dateStart || !$dateEnd) {
+                $this->logError(
+                    "Отсутствуют даты для круиза volga:$volga_cruise_id",
+                    [
+                        'volga_cruise_id' => $volga_cruise_id,
+                        'volga_ship_id' => $volga_ship_id,
+                        'date_start_raw' => $cruise['date_start'] ?? null,
+                        'date_end_raw' => $cruise['date_end'] ?? null
+                    ]
+                );
                 ProcessLog::add("Ошибка данных! --- cruise_id:$volga_cruise_id - Отсутствуют даты, заезд игнорирован.");
+                $errorsCount++;
+                $processedCount++;
+                $this->updateStateFile($processedCount, $totalCruises, $errorsCount, false);
                 continue;
             }
 
@@ -88,7 +122,19 @@ class VolgaV2 extends Volga
             
             // Проверка валидности маршрута
             if (!$waybill || empty($waybill) || count($waybill) < 2) {
+                $this->logError(
+                    "Отсутствует или некорректный маршрут для круиза volga:$volga_cruise_id",
+                    [
+                        'volga_cruise_id' => $volga_cruise_id,
+                        'volga_ship_id' => $volga_ship_id,
+                        'waybill_data' => $cruise['waybill_data'] ?? null,
+                        'waybill_points_count' => $waybill ? count($waybill) : 0
+                    ]
+                );
                 ProcessLog::add("Ошибка данных! --- cruise_id:$volga_cruise_id - Отсутствует маршрут, заезд игнорирован.");
+                $errorsCount++;
+                $processedCount++;
+                $this->updateStateFile($processedCount, $totalCruises, $errorsCount, false);
                 continue;
             }
             
@@ -113,13 +159,29 @@ class VolgaV2 extends Volga
             
             // Если цены не найдены, деактивируем заезд
             if (!$pricesImported) {
+                $this->logError(
+                    "Отсутствуют цены для заезда volga:$volga_cruise_id, заезд деактивирован",
+                    [
+                        'volga_cruise_id' => $volga_cruise_id,
+                        'checkin_id' => $checkin->id,
+                        'motorship_id' => $ship->id
+                    ]
+                );
                 ProcessLog::add("Для заезда volga:$volga_cruise_id отсутствуют цены, заезд деактивирован.");
                 $checkin->active = 0;
                 $checkin->save();
             } else {
                 ProcessLog::add("Обработка заезда volga:$volga_cruise_id завершена.");
             }
+            
+            // Обновляем прогресс после обработки каждого круиза
+            $processedCount++;
+            $this->updateStateFile($processedCount, $totalCruises, $errorsCount, false);
         }
+        
+        // Финальное обновление состояния - успешное завершение
+        $this->updateStateFile($processedCount, $totalCruises, $errorsCount, true);
+        ProcessLog::add("Обработка всех заездов Volga завершена. Обработано: $processedCount из $totalCruises, ошибок: $errorsCount");
     }
 
     /**
@@ -301,17 +363,18 @@ class VolgaV2 extends Volga
 
         $restoredCount = 0;
         foreach ($cabinIdsWithPrices as $cabinId) {
-            // Проверяем, есть ли уже связь для этой каюты
-            $hasLink = DB::table('mcmraak_rivercrs_decks_pivot')
-                ->where('cabin_id', $cabinId)
-                ->exists();
-
-            if (!$hasLink) {
-                // ПРИОРИТЕТ 1: Используем точные данные из SQLite (если есть)
-                if (isset($cabinDeckMapping[$cabinId]) && !empty($cabinDeckMapping[$cabinId])) {
-                    $deckName = $cabinDeckMapping[$cabinId];
-                    $deck = $this->getDeck($deckName);
-                    if ($deck) {
+            // ПРИОРИТЕТ 1: Используем точные данные из SQLite (если есть)
+            if (isset($cabinDeckMapping[$cabinId]) && !empty($cabinDeckMapping[$cabinId])) {
+                $deckName = $cabinDeckMapping[$cabinId];
+                $deck = $this->getDeck($deckName);
+                if ($deck) {
+                    // Проверяем, есть ли уже связь с этой конкретной палубой
+                    $hasExactLink = DB::table('mcmraak_rivercrs_decks_pivot')
+                        ->where('cabin_id', $cabinId)
+                        ->where('deck_id', $deck->id)
+                        ->exists();
+                    
+                    if (!$hasExactLink) {
                         try {
                             $this->deckPivotCheck($cabinId, $deck->id);
                             $restoredCount++;
@@ -319,31 +382,118 @@ class VolgaV2 extends Volga
                         } catch (\Exception $e) {
                             // Игнорируем ошибки дубликатов
                         }
-                        continue;
                     }
+                    continue; // Пропускаем fallback, так как точная связь обработана
                 }
+            }
 
-                // ПРИОРИТЕТ 2: Используем эталонную палубу (fallback)
-                if ($referenceDeckId) {
-                    try {
-                        DB::table('mcmraak_rivercrs_decks_pivot')->insert([
-                            'cabin_id' => $cabinId,
-                            'deck_id' => $referenceDeckId
-                        ]);
-                        $restoredCount++;
-                        ProcessLog::add("Восстановлена связь каюты $cabinId с эталонной палубой $referenceDeckId (fallback)");
-                    } catch (\Exception $e) {
-                        // Игнорируем ошибки дубликатов
-                    }
-                } else {
-                    ProcessLog::add("Предупреждение: не удалось создать связь для cabin_id=$cabinId - нет доступных палуб для теплохода $shipId");
+            // ПРИОРИТЕТ 2: Используем эталонную палубу (fallback) только если нет ЛЮБОЙ связи
+            $hasAnyLink = DB::table('mcmraak_rivercrs_decks_pivot')
+                ->where('cabin_id', $cabinId)
+                ->exists();
+
+            if (!$hasAnyLink && $referenceDeckId) {
+                try {
+                    DB::table('mcmraak_rivercrs_decks_pivot')->insert([
+                        'cabin_id' => $cabinId,
+                        'deck_id' => $referenceDeckId
+                    ]);
+                    $restoredCount++;
+                    ProcessLog::add("Восстановлена связь каюты $cabinId с эталонной палубой $referenceDeckId (fallback)");
+                } catch (\Exception $e) {
+                    // Игнорируем ошибки дубликатов
                 }
+            } elseif (!$hasAnyLink) {
+                ProcessLog::add("Предупреждение: не удалось создать связь для cabin_id=$cabinId - нет доступных палуб для теплохода $shipId");
             }
         }
 
         if ($restoredCount > 0) {
             ProcessLog::add("Восстановлено связей кают с палубами для заезда $checkinId: $restoredCount");
         }
+    }
+
+    /**
+     * Логирование ошибки в таблицу zen_worker_errors
+     */
+    private function logError($errorMessage, $cruiseData = [])
+    {
+        try {
+            // Получаем stream_id по code='Volga'
+            $stream = Stream::where('code', 'Volga')->first();
+            
+            if (!$stream) {
+                // Если stream не найден, просто логируем в ProcessLog
+                ProcessLog::add("Не удалось записать ошибку в ErrorLog: stream 'Volga' не найден. Ошибка: $errorMessage");
+                return;
+            }
+            
+            $errorLog = new ErrorLog;
+            $errorLog->stream_id = $stream->id;
+            $errorLog->call = 'VolgaV2@fillVolgaCruises';
+            $errorLog->data = $cruiseData; // Автоматически JSON через setDataAttribute
+            $errorLog->error = $errorMessage;
+            $errorLog->save();
+            
+        } catch (\Exception $e) {
+            // Если не удалось записать в ErrorLog, хотя бы логируем в ProcessLog
+            ProcessLog::add("Ошибка при записи в ErrorLog: " . $e->getMessage());
+        }
+    }
+
+    /**
+     * Инициализация файла состояния
+     */
+    private function initStateFile($totalCruises)
+    {
+        $statePath = storage_path('worker/VolgaState.yaml');
+        $stateDir = dirname($statePath);
+        
+        // Создаём директорию если не существует
+        if (!is_dir($stateDir)) {
+            mkdir($stateDir, 0777, true);
+        }
+        
+        $state = [
+            [
+                'progress_of' => $totalCruises,
+                'progress_to' => 0,
+                'errors_count' => 0,
+                'success' => false,
+                'updated_at' => time()
+            ]
+        ];
+        
+        $yaml = Yaml::render($state);
+        file_put_contents($statePath, $yaml);
+        
+        ProcessLog::add("Файл состояния инициализирован: $totalCruises заездов для обработки");
+    }
+
+    /**
+     * Обновление файла состояния
+     */
+    private function updateStateFile($progressOf, $progressTo, $errorsCount, $success)
+    {
+        $statePath = storage_path('worker/VolgaState.yaml');
+        
+        if (!file_exists($statePath)) {
+            // Если файл не существует, создаём его
+            $this->initStateFile($progressOf);
+        }
+        
+        $state = [
+            [
+                'progress_of' => $progressTo,
+                'progress_to' => $progressOf,
+                'errors_count' => $errorsCount,
+                'success' => $success,
+                'updated_at' => time()
+            ]
+        ];
+        
+        $yaml = Yaml::render($state);
+        file_put_contents($statePath, $yaml);
     }
 }
 
