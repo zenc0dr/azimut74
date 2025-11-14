@@ -244,6 +244,40 @@ class GamaDatabase
     }
 
     /**
+     * Обновление waybill_data для круиза (исправление экранирования кириллицы)
+     */
+    public function updateWaybillData($cruiseId, $waybillData)
+    {
+        try {
+            $stmt = $this->pdo->prepare("
+                UPDATE cruises 
+                SET waybill_data = ?, updated_at = CURRENT_TIMESTAMP
+                WHERE id = ?
+            ");
+            return $stmt->execute([$waybillData, $cruiseId]);
+        } catch (Exception $e) {
+            throw new Exception("Ошибка обновления waybill_data для круиза $cruiseId: " . $e->getMessage());
+        }
+    }
+
+    /**
+     * Получение всех круизов с waybill_data
+     */
+    public function getAllCruisesWithWaybill()
+    {
+        try {
+            $stmt = $this->pdo->query("
+                SELECT id, waybill_data 
+                FROM cruises 
+                WHERE waybill_data IS NOT NULL AND waybill_data != ''
+            ");
+            return $stmt->fetchAll(PDO::FETCH_ASSOC);
+        } catch (Exception $e) {
+            throw new Exception("Ошибка получения круизов: " . $e->getMessage());
+        }
+    }
+
+    /**
      * Сохранение палубы (id = gama_deck_id)
      */
     public function saveDeck($gamaDeckId, $name, $shipId)

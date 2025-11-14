@@ -136,7 +136,7 @@ class GamaDataProcessor
             'date_end' => $dateEnd,
             'path_s_id' => $pathSId,
             'path_f_id' => $pathFId,
-            'waybill_data' => json_encode($waybill),
+            'waybill_data' => json_encode($waybill, JSON_UNESCAPED_UNICODE),
             'schedule_html' => $scheduleHtml
         ];
     }

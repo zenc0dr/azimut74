@@ -6,6 +6,7 @@ use Mcmraak\Rivercrs\Models\Checkins as Checkin;
 use Zen\Worker\Console\gama\GamaDatabase;
 use Zen\Worker\Classes\ProcessLog;
 use DB;
+use Yaml;
 
 class GamaV3 extends RiverCrs
 {
@@ -15,8 +16,15 @@ class GamaV3 extends RiverCrs
         
         $db = new GamaDatabase();
         $cruises = $db->getAllCruises();
+        $totalCruises = count($cruises);
         
-        ProcessLog::add("Найдено заездов для обработки: " . count($cruises));
+        ProcessLog::add("Найдено заездов для обработки: " . $totalCruises);
+        
+        // Инициализация файла состояния
+        $this->initStateFile($totalCruises);
+        
+        $errorsCount = 0;
+        $processedCount = 0;
         
         foreach ($cruises as $cruise) {
             $gama_ship_id = $cruise['gama_ship_id'];
@@ -30,6 +38,8 @@ class GamaV3 extends RiverCrs
             // Проверка исключения теплохода (как в GamaV2.php)
             if (!$ship) {
                 ProcessLog::add("Теплоход {$gama_ship['name']} исключён");
+                $processedCount++;
+                $this->updateStateFile($processedCount, $totalCruises, $errorsCount, false);
                 continue;
             }
 
@@ -54,6 +64,9 @@ class GamaV3 extends RiverCrs
             // Проверка валидности маршрута (как в GamaV2.php)
             if (!$waybill || empty($waybill)) {
                 ProcessLog::add("Ошибка данных! --- cruise_id:$gama_cruise_id - Отсутствует маршрут, заезд игнорирован.");
+                $errorsCount++;
+                $processedCount++;
+                $this->updateStateFile($processedCount, $totalCruises, $errorsCount, false);
                 continue;
             }
             
@@ -88,8 +101,14 @@ class GamaV3 extends RiverCrs
                 ProcessLog::add("Кеш для заезда {$checkin->id} обновлён после импорта цен");
                 ProcessLog::add("Обработка заезда gama:$gama_cruise_id завершена.");
             }
-
+            
+            $processedCount++;
+            $this->updateStateFile($processedCount, $totalCruises, $errorsCount, false);
         }
+        
+        // Финальное обновление состояния
+        $this->updateStateFile($processedCount, $totalCruises, $errorsCount, true);
+        ProcessLog::add("Обработка всех заездов Gama завершена. Обработано: $processedCount, Ошибок: $errorsCount");
     }
 
     /**
@@ -112,7 +131,7 @@ class GamaV3 extends RiverCrs
                 $result[] = [
                     'town' => $this->getTownId($point['town_name'], 'gama'),
                     'excursion' => '',
-                    'bold' => $point['is_bold'] ?? false
+                    'bold' => $point['bold'] ?? $point['is_bold'] ?? false
                 ];
             }
         }
@@ -200,5 +219,60 @@ class GamaV3 extends RiverCrs
         
         ProcessLog::add("Валидных цен для заезда $gamaCruiseId не найдено");
         return false; // Валидных цен не найдено
+    }
+
+    /**
+     * Инициализация файла состояния
+     */
+    private function initStateFile($totalCruises)
+    {
+        $statePath = storage_path('worker/GamaState.yaml');
+        $stateDir = dirname($statePath);
+        
+        // Создаём директорию если не существует
+        if (!is_dir($stateDir)) {
+            mkdir($stateDir, 0777, true);
+        }
+        
+        $state = [
+            [
+                'progress_of' => $totalCruises,
+                'progress_to' => 0,
+                'errors_count' => 0,
+                'success' => false,
+                'updated_at' => time()
+            ]
+        ];
+        
+        $yaml = Yaml::render($state);
+        file_put_contents($statePath, $yaml);
+        
+        ProcessLog::add("Файл состояния инициализирован: $totalCruises заездов для обработки");
+    }
+
+    /**
+     * Обновление файла состояния
+     */
+    private function updateStateFile($progressOf, $progressTo, $errorsCount, $success)
+    {
+        $statePath = storage_path('worker/GamaState.yaml');
+        
+        if (!file_exists($statePath)) {
+            // Если файл не существует, создаём его
+            $this->initStateFile($progressOf);
+        }
+        
+        $state = [
+            [
+                'progress_of' => $progressTo,
+                'progress_to' => $progressOf,
+                'errors_count' => $errorsCount,
+                'success' => $success,
+                'updated_at' => time()
+            ]
+        ];
+        
+        $yaml = Yaml::render($state);
+        file_put_contents($statePath, $yaml);
     }
 }

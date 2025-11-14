@@ -10,17 +10,17 @@ class Debug
         $dumpId = Input::get('id');
 
         if (!$dumpId) {
-            return response()->json(['error' => 'Dump ID required'], 400);
+            return response()->json(['error' => 'Dump ID required'], 400, [], JSON_UNESCAPED_UNICODE);
         }
 
         $dumpFile = storage_path("cursor_dumps/{$dumpId}.json");
 
         if (!file_exists($dumpFile)) {
-            return response()->json(['error' => 'Dump not found', 'id' => $dumpId], 404);
+            return response()->json(['error' => 'Dump not found', 'id' => $dumpId], 404, [], JSON_UNESCAPED_UNICODE);
         }
 
         $dumpData = json_decode(file_get_contents($dumpFile), true);
-        return response()->json($dumpData);
+        return response()->json($dumpData, 200, [], JSON_UNESCAPED_UNICODE);
     }
 
     # http://azimut.dc/zen/worker/api/debug:cursorList
@@ -47,6 +47,6 @@ class Debug
             return strcmp($b['timestamp'], $a['timestamp']);
         });
 
-        return response()->json(['dumps' => $dumps, 'total' => count($dumps)]);
+        return response()->json(['dumps' => $dumps, 'total' => count($dumps)], 200, [], JSON_UNESCAPED_UNICODE);
     }
 }
