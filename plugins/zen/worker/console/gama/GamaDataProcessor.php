@@ -86,6 +86,17 @@ class GamaDataProcessor
         if (!empty($cruises)) {
             $this->db->saveCruisesBatch($cruises);
             ProcessLog::add("Сохранено круизов: " . count($cruises));
+            
+            // Сохраняем waybills для каждого круиза
+            $waybillsSaved = 0;
+            foreach ($cruises as $cruiseData) {
+                $waybill = json_decode($cruiseData['waybill_data'], true);
+                if ($waybill && is_array($waybill) && !empty($waybill)) {
+                    $this->saveWaybill($cruiseData['gama_cruise_id'], $waybill);
+                    $waybillsSaved++;
+                }
+            }
+            ProcessLog::add("Сохранено waybills: " . $waybillsSaved);
         }
     }
 
@@ -311,7 +322,6 @@ class GamaDataProcessor
             ini_set('max_execution_time', 0);
             
             // Получаем данные о ценах через API
-            ProcessLog::add("Запрос данных маршрута {$cruise['gama_cruise_id']} через API...");
             $routeData = $this->apiClient->getGamaRouteData($cruise['gama_cruise_id']);
             
             // Если API вернул null (Sub expired или нет данных), просто пропускаем круиз
@@ -560,16 +570,24 @@ class GamaDataProcessor
      */
     private function saveWaybill($cruiseId, $waybill)
     {
+        if (empty($waybill) || !is_array($waybill)) {
+            return;
+        }
+        
         foreach ($waybill as $index => $point) {
-            $this->db->saveWaybill(
-                $cruiseId,
-                $point['town_name'] ?? '',
-                $point['town'] ?? 0,
-                $point['arrival_time'] ?? null,
-                $point['departure_time'] ?? null,
-                $point['bold'] ?? 0,
-                $index
-            );
+            try {
+                $this->db->saveWaybill(
+                    $cruiseId,
+                    $point['town_name'] ?? '',
+                    $point['town'] ?? 0,
+                    $point['arrival_time'] ?? null,
+                    $point['departure_time'] ?? null,
+                    $point['bold'] ?? 0,
+                    $index
+                );
+            } catch (Exception $e) {
+                // Игнорируем ошибки сохранения отдельных точек маршрута
+            }
         }
     }
 

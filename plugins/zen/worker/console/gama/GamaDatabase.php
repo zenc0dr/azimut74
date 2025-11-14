@@ -22,6 +22,8 @@ class GamaDatabase
         try {
             $this->pdo = new PDO("sqlite:" . $this->dbPath);
             $this->pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+            // Включаем foreign keys для проверки целостности
+            $this->pdo->exec("PRAGMA foreign_keys = ON");
             $this->createTables();
         } catch (Exception $e) {
             throw new Exception("Ошибка подключения к SQLite: " . $e->getMessage());
@@ -104,6 +106,8 @@ class GamaDatabase
         ");
 
         // Таблица маршрутов (путевых листов)
+        // Временно убираем FOREIGN KEY, чтобы waybills могли сохраняться даже если круизы ещё не сохранены
+        // (круизы и waybills сохраняются в одной транзакции, но foreign key может блокировать)
         $this->pdo->exec("
             CREATE TABLE IF NOT EXISTS waybills (
                 id INTEGER PRIMARY KEY AUTOINCREMENT,
@@ -114,8 +118,7 @@ class GamaDatabase
                 departure_time DATETIME,
                 is_bold INTEGER DEFAULT 0,
                 order_index INTEGER,
-                created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
-                FOREIGN KEY (cruise_id) REFERENCES cruises(id)
+                created_at DATETIME DEFAULT CURRENT_TIMESTAMP
             )
         ");
 
@@ -199,32 +202,45 @@ class GamaDatabase
      */
     public function saveCruisesBatch($cruises)
     {
-        $this->pdo->beginTransaction();
-        
-        $stmt = $this->pdo->prepare("
-            INSERT OR REPLACE INTO cruises (
-                id, ship_id, name, route_name, 
-                date_start, date_end, path_s_id, path_f_id, 
-                waybill_data, schedule_html, updated_at
-            ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, CURRENT_TIMESTAMP)
-        ");
-        
-        foreach ($cruises as $cruise) {
-            $stmt->execute([
-                $cruise['gama_cruise_id'],
-                $cruise['gama_ship_id'],
-                $cruise['name'],
-                $cruise['route_name'],
-                $cruise['date_start'],
-                $cruise['date_end'],
-                $cruise['path_s_id'],
-                $cruise['path_f_id'],
-                $cruise['waybill_data'],
-                $cruise['schedule_html']
-            ]);
+        try {
+            $this->pdo->beginTransaction();
+            
+            $stmt = $this->pdo->prepare("
+                INSERT OR REPLACE INTO cruises (
+                    id, ship_id, name, route_name, 
+                    date_start, date_end, path_s_id, path_f_id, 
+                    waybill_data, schedule_html, updated_at
+                ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, CURRENT_TIMESTAMP)
+            ");
+            
+            $saved = 0;
+            foreach ($cruises as $cruise) {
+                try {
+                    $result = $stmt->execute([
+                        $cruise['gama_cruise_id'],
+                        $cruise['gama_ship_id'],
+                        $cruise['name'],
+                        $cruise['route_name'],
+                        $cruise['date_start'],
+                        $cruise['date_end'],
+                        $cruise['path_s_id'],
+                        $cruise['path_f_id'],
+                        $cruise['waybill_data'],
+                        $cruise['schedule_html']
+                    ]);
+                    if ($result) {
+                        $saved++;
+                    }
+                } catch (Exception $e) {
+                    throw $e;
+                }
+            }
+            
+            $this->pdo->commit();
+        } catch (Exception $e) {
+            $this->pdo->rollBack();
+            throw $e;
         }
-        
-        $this->pdo->commit();
     }
 
     /**

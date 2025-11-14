@@ -72,7 +72,6 @@ class GamaApiClient
         // Проверяем кеш в JSON файлах
         if ($this->cache->has($cacheKey)) {
             $cachedData = $this->cache->get($cacheKey);
-            ProcessLog::add("Данные маршрута $routeId загружены из кеша");
             return $cachedData; // Может быть null, если был сохранён null
         }
         
@@ -81,26 +80,17 @@ class GamaApiClient
         ini_set('max_execution_time', 0);
         
         $url = $this->routeUrl . $routeId . '/?key=' . $this->key;
-        ProcessLog::add("Запрос к API Gama для маршрута $routeId: $url");
         
         $http = new Http();
         $http_query = $http->setTimout($this->timeout)
             ->query($url, 'xml');
 
         if ($http_query->error) {
-            ProcessLog::add("Ошибка HTTP запроса для маршрута $routeId: " . $http_query->error);
             throw new Exception("Ошибка получения данных маршрута #$routeId: " . $http_query->error);
         }
 
         // Содержимое ответа
         $responseContent = $http_query->response;
-
-        // Безопасное логирование
-        if (is_string($responseContent)) {
-            ProcessLog::add("Ответ API для круиза $routeId: " . substr($responseContent, 0, 100) . "...");
-        } else {
-            ProcessLog::add("Ответ API для круиза $routeId: тип=" . gettype($responseContent));
-        }
 
         // Если строка и содержит "Sub expired" — данных нет
         if (is_string($responseContent) && strpos($responseContent, 'Sub expired') !== false) {
@@ -121,11 +111,6 @@ class GamaApiClient
         // Сохраняем даже если массив пустой, чтобы не запрашивать повторно
         try {
             $this->cache->put($cacheKey, $responseArray);
-            if ($responseArray && !empty($responseArray)) {
-                ProcessLog::add("Данные маршрута $routeId сохранены в кеш");
-            } else {
-                ProcessLog::add("Пустой ответ для маршрута $routeId сохранён в кеш");
-            }
         } catch (Exception $e) {
             ProcessLog::add("Ошибка сохранения кеша для маршрута $routeId: " . $e->getMessage());
         }
