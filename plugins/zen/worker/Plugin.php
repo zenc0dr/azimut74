@@ -23,6 +23,7 @@ class Plugin extends PluginBase
         $this->registerConsoleCommand('worker:infoflot-check-ship', 'Zen\Worker\Console\infoflot\CheckSingleShip');
         $this->registerConsoleCommand('worker:volga-parse', 'Zen\Worker\Console\volga\VolgaParse');
         $this->registerConsoleCommand('worker:germes-parse', 'Zen\Worker\Console\germes\GermesParse');
+        $this->registerConsoleCommand('worker:waterway-parse', 'Zen\Worker\Console\waterway\WaterwayParse');
     }
 
     public function boot()
