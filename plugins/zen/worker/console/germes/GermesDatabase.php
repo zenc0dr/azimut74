@@ -45,6 +45,15 @@ class GermesDatabase
             )
         ");
 
+        // Таблица палуб
+        $this->pdo->exec("
+            CREATE TABLE IF NOT EXISTS decks (
+                id INTEGER PRIMARY KEY AUTOINCREMENT,
+                name TEXT NOT NULL UNIQUE,
+                created_at DATETIME DEFAULT CURRENT_TIMESTAMP
+            )
+        ");
+
         // Таблица категорий кают (id = germes_class_id)
         $this->pdo->exec("
             CREATE TABLE IF NOT EXISTS cabin_categories (
@@ -52,10 +61,15 @@ class GermesDatabase
                 name TEXT NOT NULL,
                 description TEXT,
                 ship_id INTEGER,
+                deck_id INTEGER,
                 created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
-                FOREIGN KEY (ship_id) REFERENCES ships(id)
+                FOREIGN KEY (ship_id) REFERENCES ships(id),
+                FOREIGN KEY (deck_id) REFERENCES decks(id)
             )
         ");
+        
+        // Миграция: добавляем поле deck_id если его нет
+        $this->migrateAddDeckId();
 
         // Таблица кают (pivot)
         // Временно убираем FOREIGN KEY, так как pivot может содержать ссылки на категории, которые ещё не сохранены
@@ -101,7 +115,36 @@ class GermesDatabase
         $this->pdo->exec("CREATE INDEX IF NOT EXISTS idx_prices_cruise_id ON prices(cruise_id)");
         $this->pdo->exec("CREATE INDEX IF NOT EXISTS idx_prices_cabin_category_id ON prices(cabin_category_id)");
         $this->pdo->exec("CREATE INDEX IF NOT EXISTS idx_cabin_categories_ship_id ON cabin_categories(ship_id)");
+        $this->pdo->exec("CREATE INDEX IF NOT EXISTS idx_cabin_categories_deck_id ON cabin_categories(deck_id)");
         $this->pdo->exec("CREATE INDEX IF NOT EXISTS idx_cabins_cabin_category_id ON cabins(cabin_category_id)");
+    }
+
+    /**
+     * Миграция: добавление поля deck_id в cabin_categories
+     */
+    private function migrateAddDeckId()
+    {
+        try {
+            // Проверяем, существует ли поле deck_id
+            $stmt = $this->pdo->query("PRAGMA table_info(cabin_categories)");
+            $columns = $stmt->fetchAll(PDO::FETCH_ASSOC);
+            
+            $hasDeckId = false;
+            foreach ($columns as $column) {
+                if ($column['name'] === 'deck_id') {
+                    $hasDeckId = true;
+                    break;
+                }
+            }
+            
+            // Если поля нет, добавляем его
+            if (!$hasDeckId) {
+                $this->pdo->exec("ALTER TABLE cabin_categories ADD COLUMN deck_id INTEGER");
+                $this->pdo->exec("CREATE INDEX IF NOT EXISTS idx_cabin_categories_deck_id ON cabin_categories(deck_id)");
+            }
+        } catch (\Exception $e) {
+            // Игнорируем ошибки миграции, если таблица ещё не создана
+        }
     }
 
     /**
@@ -146,16 +189,45 @@ class GermesDatabase
     }
 
     /**
+     * Сохранение палубы
+     */
+    public function saveDeck($name)
+    {
+        $stmt = $this->pdo->prepare("
+            INSERT OR IGNORE INTO decks (name) 
+            VALUES (?)
+        ");
+        $stmt->execute([$name]);
+        
+        // Получаем ID сохранённой палубы
+        $stmt = $this->pdo->prepare("SELECT id FROM decks WHERE name = ?");
+        $stmt->execute([$name]);
+        $result = $stmt->fetch(PDO::FETCH_ASSOC);
+        return $result ? (int)$result['id'] : null;
+    }
+
+    /**
+     * Получение палубы по названию
+     */
+    public function getDeckByName($name)
+    {
+        $stmt = $this->pdo->prepare("SELECT id FROM decks WHERE name = ?");
+        $stmt->execute([$name]);
+        $result = $stmt->fetch(PDO::FETCH_ASSOC);
+        return $result ? (int)$result['id'] : null;
+    }
+
+    /**
      * Сохранение категории кают (id = germes_class_id)
      */
-    public function saveCabinCategory($germesClassId, $name, $description = null, $shipId = null)
+    public function saveCabinCategory($germesClassId, $name, $description = null, $shipId = null, $deckId = null)
     {
         $stmt = $this->pdo->prepare("
             INSERT OR REPLACE INTO cabin_categories 
-            (id, name, description, ship_id) 
-            VALUES (?, ?, ?, ?)
+            (id, name, description, ship_id, deck_id) 
+            VALUES (?, ?, ?, ?, ?)
         ");
-        return $stmt->execute([$germesClassId, $name, $description, $shipId]);
+        return $stmt->execute([$germesClassId, $name, $description, $shipId, $deckId]);
     }
 
     /**
@@ -167,8 +239,8 @@ class GermesDatabase
         
         $stmt = $this->pdo->prepare("
             INSERT OR REPLACE INTO cabin_categories 
-            (id, name, description, ship_id) 
-            VALUES (?, ?, ?, ?)
+            (id, name, description, ship_id, deck_id) 
+            VALUES (?, ?, ?, ?, ?)
         ");
         
         foreach ($categories as $category) {
@@ -176,7 +248,8 @@ class GermesDatabase
                 $category['id'],
                 $category['name'],
                 $category['description'] ?? null,
-                $category['ship_id'] ?? null
+                $category['ship_id'] ?? null,
+                $category['deck_id'] ?? null
             ]);
         }
         
@@ -383,6 +456,10 @@ class GermesDatabase
         $stmt = $this->pdo->query("SELECT COUNT(*) as count FROM cabins");
         $stats['cabins'] = $stmt->fetch(PDO::FETCH_ASSOC)['count'];
         
+        // Количество палуб
+        $stmt = $this->pdo->query("SELECT COUNT(*) as count FROM decks");
+        $stats['decks'] = $stmt->fetch(PDO::FETCH_ASSOC)['count'];
+        
         return $stats;
     }
 
@@ -395,6 +472,7 @@ class GermesDatabase
         $this->pdo->exec("DELETE FROM cabins");
         $this->pdo->exec("DELETE FROM cabin_categories");
         $this->pdo->exec("DELETE FROM cruises");
+        $this->pdo->exec("DELETE FROM decks");
         $this->pdo->exec("DELETE FROM ships");
     }
 
@@ -463,6 +541,71 @@ class GermesDatabase
         } catch (\Exception $e) {
             $this->pdo->rollBack();
             throw new \Exception("Ошибка при обновлении ship_id в cabin_categories: " . $e->getMessage());
+        }
+    }
+
+    /**
+     * Обновление deck_id в cabin_categories на основе данных из описаний
+     */
+    public function updateCabinCategoriesDeckId($categoryToDeckMap)
+    {
+        if (empty($categoryToDeckMap)) {
+            return 0;
+        }
+        
+        try {
+            $this->pdo->beginTransaction();
+            
+            $stmt = $this->pdo->prepare("
+                UPDATE cabin_categories 
+                SET deck_id = ? 
+                WHERE id = ? AND (deck_id IS NULL OR deck_id = 0)
+            ");
+            
+            $updated = 0;
+            foreach ($categoryToDeckMap as $categoryId => $deckId) {
+                if ($deckId !== null && $deckId > 0) {
+                    $stmt->execute([$deckId, $categoryId]);
+                    $updated += $stmt->rowCount();
+                }
+            }
+            
+            $this->pdo->commit();
+            
+            return $updated;
+        } catch (\Exception $e) {
+            $this->pdo->rollBack();
+            throw new \Exception("Ошибка при обновлении deck_id в cabin_categories: " . $e->getMessage());
+        }
+    }
+
+    /**
+     * Удаление категорий кают без привязки к теплоходу
+     */
+    public function deleteCabinCategoriesWithoutShip()
+    {
+        try {
+            // Сначала удаляем цены для этих категорий
+            $this->pdo->exec("
+                DELETE FROM prices 
+                WHERE cabin_category_id IN (
+                    SELECT id FROM cabin_categories WHERE ship_id IS NULL
+                )
+            ");
+            
+            // Затем удаляем сами категории
+            $stmt = $this->pdo->query("
+                SELECT COUNT(*) as count FROM cabin_categories WHERE ship_id IS NULL
+            ");
+            $count = $stmt->fetch(PDO::FETCH_ASSOC)['count'];
+            
+            $this->pdo->exec("
+                DELETE FROM cabin_categories WHERE ship_id IS NULL
+            ");
+            
+            return (int)$count;
+        } catch (\Exception $e) {
+            throw new \Exception("Ошибка при удалении категорий без теплохода: " . $e->getMessage());
         }
     }
 

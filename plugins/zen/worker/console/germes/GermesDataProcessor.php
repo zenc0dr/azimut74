@@ -96,11 +96,14 @@ class GermesDataProcessor
                     : $item['Описание'];
             }
             
+            // Используем id_teplohod из @attributes для установки ship_id
+            $shipId = isset($data['id_teplohod']) ? (int)$data['id_teplohod'] : null;
+            
             $categories[] = [
                 'id' => (int)$data['id'],
                 'name' => $data['Название'] ?? '',
                 'description' => $description,
-                'ship_id' => null // Связь с теплоходом устанавливается позже
+                'ship_id' => $shipId // Используем id_teplohod из API
             ];
         }
         
@@ -195,10 +198,23 @@ class GermesDataProcessor
         // Обрабатываем цены для каждого круиза
         $this->processCruisesPrices($cruises);
         
-        // Обновляем ship_id в cabin_categories на основе данных из круизов и цен
+        // Обновляем ship_id в cabin_categories на основе данных из круизов и цен (для тех, у кого не было id_teplohod)
         ProcessLog::add('Обновление связей категорий кают с теплоходами...');
         $updated = $this->db->updateCabinCategoriesShipId();
         ProcessLog::add("Обновлено связей категорий кают с теплоходами: $updated");
+        
+        // Извлекаем палубы из описаний и обновляем deck_id
+        ProcessLog::add('Извлечение палуб из описаний кают...');
+        $deckMapping = $this->extractDecksFromDescriptions();
+        if (!empty($deckMapping)) {
+            $updatedDecks = $this->db->updateCabinCategoriesDeckId($deckMapping);
+            ProcessLog::add("Обновлено связей категорий кают с палубами: $updatedDecks");
+        }
+        
+        // Удаляем категории без привязки к теплоходу
+        ProcessLog::add('Удаление категорий кают без привязки к теплоходу...');
+        $deleted = $this->db->deleteCabinCategoriesWithoutShip();
+        ProcessLog::add("Удалено категорий без теплохода: $deleted");
     }
 
     /**
@@ -456,6 +472,190 @@ class GermesDataProcessor
             ProcessLog::add("Ошибка обработки цен для круиза $cruiseId: " . $e->getMessage());
             return [];
         }
+    }
+
+    /**
+     * Извлечение палуб из описаний категорий кают
+     * Адаптировано из getGermesDeck из exist/Germes.php
+     */
+    private function extractDecksFromDescriptions()
+    {
+        // Получаем все категории с описаниями
+        $stmt = $this->db->getPdo()->query("
+            SELECT id, description 
+            FROM cabin_categories 
+            WHERE description IS NOT NULL AND description != ''
+        ");
+        
+        $categoryToDeckMap = [];
+        
+        while ($row = $stmt->fetch(\PDO::FETCH_ASSOC)) {
+            $categoryId = (int)$row['id'];
+            $description = $row['description'];
+            
+            // Извлекаем палубу из описания
+            $deckName = $this->extractDeckNameFromDescription($description);
+            
+            if ($deckName) {
+                // Сохраняем палубу в базу
+                $deckId = $this->db->saveDeck($deckName);
+                
+                if ($deckId) {
+                    $categoryToDeckMap[$categoryId] = $deckId;
+                }
+            }
+        }
+        
+        return $categoryToDeckMap;
+    }
+
+    /**
+     * Извлечение названия палубы из описания каюты
+     * Адаптировано из getGermesDeck
+     */
+    private function extractDeckNameFromDescription($description)
+    {
+        if (empty($description)) {
+            return null;
+        }
+        
+        // Нормализуем текст
+        $text = mb_strtolower($description);
+        $text = preg_replace('/ {1,}/', ' ', $text);
+        $words = explode(' ', $text);
+        
+        // Список известных названий палуб (можно расширить)
+        $knownDecks = [
+            'нижняя', 'нижней', 'нижнюю',
+            'главная', 'главной', 'главную',
+            'средняя', 'средней', 'среднюю',
+            'шлюпочная', 'шлюпочной', 'шлюпочную',
+            'солнечная', 'солнечной', 'солнечную',
+            'прогулочная', 'прогулочной', 'прогулочную',
+            'верхняя', 'верхней', 'верхнюю',
+            'багажная', 'багажной', 'багажную'
+        ];
+        
+        // Сначала ищем стандартный паттерн: "название палуба"
+        for ($i = 0, $count = count($words); $i < $count; $i++) {
+            $word = trim($words[$i]);
+            if (empty($word)) {
+                continue;
+            }
+            
+            $prevWord = ($i > 0) ? trim($words[$i - 1]) : false;
+            $nextWord = ($i < $count - 1) ? trim($words[$i + 1]) : false;
+            $next2Word = ($i < $count - 2) ? trim($words[$i + 2]) : false;
+            $next3Word = ($i < $count - 3) ? trim($words[$i + 3]) : false;
+            
+            // Проверяем, является ли слово названием палубы
+            $deckName = $this->isDeckName($word, $knownDecks);
+            if ($deckName === false || $prevWord == 'и') {
+                continue;
+            }
+            
+            // После слова есть "палуба" или "палубе"
+            if ($this->isDeckWord($nextWord)) {
+                return $this->normalizeDeckName($deckName);
+            }
+            
+            // После слова стоит "и", а после "и" стоит имя палубы, а после имени палубы стоит "палуба"
+            $deckName2 = $this->isDeckName($next2Word, $knownDecks);
+            if ($nextWord == 'и' && $deckName2 && $this->isDeckWord($next3Word)) {
+                // Возвращаем первую палубу (можно обработать обе, но для простоты берем первую)
+                return $this->normalizeDeckName($deckName);
+            }
+        }
+        
+        // Если не нашли стандартный паттерн, ищем "палуба" и проверяем контекст вокруг
+        for ($i = 0, $count = count($words); $i < $count; $i++) {
+            $word = trim($words[$i]);
+            if (!$this->isDeckWord($word)) {
+                continue;
+            }
+            
+            // Проверяем слова перед "палуба" (в пределах 3 слов)
+            for ($j = max(0, $i - 3); $j < $i; $j++) {
+                $prevWord = trim($words[$j]);
+                if (empty($prevWord)) {
+                    continue;
+                }
+                
+                $deckName = $this->isDeckName($prevWord, $knownDecks);
+                if ($deckName !== false) {
+                    return $this->normalizeDeckName($deckName);
+                }
+            }
+        }
+        
+        return null;
+    }
+
+    /**
+     * Проверка, является ли слово названием палубы
+     * Проверяет точное совпадение или начало слова (для склонений)
+     */
+    private function isDeckName($word, $knownDecks)
+    {
+        if (mb_strlen($word) < 4) {
+            return false;
+        }
+        
+        $wordLower = mb_strtolower(trim($word));
+        // Убираем знаки препинания в конце слова
+        $wordLower = preg_replace('/[.,;:!?\)]+$/', '', $wordLower);
+        
+        foreach ($knownDecks as $deck) {
+            // Точное совпадение
+            if ($wordLower === $deck) {
+                return $deck;
+            }
+            
+            // Начало слова совпадает с названием палубы (для склонений: нижняя, нижней, нижнюю)
+            if (mb_strlen($wordLower) >= mb_strlen($deck) && mb_substr($wordLower, 0, mb_strlen($deck)) === $deck) {
+                return $deck;
+            }
+            
+            // Название палубы начинается со слова (для случаев типа "нижняя палуба")
+            if (mb_strlen($deck) >= mb_strlen($wordLower) && mb_substr($deck, 0, mb_strlen($wordLower)) === $wordLower) {
+                return $deck;
+            }
+        }
+        
+        return false;
+    }
+
+    /**
+     * Проверка, является ли слово "палуба" или производным
+     */
+    private function isDeckWord($word)
+    {
+        if (empty($word)) {
+            return false;
+        }
+        
+        $wordLower = mb_strtolower($word);
+        return mb_substr($wordLower, 0, 5) == 'палуб';
+    }
+
+    /**
+     * Нормализация названия палубы (первая буква заглавная)
+     */
+    private function normalizeDeckName($deckName)
+    {
+        if (empty($deckName)) {
+            return null;
+        }
+        
+        // Преобразуем в нормальное название с заглавной буквы
+        $normalized = mb_strtoupper(mb_substr($deckName, 0, 1)) . mb_substr($deckName, 1);
+        
+        // Добавляем "палуба" если нужно
+        if (mb_strpos($normalized, 'палуб') === false) {
+            $normalized .= ' палуба';
+        }
+        
+        return $normalized;
     }
 
     /**

@@ -307,7 +307,21 @@ class WaterwayApiClient
         
         // Проверяем кеш полного списка
         if ($this->cache->has($cacheKey)) {
-            return $this->cache->get($cacheKey);
+            $cachedCruises = $this->cache->get($cacheKey);
+            
+            // Исправляем days в закешированных данных (конвертируем секунды в дни)
+            // Это нужно для данных, закешированных до исправления
+            if (is_array($cachedCruises)) {
+                foreach ($cachedCruises as $cruiseId => &$cruise) {
+                    if (isset($cruise['days']) && $cruise['days'] > 100) {
+                        // Если days больше 100, вероятно это секунды, конвертируем в дни
+                        $cruise['days'] = (int)($cruise['days'] / 86400);
+                    }
+                }
+                unset($cruise); // Сбрасываем ссылку
+            }
+            
+            return $cachedCruises;
         }
         
         // Получаем все круизы с пагинацией
@@ -358,12 +372,16 @@ class WaterwayApiClient
                 
                 // Преобразуем в формат, ожидаемый парсером (id => данные)
                 foreach ($cruises as $cruise) {
+                    // Конвертируем duration из секунд в дни
+                    $durationSeconds = $cruise['duration'] ?? 0;
+                    $days = $durationSeconds > 0 ? (int)($durationSeconds / 86400) : 0;
+                    
                     $allCruises[$cruise['id']] = [
                         'name' => $cruise['name'] ?? '',
                         'motorshipId' => $cruise['motorship']['id'] ?? null,
                         'dateStart' => $cruise['dateStart'] ?? null,
                         'dateStop' => $cruise['dateEnd'] ?? null,
-                        'days' => $cruise['duration'] ?? 0,
+                        'days' => $days,
                         'classDescription' => $cruise['classDescription'] ?? null
                     ];
                 }

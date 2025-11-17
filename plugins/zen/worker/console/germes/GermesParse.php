@@ -76,9 +76,6 @@ class GermesParse extends Command
             $this->showProgress('Обработка круизов и цен...', 50);
             $this->processCruisesData($dataProcessor);
             
-            $this->showProgress('Обновление связей...', 85);
-            $this->updateRelations();
-            
             $this->showProgress('Очистка круизов без цен...', 90);
             $this->cleanCruisesWithoutPrices();
             
@@ -172,18 +169,9 @@ class GermesParse extends Command
         $this->info("🎫 Круизов: {$stats['cruises']}");
         $this->info("🏠 Категорий кают: {$stats['cabin_categories']}");
         $this->info("🚪 Кают: {$stats['cabins']}");
+        $this->info("⛴️  Палуб: {$stats['decks']}");
         $this->info("💰 Цен: {$stats['prices']}");
         $this->info("💾 База данных: " . $this->db->getDbPath());
-    }
-
-    /**
-     * Обновление связей между таблицами
-     */
-    private function updateRelations()
-    {
-        $this->info('🔗 Обновление связей...');
-        // Обновление выполняется внутри processCruisesData
-        $this->info('✅ Связи обновлены');
     }
 
     /**
