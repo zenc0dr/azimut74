@@ -1,0 +1,73 @@
+<div class="report-widget">
+    <h3><?= e($this->property('title')) ?></h3>
+    
+    <div class="table-container">
+        <table class="table data">
+            <thead>
+                <tr>
+                    <th>Парсер</th>
+                    <th>Количество файлов</th>
+                    <th>Размер</th>
+                    <th>Время</th>
+                </tr>
+            </thead>
+            <tbody>
+                <?php foreach ($cacheStats as $stat): ?>
+                <tr>
+                    <td>
+                        <strong><?= e($stat['name']) ?></strong>
+                        <?php if (!$stat['exists']): ?>
+                            <span class="text-muted">(папка не существует)</span>
+                        <?php endif; ?>
+                    </td>
+                    <td>
+                        <?= number_format($stat['files'], 0, ',', ' ') ?>
+                    </td>
+                    <td>
+                        <?= e($stat['sizeFormatted']) ?>
+                    </td>
+                    <td>
+                        <?= e($stat['lastModified']) ?>
+                    </td>
+                </tr>
+                <?php endforeach; ?>
+            </tbody>
+        </table>
+    </div>
+    
+    <div class="form-buttons" style="margin-top: 15px;">
+        <button
+            type="button"
+            class="btn btn-danger"
+            data-request="onClearCache"
+            data-request-confirm="Вы уверены, что хотите очистить весь файловый кеш парсеров? Это действие нельзя отменить."
+            data-request-loading=".loading-indicator"
+            data-stripe-load-indicator>
+            Очистить файловый кеш парсеров
+        </button>
+    </div>
+</div>
+
+<style>
+.report-widget .table-container {
+    margin-top: 15px;
+}
+.report-widget table.data {
+    width: 100%;
+    border-collapse: collapse;
+}
+.report-widget table.data th,
+.report-widget table.data td {
+    padding: 8px 12px;
+    text-align: left;
+    border-bottom: 1px solid #e0e0e0;
+}
+.report-widget table.data th {
+    background-color: #f5f5f5;
+    font-weight: 600;
+}
+.report-widget table.data tbody tr:hover {
+    background-color: #f9f9f9;
+}
+</style>
+
