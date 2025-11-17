@@ -11,7 +11,7 @@ class WaterwayApiClient
     private $apiLogin = 'azimut-trk+vodohodapi@yandex.ru';
     private $accessToken;
     private $cache;
-    private $queryAttempts = 3;
+    private $maxQueryAttempts = 3;
 
     public function __construct($timeout = 30)
     {
@@ -31,11 +31,17 @@ class WaterwayApiClient
     {
         $cacheKey = "waterway_auth_token";
         
-        // Проверяем кеш токена
+        // Проверяем кеш токена (только если он не null)
         if ($this->cache->has($cacheKey)) {
-            $this->accessToken = $this->cache->get($cacheKey);
-            return;
+            $cachedToken = $this->cache->get($cacheKey);
+            if ($cachedToken !== null && !empty($cachedToken)) {
+                $this->accessToken = $cachedToken;
+                ProcessLog::add("Используется кешированный токен авторизации");
+                return;
+            }
         }
+        
+        ProcessLog::add("Выполняется авторизация в API Waterway...");
         
         $data = [
             'login' => $this->apiLogin,
@@ -48,13 +54,22 @@ class WaterwayApiClient
         ]);
 
         if ($response->code !== 200 || !isset($response->body['result']['accessToken']['token'])) {
-            throw new Exception("Ошибка авторизации в API Waterway");
+            $errorMsg = "Ошибка авторизации в API Waterway";
+            if (isset($response->body['message'])) {
+                $errorMsg .= ": " . $response->body['message'];
+            }
+            if ($response->code !== 200) {
+                $errorMsg .= " (HTTP $response->code)";
+            }
+            throw new Exception($errorMsg);
         }
 
         $this->accessToken = $response->body['result']['accessToken']['token'];
         
-        // Сохраняем токен в кеш (на 1 час)
+        // Сохраняем токен в кеш (вечный, но будет очищен при 403)
         $this->cache->put($cacheKey, $this->accessToken);
+        
+        ProcessLog::add("✅ Авторизация успешна, токен получен");
     }
 
     /**
@@ -134,15 +149,33 @@ class WaterwayApiClient
             $cacheKey = "waterway_" . md5($method . json_encode($data));
         }
         
+        // Сбрасываем счётчик попыток для каждого нового запроса (как в старой версии)
+        $queryAttempts = $this->maxQueryAttempts;
+        
         // Проверяем файловый кеш
-        if ($this->cache->has($cacheKey)) {
-            return $this->cache->get($cacheKey);
+        $wasCached = $this->cache->has($cacheKey);
+        if ($wasCached) {
+            $cached = $this->cache->get($cacheKey);
+            // Если в кеше null (запрос был неудачным ранее), возвращаем null
+            if ($cached === null) {
+                return null;
+            }
+            return $cached;
         }
 
         // Авторизация в случае отсутствия ключа
         if (!$this->accessToken) {
             $this->auth();
         }
+        
+        return $this->wwQueryWithRetries($method, $data, $cacheKey, $queryAttempts, $wasCached);
+    }
+    
+    /**
+     * Внутренний метод для выполнения запроса с повторными попытками
+     */
+    private function wwQueryWithRetries($method, $data, $cacheKey, $queryAttempts, $wasCached)
+    {
 
         // Указание метода
         $opts = ['method' => $method];
@@ -154,14 +187,65 @@ class WaterwayApiClient
 
         $response = $this->httpQuery($opts);
 
+        // Проверяем наличие ошибки в теле ответа (даже при HTTP 200)
+        if (isset($response->body['error'])) {
+            $errorCode = $response->body['error']['error_code'] ?? 'unknown';
+            $errorMsg = $response->body['error']['error_msg'] ?? 'Unknown error';
+            
+            // Rate limit в теле ответа
+            if ($errorCode == 429) {
+                $waitTime = 10;
+                ProcessLog::add("⚠️  Rate limit в ответе API (429): $method (Пауза $waitTime сек) - $errorMsg");
+                sleep($waitTime);
+                return $this->wwQuery($method, $data, $cacheKey); // Повторяем запрос
+            }
+            
+            // Access denied (403) для конкретного ресурса - это нормально, просто нет доступа
+            if ($errorCode == 403 && strpos($method, 'security.authorise') === false) {
+                ProcessLog::add("⚠️  Access denied (403) для ресурса: $method - $errorMsg");
+                // Сохраняем null в кеш, чтобы не запрашивать повторно
+                $this->cache->put($cacheKey, null);
+                return null; // Возвращаем null вместо исключения
+            }
+            
+            // Другие ошибки в теле ответа
+            ProcessLog::add("⚠️  Ошибка в ответе API: код=$errorCode, сообщение=$errorMsg для метода=$method");
+            // Сохраняем null в кеш, чтобы не запрашивать повторно
+            $this->cache->put($cacheKey, null);
+            throw new Exception("API error: $errorCode - $errorMsg");
+        }
+
         // Не прошла аутентификация
         if ($response->code == 403 || $response->code != 200 || intval(@$response->body['code']) != 200) {
-            if ($response->code == 403) {
-                $this->accessToken = null; // Сбрасываем accessToken
-                $this->cache->clear(); // Очищаем кеш токена
+            // Обработка Rate Limit (429) - не уменьшаем попытки, просто ждём
+            if ($response->code === 429) {
+                $waitTime = 10; // Увеличиваем паузу до 10 секунд
+                ProcessLog::add("⚠️  Rate limit exceeded (429): $method (Пауза $waitTime сек)");
+                sleep($waitTime);
+                // Не уменьшаем queryAttempts для rate limit - это не ошибка запроса
+                return $this->wwQuery($method, $data, $cacheKey); // Повторяем запрос
             }
-            $this->queryAttempts--;
-            if ($this->queryAttempts < 0) {
+            
+            // 403 для конкретного ресурса (не авторизация) - нет доступа к ресурсу
+            if ($response->code == 403 && strpos($method, 'security.authorise') === false) {
+                ProcessLog::add("⚠️  Access denied (403) для ресурса: $method - нет доступа");
+                // Сохраняем null в кеш, чтобы не запрашивать повторно
+                $this->cache->put($cacheKey, null);
+                return null; // Возвращаем null вместо исключения
+            }
+            
+            // 403 на авторизацию - токен истёк
+            if ($response->code == 403 && strpos($method, 'security.authorise') !== false) {
+                $this->accessToken = null; // Сбрасываем accessToken
+                // Очищаем только токен авторизации, не весь кеш
+                $this->cache->put("waterway_auth_token", null);
+                ProcessLog::add("Ошибка 403: токен истёк, требуется переавторизация");
+                // Если была ошибка 403, переавторизуемся перед повторным запросом
+                $this->auth();
+            }
+            
+            $queryAttempts--;
+            if ($queryAttempts < 0) {
                 throw new Exception('error ww1 ' . $method);
             }
 
@@ -170,18 +254,18 @@ class WaterwayApiClient
                 throw new Exception('error ww1 ' . $method);
             }
 
-            if ($response->code === 429) {
-                ProcessLog::add("Ошибка $response->code: $method (Пауза 5 сек)");
-                sleep(5);
-            }
+            ProcessLog::add("[Error code $response->code] Повтор запроса $method (осталось попыток: $queryAttempts)");
 
-            ProcessLog::add("[Error code $response->code] Повтор запроса $method");
-
-            return $this->wwQuery($method, $data, $cacheKey); // Повторяем запрос
+            return $this->wwQueryWithRetries($method, $data, $cacheKey, $queryAttempts, $wasCached); // Повторяем запрос
         }
 
         // Сохраняем в файловый кеш (вечный)
         $this->cache->put($cacheKey, $response->body);
+        
+        // Задержка между запросами к API для избежания rate limit (только для реальных запросов, не из кеша)
+        if (!$wasCached) {
+            usleep(200000); // 0.2 секунды между запросами к API
+        }
 
         return $response->body;
     }
@@ -221,11 +305,18 @@ class WaterwayApiClient
     {
         $cacheKey = "waterway_cruises";
         
+        // Проверяем кеш полного списка
+        if ($this->cache->has($cacheKey)) {
+            return $this->cache->get($cacheKey);
+        }
+        
         // Получаем все круизы с пагинацией
         $nowDay = time(); // Текущая дата в timestamp
         $batch = 100;
         $offset = 0;
         $allCruises = [];
+        $maxAttempts = 3; // Максимум попыток при ошибках
+        $errorCount = 0;
         
         while (true) {
             $queryParams = http_build_query([
@@ -238,36 +329,81 @@ class WaterwayApiClient
             $method = "json.v3.cruises?$queryParams";
             $batchCacheKey = "waterway_cruises_batch_{$offset}";
             
-            $response = $this->wwQuery($method, null, $batchCacheKey);
-            
-            if (!isset($response['result']['data'])) {
-                break;
+            try {
+                $response = $this->wwQuery($method, null, $batchCacheKey);
+                
+                // Если ответ null (ошибка или нет данных), пропускаем этот батч
+                if ($response === null) {
+                    ProcessLog::add("Ответ null для offset=$offset, пропускаем батч");
+                    $offset += $batch;
+                    $errorCount++;
+                    if ($errorCount >= $maxAttempts) {
+                        ProcessLog::add("Превышено количество ошибок подряд, завершаем получение круизов");
+                        break;
+                    }
+                    continue;
+                }
+                
+                if (!isset($response['result']['data'])) {
+                    ProcessLog::add("Нет данных в ответе API для offset=$offset, завершаем получение круизов");
+                    break;
+                }
+                
+                $cruises = $response['result']['data'];
+                
+                if (empty($cruises)) {
+                    ProcessLog::add("Пустой массив круизов для offset=$offset, завершаем получение круизов");
+                    break;
+                }
+                
+                // Преобразуем в формат, ожидаемый парсером (id => данные)
+                foreach ($cruises as $cruise) {
+                    $allCruises[$cruise['id']] = [
+                        'name' => $cruise['name'] ?? '',
+                        'motorshipId' => $cruise['motorship']['id'] ?? null,
+                        'dateStart' => $cruise['dateStart'] ?? null,
+                        'dateStop' => $cruise['dateEnd'] ?? null,
+                        'days' => $cruise['duration'] ?? 0,
+                        'classDescription' => $cruise['classDescription'] ?? null
+                    ];
+                }
+                
+                $count = intval($response['result']['count'] ?? 0);
+                $offset += $batch;
+                $errorCount = 0; // Сбрасываем счётчик ошибок при успехе
+                
+                ProcessLog::add("Получено круизов: " . count($allCruises) . " (offset=$offset, всего в API: $count)");
+                
+                // Если offset превысил общее количество или получили меньше чем batch - значит это последний батч
+                if ($offset >= $count || count($cruises) < $batch) {
+                    ProcessLog::add("Достигнут конец списка круизов (offset=$offset, count=$count)");
+                    break;
+                }
+                
+            } catch (Exception $e) {
+                $errorCount++;
+                ProcessLog::add("Ошибка при получении круизов (offset=$offset, попытка $errorCount/$maxAttempts): " . $e->getMessage());
+                
+                // Если ошибка повторяется несколько раз подряд - прекращаем получение
+                if ($errorCount >= $maxAttempts) {
+                    ProcessLog::add("Превышено количество попыток при получении круизов. Используем уже полученные " . count($allCruises) . " круизов");
+                    break;
+                }
+                
+                // Пропускаем этот батч и продолжаем со следующего
+                $offset += $batch;
+                continue;
             }
-            
-            $cruises = $response['result']['data'];
-            
-            // Преобразуем в формат, ожидаемый парсером (id => данные)
-            foreach ($cruises as $cruise) {
-                $allCruises[$cruise['id']] = [
-                    'name' => $cruise['name'] ?? '',
-                    'motorshipId' => $cruise['motorship']['id'] ?? null,
-                    'dateStart' => $cruise['dateStart'] ?? null,
-                    'dateStop' => $cruise['dateEnd'] ?? null,
-                    'days' => $cruise['duration'] ?? 0,
-                    'classDescription' => $cruise['classDescription'] ?? null
-                ];
-            }
-            
-            $count = intval($response['result']['count'] ?? 0);
-            $offset += $batch;
-            
-            if ($offset >= $count) {
-                break;
-            }
+        }
+        
+        if (empty($allCruises)) {
+            ProcessLog::add("⚠️  Не удалось получить ни одного круиза из API");
+            return [];
         }
         
         // Сохраняем полный список в кеш
         $this->cache->put($cacheKey, $allCruises);
+        ProcessLog::add("✅ Всего получено круизов для обработки: " . count($allCruises));
         
         return $allCruises;
     }
@@ -294,12 +430,27 @@ class WaterwayApiClient
         
         if (isset($response['result']['decks'])) {
             foreach ($response['result']['decks'] as $deck) {
+                if (!isset($deck['roomClasses']) || !is_array($deck['roomClasses'])) {
+                    continue;
+                }
+                
                 foreach ($deck['roomClasses'] as $roomClass) {
+                    // Пропускаем классы кают без тарифов
+                    if (!isset($roomClass['tariffs']) || !is_array($roomClass['tariffs']) || empty($roomClass['tariffs'])) {
+                        continue;
+                    }
+                    
                     foreach ($roomClass['tariffs'] as $tariff) {
-                        $tariffName = $tariff['name'] ?? '';
+                        // Используем meta_name вместо name (структура API изменилась)
+                        $tariffName = $tariff['meta_name'] ?? $tariff['name'] ?? '';
                         
                         // Обрабатываем только "Тариф Взрослый"
                         if (strpos($tariffName, 'Взрослый') === false && $tariffName !== 'Тариф взрослый') {
+                            continue;
+                        }
+                        
+                        // Проверяем наличие accommodations
+                        if (!isset($tariff['accommodations']) || !is_array($tariff['accommodations']) || empty($tariff['accommodations'])) {
                             continue;
                         }
                         
@@ -311,12 +462,21 @@ class WaterwayApiClient
                         }
                         
                         foreach ($tariff['accommodations'] as $accommodation) {
-                            $result['tariffs'][$tariffName]['prices'][] = [
-                                'rt_name' => $roomClass['name'] ?? '',
-                                'rp_name' => $roomClass['description'] ?? null,
-                                'deck_name' => $deck['name'] ?? null,
-                                'price_value' => intval(($accommodation['price']['discountedValue'] ?? $accommodation['price']['value'] ?? 0) / 100)
-                            ];
+                            // Проверяем наличие цены
+                            if (!isset($accommodation['price'])) {
+                                continue;
+                            }
+                            
+                            $priceValue = intval(($accommodation['price']['discountedValue'] ?? $accommodation['price']['value'] ?? 0) / 100);
+                            
+                            if ($priceValue > 0) {
+                                $result['tariffs'][$tariffName]['prices'][] = [
+                                    'rt_name' => $roomClass['name'] ?? '',
+                                    'rp_name' => $roomClass['description'] ?? null,
+                                    'deck_name' => $deck['name'] ?? null,
+                                    'price_value' => $priceValue
+                                ];
+                            }
                         }
                     }
                 }
