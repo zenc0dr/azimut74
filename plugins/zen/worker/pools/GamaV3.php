@@ -164,8 +164,17 @@ class GamaV3 extends RiverCrs
                 continue;
             }
             
+            // Получаем название категории (без ID, как в InfoflotV2, VolgaV2, GermesV2)
+            $categoryName = $price['category_name'] ?? '';
+            
+            // Если название пустое, используем только ID
+            if (empty($categoryName)) {
+                ProcessLog::add("Предупреждение: для категории $cabinCategoryId отсутствует название, используем только ID");
+                $categoryName = $cabinCategoryId;
+            }
+            
             $cabinId = $this->getCabinCategoryId(
-                $price['category_name'] . '|' . $price['cabin_category_id'],
+                $categoryName,
                 $shipId,
                 'gama',
                 $price['places']

@@ -256,14 +256,18 @@ class GermesV2 extends RiverCrs
                 $categoryName = $price['category_name'];
             }
             
-            // Если название пустое, используем только ID
+            // Если название пустое, используем ID как название
             if (empty($categoryName)) {
-                ProcessLog::add("Предупреждение: для категории $cabinCategoryId отсутствует название, используем только ID");
+                ProcessLog::add("Предупреждение: для категории $cabinCategoryId отсутствует название, используем ID");
                 $categoryName = $cabinCategoryId;
             }
             
-            // Передаём название категории с ID для уникальности (как в GamaV3)
+            // КРИТИЧНО: Используем формат "name|id" для уникальности (как в GamaV3)
+            // Это необходимо, так как в SQLite могут быть разные категории с одинаковыми названиями
+            // (например, "1А" встречается 8 раз с разными ID для разных теплоходов)
+            // Без ID разные категории будут маппиться в одну, создавая дубликаты
             $categoryNameWithId = $categoryName . '|' . $cabinCategoryId;
+            
             // В Germes количество мест не сохраняется в SQLite, используем значение по умолчанию
             $places = 1;
             
@@ -273,6 +277,16 @@ class GermesV2 extends RiverCrs
                 'germes',
                 $places
             );
+            
+            // После создания/получения каюты, обновляем category на чистое название для отображения
+            if ($cabinId) {
+                $cabin = \Mcmraak\Rivercrs\Models\Cabins::find($cabinId);
+                if ($cabin && ($cabin->category === $categoryNameWithId || empty($cabin->category))) {
+                    // Обновляем category на чистое название (без ID) для корректного отображения в интерфейсе
+                    $cabin->category = $categoryName;
+                    $cabin->save();
+                }
+            }
             
             if ($cabinId) {
                 $cabinMapping[$cabinCategoryId] = $cabinId;
@@ -291,7 +305,9 @@ class GermesV2 extends RiverCrs
         }
 
         // Подготавливаем данные для вставки
-        $insert_prices = [];
+        // Группируем цены по cabin_id и price_a, чтобы исключить дубликаты
+        // (в SQLite может быть несколько записей для одной категории из-за разных кают)
+        $uniquePrices = [];
         foreach ($prices as $price) {
             $cabinCategoryId = $price['cabin_category_id'];
             
@@ -305,14 +321,20 @@ class GermesV2 extends RiverCrs
             if ($cabinId && isset($price['price_value'])) {
                 $priceValue = (int)$price['price_value'];
                 if ($priceValue > 0) {
-                    $insert_prices[] = [
-                        'checkin_id' => $checkinId,
-                        'cabin_id' => $cabinId,
-                        'price_a' => $priceValue
-                    ];
+                    // Используем комбинацию cabin_id + price_a как ключ для уникальности
+                    $uniqueKey = $cabinId . '_' . $priceValue;
+                    if (!isset($uniquePrices[$uniqueKey])) {
+                        $uniquePrices[$uniqueKey] = [
+                            'checkin_id' => $checkinId,
+                            'cabin_id' => $cabinId,
+                            'price_a' => $priceValue
+                        ];
+                    }
                 }
             }
         }
+        
+        $insert_prices = array_values($uniquePrices);
 
         if (!empty($insert_prices)) {
             // Удаляем старые цены и вставляем новые

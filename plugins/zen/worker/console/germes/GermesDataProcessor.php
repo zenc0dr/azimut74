@@ -96,12 +96,15 @@ class GermesDataProcessor
                     : $item['Описание'];
             }
             
+            // Название находится на верхнем уровне элемента, а не в @attributes
+            $name = $item['Название'] ?? '';
+            
             // Используем id_teplohod из @attributes для установки ship_id
             $shipId = isset($data['id_teplohod']) ? (int)$data['id_teplohod'] : null;
             
             $categories[] = [
                 'id' => (int)$data['id'],
-                'name' => $data['Название'] ?? '',
+                'name' => $name,
                 'description' => $description,
                 'ship_id' => $shipId // Используем id_teplohod из API
             ];
