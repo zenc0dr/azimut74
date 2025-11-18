@@ -511,7 +511,9 @@ class GermesDataProcessor
 
     /**
      * Извлечение названия палубы из описания каюты
-     * Адаптировано из getGermesDeck
+     * Использует простой поиск паттернов "название+палуб" в тексте
+     * Ищет вхождения типа: нижн+палуб, главн+палуб, средн+палуб, шлюп+палуб, верхн+палуб
+     * Важно: последовательность должна соблюдаться - сначала "название", потом "палуб"
      */
     private function extractDeckNameFromDescription($description)
     {
@@ -519,71 +521,66 @@ class GermesDataProcessor
             return null;
         }
         
-        // Нормализуем текст
+        // Нормализуем текст (регистронезависимый поиск)
         $text = mb_strtolower($description);
-        $text = preg_replace('/ {1,}/', ' ', $text);
-        $words = explode(' ', $text);
         
-        // Список известных названий палуб (можно расширить)
-        $knownDecks = [
-            'нижняя', 'нижней', 'нижнюю',
-            'главная', 'главной', 'главную',
-            'средняя', 'средней', 'среднюю',
-            'шлюпочная', 'шлюпочной', 'шлюпочную',
-            'солнечная', 'солнечной', 'солнечную',
-            'прогулочная', 'прогулочной', 'прогулочную',
-            'верхняя', 'верхней', 'верхнюю',
-            'багажная', 'багажной', 'багажную'
+        // Паттерны для поиска: [префикс_названия => полное_название_палубы]
+        $deckPatterns = [
+            'нижн' => 'Нижняя палуба',
+            'главн' => 'Главная палуба',
+            'средн' => 'Средняя палуба',
+            'шлюп' => 'Шлюпочная палуба',
+            'шлюпочн' => 'Шлюпочная палуба',
+            'солнечн' => 'Солнечная палуба',
+            'прогулочн' => 'Прогулочная палуба',
+            'верхн' => 'Верхняя палуба',
+            'багажн' => 'Багажная палуба'
         ];
         
-        // Сначала ищем стандартный паттерн: "название палуба"
-        for ($i = 0, $count = count($words); $i < $count; $i++) {
-            $word = trim($words[$i]);
-            if (empty($word)) {
+        // Ищем каждый паттерн в тексте
+        foreach ($deckPatterns as $pattern => $deckName) {
+            // Ищем позицию паттерна (например, "нижн")
+            $patternPos = mb_strpos($text, $pattern);
+            if ($patternPos === false) {
                 continue;
             }
             
-            $prevWord = ($i > 0) ? trim($words[$i - 1]) : false;
-            $nextWord = ($i < $count - 1) ? trim($words[$i + 1]) : false;
-            $next2Word = ($i < $count - 2) ? trim($words[$i + 2]) : false;
-            $next3Word = ($i < $count - 3) ? trim($words[$i + 3]) : false;
-            
-            // Проверяем, является ли слово названием палубы
-            $deckName = $this->isDeckName($word, $knownDecks);
-            if ($deckName === false || $prevWord == 'и') {
+            // Ищем позицию слова "палуб" после паттерна
+            $deckWordPos = mb_strpos($text, 'палуб', $patternPos);
+            if ($deckWordPos === false) {
                 continue;
             }
             
-            // После слова есть "палуба" или "палубе"
-            if ($this->isDeckWord($nextWord)) {
-                return $this->normalizeDeckName($deckName);
-            }
-            
-            // После слова стоит "и", а после "и" стоит имя палубы, а после имени палубы стоит "палуба"
-            $deckName2 = $this->isDeckName($next2Word, $knownDecks);
-            if ($nextWord == 'и' && $deckName2 && $this->isDeckWord($next3Word)) {
-                // Возвращаем первую палубу (можно обработать обе, но для простоты берем первую)
-                return $this->normalizeDeckName($deckName);
+            // Проверяем, что "палуб" идет после паттерна (последовательность соблюдена)
+            if ($deckWordPos > $patternPos) {
+                // Проверяем расстояние между паттерном и "палуб" (не должно быть слишком большим)
+                // Ограничиваем до 50 символов, чтобы исключить ложные срабатывания
+                $distance = $deckWordPos - $patternPos - mb_strlen($pattern);
+                if ($distance >= 0 && $distance <= 50) {
+                    return $deckName;
+                }
             }
         }
         
-        // Если не нашли стандартный паттерн, ищем "палуба" и проверяем контекст вокруг
-        for ($i = 0, $count = count($words); $i < $count; $i++) {
-            $word = trim($words[$i]);
-            if (!$this->isDeckWord($word)) {
-                continue;
-            }
+        // Также проверяем существующие палубы из SQLite (для динамически созданных)
+        $existingDecks = $this->getExistingDecks();
+        foreach ($existingDecks as $deckNameLower => $deckNameNormalized) {
+            // Берем первые 4-6 символов названия палубы как паттерн
+            $deckPrefix = mb_substr($deckNameLower, 0, 6);
+            // Убираем слово "палуба" из префикса, если оно есть
+            $deckPrefix = preg_replace('/\s*палуб.*$/', '', $deckPrefix);
+            $deckPrefix = trim($deckPrefix);
             
-            // Проверяем слова перед "палуба" (в пределах 3 слов)
-            for ($j = max(0, $i - 3); $j < $i; $j++) {
-                $prevWord = trim($words[$j]);
-                if (empty($prevWord)) {
-                    continue;
-                }
-                
-                $deckName = $this->isDeckName($prevWord, $knownDecks);
-                if ($deckName !== false) {
-                    return $this->normalizeDeckName($deckName);
+            if (mb_strlen($deckPrefix) >= 4) {
+                $patternPos = mb_strpos($text, $deckPrefix);
+                if ($patternPos !== false) {
+                    $deckWordPos = mb_strpos($text, 'палуб', $patternPos);
+                    if ($deckWordPos !== false && $deckWordPos > $patternPos) {
+                        $distance = $deckWordPos - $patternPos - mb_strlen($deckPrefix);
+                        if ($distance >= 0 && $distance <= 50) {
+                            return $deckNameNormalized;
+                        }
+                    }
                 }
             }
         }
@@ -592,10 +589,110 @@ class GermesDataProcessor
     }
 
     /**
-     * Проверка, является ли слово названием палубы
-     * Проверяет точное совпадение или начало слова (для склонений)
+     * Извлечение палубы из многострочного формата
+     * Обрабатывает случаи типа:
+     * "Главная палуба 203-236 — 9,02 м2
+     *  Средняя палуба 301-314 — 9,02 м2
+     *  Шлюпочная палуба 403-430 — 9,87 м2"
+     * 
+     * Возвращает первую найденную палубу
      */
-    private function isDeckName($word, $knownDecks)
+    private function extractDeckFromMultiLineFormat($description)
+    {
+        // Разбиваем на строки
+        $lines = preg_split('/[\r\n]+/', $description);
+        
+        // Получаем все существующие палубы из SQLite
+        $existingDecks = $this->getExistingDecks();
+        
+        // Известные паттерны палуб
+        $knownDeckPatterns = [
+            'нижн' => 'Нижняя палуба',
+            'главн' => 'Главная палуба',
+            'средн' => 'Средняя палуба',
+            'шлюпочн' => 'Шлюпочная палуба',
+            'солнечн' => 'Солнечная палуба',
+            'прогулочн' => 'Прогулочная палуба',
+            'верхн' => 'Верхняя палуба',
+            'багажн' => 'Багажная палуба'
+        ];
+        
+        foreach ($lines as $line) {
+            $lineLower = mb_strtolower(trim($line));
+            
+            // Ищем паттерн: "название палуба номер-номер"
+            // Например: "главная палуба 203-236"
+            foreach ($knownDeckPatterns as $pattern => $deckName) {
+                // Проверяем, содержит ли строка паттерн и слово "палуба"
+                if (mb_strpos($lineLower, $pattern) !== false && mb_strpos($lineLower, 'палуб') !== false) {
+                    // Проверяем, что это не просто упоминание типа "выход на палубу"
+                    // Ищем паттерн "название палуба" в начале строки или после пробела
+                    $patternPos = mb_strpos($lineLower, $pattern);
+                    $deckWordPos = mb_strpos($lineLower, 'палуб');
+                    
+                    // Паттерн должен быть перед словом "палуба"
+                    if ($patternPos !== false && $deckWordPos !== false && $patternPos < $deckWordPos) {
+                        // Проверяем расстояние между паттерном и "палуба" (не более 2 слов)
+                        $between = mb_substr($lineLower, $patternPos + mb_strlen($pattern), $deckWordPos - $patternPos - mb_strlen($pattern));
+                        $betweenWords = preg_split('/\s+/', trim($between));
+                        
+                        if (count($betweenWords) <= 2) {
+                            return $deckName;
+                        }
+                    }
+                }
+            }
+            
+            // Также проверяем существующие палубы
+            foreach ($existingDecks as $deckNameLower => $deckNameNormalized) {
+                // Берем первые 4 символа названия палубы
+                $deckPrefix = mb_substr($deckNameLower, 0, 4);
+                if (mb_strlen($deckPrefix) >= 4 && mb_strpos($lineLower, $deckPrefix) !== false && mb_strpos($lineLower, 'палуб') !== false) {
+                    $prefixPos = mb_strpos($lineLower, $deckPrefix);
+                    $deckWordPos = mb_strpos($lineLower, 'палуб');
+                    
+                    if ($prefixPos !== false && $deckWordPos !== false && $prefixPos < $deckWordPos) {
+                        $between = mb_substr($lineLower, $prefixPos + mb_strlen($deckPrefix), $deckWordPos - $prefixPos - mb_strlen($deckPrefix));
+                        $betweenWords = preg_split('/\s+/', trim($between));
+                        
+                        if (count($betweenWords) <= 2) {
+                            return $deckNameNormalized;
+                        }
+                    }
+                }
+            }
+        }
+        
+        return null;
+    }
+
+    /**
+     * Получение списка существующих палуб из SQLite
+     * Возвращает массив [lowercase_name => normalized_name]
+     */
+    private function getExistingDecks()
+    {
+        static $decksCache = null;
+        
+        if ($decksCache === null) {
+            $stmt = $this->db->getPdo()->query("SELECT name FROM decks");
+            $decksCache = [];
+            while ($row = $stmt->fetch(\PDO::FETCH_ASSOC)) {
+                $normalizedName = $row['name'];
+                $lowerName = mb_strtolower($normalizedName);
+                $decksCache[$lowerName] = $normalizedName;
+            }
+        }
+        
+        return $decksCache;
+    }
+
+    /**
+     * Проверка, является ли слово названием палубы
+     * Адаптировано из isDecsName старой реализации
+     * Использует сравнение по первым 4 символам с существующими палубами
+     */
+    private function isDeckNameByPrefix($word, $existingDecks)
     {
         if (mb_strlen($word) < 4) {
             return false;
@@ -605,20 +702,36 @@ class GermesDataProcessor
         // Убираем знаки препинания в конце слова
         $wordLower = preg_replace('/[.,;:!?\)]+$/', '', $wordLower);
         
-        foreach ($knownDecks as $deck) {
-            // Точное совпадение
-            if ($wordLower === $deck) {
-                return $deck;
+        // Берем первые 4 символа (как в старой реализации)
+        $wordPrefix = mb_substr($wordLower, 0, 4);
+        
+        // Ищем совпадение в существующих палубах
+        // В старой реализации: strpos($deck_name, $word) !== false
+        // Т.е. проверяем, содержит ли название палубы первые 4 символа слова
+        foreach ($existingDecks as $deckNameLower => $deckNameNormalized) {
+            if (mb_strpos($deckNameLower, $wordPrefix) !== false) {
+                // Возвращаем нормализованное название палубы
+                return $deckNameNormalized;
             }
-            
-            // Начало слова совпадает с названием палубы (для склонений: нижняя, нижней, нижнюю)
-            if (mb_strlen($wordLower) >= mb_strlen($deck) && mb_substr($wordLower, 0, mb_strlen($deck)) === $deck) {
-                return $deck;
-            }
-            
-            // Название палубы начинается со слова (для случаев типа "нижняя палуба")
-            if (mb_strlen($deck) >= mb_strlen($wordLower) && mb_substr($deck, 0, mb_strlen($wordLower)) === $wordLower) {
-                return $deck;
+        }
+        
+        // Если не нашли в существующих, проверяем известные паттерны
+        // Это нужно для первого прохода, когда палубы еще не созданы
+        $knownDeckPatterns = [
+            'нижн' => 'Нижняя палуба',
+            'главн' => 'Главная палуба',
+            'средн' => 'Средняя палуба',
+            'шлюпочн' => 'Шлюпочная палуба',
+            'солнечн' => 'Солнечная палуба',
+            'прогулочн' => 'Прогулочная палуба',
+            'верхн' => 'Верхняя палуба',
+            'багажн' => 'Багажная палуба'
+        ];
+        
+        foreach ($knownDeckPatterns as $pattern => $deckName) {
+            // Проверяем, начинается ли слово с паттерна или паттерн содержит префикс слова
+            if (mb_strpos($wordLower, $pattern) === 0 || mb_strpos($pattern, $wordPrefix) === 0) {
+                return $deckName;
             }
         }
         

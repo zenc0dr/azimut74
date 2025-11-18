@@ -420,9 +420,13 @@ class GermesDatabase
     public function getPricesByCruiseId($cruiseId)
     {
         $stmt = $this->pdo->prepare("
-            SELECT p.*, cc.name as category_name, cc.description
+            SELECT p.*, 
+                   cc.name as category_name, 
+                   cc.description,
+                   d.name as deck_name
             FROM prices p
             LEFT JOIN cabin_categories cc ON p.cabin_category_id = cc.id
+            LEFT JOIN decks d ON cc.deck_id = d.id
             WHERE p.cruise_id = ?
         ");
         $stmt->execute([$cruiseId]);
