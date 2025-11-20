@@ -143,9 +143,12 @@ class GermesDataProcessor
         
         foreach ($items as $item) {
             $data = $item['@attributes'] ?? $item;
+            // number - это физический номер каюты (202, 301, 401...), а не внутренний ID
+            $cabinNumber = isset($data['number']) ? (int)$data['number'] : null;
             $cabins[] = [
                 'id' => (int)$data['id'],
-                'cabin_category_id' => (int)$data['idClassKauta']
+                'cabin_category_id' => (int)$data['idClassKauta'],
+                'number' => $cabinNumber
             ];
         }
         
@@ -206,12 +209,20 @@ class GermesDataProcessor
         $updated = $this->db->updateCabinCategoriesShipId();
         ProcessLog::add("Обновлено связей категорий кают с теплоходами: $updated");
         
-        // Извлекаем палубы из описаний и обновляем deck_id
+        // Обновляем палубы из CSV файлов (приоритет над парсингом описаний)
+        ProcessLog::add('Обновление палуб из CSV файлов...');
+        $csvDeckMapping = $this->updateDecksFromCsvFiles();
+        if (!empty($csvDeckMapping)) {
+            $updatedCsvDecks = $this->db->updateCabinCategoriesDeckId($csvDeckMapping);
+            ProcessLog::add("Обновлено связей категорий кают с палубами из CSV: $updatedCsvDecks");
+        }
+        
+        // Извлекаем палубы из описаний и обновляем deck_id (только для тех, у кого еще нет палубы)
         ProcessLog::add('Извлечение палуб из описаний кают...');
         $deckMapping = $this->extractDecksFromDescriptions();
         if (!empty($deckMapping)) {
             $updatedDecks = $this->db->updateCabinCategoriesDeckId($deckMapping);
-            ProcessLog::add("Обновлено связей категорий кают с палубами: $updatedDecks");
+            ProcessLog::add("Обновлено связей категорий кают с палубами из описаний: $updatedDecks");
         }
         
         // Удаляем категории без привязки к теплоходу
@@ -478,16 +489,210 @@ class GermesDataProcessor
     }
 
     /**
+     * Обновление палуб из CSV файлов
+     * CSV файлы находятся в папке ocms/plugins/zen/worker/data/rooms_decks
+     * Формат имени файла: {germes_ship_id}_{ship_name}.csv
+     * 
+     * Структура CSV:
+     * - Первая строка: названия палуб (колонки)
+     * - Последующие строки: номера кают в соответствующих колонках
+     * 
+     * Логика:
+     * 1. Загружаем CSV для каждого теплохода
+     * 2. Создаем маппинг номер_каюты -> палуба
+     * 3. Через pivot таблицу (cabins) связываем категории кают с палубами
+     * 4. Возвращаем маппинг категория_id -> deck_id
+     */
+    private function updateDecksFromCsvFiles()
+    {
+        $csvDir = __DIR__ . '/../../data/rooms_decks';
+        
+        if (!is_dir($csvDir)) {
+            ProcessLog::add("Папка с CSV файлами не найдена: $csvDir");
+            return [];
+        }
+        
+        // Получаем список всех теплоходов из SQLite
+        $stmt = $this->db->getPdo()->query("SELECT id, name FROM ships");
+        $ships = $stmt->fetchAll(\PDO::FETCH_ASSOC);
+        
+        $categoryToDeckMap = [];
+        $processedShips = 0;
+        $totalCabinsProcessed = 0;
+        
+        foreach ($ships as $ship) {
+            $shipId = (int)$ship['id'];
+            $shipName = $ship['name'];
+            
+            // Формируем имя файла: {ship_id}_{ship_name}.csv
+            $csvFileName = $shipId . '_' . $shipName . '.csv';
+            $csvFilePath = $csvDir . '/' . $csvFileName;
+            
+            if (!file_exists($csvFilePath)) {
+                continue; // CSV файл для этого теплохода не найден
+            }
+            
+            ProcessLog::add("Обработка CSV файла для теплохода $shipId ($shipName)...");
+            
+            // Загружаем CSV и создаем маппинг номер_каюты -> палуба
+            $cabinToDeckMap = $this->loadCsvDeckMapping($csvFilePath);
+            
+            if (empty($cabinToDeckMap)) {
+                ProcessLog::add("  CSV файл пуст или некорректен");
+                continue;
+            }
+            
+            // Связываем категории кают с палубами через pivot таблицу
+            $categoryDeckMapping = $this->mapCategoriesToDecksFromCabins($shipId, $cabinToDeckMap);
+            
+            if (!empty($categoryDeckMapping)) {
+                foreach ($categoryDeckMapping as $categoryId => $deckName) {
+                    // Сохраняем палубу в базу
+                    $deckId = $this->db->saveDeck($deckName);
+                    
+                    if ($deckId) {
+                        $categoryToDeckMap[$categoryId] = $deckId;
+                    }
+                }
+                
+                $processedShips++;
+                $totalCabinsProcessed += count($cabinToDeckMap);
+                ProcessLog::add("  Обработано кают: " . count($cabinToDeckMap) . ", категорий с палубами: " . count($categoryDeckMapping));
+            }
+        }
+        
+        if ($processedShips > 0) {
+            ProcessLog::add("Обработано CSV файлов: $processedShips, всего кают: $totalCabinsProcessed");
+        } else {
+            ProcessLog::add("CSV файлы не найдены или пусты");
+        }
+        
+        return $categoryToDeckMap;
+    }
+    
+    /**
+     * Загрузка маппинга номер_каюты -> палуба из CSV файла
+     * 
+     * @param string $csvFilePath Путь к CSV файлу
+     * @return array Маппинг [номер_каюты => название_палубы]
+     */
+    private function loadCsvDeckMapping($csvFilePath)
+    {
+        $handle = @fopen($csvFilePath, 'r');
+        if (!$handle) {
+            return [];
+        }
+        
+        // Читаем заголовки (названия палуб)
+        $header = fgetcsv($handle);
+        if (!$header) {
+            fclose($handle);
+            return [];
+        }
+        
+        $cabinToDeckMap = [];
+        
+        // Читаем строки с номерами кают
+        while (($row = fgetcsv($handle)) !== false) {
+            foreach ($row as $colIndex => $cabinNumber) {
+                // Пропускаем пустые ячейки
+                if (empty($cabinNumber) || !is_numeric(trim($cabinNumber))) {
+                    continue;
+                }
+                
+                $cabinNumber = (int)trim($cabinNumber);
+                $deckName = isset($header[$colIndex]) ? trim($header[$colIndex]) : '';
+                
+                if (!empty($deckName)) {
+                    $cabinToDeckMap[$cabinNumber] = $deckName;
+                }
+            }
+        }
+        
+        fclose($handle);
+        
+        return $cabinToDeckMap;
+    }
+    
+    /**
+     * Связывание категорий кают с палубами через pivot таблицу
+     * 
+     * @param int $shipId ID теплохода
+     * @param array $cabinToDeckMap Маппинг номер_каюты -> палуба из CSV
+     * @return array Маппинг категория_id -> название_палубы
+     */
+    private function mapCategoriesToDecksFromCabins($shipId, $cabinToDeckMap)
+    {
+        if (empty($cabinToDeckMap)) {
+            return [];
+        }
+        
+        // Получаем номера кают из CSV
+        $cabinNumbers = array_keys($cabinToDeckMap);
+        $placeholders = implode(',', array_fill(0, count($cabinNumbers), '?'));
+        
+        // Находим категории кают через pivot таблицу для кают из CSV
+        // Связь: cabins.number (физический номер каюты из CSV) -> cabins.cabin_category_id
+        $stmt = $this->db->getPdo()->prepare("
+            SELECT c.number as cabin_number, c.cabin_category_id
+            FROM cabins c
+            INNER JOIN cabin_categories cc ON c.cabin_category_id = cc.id
+            WHERE c.number IN ($placeholders)
+            AND cc.ship_id = ?
+        ");
+        
+        $params = array_merge($cabinNumbers, [$shipId]);
+        $stmt->execute($params);
+        
+        $categoryToDeckCount = []; // категория_id => [палуба => количество]
+        
+        while ($row = $stmt->fetch(\PDO::FETCH_ASSOC)) {
+            $cabinNumber = (int)$row['cabin_number'];
+            $categoryId = (int)$row['cabin_category_id'];
+            
+            // Получаем палубу для этой каюты из CSV
+            if (isset($cabinToDeckMap[$cabinNumber])) {
+                $deckName = $cabinToDeckMap[$cabinNumber];
+                
+                if (!isset($categoryToDeckCount[$categoryId])) {
+                    $categoryToDeckCount[$categoryId] = [];
+                }
+                
+                if (!isset($categoryToDeckCount[$categoryId][$deckName])) {
+                    $categoryToDeckCount[$categoryId][$deckName] = 0;
+                }
+                
+                $categoryToDeckCount[$categoryId][$deckName]++;
+            }
+        }
+        
+        // Для каждой категории выбираем палубу с наибольшим количеством кают
+        $categoryToDeckMap = [];
+        foreach ($categoryToDeckCount as $categoryId => $deckCounts) {
+            // Сортируем по количеству кают (по убыванию)
+            arsort($deckCounts);
+            
+            // Берем палубу с наибольшим количеством кают
+            $deckName = key($deckCounts);
+            $categoryToDeckMap[$categoryId] = $deckName;
+        }
+        
+        return $categoryToDeckMap;
+    }
+
+    /**
      * Извлечение палуб из описаний категорий кают
      * Адаптировано из getGermesDeck из exist/Germes.php
      */
     private function extractDecksFromDescriptions()
     {
-        // Получаем все категории с описаниями
+        // Получаем все категории с описаниями, у которых еще нет палубы (из CSV)
         $stmt = $this->db->getPdo()->query("
             SELECT id, description 
             FROM cabin_categories 
-            WHERE description IS NOT NULL AND description != ''
+            WHERE description IS NOT NULL 
+            AND description != ''
+            AND (deck_id IS NULL OR deck_id = 0)
         ");
         
         $categoryToDeckMap = [];

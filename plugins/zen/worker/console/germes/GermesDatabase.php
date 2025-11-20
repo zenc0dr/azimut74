@@ -77,9 +77,13 @@ class GermesDatabase
             CREATE TABLE IF NOT EXISTS cabins (
                 id INTEGER PRIMARY KEY,
                 cabin_category_id INTEGER,
+                number INTEGER,
                 created_at DATETIME DEFAULT CURRENT_TIMESTAMP
             )
         ");
+        
+        // Миграция: добавляем поле number если его нет
+        $this->migrateAddCabinNumber();
 
         // Таблица круизов (id = germes_cruise_id)
         $this->pdo->exec("
@@ -141,6 +145,34 @@ class GermesDatabase
             if (!$hasDeckId) {
                 $this->pdo->exec("ALTER TABLE cabin_categories ADD COLUMN deck_id INTEGER");
                 $this->pdo->exec("CREATE INDEX IF NOT EXISTS idx_cabin_categories_deck_id ON cabin_categories(deck_id)");
+            }
+        } catch (\Exception $e) {
+            // Игнорируем ошибки миграции, если таблица ещё не создана
+        }
+    }
+
+    /**
+     * Миграция: добавляем поле number в таблицу cabins
+     */
+    private function migrateAddCabinNumber()
+    {
+        try {
+            // Проверяем, существует ли поле number
+            $stmt = $this->pdo->query("PRAGMA table_info(cabins)");
+            $columns = $stmt->fetchAll(PDO::FETCH_ASSOC);
+            
+            $hasNumber = false;
+            foreach ($columns as $column) {
+                if ($column['name'] === 'number') {
+                    $hasNumber = true;
+                    break;
+                }
+            }
+            
+            // Если поля нет, добавляем его
+            if (!$hasNumber) {
+                $this->pdo->exec("ALTER TABLE cabins ADD COLUMN number INTEGER");
+                $this->pdo->exec("CREATE INDEX IF NOT EXISTS idx_cabins_number ON cabins(number)");
             }
         } catch (\Exception $e) {
             // Игнорируем ошибки миграции, если таблица ещё не создана
@@ -259,13 +291,13 @@ class GermesDatabase
     /**
      * Сохранение каюты (pivot)
      */
-    public function saveCabin($germesCabinId, $cabinCategoryId)
+    public function saveCabin($germesCabinId, $cabinCategoryId, $cabinNumber = null)
     {
         $stmt = $this->pdo->prepare("
-            INSERT OR REPLACE INTO cabins (id, cabin_category_id) 
-            VALUES (?, ?)
+            INSERT OR REPLACE INTO cabins (id, cabin_category_id, number) 
+            VALUES (?, ?, ?)
         ");
-        return $stmt->execute([$germesCabinId, $cabinCategoryId]);
+        return $stmt->execute([$germesCabinId, $cabinCategoryId, $cabinNumber]);
     }
 
     /**
@@ -276,14 +308,15 @@ class GermesDatabase
         $this->pdo->beginTransaction();
         
         $stmt = $this->pdo->prepare("
-            INSERT OR REPLACE INTO cabins (id, cabin_category_id) 
-            VALUES (?, ?)
+            INSERT OR REPLACE INTO cabins (id, cabin_category_id, number) 
+            VALUES (?, ?, ?)
         ");
         
         foreach ($cabins as $cabin) {
             $stmt->execute([
                 $cabin['id'],
-                $cabin['cabin_category_id']
+                $cabin['cabin_category_id'],
+                $cabin['number'] ?? null
             ]);
         }
         
