@@ -46,6 +46,10 @@ class Exist
 
     public function error($message)
     {
+        // Очищаем буфер вывода перед установкой заголовков
+        if (ob_get_level() > 0) {
+            ob_end_clean();
+        }
         $this->json([
             'error' => $message
         ]);
@@ -114,6 +118,12 @@ class Exist
 
         $cached = boolval(Input::get('cached'));
 
+        // Включаем буферизацию вывода для предотвращения проблем с заголовками
+        // когда ProcessLog::add() выводит данные до установки Content-Type
+        if ($type == 'json') {
+            ob_start();
+        }
+
         # todo открыть
         if ($type == 'json') {
             # Вернуть кеш если он есть
@@ -122,6 +132,8 @@ class Exist
                     $data = Cache::get($cache_key);
                     dd($data);
                 } else {
+                    // Очищаем буфер перед выводом JSON
+                    ob_end_clean();
                     $this->json(Cache::get($cache_key));
                     return;
                 }
@@ -133,6 +145,10 @@ class Exist
         }
 
         if (!$checkin) {
+            // Очищаем буфер перед выводом ошибки
+            if ($type == 'json') {
+                ob_end_clean();
+            }
             $this->error('no_checkin');
             return;
         }
@@ -154,6 +170,12 @@ class Exist
                 $exist_data = $waterway->getSimpleExist($checkin, $realtime);
             } catch (Exception $exception) {
                 Log::error('Exist getSimpleExist error: ' . $exception->getMessage());
+                // Очищаем буфер при ошибке
+                if ($type == 'json') {
+                    ob_end_clean();
+                }
+                $this->error('waterway_error');
+                return;
             }
         } elseif ($cached) {
             // Для других источников используем старую логику только если $cached = true
@@ -220,6 +242,8 @@ class Exist
                 } else {
                     Cache::put($cache_key, $final_data, 60); // Кешируем на 1 минуту
                 }
+                // Очищаем буфер вывода перед установкой заголовков и выводом JSON
+                ob_end_clean();
                 $this->json($final_data);
             }
             return $final_data;
@@ -270,6 +294,8 @@ class Exist
                 $mix_data['cached'] = true;
                 Cache::add($cache_key, $mix_data, 120); // Сохраняю на 2 часа
             }
+            // Очищаем буфер вывода перед установкой заголовков и выводом JSON
+            ob_end_clean();
             $this->json($mix_data);
             return;
         }
