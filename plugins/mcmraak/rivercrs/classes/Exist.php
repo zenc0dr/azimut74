@@ -40,6 +40,7 @@ class Exist
 
     public function json($array)
     {
+        header('Content-Type: application/json; charset=UTF-8');
         echo json_encode($array, JSON_UNESCAPED_UNICODE);
     }
 
@@ -146,8 +147,16 @@ class Exist
             $cached = true;
         }
 
-        if ($cached) {
-
+        // Для Waterway всегда используем простой механизм, независимо от $cached
+        if (strtolower($checkin->eds_code) === 'waterway') {
+            try {
+                $waterway = new \Mcmraak\Rivercrs\Classes\Exist\Waterway();
+                $exist_data = $waterway->getSimpleExist($checkin, $realtime);
+            } catch (Exception $exception) {
+                Log::error('Exist getSimpleExist error: ' . $exception->getMessage());
+            }
+        } elseif ($cached) {
+            // Для других источников используем старую логику только если $cached = true
             try {
                 if ($checkin->eds_code) { // && $checkin->eds_code !== 'gama'
                     $class_name = mb_convert_case($checkin->eds_code, MB_CASE_TITLE, "UTF-8");
@@ -159,7 +168,7 @@ class Exist
                     }
                 }
             } catch (Exception $exception) {
-
+                Log::error('Exist getExist error: ' . $exception->getMessage());
             }
         }
 
@@ -169,6 +178,52 @@ class Exist
             ];
         }
 
+        // Для Waterway с простым механизмом возвращаем данные напрямую, обходя сложную обработку
+        if (strtolower($checkin->eds_code) === 'waterway' && isset($exist_data['rooms']) && isset($exist_data['decks'])) {
+            // Данные уже готовы из getSimpleExist(), возвращаем их напрямую
+            // Добавляем QQ данные для каждой каюты
+            if (isset($exist_data['decks']) && is_array($exist_data['decks'])) {
+                foreach ($exist_data['decks'] as &$deck) {
+                    if (isset($deck['cabins']) && is_array($deck['cabins'])) {
+                        foreach ($deck['cabins'] as &$cabin) {
+                            // Формируем QQ данные для каюты
+                            $qq_data = [
+                                'checkinDt' => $checkin->date_start ? date('d.m.Y', strtotime($checkin->date_start)) : '',
+                                'nights' => $checkin->nights ?? 0,
+                                'hotelName' => $checkin->motorship->name ?? '',
+                                'roomType' => $cabin['name'] ?? '',
+                                'boardType' => '3-х разовое',
+                                'price' => $cabin['prices'][0]['price_value'] ?? 0,
+                                'currency' => 'RUB',
+                                'href' => url("/russia-river-cruises/cruise/{$checkin->id}"),
+                            ];
+                            $cabin['QQ'] = [json_encode($qq_data, JSON_UNESCAPED_UNICODE)];
+                        }
+                    }
+                }
+            }
+            
+            $final_data = [
+                'decks' => $exist_data['decks'] ?? [],
+                'rooms' => $exist_data['rooms'] ?? [],
+                'eds' => $exist_data['eds'] ?? 'waterway',
+                'tariff_price1_title' => $exist_data['tariff_price1_title'] ?? ['name' => 'Руб.на 1 чел.', 'desc' => null],
+                'tariff_price2' => $exist_data['tariff_price2'] ?? false,
+                'tariff_price2_title' => $exist_data['tariff_price2_title'] ?? ['name' => 'Руб.на 1 чел.', 'desc' => null],
+            ];
+            
+            if ($type == 'json') {
+                // Добавляем 'cached' => true если запрос был с cached=1 (как в старой логике)
+                if ($cached) {
+                    $final_data['cached'] = true;
+                    Cache::add($cache_key, $final_data, 120); // Сохраняем на 2 часа (как в старой логике)
+                } else {
+                    Cache::put($cache_key, $final_data, 60); // Кешируем на 1 минуту
+                }
+                $this->json($final_data);
+            }
+            return $final_data;
+        }
 
         $this->checkin = $checkin;
         $this->exist_data = $exist_data;

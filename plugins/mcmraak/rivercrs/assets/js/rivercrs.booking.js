@@ -182,14 +182,34 @@ let BEX = new Vue({
                 type: type,
                 url: location.origin + url,
                 data: data,
+                dataType: 'text', // Сначала получаем как текст, чтобы избежать автоматического парсинга
                 beforeSend: () => {
                     this.process = true
                 },
-                success: (data) => {
+                success: (responseText, textStatus, jqXHR) => {
                     this.process = false
-                    if (data) {
-                        if (!options.html) {
-                            data = JSON.parse(data)
+                    
+                    // Используем jqXHR.responseText для получения сырого ответа, даже если jQuery автоматически распарсил
+                    let rawResponse = jqXHR.responseText || responseText
+                    
+                    if (rawResponse) {
+                        let data
+                        // Если rawResponse уже объект (jQuery автоматически распарсил), используем его
+                        if (typeof rawResponse === 'object' && rawResponse !== null && !(rawResponse instanceof String)) {
+                            data = rawResponse
+                        } else if (typeof rawResponse === 'string') {
+                            // Если это строка, парсим JSON
+                            try {
+                                data = JSON.parse(rawResponse)
+                            } catch (e) {
+                                console.error('JSON parse error:', e)
+                                console.error('Failed rawResponse:', rawResponse.substring(0, 200))
+                                callback()
+                                return
+                            }
+                        } else {
+                            callback()
+                            return
                         }
                         callback(data)
                     } else {
@@ -197,8 +217,10 @@ let BEX = new Vue({
                     }
                 },
                 error: function (x) {
-                    console.log(x.responseText);
-                },
+                    console.error('AJAX Error:', x.status, x.statusText)
+                    console.error('Response:', x.responseText?.substring(0, 200))
+                    this.process = false
+                }.bind(this),
             });
         },
         silentSync(url, data, callback) {

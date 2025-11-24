@@ -110,15 +110,19 @@ class Waterway extends RiverCrs
 //        return $response;
     }
 
-    function wwQuery($method, $data = null, $cache_key = null)
+    function wwQuery($method, $data = null, $cache_key = null, $skip_cache = false)
     {
         if (!$cache_key) {
             $cache_key = $method . '::' . md5(json_encode($data));
         }
 
         $cache = new Cabox('worker');
-        $response_body = $cache->get($cache_key);
-        if ($response_body) return $response_body;
+        
+        // Пропускаем кеш, если запрошено (для запросов в реальном времени)
+        if (!$skip_cache) {
+            $response_body = $cache->get($cache_key);
+            if ($response_body) return $response_body;
+        }
 
         # Авторизация в случае отсутствия ключа
         if (!$this->accessToken) $this->auth();
@@ -152,7 +156,7 @@ class Waterway extends RiverCrs
 
             ProcessLog::add("[Error code $response->code] Повтор запроса $method");
 
-            return $this->wwQuery($method, $data); // Повторяем запрос
+            return $this->wwQuery($method, $data, $cache_key, $skip_cache); // Повторяем запрос
         }
 
         $cache->put($cache_key, $response->body);
