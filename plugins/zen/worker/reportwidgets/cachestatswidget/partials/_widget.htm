@@ -12,8 +12,9 @@
                 </tr>
             </thead>
             <tbody>
-                <?php foreach ($cacheStats as $stat): ?>
-                <tr>
+                <?php if (isset($cacheStats) && is_array($cacheStats)): ?>
+                    <?php foreach ($cacheStats as $stat): ?>
+                    <tr>
                     <td>
                         <strong><?= e($stat['name']) ?></strong>
                         <?php if (!$stat['exists']): ?>
@@ -29,8 +30,13 @@
                     <td>
                         <?= e($stat['lastModified']) ?>
                     </td>
-                </tr>
-                <?php endforeach; ?>
+                    </tr>
+                    <?php endforeach; ?>
+                <?php else: ?>
+                    <tr>
+                        <td colspan="4" class="text-muted">Статистика недоступна</td>
+                    </tr>
+                <?php endif; ?>
             </tbody>
         </table>
     </div>

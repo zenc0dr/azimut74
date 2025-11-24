@@ -140,8 +140,12 @@ class CacheStatsWidget extends ReportWidgetBase
      */
     public function onClearCache()
     {
+        // Всегда устанавливаем переменную перед рендерингом
+        $this->vars['cacheStats'] = $this->getCacheStats();
+        
         try {
-            Core::artisanExec('worker:clear-cache');
+            $core = new Core();
+            $core->artisanExec('worker:clear-cache');
             
             Flash::success('Команда очистки кеша запущена в фоновом режиме');
             
