@@ -258,14 +258,29 @@ class InfoflotV2 extends RiverCrs
                 $categoryName = $cabinCategoryId;
             }
 
+            // КРИТИЧНО: Используем формат "name|id" для уникальности (как в GermesV2)
+            // Это необходимо, так как в SQLite могут быть разные категории с одинаковыми названиями
+            // Без ID разные категории будут маппиться в одну, создавая дубликаты
+            $categoryNameWithId = $categoryName . '|' . $cabinCategoryId;
+
             $places = $price['places'] ?? 1;
 
             $cabinId = $this->getCabinCategoryId(
-                $categoryName,
+                $categoryNameWithId,
                 $shipId,
                 'infoflot',
                 $places
             );
+
+            // После создания/получения каюты, обновляем category на чистое название для отображения
+            if ($cabinId) {
+                $cabin = \Mcmraak\Rivercrs\Models\Cabins::find($cabinId);
+                if ($cabin && ($cabin->category === $categoryNameWithId || empty($cabin->category))) {
+                    // Обновляем category на чистое название (без ID) для корректного отображения в интерфейсе
+                    $cabin->category = $categoryName;
+                    $cabin->save();
+                }
+            }
 
             if ($cabinId) {
                 $cabinMapping[$cabinCategoryId] = $cabinId;
