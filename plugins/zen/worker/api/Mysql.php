@@ -255,5 +255,223 @@ class Mysql
 
         return 'UNKNOWN';
     }
+
+    /**
+     * Выполнение SQL файла целиком с детальным логированием
+     *
+     * Параметры:
+     * - token: токен доступа
+     * - file: путь к SQL файлу (относительно корня проекта)
+     *
+     * Пример:
+     * http://azimut74/zen/worker/api/mysql:execFile?token=xxx&file=docs/tasks/0003_db_normalisation/update_mcmraak_rivercrs_cabins.sql
+     */
+    public function execFile()
+    {
+        // Проверка токена
+        if (!$this->checkToken()) {
+            return response()->json(['error' => 'Access denied. Invalid token.'], 403, [], JSON_UNESCAPED_UNICODE);
+        }
+
+        $filePath = Input::get('file');
+
+        if (!$filePath) {
+            return response()->json(['error' => 'Parameter "file" is required'], 400, [], JSON_UNESCAPED_UNICODE);
+        }
+
+        // Получаем полный путь к файлу
+        // Файл должен находиться в storage/ директории (доступна из контейнера)
+        // storage_path() возвращает путь к storage/ директории
+        $fullPath = storage_path(ltrim($filePath, '/'));
+
+        if (!file_exists($fullPath)) {
+            return response()->json([
+                'error' => 'File not found',
+                'file' => $filePath,
+                'full_path' => $fullPath
+            ], 404, [], JSON_UNESCAPED_UNICODE);
+        }
+
+        try {
+            // Читаем файл
+            $sqlContent = file_get_contents($fullPath);
+            
+            if (empty($sqlContent)) {
+                return response()->json([
+                    'error' => 'File is empty',
+                    'file' => $filePath
+                ], 400, [], JSON_UNESCAPED_UNICODE);
+            }
+
+            // Разбиваем на отдельные запросы
+            $queries = $this->splitSqlFile($sqlContent);
+
+            // Получаем соединение (одно для всех запросов, чтобы временные таблицы работали)
+            $connection = $this->getConnection();
+            $pdo = $connection->getPdo();
+            $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+
+            $results = [];
+            $totalQueries = count($queries);
+            $successCount = 0;
+            $errorCount = 0;
+
+            // Выполняем каждый запрос
+            foreach ($queries as $index => $query) {
+                $queryNum = $index + 1;
+                $query = trim($query);
+
+                // Пропускаем пустые запросы и комментарии
+                if (empty($query) || preg_match('/^--/', $query)) {
+                    continue;
+                }
+
+                $stepResult = [
+                    'step' => $queryNum,
+                    'query' => $this->truncateQuery($query, 200),
+                    'query_type' => $this->getQueryType($query),
+                    'success' => false,
+                    'error' => null,
+                    'affected_rows' => null,
+                    'row_count' => null,
+                    'execution_time' => null
+                ];
+
+                try {
+                    $startTime = microtime(true);
+                    
+                    // Выполняем запрос
+                    $stmt = $pdo->prepare($query);
+                    $stmt->execute();
+                    
+                    $executionTime = round((microtime(true) - $startTime) * 1000, 2); // в миллисекундах
+                    $stepResult['execution_time'] = $executionTime . ' ms';
+
+                    // Обрабатываем результат
+                    $queryType = $this->getQueryType($query);
+                    
+                    if ($queryType === 'SELECT') {
+                        $results_data = $stmt->fetchAll(PDO::FETCH_ASSOC);
+                        $stepResult['row_count'] = count($results_data);
+                        $stepResult['success'] = true;
+                    } else {
+                        $stepResult['affected_rows'] = $stmt->rowCount();
+                        $stepResult['success'] = true;
+                        
+                        if ($queryType === 'INSERT') {
+                            $stepResult['last_insert_id'] = $pdo->lastInsertId();
+                        }
+                    }
+
+                    $successCount++;
+
+                } catch (Exception $e) {
+                    $stepResult['success'] = false;
+                    $stepResult['error'] = $e->getMessage();
+                    $stepResult['error_code'] = $e->getCode();
+                    $errorCount++;
+                }
+
+                $results[] = $stepResult;
+            }
+
+            return response()->json([
+                'success' => $errorCount === 0,
+                'database' => $this->getDatabaseName(),
+                'file' => $filePath,
+                'total_queries' => $totalQueries,
+                'executed_queries' => count($results),
+                'success_count' => $successCount,
+                'error_count' => $errorCount,
+                'results' => $results
+            ], 200, [], JSON_UNESCAPED_UNICODE);
+
+        } catch (Exception $e) {
+            return response()->json([
+                'success' => false,
+                'error' => $e->getMessage(),
+                'database' => $this->getDatabaseName(),
+                'file' => $filePath
+            ], 500, [], JSON_UNESCAPED_UNICODE);
+        }
+    }
+
+    /**
+     * Разбивает SQL файл на отдельные запросы
+     * Учитывает комментарии, строки в кавычках и точку с запятой как разделитель
+     *
+     * @param string $sqlContent Содержимое SQL файла
+     * @return array Массив отдельных SQL запросов
+     */
+    private function splitSqlFile($sqlContent)
+    {
+        // Удаляем комментарии вида -- и /* */
+        $sqlContent = preg_replace('/--.*$/m', '', $sqlContent);
+        $sqlContent = preg_replace('/\/\*.*?\*\//s', '', $sqlContent);
+
+        // Разбиваем по точке с запятой, но учитываем строки в кавычках
+        $queries = [];
+        $currentQuery = '';
+        $inString = false;
+        $stringChar = null;
+        $inBacktick = false;
+
+        $length = strlen($sqlContent);
+        for ($i = 0; $i < $length; $i++) {
+            $char = $sqlContent[$i];
+            $prevChar = $i > 0 ? $sqlContent[$i - 1] : '';
+
+            // Обработка строк в кавычках
+            if (!$inBacktick && ($char === '"' || $char === "'") && $prevChar !== '\\') {
+                if (!$inString) {
+                    $inString = true;
+                    $stringChar = $char;
+                } elseif ($char === $stringChar) {
+                    $inString = false;
+                    $stringChar = null;
+                }
+            }
+
+            // Обработка обратных кавычек (для имен таблиц/полей)
+            if (!$inString && $char === '`' && $prevChar !== '\\') {
+                $inBacktick = !$inBacktick;
+            }
+
+            $currentQuery .= $char;
+
+            // Если точка с запятой вне строки - это конец запроса
+            if (!$inString && !$inBacktick && $char === ';') {
+                $query = trim($currentQuery);
+                if (!empty($query)) {
+                    $queries[] = $query;
+                }
+                $currentQuery = '';
+            }
+        }
+
+        // Добавляем последний запрос, если он есть
+        $lastQuery = trim($currentQuery);
+        if (!empty($lastQuery)) {
+            $queries[] = $lastQuery;
+        }
+
+        return $queries;
+    }
+
+    /**
+     * Обрезает длинный SQL запрос для отображения
+     *
+     * @param string $query SQL запрос
+     * @param int $maxLength Максимальная длина
+     * @return string Обрезанный запрос
+     */
+    private function truncateQuery($query, $maxLength = 200)
+    {
+        if (strlen($query) <= $maxLength) {
+            return $query;
+        }
+
+        return substr($query, 0, $maxLength) . '...';
+    }
 }
 
