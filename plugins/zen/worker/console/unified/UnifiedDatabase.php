@@ -28,6 +28,41 @@ abstract class UnifiedDatabase
     private function initDatabase()
     {
         try {
+            // Проверяем, существует ли база и имеет ли она правильную структуру
+            $dbExists = file_exists($this->dbPath);
+            if ($dbExists) {
+                // Проверяем структуру существующей базы
+                $tempPdo = new PDO("sqlite:" . $this->dbPath);
+                $tempPdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+                
+                // Проверяем наличие колонки deck_id в таблице prices
+                try {
+                    $stmt = $tempPdo->query("PRAGMA table_info(prices)");
+                    $columns = $stmt->fetchAll(PDO::FETCH_ASSOC);
+                    $hasDeckId = false;
+                    foreach ($columns as $column) {
+                        if ($column['name'] === 'deck_id') {
+                            $hasDeckId = true;
+                            break;
+                        }
+                    }
+                    
+                    // Если структура не соответствует единой схеме, пересоздаем базу
+                    if (!$hasDeckId) {
+                        $tempPdo = null;
+                        unlink($this->dbPath);
+                        $dbExists = false;
+                    }
+                } catch (Exception $e) {
+                    // Если таблица не существует, пересоздаем базу
+                    $tempPdo = null;
+                    if (file_exists($this->dbPath)) {
+                        unlink($this->dbPath);
+                    }
+                    $dbExists = false;
+                }
+            }
+            
             $this->pdo = new PDO("sqlite:" . $this->dbPath);
             $this->pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
             // Включаем foreign keys для проверки целостности
@@ -216,7 +251,15 @@ abstract class UnifiedDatabase
      */
     public function saveCabinCategory($id, $name, $shipId, $data = [])
     {
-        $extraData = !empty($data['extra_data']) ? json_encode($data['extra_data'], JSON_UNESCAPED_UNICODE) : null;
+        // Обрабатываем extra_data - должен быть JSON строкой
+        $extraData = null;
+        if (!empty($data['extra_data'])) {
+            if (is_array($data['extra_data'])) {
+                $extraData = json_encode($data['extra_data'], JSON_UNESCAPED_UNICODE);
+            } elseif (is_string($data['extra_data'])) {
+                $extraData = $data['extra_data'];
+            }
+        }
         
         $stmt = $this->pdo->prepare("
             INSERT OR REPLACE INTO cabin_categories (

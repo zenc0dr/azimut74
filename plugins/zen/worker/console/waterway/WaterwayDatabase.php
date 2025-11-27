@@ -321,20 +321,49 @@ class WaterwayDatabase extends UnifiedDatabase
     /**
      * Сохранение категории кают (id = waterway roomClass id)
      * Адаптирован для использования единого интерфейса UnifiedDatabase
+     * Поддерживает старую сигнатуру для обратной совместимости
      */
-    public function saveCabinCategory($waterwayCategoryId, $name, $description = null, $metaId = null, $metaName = null, $shipId = null, $deckId = null)
+    public function saveCabinCategory($waterwayCategoryId, $name, $shipId = null, $data = [], $description = null, $metaId = null, $metaName = null, $deckId = null)
     {
+        // Если используется старый формат (7 параметров)
+        if (func_num_args() >= 7 && $shipId === null && empty($data)) {
+            // Извлекаем параметры из старого формата
+            $oldShipId = func_get_arg(5); // 6-й параметр (индекс 5)
+            $oldDeckId = func_get_arg(6); // 7-й параметр (индекс 6)
+            $oldDescription = func_get_arg(2);
+            $oldMetaId = func_get_arg(3);
+            $oldMetaName = func_get_arg(4);
+            
+            if (!$oldShipId) {
+                throw new \Exception("ship_id обязателен для категории кают");
+            }
+            
+            return parent::saveCabinCategory($waterwayCategoryId, $name, $oldShipId, [
+                'description' => $oldDescription,
+                'meta_id' => $oldMetaId,
+                'meta_name' => $oldMetaName,
+                'deck_id' => $oldDeckId,
+                'places' => 1 // По умолчанию для Waterway
+            ]);
+        }
+        
+        // Новый формат - проверяем ship_id
         if (!$shipId) {
             throw new \Exception("ship_id обязателен для категории кают");
         }
         
-        return parent::saveCabinCategory($waterwayCategoryId, $name, $shipId, [
-            'description' => $description,
-            'meta_id' => $metaId,
-            'meta_name' => $metaName,
-            'deck_id' => $deckId,
-            'places' => 1 // По умолчанию для Waterway
-        ]);
+        // Если $data пустой, но есть дополнительные параметры
+        if (empty($data) && $description !== null) {
+            $data = [
+                'description' => $description,
+                'meta_id' => $metaId,
+                'meta_name' => $metaName,
+                'deck_id' => $deckId,
+                'places' => 1
+            ];
+        }
+        
+        return parent::saveCabinCategory($waterwayCategoryId, $name, $shipId, $data);
     }
 
     /**

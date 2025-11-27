@@ -2,212 +2,150 @@
 
 use PDO;
 use Exception;
+use Zen\Worker\Console\unified\UnifiedDatabase;
 
-class GermesDatabase
+/**
+ * GermesDatabase - наследуется от UnifiedDatabase
+ * Использует единую структуру SQLite для всех источников
+ * Сохраняет таблицу cabins для обратной совместимости
+ */
+class GermesDatabase extends UnifiedDatabase
 {
-    private $pdo;
-    private $dbPath;
+    /**
+     * Маппинг AUTOINCREMENT deck_id → hash имени (для обратной совместимости)
+     * @var array
+     */
+    private $deckIdMapping = [];
 
+    /**
+     * Конструктор - передает путь к базе данных в родительский класс
+     */
     public function __construct()
     {
-        $this->dbPath = __DIR__ . '/germes_data.sqlite';
-        $this->initDatabase();
+        $dbPath = __DIR__ . '/germes_data.sqlite';
+        parent::__construct($dbPath);
+        
+        // Миграция: добавляем поля для обратной совместимости (если их нет)
+        $this->migrateLegacyFields();
+        
+        // Создаем таблицу cabins для обратной совместимости
+        $this->createCabinsTable();
     }
 
     /**
-     * Инициализация базы данных
+     * Миграция для обратной совместимости со старыми данными
+     * Добавляет поля, которые могут использоваться в старых версиях
      */
-    private function initDatabase()
+    private function migrateLegacyFields()
+    {
+        // Миграция структуры таблиц для единой схемы
+        $this->migrateTableStructure();
+    }
+    
+    /**
+     * Миграция структуры таблиц для единой схемы
+     * Добавляет недостающие поля из UnifiedDatabase
+     */
+    private function migrateTableStructure()
+    {
+        // Миграция таблицы ships
+        $this->addColumnIfNotExists('ships', 'operator_name', 'TEXT');
+        $this->addColumnIfNotExists('ships', 'extra_data', 'TEXT');
+        
+        // Миграция таблицы decks
+        $this->addColumnIfNotExists('decks', 'position', 'INTEGER');
+        $this->addColumnIfNotExists('decks', 'extra_data', 'TEXT');
+        
+        // Миграция таблицы cabin_categories
+        $this->addColumnIfNotExists('cabin_categories', 'places', 'INTEGER DEFAULT 1');
+        $this->addColumnIfNotExists('cabin_categories', 'places_extra', 'INTEGER');
+        $this->addColumnIfNotExists('cabin_categories', 'extra_data', 'TEXT');
+        
+        // Миграция таблицы cruises
+        $this->addColumnIfNotExists('cruises', 'days', 'INTEGER');
+        $this->addColumnIfNotExists('cruises', 'nights', 'INTEGER');
+        $this->addColumnIfNotExists('cruises', 'description', 'TEXT');
+        $this->addColumnIfNotExists('cruises', 'schedule_html', 'TEXT');
+        $this->addColumnIfNotExists('cruises', 'extra_data', 'TEXT');
+        
+        // Миграция таблицы prices
+        $this->addColumnIfNotExists('prices', 'price_extra', 'INTEGER');
+        $this->addColumnIfNotExists('prices', 'places_qnt', 'INTEGER DEFAULT 1');
+        $this->addColumnIfNotExists('prices', 'nofull', 'INTEGER DEFAULT 0');
+        $this->addColumnIfNotExists('prices', 'deck_id', 'INTEGER');
+        $this->addColumnIfNotExists('prices', 'extra_data', 'TEXT');
+    }
+    
+    /**
+     * Добавляет колонку в таблицу, если её нет
+     */
+    private function addColumnIfNotExists($tableName, $columnName, $columnDefinition)
     {
         try {
-            $this->pdo = new PDO("sqlite:" . $this->dbPath);
-            $this->pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
-            // Включаем foreign keys для проверки целостности
-            $this->pdo->exec("PRAGMA foreign_keys = ON");
-            $this->createTables();
-        } catch (Exception $e) {
-            throw new Exception("Ошибка подключения к SQLite: " . $e->getMessage());
-        }
-    }
-
-    /**
-     * Создание таблиц
-     */
-    private function createTables()
-    {
-        // Таблица теплоходов (id = germes_ship_id)
-        $this->pdo->exec("
-            CREATE TABLE IF NOT EXISTS ships (
-                id INTEGER PRIMARY KEY,
-                name TEXT NOT NULL,
-                created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
-                updated_at DATETIME DEFAULT CURRENT_TIMESTAMP
-            )
-        ");
-
-        // Таблица палуб
-        $this->pdo->exec("
-            CREATE TABLE IF NOT EXISTS decks (
-                id INTEGER PRIMARY KEY AUTOINCREMENT,
-                name TEXT NOT NULL UNIQUE,
-                created_at DATETIME DEFAULT CURRENT_TIMESTAMP
-            )
-        ");
-
-        // Таблица категорий кают (id = germes_class_id)
-        $this->pdo->exec("
-            CREATE TABLE IF NOT EXISTS cabin_categories (
-                id INTEGER PRIMARY KEY,
-                name TEXT NOT NULL,
-                description TEXT,
-                ship_id INTEGER,
-                deck_id INTEGER,
-                created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
-                FOREIGN KEY (ship_id) REFERENCES ships(id),
-                FOREIGN KEY (deck_id) REFERENCES decks(id)
-            )
-        ");
-        
-        // Миграция: добавляем поле deck_id если его нет
-        $this->migrateAddDeckId();
-
-        // Таблица кают (pivot)
-        // Временно убираем FOREIGN KEY, так как pivot может содержать ссылки на категории, которые ещё не сохранены
-        $this->pdo->exec("
-            CREATE TABLE IF NOT EXISTS cabins (
-                id INTEGER PRIMARY KEY,
-                cabin_category_id INTEGER,
-                number INTEGER,
-                created_at DATETIME DEFAULT CURRENT_TIMESTAMP
-            )
-        ");
-        
-        // Миграция: добавляем поле number если его нет
-        $this->migrateAddCabinNumber();
-
-        // Таблица круизов (id = germes_cruise_id)
-        $this->pdo->exec("
-            CREATE TABLE IF NOT EXISTS cruises (
-                id INTEGER PRIMARY KEY,
-                ship_id INTEGER,
-                name TEXT,
-                route TEXT,
-                date_start DATETIME,
-                date_end DATETIME,
-                waybill_data TEXT,
-                created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
-                updated_at DATETIME DEFAULT CURRENT_TIMESTAMP,
-                FOREIGN KEY (ship_id) REFERENCES ships(id)
-            )
-        ");
-
-        // Таблица цен
-        $this->pdo->exec("
-            CREATE TABLE IF NOT EXISTS prices (
-                id INTEGER PRIMARY KEY AUTOINCREMENT,
-                cruise_id INTEGER,
-                cabin_category_id INTEGER,
-                price_value INTEGER,
-                created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
-                FOREIGN KEY (cruise_id) REFERENCES cruises(id),
-                FOREIGN KEY (cabin_category_id) REFERENCES cabin_categories(id)
-            )
-        ");
-
-        // Создаем индексы для быстрого поиска
-        $this->pdo->exec("CREATE INDEX IF NOT EXISTS idx_cruises_ship_id ON cruises(ship_id)");
-        $this->pdo->exec("CREATE INDEX IF NOT EXISTS idx_prices_cruise_id ON prices(cruise_id)");
-        $this->pdo->exec("CREATE INDEX IF NOT EXISTS idx_prices_cabin_category_id ON prices(cabin_category_id)");
-        $this->pdo->exec("CREATE INDEX IF NOT EXISTS idx_cabin_categories_ship_id ON cabin_categories(ship_id)");
-        $this->pdo->exec("CREATE INDEX IF NOT EXISTS idx_cabin_categories_deck_id ON cabin_categories(deck_id)");
-        $this->pdo->exec("CREATE INDEX IF NOT EXISTS idx_cabins_cabin_category_id ON cabins(cabin_category_id)");
-    }
-
-    /**
-     * Миграция: добавление поля deck_id в cabin_categories
-     */
-    private function migrateAddDeckId()
-    {
-        try {
-            // Проверяем, существует ли поле deck_id
-            $stmt = $this->pdo->query("PRAGMA table_info(cabin_categories)");
+            // Проверяем, существует ли колонка
+            $stmt = $this->getPdo()->prepare("PRAGMA table_info($tableName)");
+            $stmt->execute();
             $columns = $stmt->fetchAll(PDO::FETCH_ASSOC);
             
-            $hasDeckId = false;
+            $columnExists = false;
             foreach ($columns as $column) {
-                if ($column['name'] === 'deck_id') {
-                    $hasDeckId = true;
+                if ($column['name'] === $columnName) {
+                    $columnExists = true;
                     break;
                 }
             }
             
-            // Если поля нет, добавляем его
-            if (!$hasDeckId) {
-                $this->pdo->exec("ALTER TABLE cabin_categories ADD COLUMN deck_id INTEGER");
-                $this->pdo->exec("CREATE INDEX IF NOT EXISTS idx_cabin_categories_deck_id ON cabin_categories(deck_id)");
+            if (!$columnExists) {
+                $this->getPdo()->exec("ALTER TABLE $tableName ADD COLUMN $columnName $columnDefinition");
             }
         } catch (\Exception $e) {
-            // Игнорируем ошибки миграции, если таблица ещё не создана
+            // Игнорируем ошибки миграции
         }
     }
 
     /**
-     * Миграция: добавляем поле number в таблицу cabins
+     * Создание таблицы cabins для обратной совместимости
      */
-    private function migrateAddCabinNumber()
+    private function createCabinsTable()
     {
-        try {
-            // Проверяем, существует ли поле number
-            $stmt = $this->pdo->query("PRAGMA table_info(cabins)");
-            $columns = $stmt->fetchAll(PDO::FETCH_ASSOC);
-            
-            $hasNumber = false;
-            foreach ($columns as $column) {
-                if ($column['name'] === 'number') {
-                    $hasNumber = true;
-                    break;
-                }
-            }
-            
-            // Если поля нет, добавляем его
-            if (!$hasNumber) {
-                $this->pdo->exec("ALTER TABLE cabins ADD COLUMN number INTEGER");
-                $this->pdo->exec("CREATE INDEX IF NOT EXISTS idx_cabins_number ON cabins(number)");
-            }
-        } catch (\Exception $e) {
-            // Игнорируем ошибки миграции, если таблица ещё не создана
+        if (!$this->tableExists('cabins')) {
+            $this->getPdo()->exec("
+                CREATE TABLE IF NOT EXISTS cabins (
+                    id INTEGER PRIMARY KEY,
+                    cabin_category_id INTEGER,
+                    number INTEGER,
+                    created_at DATETIME DEFAULT CURRENT_TIMESTAMP
+                )
+            ");
+            $this->getPdo()->exec("CREATE INDEX IF NOT EXISTS idx_cabins_cabin_category_id ON cabins(cabin_category_id)");
+            $this->getPdo()->exec("CREATE INDEX IF NOT EXISTS idx_cabins_number ON cabins(number)");
         }
     }
 
     /**
      * Сохранение теплохода (id = germes_ship_id)
+     * Адаптирован для единого интерфейса UnifiedDatabase
      */
-    public function saveShip($germesShipId, $name)
+    public function saveShip($germesShipId, $name, $data = [])
     {
-        $stmt = $this->pdo->prepare("
-            INSERT OR REPLACE INTO ships (id, name, updated_at) 
-            VALUES (?, ?, CURRENT_TIMESTAMP)
-        ");
-        return $stmt->execute([$germesShipId, $name]);
+        return parent::saveShip($germesShipId, $name, $data);
     }
 
     /**
      * Batch сохранение теплоходов
+     * Адаптирован для единого интерфейса UnifiedDatabase
      */
     public function saveShipsBatch($ships)
     {
-        $this->pdo->beginTransaction();
-        
-        $stmt = $this->pdo->prepare("
-            INSERT OR REPLACE INTO ships (id, name, updated_at) 
-            VALUES (?, ?, CURRENT_TIMESTAMP)
-        ");
-        
+        // Конвертируем в единый формат и используем родительский метод
+        $convertedShips = [];
         foreach ($ships as $ship) {
-            $stmt->execute([$ship['id'], $ship['name']]);
+            $convertedShips[] = [
+                'id' => $ship['id'],
+                'name' => $ship['name']
+            ];
         }
-        
-        $this->pdo->commit();
+        parent::saveShipsBatch($convertedShips);
     }
 
     /**
@@ -215,85 +153,174 @@ class GermesDatabase
      */
     public function getShipByGermesId($germesShipId)
     {
-        $stmt = $this->pdo->prepare("SELECT * FROM ships WHERE id = ?");
-        $stmt->execute([$germesShipId]);
-        return $stmt->fetch(PDO::FETCH_ASSOC);
+        return parent::getShipBySourceId($germesShipId);
     }
 
     /**
      * Сохранение палубы
+     * Адаптирован для единого интерфейса UnifiedDatabase
+     * Использует hash имени как ID (вместо AUTOINCREMENT)
+     * Сохраняет маппинг для обратной совместимости
      */
-    public function saveDeck($name)
+    public function saveDeck($id, $name, $data = [])
     {
-        $stmt = $this->pdo->prepare("
-            INSERT OR IGNORE INTO decks (name) 
-            VALUES (?)
-        ");
-        $stmt->execute([$name]);
+        // Если используется старый формат (только $name - один аргумент)
+        if (func_num_args() == 1 && is_string($id)) {
+            // Используем числовой hash имени как ID (для единой структуры)
+            // Берем первые 8 символов md5 hash и конвертируем в число
+            $deckName = (string)$id;
+            $deckId = abs(hexdec(substr(md5($deckName), 0, 8)));
+            $deckData = [];
+        } else {
+            // Новый формат - проверяем типы
+            if (!is_numeric($id) && !is_int($id)) {
+                throw new \Exception("deck_id должен быть числом, получен: " . gettype($id));
+            }
+            if (!is_string($name) && !is_numeric($name)) {
+                throw new \Exception("deck_name должен быть строкой, получен: " . gettype($name));
+            }
+            $deckId = (int)$id;
+            $deckName = (string)$name;
+            $deckData = is_array($data) ? $data : [];
+        }
         
-        // Получаем ID сохранённой палубы
-        $stmt = $this->pdo->prepare("SELECT id FROM decks WHERE name = ?");
-        $stmt->execute([$name]);
-        $result = $stmt->fetch(PDO::FETCH_ASSOC);
-        return $result ? (int)$result['id'] : null;
+        // Сохраняем палубу через родительский метод
+        parent::saveDeck($deckId, $deckName, $deckData);
+        
+        // Сохраняем маппинг для обратной совместимости
+        $this->deckIdMapping[$deckName] = $deckId;
+        
+        return $deckId;
+    }
+
+    /**
+     * Получение ID палубы из имени (hash)
+     */
+    private function getDeckIdFromName($name)
+    {
+        // Используем hash имени как ID для единой структуры
+        return abs(crc32($name));
     }
 
     /**
      * Получение палубы по названию
+     * Адаптирован для единой структуры
      */
     public function getDeckByName($name)
     {
-        $stmt = $this->pdo->prepare("SELECT id FROM decks WHERE name = ?");
-        $stmt->execute([$name]);
+        $deckId = $this->getDeckIdFromName($name);
+        
+        // Проверяем, существует ли палуба с таким ID
+        $stmt = $this->getPdo()->prepare("SELECT id FROM decks WHERE id = ? OR name = ?");
+        $stmt->execute([$deckId, $name]);
         $result = $stmt->fetch(PDO::FETCH_ASSOC);
-        return $result ? (int)$result['id'] : null;
+        
+        if ($result) {
+            return (int)$result['id'];
+        }
+        
+        return null;
+    }
+    
+    /**
+     * Сохранение палубы (старая сигнатура для обратной совместимости)
+     */
+    public function saveDeckOld($name)
+    {
+        return $this->saveDeck($name);
     }
 
     /**
      * Сохранение категории кают (id = germes_class_id)
+     * Адаптирован для единого интерфейса UnifiedDatabase
+     * Поддерживает старую сигнатуру для обратной совместимости
      */
-    public function saveCabinCategory($germesClassId, $name, $description = null, $shipId = null, $deckId = null)
+    public function saveCabinCategory($germesClassId, $name, $shipId = null, $data = [], $description = null, $deckId = null)
     {
-        $stmt = $this->pdo->prepare("
-            INSERT OR REPLACE INTO cabin_categories 
-            (id, name, description, ship_id, deck_id) 
-            VALUES (?, ?, ?, ?, ?)
-        ");
-        return $stmt->execute([$germesClassId, $name, $description, $shipId, $deckId]);
+        // Если используется старый формат (5 параметров: id, name, description, shipId, deckId)
+        if (func_num_args() >= 5 && $shipId === null && empty($data)) {
+            // Извлекаем параметры из старого формата
+            $oldDescription = func_get_arg(2);
+            $oldShipId = func_get_arg(3);
+            $oldDeckId = func_get_arg(4);
+            
+            if ($oldShipId === null) {
+                throw new \Exception("ship_id обязателен для категории кают");
+            }
+            
+            // Конвертируем deckId если это имя палубы (для обратной совместимости)
+            if (is_string($oldDeckId)) {
+                $oldDeckId = $this->getDeckIdFromName($oldDeckId);
+            }
+            
+            return parent::saveCabinCategory($germesClassId, $name, $oldShipId, [
+                'description' => $oldDescription,
+                'deck_id' => $oldDeckId,
+                'places' => 1 // По умолчанию для Germes
+            ]);
+        }
+        
+        // Новый формат - проверяем ship_id
+        if ($shipId === null) {
+            throw new \Exception("ship_id обязателен для категории кают");
+        }
+        
+        // Если $data пустой, но есть дополнительные параметры
+        if (empty($data) && $description !== null) {
+            // Конвертируем deckId если это имя палубы
+            if (is_string($deckId)) {
+                $deckId = $this->getDeckIdFromName($deckId);
+            }
+            
+            $data = [
+                'description' => $description,
+                'deck_id' => $deckId,
+                'places' => 1 // По умолчанию для Germes
+            ];
+        }
+        
+        return parent::saveCabinCategory($germesClassId, $name, $shipId, $data);
     }
 
     /**
      * Batch сохранение категорий кают
+     * Адаптирован для единого интерфейса UnifiedDatabase
      */
     public function saveCabinCategoriesBatch($categories)
     {
-        $this->pdo->beginTransaction();
-        
-        $stmt = $this->pdo->prepare("
-            INSERT OR REPLACE INTO cabin_categories 
-            (id, name, description, ship_id, deck_id) 
-            VALUES (?, ?, ?, ?, ?)
-        ");
-        
+        // Конвертируем в единый формат
+        $convertedCategories = [];
         foreach ($categories as $category) {
-            $stmt->execute([
-                $category['id'],
-                $category['name'],
-                $category['description'] ?? null,
-                $category['ship_id'] ?? null,
-                $category['deck_id'] ?? null
-            ]);
+            $deckId = $category['deck_id'] ?? null;
+            // Если deck_id это строка (имя палубы), конвертируем в ID
+            if (is_string($deckId)) {
+                $deckId = $this->getDeckIdFromName($deckId);
+            }
+            
+            $convertedCategories[] = [
+                'id' => $category['id'],
+                'name' => $category['name'],
+                'ship_id' => $category['ship_id'] ?? null,
+                'description' => $category['description'] ?? null,
+                'deck_id' => $deckId,
+                'places' => 1 // По умолчанию для Germes
+            ];
         }
         
-        $this->pdo->commit();
+        // Используем родительский метод
+        parent::saveCabinCategoriesBatch($convertedCategories);
     }
 
     /**
      * Сохранение каюты (pivot)
+     * Сохраняется в таблицу cabins для обратной совместимости
      */
     public function saveCabin($germesCabinId, $cabinCategoryId, $cabinNumber = null)
     {
-        $stmt = $this->pdo->prepare("
+        // Убеждаемся, что таблица cabins существует
+        $this->createCabinsTable();
+        
+        $stmt = $this->getPdo()->prepare("
             INSERT OR REPLACE INTO cabins (id, cabin_category_id, number) 
             VALUES (?, ?, ?)
         ");
@@ -302,93 +329,132 @@ class GermesDatabase
 
     /**
      * Batch сохранение кают
+     * Сохраняется в таблицу cabins для обратной совместимости
      */
     public function saveCabinsBatch($cabins)
     {
-        $this->pdo->beginTransaction();
-        
-        $stmt = $this->pdo->prepare("
-            INSERT OR REPLACE INTO cabins (id, cabin_category_id, number) 
-            VALUES (?, ?, ?)
-        ");
-        
-        foreach ($cabins as $cabin) {
-            $stmt->execute([
-                $cabin['id'],
-                $cabin['cabin_category_id'],
-                $cabin['number'] ?? null
-            ]);
+        if (empty($cabins)) {
+            return;
         }
         
-        $this->pdo->commit();
+        // Убеждаемся, что таблица cabins существует
+        $this->createCabinsTable();
+        
+        $this->getPdo()->beginTransaction();
+        
+        try {
+            $stmt = $this->getPdo()->prepare("
+                INSERT OR REPLACE INTO cabins (id, cabin_category_id, number) 
+                VALUES (?, ?, ?)
+            ");
+            
+            foreach ($cabins as $cabin) {
+                $stmt->execute([
+                    $cabin['id'],
+                    $cabin['cabin_category_id'],
+                    $cabin['number'] ?? null
+                ]);
+            }
+            
+            $this->getPdo()->commit();
+        } catch (\Exception $e) {
+            $this->getPdo()->rollBack();
+            throw $e;
+        }
     }
 
     /**
      * Сохранение круиза (id = germes_cruise_id, ship_id = germes_ship_id)
+     * Адаптирован для единого интерфейса UnifiedDatabase
+     * Поддерживает старую сигнатуру для обратной совместимости
      */
-    public function saveCruise($data)
+    public function saveCruise($idOrData, $shipId = null, $name = null, $dateStart = null, $dateEnd = null, $data = [])
     {
-        $stmt = $this->pdo->prepare("
-            INSERT OR REPLACE INTO cruises (
-                id, ship_id, name, route, 
-                date_start, date_end, waybill_data, updated_at
-            ) VALUES (?, ?, ?, ?, ?, ?, ?, CURRENT_TIMESTAMP)
-        ");
+        // Если первый параметр - массив (старый формат)
+        if (is_array($idOrData)) {
+            $cruiseData = $idOrData;
+            
+            // Получаем waybill_data (может быть JSON строка или массив)
+            $waybillData = $cruiseData['waybill_data'] ?? '[]';
+            if (is_string($waybillData)) {
+                $decoded = json_decode($waybillData, true);
+                if (json_last_error() === JSON_ERROR_NONE) {
+                    $waybillData = $decoded;
+                } else {
+                    $waybillData = [];
+                }
+            }
+            
+            // Вызываем родительский метод с единым интерфейсом
+            return parent::saveCruise(
+                $cruiseData['germes_cruise_id'],
+                $cruiseData['germes_ship_id'],
+                $cruiseData['name'] ?? '',
+                $cruiseData['date_start'] ?? '',
+                $cruiseData['date_end'] ?? '',
+                [
+                    'route' => $cruiseData['route'] ?? null,
+                    'waybill_data' => $waybillData
+                ]
+            );
+        }
         
-        return $stmt->execute([
-            $data['germes_cruise_id'],
-            $data['germes_ship_id'],
-            $data['name'] ?? null,
-            $data['route'] ?? null,
-            $data['date_start'] ?? null,
-            $data['date_end'] ?? null,
-            $data['waybill_data'] ?? null
-        ]);
+        // Новый формат - вызываем родительский метод напрямую
+        return parent::saveCruise($idOrData, $shipId, $name, $dateStart, $dateEnd, $data);
     }
 
     /**
      * Batch сохранение круизов
+     * Адаптирован для единого интерфейса UnifiedDatabase
      */
     public function saveCruisesBatch($cruises)
     {
-        $this->pdo->beginTransaction();
-        
-        $stmt = $this->pdo->prepare("
-            INSERT OR REPLACE INTO cruises (
-                id, ship_id, name, route, 
-                date_start, date_end, waybill_data, updated_at
-            ) VALUES (?, ?, ?, ?, ?, ?, ?, CURRENT_TIMESTAMP)
-        ");
-        
-        foreach ($cruises as $cruise) {
-            $stmt->execute([
-                $cruise['germes_cruise_id'],
-                $cruise['germes_ship_id'],
-                $cruise['name'] ?? null,
-                $cruise['route'] ?? null,
-                $cruise['date_start'] ?? null,
-                $cruise['date_end'] ?? null,
-                $cruise['waybill_data'] ?? null
-            ]);
+        if (empty($cruises)) {
+            return;
         }
         
-        $this->pdo->commit();
+        // Конвертируем круизы в единый формат
+        $convertedCruises = [];
+        foreach ($cruises as $cruise) {
+            // Получаем waybill_data (может быть JSON строка или массив)
+            $waybillData = $cruise['waybill_data'] ?? '[]';
+            if (is_string($waybillData)) {
+                $decoded = json_decode($waybillData, true);
+                if (json_last_error() === JSON_ERROR_NONE) {
+                    $waybillData = $decoded;
+                } else {
+                    $waybillData = [];
+                }
+            }
+            
+            $convertedCruises[] = [
+                'id' => $cruise['germes_cruise_id'],
+                'ship_id' => $cruise['germes_ship_id'],
+                'name' => $cruise['name'] ?? '',
+                'date_start' => $cruise['date_start'] ?? '',
+                'date_end' => $cruise['date_end'] ?? '',
+                'route' => $cruise['route'] ?? null,
+                'waybill_data' => $waybillData
+            ];
+        }
+        
+        // Вызываем родительский метод с конвертированными данными
+        parent::saveCruisesBatch($convertedCruises);
     }
 
     /**
      * Сохранение цены
+     * Адаптирован для единого интерфейса UnifiedDatabase
      */
-    public function savePrice($cruiseId, $cabinCategoryId, $priceValue)
+    public function savePrice($cruiseId, $cabinCategoryId, $priceValue, $data = [])
     {
-        $stmt = $this->pdo->prepare("
-            INSERT INTO prices (cruise_id, cabin_category_id, price_value) 
-            VALUES (?, ?, ?)
-        ");
-        return $stmt->execute([$cruiseId, $cabinCategoryId, $priceValue]);
+        // Germes использует только price_value (price_extra = null)
+        return parent::savePrice($cruiseId, $cabinCategoryId, $priceValue, $data);
     }
 
     /**
      * Batch сохранение цен
+     * Адаптирован для единого интерфейса UnifiedDatabase
      */
     public function savePricesBatch($prices)
     {
@@ -396,137 +462,97 @@ class GermesDatabase
             return;
         }
         
-        $this->pdo->beginTransaction();
-        
-        $stmt = $this->pdo->prepare("
-            INSERT INTO prices (cruise_id, cabin_category_id, price_value) 
-            VALUES (?, ?, ?)
-        ");
-        
+        // Конвертируем цены в единый формат
+        $convertedPrices = [];
         foreach ($prices as $price) {
-            $stmt->execute([
-                $price['cruise_id'],
-                $price['cabin_category_id'],
-                $price['price_value']
-            ]);
+            $convertedPrices[] = [
+                'cruise_id' => $price['cruise_id'],
+                'cabin_category_id' => $price['cabin_category_id'],
+                'price_value' => $price['price_value'],
+                'price_extra' => null // Germes не использует price_extra
+            ];
         }
         
-        $this->pdo->commit();
+        // Используем родительский метод
+        parent::savePricesBatch($convertedPrices);
     }
 
     /**
      * Получение всех круизов с теплоходами
+     * Адаптирован для единой структуры
      */
     public function getAllCruises()
     {
-        $stmt = $this->pdo->prepare("
-            SELECT c.id as id, c.id as germes_cruise_id, c.ship_id as germes_ship_id, 
-                   c.name, c.route, c.date_start, c.date_end, c.waybill_data, 
-                   c.created_at, c.updated_at,
-                   s.name as ship_name 
-            FROM cruises c 
-            LEFT JOIN ships s ON c.ship_id = s.id 
-            ORDER BY c.date_start
-        ");
-        $stmt->execute();
-        return $stmt->fetchAll(PDO::FETCH_ASSOC);
+        $cruises = parent::getAllCruises();
+        
+        // Преобразуем данные для обратной совместимости
+        foreach ($cruises as &$cruise) {
+            // Добавляем germes_cruise_id и germes_ship_id для обратной совместимости
+            $cruise['germes_cruise_id'] = $cruise['id'];
+            $cruise['germes_ship_id'] = $cruise['ship_id'];
+        }
+        
+        return $cruises;
     }
 
     /**
      * Получение круиза по ID
+     * Адаптирован для единой структуры
      */
     public function getCruiseById($cruiseId)
     {
-        $stmt = $this->pdo->prepare("
-            SELECT id as id, id as germes_cruise_id, ship_id as germes_ship_id, 
-                   name, route, date_start, date_end, waybill_data, 
-                   created_at, updated_at
-            FROM cruises WHERE id = ?
-        ");
-        $stmt->execute([$cruiseId]);
-        return $stmt->fetch(PDO::FETCH_ASSOC);
+        $cruise = parent::getCruiseById($cruiseId);
+        
+        if ($cruise) {
+            // Добавляем germes_cruise_id и germes_ship_id для обратной совместимости
+            $cruise['germes_cruise_id'] = $cruise['id'];
+            $cruise['germes_ship_id'] = $cruise['ship_id'];
+        }
+        
+        return $cruise;
     }
 
     /**
      * Получение цен для круиза по ID
+     * Адаптирован для единой структуры
      */
     public function getPricesByCruiseId($cruiseId)
     {
-        $stmt = $this->pdo->prepare("
-            SELECT p.*, 
-                   cc.name as category_name, 
-                   cc.description,
-                   d.name as deck_name
-            FROM prices p
-            LEFT JOIN cabin_categories cc ON p.cabin_category_id = cc.id
-            LEFT JOIN decks d ON cc.deck_id = d.id
-            WHERE p.cruise_id = ?
-        ");
-        $stmt->execute([$cruiseId]);
-        return $stmt->fetchAll(PDO::FETCH_ASSOC);
+        return parent::getPricesByCruiseId($cruiseId);
     }
-
+    
     /**
      * Получение статистики
+     * Использует родительский метод и добавляет статистику по cabins
      */
     public function getStats()
     {
-        $stats = [];
+        $stats = parent::getStats();
         
-        // Количество теплоходов
-        $stmt = $this->pdo->query("SELECT COUNT(*) as count FROM ships");
-        $stats['ships'] = $stmt->fetch(PDO::FETCH_ASSOC)['count'];
-        
-        // Количество круизов
-        $stmt = $this->pdo->query("SELECT COUNT(*) as count FROM cruises");
-        $stats['cruises'] = $stmt->fetch(PDO::FETCH_ASSOC)['count'];
-        
-        // Количество цен
-        $stmt = $this->pdo->query("SELECT COUNT(*) as count FROM prices");
-        $stats['prices'] = $stmt->fetch(PDO::FETCH_ASSOC)['count'];
-        
-        // Количество категорий кают
-        $stmt = $this->pdo->query("SELECT COUNT(*) as count FROM cabin_categories");
-        $stats['cabin_categories'] = $stmt->fetch(PDO::FETCH_ASSOC)['count'];
-        
-        // Количество кают
-        $stmt = $this->pdo->query("SELECT COUNT(*) as count FROM cabins");
-        $stats['cabins'] = $stmt->fetch(PDO::FETCH_ASSOC)['count'];
-        
-        // Количество палуб
-        $stmt = $this->pdo->query("SELECT COUNT(*) as count FROM decks");
-        $stats['decks'] = $stmt->fetch(PDO::FETCH_ASSOC)['count'];
+        // Добавляем статистику по cabins (для обратной совместимости)
+        if ($this->tableExists('cabins')) {
+            $stmt = $this->getPdo()->query("SELECT COUNT(*) as count FROM cabins");
+            $stats['cabins'] = $stmt->fetch(PDO::FETCH_ASSOC)['count'];
+        } else {
+            $stats['cabins'] = 0;
+        }
         
         return $stats;
     }
 
     /**
      * Очистка всех данных
+     * Включает очистку таблицы cabins
      */
     public function clearAll()
     {
-        $this->pdo->exec("DELETE FROM prices");
-        $this->pdo->exec("DELETE FROM cabins");
-        $this->pdo->exec("DELETE FROM cabin_categories");
-        $this->pdo->exec("DELETE FROM cruises");
-        $this->pdo->exec("DELETE FROM decks");
-        $this->pdo->exec("DELETE FROM ships");
-    }
-
-    /**
-     * Получение пути к базе данных
-     */
-    public function getDbPath()
-    {
-        return $this->dbPath;
-    }
-
-    /**
-     * Получение PDO объекта
-     */
-    public function getPdo()
-    {
-        return $this->pdo;
+        // Очищаем таблицу cabins если она существует
+        if ($this->tableExists('cabins')) {
+            $this->getPdo()->exec("DELETE FROM cabins");
+        }
+        
+        // Вызываем родительский метод для очистки основных таблиц
+        parent::clearAll();
     }
 
     /**
@@ -536,10 +562,10 @@ class GermesDatabase
     public function updateCabinCategoriesShipId()
     {
         try {
-            $this->pdo->beginTransaction();
+            $this->getPdo()->beginTransaction();
             
             // Получаем маппинг category_id -> ship_id из цен и круизов
-            $stmt = $this->pdo->query("
+            $stmt = $this->getPdo()->query("
                 SELECT DISTINCT p.cabin_category_id, c.ship_id
                 FROM prices p
                 INNER JOIN cruises c ON p.cruise_id = c.id
@@ -558,7 +584,7 @@ class GermesDatabase
             }
             
             // Обновляем ship_id в cabin_categories
-            $updateStmt = $this->pdo->prepare("
+            $updateStmt = $this->getPdo()->prepare("
                 UPDATE cabin_categories 
                 SET ship_id = ? 
                 WHERE id = ? AND (ship_id IS NULL OR ship_id = 0)
@@ -572,11 +598,11 @@ class GermesDatabase
                 }
             }
             
-            $this->pdo->commit();
+            $this->getPdo()->commit();
             
             return $updated;
         } catch (\Exception $e) {
-            $this->pdo->rollBack();
+            $this->getPdo()->rollBack();
             throw new \Exception("Ошибка при обновлении ship_id в cabin_categories: " . $e->getMessage());
         }
     }
@@ -591,9 +617,9 @@ class GermesDatabase
         }
         
         try {
-            $this->pdo->beginTransaction();
+            $this->getPdo()->beginTransaction();
             
-            $stmt = $this->pdo->prepare("
+            $stmt = $this->getPdo()->prepare("
                 UPDATE cabin_categories 
                 SET deck_id = ? 
                 WHERE id = ? AND (deck_id IS NULL OR deck_id = 0)
@@ -601,17 +627,22 @@ class GermesDatabase
             
             $updated = 0;
             foreach ($categoryToDeckMap as $categoryId => $deckId) {
+                // Если deckId это строка (имя палубы), конвертируем в ID
+                if (is_string($deckId)) {
+                    $deckId = $this->getDeckIdFromName($deckId);
+                }
+                
                 if ($deckId !== null && $deckId > 0) {
                     $stmt->execute([$deckId, $categoryId]);
                     $updated += $stmt->rowCount();
                 }
             }
             
-            $this->pdo->commit();
+            $this->getPdo()->commit();
             
             return $updated;
         } catch (\Exception $e) {
-            $this->pdo->rollBack();
+            $this->getPdo()->rollBack();
             throw new \Exception("Ошибка при обновлении deck_id в cabin_categories: " . $e->getMessage());
         }
     }
@@ -623,7 +654,7 @@ class GermesDatabase
     {
         try {
             // Сначала удаляем цены для этих категорий
-            $this->pdo->exec("
+            $this->getPdo()->exec("
                 DELETE FROM prices 
                 WHERE cabin_category_id IN (
                     SELECT id FROM cabin_categories WHERE ship_id IS NULL
@@ -631,12 +662,12 @@ class GermesDatabase
             ");
             
             // Затем удаляем сами категории
-            $stmt = $this->pdo->query("
+            $stmt = $this->getPdo()->query("
                 SELECT COUNT(*) as count FROM cabin_categories WHERE ship_id IS NULL
             ");
             $count = $stmt->fetch(PDO::FETCH_ASSOC)['count'];
             
-            $this->pdo->exec("
+            $this->getPdo()->exec("
                 DELETE FROM cabin_categories WHERE ship_id IS NULL
             ");
             
@@ -648,43 +679,11 @@ class GermesDatabase
 
     /**
      * Очистка круизов без цен (вызывается в конце фазы 1)
+     * Использует родительский метод
      */
     public function cleanCruisesWithoutPrices()
     {
-        try {
-            // Получаем все круизы
-            $cruises = $this->getAllCruises();
-            $totalCruises = count($cruises);
-            $deletedCount = 0;
-            
-            foreach ($cruises as $cruise) {
-                $cruiseId = $cruise['id'];
-                
-                // Проверяем, есть ли цены для этого круиза
-                $prices = $this->getPricesByCruiseId($cruiseId);
-                
-                if (empty($prices)) {
-                    // Удаляем цены
-                    $stmt = $this->pdo->prepare("DELETE FROM prices WHERE cruise_id = ?");
-                    $stmt->execute([$cruiseId]);
-                    
-                    // Удаляем сам круиз
-                    $stmt = $this->pdo->prepare("DELETE FROM cruises WHERE id = ?");
-                    $stmt->execute([$cruiseId]);
-                    
-                    $deletedCount++;
-                }
-            }
-            
-            return [
-                'total' => $totalCruises,
-                'deleted' => $deletedCount,
-                'remaining' => $totalCruises - $deletedCount
-            ];
-            
-        } catch (\Exception $e) {
-            throw new \Exception("Ошибка при очистке круизов без цен: " . $e->getMessage());
-        }
+        return parent::cleanCruisesWithoutPrices();
     }
 }
 

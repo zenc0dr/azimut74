@@ -17,6 +17,88 @@ class GamaDatabase extends UnifiedDatabase
     {
         $dbPath = __DIR__ . '/gama_data.sqlite';
         parent::__construct($dbPath);
+        
+        // Миграция: добавляем поля для обратной совместимости (если их нет)
+        $this->migrateLegacyFields();
+    }
+    
+    /**
+     * Миграция для обратной совместимости со старыми данными
+     * Добавляет поля, которые могут использоваться в старых версиях
+     */
+    private function migrateLegacyFields()
+    {
+        // Миграция структуры таблиц для единой схемы
+        $this->migrateTableStructure();
+    }
+    
+    /**
+     * Миграция структуры таблиц для единой схемы
+     * Добавляет недостающие поля из UnifiedDatabase
+     */
+    private function migrateTableStructure()
+    {
+        // Миграция таблицы ships
+        $this->addColumnIfNotExists('ships', 'description', 'TEXT');
+        $this->addColumnIfNotExists('ships', 'type', 'TEXT');
+        $this->addColumnIfNotExists('ships', 'operator_name', 'TEXT');
+        $this->addColumnIfNotExists('ships', 'extra_data', 'TEXT');
+        
+        // Миграция таблицы decks
+        $this->addColumnIfNotExists('decks', 'ship_id', 'INTEGER');
+        $this->addColumnIfNotExists('decks', 'position', 'INTEGER');
+        $this->addColumnIfNotExists('decks', 'meta_id', 'INTEGER');
+        $this->addColumnIfNotExists('decks', 'meta_name', 'TEXT');
+        $this->addColumnIfNotExists('decks', 'extra_data', 'TEXT');
+        
+        // Миграция таблицы cabin_categories
+        $this->addColumnIfNotExists('cabin_categories', 'description', 'TEXT');
+        $this->addColumnIfNotExists('cabin_categories', 'places', 'INTEGER DEFAULT 1');
+        $this->addColumnIfNotExists('cabin_categories', 'places_extra', 'INTEGER');
+        $this->addColumnIfNotExists('cabin_categories', 'meta_id', 'INTEGER');
+        $this->addColumnIfNotExists('cabin_categories', 'meta_name', 'TEXT');
+        $this->addColumnIfNotExists('cabin_categories', 'extra_data', 'TEXT');
+        
+        // Миграция таблицы cruises
+        $this->addColumnIfNotExists('cruises', 'days', 'INTEGER');
+        $this->addColumnIfNotExists('cruises', 'nights', 'INTEGER');
+        $this->addColumnIfNotExists('cruises', 'description', 'TEXT');
+        $this->addColumnIfNotExists('cruises', 'schedule_html', 'TEXT');
+        $this->addColumnIfNotExists('cruises', 'extra_data', 'TEXT');
+        
+        // Миграция таблицы prices
+        $this->addColumnIfNotExists('prices', 'price_extra', 'INTEGER');
+        $this->addColumnIfNotExists('prices', 'places_qnt', 'INTEGER DEFAULT 1');
+        $this->addColumnIfNotExists('prices', 'deck_id', 'INTEGER');
+        $this->addColumnIfNotExists('prices', 'tariff_name', 'TEXT');
+        $this->addColumnIfNotExists('prices', 'extra_data', 'TEXT');
+    }
+    
+    /**
+     * Добавляет колонку в таблицу, если её нет
+     */
+    private function addColumnIfNotExists($tableName, $columnName, $columnDefinition)
+    {
+        try {
+            // Проверяем, существует ли колонка
+            $stmt = $this->getPdo()->prepare("PRAGMA table_info($tableName)");
+            $stmt->execute();
+            $columns = $stmt->fetchAll(PDO::FETCH_ASSOC);
+            
+            $columnExists = false;
+            foreach ($columns as $column) {
+                if ($column['name'] === $columnName) {
+                    $columnExists = true;
+                    break;
+                }
+            }
+            
+            if (!$columnExists) {
+                $this->getPdo()->exec("ALTER TABLE $tableName ADD COLUMN $columnName $columnDefinition");
+            }
+        } catch (\Exception $e) {
+            // Игнорируем ошибки миграции
+        }
     }
 
     /**
@@ -255,20 +337,38 @@ class GamaDatabase extends UnifiedDatabase
      * Адаптирован для единого интерфейса UnifiedDatabase
      * Поддерживает старую сигнатуру для обратной совместимости
      */
-    public function saveCabinCategory($gamaCategoryId, $name, $places = null, $deckId = null, $shipId = null, $data = [])
+    public function saveCabinCategory($gamaCategoryId, $name, $shipId = null, $data = [], $places = null, $deckId = null)
     {
-        // Если используется старый формат (5 параметров)
-        if ($places !== null && !is_array($places) && $deckId !== null && !is_array($deckId) && $shipId !== null && !is_array($shipId) && empty($data)) {
-            return parent::saveCabinCategory($gamaCategoryId, $name, $shipId, [
-                'places' => $places,
-                'deck_id' => $deckId
+        // Если используется старый формат (5 параметров: id, name, places, deckId, shipId)
+        if (func_num_args() >= 5 && $shipId === null && empty($data) && $places !== null && $deckId !== null) {
+            // Извлекаем параметры из старого формата
+            $oldPlaces = func_get_arg(2);
+            $oldDeckId = func_get_arg(3);
+            $oldShipId = func_get_arg(4);
+            
+            if ($oldShipId === null) {
+                throw new \Exception("ship_id обязателен для категории кают");
+            }
+            
+            return parent::saveCabinCategory($gamaCategoryId, $name, $oldShipId, [
+                'places' => $oldPlaces,
+                'deck_id' => $oldDeckId
             ]);
         }
-        // Если $places это массив (новый формат), используем его как $data, а $name как $shipId
-        if (is_array($places)) {
-            return parent::saveCabinCategory($gamaCategoryId, $name, $deckId, $places);
+        
+        // Новый формат - проверяем ship_id
+        if ($shipId === null) {
+            throw new \Exception("ship_id обязателен для категории кают");
         }
-        // Иначе используем стандартный формат
+        
+        // Если $data пустой, но есть дополнительные параметры
+        if (empty($data) && $places !== null) {
+            $data = [
+                'places' => $places,
+                'deck_id' => $deckId
+            ];
+        }
+        
         return parent::saveCabinCategory($gamaCategoryId, $name, $shipId, $data);
     }
 

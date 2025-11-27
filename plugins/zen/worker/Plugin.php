@@ -26,6 +26,7 @@ class Plugin extends PluginBase
         $this->registerConsoleCommand('worker:waterway-parse', 'Zen\Worker\Console\waterway\WaterwayParse');
         $this->registerConsoleCommand('worker:waterway-check-roomclass', 'Zen\Worker\Console\waterway\WaterwayCheckRoomClass');
         $this->registerConsoleCommand('worker:clear-cache', 'Zen\Worker\Console\ClearCache');
+        $this->registerConsoleCommand('worker:test-unified-databases', 'Zen\Worker\Console\unified\TestUnifiedDatabases');
     }
 
     public function boot()
