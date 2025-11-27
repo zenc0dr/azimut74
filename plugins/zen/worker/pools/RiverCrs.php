@@ -104,44 +104,99 @@ class RiverCrs
      * @param int $motorship_id
      * @param string $eds_code
      * @param int $places
+     * @param int|null $sourceId ID категории из источника (gama_id, germes_id, etc.)
      * @return int
      */
     public function getCabinCategoryId(
         string $category_name,
         int $motorship_id,
         string $eds_code,
-        int $places = 1
+        int $places = 1,
+        ?int $sourceId = null
     ): int {
-        $key = "cabin:$category_name:$motorship_id:$eds_code";
+        // Ключ кеша включает sourceId, если он передан
+        $key = "cabin:$category_name:$motorship_id:$eds_code" . ($sourceId ? ":$sourceId" : "");
 
         if (isset($this->cache[$key])) {
             return $this->cache[$key];
         }
 
+        $edsIdField = $eds_code . '_id';
+
+        // Приоритет 1: Поиск по ID источника (если передан)
+        if ($sourceId !== null) {
+            $cabin = Cabin::where($edsIdField, $sourceId)
+                ->where('motorship_id', $motorship_id)
+                ->first();
+
+            if ($cabin) {
+                // Обновляем название, если изменилось
+                if ($cabin->category !== $category_name) {
+                    $cabin->category = $category_name;
+                }
+                if ($cabin->places_main_count !== $places) {
+                    $cabin->places_main_count = $places;
+                }
+                // Обновляем имя источника, если изменилось
+                if ($cabin->{$eds_code . '_name'} !== $category_name) {
+                    $cabin->{$eds_code . '_name'} = $category_name;
+                }
+                if ($cabin->isDirty()) {
+                    $cabin->save();
+                }
+                return $this->cache[$key] = $cabin->id;
+            }
+        }
+
+        // Приоритет 2: Поиск по имени источника
         $cabin = Cabin::where($eds_code . '_name', $category_name)
             ->where('motorship_id', $motorship_id)
             ->first();
 
         if ($cabin) {
+            // Обновляем ID источника, если его не было
+            if ($sourceId !== null && !$cabin->{$edsIdField}) {
+                $cabin->{$edsIdField} = $sourceId;
+            }
             if ($cabin->places_main_count !== $places) {
                 $cabin->places_main_count = $places;
+            }
+            if ($cabin->isDirty()) {
                 $cabin->save();
             }
-            return $cabin->id;
+            return $this->cache[$key] = $cabin->id;
         }
 
+        // Приоритет 3: Поиск по category
         $cabin = Cabin::where('category', $category_name)
             ->where('motorship_id', $motorship_id)
             ->first();
 
         if ($cabin) {
-            return $cabin->id;
+            // Обновляем ID источника и имя источника, если их не было
+            if ($sourceId !== null && !$cabin->{$edsIdField}) {
+                $cabin->{$edsIdField} = $sourceId;
+            }
+            if (!$cabin->{$eds_code . '_name'}) {
+                $cabin->{$eds_code . '_name'} = $category_name;
+            }
+            if ($cabin->places_main_count !== $places) {
+                $cabin->places_main_count = $places;
+            }
+            if ($cabin->isDirty()) {
+                $cabin->save();
+            }
+            return $this->cache[$key] = $cabin->id;
         }
 
+        // Создание новой каюты
         $cabin = new Cabin;
         $cabin->motorship_id = $motorship_id;
         $cabin->category = $category_name;
         $cabin->{$eds_code . '_name'} = $category_name;
+        if ($sourceId !== null) {
+            $cabin->{$edsIdField} = $sourceId;
+        }
         $cabin->places_main_count = $places;
         $cabin->desc = '';
         $cabin->save();

@@ -24,6 +24,7 @@ class Plugin extends PluginBase
         $this->registerConsoleCommand('worker:volga-parse', 'Zen\Worker\Console\volga\VolgaParse');
         $this->registerConsoleCommand('worker:germes-parse', 'Zen\Worker\Console\germes\GermesParse');
         $this->registerConsoleCommand('worker:waterway-parse', 'Zen\Worker\Console\waterway\WaterwayParse');
+        $this->registerConsoleCommand('worker:waterway-check-roomclass', 'Zen\Worker\Console\waterway\WaterwayCheckRoomClass');
         $this->registerConsoleCommand('worker:clear-cache', 'Zen\Worker\Console\ClearCache');
     }
 

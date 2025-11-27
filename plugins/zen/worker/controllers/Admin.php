@@ -44,6 +44,7 @@ class Admin extends Controller
             DB::table('mcmraak_rivercrs_checkins_memory')->truncate();
             DB::table('mcmraak_rivercrs_decks_pivot')->truncate();
             DB::table('mcmraak_rivercrs_pricing')->truncate();
+            DB::table('mcmraak_rivercrs_nprices')->truncate();
             DB::table('mcmraak_rivercrs_waybills')->truncate();
             DB::table('zen_worker_errors')->truncate();
 

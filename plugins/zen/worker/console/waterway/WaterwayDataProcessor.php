@@ -119,8 +119,9 @@ class WaterwayDataProcessor
                         $processedCruises++;
                     }
                     
-                    // Обрабатываем цены
-                    $prices = $this->processPricesData($cruiseIdInt, $pricesData);
+                    // Обрабатываем цены (передаем ship_id для категорий)
+                    $shipId = (int)($cruise['motorshipId'] ?? 0);
+                    $prices = $this->processPricesData($cruiseIdInt, $pricesData, $shipId);
                     if (!empty($prices)) {
                         $this->db->savePricesBatch($prices);
                         $processedPrices += count($prices);
@@ -431,14 +432,78 @@ class WaterwayDataProcessor
     /**
      * Обработка цен для круиза
      */
-    private function processPricesData($cruiseId, $pricesData)
+    private function processPricesData($cruiseId, $pricesData, $shipId)
     {
         $prices = [];
+        $cabinCategories = []; // Собираем уникальные категории кают
+        $decks = []; // Собираем уникальные палубы
         
         if (!isset($pricesData['tariffs']) || !is_array($pricesData['tariffs'])) {
             return $prices;
         }
         
+        // Сначала собираем все уникальные категории кают и палубы
+        foreach ($pricesData['tariffs'] as $tariff) {
+            $tariffName = $tariff['tariff_name'] ?? '';
+            
+            // Обрабатываем только "Тариф Взрослый"
+            if ($tariffName !== 'Тариф Взрослый') {
+                continue;
+            }
+            
+            if (!isset($tariff['prices']) || !is_array($tariff['prices'])) {
+                continue;
+            }
+            
+            foreach ($tariff['prices'] as $price) {
+                $categoryId = $price['rt_id'] ?? null;
+                $deckId = $price['deck_id'] ?? null;
+                
+                // Если есть ID категории, добавляем в список для сохранения
+                if ($categoryId !== null && !isset($cabinCategories[$categoryId])) {
+                    $cabinCategories[$categoryId] = [
+                        'id' => $categoryId,
+                        'name' => $price['rt_name'] ?? '',
+                        'description' => $price['rp_name'] ?? null,
+                        'meta_id' => $price['rp_id'] ?? null,
+                        'meta_name' => $price['rt_meta_name'] ?? null, // meta_name из roomClass
+                        'ship_id' => $shipId,
+                        'deck_id' => null // Оставляем NULL, так как одна категория может быть на разных палубах
+                    ];
+                }
+                
+                // Если есть ID палубы, добавляем в список для сохранения
+                if ($deckId !== null && !isset($decks[$deckId])) {
+                    $decks[$deckId] = [
+                        'id' => $deckId,
+                        'name' => $price['deck_name'] ?? '',
+                        'meta_id' => $price['deck_meta_id'] ?? null,
+                        'meta_name' => $price['deck_meta_name'] ?? null,
+                        'ship_id' => $shipId
+                    ];
+                }
+            }
+        }
+        
+        // Сохраняем палубы в базу данных
+        if (!empty($decks)) {
+            try {
+                $this->db->saveDecksBatch(array_values($decks));
+            } catch (Exception $e) {
+                ProcessLog::add("Ошибка при сохранении палуб для круиза $cruiseId: " . $e->getMessage());
+            }
+        }
+        
+        // Сохраняем категории кают в базу данных
+        if (!empty($cabinCategories)) {
+            try {
+                $this->db->saveCabinCategoriesBatch(array_values($cabinCategories));
+            } catch (Exception $e) {
+                ProcessLog::add("Ошибка при сохранении категорий кают для круиза $cruiseId: " . $e->getMessage());
+            }
+        }
+        
+        // Теперь обрабатываем цены с использованием ID категорий и палуб
         foreach ($pricesData['tariffs'] as $tariff) {
             $tariffName = $tariff['tariff_name'] ?? '';
             
@@ -457,11 +522,16 @@ class WaterwayDataProcessor
                     continue;
                 }
                 
+                $categoryId = $price['rt_id'] ?? null;
+                $deckId = $price['deck_id'] ?? null;
+                
                 $prices[] = [
                     'cruise_id' => $cruiseId,
-                    'cabin_category_name' => $price['rt_name'] ?? '',
+                    'cabin_category_id' => $categoryId,
+                    'cabin_category_name' => $price['rt_name'] ?? '', // Оставляем для совместимости
                     'cabin_category_desc' => $price['rp_name'] ?? null,
-                    'deck_name' => $price['deck_name'] ?? null,
+                    'deck_id' => $deckId,
+                    'deck_name' => $price['deck_name'] ?? null, // Оставляем для совместимости
                     'price_value' => $priceValue,
                     'tariff_name' => $tariffName
                 ];

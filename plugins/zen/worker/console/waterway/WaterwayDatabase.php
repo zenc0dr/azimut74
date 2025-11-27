@@ -71,24 +71,74 @@ class WaterwayDatabase
             )
         ");
 
+        // Таблица палуб (id = waterway deck id)
+        $this->pdo->exec("
+            CREATE TABLE IF NOT EXISTS decks (
+                id INTEGER PRIMARY KEY,
+                name TEXT NOT NULL,
+                meta_id INTEGER,
+                meta_name TEXT,
+                ship_id INTEGER,
+                created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
+                FOREIGN KEY (ship_id) REFERENCES ships(id)
+            )
+        ");
+
+        // Таблица категорий кают (id = waterway roomClass id)
+        $this->pdo->exec("
+            CREATE TABLE IF NOT EXISTS cabin_categories (
+                id INTEGER PRIMARY KEY,
+                name TEXT NOT NULL,
+                description TEXT,
+                meta_id INTEGER,
+                meta_name TEXT,
+                ship_id INTEGER,
+                deck_id INTEGER,
+                created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
+                FOREIGN KEY (ship_id) REFERENCES ships(id)
+            )
+        ");
+
         // Таблица цен
         $this->pdo->exec("
             CREATE TABLE IF NOT EXISTS prices (
                 id INTEGER PRIMARY KEY AUTOINCREMENT,
                 cruise_id INTEGER,
+                cabin_category_id INTEGER,
                 cabin_category_name TEXT,
                 cabin_category_desc TEXT,
+                deck_id INTEGER,
                 deck_name TEXT,
                 price_value INTEGER,
                 tariff_name TEXT,
                 created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
-                FOREIGN KEY (cruise_id) REFERENCES cruises(id)
+                FOREIGN KEY (cruise_id) REFERENCES cruises(id),
+                FOREIGN KEY (cabin_category_id) REFERENCES cabin_categories(id),
+                FOREIGN KEY (deck_id) REFERENCES decks(id)
             )
         ");
+
+        // Миграция: добавляем поле cabin_category_id если его нет (для существующих баз)
+        try {
+            $this->pdo->exec("ALTER TABLE prices ADD COLUMN cabin_category_id INTEGER");
+        } catch (\Exception $e) {
+            // Поле уже существует, игнорируем ошибку
+        }
+
+        // Миграция: добавляем поле deck_id если его нет (для существующих баз)
+        try {
+            $this->pdo->exec("ALTER TABLE prices ADD COLUMN deck_id INTEGER");
+        } catch (\Exception $e) {
+            // Поле уже существует, игнорируем ошибку
+        }
 
         // Создаем индексы для быстрого поиска
         $this->pdo->exec("CREATE INDEX IF NOT EXISTS idx_cruises_ship_id ON cruises(ship_id)");
         $this->pdo->exec("CREATE INDEX IF NOT EXISTS idx_prices_cruise_id ON prices(cruise_id)");
+        $this->pdo->exec("CREATE INDEX IF NOT EXISTS idx_prices_cabin_category_id ON prices(cabin_category_id)");
+        $this->pdo->exec("CREATE INDEX IF NOT EXISTS idx_prices_deck_id ON prices(deck_id)");
+        $this->pdo->exec("CREATE INDEX IF NOT EXISTS idx_cabin_categories_ship_id ON cabin_categories(ship_id)");
+        $this->pdo->exec("CREATE INDEX IF NOT EXISTS idx_decks_ship_id ON decks(ship_id)");
     }
 
     /**
@@ -202,15 +252,121 @@ class WaterwayDatabase
     }
 
     /**
-     * Сохранение цены
+     * Сохранение категории кают (id = waterway roomClass id)
      */
-    public function savePrice($cruiseId, $cabinCategoryName, $cabinCategoryDesc, $deckName, $priceValue, $tariffName)
+    public function saveCabinCategory($waterwayCategoryId, $name, $description = null, $metaId = null, $metaName = null, $shipId = null, $deckId = null)
     {
         $stmt = $this->pdo->prepare("
-            INSERT INTO prices (cruise_id, cabin_category_name, cabin_category_desc, deck_name, price_value, tariff_name) 
-            VALUES (?, ?, ?, ?, ?, ?)
+            INSERT OR REPLACE INTO cabin_categories 
+            (id, name, description, meta_id, meta_name, ship_id, deck_id) 
+            VALUES (?, ?, ?, ?, ?, ?, ?)
         ");
-        return $stmt->execute([$cruiseId, $cabinCategoryName, $cabinCategoryDesc, $deckName, $priceValue, $tariffName]);
+        return $stmt->execute([$waterwayCategoryId, $name, $description, $metaId, $metaName, $shipId, $deckId]);
+    }
+
+    /**
+     * Batch сохранение категорий кают
+     */
+    public function saveCabinCategoriesBatch($categories)
+    {
+        if (empty($categories)) {
+            return;
+        }
+        
+        $this->pdo->beginTransaction();
+        
+        $stmt = $this->pdo->prepare("
+            INSERT OR REPLACE INTO cabin_categories 
+            (id, name, description, meta_id, meta_name, ship_id, deck_id) 
+            VALUES (?, ?, ?, ?, ?, ?, ?)
+        ");
+        
+        foreach ($categories as $category) {
+            $stmt->execute([
+                $category['id'],
+                $category['name'],
+                $category['description'] ?? null,
+                $category['meta_id'] ?? null,
+                $category['meta_name'] ?? null,
+                $category['ship_id'] ?? null,
+                $category['deck_id'] ?? null
+            ]);
+        }
+        
+        $this->pdo->commit();
+    }
+
+    /**
+     * Получение категории кают по Waterway ID
+     */
+    public function getCabinCategoryByWaterwayId($waterwayCategoryId)
+    {
+        $stmt = $this->pdo->prepare("SELECT * FROM cabin_categories WHERE id = ?");
+        $stmt->execute([$waterwayCategoryId]);
+        return $stmt->fetch(PDO::FETCH_ASSOC);
+    }
+
+    /**
+     * Сохранение палубы (id = waterway deck id)
+     */
+    public function saveDeck($waterwayDeckId, $name, $metaId = null, $metaName = null, $shipId = null)
+    {
+        $stmt = $this->pdo->prepare("
+            INSERT OR REPLACE INTO decks (id, name, meta_id, meta_name, ship_id) 
+            VALUES (?, ?, ?, ?, ?)
+        ");
+        return $stmt->execute([$waterwayDeckId, $name, $metaId, $metaName, $shipId]);
+    }
+
+    /**
+     * Batch сохранение палуб
+     */
+    public function saveDecksBatch($decks)
+    {
+        if (empty($decks)) {
+            return;
+        }
+        
+        $this->pdo->beginTransaction();
+        
+        $stmt = $this->pdo->prepare("
+            INSERT OR REPLACE INTO decks (id, name, meta_id, meta_name, ship_id) 
+            VALUES (?, ?, ?, ?, ?)
+        ");
+        
+        foreach ($decks as $deck) {
+            $stmt->execute([
+                $deck['id'],
+                $deck['name'],
+                $deck['meta_id'] ?? null,
+                $deck['meta_name'] ?? null,
+                $deck['ship_id'] ?? null
+            ]);
+        }
+        
+        $this->pdo->commit();
+    }
+
+    /**
+     * Получение палубы по Waterway ID
+     */
+    public function getDeckByWaterwayId($waterwayDeckId)
+    {
+        $stmt = $this->pdo->prepare("SELECT * FROM decks WHERE id = ?");
+        $stmt->execute([$waterwayDeckId]);
+        return $stmt->fetch(PDO::FETCH_ASSOC);
+    }
+
+    /**
+     * Сохранение цены
+     */
+    public function savePrice($cruiseId, $cabinCategoryId = null, $cabinCategoryName = null, $cabinCategoryDesc = null, $deckId = null, $deckName = null, $priceValue = null, $tariffName = null)
+    {
+        $stmt = $this->pdo->prepare("
+            INSERT INTO prices (cruise_id, cabin_category_id, cabin_category_name, cabin_category_desc, deck_id, deck_name, price_value, tariff_name) 
+            VALUES (?, ?, ?, ?, ?, ?, ?, ?)
+        ");
+        return $stmt->execute([$cruiseId, $cabinCategoryId, $cabinCategoryName, $cabinCategoryDesc, $deckId, $deckName, $priceValue, $tariffName]);
     }
 
     /**
@@ -225,18 +381,20 @@ class WaterwayDatabase
         $this->pdo->beginTransaction();
         
         $stmt = $this->pdo->prepare("
-            INSERT INTO prices (cruise_id, cabin_category_name, cabin_category_desc, deck_name, price_value, tariff_name) 
-            VALUES (?, ?, ?, ?, ?, ?)
+            INSERT INTO prices (cruise_id, cabin_category_id, cabin_category_name, cabin_category_desc, deck_id, deck_name, price_value, tariff_name) 
+            VALUES (?, ?, ?, ?, ?, ?, ?, ?)
         ");
         
         foreach ($prices as $price) {
             $stmt->execute([
                 $price['cruise_id'],
-                $price['cabin_category_name'],
+                $price['cabin_category_id'] ?? null,
+                $price['cabin_category_name'] ?? null,
                 $price['cabin_category_desc'] ?? null,
+                $price['deck_id'] ?? null,
                 $price['deck_name'] ?? null,
                 $price['price_value'],
-                $price['tariff_name']
+                $price['tariff_name'] ?? null
             ]);
         }
         
@@ -303,6 +461,7 @@ class WaterwayDatabase
     {
         $this->pdo->exec("DELETE FROM prices");
         $this->pdo->exec("DELETE FROM cruises");
+        $this->pdo->exec("DELETE FROM cabin_categories");
         $this->pdo->exec("DELETE FROM ships");
     }
 

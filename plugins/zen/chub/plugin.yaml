@@ -1,0 +1,6 @@
+plugin:
+    name: 'zen.chub::lang.plugin.name'
+    description: 'zen.chub::lang.plugin.description'
+    author: 'Al Blaze'
+    icon: oc-icon-arrow-circle-right
+    homepage: ''

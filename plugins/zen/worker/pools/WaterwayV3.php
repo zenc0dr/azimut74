@@ -11,49 +11,15 @@ use Carbon\Carbon;
 use Exception;
 use Yaml;
 
-class WaterwayV2 extends Waterway
+/**
+ * WaterwayV3 - независимый пул для импорта данных из SQLite в MySQL (Фаза 2)
+ * Наследуется от RiverCrs, а не от Waterway, чтобы исключить методы работы с API
+ */
+class WaterwayV3 extends RiverCrs
 {
-    /**
-     * Переопределяем методы Waterway, которые делают запросы к API
-     * На фазе 2 мы работаем только с SQLite, без запросов к источнику
-     */
-    
-    /**
-     * Переопределяем auth() - не нужна на фазе 2
-     */
-    function auth()
-    {
-        // На фазе 2 авторизация не нужна - работаем только с SQLite
-        return;
-    }
-    
-    /**
-     * Переопределяем wwQuery() - не нужен на фазе 2
-     */
-    function wwQuery($method, $data = null, $cache_key = null, $skip_cache = false)
-    {
-        // На фазе 2 запросы к API не нужны - работаем только с SQLite
-        ProcessLog::add("⚠️  Попытка запроса к API на фазе 2: $method (игнорируется)");
-        return null;
-    }
-    
-    /**
-     * Переопределяем httpQuery() - не нужен на фазе 2
-     */
-    function httpQuery($opts)
-    {
-        // На фазе 2 запросы к API не нужны - работаем только с SQLite
-        $method = $opts['method'] ?? 'unknown';
-        ProcessLog::add("⚠️  Попытка HTTP запроса на фазе 2: $method (игнорируется)");
-        return (object)[
-            'code' => 200,
-            'body' => null
-        ];
-    }
-    
     public function fillWaterwayCruises()
     {
-        ProcessLog::add('Обработка заездов Waterway из SQLite');
+        ProcessLog::add('Обработка заездов Waterway из SQLite (WaterwayV3)');
         
         $db = new WaterwayDatabase();
         $cruises = $db->getAllCruises();

@@ -453,7 +453,6 @@ class WaterwayApiClient
                 }
                 
                 foreach ($deck['roomClasses'] as $roomClass) {
-                    // Пропускаем классы кают без тарифов
                     if (!isset($roomClass['tariffs']) || !is_array($roomClass['tariffs']) || empty($roomClass['tariffs'])) {
                         continue;
                     }
@@ -490,8 +489,14 @@ class WaterwayApiClient
                             if ($priceValue > 0) {
                                 $result['tariffs'][$tariffName]['prices'][] = [
                                     'rt_name' => $roomClass['name'] ?? '',
+                                    'rt_id' => $roomClass['id'] ?? null,
+                                    'rt_meta_name' => $roomClass['meta_name'] ?? null,
                                     'rp_name' => $roomClass['description'] ?? null,
+                                    'rp_id' => $roomClass['meta_id'] ?? null,
+                                    'deck_id' => $deck['id'] ?? null,
                                     'deck_name' => $deck['name'] ?? null,
+                                    'deck_meta_id' => $deck['meta_id'] ?? null,
+                                    'deck_meta_name' => $deck['meta_name'] ?? null,
                                     'price_value' => $priceValue
                                 ];
                             }
