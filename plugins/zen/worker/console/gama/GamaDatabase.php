@@ -2,143 +2,30 @@
 
 use PDO;
 use Exception;
+use Zen\Worker\Console\unified\UnifiedDatabase;
 
-class GamaDatabase
+/**
+ * GamaDatabase - наследуется от UnifiedDatabase
+ * Использует единую структуру SQLite для всех источников
+ */
+class GamaDatabase extends UnifiedDatabase
 {
-    private $pdo;
-    private $dbPath;
-
+    /**
+     * Конструктор - передает путь к базе данных в родительский класс
+     */
     public function __construct()
     {
-        $this->dbPath = __DIR__ . '/gama_data.sqlite';
-        $this->initDatabase();
-    }
-
-    /**
-     * Инициализация базы данных
-     */
-    private function initDatabase()
-    {
-        try {
-            $this->pdo = new PDO("sqlite:" . $this->dbPath);
-            $this->pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
-            // Включаем foreign keys для проверки целостности
-            $this->pdo->exec("PRAGMA foreign_keys = ON");
-            $this->createTables();
-        } catch (Exception $e) {
-            throw new Exception("Ошибка подключения к SQLite: " . $e->getMessage());
-        }
-    }
-
-    /**
-     * Создание таблиц
-     */
-    private function createTables()
-    {
-        // Таблица теплоходов (id = gama_ship_id)
-        $this->pdo->exec("
-            CREATE TABLE IF NOT EXISTS ships (
-                id INTEGER PRIMARY KEY,
-                name TEXT NOT NULL,
-                description TEXT,
-                created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
-                updated_at DATETIME DEFAULT CURRENT_TIMESTAMP
-            )
-        ");
-
-        // Таблица палуб (id = gama_deck_id)
-        $this->pdo->exec("
-            CREATE TABLE IF NOT EXISTS decks (
-                id INTEGER PRIMARY KEY,
-                name TEXT NOT NULL,
-                ship_id INTEGER,
-                created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
-                FOREIGN KEY (ship_id) REFERENCES ships(id)
-            )
-        ");
-
-        // Таблица категорий кают (id = gama_category_id)
-        $this->pdo->exec("
-            CREATE TABLE IF NOT EXISTS cabin_categories (
-                id INTEGER PRIMARY KEY,
-                name TEXT NOT NULL,
-                places INTEGER,
-                deck_id INTEGER,
-                ship_id INTEGER,
-                created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
-                FOREIGN KEY (deck_id) REFERENCES decks(id),
-                FOREIGN KEY (ship_id) REFERENCES ships(id)
-            )
-        ");
-
-        // Таблица круизов (id = gama_cruise_id)
-        $this->pdo->exec("
-            CREATE TABLE IF NOT EXISTS cruises (
-                id INTEGER PRIMARY KEY,
-                ship_id INTEGER,
-                name TEXT NOT NULL,
-                route_name TEXT,
-                date_start DATETIME,
-                date_end DATETIME,
-                path_s_id INTEGER,
-                path_f_id INTEGER,
-                waybill_data TEXT,
-                schedule_html TEXT,
-                created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
-                updated_at DATETIME DEFAULT CURRENT_TIMESTAMP,
-                FOREIGN KEY (ship_id) REFERENCES ships(id)
-            )
-        ");
-
-        // Таблица цен
-        $this->pdo->exec("
-            CREATE TABLE IF NOT EXISTS prices (
-                id INTEGER PRIMARY KEY AUTOINCREMENT,
-                cruise_id INTEGER,
-                cabin_category_id INTEGER,
-                price_a INTEGER,
-                price_b INTEGER,
-                persons INTEGER,
-                created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
-                FOREIGN KEY (cruise_id) REFERENCES cruises(id),
-                FOREIGN KEY (cabin_category_id) REFERENCES cabin_categories(id)
-            )
-        ");
-
-        // Таблица маршрутов (путевых листов)
-        // Временно убираем FOREIGN KEY, чтобы waybills могли сохраняться даже если круизы ещё не сохранены
-        // (круизы и waybills сохраняются в одной транзакции, но foreign key может блокировать)
-        $this->pdo->exec("
-            CREATE TABLE IF NOT EXISTS waybills (
-                id INTEGER PRIMARY KEY AUTOINCREMENT,
-                cruise_id INTEGER,
-                town_name TEXT,
-                town_id INTEGER,
-                arrival_time DATETIME,
-                departure_time DATETIME,
-                is_bold INTEGER DEFAULT 0,
-                order_index INTEGER,
-                created_at DATETIME DEFAULT CURRENT_TIMESTAMP
-            )
-        ");
-
-        // Создаем индексы для быстрого поиска
-        $this->pdo->exec("CREATE INDEX IF NOT EXISTS idx_cruises_ship_id ON cruises(ship_id)");
-        $this->pdo->exec("CREATE INDEX IF NOT EXISTS idx_prices_cruise_id ON prices(cruise_id)");
-        $this->pdo->exec("CREATE INDEX IF NOT EXISTS idx_waybills_cruise_id ON waybills(cruise_id)");
-        $this->pdo->exec("CREATE INDEX IF NOT EXISTS idx_cabin_categories_ship_id ON cabin_categories(ship_id)");
+        $dbPath = __DIR__ . '/gama_data.sqlite';
+        parent::__construct($dbPath);
     }
 
     /**
      * Сохранение теплохода (id = gama_ship_id)
+     * Адаптирован для единого интерфейса UnifiedDatabase
      */
     public function saveShip($gamaShipId, $name, $description = '')
     {
-        $stmt = $this->pdo->prepare("
-            INSERT OR REPLACE INTO ships (id, name, description, updated_at) 
-            VALUES (?, ?, ?, CURRENT_TIMESTAMP)
-        ");
-        return $stmt->execute([$gamaShipId, $name, $description]);
+        return parent::saveShip($gamaShipId, $name, ['description' => $description]);
     }
 
     /**
@@ -146,110 +33,164 @@ class GamaDatabase
      */
     public function saveShipsBatch($ships)
     {
-        $this->pdo->beginTransaction();
-        
-        $stmt = $this->pdo->prepare("
-            INSERT OR REPLACE INTO ships (id, name, description, updated_at) 
-            VALUES (?, ?, ?, CURRENT_TIMESTAMP)
-        ");
-        
+        // Конвертируем в единый формат и используем родительский метод
+        $convertedShips = [];
         foreach ($ships as $ship) {
-            $stmt->execute([$ship['id'], $ship['name'], $ship['description'] ?? '']);
+            $convertedShips[] = [
+                'id' => $ship['id'],
+                'name' => $ship['name'],
+                'description' => $ship['description'] ?? null
+            ];
         }
-        
-        $this->pdo->commit();
-    }
-
-    /**
-     * Получение теплохода по Gama ID
-     */
-    public function getShipByGamaId($gamaShipId)
-    {
-        $stmt = $this->pdo->prepare("SELECT * FROM ships WHERE id = ?");
-        $stmt->execute([$gamaShipId]);
-        return $stmt->fetch(PDO::FETCH_ASSOC);
+        parent::saveShipsBatch($convertedShips);
     }
 
     /**
      * Сохранение круиза (id = gama_cruise_id, ship_id = gama_ship_id)
+     * Адаптирован для единого интерфейса UnifiedDatabase
+     * Конвертирует path_s_id/path_f_id → extra_data
+     * Конвертирует waybills из таблицы → JSON в waybill_data
+     * Поддерживает старую сигнатуру для обратной совместимости
      */
-    public function saveCruise($data)
+    public function saveCruise($idOrData, $shipId = null, $name = null, $dateStart = null, $dateEnd = null, $data = [])
     {
-        $stmt = $this->pdo->prepare("
-            INSERT OR REPLACE INTO cruises (
-                id, ship_id, name, route_name, 
-                date_start, date_end, path_s_id, path_f_id, 
-                waybill_data, schedule_html, updated_at
-            ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, CURRENT_TIMESTAMP)
-        ");
+        // Если первый параметр - массив (старый формат)
+        if (is_array($idOrData)) {
+            $data = $idOrData;
+            
+            // Подготавливаем extra_data с path_s_id и path_f_id
+            $extraData = [];
+            if (isset($data['path_s_id'])) {
+                $extraData['path_s_id'] = $data['path_s_id'];
+            }
+            if (isset($data['path_f_id'])) {
+                $extraData['path_f_id'] = $data['path_f_id'];
+            }
+            
+            // Получаем waybill_data (может быть уже JSON или нужно получить из таблицы waybills)
+            $waybillData = $data['waybill_data'] ?? '[]';
+            
+            // Если waybill_data это строка JSON, декодируем для проверки
+            if (is_string($waybillData)) {
+                $decoded = json_decode($waybillData, true);
+                if (json_last_error() === JSON_ERROR_NONE) {
+                    $waybillData = $decoded;
+                }
+            }
+            
+            // Если waybill_data не массив, пытаемся получить из таблицы waybills
+            if (!is_array($waybillData) && isset($data['gama_cruise_id'])) {
+                $waybillData = $this->getCruiseWaybillAsArray($data['gama_cruise_id']);
+            }
+            
+            // Вызываем родительский метод с единым интерфейсом
+            return parent::saveCruise(
+                $data['gama_cruise_id'],
+                $data['gama_ship_id'],
+                $data['name'],
+                $data['date_start'],
+                $data['date_end'],
+                [
+                    'route' => $data['route_name'] ?? null,
+                    'waybill_data' => $waybillData,
+                    'schedule_html' => $data['schedule_html'] ?? null,
+                    'extra_data' => !empty($extraData) ? $extraData : null
+                ]
+            );
+        }
         
-        return $stmt->execute([
-            $data['gama_cruise_id'],
-            $data['gama_ship_id'],
-            $data['name'],
-            $data['route_name'],
-            $data['date_start'],
-            $data['date_end'],
-            $data['path_s_id'],
-            $data['path_f_id'],
-            $data['waybill_data'],
-            $data['schedule_html']
-        ]);
+        // Новый формат - вызываем родительский метод напрямую
+        return parent::saveCruise($idOrData, $shipId, $name, $dateStart, $dateEnd, $data);
+    }
+    
+    /**
+     * Получение waybill из таблицы waybills в виде массива для JSON
+     */
+    private function getCruiseWaybillAsArray($cruiseId)
+    {
+        $waybills = $this->getCruiseWaybill($cruiseId);
+        if (empty($waybills)) {
+            return [];
+        }
+        
+        $result = [];
+        foreach ($waybills as $waybill) {
+            $result[] = [
+                'town_name' => $waybill['town_name'] ?? '',
+                'town' => $waybill['town_id'] ?? 0,
+                'arrival_time' => $waybill['arrival_time'] ?? null,
+                'departure_time' => $waybill['departure_time'] ?? null,
+                'bold' => $waybill['is_bold'] ?? 0
+            ];
+        }
+        
+        return $result;
     }
 
     /**
      * Batch сохранение круизов
+     * Адаптирован для единого интерфейса UnifiedDatabase
+     * Конвертирует данные из старого формата Gama в единый формат
      */
     public function saveCruisesBatch($cruises)
     {
-        try {
-            $this->pdo->beginTransaction();
+        if (empty($cruises)) {
+            return;
+        }
+        
+        // Конвертируем круизы в единый формат
+        $convertedCruises = [];
+        foreach ($cruises as $cruise) {
+            // Подготавливаем extra_data с path_s_id и path_f_id
+            $extraData = [];
+            if (isset($cruise['path_s_id'])) {
+                $extraData['path_s_id'] = $cruise['path_s_id'];
+            }
+            if (isset($cruise['path_f_id'])) {
+                $extraData['path_f_id'] = $cruise['path_f_id'];
+            }
             
-            $stmt = $this->pdo->prepare("
-                INSERT OR REPLACE INTO cruises (
-                    id, ship_id, name, route_name, 
-                    date_start, date_end, path_s_id, path_f_id, 
-                    waybill_data, schedule_html, updated_at
-                ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, CURRENT_TIMESTAMP)
-            ");
-            
-            $saved = 0;
-            foreach ($cruises as $cruise) {
-                try {
-                    $result = $stmt->execute([
-                        $cruise['gama_cruise_id'],
-                        $cruise['gama_ship_id'],
-                        $cruise['name'],
-                        $cruise['route_name'],
-                        $cruise['date_start'],
-                        $cruise['date_end'],
-                        $cruise['path_s_id'],
-                        $cruise['path_f_id'],
-                        $cruise['waybill_data'],
-                        $cruise['schedule_html']
-                    ]);
-                    if ($result) {
-                        $saved++;
-                    }
-                } catch (Exception $e) {
-                    throw $e;
+            // Получаем waybill_data (может быть JSON строка или массив)
+            $waybillData = $cruise['waybill_data'] ?? '[]';
+            if (is_string($waybillData)) {
+                $decoded = json_decode($waybillData, true);
+                if (json_last_error() === JSON_ERROR_NONE) {
+                    $waybillData = $decoded;
+                } else {
+                    $waybillData = [];
                 }
             }
             
-            $this->pdo->commit();
-        } catch (Exception $e) {
-            $this->pdo->rollBack();
-            throw $e;
+            $convertedCruises[] = [
+                'id' => $cruise['gama_cruise_id'],
+                'ship_id' => $cruise['gama_ship_id'],
+                'name' => $cruise['name'],
+                'date_start' => $cruise['date_start'],
+                'date_end' => $cruise['date_end'],
+                'route' => $cruise['route_name'] ?? null,
+                'waybill_data' => $waybillData,
+                'schedule_html' => $cruise['schedule_html'] ?? null,
+                'extra_data' => !empty($extraData) ? $extraData : null
+            ];
         }
+        
+        // Вызываем родительский метод с конвертированными данными
+        parent::saveCruisesBatch($convertedCruises);
     }
 
     /**
      * Обновление waybill_data для круиза (исправление экранирования кириллицы)
+     * Адаптирован для единой структуры
      */
     public function updateWaybillData($cruiseId, $waybillData)
     {
         try {
-            $stmt = $this->pdo->prepare("
+            // Если waybill_data это массив, конвертируем в JSON
+            if (is_array($waybillData)) {
+                $waybillData = json_encode($waybillData, JSON_UNESCAPED_UNICODE);
+            }
+            
+            $stmt = $this->getPdo()->prepare("
                 UPDATE cruises 
                 SET waybill_data = ?, updated_at = CURRENT_TIMESTAMP
                 WHERE id = ?
@@ -262,16 +203,29 @@ class GamaDatabase
 
     /**
      * Получение всех круизов с waybill_data
+     * Адаптирован для единой структуры
      */
     public function getAllCruisesWithWaybill()
     {
         try {
-            $stmt = $this->pdo->query("
+            $stmt = $this->getPdo()->query("
                 SELECT id, waybill_data 
                 FROM cruises 
-                WHERE waybill_data IS NOT NULL AND waybill_data != ''
+                WHERE waybill_data IS NOT NULL AND waybill_data != '' AND waybill_data != '[]'
             ");
-            return $stmt->fetchAll(PDO::FETCH_ASSOC);
+            $cruises = $stmt->fetchAll(PDO::FETCH_ASSOC);
+            
+            // Декодируем waybill_data из JSON
+            foreach ($cruises as &$cruise) {
+                if (!empty($cruise['waybill_data'])) {
+                    $decoded = json_decode($cruise['waybill_data'], true);
+                    if (json_last_error() === JSON_ERROR_NONE) {
+                        $cruise['waybill_data'] = $decoded;
+                    }
+                }
+            }
+            
+            return $cruises;
         } catch (Exception $e) {
             throw new Exception("Ошибка получения круизов: " . $e->getMessage());
         }
@@ -279,43 +233,69 @@ class GamaDatabase
 
     /**
      * Сохранение палубы (id = gama_deck_id)
+     * Адаптирован для единого интерфейса UnifiedDatabase
+     * Поддерживает старую сигнатуру для обратной совместимости
      */
-    public function saveDeck($gamaDeckId, $name, $shipId)
+    public function saveDeck($gamaDeckId, $name, $shipId = null, $data = [])
     {
-        $stmt = $this->pdo->prepare("
-            INSERT OR REPLACE INTO decks (id, name, ship_id) 
-            VALUES (?, ?, ?)
-        ");
-        return $stmt->execute([$gamaDeckId, $name, $shipId]);
+        // Если $shipId передан как третий параметр (старый формат), используем его
+        if ($shipId !== null && !is_array($shipId) && empty($data)) {
+            return parent::saveDeck($gamaDeckId, $name, ['ship_id' => $shipId]);
+        }
+        // Если $shipId это массив (новый формат), используем его как $data
+        if (is_array($shipId)) {
+            return parent::saveDeck($gamaDeckId, $name, $shipId);
+        }
+        // Иначе используем стандартный формат
+        return parent::saveDeck($gamaDeckId, $name, $data);
     }
 
     /**
      * Сохранение категории кают (id = gama_category_id)
+     * Адаптирован для единого интерфейса UnifiedDatabase
+     * Поддерживает старую сигнатуру для обратной совместимости
      */
-    public function saveCabinCategory($gamaCategoryId, $name, $places, $deckId, $shipId)
+    public function saveCabinCategory($gamaCategoryId, $name, $places = null, $deckId = null, $shipId = null, $data = [])
     {
-        $stmt = $this->pdo->prepare("
-            INSERT OR REPLACE INTO cabin_categories 
-            (id, name, places, deck_id, ship_id) 
-            VALUES (?, ?, ?, ?, ?)
-        ");
-        return $stmt->execute([$gamaCategoryId, $name, $places, $deckId, $shipId]);
+        // Если используется старый формат (5 параметров)
+        if ($places !== null && !is_array($places) && $deckId !== null && !is_array($deckId) && $shipId !== null && !is_array($shipId) && empty($data)) {
+            return parent::saveCabinCategory($gamaCategoryId, $name, $shipId, [
+                'places' => $places,
+                'deck_id' => $deckId
+            ]);
+        }
+        // Если $places это массив (новый формат), используем его как $data, а $name как $shipId
+        if (is_array($places)) {
+            return parent::saveCabinCategory($gamaCategoryId, $name, $deckId, $places);
+        }
+        // Иначе используем стандартный формат
+        return parent::saveCabinCategory($gamaCategoryId, $name, $shipId, $data);
     }
 
     /**
-     * Сохранение цены (price_a вместо price_1, price_b вместо price_2)
+     * Сохранение цены (price_a → price_value, price_b → price_extra)
+     * Адаптирован для единого интерфейса UnifiedDatabase
      */
     public function savePrice($cruiseId, $cabinCategoryId, $priceA, $priceB = null, $persons = null)
     {
-        $stmt = $this->pdo->prepare("
-            INSERT INTO prices (cruise_id, cabin_category_id, price_a, price_b, persons) 
-            VALUES (?, ?, ?, ?, ?)
-        ");
-        return $stmt->execute([$cruiseId, $cabinCategoryId, $priceA, $priceB, $persons]);
+        // Конвертируем price_a → price_value, price_b → price_extra
+        // persons сохраняем в places_qnt или extra_data
+        $extraData = null;
+        if ($persons !== null) {
+            $extraData = ['persons' => $persons];
+        }
+        
+        return parent::savePrice($cruiseId, $cabinCategoryId, $priceA, [
+            'price_extra' => $priceB,
+            'places_qnt' => $persons ?? 1,
+            'extra_data' => $extraData
+        ]);
     }
 
     /**
      * Batch сохранение цен
+     * Адаптирован для единого интерфейса UnifiedDatabase
+     * Конвертирует price_a → price_value, price_b → price_extra
      */
     public function savePricesBatch($prices)
     {
@@ -323,32 +303,54 @@ class GamaDatabase
             return;
         }
         
-        $this->pdo->beginTransaction();
-        
-        $stmt = $this->pdo->prepare("
-            INSERT INTO prices (cruise_id, cabin_category_id, price_a, price_b, persons) 
-            VALUES (?, ?, ?, ?, ?)
-        ");
-        
+        // Конвертируем цены в единый формат
+        $convertedPrices = [];
         foreach ($prices as $price) {
-            $stmt->execute([
-                $price['cruise_id'],
-                $price['cabin_category_id'],
-                $price['price_a'],
-                $price['price_b'] ?? null,
-                $price['persons'] ?? null
-            ]);
+            $extraData = null;
+            if (isset($price['persons'])) {
+                $extraData = ['persons' => $price['persons']];
+            }
+            
+            $convertedPrices[] = [
+                'cruise_id' => $price['cruise_id'],
+                'cabin_category_id' => $price['cabin_category_id'],
+                'price_value' => $price['price_a'],
+                'price_extra' => $price['price_b'] ?? null,
+                'places_qnt' => $price['persons'] ?? 1,
+                'extra_data' => $extraData
+            ];
         }
         
-        $this->pdo->commit();
+        // Используем родительский метод
+        parent::savePricesBatch($convertedPrices);
     }
 
     /**
      * Сохранение путевого листа
+     * Сохраняет в старую таблицу waybills для обратной совместимости
+     * При сохранении круиза waybills автоматически конвертируются в JSON
      */
     public function saveWaybill($cruiseId, $townName, $townId, $arrivalTime, $departureTime, $isBold, $orderIndex)
     {
-        $stmt = $this->pdo->prepare("
+        // Создаем таблицу waybills если её нет (для обратной совместимости)
+        if (!$this->tableExists('waybills')) {
+            $this->getPdo()->exec("
+                CREATE TABLE IF NOT EXISTS waybills (
+                    id INTEGER PRIMARY KEY AUTOINCREMENT,
+                    cruise_id INTEGER,
+                    town_name TEXT,
+                    town_id INTEGER,
+                    arrival_time DATETIME,
+                    departure_time DATETIME,
+                    is_bold INTEGER DEFAULT 0,
+                    order_index INTEGER,
+                    created_at DATETIME DEFAULT CURRENT_TIMESTAMP
+                )
+            ");
+            $this->getPdo()->exec("CREATE INDEX IF NOT EXISTS idx_waybills_cruise_id ON waybills(cruise_id)");
+        }
+        
+        $stmt = $this->getPdo()->prepare("
             INSERT INTO waybills 
             (cruise_id, town_name, town_id, arrival_time, departure_time, is_bold, order_index) 
             VALUES (?, ?, ?, ?, ?, ?, ?)
@@ -358,152 +360,200 @@ class GamaDatabase
 
     /**
      * Получение всех круизов с теплоходами
+     * Адаптирован для единой структуры с извлечением path_s_id/path_f_id из extra_data
      */
     public function getAllCruises()
     {
-        $stmt = $this->pdo->prepare("
-            SELECT c.id as id, c.id as gama_cruise_id, c.ship_id as gama_ship_id, c.name, c.route_name, 
-                   c.date_start, c.date_end, c.path_s_id, c.path_f_id, 
-                   c.waybill_data, c.schedule_html, c.created_at, c.updated_at,
-                   s.name as ship_name 
-            FROM cruises c 
-            LEFT JOIN ships s ON c.ship_id = s.id 
-            ORDER BY c.date_start
-        ");
-        $stmt->execute();
-        return $stmt->fetchAll(PDO::FETCH_ASSOC);
+        $cruises = parent::getAllCruises();
+        
+        // Преобразуем данные для обратной совместимости
+        foreach ($cruises as &$cruise) {
+            // Извлекаем path_s_id и path_f_id из extra_data
+            if (!empty($cruise['extra_data']) && is_array($cruise['extra_data'])) {
+                $cruise['path_s_id'] = $cruise['extra_data']['path_s_id'] ?? null;
+                $cruise['path_f_id'] = $cruise['extra_data']['path_f_id'] ?? null;
+            }
+            
+            // Добавляем обратную совместимость с route_name
+            if (!isset($cruise['route_name']) && isset($cruise['route'])) {
+                $cruise['route_name'] = $cruise['route'];
+            }
+            
+            // Добавляем gama_cruise_id и gama_ship_id для обратной совместимости
+            $cruise['gama_cruise_id'] = $cruise['id'];
+            $cruise['gama_ship_id'] = $cruise['ship_id'];
+        }
+        
+        return $cruises;
     }
 
     /**
      * Получение круиза по ID
+     * Адаптирован для единой структуры с извлечением path_s_id/path_f_id из extra_data
      */
     public function getCruiseById($cruiseId)
     {
-        $stmt = $this->pdo->prepare("
-            SELECT id as id, id as gama_cruise_id, ship_id as gama_ship_id, name, route_name, 
-                   date_start, date_end, path_s_id, path_f_id, 
-                   waybill_data, schedule_html, created_at, updated_at
-            FROM cruises WHERE id = ?
-        ");
-        $stmt->execute([$cruiseId]);
-        return $stmt->fetch(PDO::FETCH_ASSOC);
+        $cruise = parent::getCruiseById($cruiseId);
+        
+        if ($cruise) {
+            // Извлекаем path_s_id и path_f_id из extra_data
+            if (!empty($cruise['extra_data']) && is_array($cruise['extra_data'])) {
+                $cruise['path_s_id'] = $cruise['extra_data']['path_s_id'] ?? null;
+                $cruise['path_f_id'] = $cruise['extra_data']['path_f_id'] ?? null;
+            }
+            
+            // Добавляем обратную совместимость с route_name
+            if (!isset($cruise['route_name']) && isset($cruise['route'])) {
+                $cruise['route_name'] = $cruise['route'];
+            }
+            
+            // Добавляем gama_cruise_id и gama_ship_id для обратной совместимости
+            $cruise['gama_cruise_id'] = $cruise['id'];
+            $cruise['gama_ship_id'] = $cruise['ship_id'];
+        }
+        
+        return $cruise;
     }
 
+    /**
+     * Получение цен для круиза
+     * Адаптирован для единой структуры с конвертацией price_value → price_a
+     */
+    public function getCruisePrices($cruiseId)
+    {
+        $prices = parent::getPricesByCruiseId($cruiseId);
+        
+        // Преобразуем для обратной совместимости
+        foreach ($prices as &$price) {
+            // Конвертируем price_value → price_a, price_extra → price_b
+            $price['price_a'] = $price['price_value'] ?? null;
+            $price['price_b'] = $price['price_extra'] ?? null;
+            
+            // Извлекаем persons из extra_data или используем places_qnt
+            if (!empty($price['extra_data']) && is_array($price['extra_data']) && isset($price['extra_data']['persons'])) {
+                $price['persons'] = $price['extra_data']['persons'];
+            } else {
+                $price['persons'] = $price['places_qnt'] ?? 1;
+            }
+        }
+        
+        // Сортируем по price_a
+        usort($prices, function($a, $b) {
+            $priceA = $a['price_a'] ?? 0;
+            $priceB = $b['price_a'] ?? 0;
+            return $priceA <=> $priceB;
+        });
+        
+        return $prices;
+    }
+
+    /**
+     * Получение цен для круиза по ID (для проверки наличия цен)
+     * Адаптирован для единой структуры с конвертацией price_value → price_a
+     */
+    public function getPricesByCruiseId($cruiseId)
+    {
+        $prices = parent::getPricesByCruiseId($cruiseId);
+        
+        // Преобразуем для обратной совместимости
+        foreach ($prices as &$price) {
+            // Конвертируем price_value → price_a, price_extra → price_b
+            $price['price_a'] = $price['price_value'] ?? null;
+            $price['price_b'] = $price['price_extra'] ?? null;
+            
+            // Извлекаем persons из extra_data или используем places_qnt
+            if (!empty($price['extra_data']) && is_array($price['extra_data']) && isset($price['extra_data']['persons'])) {
+                $price['persons'] = $price['extra_data']['persons'];
+            } else {
+                $price['persons'] = $price['places_qnt'] ?? 1;
+            }
+        }
+        
+        return $prices;
+    }
+
+    /**
+     * Получение путевого листа для круиза
+     * Поддерживает старую таблицу waybills для обратной совместимости
+     */
+    public function getCruiseWaybill($cruiseId)
+    {
+        // Сначала пытаемся получить из таблицы waybills (старый формат)
+        if ($this->tableExists('waybills')) {
+            $stmt = $this->getPdo()->prepare("
+                SELECT * FROM waybills 
+                WHERE cruise_id = ? 
+                ORDER BY order_index
+            ");
+            $stmt->execute([$cruiseId]);
+            $waybills = $stmt->fetchAll(PDO::FETCH_ASSOC);
+            
+            if (!empty($waybills)) {
+                return $waybills;
+            }
+        }
+        
+        // Если в таблице waybills нет данных, пытаемся получить из waybill_data круиза
+        $cruise = parent::getCruiseById($cruiseId);
+        if ($cruise && !empty($cruise['waybill_data']) && is_array($cruise['waybill_data'])) {
+            // Конвертируем JSON waybill_data в формат таблицы waybills
+            $result = [];
+            foreach ($cruise['waybill_data'] as $index => $point) {
+                $result[] = [
+                    'id' => null,
+                    'cruise_id' => $cruiseId,
+                    'town_name' => $point['town_name'] ?? '',
+                    'town_id' => $point['town'] ?? 0,
+                    'arrival_time' => $point['arrival_time'] ?? null,
+                    'departure_time' => $point['departure_time'] ?? null,
+                    'is_bold' => $point['bold'] ?? 0,
+                    'order_index' => $index
+                ];
+            }
+            return $result;
+        }
+        
+        return [];
+    }
+
+    /**
+     * Получение статистики
+     * Использует родительский метод
+     */
+    public function getStats()
+    {
+        return parent::getStats();
+    }
+
+    /**
+     * Очистка всех данных
+     * Включает очистку старой таблицы waybills
+     */
+    public function clearAll()
+    {
+        // Очищаем старую таблицу waybills если она существует
+        if ($this->tableExists('waybills')) {
+            $this->getPdo()->exec("DELETE FROM waybills");
+        }
+        
+        // Вызываем родительский метод для очистки основных таблиц
+        parent::clearAll();
+    }
+
+    /**
+     * Получение теплохода по Gama ID
+     */
+    public function getShipByGamaId($gamaShipId)
+    {
+        return parent::getShipBySourceId($gamaShipId);
+    }
+    
     /**
      * Получение круиза по gama_cruise_id
      */
     public function getCruiseByGamaId($gamaCruiseId)
     {
-        $stmt = $this->pdo->prepare("
-            SELECT id as id, id as gama_cruise_id, ship_id as gama_ship_id, name, route_name, 
-                   date_start, date_end, path_s_id, path_f_id, 
-                   waybill_data, schedule_html, created_at, updated_at
-            FROM cruises WHERE id = ?
-        ");
-        $stmt->execute([$gamaCruiseId]);
-        return $stmt->fetch(PDO::FETCH_ASSOC);
-    }
-
-    /**
-     * Получение цен для круиза
-     */
-    public function getCruisePrices($cruiseId)
-    {
-        $stmt = $this->pdo->prepare("
-            SELECT p.*, cc.name as category_name, cc.places, d.name as deck_name
-            FROM prices p
-            LEFT JOIN cabin_categories cc ON p.cabin_category_id = cc.id
-            LEFT JOIN decks d ON cc.deck_id = d.id
-            WHERE p.cruise_id = ?
-            ORDER BY p.price_a
-        ");
-        $stmt->execute([$cruiseId]);
-        return $stmt->fetchAll(PDO::FETCH_ASSOC);
-    }
-
-    /**
-     * Получение цен для круиза по ID (для проверки наличия цен)
-     */
-    public function getPricesByCruiseId($cruiseId)
-    {
-        $stmt = $this->pdo->prepare("
-            SELECT p.*, cc.name as category_name, cc.places, d.name as deck_name
-            FROM prices p
-            LEFT JOIN cabin_categories cc ON p.cabin_category_id = cc.id
-            LEFT JOIN decks d ON cc.deck_id = d.id
-            WHERE p.cruise_id = ?
-        ");
-        $stmt->execute([$cruiseId]);
-        return $stmt->fetchAll(PDO::FETCH_ASSOC);
-    }
-
-    /**
-     * Получение путевого листа для круиза
-     */
-    public function getCruiseWaybill($cruiseId)
-    {
-        $stmt = $this->pdo->prepare("
-            SELECT * FROM waybills 
-            WHERE cruise_id = ? 
-            ORDER BY order_index
-        ");
-        $stmt->execute([$cruiseId]);
-        return $stmt->fetchAll(PDO::FETCH_ASSOC);
-    }
-
-    /**
-     * Получение статистики
-     */
-    public function getStats()
-    {
-        $stats = [];
-        
-        // Количество теплоходов
-        $stmt = $this->pdo->query("SELECT COUNT(*) as count FROM ships");
-        $stats['ships'] = $stmt->fetch(PDO::FETCH_ASSOC)['count'];
-        
-        // Количество круизов
-        $stmt = $this->pdo->query("SELECT COUNT(*) as count FROM cruises");
-        $stats['cruises'] = $stmt->fetch(PDO::FETCH_ASSOC)['count'];
-        
-        // Количество цен
-        $stmt = $this->pdo->query("SELECT COUNT(*) as count FROM prices");
-        $stats['prices'] = $stmt->fetch(PDO::FETCH_ASSOC)['count'];
-        
-        // Количество категорий кают
-        $stmt = $this->pdo->query("SELECT COUNT(*) as count FROM cabin_categories");
-        $stats['cabin_categories'] = $stmt->fetch(PDO::FETCH_ASSOC)['count'];
-        
-        return $stats;
-    }
-
-    /**
-     * Очистка всех данных
-     */
-    public function clearAll()
-    {
-        $this->pdo->exec("DELETE FROM waybills");
-        $this->pdo->exec("DELETE FROM prices");
-        $this->pdo->exec("DELETE FROM cabin_categories");
-        $this->pdo->exec("DELETE FROM decks");
-        $this->pdo->exec("DELETE FROM cruises");
-        $this->pdo->exec("DELETE FROM ships");
-    }
-
-    /**
-     * Получение пути к базе данных
-     */
-    public function getDbPath()
-    {
-        return $this->dbPath;
-    }
-
-    /**
-     * Получение PDO объекта
-     */
-    public function getPdo()
-    {
-        return $this->pdo;
+        return $this->getCruiseById($gamaCruiseId);
     }
 
     /**
@@ -511,29 +561,27 @@ class GamaDatabase
      */
     public function getCruisePricesCount($cruiseId)
     {
-        $stmt = $this->pdo->prepare("SELECT COUNT(*) FROM prices WHERE cruise_id = ?");
+        $stmt = $this->getPdo()->prepare("SELECT COUNT(*) FROM prices WHERE cruise_id = ?");
         $stmt->execute([$cruiseId]);
         return $stmt->fetchColumn();
     }
 
     /**
      * Получение всех теплоходов
+     * Использует родительский метод
      */
     public function getAllShips()
     {
-        $stmt = $this->pdo->prepare("SELECT * FROM ships ORDER BY name");
-        $stmt->execute();
-        return $stmt->fetchAll(PDO::FETCH_ASSOC);
+        return parent::getAllShips();
     }
 
     /**
      * Получение всех категорий кают
+     * Использует родительский метод
      */
     public function getAllCabinCategories()
     {
-        $stmt = $this->pdo->prepare("SELECT * FROM cabin_categories ORDER BY name");
-        $stmt->execute();
-        return $stmt->fetchAll(PDO::FETCH_ASSOC);
+        return parent::getAllCabinCategories();
     }
 
     /**
@@ -541,7 +589,7 @@ class GamaDatabase
      */
     public function getAllPrices()
     {
-        $stmt = $this->pdo->prepare("SELECT * FROM prices ORDER BY cruise_id, cabin_category_id");
+        $stmt = $this->getPdo()->prepare("SELECT * FROM prices ORDER BY cruise_id, cabin_category_id");
         $stmt->execute();
         return $stmt->fetchAll(PDO::FETCH_ASSOC);
     }
@@ -551,7 +599,10 @@ class GamaDatabase
      */
     public function getAllWaybills()
     {
-        $stmt = $this->pdo->prepare("SELECT * FROM waybills ORDER BY cruise_id, order_index");
+        if (!$this->tableExists('waybills')) {
+            return [];
+        }
+        $stmt = $this->getPdo()->prepare("SELECT * FROM waybills ORDER BY cruise_id, order_index");
         $stmt->execute();
         return $stmt->fetchAll(PDO::FETCH_ASSOC);
     }
@@ -563,28 +614,30 @@ class GamaDatabase
     {
         try {
             // Начинаем транзакцию
-            $this->pdo->beginTransaction();
+            $this->getPdo()->beginTransaction();
             
             // Удаляем цены
-            $stmt = $this->pdo->prepare("DELETE FROM prices WHERE cruise_id = ?");
+            $stmt = $this->getPdo()->prepare("DELETE FROM prices WHERE cruise_id = ?");
             $stmt->execute([$gamaCruiseId]);
             
-            // Удаляем путевые листы
-            $stmt = $this->pdo->prepare("DELETE FROM waybills WHERE cruise_id = ?");
-            $stmt->execute([$gamaCruiseId]);
+            // Удаляем путевые листы (если таблица существует)
+            if ($this->tableExists('waybills')) {
+                $stmt = $this->getPdo()->prepare("DELETE FROM waybills WHERE cruise_id = ?");
+                $stmt->execute([$gamaCruiseId]);
+            }
             
             // Удаляем сам круиз
-            $stmt = $this->pdo->prepare("DELETE FROM cruises WHERE id = ?");
+            $stmt = $this->getPdo()->prepare("DELETE FROM cruises WHERE id = ?");
             $stmt->execute([$gamaCruiseId]);
             
             // Подтверждаем транзакцию
-            $this->pdo->commit();
+            $this->getPdo()->commit();
             
             return true;
             
         } catch (\Exception $e) {
             // Откатываем транзакцию при ошибке
-            $this->pdo->rollBack();
+            $this->getPdo()->rollBack();
             throw $e;
         }
     }
