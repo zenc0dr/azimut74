@@ -546,12 +546,12 @@ class GermesDataProcessor
             $categoryDeckMapping = $this->mapCategoriesToDecksFromCabins($shipId, $cabinToDeckMap);
             
             if (!empty($categoryDeckMapping)) {
-                foreach ($categoryDeckMapping as $categoryId => $deckName) {
-                    // Сохраняем палубу в базу
-                    $deckId = $this->db->saveDeck($deckName);
-                    
-                    if ($deckId) {
-                        $categoryToDeckMap[$categoryId] = $deckId;
+                // categoryDeckMapping уже содержит deckId (число), а не deckName (строка)
+                // так как конвертация происходит в mapCategoriesToDecksFromCabins
+                foreach ($categoryDeckMapping as $categoryId => $deckId) {
+                    // Проверяем, что deckId валидный
+                    if ($deckId && $deckId > 0 && is_numeric($deckId)) {
+                        $categoryToDeckMap[$categoryId] = (int)$deckId;
                     }
                 }
                 
@@ -674,7 +674,17 @@ class GermesDataProcessor
             
             // Берем палубу с наибольшим количеством кают
             $deckName = key($deckCounts);
-            $categoryToDeckMap[$categoryId] = $deckName;
+            
+            // Конвертируем имя палубы в ID (используем hash)
+            $deckId = abs(hexdec(substr(md5($deckName), 0, 8)));
+            
+            // Сохраняем палубу в базу, если её ещё нет
+            $this->db->saveDeck($deckId, $deckName);
+            
+            // Сохраняем deckId (число), а не deckName (строка)
+            if ($deckId && $deckId > 0) {
+                $categoryToDeckMap[$categoryId] = $deckId;
+            }
         }
         
         return $categoryToDeckMap;
@@ -705,8 +715,9 @@ class GermesDataProcessor
             $deckName = $this->extractDeckNameFromDescription($description);
             
             if ($deckName) {
-                // Сохраняем палубу в базу
-                $deckId = $this->db->saveDeck($deckName);
+                // Сохраняем палубу в базу (используем hash имени как ID)
+                $deckId = abs(hexdec(substr(md5($deckName), 0, 8)));
+                $this->db->saveDeck($deckId, $deckName);
                 
                 if ($deckId) {
                     $categoryToDeckMap[$categoryId] = $deckId;

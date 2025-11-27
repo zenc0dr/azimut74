@@ -34,7 +34,10 @@ class VolgaDataProcessor
         // Обрабатываем данные в правильном порядке
         $this->processShipsData($dump);
         $this->processDecksData($dump);
+        // Сначала обрабатываем категории кают с временным ship_id (первый доступный)
+        // Это необходимо, так как каюты имеют FOREIGN KEY на категории
         $this->processCabinCategoriesData($dump);
+        // Затем обрабатываем каюты (они ссылаются на категории через class_id)
         $this->processCabinsData($dump);
         $this->processCruisesData($dump);
         $this->processPricesData($dump);
@@ -123,6 +126,13 @@ class VolgaDataProcessor
             return;
         }
 
+        // Получаем первый доступный ship_id (временное значение, будет обновлено позже)
+        $tempShipId = $this->getFirstAvailableShipId();
+        
+        if ($tempShipId === null) {
+            throw new Exception("Не найдено ни одного теплохода. Сначала обработайте данные о теплоходах.");
+        }
+
         $categories = [];
         $items = $dump['classes']['class'];
         
@@ -133,22 +143,36 @@ class VolgaDataProcessor
 
         foreach ($items as $item) {
             $data = $item['@attributes'] ?? $item;
+            $classId = (int)$data['id'];
+            
+            // Используем временный ship_id (будет обновлён через updateCabinCategoriesRelations)
             $categories[] = [
-                'id' => (int)$data['id'],
+                'id' => $classId,
                 'name' => $data['name'] ?? '',
                 'comment' => $data['comment'] ?? null,
                 'places_main_count' => (int)($data['m_count'] ?? 0),
                 'places_extra_count' => (int)($data['r_count'] ?? 0),
                 'deck_id' => null, // Будет обновлено через каюты
-                'ship_id' => null, // Будет обновлено через каюты
+                'ship_id' => $tempShipId, // Временный ship_id, будет обновлён позже
                 'no_full' => (int)($data['no_full'] ?? 0)
             ];
         }
 
         if (!empty($categories)) {
             $this->db->saveCabinCategoriesBatch($categories);
-            ProcessLog::add("Сохранено категорий кают: " . count($categories));
+            ProcessLog::add("Сохранено категорий кают: " . count($categories) . " (с временным ship_id, будет обновлён)");
         }
+    }
+    
+    /**
+     * Получение первого доступного ship_id
+     */
+    private function getFirstAvailableShipId()
+    {
+        $pdo = $this->db->getPdo();
+        $stmt = $pdo->query("SELECT id FROM ships LIMIT 1");
+        $row = $stmt->fetch(\PDO::FETCH_ASSOC);
+        return $row ? (int)$row['id'] : null;
     }
 
     /**

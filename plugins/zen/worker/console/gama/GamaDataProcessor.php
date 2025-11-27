@@ -187,7 +187,7 @@ class GamaDataProcessor
                     $gamaDeckId = $deck['@attributes']['id'];
                     $deckName = $deck['@attributes']['name'];
                     
-                    $this->db->saveDeck($gamaDeckId, $deckName, $gamaShipId);
+                    $this->db->saveDeck($gamaDeckId, $deckName, ['ship_id' => $gamaShipId]);
                     
                     // Обрабатываем категории кают
                     if (isset($deck['CabinList']['Cabin'])) {
@@ -221,9 +221,11 @@ class GamaDataProcessor
             $this->db->saveCabinCategory(
                 $categoryId,
                 $categoryName,
-                $places,
-                $gamaDeckId,
-                $gamaShipId
+                $gamaShipId,
+                [
+                    'places' => $places,
+                    'deck_id' => $gamaDeckId
+                ]
             );
         }
     }
