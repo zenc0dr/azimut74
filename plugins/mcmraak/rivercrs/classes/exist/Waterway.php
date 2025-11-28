@@ -140,9 +140,6 @@ class Waterway extends Exist
             $initial_data = $this->getInitialDataFromBase($checkin);
         }
         
-        // Получаем данные из API Waterway (с обходом кеша при realtime)
-        $ww_rooms = $ww->wwQuery("json.v3.cabins?id=$ww_cruise_id", null, "waterway.cabins.$ww_cruise_id", $realtime);
-        
         // Получаем номера кают из базы данных
         $motorship = $checkin->motorship;
         $exist_rooms = json_decode($motorship->exist_rooms ?? '[]', true);
@@ -162,11 +159,25 @@ class Waterway extends Exist
             $deck_name_to_id_map[$deck->name] = $deck->id;
         }
         
-        foreach ($ww_rooms['result']['data'] ?? [] as $room) {
+        // Получаем данные из API Waterway только если realtime=true
+        // При realtime=false показываем только данные из базы (все каюты как "под запрос")
+        if ($realtime) {
+            $ww_rooms = $ww->wwQuery("json.v3.cabins?id=$ww_cruise_id", null, "waterway.cabins.$ww_cruise_id", $realtime);
+            
+            // Отслеживание уже обработанных номеров кают для дедупликации
+            $processed_room_numbers = [];
+            foreach ($ww_rooms['result']['data'] ?? [] as $room) {
             if ($room['availability'] && isset($room['number'])) {
+                $room_number = $room['number'];
+                
+                // Пропускаем дубликаты
+                if (isset($processed_room_numbers[$room_number])) {
+                    continue;
+                }
+                $processed_room_numbers[$room_number] = true;
+                
                 $cabin_name = $room['class']['name'] ?? '';
                 $deck_name = $room['deck']['name'] ?? '';
-                $room_number = $room['number'];
                 
                 if (!$cabin_name || !$deck_name) {
                     continue;
@@ -211,6 +222,7 @@ class Waterway extends Exist
                     'deck_id' => $deck_id, // Теперь это реальный deck_id из базы
                     'deck_name' => $deck_name,
                 ];
+            }
             }
         }
         
@@ -291,8 +303,16 @@ class Waterway extends Exist
         // Формируем массив rooms: сопоставляем номера из базы с данными из API
         // roomsHandler ожидает все каюты из базы (exist_rooms), но с пометкой о свободных из API
         $rooms = [];
+        $processed_room_numbers = []; // Для отслеживания уже обработанных номеров
         foreach ($exist_rooms as $ev_room) {
             $room_number = $ev_room['n'] ?? '';
+            
+            // Пропускаем дубликаты
+            if (isset($processed_room_numbers[$room_number])) {
+                continue;
+            }
+            $processed_room_numbers[$room_number] = true;
+            
             $is_free = isset($available_rooms_by_number[$room_number]);
             
             // Получаем deck_id из API или оставляем 0
@@ -311,6 +331,38 @@ class Waterway extends Exist
                 'f' => $is_free ? 1 : 0, // 1 = свободна, 0 = занята
                 'd' => $deck_id,
             ];
+        }
+        
+        // Создаем индекс свободных кают по категории и палубе
+        $free_rooms_index = [];
+        foreach ($rooms as $room) {
+            if ($room['f'] == 1) { // Только свободные каюты
+                $key = "{$room['c']}_{$room['d']}";
+                $free_rooms_index[$key] = true;
+            }
+        }
+        
+        // Добавляем каюты "под запрос" для категорий без свободных кают
+        foreach ($decks as $deck) {
+            $deck_id = $deck['id'];
+            foreach ($deck['cabins'] as $cabin) {
+                $cabin_id = $cabin['id'];
+                $key = "{$cabin_id}_{$deck_id}";
+                
+                // Если нет свободных кают для этой категории на этой палубе
+                if (!isset($free_rooms_index[$key])) {
+                    $rooms[] = [
+                        'n' => 'Под запрос',
+                        'c' => $cabin_id,
+                        'd' => $deck_id,
+                        'w' => 0,
+                        'h' => 0,
+                        'x' => 0,
+                        'y' => 0,
+                        'f' => 1, // Свободна (под запрос)
+                    ];
+                }
+            }
         }
         
         // Добавляем 'eds' => true в каждый cabin (как в Infoflot)

@@ -167,7 +167,11 @@ class Exist
         if (strtolower($checkin->eds_code) === 'waterway') {
             try {
                 $waterway = new \Mcmraak\Rivercrs\Classes\Exist\Waterway();
-                $exist_data = $waterway->getSimpleExist($checkin, $realtime);
+                // Логика: 
+                // - Первый запрос (cached=0): показываем данные из базы БЕЗ запроса к API (realtime=false)
+                // - Второй запрос (cached=1): делаем запрос к API для обновления данных (realtime=true)
+                $realtime_for_waterway = $cached ? $realtime : false;
+                $exist_data = $waterway->getSimpleExist($checkin, $realtime_for_waterway);
             } catch (Exception $exception) {
                 Log::error('Exist getSimpleExist error: ' . $exception->getMessage());
                 // Очищаем буфер при ошибке
@@ -240,6 +244,7 @@ class Exist
                     $final_data['cached'] = true;
                     Cache::add($cache_key, $final_data, 120); // Сохраняем на 2 часа (как в старой логике)
                 } else {
+                    $final_data['cached'] = false; // Явно указываем, что это первый запрос (данные из базы)
                     Cache::put($cache_key, $final_data, 60); // Кешируем на 1 минуту
                 }
                 // Очищаем буфер вывода перед установкой заголовков и выводом JSON
