@@ -49,6 +49,35 @@ class InfoflotApiClient
         $http_query = $http->setTimout($this->timeout)
             ->query($url, 'json');
 
+        // Обход проблемы с DNS в контейнере: если ошибка DNS или пустой ответ, пробуем с CURLOPT_RESOLVE
+        if ($http_query->error && (strpos($http_query->error, 'Could not resolve host') !== false || 
+            strpos($http_query->error, 'Пустой ответ') !== false || 
+            !$http_query->response)) {
+            ProcessLog::add("Проблема с DNS, используем обход через IP адрес");
+            // Используем прямой запрос через curl с CURLOPT_RESOLVE
+            $ch = curl_init($url);
+            curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+            curl_setopt($ch, CURLOPT_TIMEOUT, $this->timeout);
+            curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);
+            curl_setopt($ch, CURLOPT_SSL_VERIFYHOST, false);
+            curl_setopt($ch, CURLOPT_RESOLVE, ['restapi.infoflot.com:443:178.248.239.118']);
+            $response = curl_exec($ch);
+            $code = curl_getinfo($ch, CURLINFO_HTTP_CODE);
+            $error = curl_error($ch);
+            curl_close($ch);
+            
+            if ($code == 200 && $response) {
+                $response = json_decode($response, true);
+                if ($response) {
+                    // Сохраняем в файловый кеш (вечный)
+                    $this->cache->put($cacheKey, $response);
+                    return $response;
+                }
+            }
+            
+            throw new Exception("Ошибка получения списка судов (страница $page) через IP: " . $error);
+        }
+
         if ($http_query->error) {
             throw new Exception("Ошибка получения списка судов (страница $page): " . $http_query->error);
         }
@@ -92,6 +121,37 @@ class InfoflotApiClient
         $http = new Http();
         $http_query = $http->setTimout($this->timeout)
             ->query($url, 'json');
+
+        // Обход проблемы с DNS в контейнере
+        if ($http_query->error && (strpos($http_query->error, 'Could not resolve host') !== false || 
+            strpos($http_query->error, 'Пустой ответ') !== false || 
+            !$http_query->response)) {
+            ProcessLog::add("Проблема с DNS для круизов судна $shipId, используем обход через IP адрес");
+            $ch = curl_init($url);
+            curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+            curl_setopt($ch, CURLOPT_TIMEOUT, $this->timeout);
+            curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);
+            curl_setopt($ch, CURLOPT_SSL_VERIFYHOST, false);
+            curl_setopt($ch, CURLOPT_RESOLVE, ['restapi.infoflot.com:443:178.248.239.118']);
+            $response = curl_exec($ch);
+            $code = curl_getinfo($ch, CURLINFO_HTTP_CODE);
+            $error = curl_error($ch);
+            curl_close($ch);
+            
+            if ($code == 200 && $response) {
+                $response = json_decode($response, true);
+                if ($response) {
+                    $this->cache->put($cacheKey, $response);
+                    return $response;
+                }
+            }
+            
+            if (strpos($error, 'Not found') !== false || $code == 404) {
+                return null;
+            }
+            
+            throw new Exception("Ошибка получения круизов для судна $shipId (страница $page) через IP: " . $error);
+        }
 
         if ($http_query->error) {
             // Если "Not found" или "Resource not found" - это нормально, значит нет круизов
@@ -143,6 +203,37 @@ class InfoflotApiClient
         $http = new Http();
         $http_query = $http->setTimout($this->timeout)
             ->query($url, 'json');
+
+        // Обход проблемы с DNS в контейнере
+        if ($http_query->error && (strpos($http_query->error, 'Could not resolve host') !== false || 
+            strpos($http_query->error, 'Пустой ответ') !== false || 
+            !$http_query->response)) {
+            ProcessLog::add("Проблема с DNS для цен круиза $cruiseId, используем обход через IP адрес");
+            $ch = curl_init($url);
+            curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+            curl_setopt($ch, CURLOPT_TIMEOUT, $this->timeout);
+            curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);
+            curl_setopt($ch, CURLOPT_SSL_VERIFYHOST, false);
+            curl_setopt($ch, CURLOPT_RESOLVE, ['restapi.infoflot.com:443:178.248.239.118']);
+            $response = curl_exec($ch);
+            $code = curl_getinfo($ch, CURLINFO_HTTP_CODE);
+            $error = curl_error($ch);
+            curl_close($ch);
+            
+            if ($code == 200 && $response) {
+                $response = json_decode($response, true);
+                if ($response) {
+                    $this->cache->put($cacheKey, $response);
+                    return $response;
+                }
+            }
+            
+            if (strpos($error, 'Not found') !== false || $code == 404) {
+                return null;
+            }
+            
+            throw new Exception("Ошибка получения цен для круиза $cruiseId через IP: " . $error);
+        }
 
         if ($http_query->error) {
             // Если "Not found" или "Resource not found" - значит нет данных о ценах

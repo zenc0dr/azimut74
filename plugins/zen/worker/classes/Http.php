@@ -116,10 +116,17 @@ class Http
 
 
         $this->response = curl_exec($ch);
-
+        
+        $curl_error = curl_error($ch);
         $this->code = intval(curl_getinfo($ch, CURLINFO_HTTP_CODE));
 
         curl_close($ch);
+
+        # Проверка ошибок curl (DNS, таймауты и т.д.)
+        if ($curl_error) {
+            $this->error = $curl_error . ', url:' . $url;
+            return;
+        }
 
         if($this->code == 301) {
             # Получить последнюю ссылку редиректов

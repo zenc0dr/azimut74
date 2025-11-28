@@ -43,6 +43,12 @@ class InfoflotDataProcessor
                 
                 $response = $this->apiClient->getShips($page, $limit);
                 
+                // Отладочный вывод
+                ProcessLog::add("Ответ API получен. Ключи ответа: " . implode(', ', array_keys($response ?? [])));
+                if (isset($response['pagination'])) {
+                    ProcessLog::add("Pagination: " . json_encode($response['pagination'], JSON_UNESCAPED_UNICODE));
+                }
+                
                 // Получаем общее количество теплоходов из API (только один раз)
                 if ($totalShipsInApi === null && isset($response['pagination']['records']['total'])) {
                     $totalShipsInApi = (int)$response['pagination']['records']['total'];
@@ -50,16 +56,19 @@ class InfoflotDataProcessor
                 }
                 
                 if (!isset($response['data']) || !is_array($response['data'])) {
-                    ProcessLog::add("Нет данных на странице $page");
+                    ProcessLog::add("Нет данных на странице $page. Структура ответа: " . json_encode(array_keys($response ?? []), JSON_UNESCAPED_UNICODE));
                     break;
                 }
 
                 $shipsPage = $response['data'];
+                ProcessLog::add("Получено судов на странице $page: " . count($shipsPage));
+                
                 if (empty($shipsPage)) {
                     ProcessLog::add("Пустая страница $page");
                     break;
                 }
 
+                $marineShipsCount = 0;
                 foreach ($shipsPage as $ship) {
                     $shipName = $ship['name'] ?? '';
                     $shipType = $ship['typeName'] ?? '';
@@ -68,6 +77,7 @@ class InfoflotDataProcessor
                     // РАННЯЯ ФИЛЬТРАЦИЯ: Пропускаем морские суда сразу при загрузке
                     // Это экономит время, так как мы не будем запрашивать круизы для них
                     if ($this->isMarineShip($shipName, $shipType, $operatorName)) {
+                        $marineShipsCount++;
                         ProcessLog::add("Пропуск морского судна при загрузке: $shipName (ID: {$ship['id']}, тип: $shipType)");
                         continue;
                     }
@@ -81,7 +91,7 @@ class InfoflotDataProcessor
                     ];
                 }
                 
-                ProcessLog::add("Загружено теплоходов со страницы $page: " . count($shipsPage) . " (всего: " . count($ships) . ")");
+                ProcessLog::add("Загружено теплоходов со страницы $page: " . count($shipsPage) . " (всего: " . count($ships) . ", пропущено морских: $marineShipsCount)");
 
                 // Ограничение для тестирования
                 if ($this->limit && count($ships) >= $this->limit) {
@@ -123,8 +133,16 @@ class InfoflotDataProcessor
         
         // Сохраняем суда
         if (!empty($ships)) {
-            $this->db->saveShipsBatch($ships);
-            ProcessLog::add("Сохранено судов в SQLite: " . count($ships));
+            ProcessLog::add("Попытка сохранить " . count($ships) . " судов в SQLite");
+            try {
+                $this->db->saveShipsBatch($ships);
+                ProcessLog::add("Сохранено судов в SQLite: " . count($ships));
+            } catch (\Exception $e) {
+                ProcessLog::add("ОШИБКА сохранения судов: " . $e->getMessage());
+                ProcessLog::add("Трассировка: " . $e->getTraceAsString());
+            }
+        } else {
+            ProcessLog::add("⚠️  Массив судов пуст, нечего сохранять");
         }
         
         return $ships;
