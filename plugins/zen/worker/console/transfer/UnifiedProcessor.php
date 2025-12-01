@@ -12,39 +12,95 @@ use Carbon\Carbon;
 class UnifiedProcessor extends TransferProcessor
 {
     /**
+     * @var \Illuminate\Console\Command|null Команда для вывода в консоль
+     */
+    protected $command = null;
+    
+    /**
+     * Установка команды для вывода в консоль
+     * 
+     * @param \Illuminate\Console\Command $command
+     */
+    public function setCommand($command)
+    {
+        $this->command = $command;
+    }
+    
+    /**
+     * Вывод сообщения в консоль (если команда установлена)
+     * 
+     * @param string $message
+     * @param string $type info|line|warn|error
+     */
+    protected function output($message, $type = 'line')
+    {
+        if ($this->command) {
+            switch ($type) {
+                case 'info':
+                    $this->command->info($message);
+                    break;
+                case 'warn':
+                    $this->command->warn($message);
+                    break;
+                case 'error':
+                    $this->command->error($message);
+                    break;
+                default:
+                    $this->command->line($message);
+            }
+        }
+        ProcessLog::add($message);
+    }
+    
+    /**
      * Основной метод обработки всех круизов из SQLite
      */
     public function process()
     {
-        ProcessLog::add("Обработка заездов {$this->sourceName} из SQLite (UnifiedProcessor)");
+        $this->output("🔄 Обработка заездов {$this->sourceName} из SQLite (UnifiedProcessor)", 'info');
         
         $cruises = $this->db->getAllCruises();
         $totalCruises = count($cruises);
         
-        ProcessLog::add("Найдено заездов для обработки: " . $totalCruises);
+        $this->output("📋 Найдено заездов для обработки: $totalCruises", 'info');
         
         $errorsCount = 0;
         $processedCount = 0;
+        $skippedCount = 0;
         
-        foreach ($cruises as $cruise) {
+        $this->output("⏳ Начинаем обработку...", 'line');
+        
+        foreach ($cruises as $index => $cruise) {
+            $cruiseNum = $index + 1;
             try {
                 $cruiseId = $cruise['id'];
+                
+                // Выводим прогресс каждые 10 круизов или для каждого круиза, если их меньше 20
+                if ($totalCruises <= 20 || $cruiseNum % 10 == 0 || $cruiseNum == $totalCruises) {
+                    $this->output("  [$cruiseNum/$totalCruises] Обработка круиза {$this->edsCode}:$cruiseId...", 'line');
+                }
+                
                 $checkinId = $this->importCruise($cruise);
                 
                 if ($checkinId) {
                     $processedCount++;
-                    ProcessLog::add("Обработка заезда {$this->edsCode}:$cruiseId завершена успешно");
+                    if ($totalCruises <= 20 || $cruiseNum % 10 == 0 || $cruiseNum == $totalCruises) {
+                        $this->output("  ✅ Круиз {$this->edsCode}:$cruiseId обработан успешно (ID заезда: $checkinId)", 'line');
+                    }
                 } else {
-                    $errorsCount++;
-                    ProcessLog::add("Ошибка обработки заезда {$this->edsCode}:$cruiseId");
+                    $skippedCount++;
+                    if ($totalCruises <= 20) {
+                        $this->output("  ⚠️  Круиз {$this->edsCode}:$cruiseId пропущен", 'warn');
+                    }
                 }
             } catch (\Exception $e) {
                 $errorsCount++;
-                ProcessLog::add("Исключение при обработке заезда {$this->edsCode}:{$cruise['id']}: " . $e->getMessage());
+                $this->output("  ❌ Ошибка обработки круиза {$this->edsCode}:{$cruise['id']}: " . $e->getMessage(), 'error');
             }
         }
         
-        ProcessLog::add("Обработка всех заездов {$this->sourceName} завершена. Обработано: $processedCount из $totalCruises, ошибок: $errorsCount");
+        $this->output("✅ Обработка всех заездов {$this->sourceName} завершена", 'info');
+        $this->output("📊 Результаты: обработано: $processedCount, пропущено: $skippedCount, ошибок: $errorsCount из $totalCruises", 'info');
     }
     
     /**
@@ -61,18 +117,16 @@ class UnifiedProcessor extends TransferProcessor
         $shipData = $this->db->getShipBySourceId($shipId);
         
         if (!$shipData) {
-            ProcessLog::add("Теплоход с ID $shipId не найден в SQLite для круиза $cruiseId");
+            $this->output("  ⚠️  Теплоход с ID $shipId не найден в SQLite для круиза $cruiseId", 'warn');
             return null;
         }
-        
-        ProcessLog::add("Обработка заезда {$this->edsCode}:$cruiseId (теплоход: {$shipData['name']})");
         
         // Получаем или создаем теплоход в MySQL
         $ship = $this->getMotorship($shipData['name'], $shipId);
         
         // Проверка исключения теплохода (не считается ошибкой, просто пропускаем)
         if (!$ship) {
-            ProcessLog::add("Теплоход {$shipData['name']} исключён");
+            $this->output("  ⚠️  Теплоход {$shipData['name']} исключён", 'warn');
             return null;
         }
         
@@ -109,7 +163,7 @@ class UnifiedProcessor extends TransferProcessor
         }
         
         if (!$dateStart || !$dateEnd) {
-            ProcessLog::add("Ошибка данных! --- cruise_id:$cruiseId - Отсутствуют даты, заезд игнорирован.");
+            $this->output("  ⚠️  Круиз $cruiseId: отсутствуют даты, заезд пропущен", 'warn');
             return null;
         }
         
@@ -121,22 +175,19 @@ class UnifiedProcessor extends TransferProcessor
             $waybillFromRoute = $this->createWaybillFromRoute($cruise['route'] ?? '', $cruise['name'] ?? '');
             if ($waybillFromRoute && count($waybillFromRoute) >= 2) {
                 $waybill = $waybillFromRoute;
-                ProcessLog::add("Маршрут создан из route/name для круиза $cruiseId");
             }
         }
         
         // Проверка валидности маршрута
         if (!$waybill || empty($waybill) || count($waybill) < 2) {
-            ProcessLog::add("Ошибка данных! --- cruise_id:$cruiseId - Отсутствует маршрут, заезд игнорирован.");
+            $this->output("  ⚠️  Круиз $cruiseId: отсутствует маршрут, заезд пропущен", 'warn');
             return null;
         }
-        
-        ProcessLog::add("Маршрут получен");
         
         // Проверяем наличие цен ДО создания заезда
         $prices = $this->db->getPricesByCruiseId($cruiseId);
         if (empty($prices)) {
-            ProcessLog::add("Для заезда {$this->edsCode}:$cruiseId отсутствуют цены, заезд пропущен.");
+            $this->output("  ⚠️  Круиз $cruiseId: отсутствуют цены, заезд пропущен", 'warn');
             return null;
         }
         
@@ -154,14 +205,12 @@ class UnifiedProcessor extends TransferProcessor
         
         $this->fixCheckin($checkin->id);
         
-        ProcessLog::add("Заезд добавлен в базу. Обработка цен...");
-        
         // Импорт цен из SQLite
         $pricesImported = $this->importPrices($checkin->id, $cruiseId, $ship->id);
         
         // Цены должны быть, но на всякий случай проверяем
         if (!$pricesImported) {
-            ProcessLog::add("⚠️  Для заезда {$this->edsCode}:$cruiseId не удалось импортировать цены, заезд деактивирован.");
+            $this->output("  ⚠️  Для заезда {$this->edsCode}:$cruiseId не удалось импортировать цены, заезд деактивирован", 'warn');
             $checkin->active = 0;
             $checkin->createCache = false;
             $checkin->save();
@@ -169,8 +218,6 @@ class UnifiedProcessor extends TransferProcessor
             // Очищаем кеш и пересоздаём его с правильными данными
             $this->clearCheckinCache($checkin->id);
             $this->rebuildCheckinCache($checkin->id);
-            
-            ProcessLog::add("Кеш для заезда {$checkin->id} обновлён после импорта цен");
         }
         
         return $checkin->id;
@@ -191,6 +238,8 @@ class UnifiedProcessor extends TransferProcessor
         if (empty($prices)) {
             return false; // Цен нет
         }
+        
+        $this->output("  💰 Импорт цен для заезда $checkinId: найдено " . count($prices) . " цен", 'line');
         
         // Создаем маппинг категорий кают и обрабатываем палубы
         $cabinMapping = [];
@@ -262,12 +311,9 @@ class UnifiedProcessor extends TransferProcessor
                 $priceData = [
                     'checkin_id' => $checkinId,
                     'cabin_id' => $cabinId,
-                    'price_a' => $priceValue
+                    'price_a' => $priceValue,
+                    'price_b' => $priceExtra // Всегда включаем price_b, даже если null
                 ];
-                
-                if ($priceExtra) {
-                    $priceData['price_b'] = $priceExtra;
-                }
                 
                 $insert_prices[] = $priceData;
                 
@@ -308,11 +354,11 @@ class UnifiedProcessor extends TransferProcessor
             DB::table('mcmraak_rivercrs_pricing')
                 ->insert($insert_prices);
             
-            ProcessLog::add("Цены для заезда $cruiseId: добавлено " . count($insert_prices) . " цен в pricing, $nprices_count цен с палубами в nprices");
+            $this->output("  ✅ Цены импортированы: " . count($insert_prices) . " цен в pricing, $nprices_count цен с палубами в nprices", 'line');
             return true; // Цены успешно импортированы
         }
         
-        ProcessLog::add("Валидных цен для заезда $cruiseId не найдено");
+        $this->output("  ⚠️  Валидных цен для заезда $cruiseId не найдено", 'warn');
         return false; // Валидных цен не найдено
     }
     

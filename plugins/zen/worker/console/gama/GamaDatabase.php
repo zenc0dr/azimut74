@@ -3,6 +3,7 @@
 use PDO;
 use Exception;
 use Zen\Worker\Console\unified\UnifiedDatabase;
+use Zen\Worker\Console\transfer\TransferConfig;
 
 /**
  * GamaDatabase - наследуется от UnifiedDatabase
@@ -15,7 +16,11 @@ class GamaDatabase extends UnifiedDatabase
      */
     public function __construct()
     {
-        $dbPath = __DIR__ . '/gama_data.sqlite';
+        // Получаем путь к базе данных из конфигурации
+        $dbPath = TransferConfig::getDbPath('gama');
+        if (!file_exists($dbPath)) {
+            throw new Exception("База данных gama_data.sqlite не найдена: {$dbPath}");
+        }
         parent::__construct($dbPath);
         
         // Миграция: добавляем поля для обратной совместимости (если их нет)

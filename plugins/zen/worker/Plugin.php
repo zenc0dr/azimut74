@@ -34,6 +34,9 @@ class Plugin extends PluginBase
     {
         // Подключаем хелпер функцию cursor()
         require_once __DIR__ . '/init.php';
+        
+        // Подключаем конфигурацию для transfer
+        require_once __DIR__ . '/console/transfer/config.php';
     }
 
     public function registerReportWidgets()

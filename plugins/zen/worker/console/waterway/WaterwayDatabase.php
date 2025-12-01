@@ -1,6 +1,8 @@
 <?php namespace Zen\Worker\Console\waterway;
 
+use Exception;
 use Zen\Worker\Console\unified\UnifiedDatabase;
+use Zen\Worker\Console\transfer\TransferConfig;
 
 /**
  * WaterwayDatabase - наследуется от UnifiedDatabase
@@ -13,7 +15,11 @@ class WaterwayDatabase extends UnifiedDatabase
      */
     public function __construct()
     {
-        $dbPath = __DIR__ . '/waterway_data.sqlite';
+        // Получаем путь к базе данных из конфигурации
+        $dbPath = TransferConfig::getDbPath('waterway');
+        if (!file_exists($dbPath)) {
+            throw new Exception("База данных waterway_data.sqlite не найдена: {$dbPath}");
+        }
         parent::__construct($dbPath);
         
         // Миграция: добавляем поля для обратной совместимости (если их нет)

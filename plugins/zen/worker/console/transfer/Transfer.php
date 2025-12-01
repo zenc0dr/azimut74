@@ -8,7 +8,9 @@ use Zen\Worker\Console\germes\GermesDatabase;
 use Zen\Worker\Console\infoflot\InfoflotDatabase;
 use Zen\Worker\Console\volga\VolgaDatabase;
 use Zen\Worker\Console\waterway\WaterwayDatabase;
+use Zen\Worker\Console\transfer\TelegramNotifier;
 use Exception;
+use DB;
 
 /**
  * Команда для импорта данных из SQLite баз в MySQL
@@ -60,6 +62,11 @@ class Transfer extends Command
     protected $stats = [];
     
     /**
+     * Telegram уведомления
+     */
+    protected $telegram;
+    
+    /**
      * Execute the console command.
      * @return int
      */
@@ -69,6 +76,10 @@ class Transfer extends Command
         set_time_limit(0);
         ini_set('memory_limit', '512M');
         ini_set('max_execution_time', 0);
+        
+        // Инициализируем Telegram уведомления
+        $this->telegram = new TelegramNotifier();
+        $this->telegram->reset();
         
         $source = $this->option('source');
         $validateOnly = $this->option('validate-only');
@@ -96,10 +107,26 @@ class Transfer extends Command
         
         $this->line('');
         
+        // Инициализируем данные о всех источниках для Telegram
+        $sourcesData = [];
+        foreach ($sourcesToProcess as $sourceKey => $sourceConfig) {
+            $sourcesData[$sourceKey] = [
+                'name' => $sourceConfig['name'],
+                'status' => 'pending',
+                'stats' => []
+            ];
+        }
+        
+        // Отправляем начальное сообщение в Telegram
+        $this->telegram->updateProgress($sourcesData);
+        
         // Обрабатываем каждый источник
         foreach ($sourcesToProcess as $sourceKey => $sourceConfig) {
-            $this->processSource($sourceKey, $sourceConfig, $validateOnly, $skipValidation);
+            $this->processSource($sourceKey, $sourceConfig, $validateOnly, $skipValidation, $sourcesData);
         }
+        
+        // Финальное обновление сообщения
+        $this->telegram->updateProgress($sourcesData);
         
         // Выводим итоговую статистику
         $this->displaySummary();
@@ -128,12 +155,20 @@ class Transfer extends Command
     /**
      * Обработка одного источника
      */
-    protected function processSource($sourceKey, $sourceConfig, $validateOnly, $skipValidation)
+    protected function processSource($sourceKey, $sourceConfig, $validateOnly, $skipValidation, &$sourcesData = [])
     {
         $sourceName = $sourceConfig['name'];
+        $edsCode = $sourceConfig['edsCode'];
+        
         $this->info("━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━");
         $this->info("📦 Обработка источника: $sourceName");
         $this->info("━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━");
+        
+        // Обновляем статус источника в данных для Telegram
+        if (isset($sourcesData[$sourceKey])) {
+            $sourcesData[$sourceKey]['status'] = 'processing';
+            $this->telegram->updateProgress($sourcesData, $sourceKey);
+        }
         
         try {
             // Создаем экземпляр Database класса
@@ -174,6 +209,13 @@ class Transfer extends Command
                         'warnings' => count($warnings)
                     ];
                     
+                    // Обновляем статус в Telegram
+                    if (isset($sourcesData[$sourceKey])) {
+                        $sourcesData[$sourceKey]['status'] = 'validation_failed';
+                        $sourcesData[$sourceKey]['error'] = 'Валидация не пройдена';
+                        $this->telegram->updateProgress($sourcesData);
+                    }
+                    
                     return;
                 }
                 
@@ -198,14 +240,33 @@ class Transfer extends Command
                     $sourceConfig['edsIdField']
                 );
                 
+                // Передаем команду для вывода в консоль
+                $processor->setCommand($this);
+                
                 $processor->process();
                 
+                // Получаем статистику обработанных записей
+                $stats = $this->getProcessedStats($edsCode);
+                
                 $this->info("✅ Импорт завершен для источника: $sourceName");
+                $this->info("📊 Статистика:");
+                $this->info("  🚢 Обработано теплоходов: {$stats['ships']}");
+                $this->info("  🏠 Обработано категорий кают: {$stats['cabin_categories']}");
+                $this->info("  🎫 Обработано круизов: {$stats['cruises']}");
+                
                 $this->stats[$sourceKey] = [
                     'status' => 'success',
                     'errors' => 0,
-                    'warnings' => 0
+                    'warnings' => 0,
+                    'stats' => $stats
                 ];
+                
+                // Обновляем статус в Telegram
+                if (isset($sourcesData[$sourceKey])) {
+                    $sourcesData[$sourceKey]['status'] = 'success';
+                    $sourcesData[$sourceKey]['stats'] = $stats;
+                    $this->telegram->updateProgress($sourcesData);
+                }
             } else {
                 $this->info("✅ Валидация завершена для источника: $sourceName");
                 $this->stats[$sourceKey] = [
@@ -218,10 +279,18 @@ class Transfer extends Command
         } catch (Exception $e) {
             $this->error("❌ Ошибка обработки источника $sourceName: " . $e->getMessage());
             ProcessLog::add("Критическая ошибка обработки источника $sourceName: " . $e->getMessage());
+            
             $this->stats[$sourceKey] = [
                 'status' => 'error',
                 'error' => $e->getMessage()
             ];
+            
+            // Обновляем статус в Telegram
+            if (isset($sourcesData[$sourceKey])) {
+                $sourcesData[$sourceKey]['status'] = 'error';
+                $sourcesData[$sourceKey]['error'] = $e->getMessage();
+                $this->telegram->updateProgress($sourcesData);
+            }
         }
         
         $this->line('');
@@ -268,6 +337,65 @@ class Transfer extends Command
         $this->info("Успешно: $successCount");
         $this->info("Валидация: $validatedCount");
         $this->info("Ошибок: $errorCount");
+    }
+    
+    /**
+     * Получение статистики обработанных записей для источника
+     * 
+     * @param string $edsCode EDS код источника
+     * @return array Статистика (ships, cabin_categories, cruises)
+     */
+    protected function getProcessedStats($edsCode)
+    {
+        return [
+            'ships' => $this->countMotorships($edsCode),
+            'cabin_categories' => $this->countCabinCategories($edsCode),
+            'cruises' => $this->countCruises($edsCode)
+        ];
+    }
+    
+    /**
+     * Подсчет количества обработанных теплоходов для источника
+     * Считаем теплоходы, у которых заполнено поле {eds_code}_id
+     * 
+     * @param string $edsCode EDS код источника
+     * @return int
+     */
+    protected function countMotorships($edsCode)
+    {
+        $edsIdField = $edsCode . '_id';
+        return DB::table('mcmraak_rivercrs_motorships')
+            ->where($edsIdField, '>', 0)
+            ->count();
+    }
+    
+    /**
+     * Подсчет количества обработанных категорий кают для источника
+     * Считаем категории кают, у которых заполнено поле {eds_code}_name
+     * 
+     * @param string $edsCode EDS код источника
+     * @return int
+     */
+    protected function countCabinCategories($edsCode)
+    {
+        $edsNameField = $edsCode . '_name';
+        return DB::table('mcmraak_rivercrs_cabins')
+            ->whereNotNull($edsNameField)
+            ->where($edsNameField, '!=', '')
+            ->count();
+    }
+    
+    /**
+     * Подсчет количества обработанных круизов для источника
+     * 
+     * @param string $edsCode EDS код источника
+     * @return int
+     */
+    protected function countCruises($edsCode)
+    {
+        return DB::table('mcmraak_rivercrs_checkins')
+            ->where('eds_code', $edsCode)
+            ->count();
     }
     
     /**

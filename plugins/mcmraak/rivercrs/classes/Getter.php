@@ -121,6 +121,13 @@ class Getter extends Parser
         $name = str_replace('⏹', '-', $name);
         $name = str_replace('⏴', '(', $name);
         $name = str_replace('⏵', ')', $name);
+        
+        // Обрезаем название до максимальной длины поля (255 символов для string)
+        // Используем mb_substr для корректной работы с UTF-8
+        $maxLength = 255;
+        if (mb_strlen($name, 'UTF-8') > $maxLength) {
+            $name = mb_substr($name, 0, $maxLength, 'UTF-8');
+        }
 
 
         $town = Town::where('name', $name)->first();

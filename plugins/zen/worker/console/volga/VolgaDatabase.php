@@ -3,6 +3,7 @@
 use PDO;
 use Exception;
 use Zen\Worker\Console\unified\UnifiedDatabase;
+use Zen\Worker\Console\transfer\TransferConfig;
 
 /**
  * VolgaDatabase - наследуется от UnifiedDatabase
@@ -16,7 +17,11 @@ class VolgaDatabase extends UnifiedDatabase
      */
     public function __construct()
     {
-        $dbPath = __DIR__ . '/volga_data.sqlite';
+        // Получаем путь к базе данных из конфигурации
+        $dbPath = TransferConfig::getDbPath('volga');
+        if (!file_exists($dbPath)) {
+            throw new Exception("База данных volga_data.sqlite не найдена: {$dbPath}");
+        }
         
         // Проверка и исправление прав доступа (специфично для Volga)
         $this->ensureDatabasePermissions($dbPath);
