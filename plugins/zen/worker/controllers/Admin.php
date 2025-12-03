@@ -47,6 +47,7 @@ class Admin extends Controller
             DB::table('mcmraak_rivercrs_nprices')->truncate();
             DB::table('mcmraak_rivercrs_waybills')->truncate();
             DB::table('zen_worker_errors')->truncate();
+            DB::table('mcmraak_rivercrs_towns')->where('id', '>=', 4304)->delete();
 
             DB::statement('SET FOREIGN_KEY_CHECKS = 1');
         } catch (\Exception $ex) {
