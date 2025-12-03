@@ -40,13 +40,28 @@ class Admin extends Controller
         try {
             DB::statement('SET FOREIGN_KEY_CHECKS = 0');
 
+            // Очистка данных, связанных с заездами
             DB::table('mcmraak_rivercrs_checkins')->truncate();
             DB::table('mcmraak_rivercrs_checkins_memory')->truncate();
-            DB::table('mcmraak_rivercrs_decks_pivot')->truncate();
             DB::table('mcmraak_rivercrs_pricing')->truncate();
             DB::table('mcmraak_rivercrs_nprices')->truncate();
             DB::table('mcmraak_rivercrs_waybills')->truncate();
+            
+            // Очистка категорий кают (создаются при импорте)
+            DB::table('mcmraak_rivercrs_cabins')->truncate();
+            
+            // Очистка связей палуб с каютами (создаются при импорте)
+            DB::table('mcmraak_rivercrs_decks_pivot')->truncate();
+            
+            // Очистка палуб, созданных автоматически при импорте
+            // Внимание: палубы могут быть созданы вручную, но для чистоты проверки очищаем все
+            // При импорте палубы будут пересозданы автоматически через getDeck()
+            DB::table('mcmraak_rivercrs_decks')->truncate();
+            
+            // Очистка логов и ошибок
             DB::table('zen_worker_errors')->truncate();
+            
+            // Очистка городов, созданных при импорте (id >= 4304 - автоматически созданные)
             DB::table('mcmraak_rivercrs_towns')->where('id', '>=', 4304)->delete();
 
             DB::statement('SET FOREIGN_KEY_CHECKS = 1');
