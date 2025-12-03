@@ -114,6 +114,13 @@ class RiverCrs
         int $places = 1,
         ?int $sourceId = null
     ): int {
+        // Проверка исключений категорий кают (как в Volga, Gama, Germes Phase 1)
+        if ($this->isCabinNotLet($category_name, $motorship_id)) {
+            // Категория в исключениях - возвращаем 0 (недопустимый ID)
+            // Это предотвратит создание категории и импорт цен для неё
+            return 0;
+        }
+
         // Ключ кеша включает sourceId, если он передан
         $key = "cabin:$category_name:$motorship_id:$eds_code" . ($sourceId ? ":$sourceId" : "");
 
@@ -167,26 +174,27 @@ class RiverCrs
             return $this->cache[$key] = $cabin->id;
         }
 
-        // Приоритет 3: Поиск по category
-        $cabin = Cabin::where('category', $category_name)
-            ->where('motorship_id', $motorship_id)
-            ->first();
+        // Приоритет 3: Поиск по category (только если sourceId НЕ передан, для обратной совместимости)
+        // Если sourceId передан, пропускаем приоритет 3, чтобы избежать неправильного маппинга
+        // категорий с одинаковыми названиями, но разными ID источников
+        if ($sourceId === null) {
+            $cabin = Cabin::where('category', $category_name)
+                ->where('motorship_id', $motorship_id)
+                ->first();
 
-        if ($cabin) {
-            // Обновляем ID источника и имя источника, если их не было
-            if ($sourceId !== null && !$cabin->{$edsIdField}) {
-                $cabin->{$edsIdField} = $sourceId;
+            if ($cabin) {
+                // Обновляем имя источника, если его не было
+                if (!$cabin->{$eds_code . '_name'}) {
+                    $cabin->{$eds_code . '_name'} = $category_name;
+                }
+                if ($cabin->places_main_count !== $places) {
+                    $cabin->places_main_count = $places;
+                }
+                if ($cabin->isDirty()) {
+                    $cabin->save();
+                }
+                return $this->cache[$key] = $cabin->id;
             }
-            if (!$cabin->{$eds_code . '_name'}) {
-                $cabin->{$eds_code . '_name'} = $category_name;
-            }
-            if ($cabin->places_main_count !== $places) {
-                $cabin->places_main_count = $places;
-            }
-            if ($cabin->isDirty()) {
-                $cabin->save();
-            }
-            return $this->cache[$key] = $cabin->id;
         }
 
         // Создание новой каюты

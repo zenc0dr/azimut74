@@ -340,20 +340,36 @@ class GermesDataProcessor
         $max = count($towns) - 1;
         
         foreach ($towns as $townName) {
-            // Получаем ID города через Getter
-            $townId = $this->getter->getTownId($townName, 'germes');
+            // Очищаем название города от HTML тегов и лишних символов
+            $cleanTownName = strip_tags($townName);
+            $cleanTownName = trim($cleanTownName);
+            
+            // Удаляем лишние пробелы и символы
+            $cleanTownName = preg_replace('/\s+/', ' ', $cleanTownName);
+            
+            // Если название пустое после очистки, пропускаем
+            if (empty($cleanTownName)) {
+                continue;
+            }
+            
+            // Получаем ID города через Getter (используем очищенное название)
+            $townId = $this->getter->getTownId($cleanTownName, 'germes');
             
             // Определяем, является ли город bold
             $isBold = false;
             if (!empty($boldTowns)) {
-                $isBold = in_array($townName, $boldTowns) || $key == 0 || $key == $max;
+                // Сравниваем с очищенными названиями из boldTowns
+                $cleanBoldTowns = array_map(function($bt) {
+                    return trim(strip_tags($bt));
+                }, $boldTowns);
+                $isBold = in_array($cleanTownName, $cleanBoldTowns) || $key == 0 || $key == $max;
             } else {
                 $isBold = $key == 0 || $key == $max;
             }
             
             $waybill[] = [
                 'town' => $townId,
-                'town_name' => $townName,
+                'town_name' => $cleanTownName,
                 'excursion' => '',
                 'bold' => $isBold ? 1 : 0
             ];

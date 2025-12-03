@@ -262,6 +262,11 @@ class UnifiedProcessor extends TransferProcessor
             // Получаем или создаем категорию кают с использованием ID источника
             $cabinId = $this->getCabinCategory($cabinCategoryId, $cabinCategoryName, $shipId, $places);
             
+            // Проверяем, что категория не в исключениях (getCabinCategoryId возвращает 0 для исключенных)
+            if (!$cabinId || $cabinId === 0) {
+                continue; // Пропускаем категорию, если она в исключениях
+            }
+            
             if ($cabinId) {
                 $cabinMapping[$cabinCategoryId] = $cabinId;
                 
@@ -297,6 +302,7 @@ class UnifiedProcessor extends TransferProcessor
         // Подготавливаем данные для вставки
         $insert_prices = [];
         $nprices_count = 0; // Счетчик цен с палубами
+        $priceKeys = []; // Для проверки дубликатов: ключ = checkin_id:cabin_id
         
         foreach ($prices as $price) {
             $cabinCategoryId = $price['cabin_category_id'] ?? null;
@@ -312,6 +318,61 @@ class UnifiedProcessor extends TransferProcessor
             $placesQnt = (int)($price['places_qnt'] ?? 1);
             
             if ($cabinId && $priceValue > 0) {
+                // Сохраняем цену с палубой в nprices (если есть информация о палубе)
+                // ВАЖНО: Проверяем deck_name из каждой цены, т.к. у категории может быть несколько палуб
+                // Делаем это ДО проверки дубликатов, чтобы сохранить все палубы
+                $deckName = $price['deck_name'] ?? null;
+                $deckId = null;
+                
+                if ($deckName) {
+                    // Получаем палубу по названию (getDeck создаст её, если нет)
+                    // ВАЖНО: getDeck() использует LIKE для поиска, что может приводить к неправильным совпадениям
+                    // Но для Germes это должно работать, т.к. названия палуб стандартизированы
+                    $deck = $this->getDeck($deckName);
+                    if ($deck) {
+                        $deckId = $deck->id;
+                        // Создаем связь каюты с палубой (если ещё не создана)
+                        $this->deckPivotCheck($cabinId, $deckId);
+                        
+                        // Сохраняем в nprices через DeckPricesPatch
+                        // ВАЖНО: Сохраняем для каждой цены с палубой, даже если это дубликат по cabin_id
+                        // Т.к. одна категория кают может иметь цены на разных палубах
+                        if ($this->savePriceWithDeck($checkinId, $cabinId, $deckId, $priceValue, $placesQnt)) {
+                            $nprices_count++;
+                        } else {
+                            // Логируем ошибку сохранения
+                            ProcessLog::add("Ошибка сохранения в nprices: checkin_id=$checkinId, cabin_id=$cabinId, deck_id=$deckId, price=$priceValue");
+                        }
+                    } else {
+                        // Логируем, если палуба не найдена
+                        ProcessLog::add("Палуба не найдена: deck_name='$deckName' для checkin_id=$checkinId, cabin_id=$cabinId");
+                    }
+                } else {
+                    // Fallback: используем маппинг, если deck_name отсутствует
+                    $deckId = $cabinDeckMapping[$cabinId] ?? null;
+                    if ($deckId) {
+                        // Сохраняем в nprices через DeckPricesPatch
+                        if ($this->savePriceWithDeck($checkinId, $cabinId, $deckId, $priceValue, $placesQnt)) {
+                            $nprices_count++;
+                        }
+                    }
+                }
+                
+                // Проверяем на дубликаты: одна категория кают = одна цена на заезд (для pricing)
+                $priceKey = $checkinId . ':' . $cabinId;
+                if (isset($priceKeys[$priceKey])) {
+                    // Дубликат найден - пропускаем или обновляем (берем максимальную цену)
+                    $existingIndex = $priceKeys[$priceKey];
+                    if ($priceValue > $insert_prices[$existingIndex]['price_a']) {
+                        // Обновляем на более высокую цену
+                        $insert_prices[$existingIndex]['price_a'] = $priceValue;
+                        if ($priceExtra !== null) {
+                            $insert_prices[$existingIndex]['price_b'] = $priceExtra;
+                        }
+                    }
+                    continue; // Пропускаем добавление в pricing, но nprices уже сохранен выше
+                }
+                
                 $priceData = [
                     'checkin_id' => $checkinId,
                     'cabin_id' => $cabinId,
@@ -320,27 +381,7 @@ class UnifiedProcessor extends TransferProcessor
                 ];
                 
                 $insert_prices[] = $priceData;
-                
-                // Сохраняем цену с палубой в nprices (если есть информация о палубе)
-                $deckId = $cabinDeckMapping[$cabinId] ?? null;
-                
-                // Если deck_id не найден в маппинге, пытаемся получить из цены
-                if (!$deckId) {
-                    $deckName = $price['deck_name'] ?? null;
-                    if ($deckName) {
-                        $deck = $this->getDeck($deckName);
-                        if ($deck) {
-                            $deckId = $deck->id;
-                        }
-                    }
-                }
-                
-                if ($deckId) {
-                    // Сохраняем в nprices через DeckPricesPatch
-                    if ($this->savePriceWithDeck($checkinId, $cabinId, $deckId, $priceValue, $placesQnt)) {
-                        $nprices_count++;
-                    }
-                }
+                $priceKeys[$priceKey] = count($insert_prices) - 1; // Сохраняем индекс для проверки дубликатов
             }
         }
         
@@ -444,7 +485,14 @@ class UnifiedProcessor extends TransferProcessor
             elseif (isset($point['town_name']) || isset($point['portName'])) {
                 $townName = $point['town_name'] ?? $point['portName'];
                 if ($townName) {
-                    $townId = $this->getTownId($townName);
+                    // Очищаем название города от HTML тегов и лишних символов
+                    $cleanTownName = strip_tags($townName);
+                    $cleanTownName = trim($cleanTownName);
+                    $cleanTownName = preg_replace('/\s+/', ' ', $cleanTownName);
+                    
+                    if (!empty($cleanTownName)) {
+                        $townId = $this->getTownId($cleanTownName);
+                    }
                 }
             }
             
