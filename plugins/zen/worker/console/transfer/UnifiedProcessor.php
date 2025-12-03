@@ -4,6 +4,7 @@ use Zen\Worker\Classes\ProcessLog;
 use Mcmraak\Rivercrs\Models\Checkins as Checkin;
 use DB;
 use Carbon\Carbon;
+use PDO;
 
 /**
  * Единый процессор для всех источников
@@ -58,6 +59,9 @@ class UnifiedProcessor extends TransferProcessor
     public function process()
     {
         $this->output("🔄 Обработка заездов {$this->sourceName} из SQLite (UnifiedProcessor)", 'info');
+        
+        // Импортируем палубы из SQLite в MySQL
+        $this->importDecks();
         
         $cruises = $this->db->getAllCruises();
         $totalCruises = count($cruises);
@@ -360,6 +364,48 @@ class UnifiedProcessor extends TransferProcessor
         
         $this->output("  ⚠️  Валидных цен для заезда $cruiseId не найдено", 'warn');
         return false; // Валидных цен не найдено
+    }
+    
+    /**
+     * Импорт палуб из SQLite в MySQL
+     * Создает палубы в MySQL через getDeck(), если их еще нет
+     */
+    protected function importDecks()
+    {
+        try {
+            // Получаем все палубы из SQLite
+            $pdo = $this->db->getPdo();
+            $stmt = $pdo->prepare("SELECT DISTINCT name FROM decks WHERE name IS NOT NULL AND name != '' ORDER BY name");
+            $stmt->execute();
+            $decks = $stmt->fetchAll(PDO::FETCH_ASSOC);
+            
+            if (empty($decks)) {
+                $this->output("  ℹ️  Палубы в SQLite не найдены", 'line');
+                return;
+            }
+            
+            $this->output("  🏗️  Импорт палуб из SQLite: найдено " . count($decks) . " палуб", 'line');
+            
+            $importedCount = 0;
+            foreach ($decks as $deck) {
+                $deckName = $deck['name'];
+                if (empty($deckName)) {
+                    continue;
+                }
+                
+                // getDeck() создаст палубу, если её нет, или вернет существующую
+                $deckModel = $this->getDeck($deckName);
+                if ($deckModel) {
+                    $importedCount++;
+                    ProcessLog::add("Импортирована палуба: $deckName (ID: {$deckModel->id})");
+                }
+            }
+            
+            $this->output("  ✅ Импортировано палуб: $importedCount из " . count($decks), 'line');
+        } catch (\Exception $e) {
+            $this->output("  ⚠️  Ошибка импорта палуб: " . $e->getMessage(), 'warn');
+            ProcessLog::add("Ошибка импорта палуб: " . $e->getMessage());
+        }
     }
     
     /**

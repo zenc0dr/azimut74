@@ -29,6 +29,11 @@ class TelegramNotifier
     private $messageId = null;
     
     /**
+     * Предыдущий текст сообщения (для проверки изменений)
+     */
+    private $lastMessageText = null;
+    
+    /**
      * Конструктор - инициализирует chat_id из переменной окружения
      */
     public function __construct()
@@ -212,14 +217,27 @@ class TelegramNotifier
             }
         }
         
+        // Проверяем, изменилось ли содержимое сообщения
+        if ($this->lastMessageText === $message && $this->messageId !== null) {
+            // Сообщение не изменилось, не обновляем
+            return true;
+        }
+        
         // Отправляем или обновляем сообщение
         if ($this->messageId === null) {
             // Первая отправка
-            return $this->sendOrUpdateMessage($message, true);
+            $result = $this->sendOrUpdateMessage($message, true);
         } else {
             // Обновление существующего сообщения
-            return $this->sendOrUpdateMessage($message, false);
+            $result = $this->sendOrUpdateMessage($message, false);
         }
+        
+        // Сохраняем текст сообщения при успешной отправке/обновлении
+        if ($result) {
+            $this->lastMessageText = $message;
+        }
+        
+        return $result;
     }
     
     /**
@@ -290,7 +308,15 @@ class TelegramNotifier
                  strpos($result['description'], 'message can\'t be edited') !== false)) {
                 // Сбрасываем message_id и отправляем новое сообщение
                 $this->messageId = null;
+                $this->lastMessageText = null;
                 return $this->sendOrUpdateMessage($message, true);
+            }
+            
+            // Если сообщение не изменилось - это не ошибка, просто игнорируем
+            if (!$isNew && isset($result['description']) && 
+                strpos($result['description'], 'message is not modified') !== false) {
+                // Сообщение не изменилось, считаем успешным
+                return true;
             }
             
             error_log("Telegram API error: " . ($result['description'] ?? 'Unknown error'));
@@ -308,6 +334,7 @@ class TelegramNotifier
     public function reset()
     {
         $this->messageId = null;
+        $this->lastMessageText = null;
     }
 }
 
