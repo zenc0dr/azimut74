@@ -40,8 +40,11 @@ class TransferErrorLogger
         
         // Очищаем файл (перезаписываем пустой строкой)
         // file_put_contents с пустой строкой создаст или очистит файл
+        // Используем режим 'w' для перезаписи (без FILE_APPEND)
         file_put_contents($this->logPath, '', LOCK_EX);
-        chmod($this->logPath, 0644);
+        if (file_exists($this->logPath)) {
+            chmod($this->logPath, 0644);
+        }
     }
 
     /**
