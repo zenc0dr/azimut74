@@ -137,9 +137,12 @@ class RiverCrs
                 ->first();
 
             if ($cabin) {
-                // Обновляем название, если изменилось
-                if ($cabin->category !== $category_name) {
-                    $cabin->category = $category_name;
+                // Обновляем category только если оно совпадает с {source}_name
+                // (т.е. не было изменено вручную)
+                if ($cabin->category === $cabin->{$eds_code . '_name'}) {
+                    if ($cabin->category !== $category_name) {
+                        $cabin->category = $category_name;
+                    }
                 }
                 if ($cabin->places_main_count !== $places) {
                     $cabin->places_main_count = $places;
@@ -186,6 +189,13 @@ class RiverCrs
                 // Обновляем имя источника, если его не было
                 if (!$cabin->{$eds_code . '_name'}) {
                     $cabin->{$eds_code . '_name'} = $category_name;
+                }
+                // Обновляем category только если оно совпадает с {source}_name
+                // (т.е. не было изменено вручную)
+                if ($cabin->category === $cabin->{$eds_code . '_name'}) {
+                    if ($cabin->category !== $category_name) {
+                        $cabin->category = $category_name;
+                    }
                 }
                 if ($cabin->places_main_count !== $places) {
                     $cabin->places_main_count = $places;
