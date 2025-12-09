@@ -137,6 +137,18 @@ abstract class TransferValidator
     }
 
     /**
+     * Получение всех проблем (ошибки + предупреждения)
+     * @return array Массив с ключами 'errors' и 'warnings'
+     */
+    public function getAllIssues(): array
+    {
+        return [
+            'errors' => $this->errors,
+            'warnings' => $this->warnings
+        ];
+    }
+
+    /**
      * Проверка существования таблицы в базе данных
      * @param string $tableName Название таблицы
      * @return bool

@@ -9,6 +9,8 @@ use Zen\Worker\Console\infoflot\InfoflotDatabase;
 use Zen\Worker\Console\volga\VolgaDatabase;
 use Zen\Worker\Console\waterway\WaterwayDatabase;
 use Zen\Worker\Console\transfer\TelegramNotifier;
+use Zen\Worker\Console\transfer\TransferConfig;
+use Zen\Worker\Console\transfer\TransferErrorLogger;
 use Exception;
 use DB;
 
@@ -67,6 +69,11 @@ class Transfer extends Command
     protected $telegram;
     
     /**
+     * Логгер ошибок валидации
+     */
+    protected $errorLogger;
+    
+    /**
      * Execute the console command.
      * @return int
      */
@@ -76,6 +83,10 @@ class Transfer extends Command
         set_time_limit(0);
         ini_set('memory_limit', '512M');
         ini_set('max_execution_time', 0);
+        
+        // Инициализируем логгер ошибок и очищаем лог при запуске
+        $this->errorLogger = new TransferErrorLogger();
+        $this->errorLogger->clearLog();
         
         // Инициализируем Telegram уведомления
         $this->telegram = new TelegramNotifier();
@@ -96,6 +107,40 @@ class Transfer extends Command
         }
         
         $this->info('📋 Источники для обработки: ' . implode(', ', array_keys($sourcesToProcess)));
+        
+        // Проверка существования баз данных перед началом обработки
+        $this->info('🔍 Проверка наличия баз данных...');
+        $missingDatabases = [];
+        foreach ($sourcesToProcess as $sourceKey => $sourceConfig) {
+            try {
+                $dbPath = TransferConfig::getDbPath($sourceKey);
+                if (!file_exists($dbPath)) {
+                    $missingDatabases[] = [
+                        'source' => $sourceKey,
+                        'path' => $dbPath
+                    ];
+                } else {
+                    $this->info("  ✅ {$sourceConfig['name']}: " . basename($dbPath));
+                }
+            } catch (Exception $e) {
+                $missingDatabases[] = [
+                    'source' => $sourceKey,
+                    'path' => 'не найден',
+                    'error' => $e->getMessage()
+                ];
+            }
+        }
+        
+        if (!empty($missingDatabases)) {
+            $this->error('❌ Не найдены базы данных для следующих источников:');
+            foreach ($missingDatabases as $missing) {
+                $this->error("  • {$missing['source']}: {$missing['path']}");
+                if (isset($missing['error'])) {
+                    $this->error("    Ошибка: {$missing['error']}");
+                }
+            }
+            return 1;
+        }
         
         if ($validateOnly) {
             $this->info('🔍 Режим: только валидация');
@@ -180,53 +225,25 @@ class Transfer extends Command
                 $this->info("🔍 Валидация SQLite базы...");
                 $validator = new UnifiedValidator($db, $sourceKey);
                 
-                if (!$validator->validate()) {
-                    $errors = $validator->getErrors();
-                    $warnings = $validator->getWarnings();
-                    
-                    $this->error("❌ Валидация не пройдена для источника: $sourceName");
-                    
-                    foreach ($errors as $error) {
-                        $this->error("  • {$error['message']}");
-                        if (!empty($error['context'])) {
-                            $context = $error['context'];
-                            if (isset($context['count'])) {
-                                $this->line("    Количество: {$context['count']}");
-                            }
-                            if (isset($context['cruise_ids']) && count($context['cruise_ids']) <= 10) {
-                                $this->line("    ID круизов: " . implode(', ', $context['cruise_ids']));
-                            }
-                        }
-                    }
-                    
-                    foreach ($warnings as $warning) {
-                        $this->warn("  ⚠️  {$warning['message']}");
-                    }
-                    
-                    $this->stats[$sourceKey] = [
-                        'status' => 'validation_failed',
-                        'errors' => count($errors),
-                        'warnings' => count($warnings)
-                    ];
-                    
-                    // Обновляем статус в Telegram
-                    if (isset($sourcesData[$sourceKey])) {
-                        $sourcesData[$sourceKey]['status'] = 'validation_failed';
-                        $sourcesData[$sourceKey]['error'] = 'Валидация не пройдена';
-                        $this->telegram->updateProgress($sourcesData);
-                    }
-                    
-                    return;
-                }
-                
+                // Выполняем валидацию (не блокируем импорт при ошибках)
+                $validator->validate();
+                $errors = $validator->getErrors();
                 $warnings = $validator->getWarnings();
-                if (!empty($warnings)) {
-                    foreach ($warnings as $warning) {
-                        $this->warn("  ⚠️  {$warning['message']}");
-                    }
-                }
                 
-                $this->info("✅ Валидация пройдена успешно");
+                // Логируем все ошибки и предупреждения в файл
+                if (!empty($errors) || !empty($warnings)) {
+                    $this->errorLogger->logErrors($sourceKey, $errors, $warnings);
+                    
+                    $totalIssues = count($errors) + count($warnings);
+                    $logPath = $this->errorLogger->getLogPath();
+                    
+                    $this->warn("⚠️  Найдены проблемы целостности данных для источника: $sourceName");
+                    $this->warn("   Ошибок: " . count($errors) . ", Предупреждений: " . count($warnings));
+                    $this->info("   📝 Все проблемы записаны в лог: $logPath");
+                    $this->info("   💡 Импорт продолжается. Ошибки будут исправлены инженером парсеров на фазе 1.");
+                } else {
+                    $this->info("✅ Валидация пройдена успешно");
+                }
             }
             
             // Импорт (если не только валидация)

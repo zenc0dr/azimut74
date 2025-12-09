@@ -14,13 +14,16 @@ class TransferConfig
 {
     /**
      * Пути по умолчанию (относительно base_path)
+     * 
+     * Базы данных монтируются из /Atman/projects/parsers/db/ 
+     * в /var/www/html/storage/parsers_db/ внутри контейнера
      */
     private static $defaultPaths = [
-        'waterway' => 'parsers/db/waterway_data.sqlite',
-        'gama' => 'parsers/db/gama_data.sqlite',
-        'germes' => 'parsers/db/germes_data.sqlite',
-        'infoflot' => 'parsers/db/infoflot_data.sqlite',
-        'volga' => 'parsers/db/volga_data.sqlite',
+        'waterway' => 'storage/parsers_db/waterway_data.sqlite',
+        'gama' => 'storage/parsers_db/gama_data.sqlite',
+        'germes' => 'storage/parsers_db/germes_data.sqlite',
+        'infoflot' => 'storage/parsers_db/infoflot_data.sqlite',
+        'volga' => 'storage/parsers_db/volga_data.sqlite',
     ];
     
     /**
