@@ -58,24 +58,39 @@ class TransferErrorLogger
     {
         $timestamp = date('Y-m-d H:i:s');
         $logEntries = [];
+        $errorsCount = is_array($errors) ? count($errors) : 0;
+        $warningsCount = is_array($warnings) ? count($warnings) : 0;
+        error_log("[transfer] logErrors source={$source} errors={$errorsCount} warnings={$warningsCount}");
 
         // Логируем ошибки
-        foreach ($errors as $error) {
+        foreach ((array) $errors as $error) {
             $entry = $this->formatLogEntry($timestamp, $source, 'ERROR', $error);
             $logEntries[] = $entry;
         }
 
         // Логируем предупреждения
-        foreach ($warnings as $warning) {
+        foreach ((array) $warnings as $warning) {
             $entry = $this->formatLogEntry($timestamp, $source, 'WARNING', $warning);
             $logEntries[] = $entry;
         }
+
+        // Убираем пустые записи, если форматирование не удалось
+        $logEntries = array_filter($logEntries, static function ($entry) {
+            return trim((string) $entry) !== '';
+        });
 
         // Записываем в файл
         if (!empty($logEntries)) {
             $content = implode("\n", $logEntries) . "\n\n";
             // Записываем в файл (FILE_APPEND добавляет к существующему содержимому)
-            file_put_contents($this->logPath, $content, FILE_APPEND | LOCK_EX);
+            $bytes = file_put_contents($this->logPath, $content, FILE_APPEND | LOCK_EX);
+            if ($bytes === false) {
+                error_log("[transfer] logErrors failed to write to {$this->logPath}");
+            } else {
+                error_log("[transfer] logErrors wrote {$bytes} bytes to {$this->logPath}");
+            }
+        } else {
+            error_log("[transfer] logErrors skipped write: no entries after formatting");
         }
     }
 
@@ -90,13 +105,19 @@ class TransferErrorLogger
      */
     protected function formatLogEntry($timestamp, $source, $type, $issue)
     {
+        $issue = is_array($issue) ? $issue : ['message' => (string) $issue];
+        $context = isset($issue['context']) && is_array($issue['context']) ? $issue['context'] : [];
+        $message = isset($issue['message']) && $issue['message'] !== '' ? $issue['message'] : 'Неизвестная ошибка';
+
+        if ($message === 'Неизвестная ошибка') {
+            $context['raw_issue'] = $issue;
+        }
+
         $lines = [];
-        $lines[] = "[{$timestamp}] [{$source}] {$type}: {$issue['message']}";
+        $lines[] = "[{$timestamp}] [{$source}] {$type}: {$message}";
         
         // Добавляем контекст, если есть
-        if (!empty($issue['context'])) {
-            $context = $issue['context'];
-            
+        if (!empty($context)) {
             if (isset($context['count'])) {
                 $lines[] = "  Количество: {$context['count']}";
             }
