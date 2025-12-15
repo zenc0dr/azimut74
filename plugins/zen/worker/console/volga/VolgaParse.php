@@ -36,6 +36,7 @@ class VolgaParse extends Command
         
         $this->timeout = $this->option('timeout');
         $clear = $this->option('clear');
+        $clearCache = $this->option('clear_cache');
         $limit = $this->option('limit');
         $nextUrl = $this->option('next-url');
 
@@ -48,9 +49,11 @@ class VolgaParse extends Command
         $this->info("⏱️  Таймаут: {$this->timeout} сек");
         $this->info("🔄 Ограничение времени выполнения: отключено");
         $this->info("📥 URL источника: {$this->nextUrl}");
+        $this->info("📁 XML кеш: storage/parsers_cache/volga/volga_next_url.xml");
         
         try {
-            $this->db = new VolgaDatabase();
+            // Фаза 1: разрешаем создать SQLite при отсутствии файла
+            $this->db = new VolgaDatabase(true);
             
             if ($clear) {
                 $this->info('🧹 Очистка существующих данных...');
@@ -62,7 +65,13 @@ class VolgaParse extends Command
             $this->showProgress('Скачивание XML...', 10);
             
             $apiClient = new VolgaApiClient($this->nextUrl, $this->timeout);
-            $apiClient->downloadXmlFile();
+            if ($clearCache) {
+                $this->info('🧹 Очистка XML кеша...');
+                $apiClient->clearCache();
+                $this->info('✅ XML кеш очищен');
+            }
+            // Кеш по умолчанию: если XML уже есть, скачивание пропускается
+            $apiClient->downloadXmlFile((bool)$clearCache);
             
             $this->showProgress('Парсинг XML...', 20);
             $dump = $apiClient->getXmlData();
@@ -169,6 +178,7 @@ class VolgaParse extends Command
         return [
             ['timeout', 't', InputOption::VALUE_OPTIONAL, 'Таймаут для HTTP запросов в секундах', 30],
             ['clear', 'c', InputOption::VALUE_NONE, 'Очистить существующие данные перед парсингом'],
+            ['clear_cache', null, InputOption::VALUE_NONE, 'Очистить кеш XML Volga перед парсингом'],
             ['limit', 'l', InputOption::VALUE_OPTIONAL, 'Ограничить количество записей для тестирования', null],
             ['next-url', 'u', InputOption::VALUE_OPTIONAL, 'URL источника XML данных', 'http://test.volgawolga.ru/xml/daily2024.xml'],
         ];

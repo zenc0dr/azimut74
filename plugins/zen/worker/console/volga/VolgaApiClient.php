@@ -9,6 +9,7 @@ class VolgaApiClient
     private $timeout;
     private $nextUrl;
     private $xmlFilePath;
+    private $legacyXmlFilePath;
 
     public function __construct($nextUrl, $timeout = 30)
     {
@@ -19,16 +20,36 @@ class VolgaApiClient
         
         $this->timeout = $timeout;
         $this->nextUrl = $nextUrl;
-        $this->xmlFilePath = storage_path('volga_next_url.xml');
+        $this->legacyXmlFilePath = storage_path('volga_next_url.xml');
+
+        // Единый кеш парсеров: storage/parsers_cache/volga/volga_next_url.xml
+        $preferredDir = storage_path('parsers_cache/volga');
+        if (!is_dir($preferredDir)) {
+            @mkdir($preferredDir, 0775, true);
+        }
+        $preferredPath = rtrim($preferredDir, '/') . '/volga_next_url.xml';
+
+        // Миграция: если legacy-файл есть, а нового нет — копируем в новый кеш.
+        if (!file_exists($preferredPath) && file_exists($this->legacyXmlFilePath)) {
+            @copy($this->legacyXmlFilePath, $preferredPath);
+        }
+
+        $this->xmlFilePath = $preferredPath;
     }
 
     /**
      * Скачивание XML файла через PHP
      */
-    public function downloadXmlFile()
+    public function downloadXmlFile(bool $force = false)
     {
         if (empty($this->nextUrl)) {
             throw new Exception('URL источника данных не указан (next_url)');
+        }
+
+        // Кеш: если файл уже есть и не просили принудительно — используем его.
+        if (!$force && file_exists($this->xmlFilePath) && filesize($this->xmlFilePath) > 0) {
+            ProcessLog::add("XML кеш hit: {$this->xmlFilePath} (" . number_format(filesize($this->xmlFilePath)) . " байт)");
+            return $this->xmlFilePath;
         }
 
         ProcessLog::add("Скачивание XML файла из: {$this->nextUrl}");
@@ -72,6 +93,14 @@ class VolgaApiClient
             throw new Exception('XML файл пуст или не был скачан');
         }
         
+        // Гарантируем директорию кеша
+        $dir = dirname($this->xmlFilePath);
+        if (!is_dir($dir)) {
+            if (!@mkdir($dir, 0775, true)) {
+                throw new Exception("Не удалось создать директорию кеша Volga: {$dir}");
+            }
+        }
+
         // Сохраняем файл
         $result = file_put_contents($this->xmlFilePath, $xmlContent);
         
@@ -130,6 +159,19 @@ class VolgaApiClient
     public function xmlFileExists()
     {
         return file_exists($this->xmlFilePath);
+    }
+
+    /**
+     * Очистка кеша XML (и legacy-файла для совместимости)
+     */
+    public function clearCache(): void
+    {
+        if (file_exists($this->xmlFilePath)) {
+            @unlink($this->xmlFilePath);
+        }
+        if ($this->legacyXmlFilePath && file_exists($this->legacyXmlFilePath)) {
+            @unlink($this->legacyXmlFilePath);
+        }
     }
 }
 

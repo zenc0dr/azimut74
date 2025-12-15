@@ -15,14 +15,30 @@ class VolgaDatabase extends UnifiedDatabase
     /**
      * Конструктор - передает путь к базе данных в родительский класс
      */
-    public function __construct()
+    public function __construct(bool $createIfMissing = false)
     {
         // Получаем путь к базе данных из конфигурации
         $dbPath = TransferConfig::getDbPath('volga');
-        if (!file_exists($dbPath)) {
+
+        // Для фазы 1 (парсер) база может отсутствовать — UnifiedDatabase создаст её сам.
+        // Для фазы 2 (transfer) лучше падать, чтобы не импортировать пустую базу по ошибке.
+        if (!file_exists($dbPath) && !$createIfMissing) {
             throw new Exception("База данных volga_data.sqlite не найдена: {$dbPath}");
         }
-        
+
+        // Если разрешено создание — убеждаемся, что директория существует и доступна для записи
+        if ($createIfMissing) {
+            $dir = dirname($dbPath);
+            if (!is_dir($dir)) {
+                if (!@mkdir($dir, 0775, true)) {
+                    throw new Exception("Не удалось создать директорию для SQLite: {$dir}");
+                }
+            }
+            if (!is_writable($dir)) {
+                throw new Exception("Директория SQLite недоступна для записи: {$dir}");
+            }
+        }
+
         // Проверка и исправление прав доступа (специфично для Volga)
         $this->ensureDatabasePermissions($dbPath);
         
@@ -58,9 +74,11 @@ class VolgaDatabase extends UnifiedDatabase
                 // Если всё ещё не доступен для записи, пробуем через chown
                 if (!is_writable($dbPath)) {
                     // Получаем текущего пользователя
-                    $currentUser = posix_getpwuid(posix_geteuid());
-                    if ($currentUser && isset($currentUser['name'])) {
-                        @chown($dbPath, $currentUser['name']);
+                    if (function_exists('posix_getpwuid') && function_exists('posix_geteuid')) {
+                        $currentUser = posix_getpwuid(posix_geteuid());
+                        if ($currentUser && isset($currentUser['name'])) {
+                            @chown($dbPath, $currentUser['name']);
+                        }
                     }
                 }
             }
