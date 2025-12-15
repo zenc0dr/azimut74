@@ -43,7 +43,8 @@ class GamaParse extends Command
         $this->info("🔄 Ограничение времени выполнения: отключено");
         
         try {
-            $this->db = new GamaDatabase();
+            // Фаза 1: разрешаем создать SQLite при отсутствии файла
+            $this->db = new GamaDatabase(true);
             
             // Очистка кеша API (если указан флаг)
             if ($clearCache) {

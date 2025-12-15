@@ -13,14 +13,40 @@ class GamaCache
 
     public function __construct()
     {
-        // Путь к директории кеша: storage/gama_cache/
-        $basePath = base_path();
-        $this->cacheDir = $basePath . '/storage/gama_cache';
-        
-        // Создаём директорию, если её нет
+        // Единый путь кеша: storage/parsers_cache/gama/
+        // Legacy путь: storage/gama_cache/ — поддерживаем только как источник миграции.
+        $preferred = storage_path('parsers_cache/gama');
+        $legacy = storage_path('gama_cache');
+        $this->cacheDir = $preferred;
+
         if (!is_dir($this->cacheDir)) {
             if (!mkdir($this->cacheDir, 0775, true)) {
                 throw new Exception("Не удалось создать директорию кеша: {$this->cacheDir}");
+            }
+        }
+
+        // Если есть прогретый legacy-кеш и новый путь пуст — перенесём файлы.
+        $this->migrateLegacyCacheIfNeeded($legacy, $preferred);
+    }
+
+    private function migrateLegacyCacheIfNeeded(string $legacy, string $preferred): void
+    {
+        $preferredHasFiles = is_dir($preferred) && count(glob($preferred . '/*.json')) > 0;
+        if ($preferredHasFiles) {
+            return;
+        }
+
+        $legacyHasFiles = is_dir($legacy) && count(glob($legacy . '/*.json')) > 0;
+        if (!$legacyHasFiles) {
+            return;
+        }
+
+        foreach (glob($legacy . '/*.json') as $src) {
+            $dst = $preferred . '/' . basename($src);
+            if (!@rename($src, $dst)) {
+                if (@copy($src, $dst)) {
+                    @unlink($src);
+                }
             }
         }
     }
