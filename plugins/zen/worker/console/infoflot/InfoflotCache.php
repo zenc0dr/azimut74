@@ -12,26 +12,46 @@ class InfoflotCache
 
     public function __construct()
     {
-        // Предпочтительный путь кеша: storage/parsers_cache/infoflot/
-        // Legacy путь: storage/infoflot_cache/ (для обратной совместимости)
+        // Единый путь кеша: storage/parsers_cache/infoflot/
+        // Legacy путь: storage/infoflot_cache/ — поддерживаем только как источник миграции.
         $preferred = storage_path('parsers_cache/infoflot');
         $legacy = storage_path('infoflot_cache');
-
-        // Если новый кеш уже используется — работаем с ним.
-        // Если новый пуст, но старый есть — читаем/пишем в старый, чтобы не терять прогретый кеш.
-        $preferredHasFiles = is_dir($preferred) && count(glob($preferred . '/*')) > 0;
-        $legacyHasFiles = is_dir($legacy) && count(glob($legacy . '/*')) > 0;
-
-        if ($preferredHasFiles || !$legacyHasFiles) {
-            $this->cacheDir = $preferred;
-        } else {
-            $this->cacheDir = $legacy;
-        }
+        $this->cacheDir = $preferred;
         
         // Создаём директорию, если её нет
         if (!is_dir($this->cacheDir)) {
             if (!mkdir($this->cacheDir, 0775, true)) {
                 throw new Exception("Не удалось создать директорию кеша: {$this->cacheDir}");
+            }
+        }
+
+        // Если есть прогретый legacy-кеш и новый путь пуст — перенесём файлы.
+        // Это защищает от ситуации, когда пользователь копировал кеш вручную/по SFTP.
+        $this->migrateLegacyCacheIfNeeded($legacy, $preferred);
+    }
+
+    private function migrateLegacyCacheIfNeeded(string $legacy, string $preferred): void
+    {
+        // Новый кеш уже не пуст — миграция не нужна.
+        $preferredHasFiles = is_dir($preferred) && count(glob($preferred . '/*.json')) > 0;
+        if ($preferredHasFiles) {
+            return;
+        }
+
+        // Старого кеша нет — миграция не нужна.
+        $legacyHasFiles = is_dir($legacy) && count(glob($legacy . '/*.json')) > 0;
+        if (!$legacyHasFiles) {
+            return;
+        }
+
+        // Пытаемся перенести файлы "как есть" (best effort).
+        foreach (glob($legacy . '/*.json') as $src) {
+            $dst = $preferred . '/' . basename($src);
+            if (!@rename($src, $dst)) {
+                // Если rename не сработал (например, разные FS), пробуем copy+unlink
+                if (@copy($src, $dst)) {
+                    @unlink($src);
+                }
             }
         }
     }

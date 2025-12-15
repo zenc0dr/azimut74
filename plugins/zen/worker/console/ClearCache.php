@@ -21,7 +21,7 @@ class ClearCache extends Command
         $cacheDirs = [
             'gama_cache' => 'Gama',
             'germes_cache' => 'Germes',
-            'infoflot_cache' => 'Infoflot',
+            'parsers_cache/infoflot' => 'Infoflot',
             'parsers_cache/waterway' => 'Waterway'
         ];
 
