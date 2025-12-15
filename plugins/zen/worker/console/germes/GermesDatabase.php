@@ -21,13 +21,26 @@ class GermesDatabase extends UnifiedDatabase
     /**
      * Конструктор - передает путь к базе данных в родительский класс
      */
-    public function __construct()
+    public function __construct(bool $createIfMissing = false)
     {
         // Получаем путь к базе данных из конфигурации
         $dbPath = TransferConfig::getDbPath('germes');
-        if (!file_exists($dbPath)) {
+        if (!file_exists($dbPath) && !$createIfMissing) {
             throw new Exception("База данных germes_data.sqlite не найдена: {$dbPath}");
         }
+
+        if ($createIfMissing) {
+            $dir = dirname($dbPath);
+            if (!is_dir($dir)) {
+                if (!@mkdir($dir, 0775, true)) {
+                    throw new Exception("Не удалось создать директорию для SQLite: {$dir}");
+                }
+            }
+            if (!is_writable($dir)) {
+                throw new Exception("Директория SQLite недоступна для записи: {$dir}");
+            }
+        }
+
         parent::__construct($dbPath);
         
         // Миграция: добавляем поля для обратной совместимости (если их нет)
@@ -167,7 +180,7 @@ class GermesDatabase extends UnifiedDatabase
      * Использует hash имени как ID (вместо AUTOINCREMENT)
      * Сохраняет маппинг для обратной совместимости
      */
-    public function saveDeck($id, $name, $data = [])
+    public function saveDeck($id, $name = null, $data = [])
     {
         // Если используется старый формат (только $name - один аргумент)
         if (func_num_args() == 1 && is_string($id)) {

@@ -28,6 +28,7 @@ class Plugin extends PluginBase
         $this->registerConsoleCommand('worker:waterway-sync', 'Zen\Worker\Console\sync\WaterwaySync');
         $this->registerConsoleCommand('worker:infoflot-sync', 'Zen\Worker\Console\sync\InfoflotSync');
         $this->registerConsoleCommand('worker:volga-sync', 'Zen\Worker\Console\sync\VolgaSync');
+        $this->registerConsoleCommand('worker:germes-sync', 'Zen\Worker\Console\sync\GermesSync');
         $this->registerConsoleCommand('worker:clear-cache', 'Zen\Worker\Console\ClearCache');
         $this->registerConsoleCommand('worker:clear-cruises', 'Zen\Worker\Console\ClearCruises');
         $this->registerConsoleCommand('worker:test-unified-databases', 'Zen\Worker\Console\unified\TestUnifiedDatabases');

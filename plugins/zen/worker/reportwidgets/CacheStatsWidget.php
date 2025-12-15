@@ -38,7 +38,7 @@ class CacheStatsWidget extends ReportWidgetBase
     {
         $cacheDirs = [
             'gama_cache' => 'Gama',
-            'germes_cache' => 'Germes',
+            'parsers_cache/germes' => 'Germes',
             'parsers_cache/infoflot' => 'Infoflot',
             'parsers_cache/volga' => 'Volga',
             'parsers_cache/waterway' => 'Waterway'

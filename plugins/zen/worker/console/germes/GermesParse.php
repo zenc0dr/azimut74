@@ -43,7 +43,8 @@ class GermesParse extends Command
         $this->info("🔄 Ограничение времени выполнения: отключено");
         
         try {
-            $this->db = new GermesDatabase();
+            // Фаза 1: разрешаем создать SQLite при отсутствии файла
+            $this->db = new GermesDatabase(true);
             
             // Очистка кеша API (если указан флаг)
             if ($clearCache) {

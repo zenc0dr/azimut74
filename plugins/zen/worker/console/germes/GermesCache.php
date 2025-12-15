@@ -12,14 +12,40 @@ class GermesCache
 
     public function __construct()
     {
-        // Путь к директории кеша: storage/germes_cache/
-        $basePath = base_path();
-        $this->cacheDir = $basePath . '/storage/germes_cache';
-        
-        // Создаём директорию, если её нет
+        // Единый путь кеша: storage/parsers_cache/germes/
+        // Legacy путь: storage/germes_cache/ — поддерживаем только как источник миграции.
+        $preferred = storage_path('parsers_cache/germes');
+        $legacy = storage_path('germes_cache');
+        $this->cacheDir = $preferred;
+
         if (!is_dir($this->cacheDir)) {
             if (!mkdir($this->cacheDir, 0775, true)) {
                 throw new Exception("Не удалось создать директорию кеша: {$this->cacheDir}");
+            }
+        }
+
+        // Если есть прогретый legacy-кеш и новый путь пуст — перенесём файлы.
+        $this->migrateLegacyCacheIfNeeded($legacy, $preferred);
+    }
+
+    private function migrateLegacyCacheIfNeeded(string $legacy, string $preferred): void
+    {
+        $preferredHasFiles = is_dir($preferred) && count(glob($preferred . '/*.json')) > 0;
+        if ($preferredHasFiles) {
+            return;
+        }
+
+        $legacyHasFiles = is_dir($legacy) && count(glob($legacy . '/*.json')) > 0;
+        if (!$legacyHasFiles) {
+            return;
+        }
+
+        foreach (glob($legacy . '/*.json') as $src) {
+            $dst = $preferred . '/' . basename($src);
+            if (!@rename($src, $dst)) {
+                if (@copy($src, $dst)) {
+                    @unlink($src);
+                }
             }
         }
     }
