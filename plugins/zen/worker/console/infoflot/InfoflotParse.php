@@ -39,8 +39,10 @@ class InfoflotParse extends Command
         $clearCache = $this->option('clear_cache');
         $limit = $this->option('limit');
 
-        #$this->apiKey = $this->option('api-key');
-        $this->apiKey = 'b5262f5d8de5be65b201bb5e3f5e544a245b6082';
+        // API key: CLI -> .env -> fallback
+        $this->apiKey = $this->option('api-key')
+            ?: env('INFOFLOT_API_KEY')
+            ?: 'b5262f5d8de5be65b201bb5e3f5e544a245b6082';
 
         if (!$this->apiKey) {
             $this->error('❌ API ключ не указан! Используйте --api-key=YOUR_KEY');
@@ -52,7 +54,8 @@ class InfoflotParse extends Command
         $this->info("🔄 Ограничение времени выполнения: отключено");
 
         try {
-            $this->db = new InfoflotDatabase();
+            // Фаза 1: разрешаем создать SQLite при отсутствии файла
+            $this->db = new InfoflotDatabase(true);
 
             // Очистка кеша API (если указан флаг)
             if ($clearCache) {

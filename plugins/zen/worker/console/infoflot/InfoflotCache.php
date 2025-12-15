@@ -12,9 +12,21 @@ class InfoflotCache
 
     public function __construct()
     {
-        // Путь к директории кеша: storage/infoflot_cache/
-        $basePath = base_path();
-        $this->cacheDir = $basePath . '/storage/infoflot_cache';
+        // Предпочтительный путь кеша: storage/parsers_cache/infoflot/
+        // Legacy путь: storage/infoflot_cache/ (для обратной совместимости)
+        $preferred = storage_path('parsers_cache/infoflot');
+        $legacy = storage_path('infoflot_cache');
+
+        // Если новый кеш уже используется — работаем с ним.
+        // Если новый пуст, но старый есть — читаем/пишем в старый, чтобы не терять прогретый кеш.
+        $preferredHasFiles = is_dir($preferred) && count(glob($preferred . '/*')) > 0;
+        $legacyHasFiles = is_dir($legacy) && count(glob($legacy . '/*')) > 0;
+
+        if ($preferredHasFiles || !$legacyHasFiles) {
+            $this->cacheDir = $preferred;
+        } else {
+            $this->cacheDir = $legacy;
+        }
         
         // Создаём директорию, если её нет
         if (!is_dir($this->cacheDir)) {

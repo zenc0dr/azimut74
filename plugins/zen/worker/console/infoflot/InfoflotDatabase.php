@@ -14,13 +14,29 @@ class InfoflotDatabase extends UnifiedDatabase
     /**
      * Конструктор - передает путь к базе данных в родительский класс
      */
-    public function __construct()
+    public function __construct(bool $createIfMissing = false)
     {
         // Получаем путь к базе данных из конфигурации
         $dbPath = TransferConfig::getDbPath('infoflot');
-        if (!file_exists($dbPath)) {
+
+        // Для фазы 1 (парсер) база может отсутствовать — UnifiedDatabase создаст её сам.
+        // Для фазы 2 (transfer) лучше падать, чтобы не импортировать пустую базу по ошибке.
+        if (!file_exists($dbPath) && !$createIfMissing) {
             throw new Exception("База данных infoflot_data.sqlite не найдена: {$dbPath}");
         }
+
+        if ($createIfMissing) {
+            $dir = dirname($dbPath);
+            if (!is_dir($dir)) {
+                if (!@mkdir($dir, 0775, true)) {
+                    throw new Exception("Не удалось создать директорию для SQLite: {$dir}");
+                }
+            }
+            if (!is_writable($dir)) {
+                throw new Exception("Директория SQLite недоступна для записи: {$dir}");
+            }
+        }
+
         parent::__construct($dbPath);
         
         // Миграция: добавляем поля для обратной совместимости (если их нет)
