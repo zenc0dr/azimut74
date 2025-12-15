@@ -94,6 +94,13 @@ class Stream
         }
 
         $this->runJob($pool_state);
+        // Если в критическом пуле произошла ошибка, поток должен завершиться,
+        // иначе "самострел" пул будет создавать новую задачу бесконечно.
+        if ($this->exception instanceof Exception) {
+            ProcessLog::add("Поток остановлен из-за критической ошибки в пуле: {$pool_state->call}");
+            return;
+        }
+
         $this->work();
     }
 

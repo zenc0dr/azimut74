@@ -11,9 +11,22 @@ class WaterwayDataProcessor
     private $apiClient;
     private $timeout;
     private $limit;
+    private $limitShips;
+    private $limitCruises;
+    private $limitCruisesPerShip;
     private $getter;
+    private $allowedShipIds = null;
+    private $command = null;
+    private $progressEvery = 1;
 
-    public function __construct($database, $timeout = 30, $limit = null)
+    public function __construct(
+        $database,
+        $timeout = 30,
+        $limit = null,
+        $limitShips = null,
+        $limitCruises = null,
+        $limitCruisesPerShip = null
+    )
     {
         // Убираем ограничение времени выполнения
         set_time_limit(0);
@@ -24,7 +37,37 @@ class WaterwayDataProcessor
         $this->apiClient = new WaterwayApiClient($timeout);
         $this->timeout = $timeout;
         $this->limit = $limit;
+        $this->limitShips = $limitShips ? (int)$limitShips : null;
+        $this->limitCruises = $limitCruises ? (int)$limitCruises : null;
+        $this->limitCruisesPerShip = $limitCruisesPerShip ? (int)$limitCruisesPerShip : null;
         $this->getter = new Getter();
+    }
+
+    /**
+     * Подключить вывод в консоль (для долгих прогонов)
+     */
+    public function setCommand($command)
+    {
+        $this->command = $command;
+        // пробрасываем в API клиент, чтобы видеть прогресс получения списка круизов
+        $this->apiClient->setCommand($command);
+        return $this;
+    }
+
+    /**
+     * Частота вывода прогресса по круизам: 1 = каждый круиз, 10 = каждый 10-й и т.д.
+     */
+    public function setProgressEvery(int $n)
+    {
+        $this->progressEvery = max(1, $n);
+        return $this;
+    }
+
+    private function consoleLine(string $message)
+    {
+        if ($this->command && method_exists($this->command, 'line')) {
+            $this->command->line('[' . date('H:i:s') . '] ' . $message);
+        }
     }
 
     /**
@@ -33,12 +76,14 @@ class WaterwayDataProcessor
     public function processMotorshipsData()
     {
         ProcessLog::add('Начинаем обработку теплоходов Waterway...');
+        $this->consoleLine('Запрос списка теплоходов...');
         
         try {
             $response = $this->apiClient->getMotorships();
             
             if (!is_array($response)) {
                 ProcessLog::add("API вернул некорректные данные о теплоходах");
+                $this->consoleLine("⚠️  Некорректные данные о теплоходах (API)");
                 return [];
             }
             
@@ -51,15 +96,29 @@ class WaterwayDataProcessor
                     'description' => $ship['description'] ?? ''
                 ];
             }
+
+            // Ограничение по теплоходам (для безопасной отладки / прогрева кеша)
+            if ($this->limitShips) {
+                $ships = array_slice($ships, 0, $this->limitShips);
+                $this->allowedShipIds = array_map(function ($s) {
+                    return (int)$s['id'];
+                }, $ships);
+                ProcessLog::add("⚠️  Ограничение парсинга: обрабатываем только {$this->limitShips} теплоходов");
+                $this->consoleLine("Ограничение: {$this->limitShips} теплоходов (IDs: " . implode(',', $this->allowedShipIds) . ")");
+            } else {
+                $this->allowedShipIds = null;
+            }
             
             if (!empty($ships)) {
                 $this->db->saveShipsBatch($ships);
                 ProcessLog::add("Сохранено теплоходов в SQLite: " . count($ships));
+                $this->consoleLine("Сохранено теплоходов в SQLite: " . count($ships));
             }
             
             return $ships;
         } catch (Exception $e) {
             ProcessLog::add("Ошибка при обработке теплоходов: " . $e->getMessage());
+            $this->consoleLine("❌ Ошибка обработки теплоходов: " . $e->getMessage());
             throw $e;
         }
     }
@@ -70,12 +129,14 @@ class WaterwayDataProcessor
     public function processCruisesData()
     {
         ProcessLog::add('Начинаем обработку круизов Waterway...');
+        $this->consoleLine('Получаем список круизов (может занять время)...');
         
         try {
             $cruisesResponse = $this->apiClient->getCruises();
             
             if (!is_array($cruisesResponse)) {
                 ProcessLog::add("API вернул некорректные данные о круизах");
+                $this->consoleLine("⚠️  Некорректные данные о круизах (API)");
                 return;
             }
             
@@ -84,19 +145,65 @@ class WaterwayDataProcessor
             $totalCruises = count($cruisesResponse);
             $cruiseIndex = 0;
             
-            // Применяем лимит если указан
+            // Фильтр по теплоходам, если задан limitShips
+            if (is_array($this->allowedShipIds) && !empty($this->allowedShipIds)) {
+                $filtered = [];
+                foreach ($cruisesResponse as $cruiseId => $cruise) {
+                    $shipId = (int)($cruise['motorshipId'] ?? 0);
+                    if ($shipId && in_array($shipId, $this->allowedShipIds, true)) {
+                        $filtered[$cruiseId] = $cruise;
+                    }
+                }
+                $cruisesResponse = $filtered;
+                $totalCruises = count($cruisesResponse);
+                ProcessLog::add("⚠️  Ограничение парсинга: круизы только для выбранных теплоходов (найдено: {$totalCruises})");
+            }
+
+            // Ограничение \"N круизов на теплоход\" (для прогрева кеша без долгого прогона)
+            if ($this->limitCruisesPerShip) {
+                $filtered = [];
+                $perShip = [];
+                foreach ($cruisesResponse as $cruiseId => $cruise) {
+                    $shipId = (int)($cruise['motorshipId'] ?? 0);
+                    if (!$shipId) {
+                        continue;
+                    }
+                    if (!isset($perShip[$shipId])) {
+                        $perShip[$shipId] = 0;
+                    }
+                    if ($perShip[$shipId] >= $this->limitCruisesPerShip) {
+                        continue;
+                    }
+                    $perShip[$shipId]++;
+                    $filtered[$cruiseId] = $cruise;
+                }
+                $cruisesResponse = $filtered;
+                $totalCruises = count($cruisesResponse);
+                ProcessLog::add("⚠️  Ограничение парсинга: максимум {$this->limitCruisesPerShip} круизов на теплоход (итого: {$totalCruises})");
+            }
+
+            // Применяем общий лимит если указан (совместимость со старым --limit)
             if ($this->limit) {
                 $cruisesResponse = array_slice($cruisesResponse, 0, $this->limit, true);
                 ProcessLog::add("⚠️  Ограничение парсинга: обрабатываем только {$this->limit} круизов");
+                $totalCruises = count($cruisesResponse);
+            }
+
+            // Явный лимит круизов (новый флаг, не конфликтует со старым)
+            if ($this->limitCruises) {
+                $cruisesResponse = array_slice($cruisesResponse, 0, $this->limitCruises, true);
+                ProcessLog::add("⚠️  Ограничение парсинга: обрабатываем только {$this->limitCruises} круизов (limit_cruises)");
+                $totalCruises = count($cruisesResponse);
             }
             
             foreach ($cruisesResponse as $cruiseId => $cruise) {
                 $cruiseIndex++;
                 $cruiseIdInt = (int)$cruiseId;
+                $shipId = (int)($cruise['motorshipId'] ?? 0);
                 
-                // Показываем прогресс каждые 50 круизов
-                if ($cruiseIndex % 50 == 0) {
-                    ProcessLog::add("Обработка круиза $cruiseIndex/$totalCruises (ID: $cruiseIdInt)...");
+                // Прогресс в консоль (по умолчанию — каждый круиз)
+                if ($cruiseIndex === 1 || $cruiseIndex === $totalCruises || ($cruiseIndex % $this->progressEvery) === 0) {
+                    $this->consoleLine("Круиз $cruiseIndex/$totalCruises: id=$cruiseIdInt, ship_id=$shipId — старт");
                 }
                 
                 try {
@@ -108,6 +215,7 @@ class WaterwayDataProcessor
                     
                     if (!$pricesData || !isset($pricesData['tariffs'])) {
                         ProcessLog::add("Круиз $cruiseIdInt пропущен - нет данных о ценах");
+                        $this->consoleLine("Круиз id=$cruiseIdInt пропущен: нет цен");
                         continue;
                     }
                     
@@ -120,15 +228,19 @@ class WaterwayDataProcessor
                     }
                     
                     // Обрабатываем цены (передаем ship_id для категорий)
-                    $shipId = (int)($cruise['motorshipId'] ?? 0);
                     $prices = $this->processPricesData($cruiseIdInt, $pricesData, $shipId);
                     if (!empty($prices)) {
                         $this->db->savePricesBatch($prices);
                         $processedPrices += count($prices);
                     }
                     
+                    if ($cruiseIndex === 1 || $cruiseIndex === $totalCruises || ($cruiseIndex % $this->progressEvery) === 0) {
+                        $this->consoleLine("Круиз $cruiseIndex/$totalCruises: id=$cruiseIdInt — ok (цены: " . count($prices) . ")");
+                    }
+                    
                 } catch (Exception $e) {
                     ProcessLog::add("Ошибка при обработке круиза $cruiseIdInt: " . $e->getMessage());
+                    $this->consoleLine("❌ Ошибка круиза id=$cruiseIdInt: " . $e->getMessage());
                     continue;
                 }
             }
@@ -136,10 +248,12 @@ class WaterwayDataProcessor
             ProcessLog::add("=== ИТОГИ ОБРАБОТКИ КРУИЗОВ ===");
             ProcessLog::add("Обработано круизов: $processedCruises");
             ProcessLog::add("Обработано цен: $processedPrices");
+            $this->consoleLine("Итоги: круизов=$processedCruises, цен=$processedPrices");
             
         } catch (Exception $e) {
             ProcessLog::add("⚠️  Ошибка при получении списка круизов: " . $e->getMessage());
             ProcessLog::add("Продолжаем обработку уже полученных круизов...");
+            $this->consoleLine("⚠️  Ошибка списка круизов: " . $e->getMessage());
             // Не выбрасываем исключение, чтобы парсер мог продолжить работу с уже полученными данными
             // Если круизов нет, просто завершаем без ошибки
         }

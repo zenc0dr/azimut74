@@ -40,7 +40,7 @@ class CacheStatsWidget extends ReportWidgetBase
             'gama_cache' => 'Gama',
             'germes_cache' => 'Germes',
             'infoflot_cache' => 'Infoflot',
-            'waterway_cache' => 'Waterway'
+            'parsers_cache/waterway' => 'Waterway'
         ];
 
         $stats = [];

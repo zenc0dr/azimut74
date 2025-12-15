@@ -136,7 +136,7 @@ Mcmraak\Rivercrs\Models\Pricing::whereHas('checkin', function($q) { $q->where('e
 
 ## Кеширование
 
-API запросы кешируются вечно в файловом кеше (`storage/waterway_cache/`). Кеш удаляется только при явном вызове `--clear_cache`.
+API запросы кешируются вечно в файловом кеше (`storage/parsers_cache/waterway/`). Кеш удаляется только при явном вызове `--clear_cache`.
 
 ## Особенности данных Waterway
 

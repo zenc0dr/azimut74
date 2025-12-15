@@ -1,0 +1,399 @@
+[
+    {
+      "id": 1,
+      "name": "Водоход",
+      "code": "Waterway",
+      "data": {
+        "pauth": "kefhjkdRgwFdkVHpRHGs"
+      },
+      "pools": [
+        {
+          "active": "1",
+          "call": "WaterwayShips@getShips",
+          "title": "Запрос списка теплоходов",
+          "self": "1",
+          "critical": "1",
+          "attempts": 10,
+          "pause": 5,
+          "timeout": 60
+        },
+        {
+          "active": "1",
+          "call": "WaterwayShips@addShip",
+          "title": "Добавление теплохода в базу",
+          "self": "0",
+          "critical": "0",
+          "attempts": 5,
+          "pause": 1,
+          "timeout": 10
+        },
+        {
+          "active": "1",
+          "call": "WaterwayCruises@getCruises",
+          "title": "Запрос списка круизов",
+          "self": "1",
+          "critical": "1",
+          "attempts": 10,
+          "pause": 3,
+          "timeout": 60
+        },
+        {
+          "active": "1",
+          "call": "WaterwayCruises@wwBatchCruisesHandler",
+          "title": "Разбиение страниц на записи по 100",
+          "self": "0",
+          "critical": "1",
+          "attempts": 10,
+          "pause": 0,
+          "timeout": 120
+        },
+        {
+          "active": "1",
+          "call": "WaterwayCruises@addCruise",
+          "title": "Добавление круиза в базу",
+          "self": "0",
+          "critical": "0",
+          "attempts": 5,
+          "pause": 1,
+          "timeout": 30
+        },
+        {
+          "active": "1",
+          "call": "WaterwayService@clean",
+          "title": "Очистка потока",
+          "self": "1",
+          "critical": "0",
+          "attempts": 5,
+          "pause": 1,
+          "timeout": 0
+        },
+        {
+          "active": "1",
+          "call": "Service@checkData",
+          "title": "Проверка контента",
+          "self": "1",
+          "critical": "0",
+          "attempts": 1,
+          "pause": null,
+          "timeout": 0
+        }
+      ],
+      "active": 1,
+      "sort_order": 3
+    },
+    {
+      "id": 3,
+      "name": "ВолгаWolga",
+      "code": "Volga",
+      "data": {
+        "api_url": "test.volgawolga.ru",
+        "next_url": "test.volgawolga.ru"
+      },
+      "pools": [
+        {
+          "active": "1",
+          "call": "VolgaCruises@getCruises",
+          "title": "Загрузка баз данных",
+          "self": "1",
+          "critical": "1",
+          "attempts": 5,
+          "pause": 10,
+          "timeout": 0
+        },
+        {
+          "active": "1",
+          "call": "VolgaCruises@checkDecks",
+          "title": "",
+          "self": "1",
+          "critical": "0",
+          "attempts": 5,
+          "pause": 10,
+          "timeout": 0
+        },
+        {
+          "active": "1",
+          "call": "VolgaCruises@addCruise",
+          "title": "Обработка круизов",
+          "self": "0",
+          "critical": "0",
+          "attempts": 5,
+          "pause": 2,
+          "timeout": 0
+        },
+        {
+          "active": "1",
+          "call": "VolgaService@clean",
+          "title": "",
+          "self": "1",
+          "critical": "0",
+          "attempts": 5,
+          "pause": 2,
+          "timeout": 0
+        }
+      ],
+      "active": 1,
+      "sort_order": 1
+    },
+    {
+      "id": 4,
+      "name": "Гама",
+      "code": "Gama",
+      "data": [],
+      "pools": [
+        {
+          "active": "1",
+          "call": "GamaV3@fillGamaCruises",
+          "title": "Набор запросов к источнику",
+          "self": "1",
+          "critical": "1",
+          "attempts": 0,
+          "pause": 0,
+          "timeout": 0
+        }
+      ],
+      "active": 1,
+      "sort_order": 6
+    },
+    {
+      "id": 5,
+      "name": "Спутник-Гермес",
+      "code": "Germes",
+      "data": [],
+      "pools": [
+        {
+          "active": "1",
+          "call": "GermesCruises@cacheQueries",
+          "title": "Кеширование набора запросов",
+          "self": "1",
+          "critical": "1",
+          "attempts": 5,
+          "pause": 5,
+          "timeout": 600
+        },
+        {
+          "active": "1",
+          "call": "GermesCruises@cacheQuery",
+          "title": "Запросы к источнику",
+          "self": "0",
+          "critical": "1",
+          "attempts": 5,
+          "pause": 5,
+          "timeout": 600
+        },
+        {
+          "active": "1",
+          "call": "GermesCruises@addCruises",
+          "title": "Создание заданий по добавлению круизов",
+          "self": "1",
+          "critical": "1",
+          "attempts": 5,
+          "pause": 5,
+          "timeout": 600
+        },
+        {
+          "active": "1",
+          "call": "GermesCruises@addCruise",
+          "title": "Добавление круиза",
+          "self": "0",
+          "critical": "0",
+          "attempts": 0,
+          "pause": 1,
+          "timeout": 30
+        },
+        {
+          "active": "1",
+          "call": "GermesService@clean",
+          "title": "Очистка",
+          "self": "1",
+          "critical": "0",
+          "attempts": 5,
+          "pause": 5,
+          "timeout": 600
+        }
+      ],
+      "active": 1,
+      "sort_order": 5
+    },
+    {
+      "id": 6,
+      "name": "Инфофлот",
+      "code": "Infoflot",
+      "data": {
+        "key": "b5262f5d8de5be65b201bb5e3f5e544a245b6082"
+      },
+      "pools": [
+        {
+          "active": "1",
+          "call": "InfoflotShips@getCount",
+          "title": "Счётчик страниц теплоходов",
+          "self": "1",
+          "critical": "1",
+          "attempts": 5,
+          "pause": 5,
+          "timeout": 600
+        },
+        {
+          "active": "1",
+          "call": "InfoflotShips@getPage",
+          "title": "Анализ страницы теплоходов (100 шт.)",
+          "self": "0",
+          "critical": "0",
+          "attempts": 5,
+          "pause": 5,
+          "timeout": 300
+        },
+        {
+          "active": "1",
+          "call": "InfoflotShips@addShip",
+          "title": "Анализ и добавление корабля",
+          "self": "0",
+          "critical": "0",
+          "attempts": 5,
+          "pause": 5,
+          "timeout": 300
+        },
+        {
+          "active": "1",
+          "call": "InfoflotCruises@addCruise",
+          "title": "Добавление круиза",
+          "self": "0",
+          "critical": "0",
+          "attempts": 5,
+          "pause": 5,
+          "timeout": 300
+        },
+        {
+          "active": "1",
+          "call": "InfoflotService@clean",
+          "title": "Очистка",
+          "self": "1",
+          "critical": "0",
+          "attempts": 3,
+          "pause": 1,
+          "timeout": 300
+        }
+      ],
+      "active": 1,
+      "sort_order": 4
+    },
+    {
+      "id": 7,
+      "name": "Сервисный поток",
+      "code": "Service",
+      "data": [],
+      "pools": [
+        {
+          "active": "1",
+          "call": "Service@shipCleaner",
+          "title": "Чистка теплоходов",
+          "self": "1",
+          "critical": "0",
+          "attempts": 1,
+          "pause": 1,
+          "timeout": 0
+        },
+        {
+          "active": "1",
+          "call": "Service@fixTimeoutCheckins",
+          "title": "Удаление устаревших заездов",
+          "self": "1",
+          "critical": "0",
+          "attempts": 1,
+          "pause": 1,
+          "timeout": 1
+        },
+        {
+          "active": "1",
+          "call": "Service@removeCheckin",
+          "title": "Удаление неактуального заезда",
+          "self": "0",
+          "critical": "0",
+          "attempts": 1,
+          "pause": 1,
+          "timeout": 0
+        },
+        {
+          "active": "1",
+          "call": "Service@emptyPrices",
+          "title": "Удаление цен с пустыми заездами",
+          "self": "1",
+          "critical": "0",
+          "attempts": 1,
+          "pause": 1,
+          "timeout": 5
+        },
+        {
+          "active": "1",
+          "call": "Service@noPricesCabins",
+          "title": "Удаление ненужных кают",
+          "self": "1",
+          "critical": "0",
+          "attempts": 1,
+          "pause": 0,
+          "timeout": 0
+        },
+        {
+          "active": "1",
+          "call": "Service@notActualCheckins",
+          "title": "Удаление ненужных заездов",
+          "self": "1",
+          "critical": "0",
+          "attempts": 1,
+          "pause": 1,
+          "timeout": 0
+        },
+        {
+          "active": "1",
+          "call": "Service@noCabinPrices",
+          "title": "Удаление цен без кают",
+          "self": "1",
+          "critical": "0",
+          "attempts": 1,
+          "pause": 1,
+          "timeout": 0
+        },
+        {
+          "active": "1",
+          "call": "Service@successCruisesClean",
+          "title": "Удаление закрытых заездов",
+          "self": "1",
+          "critical": "0",
+          "attempts": 1,
+          "pause": 1,
+          "timeout": 0
+        },
+        {
+          "active": "1",
+          "call": "Service@removeCheckin",
+          "title": "Удаление неактуального заезда",
+          "self": "0",
+          "critical": "0",
+          "attempts": 1,
+          "pause": 1,
+          "timeout": 0
+        },
+        {
+          "active": "1",
+          "call": "Service@fixCheckinsPrices",
+          "title": "Проверка цен",
+          "self": "1",
+          "critical": "0",
+          "attempts": 1,
+          "pause": 1,
+          "timeout": 0
+        },
+        {
+          "active": "1",
+          "call": "Service@checkData",
+          "title": "",
+          "self": "1",
+          "critical": "0",
+          "attempts": 1,
+          "pause": null,
+          "timeout": null
+        }
+      ],
+      "active": 1,
+      "sort_order": 7
+    }
+]

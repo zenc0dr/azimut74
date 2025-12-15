@@ -88,9 +88,15 @@ class Transfer extends Command
         $this->errorLogger = new TransferErrorLogger();
         $this->errorLogger->clearLog();
         
-        // Инициализируем Telegram уведомления
-        $this->telegram = new TelegramNotifier();
-        $this->telegram->reset();
+        $noTelegram = (bool)$this->option('no-telegram');
+
+        // Инициализируем Telegram уведомления (если не отключены)
+        if (!$noTelegram) {
+            $this->telegram = new TelegramNotifier();
+            $this->telegram->reset();
+        } else {
+            $this->telegram = null;
+        }
         
         $source = $this->option('source');
         $validateOnly = $this->option('validate-only');
@@ -163,7 +169,9 @@ class Transfer extends Command
         }
         
         // Отправляем начальное сообщение в Telegram
-        $this->telegram->updateProgress($sourcesData);
+        if ($this->telegram) {
+            $this->telegram->updateProgress($sourcesData);
+        }
         
         // Обрабатываем каждый источник
         foreach ($sourcesToProcess as $sourceKey => $sourceConfig) {
@@ -171,7 +179,9 @@ class Transfer extends Command
         }
         
         // Финальное обновление сообщения
-        $this->telegram->updateProgress($sourcesData);
+        if ($this->telegram) {
+            $this->telegram->updateProgress($sourcesData);
+        }
         
         // Выводим итоговую статистику
         $this->displaySummary();
@@ -212,7 +222,9 @@ class Transfer extends Command
         // Обновляем статус источника в данных для Telegram
         if (isset($sourcesData[$sourceKey])) {
             $sourcesData[$sourceKey]['status'] = 'processing';
-            $this->telegram->updateProgress($sourcesData, $sourceKey);
+            if ($this->telegram) {
+                $this->telegram->updateProgress($sourcesData, $sourceKey);
+            }
         }
         
         try {
@@ -282,7 +294,9 @@ class Transfer extends Command
                 if (isset($sourcesData[$sourceKey])) {
                     $sourcesData[$sourceKey]['status'] = 'success';
                     $sourcesData[$sourceKey]['stats'] = $stats;
-                    $this->telegram->updateProgress($sourcesData);
+                    if ($this->telegram) {
+                        $this->telegram->updateProgress($sourcesData);
+                    }
                 }
             } else {
                 $this->info("✅ Валидация завершена для источника: $sourceName");
@@ -306,7 +320,9 @@ class Transfer extends Command
             if (isset($sourcesData[$sourceKey])) {
                 $sourcesData[$sourceKey]['status'] = 'error';
                 $sourcesData[$sourceKey]['error'] = $e->getMessage();
-                $this->telegram->updateProgress($sourcesData);
+                if ($this->telegram) {
+                    $this->telegram->updateProgress($sourcesData);
+                }
             }
         }
         
@@ -425,6 +441,7 @@ class Transfer extends Command
             ['source', 's', InputOption::VALUE_OPTIONAL, 'Источник для обработки (gama, germes, infoflot, volga, waterway, all)', 'all'],
             ['validate-only', null, InputOption::VALUE_NONE, 'Только валидация без импорта'],
             ['skip-validation', null, InputOption::VALUE_NONE, 'Пропустить валидацию'],
+            ['no-telegram', null, InputOption::VALUE_NONE, 'Отключить Telegram-уведомления (для внешних оркестраторов)'],
         ];
     }
 }

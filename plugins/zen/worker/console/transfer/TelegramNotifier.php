@@ -239,6 +239,27 @@ class TelegramNotifier
         
         return $result;
     }
+
+    /**
+     * Создание или обновление одного произвольного сообщения (HTML).
+     * Используется внешними командами (например, worker:*:sync), чтобы не спамить несколькими сообщениями.
+     */
+    public function updateMessage(string $message, string $parseMode = 'HTML'): bool
+    {
+        // Проверяем, изменилось ли содержимое сообщения
+        if ($this->lastMessageText === $message && $this->messageId !== null) {
+            return true;
+        }
+
+        $isNew = ($this->messageId === null);
+        $result = $this->sendOrUpdateMessage($message, $isNew);
+
+        if ($result) {
+            $this->lastMessageText = $message;
+        }
+
+        return $result;
+    }
     
     /**
      * Отправка или обновление сообщения

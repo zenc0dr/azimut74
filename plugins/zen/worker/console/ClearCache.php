@@ -22,7 +22,7 @@ class ClearCache extends Command
             'gama_cache' => 'Gama',
             'germes_cache' => 'Germes',
             'infoflot_cache' => 'Infoflot',
-            'waterway_cache' => 'Waterway'
+            'parsers_cache/waterway' => 'Waterway'
         ];
 
         $totalFiles = 0;

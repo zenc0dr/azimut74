@@ -140,34 +140,60 @@ class UnifiedProcessor extends TransferProcessor
         // Обработка дат
         $dateStart = null;
         $dateEnd = null;
+
+        // В Waterway встречается формат "YYYY-MM-DD HH:MM:SS HH:MM:SS"
+        // (двойное время). Приводим к валидному, иначе Carbon::parse() падает,
+        // а ниже это выглядит как "отсутствуют даты".
+        $rawDateStart = $cruise['date_start'] ?? null;
+        $rawDateEnd = $cruise['date_end'] ?? null;
+        $dateStartRaw = $this->cleanDuplicateTime($rawDateStart);
+        $dateEndRaw = $this->cleanDuplicateTime($rawDateEnd);
         
-        if (!empty($cruise['date_start'])) {
+        if (!empty($dateStartRaw)) {
             try {
                 // Используем master()->carbon() для совместимости
                 if (function_exists('master') && method_exists(master(), 'carbon')) {
-                    $dateStart = master()->carbon($cruise['date_start'])->toDateTimeString();
+                    $dateStart = master()->carbon($dateStartRaw)->toDateTimeString();
                 } else {
-                    $dateStart = Carbon::parse($cruise['date_start'])->toDateTimeString();
+                    $dateStart = Carbon::parse($dateStartRaw)->toDateTimeString();
                 }
             } catch (\Exception $e) {
-                ProcessLog::add("Ошибка парсинга date_start для круиза $cruiseId: " . $e->getMessage());
+                $this->output(
+                    "  ⚠️  Круиз $cruiseId: не удалось распарсить date_start. raw=" .
+                    ($rawDateStart ?? 'null') .
+                    " cleaned=" .
+                    ($dateStartRaw ?? 'null') .
+                    " err=" . $e->getMessage(),
+                    'warn'
+                );
             }
         }
         
-        if (!empty($cruise['date_end'])) {
+        if (!empty($dateEndRaw)) {
             try {
                 if (function_exists('master') && method_exists(master(), 'carbon')) {
-                    $dateEnd = master()->carbon($cruise['date_end'])->toDateTimeString();
+                    $dateEnd = master()->carbon($dateEndRaw)->toDateTimeString();
                 } else {
-                    $dateEnd = Carbon::parse($cruise['date_end'])->toDateTimeString();
+                    $dateEnd = Carbon::parse($dateEndRaw)->toDateTimeString();
                 }
             } catch (\Exception $e) {
-                ProcessLog::add("Ошибка парсинга date_end для круиза $cruiseId: " . $e->getMessage());
+                $this->output(
+                    "  ⚠️  Круиз $cruiseId: не удалось распарсить date_end. raw=" .
+                    ($rawDateEnd ?? 'null') .
+                    " cleaned=" .
+                    ($dateEndRaw ?? 'null') .
+                    " err=" . $e->getMessage(),
+                    'warn'
+                );
             }
         }
         
         if (!$dateStart || !$dateEnd) {
-            $this->output("  ⚠️  Круиз $cruiseId: отсутствуют даты, заезд пропущен", 'warn');
+            $this->output(
+                "  ⚠️  Круиз $cruiseId: даты невалидны/не распарсились, заезд пропущен " .
+                "(date_start=" . ($rawDateStart ?? 'null') . ", date_end=" . ($rawDateEnd ?? 'null') . ")",
+                'warn'
+            );
             return null;
         }
         
@@ -225,6 +251,24 @@ class UnifiedProcessor extends TransferProcessor
         }
         
         return $checkin->id;
+    }
+
+    /**
+     * Исправляет формат "YYYY-MM-DD HH:MM:SS HH:MM:SS" -> "YYYY-MM-DD HH:MM:SS"
+     */
+    private function cleanDuplicateTime($dateString)
+    {
+        if (empty($dateString) || !is_string($dateString)) {
+            return $dateString;
+        }
+
+        $dateString = trim($dateString);
+
+        if (preg_match('/^(\d{4}-\d{2}-\d{2} \d{2}:\d{2}:\d{2}) \d{2}:\d{2}:\d{2}$/', $dateString, $m)) {
+            return $m[1];
+        }
+
+        return $dateString;
     }
     
     /**
@@ -303,6 +347,12 @@ class UnifiedProcessor extends TransferProcessor
         $insert_prices = [];
         $nprices_count = 0; // Счетчик цен с палубами
         $priceKeys = []; // Для проверки дубликатов: ключ = checkin_id:cabin_id
+
+        // ВАЖНО: очищаем палубные цены ДО того, как начнём их записывать через pricePatch().
+        // Иначе при очистке в конце мы случайно удаляем только что записанные nprices.
+        DB::table('mcmraak_rivercrs_nprices')
+            ->where('checkin_id', $checkinId)
+            ->delete();
         
         foreach ($prices as $price) {
             $cabinCategoryId = $price['cabin_category_id'] ?? null;
@@ -388,11 +438,6 @@ class UnifiedProcessor extends TransferProcessor
         if (!empty($insert_prices)) {
             // Удаляем старые цены и вставляем новые
             DB::table('mcmraak_rivercrs_pricing')
-                ->where('checkin_id', $checkinId)
-                ->delete();
-            
-            // Удаляем старые цены с палубами для этого заезда
-            DB::table('mcmraak_rivercrs_nprices')
                 ->where('checkin_id', $checkinId)
                 ->delete();
             

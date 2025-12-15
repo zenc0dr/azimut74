@@ -12,9 +12,10 @@ class WaterwayCache
 
     public function __construct()
     {
-        // Путь к директории кеша: storage/waterway_cache/
-        $basePath = base_path();
-        $this->cacheDir = $basePath . '/storage/waterway_cache';
+        // Путь к директории кеша:
+        // storage/parsers_cache/waterway/
+        // (единая структура кешей для парсеров всех источников)
+        $this->cacheDir = storage_path('parsers_cache/waterway');
         
         // Создаём директорию, если её нет
         if (!is_dir($this->cacheDir)) {

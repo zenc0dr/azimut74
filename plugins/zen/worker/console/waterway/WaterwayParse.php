@@ -36,14 +36,25 @@ class WaterwayParse extends Command
         $this->timeout = $this->option('timeout');
         $clear = $this->option('clear');
         $clearCache = $this->option('clear_cache');
+        // legacy
         $limit = $this->option('limit');
+        // new granular limits (safe debug / cache warm-up)
+        $limitShips = $this->option('limit_ships');
+        $limitCruises = $this->option('limit_cruises');
+        $limitCruisesPerShip = $this->option('limit_cruises_per_ship');
+        $progressEvery = $this->option('progress_every');
         
         $this->info('🚢 Начинаем парсинг круизов Waterway...');
         $this->info("⏱️  Таймаут: {$this->timeout} сек");
         $this->info("🔄 Ограничение времени выполнения: отключено");
+        if ($limitShips) $this->info("🧪 Лимит теплоходов: {$limitShips}");
+        if ($limitCruisesPerShip) $this->info("🧪 Лимит круизов на теплоход: {$limitCruisesPerShip}");
+        if ($limitCruises) $this->info("🧪 Лимит круизов: {$limitCruises}");
+        if ($limit) $this->info("🧪 Лимит круизов (legacy --limit): {$limit}");
         
         try {
-            $this->db = new WaterwayDatabase();
+            // Фаза 1: разрешаем создать SQLite при отсутствии файла
+            $this->db = new WaterwayDatabase(true);
             
             // Очистка кеша API (если указан флаг)
             if ($clearCache) {
@@ -62,7 +73,15 @@ class WaterwayParse extends Command
             $this->info('📥 Получение данных с API Waterway...');
             $this->showProgress('Обработка данных о теплоходах...', 10);
             
-            $dataProcessor = new WaterwayDataProcessor($this->db, $this->timeout, $limit);
+            $dataProcessor = new WaterwayDataProcessor(
+                $this->db,
+                $this->timeout,
+                $limit,
+                $limitShips,
+                $limitCruises,
+                $limitCruisesPerShip
+            );
+            $dataProcessor->setCommand($this)->setProgressEvery((int)$progressEvery);
             
             $this->showProgress('Обработка данных о теплоходах...', 25);
             $this->processMotorshipsData($dataProcessor);
@@ -186,6 +205,10 @@ class WaterwayParse extends Command
             ['clear', 'c', InputOption::VALUE_NONE, 'Очистить существующие данные перед парсингом'],
             ['clear_cache', null, InputOption::VALUE_NONE, 'Очистить кеш API перед парсингом'],
             ['limit', 'l', InputOption::VALUE_OPTIONAL, 'Ограничить количество записей для тестирования', null],
+            ['limit_ships', null, InputOption::VALUE_OPTIONAL, 'Ограничить количество теплоходов (для прогрева кеша/отладки)', null],
+            ['limit_cruises', null, InputOption::VALUE_OPTIONAL, 'Ограничить количество круизов (для прогрева кеша/отладки)', null],
+            ['limit_cruises_per_ship', null, InputOption::VALUE_OPTIONAL, 'Ограничить количество круизов на один теплоход', null],
+            ['progress_every', null, InputOption::VALUE_OPTIONAL, 'Выводить прогресс каждые N круизов (1 = каждый круиз)', 1],
         ];
     }
 }

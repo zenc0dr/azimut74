@@ -12,6 +12,7 @@ class WaterwayApiClient
     private $accessToken;
     private $cache;
     private $maxQueryAttempts = 3;
+    private $command = null;
 
     public function __construct($timeout = 30)
     {
@@ -22,6 +23,22 @@ class WaterwayApiClient
         
         $this->timeout = $timeout;
         $this->cache = new WaterwayCache();
+    }
+
+    /**
+     * Подключить вывод прогресса в консоль (для долгих прогонов)
+     */
+    public function setCommand($command)
+    {
+        $this->command = $command;
+        return $this;
+    }
+
+    private function consoleLine(string $message)
+    {
+        if ($this->command && method_exists($this->command, 'line')) {
+            $this->command->line('[' . date('H:i:s') . '] ' . $message);
+        }
     }
 
     /**
@@ -303,6 +320,7 @@ class WaterwayApiClient
      */
     public function getCruises()
     {
+        // Кеш списка круизов (вечный файловый кеш WaterwayCache)
         $cacheKey = "waterway_cruises";
         
         // Проверяем кеш полного списка
@@ -321,8 +339,10 @@ class WaterwayApiClient
                 unset($cruise); // Сбрасываем ссылку
             }
             
+            $this->consoleLine('Список круизов: кеш hit (' . (is_array($cachedCruises) ? count($cachedCruises) : 0) . ')');
             return $cachedCruises;
         }
+        $this->consoleLine('Список круизов: кеш miss, получаем из API батчами...');
         
         // Получаем все круизы с пагинацией
         $nowDay = time(); // Текущая дата в timestamp
@@ -333,11 +353,15 @@ class WaterwayApiClient
         $errorCount = 0;
         
         while (true) {
+            // ВАЖНО: параметры dateFrom/durationFrom должны передаваться внутри filter
+            // (см. docs/sources/waterway.md). Иначе API может отвечать 403.
             $queryParams = http_build_query([
                 'limit' => $batch,
-                'durationFrom' => 2,
-                'dateFrom' => $nowDay,
-                'offset' => $offset
+                'offset' => $offset,
+                'filter' => [
+                    'durationFrom' => [2],
+                    'dateFrom' => $nowDay,
+                ],
             ]);
             
             $method = "json.v3.cruises?$queryParams";
@@ -391,20 +415,24 @@ class WaterwayApiClient
                 $errorCount = 0; // Сбрасываем счётчик ошибок при успехе
                 
                 ProcessLog::add("Получено круизов: " . count($allCruises) . " (offset=$offset, всего в API: $count)");
+                $this->consoleLine("Получено круизов: " . count($allCruises) . " (offset=$offset, всего: $count)");
                 
                 // Если offset превысил общее количество или получили меньше чем batch - значит это последний батч
                 if ($offset >= $count || count($cruises) < $batch) {
                     ProcessLog::add("Достигнут конец списка круизов (offset=$offset, count=$count)");
+                    $this->consoleLine("Конец списка круизов (offset=$offset, count=$count)");
                     break;
                 }
                 
             } catch (Exception $e) {
                 $errorCount++;
                 ProcessLog::add("Ошибка при получении круизов (offset=$offset, попытка $errorCount/$maxAttempts): " . $e->getMessage());
+                $this->consoleLine("Ошибка получения круизов (offset=$offset, попытка $errorCount/$maxAttempts): " . $e->getMessage());
                 
                 // Если ошибка повторяется несколько раз подряд - прекращаем получение
                 if ($errorCount >= $maxAttempts) {
                     ProcessLog::add("Превышено количество попыток при получении круизов. Используем уже полученные " . count($allCruises) . " круизов");
+                    $this->consoleLine("Превышено количество попыток. Используем уже полученные: " . count($allCruises));
                     break;
                 }
                 
@@ -416,12 +444,14 @@ class WaterwayApiClient
         
         if (empty($allCruises)) {
             ProcessLog::add("⚠️  Не удалось получить ни одного круиза из API");
+            $this->consoleLine("⚠️  Не удалось получить ни одного круиза из API");
             return [];
         }
         
         // Сохраняем полный список в кеш
         $this->cache->put($cacheKey, $allCruises);
         ProcessLog::add("✅ Всего получено круизов для обработки: " . count($allCruises));
+        $this->consoleLine("✅ Всего получено круизов для обработки: " . count($allCruises));
         
         return $allCruises;
     }
