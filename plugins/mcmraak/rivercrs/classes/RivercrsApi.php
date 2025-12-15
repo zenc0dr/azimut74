@@ -2,6 +2,7 @@
 
 use Ramsey\Uuid\Uuid;
 use Cache;
+use Zen\Worker\Classes\SearchCacheVersion;
 
 class RivercrsApi
 {
@@ -24,7 +25,7 @@ class RivercrsApi
     # http://azimut.dc/rivercrs/api/extraRefresh
     public function extraRefresh()
     {
-        return env('CRS_EXTRA_REFRESH');
+        return SearchCacheVersion::get();
     }
 
     # http://azimut.dc/rivercrs/api/mounted

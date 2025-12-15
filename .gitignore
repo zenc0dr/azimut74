@@ -12,3 +12,4 @@
 .env
 server_errors.log
 sync.ffs_gui
+.env.backup

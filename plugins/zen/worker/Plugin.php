@@ -55,6 +55,10 @@ class Plugin extends PluginBase
             'Zen\Worker\ReportWidgets\CacheStatsWidget' => [
                 'label'   => 'Статистика кеша парсеров',
                 'context' => 'dashboard'
+            ],
+            'Zen\Worker\ReportWidgets\SearchCacheVersionWidget' => [
+                'label'   => 'Версия поискового кеша',
+                'context' => 'dashboard'
             ]
         ];
     }
