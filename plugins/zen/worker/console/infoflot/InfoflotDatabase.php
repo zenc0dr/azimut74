@@ -231,8 +231,11 @@ class InfoflotDatabase extends UnifiedDatabase
         if (is_array($idOrData)) {
             $cruiseData = $idOrData;
             
-            // Создаем waybill_data из route (если есть)
-            $waybillData = $this->createWaybillDataFromRoute($cruiseData['route'] ?? '');
+            $routeText = $cruiseData['route'] ?? '';
+
+            // Создаем waybill_data из route (если есть).
+            // Важно: waybill_data должен содержать >=2 точек, иначе UnifiedProcessor пропускает заезд.
+            $waybillData = $this->createWaybillDataFromRoute($routeText);
             
             // Формируем extra_data из дополнительных полей
             $extraData = [];
@@ -257,6 +260,9 @@ class InfoflotDatabase extends UnifiedDatabase
                 $cruiseData['date_start'] ?? '',
                 $cruiseData['date_end'] ?? '',
                 [
+                    // Дублируем route в явное поле cruises.route (UnifiedDatabase schema),
+                    // чтобы был fallback для импорта (createWaybillFromRoute()).
+                    'route' => $routeText,
                     'days' => $cruiseData['days'] ?? null,
                     'nights' => $cruiseData['nights'] ?? null,
                     'description' => $cruiseData['description'] ?? null,
@@ -272,23 +278,69 @@ class InfoflotDatabase extends UnifiedDatabase
     
     /**
      * Создание waybill_data из route (текстовое описание маршрута)
-     * Infoflot не имеет структурированного маршрута, поэтому создаем простой формат
+     * Infoflot часто отдаёт маршрут строкой, разделённой " — " / " – " / " - ".
+     * Здесь мы пытаемся преобразовать её в массив точек, понятный UnifiedProcessor::processWaybillData().
      */
     private function createWaybillDataFromRoute($route)
     {
         if (empty($route)) {
             return [];
         }
-        
-        // Сохраняем route как текстовое описание в waybill_data
-        return [
-            [
+
+        $route = trim((string)$route);
+        if ($route === '') {
+            return [];
+        }
+
+        // Пробуем аккуратно разбить маршрут на города.
+        // ВАЖНО: не делаем split по дефису без пробелов, чтобы не ломать "Ростов-на-Дону".
+        $parts = [];
+        if (strpos($route, ' — ') !== false) {
+            $parts = explode(' — ', $route);
+        } elseif (strpos($route, ' – ') !== false) { // en dash
+            $parts = explode(' – ', $route);
+        } elseif (strpos($route, ' - ') !== false) {
+            $parts = explode(' - ', $route);
+        } else {
+            // Fallback: пытаемся split по " —/– " с пробелами (регэксп),
+            // но всё равно оставляем только случаи с пробелами вокруг.
+            $parts = preg_split('/\s[—–]\s/u', $route) ?: [];
+        }
+
+        $waybill = [];
+        foreach ($parts as $i => $raw) {
+            $townName = trim((string)$raw);
+            if ($townName === '') {
+                continue;
+            }
+
+            // Убираем информацию в скобках и после запятой — это почти всегда "страна/ночей".
+            $townName = preg_replace('/\s*\([^)]+\)\s*/u', '', $townName);
+            $townName = preg_replace('/,.*/u', '', $townName);
+            $townName = trim($townName);
+
+            if ($townName === '') {
+                continue;
+            }
+
+            $waybill[] = [
                 'town' => null,
-                'town_name' => $route,
+                'town_name' => $townName,
                 'excursion' => '',
                 'bold' => 0
-            ]
-        ];
+            ];
+        }
+
+        // Если получилось меньше 2 точек — это невалидный маршрут для импорта.
+        if (count($waybill) < 2) {
+            return [];
+        }
+
+        // Помечаем первую и последнюю точки как bold (для совместимости с логикой пула).
+        $waybill[0]['bold'] = 1;
+        $waybill[count($waybill) - 1]['bold'] = 1;
+
+        return $waybill;
     }
 
     /**

@@ -582,10 +582,15 @@ class UnifiedProcessor extends TransferProcessor
             return [];
         }
         
-        // Разбиваем маршрут по разделителю " — " или " - "
+        // Разбиваем маршрут по разделителям:
+        // - " — " (em dash)
+        // - " – " (en dash)
+        // - " - " (hyphen)
         $routeArray = [];
         if (strpos($routeString, ' — ') !== false) {
             $routeArray = explode(' — ', $routeString);
+        } elseif (strpos($routeString, ' – ') !== false) {
+            $routeArray = explode(' – ', $routeString);
         } elseif (strpos($routeString, ' - ') !== false) {
             $routeArray = explode(' - ', $routeString);
         } else {
