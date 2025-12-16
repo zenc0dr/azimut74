@@ -45,7 +45,6 @@ log_file()  { echo "${STORAGE_DIR}/$1.log"; }
 now() { date '+%Y-%m-%d %H:%M:%S'; }
 
 file_size_bytes() {
-  # Linux: stat -c%s, BSD/macOS: stat -f%z
   f="$1"
   if [ ! -f "$f" ]; then
     echo 0
@@ -60,7 +59,7 @@ rotate_log_if_needed() {
   lf="$1"
   size="$(file_size_bytes "$lf")"
   if [ "$size" -ge "$LOG_ROTATE_BYTES" ]; then
-    mv -f "$lf" "${lf}.$(date '+%Y%m%d_%H%M%S').old" 2>/dev/null || true
+    mv -f "$lf" "${lf}.$(date '+%Y%m%d_%H%M%S').$$.old"
   fi
 }
 
@@ -69,16 +68,14 @@ is_running_pid() {
   [ -n "$_pid" ] && kill -0 "$_pid" 2>/dev/null
 }
 
-# Проверяем, что PID соответствует *нашему* artisan-командному процессу
 is_our_process() {
   _pid="${1:-}"
-  _cmd="${2:-}" # например worker:waterway-sync
+  _cmd="${2:-}"
 
   [ -n "$_pid" ] || return 1
   is_running_pid "$_pid" || return 1
 
-  # ps args: должна встречаться строка "artisan" и конкретная команда
-  args="$(ps -p "$_pid" -o args= 2>/dev/null || true)"
+  args="$(ps -p "$_pid" -o args= 2>/dev/null)"
   [ -n "$args" ] || return 1
   echo "$args" | grep -Fq "artisan" || return 1
   echo "$args" | grep -Fq "$_cmd"   || return 1
@@ -86,24 +83,22 @@ is_our_process() {
   return 0
 }
 
-# Глобальная блокировка от параллельного запуска
 LOCK_DIR="${STORAGE_DIR}/.lockdir"
 acquire_lock() {
   if mkdir "$LOCK_DIR" 2>/dev/null; then
-    echo $$ > "${LOCK_DIR}/pid" 2>/dev/null || true
+    echo $$ > "${LOCK_DIR}/pid"
     return 0
   fi
 
-  # если лок “завис” (процесс умер) — подчистим
   if [ -f "${LOCK_DIR}/pid" ]; then
-    lock_pid="$(cat "${LOCK_DIR}/pid" 2>/dev/null || true)"
+    lock_pid="$(cat "${LOCK_DIR}/pid" 2>/dev/null)"
     if [ -n "$lock_pid" ] && ! is_running_pid "$lock_pid"; then
-      rm -rf "$LOCK_DIR" 2>/dev/null || true
+      rm -rf "$LOCK_DIR"
       mkdir "$LOCK_DIR" 2>/dev/null || {
         echo "❌ Скрипт уже выполняется (lock удерживается)"
         exit 1
       }
-      echo $$ > "${LOCK_DIR}/pid" 2>/dev/null || true
+      echo $$ > "${LOCK_DIR}/pid"
       return 0
     fi
   fi
@@ -113,7 +108,7 @@ acquire_lock() {
 }
 
 release_lock() {
-  rm -rf "$LOCK_DIR" 2>/dev/null || true
+  rm -rf "$LOCK_DIR"
 }
 
 trap 'release_lock' INT TERM EXIT
@@ -137,37 +132,26 @@ start_one() {
   rotate_log_if_needed "$lf"
 
   if [ -f "$pf" ]; then
-    old_pid="$(cat "$pf" 2>/dev/null || true)"
+    old_pid="$(cat "$pf" 2>/dev/null)"
     if is_our_process "$old_pid" "$cmd"; then
-      echo "⚠️  $code уже запущен (PID: $old_pid)"
+      echo "⚠️ $code уже запущен (PID: $old_pid)"
       return 0
     fi
   fi
 
   start_time="$(now)"
 
-  # Запуск в фоне + лог. Собираем аргументы безопасно.
   set -- "$PHP_BIN" "$ARTISAN" "$cmd"
   if [ -n "${PHP_OPTIONS:-}" ]; then
-    case "$PHP_OPTIONS" in
-      *"$LF"*)
-        while IFS= read -r opt; do
-          [ -n "$opt" ] && set -- "$@" "$opt"
-        done <<EOF
+    while IFS= read -r opt || [ -n "$opt" ]; do
+      [ -n "$opt" ] && set -- "$@" "$opt"
+    done <<EOF
 $PHP_OPTIONS
 EOF
-        ;;
-      *)
-        set -f
-        set -- "$@" $PHP_OPTIONS
-        set +f
-        ;;
-    esac
   fi
   "$@" >>"$lf" 2>&1 &
   new_pid=$!
 
-  # Мета — пишем целиком и предсказуемо
   {
     echo "pid=$new_pid"
     echo "cmd=$cmd"
@@ -178,11 +162,10 @@ EOF
 
   echo "$new_pid" > "$pf"
 
-  # Проверим: не упал ли сразу
   sleep "$START_CHECK_DELAY"
   if ! is_our_process "$new_pid" "$cmd"; then
     echo "❌ $code не удержался в фоне. Проверь лог: $lf"
-    rm -f "$pf" 2>/dev/null || true
+    rm -f "$pf"
     end_time="$(now)"
     {
       echo "pid=$new_pid"
@@ -194,7 +177,7 @@ EOF
     return 1
   fi
 
-  echo "✅ Запущен $code (PID: $new_pid)  log: $lf"
+  echo "✅ Запущен $code (PID: $new_pid) log: $lf"
 }
 
 stop_one() {
@@ -208,9 +191,9 @@ stop_one() {
     return 0
   fi
 
-  pid="$(cat "$pf" 2>/dev/null || true)"
-  cmd="$(grep '^cmd=' "$mf" 2>/dev/null | cut -d= -f2- || true)"
-  start_time="$(grep '^start_time=' "$mf" 2>/dev/null | cut -d= -f2- || true)"
+  pid="$(cat "$pf" 2>/dev/null)"
+  cmd="$(grep '^cmd=' "$mf" 2>/dev/null | cut -d= -f2-)"
+  start_time="$(grep '^start_time=' "$mf" 2>/dev/null | cut -d= -f2-)"
   end_time="$(now)"
 
   if [ -z "$cmd" ]; then
@@ -219,7 +202,7 @@ stop_one() {
 
   if ! is_running_pid "$pid"; then
     echo "🔴 $code уже не запущен (PID: $pid)"
-    rm -f "$pf" 2>/dev/null || true
+    rm -f "$pf"
     {
       echo "pid=$pid"
       echo "cmd=$cmd"
@@ -231,8 +214,8 @@ stop_one() {
   fi
 
   if ! is_our_process "$pid" "$cmd"; then
-    echo "⚠️  $code: PID $pid не принадлежит ожидаемой команде, очищаю pid/meta"
-    rm -f "$pf" 2>/dev/null || true
+    echo "⚠️ $code: PID $pid не принадлежит ожидаемой команде, очищаю pid/meta"
+    rm -f "$pf"
     {
       echo "pid=$pid"
       echo "cmd=$cmd"
@@ -243,8 +226,7 @@ stop_one() {
     return 0
   fi
 
-  # Мягкая остановка
-  kill "$pid" 2>/dev/null || true
+  kill "$pid" 2>/dev/null
 
   i=0
   while is_running_pid "$pid" && [ "$i" -lt "$STOP_TIMEOUT" ]; do
@@ -253,11 +235,12 @@ stop_one() {
   done
 
   if is_running_pid "$pid"; then
-    kill -9 "$pid" 2>/dev/null || true
+    echo "⚠️ $code не остановился мягко, применяю SIGKILL (PID: $pid)"
+    kill -9 "$pid" 2>/dev/null
     sleep 1
   fi
 
-  rm -f "$pf" 2>/dev/null || true
+  rm -f "$pf"
   {
     echo "pid=$pid"
     echo "cmd=$cmd"
@@ -272,7 +255,7 @@ stop_one() {
 restart_one() {
   code="$1"
   cmd="$2"
-  stop_one "$code" || true
+  stop_one "$code"
   sleep 1
   start_one "$code" "$cmd"
 }
@@ -287,20 +270,22 @@ status_all() {
     lf="$(log_file "$code")"
 
     pid=""
-    [ -f "$pf" ] && pid="$(cat "$pf" 2>/dev/null || true)"
+    [ -f "$pf" ] && pid="$(cat "$pf" 2>/dev/null)"
 
     if is_our_process "$pid" "$cmd"; then
       st="🟢 запущен"
+    elif [ -n "$pid" ]; then
+      st="🔴 зависший PID-файл (PID $pid не наш процесс)"
     else
-      [ -n "$pid" ] && st="🔴 остановлен" || st="⚪ не запускался"
+      st="⚪ не запускался"
     fi
 
     echo "  $code:"
     echo "    Статус: $st"
     [ -n "$pid" ] && echo "    PID: $pid"
     [ -f "$mf" ] && {
-      start_time="$(grep '^start_time=' "$mf" 2>/dev/null | cut -d= -f2- || true)"
-      end_time="$(grep '^end_time=' "$mf" 2>/dev/null | cut -d= -f2- || true)"
+      start_time="$(grep '^start_time=' "$mf" 2>/dev/null | cut -d= -f2-)"
+      end_time="$(grep '^end_time=' "$mf" 2>/dev/null | cut -d= -f2-)"
       [ -n "$start_time" ] && echo "    start_time: $start_time"
       [ -n "$end_time" ] && echo "    end_time:   $end_time"
     }
@@ -312,7 +297,6 @@ EOF
 }
 
 find_source_cmd() {
-  # печатает cmd по code или пусто
   code="$1"
   while IFS='|' read -r c cmd; do
     if [ "$c" = "$code" ]; then
@@ -336,13 +320,13 @@ target="${2:-}"
 case "$action" in
   start)
     if [ -n "$target" ]; then
-      cmd="$(find_source_cmd "$target" || true)"
+      cmd="$(find_source_cmd "$target")"
       [ -n "$cmd" ] || { echo "❌ Неизвестный сервис: $target"; exit 1; }
       start_one "$target" "$cmd"
     else
       echo "🚀 Запускаю синки..."
       while IFS='|' read -r code cmd; do
-        start_one "$code" "$cmd" || true
+        start_one "$code" "$cmd"
       done <<EOF
 $SOURCES
 EOF
@@ -354,7 +338,7 @@ EOF
     else
       echo "🛑 Останавливаю синки..."
       while IFS='|' read -r code cmd; do
-        stop_one "$code" || true
+        stop_one "$code"
       done <<EOF
 $SOURCES
 EOF
@@ -362,13 +346,13 @@ EOF
     ;;
   restart)
     if [ -n "$target" ]; then
-      cmd="$(find_source_cmd "$target" || true)"
+      cmd="$(find_source_cmd "$target")"
       [ -n "$cmd" ] || { echo "❌ Неизвестный сервис: $target"; exit 1; }
       restart_one "$target" "$cmd"
     else
       echo "🔁 Рестарт всех синков..."
       while IFS='|' read -r code cmd; do
-        restart_one "$code" "$cmd" || true
+        restart_one "$code" "$cmd"
       done <<EOF
 $SOURCES
 EOF
