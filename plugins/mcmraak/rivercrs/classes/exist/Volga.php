@@ -3,6 +3,7 @@
 use Mcmraak\Rivercrs\Classes\Exist;
 use Mcmraak\Rivercrs\Models\Cabins as Cabin;
 use Log;
+use Zen\Worker\Classes\Convertor;
 
 class Volga extends Exist
 {
@@ -14,8 +15,12 @@ class Volga extends Exist
         #$this->query_type = ($realtime)?'array_now':'array'; #TODO:НА время отключено
         $this->query_type = 'array';
 
-        $this->dump = $this->parser->cacheWarmUp('volgawolga-database', $this->query_type);
+        # Тут возвращается массив с волги
 
+        #$this->dump = $this->parser->cacheWarmUp('volgawolga-database', $this->query_type);
+        $this->dump = Convertor::xmlToArr(file_get_contents(base_path(
+            'storage/parsers_cache/volga/volga_next_url.xml'
+        )));
 
         //dd($this->dump['free']['cruise'][0]);
 
