@@ -51,7 +51,9 @@ file_size_bytes() {
     echo 0
     return
   fi
-  (stat -c%s "$f" 2>/dev/null || stat -f%z "$f" 2>/dev/null || echo 0) | tr -d '[:space:]'
+  size=$(stat -c%s "$f" 2>/dev/null || stat -f%z "$f" 2>/dev/null || echo 0)
+  size=$(echo "$size" | tr -d '[:space:]')
+  [ -n "$size" ] && [ "$size" -ge 0 ] 2>/dev/null && echo "$size" || echo 0
 }
 
 rotate_log_if_needed() {
@@ -77,6 +79,7 @@ is_our_process() {
 
   # ps args: должна встречаться строка "artisan" и конкретная команда
   args="$(ps -p "$_pid" -o args= 2>/dev/null || true)"
+  [ -n "$args" ] || return 1
   echo "$args" | grep -Fq "artisan" || return 1
   echo "$args" | grep -Fq "$_cmd"   || return 1
 
@@ -180,10 +183,14 @@ EOF
   if ! is_our_process "$new_pid" "$cmd"; then
     echo "❌ $code не удержался в фоне. Проверь лог: $lf"
     rm -f "$pf" 2>/dev/null || true
+    end_time="$(now)"
     {
-      echo "end_time=$(now)"
+      echo "pid=$new_pid"
+      echo "cmd=$cmd"
+      echo "start_time=$start_time"
+      echo "end_time=$end_time"
       echo "status=failed"
-    } >> "$mf"
+    } > "$mf"
     return 1
   fi
 
@@ -203,6 +210,7 @@ stop_one() {
 
   pid="$(cat "$pf" 2>/dev/null || true)"
   cmd="$(grep '^cmd=' "$mf" 2>/dev/null | cut -d= -f2- || true)"
+  start_time="$(grep '^start_time=' "$mf" 2>/dev/null | cut -d= -f2- || true)"
   end_time="$(now)"
 
   if [ -z "$cmd" ]; then
@@ -213,9 +221,12 @@ stop_one() {
     echo "🔴 $code уже не запущен (PID: $pid)"
     rm -f "$pf" 2>/dev/null || true
     {
+      echo "pid=$pid"
+      echo "cmd=$cmd"
+      [ -n "$start_time" ] && echo "start_time=$start_time"
       echo "end_time=$end_time"
       echo "status=stopped"
-    } >> "$mf"
+    } > "$mf"
     return 0
   fi
 
@@ -223,9 +234,12 @@ stop_one() {
     echo "⚠️  $code: PID $pid не принадлежит ожидаемой команде, очищаю pid/meta"
     rm -f "$pf" 2>/dev/null || true
     {
+      echo "pid=$pid"
+      echo "cmd=$cmd"
+      [ -n "$start_time" ] && echo "start_time=$start_time"
       echo "end_time=$end_time"
       echo "status=stale_pid"
-    } >> "$mf"
+    } > "$mf"
     return 0
   fi
 
@@ -245,9 +259,12 @@ stop_one() {
 
   rm -f "$pf" 2>/dev/null || true
   {
+    echo "pid=$pid"
+    echo "cmd=$cmd"
+    [ -n "$start_time" ] && echo "start_time=$start_time"
     echo "end_time=$end_time"
     echo "status=stopped"
-  } >> "$mf"
+  } > "$mf"
 
   echo "✅ Остановлен $code (PID: $pid)"
 }
