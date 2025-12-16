@@ -88,6 +88,7 @@ class Exist
             $checkin_id = $checkin->id;
         }
 
+          #TODO Временно отключил кеширование
         if ($type === 'array') {
             $cabox = new Cabox('rivercrs');
             $array_cache_key = "exist_array:$checkin_id";
@@ -125,20 +126,20 @@ class Exist
         }
 
         # todo открыть
-        if ($type == 'json') {
-            # Вернуть кеш если он есть
-            if (Cache::has($cache_key)) {
-                if (isset($_GET['debug'])) {
-                    $data = Cache::get($cache_key);
-                    dd($data);
-                } else {
-                    // Очищаем буфер перед выводом JSON
-                    ob_end_clean();
-                    $this->json(Cache::get($cache_key));
-                    return;
-                }
-            }
-        }
+//        if ($type == 'json') {
+//            # Вернуть кеш если он есть
+//            if (Cache::has($cache_key)) {
+//                if (isset($_GET['debug'])) {
+//                    $data = Cache::get($cache_key);
+//                    dd($data);
+//                } else {
+//                    // Очищаем буфер перед выводом JSON
+//                    ob_end_clean();
+//                    $this->json(Cache::get($cache_key));
+//                    return;
+//                }
+//            }
+//        }
 
         if (!$checkin) {
             $this->checkin = self::$static_checkin = $checkin = Checkin::find($checkin_id);

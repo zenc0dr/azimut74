@@ -17,10 +17,41 @@ class Volga extends Exist
 
         # Тут возвращается массив с волги
 
-        #$this->dump = $this->parser->cacheWarmUp('volgawolga-database', $this->query_type);
-        $this->dump = Convertor::xmlToArr(file_get_contents(base_path(
-            'storage/parsers_cache/volga/volga_next_url.xml'
-        )));
+        /*
+         * Источник Volga исторически пережил несколько схем кеширования.
+         * В проде "каноничный" файл отдаётся через Service@getVolgaDB (storage/next_url.xml).
+         * Ранее встречались альтернативные пути (volga_next_url.xml, parsers_cache/volga/...).
+         *
+         * Важно: механизм Exist критичен к актуальности XML (иначе можно “терять” каюты).
+         */
+        $xml = null;
+        // При realtime-запросе стараемся брать актуальные данные напрямую у источника
+        if ($realtime) {
+            $xml = @file_get_contents('http://test.volgawolga.ru/xml/daily2024.xml');
+        }
+
+        $xmlPaths = [
+            base_path('storage/next_url.xml'),
+            base_path('storage/volga_next_url.xml'),
+            base_path('storage/parsers_cache/volga/volga_next_url.xml'),
+        ];
+        if (!$xml) {
+            foreach ($xmlPaths as $path) {
+                if (file_exists($path)) {
+                    $xml = file_get_contents($path);
+                    break;
+                }
+            }
+        }
+
+        $this->dump = Convertor::xmlToArr($xml ?? '');
+        if (!$this->dump) {
+            Log::error('Volga exist: не удалось разобрать XML');
+            return [
+                'decks' => [],
+                'rooms' => []
+            ];
+        }
 
         //dd($this->dump['free']['cruise'][0]);
 
@@ -44,8 +75,8 @@ class Volga extends Exist
 
         # Свободные каюты
         //dd($this->dump['free']['cruise'][0]['@attributes']['id']); # eds_id круиза
-        //dd($this->dump['free']['cruise'][0]['cabin'][0]['@attributes']['id']); # eds_id кабин в круизе
-        //dd($this->dump['free']['cruise'][0]['cabin'][0]['@attributes']['free']); # 0 || 1 = занято || свободно
+        //dd($this->dump['free']['cruise'][0]['cabin'][0]['@attributes']['id']); # eds_id каюты (cabin_id)
+        //dd($this->dump['free']['cruise'][0]['cabin'][0]['@attributes']['free']); # обычно '0' (список свободных); исторически: 0 — каюта полностью свободна, >0 — подселение/частично занята
 
         # Цены
         //dd($this->dump['prices']['price'][0]['@attributes']['cruise_id']); # eds_id круиза
@@ -59,11 +90,25 @@ class Volga extends Exist
         $rooms = [];
         $tariff_price2 = false;
 
-        foreach ($this->dump['free']['cruise'] as $cruise) {
+        $cruises = $this->dump['free']['cruise'] ?? [];
+        // simplexml->json: одиночный элемент может стать объектом (ассоц. массивом)
+        if (isset($cruises['@attributes'])) {
+            $cruises = [$cruises];
+        }
+
+        foreach ($cruises as $cruise) {
             if($cruise['@attributes']['id'] == $cruise_id) {
                 if(!isset($cruise['cabin'])) continue;
-                foreach ($cruise['cabin'] as $cabin) {
-                    if($cabin['@attributes']['free'] == 1) continue; # Значит каюта уже занята
+                $cabins = $cruise['cabin'];
+                if (isset($cabins['@attributes'])) {
+                    $cabins = [$cabins];
+                }
+                foreach ($cabins as $cabin) {
+                    // См. комментарий выше: на практике часто приходит только список свободных (free=0),
+                    // но на всякий случай трактуем любое ненулевое значение как "не полностью свободна".
+                    if (intval($cabin['@attributes']['free'] ?? 0) !== 0) {
+                        continue;
+                    }
                     $eds_cabin_id = $cabin['@attributes']['id'];
                     $eds_item = $this->getEdsItem($eds_cabin_id, $cruise_id);
                     if(!$eds_item) continue;
