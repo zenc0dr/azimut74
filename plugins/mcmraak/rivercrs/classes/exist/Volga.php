@@ -19,32 +19,20 @@ class Volga extends Exist
 
         /*
          * Источник Volga исторически пережил несколько схем кеширования.
-         * В проде "каноничный" файл отдаётся через Service@getVolgaDB (storage/next_url.xml).
-         * Ранее встречались альтернативные пути (volga_next_url.xml, parsers_cache/volga/...).
-         *
-         * Важно: механизм Exist критичен к актуальности XML (иначе можно “терять” каюты).
+         * ВНИМАНИЕ: "единственный источник истины" — локальный кеш, который
+         * обновляется воркерами по расписанию. Прямые запросы к Volga здесь
+         * не делаем, чтобы не получать блокировки и не зависеть от сети.
          */
-        $xml = null;
-        // При realtime-запросе стараемся брать актуальные данные напрямую у источника
-        if ($realtime) {
-            $xml = @file_get_contents('http://test.volgawolga.ru/xml/daily2024.xml');
+        $path = base_path('storage/parsers_cache/volga/volga_next_url.xml');
+        if (!file_exists($path)) {
+            Log::error("Volga exist: кеш не найден: {$path}");
+            return [
+                'decks' => [],
+                'rooms' => []
+            ];
         }
 
-        $xmlPaths = [
-            base_path('storage/next_url.xml'),
-            base_path('storage/volga_next_url.xml'),
-            base_path('storage/parsers_cache/volga/volga_next_url.xml'),
-        ];
-        if (!$xml) {
-            foreach ($xmlPaths as $path) {
-                if (file_exists($path)) {
-                    $xml = file_get_contents($path);
-                    break;
-                }
-            }
-        }
-
-        $this->dump = Convertor::xmlToArr($xml ?? '');
+        $this->dump = Convertor::xmlToArr(file_get_contents($path) ?: '');
         if (!$this->dump) {
             Log::error('Volga exist: не удалось разобрать XML');
             return [
