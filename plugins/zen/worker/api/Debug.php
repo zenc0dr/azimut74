@@ -1,10 +1,11 @@
 <?php namespace Zen\Worker\Api;
 
 use Input;
+use Zen\Worker\Classes\Convertor;
 
 class Debug
 {
-    # http://azimut.dc/zen/worker/api/debug:cursorDump?id=cursor_xxx
+    # http://azimut74/zen/worker/api/debug:cursorDump?id=cursor_xxx
     public function cursorDump()
     {
         $dumpId = Input::get('id');
@@ -23,7 +24,18 @@ class Debug
         return response()->json($dumpData, 200, [], JSON_UNESCAPED_UNICODE);
     }
 
-    # http://azimut.dc/zen/worker/api/debug:cursorList
+    # Преообразует `storage/parsers_cache/volga/volga_next_url.xml` в JSON и возвращает его
+    # http://azimut74/zen/worker/api/debug:xmlExplorer
+    public function xmlExplorer()
+    {
+        $xmlFile = storage_path('parsers_cache/volga/volga_next_url.xml');
+        $xmlData = file_get_contents($xmlFile);
+        $xmlData = Convertor::xmlToArr($xmlData);
+        dd($xmlData['free']['cruise'][0]);
+
+    }
+
+    # http://azimut74/zen/worker/api/debug:cursorList
     public function cursorList()
     {
         $dumpDir = storage_path('cursor_dumps');
