@@ -11,7 +11,15 @@ mkdir -p "$STORAGE_DIR"
 ARTISAN="${SCRIPT_DIR}/artisan"     # ожидаем artisan рядом со скриптом
 PHP_BIN="${PHP_BIN:-php}"
 
-PHP_OPTIONS="--clear_cache --clear --import"
+DEFAULT_PHP_OPTIONS=$(cat <<'EOF'
+--clear_cache
+--clear
+--import
+EOF
+)
+PHP_OPTIONS="${PHP_OPTIONS:-$DEFAULT_PHP_OPTIONS}"
+LF='
+'
 
 STOP_TIMEOUT="${STOP_TIMEOUT:-10}"             # секунд на мягкую остановку
 START_CHECK_DELAY="${START_CHECK_DELAY:-1}"    # секунд подождать и проверить запуск
@@ -69,8 +77,8 @@ is_our_process() {
 
   # ps args: должна встречаться строка "artisan" и конкретная команда
   args="$(ps -p "$_pid" -o args= 2>/dev/null || true)"
-  echo "$args" | grep -q "artisan" || return 1
-  echo "$args" | grep -q "$_cmd"   || return 1
+  echo "$args" | grep -Fq "artisan" || return 1
+  echo "$args" | grep -Fq "$_cmd"   || return 1
 
   return 0
 }
@@ -135,8 +143,25 @@ start_one() {
 
   start_time="$(now)"
 
-  # Запуск в фоне + лог
-  "$PHP_BIN" "$ARTISAN" "$cmd" $PHP_OPTIONS >>"$lf" 2>&1 &
+  # Запуск в фоне + лог. Собираем аргументы безопасно.
+  set -- "$PHP_BIN" "$ARTISAN" "$cmd"
+  if [ -n "${PHP_OPTIONS:-}" ]; then
+    case "$PHP_OPTIONS" in
+      *"$LF"*)
+        while IFS= read -r opt; do
+          [ -n "$opt" ] && set -- "$@" "$opt"
+        done <<EOF
+$PHP_OPTIONS
+EOF
+        ;;
+      *)
+        set -f
+        set -- "$@" $PHP_OPTIONS
+        set +f
+        ;;
+    esac
+  fi
+  "$@" >>"$lf" 2>&1 &
   new_pid=$!
 
   # Мета — пишем целиком и предсказуемо
@@ -194,6 +219,16 @@ stop_one() {
     return 0
   fi
 
+  if ! is_our_process "$pid" "$cmd"; then
+    echo "⚠️  $code: PID $pid не принадлежит ожидаемой команде, очищаю pid/meta"
+    rm -f "$pf" 2>/dev/null || true
+    {
+      echo "end_time=$end_time"
+      echo "status=stale_pid"
+    } >> "$mf"
+    return 0
+  fi
+
   # Мягкая остановка
   kill "$pid" 2>/dev/null || true
 
@@ -229,7 +264,7 @@ status_all() {
   echo "📊 Статус процессов:"
   echo ""
 
-  echo "$SOURCES" | while IFS='|' read -r code cmd; do
+  while IFS='|' read -r code cmd; do
     pf="$(pid_file "$code")"
     mf="$(meta_file "$code")"
     lf="$(log_file "$code")"
@@ -254,15 +289,22 @@ status_all() {
     }
     echo "    log: $lf ($(file_size_bytes "$lf") bytes)"
     echo ""
-  done
+  done <<EOF
+$SOURCES
+EOF
 }
 
 find_source_cmd() {
   # печатает cmd по code или пусто
   code="$1"
-  echo "$SOURCES" | while IFS='|' read -r c cmd; do
-    [ "$c" = "$code" ] && { echo "$cmd"; exit 0; }
-  done
+  while IFS='|' read -r c cmd; do
+    if [ "$c" = "$code" ]; then
+      echo "$cmd"
+      return 0
+    fi
+  done <<EOF
+$SOURCES
+EOF
 }
 
 # ---------------------------
@@ -282,9 +324,11 @@ case "$action" in
       start_one "$target" "$cmd"
     else
       echo "🚀 Запускаю синки..."
-      echo "$SOURCES" | while IFS='|' read -r code cmd; do
+      while IFS='|' read -r code cmd; do
         start_one "$code" "$cmd" || true
-      done
+      done <<EOF
+$SOURCES
+EOF
     fi
     ;;
   stop)
@@ -292,9 +336,11 @@ case "$action" in
       stop_one "$target"
     else
       echo "🛑 Останавливаю синки..."
-      echo "$SOURCES" | while IFS='|' read -r code cmd; do
+      while IFS='|' read -r code cmd; do
         stop_one "$code" || true
-      done
+      done <<EOF
+$SOURCES
+EOF
     fi
     ;;
   restart)
@@ -304,9 +350,11 @@ case "$action" in
       restart_one "$target" "$cmd"
     else
       echo "🔁 Рестарт всех синков..."
-      echo "$SOURCES" | while IFS='|' read -r code cmd; do
+      while IFS='|' read -r code cmd; do
         restart_one "$code" "$cmd" || true
-      done
+      done <<EOF
+$SOURCES
+EOF
     fi
     ;;
   status)
