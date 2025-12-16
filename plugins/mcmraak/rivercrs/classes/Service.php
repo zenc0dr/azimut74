@@ -32,7 +32,7 @@ use View;
 
 class Service extends Parser
 {
-    # http://azimut.dc/rivercrs/debug/Service@removeEdsData?eds_name=infoflot
+    # http://azimut74/rivercrs/debug/Service@removeEdsData?eds_name=infoflot
     function removeEdsData()
     {
         $eds_name = Input::get('eds_name');
@@ -78,15 +78,15 @@ class Service extends Parser
         echo "В очередь поставлено: {$count} заданий на удаление";
     }
 
-    # http://azimut.dc/rivercrs/debug/Service@printLogs
+    # http://azimut74/rivercrs/debug/Service@printLogs
     function printLogs()
     {
         echo View::make('mcmraak.rivercrs::logs', ['items' => JLog::where('type', 'error')->get()])->render();
     }
 
 
-    # http://azimut.dc/rivercrs/debug/Service@getParserLog?eds=infoflot
-    # http://azimut.dc/rivercrs/debug/Service@getParserLog?eds=infoflot&show_all
+    # http://azimut74/rivercrs/debug/Service@getParserLog?eds=infoflot
+    # http://azimut74/rivercrs/debug/Service@getParserLog?eds=infoflot&show_all
     public function getParserLog()
     {
         $eds_code = Input::get('eds');
@@ -101,7 +101,7 @@ class Service extends Parser
     }
 
 
-    # http://azimut.dc/rivercrs/debug/Service@checkDecks
+    # http://azimut74/rivercrs/debug/Service@checkDecks
     function checkDecks()
     {
         $decks = Deck::orderBy('id')->get();
@@ -165,8 +165,8 @@ class Service extends Parser
 
 
 
-    # http://azimut.dc/rivercrs/debug/Service@idsViewer?like_id=ship_tour:
-    # http://azimut.dc/rivercrs/debug/Service@idsViewer?stats
+    # http://azimut74/rivercrs/debug/Service@idsViewer?like_id=ship_tour:
+    # http://azimut74/rivercrs/debug/Service@idsViewer?stats
     function idsViewer()
     {
         $stats = (Input::get('stats') !== null) ? true : false;
@@ -184,9 +184,9 @@ class Service extends Parser
         dd($records);
     }
 
-    # http://azimut.dc/rivercrs/debug/Service@idsDelete?like_id=cruise_page&preview
-    # http://azimut.dc/rivercrs/debug/Service@idsDelete?only=cruise_page:1
-    # http://azimut.dc/rivercrs/debug/Service@idsDelete?clean
+    # http://azimut74/rivercrs/debug/Service@idsDelete?like_id=cruise_page&preview
+    # http://azimut74/rivercrs/debug/Service@idsDelete?only=cruise_page:1
+    # http://azimut74/rivercrs/debug/Service@idsDelete?clean
     function idsDelete()
     {
         $preview = (Input::get('preview') !== null) ? true : false;
@@ -210,14 +210,14 @@ class Service extends Parser
     }
 
 
-    # http://azimut.dc/rivercrs/debug/Service@getVolgaDB
+    # http://azimut74/rivercrs/debug/Service@getVolgaDB
     function getVolgaDB()
     {
         $path = "storage/next_url.xml";
         echo file_get_contents(base_path($path));
     }
 
-    # http://azimut.dc/rivercrs/debug/Service@getStats?key=eSw2bHdi8GbdhfmDf4VfhHhdbrgtJd
+    # http://azimut74/rivercrs/debug/Service@getStats?key=eSw2bHdi8GbdhfmDf4VfhHhdbrgtJd
     function getStats()
     {
         $key = get('key');

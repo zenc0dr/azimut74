@@ -526,7 +526,7 @@ class ExistTest
         ]);
     }
 
-    # http://azimut.dc/rivercrs/debug/Exist@getCabinData
+    # http://azimut74/rivercrs/debug/Exist@getCabinData
     public function getCabinData($checkin_id, $room_number, $deck_id)
     {
         $data = $this->get($checkin_id, 'array', false);

@@ -2,7 +2,7 @@
 
 class Order extends Api
 {
-    # http://azimut.dc/zen/gt/api/order:send
+    # http://azimut74/zen/gt/api/order:send
     public function send()
     {
         $order = $this->input('order');

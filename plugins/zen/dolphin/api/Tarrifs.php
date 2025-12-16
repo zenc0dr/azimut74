@@ -13,7 +13,7 @@ use DB;
 
 class Tarrifs extends Core
 {
-    # http://azimut.dc/zen/dolphin/api/tarrifs:records?tour_id=1
+    # http://azimut74/zen/dolphin/api/tarrifs:records?tour_id=1
     function records()
     {
         $tour_id = $this->input('tour_id');
@@ -41,8 +41,8 @@ class Tarrifs extends Core
     }
 
     // Create || Open
-    # http://azimut.dc/zen/dolphin/api/tarrifs:open?tarrif_id=null // Создать новый тариф
-    # http://azimut.dc/zen/dolphin/api/tarrifs:open?tarrif_id=19
+    # http://azimut74/zen/dolphin/api/tarrifs:open?tarrif_id=null // Создать новый тариф
+    # http://azimut74/zen/dolphin/api/tarrifs:open?tarrif_id=19
     function open()
     {
         $tarrif_id = $this->input('tarrif_id');
@@ -74,7 +74,7 @@ class Tarrifs extends Core
         $this->json($data);
     }
 
-    # http://azimut.dc/zen/dolphin/api/tarrifs:save
+    # http://azimut74/zen/dolphin/api/tarrifs:save
     function save()
     {
         $this->isAdmin();
@@ -198,7 +198,7 @@ class Tarrifs extends Core
     }
 
     # Функция для формирования опций для гостиницы
-    # http://azimut.dc/zen/dolphin/api/tarrifs:hotels
+    # http://azimut74/zen/dolphin/api/tarrifs:hotels
     function hotels()
     {
         $search_text = $this->input('serch_text');
@@ -213,7 +213,7 @@ class Tarrifs extends Core
         $this->json($return);
     }
 
-    # http://azimut.dc/zen/dolphin/api/tarrifs:deleteTarrif
+    # http://azimut74/zen/dolphin/api/tarrifs:deleteTarrif
     function deleteTarrif()
     {
         $this->isAdmin();
@@ -229,7 +229,7 @@ class Tarrifs extends Core
         ]);
     }
 
-    # http://azimut.dc/zen/dolphin/api/tarrifs:deleteTarrifs
+    # http://azimut74/zen/dolphin/api/tarrifs:deleteTarrifs
     function deleteTarrifs()
     {
         $this->isAdmin();

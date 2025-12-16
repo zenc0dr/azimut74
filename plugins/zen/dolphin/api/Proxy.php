@@ -5,7 +5,7 @@ use Input;
 
 class Proxy extends Core
 {
-    # http://azimut.dc/zen/dolphin/api/proxy:get
+    # http://azimut74/zen/dolphin/api/proxy:get
     function get()
     {
         $url = post('url');

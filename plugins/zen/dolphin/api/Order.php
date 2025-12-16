@@ -7,7 +7,7 @@ use Zen\Uongate\Classes\Lead;
 
 class Order extends Core
 {
-    # http://azimut.dc/zen/dolphin/api/order:send
+    # http://azimut74/zen/dolphin/api/order:send
     public function send()
     {
         $order = $this->input('order');

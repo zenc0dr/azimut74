@@ -10,7 +10,7 @@ use View;
 
 class RivercrsSearch
 {
-    # http://azimut.dc/rivercrs/api/search?debug=62
+    # http://azimut74/rivercrs/api/search?debug=62
     public static function search()
     {
         $ids = Input::get('ids');

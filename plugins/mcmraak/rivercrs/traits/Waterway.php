@@ -16,8 +16,8 @@ trait Waterway {
 
 
     # Водоход - Кеш цен
-    # http://azimut.dc/rivercrs/api/v2/parser/waterwayCruisesCache
-    # http://azimut.dc/rivercrs/api/v2/parser/waterwayCruisesCache?id=10038
+    # http://azimut74/rivercrs/api/v2/parser/waterwayCruisesCache
+    # http://azimut74/rivercrs/api/v2/parser/waterwayCruisesCache?id=10038
     public function waterwayCruisesCache()
     {
         $id = Input::get('id');
@@ -47,8 +47,8 @@ trait Waterway {
     }
 
     # Водоход - Кеш маршрутов
-    # http://azimut.dc/rivercrs/api/v2/parser/waterwayRoutesCache
-    # http://azimut.dc/rivercrs/api/v2/parser/waterwayRoutesCache?id=10130
+    # http://azimut74/rivercrs/api/v2/parser/waterwayRoutesCache
+    # http://azimut74/rivercrs/api/v2/parser/waterwayRoutesCache?id=10130
     public function waterwayRoutesCache()
     {
         $id = Input::get('id');
@@ -81,7 +81,7 @@ trait Waterway {
 
     }
 
-    # http://azimut.dc/rivercrs/debug/Getter@waterwayMotorshipsSeeder #V
+    # http://azimut74/rivercrs/debug/Getter@waterwayMotorshipsSeeder #V
     public function waterwayMotorshipsSeeder()
     {
         $dump = $this->cacheWarmUp('waterway-motorships', 'array');
@@ -119,7 +119,7 @@ trait Waterway {
         }
     }
 
-    # http://azimut.dc/rivercrs/debug/Getter@waterwayDecksSeeder
+    # http://azimut74/rivercrs/debug/Getter@waterwayDecksSeeder
     public function waterwayDecksSeeder()
     {
         $cruises = $this->cacheWarmUp('waterway-cruises', 'array');
@@ -174,7 +174,7 @@ trait Waterway {
         }
     }
 
-    # http://azimut.dc/rivercrs/debug/Getter@testwwChecki
+    # http://azimut74/rivercrs/debug/Getter@testwwChecki
     /*
     function testwwCheckin()
     {
@@ -184,8 +184,8 @@ trait Waterway {
 
     public function waterwayCabinsSeeder()
     {
-        # http://azimut.dc/rivercrs/debug/Getter@waterwayCabinsSeeder?id=init
-        # http://azimut.dc/rivercrs/debug/Getter@waterwayCabinsSeeder?debug=7868
+        # http://azimut74/rivercrs/debug/Getter@waterwayCabinsSeeder?id=init
+        # http://azimut74/rivercrs/debug/Getter@waterwayCabinsSeeder?debug=7868
 
 
         $debug = Input::get('debug');

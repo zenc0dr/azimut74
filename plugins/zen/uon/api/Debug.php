@@ -6,7 +6,7 @@ use Cache;
 class Debug extends Core {
 
 
-    # http://azimut.dc/zen/uon/api/debug:go
+    # http://azimut74/zen/uon/api/debug:go
     function go()
     {
         //Cache::add('olo', 'value', 60);
@@ -16,7 +16,7 @@ class Debug extends Core {
         //$this->api()->getRequest(15638)->dump();
     }
 
-    # http://azimut.dc/zen/uon/api/debug:testConnection
+    # http://azimut74/zen/uon/api/debug:testConnection
     function testConnection()
     {
         $query = 'https://api.u-on.ru/7hPDplm8q882V4K7pFbB/user/17677.json';
@@ -42,7 +42,7 @@ class Debug extends Core {
         //dd($response);
     }
 
-    # http://azimut.dc/zen/uon/api/debug:testQuery
+    # http://azimut74/zen/uon/api/debug:testQuery
     function testQuery()
     {
         $request_id = 17535;

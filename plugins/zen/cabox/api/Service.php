@@ -7,7 +7,7 @@ use Illuminate\Support\Facades\Artisan;
 
 class Service extends Core
 {
-    # http://azimut.dc/zen/cabox/api/Service@getStorageSize
+    # http://azimut74/zen/cabox/api/Service@getStorageSize
     function getStorageSize()
     {
         $this->isAdminCheck();
@@ -21,7 +21,7 @@ class Service extends Core
         $this->json($cache->storageSize());
     }
 
-    # http://azimut.dc/zen/cabox/api/Service@getStorageItems?storage_id=1
+    # http://azimut74/zen/cabox/api/Service@getStorageItems?storage_id=1
     function getStorageItems()
     {
         $this->isAdminCheck();

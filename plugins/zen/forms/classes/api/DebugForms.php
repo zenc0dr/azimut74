@@ -7,7 +7,7 @@ use Http;
 
 class DebugForms
 {
-    # http://azimut.dc/zen/forms/api/DebugForms:playground
+    # http://azimut74/zen/forms/api/DebugForms:playground
     public function playground()
     {
 

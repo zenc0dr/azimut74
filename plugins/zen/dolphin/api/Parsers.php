@@ -4,7 +4,7 @@ use Zen\Dolphin\Classes\Core;
 
 class Parsers extends Core
 {
-    # http://azimut.dc/zen/dolphin/api/parsers:go
+    # http://azimut74/zen/dolphin/api/parsers:go
     function go()
     {
         $this->isAdmin();

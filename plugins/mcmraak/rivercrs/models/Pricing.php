@@ -163,7 +163,7 @@ class Pricing extends Model
     /**
     * Return price of one ship.
     * @return array
-    * ex: http://azimut.dc/rivercrs/api/v1/pricing/price/12/61
+    * ex: http://azimut74/rivercrs/api/v1/pricing/price/12/61
     */
     public static function PriceXLS($motorship_id, $town_id)
     {

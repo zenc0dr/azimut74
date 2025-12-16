@@ -58,7 +58,7 @@ class RivercrsCheckin
             return null;
         }
 
-        # http://azimut.dc/cruise/2449
+        # http://azimut74/cruise/2449
         if ($eds_code == 'germes') {
             $data = (new \Mcmraak\Rivercrs\Classes\Exist\GermesSchelude)->render($checkin, true);
             # arr: trace_table, excursion_table
@@ -68,12 +68,12 @@ class RivercrsCheckin
             return self::germesSchedule($data['trace_table']);
         }
 
-        # http://azimut.dc/cruise/1
+        # http://azimut74/cruise/1
         if ($eds_code == 'waterway') {
             return self::waterwaySchedule($checkin->desc_1);
         }
 
-        # http://azimut.dc/cruise/1681
+        # http://azimut74/cruise/1681
         if ($eds_code == 'gama') {
             return self::sheduleStandartTableToArray($checkin->desc_1);
         }

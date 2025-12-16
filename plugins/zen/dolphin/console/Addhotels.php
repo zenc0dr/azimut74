@@ -275,7 +275,7 @@ class Addhotels extends Command
 
     function getCacheUrl()
     {
-        echo "http://azimut.dc/zen/dolphin/api/Debug@viewHotelPage?id={$this->hotel_id}\n";
+        echo "http://azimut74/zen/dolphin/api/Debug@viewHotelPage?id={$this->hotel_id}\n";
         die;
     }
 

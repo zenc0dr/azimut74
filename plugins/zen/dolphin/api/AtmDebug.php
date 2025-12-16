@@ -4,7 +4,7 @@ use Zen\Dolphin\Classes\Core;
 
 class AtmDebug extends Core
 {
-    # http://azimut.dc/zen/dolphin/api/AtmDebug:debugAtmDb
+    # http://azimut74/zen/dolphin/api/AtmDebug:debugAtmDb
     function debugAtmDb()
     {
         $dates = ["18.06.2021", "21.06.2021"];

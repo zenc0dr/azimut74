@@ -11,7 +11,7 @@ class Admin extends Core
 
     private $token = 'xDenBhdu6fTgd3nbbBd45oOpd6gGssX';
 
-    # http://azimut.dc/zen/worker/api/admin:state
+    # http://azimut74/zen/worker/api/admin:state
     function state()
     {
 
@@ -47,7 +47,7 @@ class Admin extends Core
         ]);
     }
 
-    # http://azimut.dc/zen/worker/api/admin:go
+    # http://azimut74/zen/worker/api/admin:go
     function go()
     {
         $token = $this->input('token');
@@ -67,7 +67,7 @@ class Admin extends Core
         }
     }
 
-    # http://azimut.dc/zen/worker/api/admin:wakeUp
+    # http://azimut74/zen/worker/api/admin:wakeUp
     function wakeUp()
     {
         if(!Event::hasOpenSession()) {
@@ -87,7 +87,7 @@ class Admin extends Core
     function transfer()
     {
         $token = $this->input('token');
-        
+
         if(!$this->isAdmin(true)) {
             if($token !== $this->token) {
                 die('access error');

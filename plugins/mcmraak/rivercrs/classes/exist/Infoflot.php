@@ -9,9 +9,9 @@ class Infoflot extends Exist
 {
     public $query_type;
     # Получить список круизов
-    # http://azimut.dc/rivercrs/api/v2/parser/infoflotSeeder?id=init&debug=true
+    # http://azimut74/rivercrs/api/v2/parser/infoflotSeeder?id=init&debug=true
 
-    # http://azimut.dc/rivercrs/api/v2/exist/34888?debug
+    # http://azimut74/rivercrs/api/v2/exist/34888?debug
     public function getExist($checkin, $realtime) {
         //dd($checkin, $realtime);
 

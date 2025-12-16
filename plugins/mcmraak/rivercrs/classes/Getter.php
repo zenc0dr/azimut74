@@ -121,7 +121,7 @@ class Getter extends Parser
         $name = str_replace('⏹', '-', $name);
         $name = str_replace('⏴', '(', $name);
         $name = str_replace('⏵', ')', $name);
-        
+
         // Обрезаем название до максимальной длины поля (255 символов для string)
         // Используем mb_substr для корректной работы с UTF-8
         $maxLength = 255;
@@ -400,7 +400,7 @@ class Getter extends Parser
     public function checkCabins()
     {
 
-        $debug = false; # http://azimut.dc/rivercrs/debug/Getter@checkCabins
+        $debug = false; # http://azimut74/rivercrs/debug/Getter@checkCabins
 
         if (isset($_GET['debug'])) $debug = $_GET['debug'];
 
@@ -439,8 +439,8 @@ class Getter extends Parser
         ]);
     }
 
-    # http://azimut.dc/rivercrs/debug/Getter@excludedMotorshipsCheckins?id=init&debug=1
-    # http://azimut.dc/rivercrs/debug/Getter@excludedMotorshipsCheckins?id=infoflot:11&debug=1
+    # http://azimut74/rivercrs/debug/Getter@excludedMotorshipsCheckins?id=init&debug=1
+    # http://azimut74/rivercrs/debug/Getter@excludedMotorshipsCheckins?id=infoflot:11&debug=1
     function excludedMotorshipsCheckins()
     {
         $debug = false;
@@ -516,7 +516,7 @@ class Getter extends Parser
     public function isCabinNotLetTest()
     {
 
-        # http://azimut.dc/rivercrs/debug/Getter@isCabinNotLetTest
+        # http://azimut74/rivercrs/debug/Getter@isCabinNotLetTest
 
         $not_let = [['name' => 'Эко (2+1) {!11}']]; // Разрешить 'Эко (2+1)' для всех теплоходов кроме 11 (true = запретить)
         $test = $this->isCabinNotLet('Эко (2+1)', 11, $not_let);
@@ -899,7 +899,7 @@ class Getter extends Parser
         return $date[2] . '-' . $date[1] . '-' . $date[0];
     }
 
-    # http://azimut.dc/rivercrs/debug/Getter@reActualCheckins?id=init
+    # http://azimut74/rivercrs/debug/Getter@reActualCheckins?id=init
     public function reActualCheckins()
     {
         $id = Input::get('id');

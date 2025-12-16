@@ -2,7 +2,7 @@
 
 class Parser
 {
-    # http://azimut.dc/zen/putpics/api/parser:test
+    # http://azimut74/zen/putpics/api/parser:test
     public function test()
     {
         $curl = curl_init();

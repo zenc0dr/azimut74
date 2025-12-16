@@ -5,7 +5,7 @@ use Zen\Dolphin\Classes\Parser;
 class State extends Parser
 {
 
-    # http://azimut.dc/zen/dolphin/api/state:get
+    # http://azimut74/zen/dolphin/api/state:get
     function get()
     {
         $this->isAdmin();

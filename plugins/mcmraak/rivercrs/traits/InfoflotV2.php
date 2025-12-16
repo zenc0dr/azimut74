@@ -21,7 +21,7 @@ use Mcmraak\Rivercrs\Classes\ParserLog;
 
 trait InfoflotV2
 {
-    # http://azimut.dc/rivercrs/api/v2/parser/infoflotMount?id=535&debug
+    # http://azimut74/rivercrs/api/v2/parser/infoflotMount?id=535&debug
     function infoflotMount()
     {
 
@@ -88,8 +88,8 @@ trait InfoflotV2
         $this->json(['html' => "Кеш круизов теплохода #$ship_eds_id"]);
     }
 
-    # http://azimut.dc/rivercrs/api/v2/parser/infoflotToursByShip
-    # http://azimut.dc/rivercrs/api/v2/parser/infoflotToursByShip?id=1
+    # http://azimut74/rivercrs/api/v2/parser/infoflotToursByShip
+    # http://azimut74/rivercrs/api/v2/parser/infoflotToursByShip?id=1
     function infoflotToursByShip()
     {
         $ship_id = Input::get('id');
@@ -173,8 +173,8 @@ trait InfoflotV2
 
 
 
-    # http://azimut.dc/rivercrs/api/v2/parser/infoflotToursById?debug
-    # http://azimut.dc/rivercrs/api/v2/parser/infoflotToursById?id=4.8546&debug
+    # http://azimut74/rivercrs/api/v2/parser/infoflotToursById?debug
+    # http://azimut74/rivercrs/api/v2/parser/infoflotToursById?id=4.8546&debug
     function infoflotToursById()
     {
 
@@ -266,7 +266,7 @@ trait InfoflotV2
 
     }
 
-    # http://azimut.dc/rivercrs/api/v2/parser/infoflotSeeder?id=init&debug=true
+    # http://azimut74/rivercrs/api/v2/parser/infoflotSeeder?id=init&debug=true
     function infoflotSeeder()
     {
         die('stop');

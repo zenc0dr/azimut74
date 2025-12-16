@@ -6,7 +6,7 @@ use DB;
 
 class Atm extends Core
 {
-    # http://azimut.dc/zen/dolphin/api/atm:allowedDates
+    # http://azimut74/zen/dolphin/api/atm:allowedDates
     public function allowedDates()
     {
         DB::unprepared("SET sql_mode = ''");
@@ -14,7 +14,7 @@ class Atm extends Core
         $this->json($allowed_dates);
     }
 
-    # http://azimut.dc/zen/dolphin/api/atm:allowedHotels
+    # http://azimut74/zen/dolphin/api/atm:allowedHotels
     # @input: dates (array), geo_objects (array)
     public function allowedHotels()
     {
@@ -30,7 +30,7 @@ class Atm extends Core
         $this->json($allowed_hotels);
     }
 
-    # http://azimut.dc/zen/dolphin/api/atm:db
+    # http://azimut74/zen/dolphin/api/atm:db
     # @input: dates (array), hotels (array)
     public function db()
     {
@@ -76,7 +76,7 @@ class Atm extends Core
         $this->json($data);
     }
 
-    # http://azimut.dc/zen/dolphin/api/atm:getHotelPreset?hotel_id=2459
+    # http://azimut74/zen/dolphin/api/atm:getHotelPreset?hotel_id=2459
     public function getHotelPreset()
     {
         # Надо получить дату и гео-точку
@@ -107,7 +107,7 @@ class Atm extends Core
         ]);
     }
 
-    # http://azimut.dc/zen/dolphin/api/atm:openGPS?gps=44.880857:37.313113&html=true
+    # http://azimut74/zen/dolphin/api/atm:openGPS?gps=44.880857:37.313113&html=true
     public function openGPS()
     {
         $gps = $this->input('gps'); # ex: 44.880857:37.313113

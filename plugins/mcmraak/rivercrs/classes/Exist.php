@@ -97,21 +97,21 @@ class Exist
             }
         }
 
-        # Схема выводимых данных: http://azimut.dc/plugins/mcmraak/rivercrs/assets/images/docs/data_sheme.jpg
+        # Схема выводимых данных: http://azimut74/plugins/mcmraak/rivercrs/assets/images/docs/data_sheme.jpg
 
-        #API_URL: http://azimut.dc/rivercrs/api/v2/exist/8784?debug     :Gama # Никитин
-        #API_URL: http://azimut.dc/rivercrs/api/v2/exist/1550306?debug   :Waterway
-        #API_URL: http://azimut.dc/rivercrs/api/v2/exist/14666?debug    :Germes # Чкалов
-        #API_URL: http://azimut.dc/rivercrs/api/v2/exist/33679?debug    :Volga # Кутузов
-        #API_URL: http://azimut.dc/rivercrs/api/v2/exist/29274?debug_qq :infoflot
-        #API_URL: http://azimut.dc/rivercrs/api/v2/exist/30786?debug    :infoflot
+        #API_URL: http://azimut74/rivercrs/api/v2/exist/8784?debug     :Gama # Никитин
+        #API_URL: http://azimut74/rivercrs/api/v2/exist/1550306?debug   :Waterway
+        #API_URL: http://azimut74/rivercrs/api/v2/exist/14666?debug    :Germes # Чкалов
+        #API_URL: http://azimut74/rivercrs/api/v2/exist/33679?debug    :Volga # Кутузов
+        #API_URL: http://azimut74/rivercrs/api/v2/exist/29274?debug_qq :infoflot
+        #API_URL: http://azimut74/rivercrs/api/v2/exist/30786?debug    :infoflot
 
-        #API_URL: http://azimut.dc/rivercrs/api/v2/exist/28839?debug
-        #API_URL: http://azimut.dc/rivercrs/api/v2/exist/33898?debug
+        #API_URL: http://azimut74/rivercrs/api/v2/exist/28839?debug
+        #API_URL: http://azimut74/rivercrs/api/v2/exist/33898?debug
 
-        # http://azimut.dc/rivercrs/api/v2/exist/550402?debug?cached=1
+        # http://azimut74/rivercrs/api/v2/exist/550402?debug?cached=1
 
-        #Кулибин лишние палубы: http://azimut.dc/rivercrs/api/v2/exist/13966?debug
+        #Кулибин лишние палубы: http://azimut74/rivercrs/api/v2/exist/13966?debug
 
         $cache_key = "exist:$checkin_id";
 
@@ -167,7 +167,7 @@ class Exist
         if (strtolower($checkin->eds_code) === 'waterway') {
             try {
                 $waterway = new \Mcmraak\Rivercrs\Classes\Exist\Waterway();
-                // Логика: 
+                // Логика:
                 // - Первый запрос (cached=0): показываем данные из базы БЕЗ запроса к API (realtime=false)
                 // - Второй запрос (cached=1): делаем запрос к API для обновления данных (realtime=true)
                 $realtime_for_waterway = $cached ? $realtime : false;
@@ -228,7 +228,7 @@ class Exist
                     }
                 }
             }
-            
+
             $final_data = [
                 'decks' => $exist_data['decks'] ?? [],
                 'rooms' => $exist_data['rooms'] ?? [],
@@ -237,7 +237,7 @@ class Exist
                 'tariff_price2' => $exist_data['tariff_price2'] ?? false,
                 'tariff_price2_title' => $exist_data['tariff_price2_title'] ?? ['name' => 'Руб.на 1 чел.', 'desc' => null],
             ];
-            
+
             if ($type == 'json') {
                 // Добавляем 'cached' => true если запрос был с cached=1 (как в старой логике)
                 if ($cached) {
@@ -718,7 +718,7 @@ class Exist
         ]);
     }
 
-    # http://azimut.dc/rivercrs/debug/Exist@getCabinData
+    # http://azimut74/rivercrs/debug/Exist@getCabinData
     public function getCabinData($checkin_id, $room_number, $deck_id)
     {
         $data = $this->get($checkin_id, 'array', false);

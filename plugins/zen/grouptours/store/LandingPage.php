@@ -5,7 +5,7 @@ use Zen\Dolphin\Classes\Core as DolphinCore;
 
 class LandingPage extends Store
 {
-    # http://azimut.dc/group-tours/kakie-tam-tury-iz-saratova?dump
+    # http://azimut74/group-tours/kakie-tam-tury-iz-saratova?dump
     public function get($data): ?array
     {
         $page = Page::active()

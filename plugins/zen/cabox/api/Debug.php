@@ -6,7 +6,7 @@ use Zen\Cabox\Classes\Cabox;
 
 class Debug
 {
-    # http://azimut.dc/zen/cabox/api/Debug@testConfig
+    # http://azimut74/zen/cabox/api/Debug@testConfig
     function testConfig()
     {
         $cache = new Cabox('dolphin.parsers');
@@ -19,7 +19,7 @@ class Debug
         app('Zen\Cabox\Controllers\Storages')->onShowDump();
     }
 
-    # http://azimut.dc/zen/cabox/api/Debug@testHandlers
+    # http://azimut74/zen/cabox/api/Debug@testHandlers
     function testHandlers()
     {
         $cabox = new Cabox('dolphin.parsers');

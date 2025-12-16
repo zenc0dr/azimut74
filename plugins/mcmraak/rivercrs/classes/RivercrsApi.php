@@ -11,7 +11,7 @@ class RivercrsApi
         echo json_encode($array, JSON_UNESCAPED_UNICODE);
     }
 
-    # http://azimut.dc/rivercrs/api/getToken
+    # http://azimut74/rivercrs/api/getToken
     public function getToken()
     {
         $token = Uuid::uuid4()->toString();
@@ -22,19 +22,19 @@ class RivercrsApi
         ]);
     }
 
-    # http://azimut.dc/rivercrs/api/extraRefresh
+    # http://azimut74/rivercrs/api/extraRefresh
     public function extraRefresh()
     {
         return SearchCacheVersion::get();
     }
 
-    # http://azimut.dc/rivercrs/api/mounted
+    # http://azimut74/rivercrs/api/mounted
     public function mounted()
     {
         echo (new \Mcmraak\Rivercrs\Classes\Search)->mounted();
     }
 
-    # http://azimut.dc/rivercrs/api/search
+    # http://azimut74/rivercrs/api/search
     public function search()
     {
         self::json([
@@ -42,7 +42,7 @@ class RivercrsApi
         ]);
     }
 
-    # http://azimut.dc/rivercrs/api/ships
+    # http://azimut74/rivercrs/api/ships
     public function ships()
     {
         self::json([
@@ -50,25 +50,25 @@ class RivercrsApi
         ]);
     }
 
-    # http://azimut.dc/rivercrs/api/searchShips
+    # http://azimut74/rivercrs/api/searchShips
     public function searchShips()
     {
         self::json(RivercrsShips::search());
     }
 
-    # http://azimut.dc/rivercrs/api/booking
+    # http://azimut74/rivercrs/api/booking
     public function booking()
     {
         app('Mcmraak\Rivercrs\Controllers\Booking')->sendBooking();
     }
 
-    # http://azimut.dc/rivercrs/api/callback
+    # http://azimut74/rivercrs/api/callback
     public function callback()
     {
         self::json(RivercrsCallback::send());
     }
 
-    # http://azimut.dc/rivercrs/api/cabinInfo
+    # http://azimut74/rivercrs/api/cabinInfo
     public function cabinInfo()
     {
         self::json([
@@ -76,7 +76,7 @@ class RivercrsApi
         ]);
     }
 
-    # http://azimut.dc/rivercrs/api/openCabin
+    # http://azimut74/rivercrs/api/openCabin
     public function openCabin()
     {
         self::json([

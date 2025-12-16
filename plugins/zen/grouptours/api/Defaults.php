@@ -4,7 +4,7 @@ use BackendAuth;
 
 class Defaults extends Api
 {
-    # http://azimut.dc/zen/gt/api/defaults:get
+    # http://azimut74/zen/gt/api/defaults:get
     public function get()
     {
         $data = [

@@ -6,7 +6,7 @@ use View;
 
 class Data extends Core
 {
-    # http://azimut.dc/zen/uon/api/data:get?request=4-5:14980,12-15:14982,19-20:14983 // {места}:{Номер заказа}
+    # http://azimut74/zen/uon/api/data:get?request=4-5:14980,12-15:14982,19-20:14983 // {места}:{Номер заказа}
     public function get()
     {
         $styler = intval($this->input('styler'));

@@ -18,7 +18,7 @@ class Debug extends Core
         $this->isAdmin();
     }
 
-    # http://azimut.dc/zen/dolphin/api/debug:extSearch
+    # http://azimut74/zen/dolphin/api/debug:extSearch
     public function extSearch()
     {
         $search_query = [
@@ -49,19 +49,19 @@ class Debug extends Core
         dd($output);
     }
 
-    # http://azimut.dc/zen/dolphin/api/debug:debugGreeter
+    # http://azimut74/zen/dolphin/api/debug:debugGreeter
     public function debugGreeter()
     {
         Showcases::createCache();
     }
 
-    # http://azimut.dc/zen/dolphin/api/debug:debugImport
+    # http://azimut74/zen/dolphin/api/debug:debugImport
     public function debugImport()
     {
         app('Zen\Dolphin\Console\Import')->handle();
     }
 
-    # http://azimut.dc/zen/dolphin/api/debug:test
+    # http://azimut74/zen/dolphin/api/debug:test
     public function test()
     {
         deprecator('callme')->catch([

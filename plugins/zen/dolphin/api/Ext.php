@@ -7,7 +7,7 @@ use Cache;
 class Ext extends Core
 {
     # ПОисковый запрос с посадочной страницы вида
-    # http://azimut.dc/zen/dolphin/api/ext:search
+    # http://azimut74/zen/dolphin/api/ext:search
     public function search()
     {
         $search_query = [
@@ -35,7 +35,7 @@ class Ext extends Core
         echo $output;
     }
 
-    # http://azimut.dc/zen/dolphin/api/ext:schedule?limit=100
+    # http://azimut74/zen/dolphin/api/ext:schedule?limit=100
     public function schedule()
     {
         $limit = $this->input('limit');

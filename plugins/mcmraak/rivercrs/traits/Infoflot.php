@@ -39,7 +39,7 @@ trait Infoflot
         return $ships_ids;
     }
 
-    # http://azimut.dc/rivercrs/api/v2/parser/infoflotTours
+    # http://azimut74/rivercrs/api/v2/parser/infoflotTours
     function infoflotTours()
     {
         $ship_id = Input::get('id');
@@ -117,7 +117,7 @@ trait Infoflot
 
 
 
-    # http://azimut.dc/rivercrs/api/v2/parser/infoflotRoutes
+    # http://azimut74/rivercrs/api/v2/parser/infoflotRoutes
     function infoflotRoutes()
     {
         $id = Input::get('id'); // 345:34532
@@ -155,7 +155,7 @@ trait Infoflot
         }
     }
 
-    # http://azimut.dc/rivercrs/api/v2/parser/infoflotCabins?id=475
+    # http://azimut74/rivercrs/api/v2/parser/infoflotCabins?id=475
     function infoflotCabins()
     {
         $ship_id = Input::get('id');
@@ -186,7 +186,7 @@ trait Infoflot
     }
 
     # TODO: Пока не используется
-    # http://azimut.dc/rivercrs/api/v2/parser/infoflotCabinsDesc?id=28:Люкс 1
+    # http://azimut74/rivercrs/api/v2/parser/infoflotCabinsDesc?id=28:Люкс 1
     function infoflotCabinsDesc()
     {
         $id = Input::get('id');
@@ -225,8 +225,8 @@ trait Infoflot
         }
     }
 
-    # http://azimut.dc/rivercrs/api/v2/parser/infoflotMotorshipsSeeder?id=init
-    # http://azimut.dc/rivercrs/api/v2/parser/infoflotMotorshipsSeeder?id=325
+    # http://azimut74/rivercrs/api/v2/parser/infoflotMotorshipsSeeder?id=init
+    # http://azimut74/rivercrs/api/v2/parser/infoflotMotorshipsSeeder?id=325
     function infoflotMotorshipsSeeder()
     {
         $debug = Input::get('debug');
@@ -276,14 +276,14 @@ trait Infoflot
         ]);
     }
 
-    # http://azimut.dc/rivercrs/api/v2/parser/infoflotSeeder?id=init&debug=true
-    # http://azimut.dc/rivercrs/api/v2/parser/infoflotSeeder?id=498:307336&debug=true
+    # http://azimut74/rivercrs/api/v2/parser/infoflotSeeder?id=init&debug=true
+    # http://azimut74/rivercrs/api/v2/parser/infoflotSeeder?id=498:307336&debug=true
 
-    # http://azimut.dc/rivercrs/api/v2/parser/infoflotSeeder?id=41:337164&debug=true
+    # http://azimut74/rivercrs/api/v2/parser/infoflotSeeder?id=41:337164&debug=true
     # 41:337164
 
 
-    # http://azimut.dc/rivercrs/api/v2/parser/infoflotSeeder?id=551:318930&debug=true // Без $route
+    # http://azimut74/rivercrs/api/v2/parser/infoflotSeeder?id=551:318930&debug=true // Без $route
     public $id;
     function infoflotSeeder()
     {

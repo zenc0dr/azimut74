@@ -6,7 +6,7 @@ use DB;
 class Service extends Core
 {
     # Генерировать CSS бэкенда для режима разработки vue-приложения для бэкенда
-    # http://azimut.dc/zen/dolphin/api/service:backendCss
+    # http://azimut74/zen/dolphin/api/service:backendCss
     function backendCss()
     {
         $cache = $this->cache('dolphin.service');
@@ -31,7 +31,7 @@ class Service extends Core
         return response($css)->header('Content-Type', 'text/css');
     }
 
-    # http://azimut.dc/zen/dolphin/api/service:frontendCss
+    # http://azimut74/zen/dolphin/api/service:frontendCss
     function frontendCss()
     {
         $css = file(base_path('plugins/zen/dolphin/storage/frontend_css_links.txt'));
@@ -42,7 +42,7 @@ class Service extends Core
         return response(join('', $out))->header('Content-Type', 'text/css');
     }
 
-    # http://azimut.dc/zen/dolphin/api/service:streamDump?token=d328fea4a3662d38640d6c1eaecdd02f
+    # http://azimut74/zen/dolphin/api/service:streamDump?token=d328fea4a3662d38640d6c1eaecdd02f
     function streamDump()
     {
         $token = $this->input('token');
@@ -52,7 +52,7 @@ class Service extends Core
         $this->ddd($stream);
     }
 
-    # http://azimut.dc/zen/dolphin/api/service:getAgreement
+    # http://azimut74/zen/dolphin/api/service:getAgreement
     function getAgreement()
     {
         $html = DB::table('mcmraak_blocks_offer')->find(1)->offertext;

@@ -4,7 +4,7 @@ use Zen\GroupTours\Models\Tour;
 
 class Debug extends Api
 {
-    # http://azimut.dc/zen/gt/api/debug:testApi
+    # http://azimut74/zen/gt/api/debug:testApi
     public function testApi()
     {
         $order = master()->files()->arrayFromFile(storage_path('gt_order.json'));
@@ -18,7 +18,7 @@ class Debug extends Api
 //        dd($data);
     }
 
-    # http://azimut.dc/zen/gt/api/debug:testTour?id=1
+    # http://azimut74/zen/gt/api/debug:testTour?id=1
     public function testTour()
     {
         $tour_id = $this->input('id');

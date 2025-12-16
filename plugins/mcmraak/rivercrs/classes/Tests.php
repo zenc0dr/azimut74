@@ -35,7 +35,7 @@ class Tests
 {
 
     # Тест метода cleanNames для теплоходов
-    # http://azimut.dc/rivercrs/debug/Tests@motorshipsTest
+    # http://azimut74/rivercrs/debug/Tests@motorshipsTest
     function motorshipsTest()
     {
         $ships = Ship::cleanNames();
@@ -44,7 +44,7 @@ class Tests
     }
 
     # Просмотр цен на заезд
-    # http://azimut.dc/rivercrs/debug/Tests@testCheckinPrices
+    # http://azimut74/rivercrs/debug/Tests@testCheckinPrices
     function testCheckinPrices()
     {
         $checkin = Checkin::find(29748);
@@ -52,7 +52,7 @@ class Tests
     }
 
     # Тестирование преобразователя времени для Excel
-    # http://azimut.dc/rivercrs/debug/Tests@testExcelTime
+    # http://azimut74/rivercrs/debug/Tests@testExcelTime
     function testExcelTime()
     {
         # unixtime считает от 01.01.1970
@@ -82,14 +82,14 @@ class Tests
     }
 
     # Просмотр расписания Волга Волга
-    # http://azimut.dc/rivercrs/debug/Tests@testVolgaShelude
+    # http://azimut74/rivercrs/debug/Tests@testVolgaShelude
     function testVolgaShelude(){
         $checkin = Checkin::find(24672);
         return \Mcmraak\Rivercrs\Controllers\VolgaSettings::getVolgaExcursion($checkin);
     }
 
     # Тестирование системы логов
-    # http://azimut.dc/rivercrs/debug/Tests@testJLOG
+    # http://azimut74/rivercrs/debug/Tests@testJLOG
     function testJLOG(){
         JLog::addLog([
             'title' => 'Тест лога',
@@ -102,7 +102,7 @@ class Tests
         echo "Запись создана";
     }
 
-    # http://azimut.dc/rivercrs/debug/Tests@readMail
+    # http://azimut74/rivercrs/debug/Tests@readMail
     function readMail()
     {
         $connect = imap_open("{imap.yandex.ru:143/novalidate-cert}", "noreply@xn----7sbveuzmbgd.xn--p1ai", "mbvmhyubrpgqivad");
@@ -158,7 +158,7 @@ class Tests
         */
     }
 
-    # http://azimut.dc/rivercrs/debug/Tests@testCabinPivots
+    # http://azimut74/rivercrs/debug/Tests@testCabinPivots
     function testCabinPivots()
     {
         Config::set('database.connections.azimut_backup', array(
@@ -184,7 +184,7 @@ class Tests
         dd($pivots);
     }
 
-    # http://azimut.dc/rivercrs/debug/Tests@infoflotIssue1
+    # http://azimut74/rivercrs/debug/Tests@infoflotIssue1
     function infoflotIssue1()
     {
         //$page = Input::get('page');
@@ -211,13 +211,13 @@ class Tests
         }
     }
 
-    # http://azimut.dc/rivercrs/debug/Tests@waterwayIssue1
+    # http://azimut74/rivercrs/debug/Tests@waterwayIssue1
     function waterwayIssue1()
     {
         dd(ID::isExist('waterway', 9495));
     }
 
-    # http://azimut.dc/rivercrs/debug/Tests@testCabins
+    # http://azimut74/rivercrs/debug/Tests@testCabins
     function testCabins()
     {
         return;
@@ -231,13 +231,13 @@ class Tests
 
     }
 
-    # http://azimut.dc/rivercrs/debug/Tests@testReviews
+    # http://azimut74/rivercrs/debug/Tests@testReviews
     function testReviews()
     {
         echo \Mcmraak\Rivercrs\Classes\InjSettings::getReviews();
     }
 
-    # http://azimut.dc/rivercrs/debug/Tests@testQuizPriz
+    # http://azimut74/rivercrs/debug/Tests@testQuizPriz
     function testQuizPriz()
     {
         //dd(Session::get('quize_passed'));

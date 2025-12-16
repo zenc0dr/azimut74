@@ -6,7 +6,7 @@ use Session;
 
 class Debug extends Api
 {
-    # http://azimut.dc/zen/uongate/api/debug:testApi
+    # http://azimut74/zen/uongate/api/debug:testApi
     public function testApi()
     {
         $time = now()->format('d.m.Y H:i:s');
@@ -18,7 +18,7 @@ class Debug extends Api
         );
     }
 
-    # http://azimut.dc/zen/uongate/api/debug:testQuery
+    # http://azimut74/zen/uongate/api/debug:testQuery
     public function testQuery()
     {
         Lead::push([
@@ -30,7 +30,7 @@ class Debug extends Api
         ]);
     }
 
-    # http://azimut.dc/zen/uongate/api/debug:testUtm
+    # http://azimut74/zen/uongate/api/debug:testUtm
     public function testUtm()
     {
         dd(

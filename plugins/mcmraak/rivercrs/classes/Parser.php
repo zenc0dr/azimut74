@@ -269,7 +269,7 @@ class Parser
 
         # Водоходъ - Теплоходы
         # Запрос: https://api.vodohod.com/json/v2/motorships.php?pauth=kefhjkdRgwFdkVHpRHGs
-        # Дамп: http://azimut.dc/rivercrs/api/v2/cache/debug/waterway-motorships
+        # Дамп: http://azimut74/rivercrs/api/v2/cache/debug/waterway-motorships
         if($method == 'waterway-motorships') {
             $answer = $this->get('json',
                 'https://api.vodohod.com/json/v2/motorships.php',
@@ -280,7 +280,7 @@ class Parser
 
         # Водоходъ - Круизы
         # Запрос: https://api.vodohod.com/json/v2/cruises.php?pauth=kefhjkdRgwFdkVHpRHGs
-        # Дамп: http://azimut.dc/rivercrs/api/v2/cache/debug/waterway-cruises
+        # Дамп: http://azimut74/rivercrs/api/v2/cache/debug/waterway-cruises
         if($method == 'waterway-cruises') {
             $answer = $this->get('json',
                 'https://api.vodohod.com/json/v2/cruises.php',
@@ -291,7 +291,7 @@ class Parser
 
         # Водоходъ - Цены круиза с наличием мест
         # Запрос: https://api.vodohod.com/json/v2/cruise-prices.php?pauth=kefhjkdRgwFdkVHpRHGs&cruise=7868
-        # Дамп: http://azimut.dc/rivercrs/api/v2/cache/debug/waterway-prices/7868
+        # Дамп: http://azimut74/rivercrs/api/v2/cache/debug/waterway-prices/7868
         if($method == 'waterway-prices') {
             if(!isset($vars->id)) $this->error('Error: variable "cruise" not defined');
             $answer = $this->get('json',
@@ -306,7 +306,7 @@ class Parser
 
         # Водоходъ - Расписание круиза по дням
         # Запрос: https://api.vodohod.com/json/v2/cruise-days.php?pauth=kefhjkdRgwFdkVHpRHGs&cruise=7868
-        # Дамп: http://azimut.dc/rivercrs/api/v2/cache/debug/waterway-route/7868
+        # Дамп: http://azimut74/rivercrs/api/v2/cache/debug/waterway-route/7868
         if($method == 'waterway-route') {
             if(!isset($vars->id)) $this->error('Error: variable "cruise" not defined');
             $answer = $this->get('json',

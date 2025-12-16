@@ -6,7 +6,7 @@ use Zen\Fetcher\Classes\Sources\SourceClass;
 
 class Playground extends Api
 {
-    # http://azimut.dc/fetcher/api/debug.Playground:test
+    # http://azimut74/fetcher/api/debug.Playground:test
     public function test()
     {
         $source = new SourceClass();

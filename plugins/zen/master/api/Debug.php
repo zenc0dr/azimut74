@@ -6,14 +6,14 @@ use Zen\Cleaner\Classes\SmartCleaner;
 
 class Debug
 {
-    # http://azimut.dc/master.api.Debug.test
+    # http://azimut74/master.api.Debug.test
     public function test()
     {
         dd($_COOKIE['_ct_session_id']);
         //master()->telegram()->sendMessage('Ваша лодка готова капитан!');
     }
 
-    # http://azimut.dc/master.api.Debug.getFreeSize
+    # http://azimut74/master.api.Debug.getFreeSize
     public function getFreeSize()
     {
         $size = shell_exec("df -m --output=avail / | tail -n 1");

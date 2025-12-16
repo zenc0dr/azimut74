@@ -6,7 +6,7 @@ use Zen\Forms\Models\Item;
 
 class Sender
 {
-    # http://azimut.dc/zen/forms/api/Sender:send
+    # http://azimut74/zen/forms/api/Sender:send
     public function send()
     {
         $data = [

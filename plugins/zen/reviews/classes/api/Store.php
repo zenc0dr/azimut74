@@ -14,7 +14,7 @@ use File;
 class Store
 {
     # Добавление нового отзыва
-    # http://azimut.dc/zen/reviews/api/Store:push
+    # http://azimut74/zen/reviews/api/Store:push
     public function push()
     {
 //        reviews()->files()->arrayToFile(
@@ -166,7 +166,7 @@ class Store
         ]);
     }
 
-    # http://azimut.dc/zen/reviews/api/Store:sendEmail?debug=test@bk.ru
+    # http://azimut74/zen/reviews/api/Store:sendEmail?debug=test@bk.ru
     public function sendEmail(string $email = null, Review $review = null)
     {
         $email = $email ?? request('email') ?? request('debug');
@@ -202,7 +202,7 @@ class Store
     }
 
     # Добавление нового изображения
-    # http://azimut.dc/zen/reviews/api/Store:addImage
+    # http://azimut74/zen/reviews/api/Store:addImage
     public function addImage()
     {
         $image = reviews()->image(request('image'))->store(); // input: image => [file_name, base64]
@@ -216,7 +216,7 @@ class Store
         ]);
     }
 
-    # http://azimut.dc/zen/reviews/api/Store:sendInvitationEmail
+    # http://azimut74/zen/reviews/api/Store:sendInvitationEmail
     public function sendInvitationEmail()
     {
         $email = request('email');

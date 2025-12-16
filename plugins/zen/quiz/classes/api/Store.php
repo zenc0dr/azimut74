@@ -11,7 +11,7 @@ use Carbon\Carbon;
 class Store
 {
     # Добавление новой заявки
-    # http://azimut.dc/zen/quiz/api/Store:push
+    # http://azimut74/zen/quiz/api/Store:push
     public function push()
     {
         $form = request('form');

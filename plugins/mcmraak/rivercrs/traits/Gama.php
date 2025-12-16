@@ -19,8 +19,8 @@ trait Gama {
     public $id;
 
     # Гама - Кеш круизов
-    # http://azimut.dc/rivercrs/api/v2/parser/gamaCruisesCache
-    # http://azimut.dc/rivercrs/api/v2/parser/gamaCruisesCache?id=17438
+    # http://azimut74/rivercrs/api/v2/parser/gamaCruisesCache
+    # http://azimut74/rivercrs/api/v2/parser/gamaCruisesCache?id=17438
     public function gamaCruisesCache()
     {
         $id = Input::get('id');
@@ -77,8 +77,8 @@ trait Gama {
     }
 
     # Гама - Кеш палуб
-    # http://azimut.dc/rivercrs/api/v2/parser/gamaDecksCache
-    # http://azimut.dc/rivercrs/api/v2/parser/gamaDecksCache?id=8
+    # http://azimut74/rivercrs/api/v2/parser/gamaDecksCache
+    # http://azimut74/rivercrs/api/v2/parser/gamaDecksCache?id=8
     public function gamaDecksCache()
     {
         $id = Input::get('id');
@@ -120,7 +120,7 @@ trait Gama {
         try {
             $debug = false; // 16520
 
-            # http://azimut.dc/rivercrs/debug/Getter@gamaSeeder
+            # http://azimut74/rivercrs/debug/Getter@gamaSeeder
 
             $id = Input::get('id');
 

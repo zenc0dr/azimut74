@@ -21,8 +21,8 @@ use Mcmraak\Rivercrs\Models\Decks as Deck;
 trait Germes {
 
     # Гермес кеш статусов
-    # http://azimut.dc/rivercrs/api/v2/parser/germesStatusCache
-    # http://azimut.dc/rivercrs/api/v2/parser/germesStatusCache?id=14591
+    # http://azimut74/rivercrs/api/v2/parser/germesStatusCache
+    # http://azimut74/rivercrs/api/v2/parser/germesStatusCache?id=14591
     public function germesStatusCache()
     {
 
@@ -61,8 +61,8 @@ trait Germes {
     }
 
     # Гермес кеш маршрутов
-    # http://azimut.dc/rivercrs/api/v2/parser/germesTraceCache
-    # http://azimut.dc/rivercrs/api/v2/parser/germesTraceCache?id=14624
+    # http://azimut74/rivercrs/api/v2/parser/germesTraceCache
+    # http://azimut74/rivercrs/api/v2/parser/germesTraceCache?id=14624
     public function germesTraceCache()
     {
         $id = Input::get('id');
@@ -95,8 +95,8 @@ trait Germes {
     }
 
     # Гермес кеш экскурсий
-    # http://azimut.dc/rivercrs/api/v2/parser/germesExcursionCache
-    # http://azimut.dc/rivercrs/api/v2/parser/germesExcursionCache?id=14591
+    # http://azimut74/rivercrs/api/v2/parser/germesExcursionCache
+    # http://azimut74/rivercrs/api/v2/parser/germesExcursionCache?id=14591
     public function germesExcursionCache()
     {
         $id = Input::get('id');
@@ -133,7 +133,7 @@ trait Germes {
         }
     }
 
-    # http://azimut.dc/rivercrs/debug/Getter@germesSeeder?id=14668
+    # http://azimut74/rivercrs/debug/Getter@germesSeeder?id=14668
     public function germesSeeder()
     {
         $id = Input::get('id');

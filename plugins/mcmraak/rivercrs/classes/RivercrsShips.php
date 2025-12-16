@@ -48,7 +48,7 @@ class RivercrsShips
         ];
     }
 
-    # http://azimut.dc/rivercrs/api/searchships?dump
+    # http://azimut74/rivercrs/api/searchships?dump
     public static function search() : array
     {
         $form = Input::get('form');

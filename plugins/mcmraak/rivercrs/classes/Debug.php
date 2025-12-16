@@ -15,7 +15,7 @@ use Mcmraak\Rivercrs\Models\Motorships as Ship;
 
 class Debug
 {
-    # http://azimut.dc/rivercrs/debug/Debug@test
+    # http://azimut74/rivercrs/debug/Debug@test
     public function test()
     {
 
@@ -23,7 +23,7 @@ class Debug
     }
 
 
-    # http://azimut.dc/rivercrs/debug/Debug@generateCheckinsVector
+    # http://azimut74/rivercrs/debug/Debug@generateCheckinsVector
     public function generateCheckinsVector()
     {
         $checkins = Checkins::where('eds_code', 'waterway')->get();
@@ -59,7 +59,7 @@ class Debug
         );
     }
 
-    # http://azimut.dc/rivercrs/debug/Debug@exTest?id=5009
+    # http://azimut74/rivercrs/debug/Debug@exTest?id=5009
     public function exTest()
     {
         $checkin_id = Input::get('id');
@@ -73,11 +73,11 @@ class Debug
 
         $extTest->get($checkin);
 
-        # http://azimut.dc/rivercrs/debug/Debug@exTest
+        # http://azimut74/rivercrs/debug/Debug@exTest
         //app('Mcmraak\Rivercrs\Classes\ExistTest')->get($checkin, 'array');
     }
 
-    # http://azimut.dc/rivercrs/debug/Debug@exTestTurbo?id=5009
+    # http://azimut74/rivercrs/debug/Debug@exTestTurbo?id=5009
     public function exTestTurbo()
     {
         $checkin_id = Input::get('id');

@@ -21,7 +21,7 @@ use Mcmraak\Rivercrs\Classes\ParserLog;
 trait InfoflotV3
 {
     # Метод 1 - Перебор теплоходов
-    # http://azimut.dc/rivercrs/api/v2/parser/infoflotShips
+    # http://azimut74/rivercrs/api/v2/parser/infoflotShips
     function infoflotShips()
     {
         $page_id = Input::get('id');
@@ -132,7 +132,7 @@ trait InfoflotV3
 
 
     # Метод 2 - Перебор круизов и цен
-    # http://azimut.dc/rivercrs/api/v2/parser/infoflotCruisesCache
+    # http://azimut74/rivercrs/api/v2/parser/infoflotCruisesCache
     function infoflotCruisesCache()
     {
         $id = Input::get('id');
@@ -390,7 +390,7 @@ trait InfoflotV3
         $this->updateCabinPriceQueries($del_q, $ins_q);
     }
 
-    # http://azimut.dc/rivercrs/api/v2/parser/infoflotSeeder?id=init&debug=true
+    # http://azimut74/rivercrs/api/v2/parser/infoflotSeeder?id=init&debug=true
     function infoflotSeeder()
     {
         $idsDB = new Ids('infoflot_cache', CacheSettings::get('infoflot_tours'));

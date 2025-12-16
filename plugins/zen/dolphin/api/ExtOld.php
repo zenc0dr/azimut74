@@ -24,7 +24,7 @@ class ExtOld extends Core
 
     # Документация: http://8ber.ru/s/cjs
     # Отладка:
-    # http://azimut.dc/zen/dolphin/api/ext:search
+    # http://azimut74/zen/dolphin/api/ext:search
     public function search($debug = null)
     {
         if ($debug) {
@@ -190,7 +190,7 @@ class ExtOld extends Core
         $this->result_items = array_values($this->result_items);
     }
 
-    # http://azimut.dc/zen/dolphin/api/ext:tour?tour_eid=29165
+    # http://azimut74/zen/dolphin/api/ext:tour?tour_eid=29165
     public function tour()
     {
         $tour_id = $this->input('tour_id');

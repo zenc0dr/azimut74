@@ -6,7 +6,7 @@ use Zen\Dolphin\Models\Tour;
 
 class OrderOld extends Core
 {
-    # http://azimut.dc/zen/dolphin/api/order:send
+    # http://azimut74/zen/dolphin/api/order:send
     function send()
     {
         $order = $this->input('order');

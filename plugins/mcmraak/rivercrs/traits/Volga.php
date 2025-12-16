@@ -38,8 +38,8 @@ trait Volga
     public function volgaCabinsSeeder()
     {
 
-        # http://azimut.dc/rivercrs/debug/Getter@volgaCabinsSeeder?debug_id=3117 // Разбор расписания
-        # http://azimut.dc/rivercrs/debug/Getter@volgaCabinsSeeder?debug_id=3117
+        # http://azimut74/rivercrs/debug/Getter@volgaCabinsSeeder?debug_id=3117 // Разбор расписания
+        # http://azimut74/rivercrs/debug/Getter@volgaCabinsSeeder?debug_id=3117
 
         $debug = false; #405;
 

@@ -121,7 +121,7 @@ class Parser extends Command
 
             if(!$start_name) {
 
-                $url_cabox = "http://azimut.dc/zen/dolphin/api/Debug@viewHotelPage?id=$hotel_id";
+                $url_cabox = "http://azimut74/zen/dolphin/api/Debug@viewHotelPage?id=$hotel_id";
 
                 $this->output->writeln("Страница не читается: $url");
                 $this->output->writeln("Страница в кеше: $url_cabox");

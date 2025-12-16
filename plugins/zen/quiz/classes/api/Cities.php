@@ -4,7 +4,7 @@ namespace Zen\Quiz\Classes\Api;
 
 class Cities
 {
-    # http://azimut.dc/zen/quiz/api/Cities:getList
+    # http://azimut74/zen/quiz/api/Cities:getList
     public function getList()
     {
         $cities = \DB::table('zen_quiz_cities')

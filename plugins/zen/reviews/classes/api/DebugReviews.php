@@ -7,7 +7,7 @@ use Http;
 
 class DebugReviews
 {
-    # http://azimut.dc/zen/reviews/api/DebugReviews:playground
+    # http://azimut74/zen/reviews/api/DebugReviews:playground
     public function playground()
     {
         $data = [
@@ -21,7 +21,7 @@ class DebugReviews
         dd($response->body);
     }
 
-     # http://azimut.dc/zen/reviews/api/DebugReviews:sendMail
+     # http://azimut74/zen/reviews/api/DebugReviews:sendMail
     public function sendMail() {
         $email = 'darkrogua@inbox.ru';
 

@@ -52,7 +52,7 @@ class Search
         # Save query dump
         #file_put_contents(temp_path().'/sans_query_dump.txt', serialize($data));
 
-        # Load query dump (http://azimut.dc/sans/api/v1/search/query)
+        # Load query dump (http://azimut74/sans/api/v1/search/query)
         #$data = unserialize(file_get_contents(temp_path().'/sans_query_dump.txt'));
         #dd($data);
 

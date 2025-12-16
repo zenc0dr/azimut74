@@ -5,7 +5,7 @@ use Zen\GroupTours\Models\Tour;
 
 class Search extends Api
 {
-    # http://azimut.dc/zen/gt/api/search:go?debug={"geo_objects":[],"days":[],"tags":[],"type":"catalog"}
+    # http://azimut74/zen/gt/api/search:go?debug={"geo_objects":[],"days":[],"tags":[],"type":"catalog"}
     public function go()
     {
         $data = $this->input('data');

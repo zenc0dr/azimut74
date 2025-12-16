@@ -12,7 +12,7 @@ class Check extends Command
     protected $name = 'rivercrs:service';
     protected $description = 'Необходимые проверки';
 
-    # http://azimut.dc/rivercrs/debug/Console/Check@handle
+    # http://azimut74/rivercrs/debug/Console/Check@handle
     public function handle()
     {
         $this->fixZeroPrices();

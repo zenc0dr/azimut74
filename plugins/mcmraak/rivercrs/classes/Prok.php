@@ -170,7 +170,7 @@ class Prok
         if($widget->is404()) return $widget->is404();
     }
 
-    # http://azimut.dc/prok/api/callback?name=Alex&phone=79173237700
+    # http://azimut74/prok/api/callback?name=Alex&phone=79173237700
     function callback()
     {
         $session_key = 'prok_callback_timestamp';
@@ -331,19 +331,19 @@ class Prok
     }
 
     ### API ###
-    # http://azimut.dc/prok/api/mounted
+    # http://azimut74/prok/api/mounted
     function mounted()
     {
         echo (new \Mcmraak\Rivercrs\Classes\Search)->mounted();
     }
 
-    # http://azimut.dc/prok/api/booking
+    # http://azimut74/prok/api/booking
     function booking()
     {
         (new \Mcmraak\Rivercrs\Controllers\Booking)->sendBooking(true);
     }
 
-    # http://azimut.dc/prok/api/ksearch
+    # http://azimut74/prok/api/ksearch
     function ksearch()
     {
         $ids = Input::get('ids');
@@ -434,7 +434,7 @@ class Prok
             return;
         }
 
-        # http://azimut.dc/cruise/2449
+        # http://azimut74/cruise/2449
         if($eds_code == 'germes') {
             $data = (new \Mcmraak\Rivercrs\Classes\Exist\GermesSchelude)->render($checkin, true);
             # arr: trace_table, excursion_table
@@ -442,12 +442,12 @@ class Prok
             return $this->germesSchedule($data['trace_table']);
         }
 
-        # http://azimut.dc/cruise/1
+        # http://azimut74/cruise/1
         if($eds_code == 'waterway') {
             return $this->waterwaySchedule($checkin->desc_1);
         }
 
-        # http://azimut.dc/cruise/1681
+        # http://azimut74/cruise/1681
         if($eds_code == 'gama') {
             return $this->sheduleStandartTableToArray($checkin->desc_1);
         }
@@ -704,7 +704,7 @@ class Prok
     }
 
     # Получить описание статуса теплохода
-    # http://azimut.dc/prok/api/getShipStatusDesc?name=%D0%9F%D1%80%D0%B5%D0%BC%D0%B8%D1%83%D0%BC
+    # http://azimut74/prok/api/getShipStatusDesc?name=%D0%9F%D1%80%D0%B5%D0%BC%D0%B8%D1%83%D0%BC
     function getShipStatusDesc()
     {
         $name = Input::get('name');
@@ -730,7 +730,7 @@ class Prok
         10 => 'Десяти',
     ];
 
-    # http://azimut.dc/prok/api/openCabin
+    # http://azimut74/prok/api/openCabin
     function openCabin()
     {
         $exist = new Exist;
