@@ -213,7 +213,7 @@ class Service extends Parser
     # http://azimut74/rivercrs/debug/Service@getVolgaDB
     function getVolgaDB()
     {
-        $path = "storage/parsers_cache/volga/next_url.xml";
+        $path = "storage/next_url.xml";
         echo file_get_contents(base_path($path));
     }
 
