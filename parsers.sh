@@ -137,6 +137,13 @@ start_one() {
       echo "⚠️ $code уже запущен (PID: $old_pid)"
       return 0
     fi
+    # Процесс не существует или не наш - очищаем зависший PID-файл
+    if is_running_pid "$old_pid"; then
+      echo "🧹 Очищаю зависший PID-файл для $code (PID: $old_pid не наш процесс)"
+    else
+      echo "🧹 Очищаю зависший PID-файл для $code (PID: $old_pid процесс не существует)"
+    fi
+    rm -f "$pf"
   fi
 
   start_time="$(now)"
@@ -200,8 +207,9 @@ stop_one() {
     cmd="(unknown)"
   fi
 
+  # Проверяем, существует ли процесс
   if ! is_running_pid "$pid"; then
-    echo "🔴 $code уже не запущен (PID: $pid)"
+    echo "🔴 $code уже не запущен (PID: $pid) - очищаю зависший PID-файл"
     rm -f "$pf"
     {
       echo "pid=$pid"
@@ -213,8 +221,9 @@ stop_one() {
     return 0
   fi
 
+  # Проверяем, что это наш процесс
   if ! is_our_process "$pid" "$cmd"; then
-    echo "⚠️ $code: PID $pid не принадлежит ожидаемой команде, очищаю pid/meta"
+    echo "⚠️ $code: PID $pid не принадлежит ожидаемой команде - очищаю зависший PID-файл"
     rm -f "$pf"
     {
       echo "pid=$pid"
@@ -240,6 +249,21 @@ stop_one() {
     sleep 1
   fi
 
+  # Финальная проверка: процесс должен быть остановлен перед удалением PID-файла
+  if is_running_pid "$pid"; then
+    echo "❌ $code: процесс $pid всё ещё запущен после попытки остановки"
+    # Не удаляем PID-файл, если процесс не остановился
+    {
+      echo "pid=$pid"
+      echo "cmd=$cmd"
+      [ -n "$start_time" ] && echo "start_time=$start_time"
+      echo "end_time=$end_time"
+      echo "status=failed_to_stop"
+    } > "$mf"
+    return 1
+  fi
+
+  # Процесс остановлен - удаляем PID-файл и обновляем meta
   rm -f "$pf"
   {
     echo "pid=$pid"
@@ -308,6 +332,29 @@ $SOURCES
 EOF
 }
 
+clean_stale_pids() {
+  echo "🧹 Очистка зависших PID-файлов..."
+  cleaned=0
+  while IFS='|' read -r code cmd; do
+    pf="$(pid_file "$code")"
+    if [ -f "$pf" ]; then
+      pid="$(cat "$pf" 2>/dev/null)"
+      if [ -n "$pid" ] && ! is_our_process "$pid" "$cmd"; then
+        echo "  Удаляю зависший PID-файл для $code (PID: $pid)"
+        rm -f "$pf"
+        cleaned=$((cleaned + 1))
+      fi
+    fi
+  done <<EOF
+$SOURCES
+EOF
+  if [ "$cleaned" -eq 0 ]; then
+    echo "✅ Зависших PID-файлов не найдено"
+  else
+    echo "✅ Очищено зависших PID-файлов: $cleaned"
+  fi
+}
+
 # ---------------------------
 # main
 # ---------------------------
@@ -361,8 +408,11 @@ EOF
   status)
     status_all
     ;;
+  clean)
+    clean_stale_pids
+    ;;
   *)
-    echo "Использование: $0 {start|stop|restart|status} [service]"
+    echo "Использование: $0 {start|stop|restart|status|clean} [service]"
     echo ""
     echo "Примеры:"
     echo "  $0 start"
@@ -370,6 +420,7 @@ EOF
     echo "  $0 stop volga"
     echo "  $0 restart"
     echo "  $0 status"
+    echo "  $0 clean"
     exit 1
     ;;
 esac
