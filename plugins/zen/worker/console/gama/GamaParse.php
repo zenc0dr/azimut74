@@ -63,6 +63,11 @@ class GamaParse extends Command
             $this->info('📥 Скачивание данных с API Gama...');
             $this->showProgress('Скачивание архива...', 0);
             
+            // Скачиваем архив с данными
+            $apiClient = new GamaApiClient($this->timeout);
+            $apiClient->downloadGamaArchives();
+            $this->info('✅ Архив скачан и распакован');
+            
             $dataProcessor = new GamaDataProcessor($this->db, $this->timeout, $limit);
             
             $this->showProgress('Обработка навигационных данных...', 25);

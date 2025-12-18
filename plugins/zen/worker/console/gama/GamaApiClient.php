@@ -40,11 +40,22 @@ class GamaApiClient
         // Очищаем старые файлы
         shell_exec("rm -rf " . escapeshellarg($storage_path) . "/*");
         
-        // Скачиваем архив
-        shell_exec("wget -O " . escapeshellarg($zip_file) . " " . escapeshellarg($zip_url));
+        // Скачиваем архив (используем curl вместо wget)
+        $curlCmd = "curl -sL -o " . escapeshellarg($zip_file) . " " . escapeshellarg($zip_url);
+        shell_exec($curlCmd);
+        
+        // Проверяем что файл скачался
+        if (!file_exists($zip_file) || filesize($zip_file) < 1000) {
+            throw new Exception("Не удалось скачать архив Gama. Проверьте API ключ.");
+        }
         
         // Распаковываем
         shell_exec("unzip -o " . escapeshellarg($zip_file) . " -d " . escapeshellarg($storage_path));
+        
+        // Проверяем что файлы распаковались
+        if (!file_exists($storage_path . '/navigation.xml')) {
+            throw new Exception("Архив не содержит navigation.xml или не удалось распаковать.");
+        }
     }
 
     /**
@@ -72,7 +83,11 @@ class GamaApiClient
         // Проверяем кеш в JSON файлах
         if ($this->cache->has($cacheKey)) {
             $cachedData = $this->cache->get($cacheKey);
-            return $cachedData; // Может быть null, если был сохранён null
+            // Если круиз был отозван — возвращаем null
+            if (is_array($cachedData) && isset($cachedData['_expired'])) {
+                return null;
+            }
+            return $cachedData;
         }
         
         // Сбрасываем время выполнения перед каждым HTTP запросом
@@ -81,34 +96,41 @@ class GamaApiClient
         
         $url = $this->routeUrl . $routeId . '/?key=' . $this->key;
         
-        $http = new Http();
-        $http_query = $http->setTimout($this->timeout)
-            ->query($url, 'xml');
-
-        if ($http_query->error) {
-            throw new Exception("Ошибка получения данных маршрута #$routeId: " . $http_query->error);
+        // Делаем запрос без автоматического парсинга XML
+        $rawResponse = $this->fetchRawResponse($url);
+        
+        // Проверяем на ошибки отозванного круиза
+        if ($rawResponse === false || strpos($rawResponse, 'Sub expired') !== false) {
+            // Сохраняем осмысленную информацию для отладки
+            $expiredData = [
+                '_expired' => true,
+                '_reason' => 'Sub expired',
+                '_route_id' => $routeId,
+                '_cached_at' => date('Y-m-d H:i:s'),
+                '_message' => 'Круиз отозван или завершён'
+            ];
+            $this->cache->put($cacheKey, $expiredData);
+            return null;
         }
-
-        // Содержимое ответа
-        $responseContent = $http_query->response;
-
-        // Если строка и содержит "Sub expired" — данных нет
-        if (is_string($responseContent) && strpos($responseContent, 'Sub expired') !== false) {
-            ProcessLog::add("Круиз $routeId: нет данных в данный момент (Sub expired)");
-            // Сохраняем null в кеш, чтобы не запрашивать повторно
-            $this->cache->put($cacheKey, null);
+        
+        // Парсим XML в массив
+        $responseArray = $this->xmlToArray($rawResponse);
+        
+        // Если парсинг не удался — сохраняем информацию об ошибке
+        if ($responseArray === false || $responseArray === null) {
+            $errorData = [
+                '_error' => true,
+                '_reason' => 'Invalid XML',
+                '_route_id' => $routeId,
+                '_cached_at' => date('Y-m-d H:i:s'),
+                '_raw_preview' => substr($rawResponse, 0, 200)
+            ];
+            $this->cache->put($cacheKey, $errorData);
+            ProcessLog::add("Круиз $routeId: невалидный XML ответ");
             return null;
         }
 
-        // Нормализуем ответ к массиву
-        if (is_string($responseContent)) {
-            $responseArray = $this->xmlToArray($responseContent);
-        } else {
-            $responseArray = $responseContent;
-        }
-
-        // Кэшируем массив в JSON файл (вечный кеш)
-        // Сохраняем даже если массив пустой, чтобы не запрашивать повторно
+        // Кэшируем успешный ответ
         try {
             $this->cache->put($cacheKey, $responseArray);
         } catch (Exception $e) {
@@ -116,6 +138,31 @@ class GamaApiClient
         }
         
         return $responseArray;
+    }
+    
+    /**
+     * Получение сырого ответа без парсинга
+     */
+    private function fetchRawResponse($url)
+    {
+        $ch = curl_init();
+        curl_setopt($ch, CURLOPT_URL, $url);
+        curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+        curl_setopt($ch, CURLOPT_TIMEOUT, $this->timeout);
+        curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);
+        curl_setopt($ch, CURLOPT_SSL_VERIFYHOST, false);
+        
+        $response = curl_exec($ch);
+        $httpCode = curl_getinfo($ch, CURLINFO_HTTP_CODE);
+        $error = curl_error($ch);
+        curl_close($ch);
+        
+        if ($error || $httpCode !== 200) {
+            ProcessLog::add("HTTP ошибка для $url: $error (код $httpCode)");
+            return false;
+        }
+        
+        return $response;
     }
 
     /**
