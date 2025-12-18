@@ -78,7 +78,7 @@ class Exist
             f (int[0|1]) - [Занято|Свободно]
             d (int) - deck_id - id палубы
     */
-    public function get($checkin_id, $type = 'json', $realtime = true)
+    public function get($checkin_id, $type = 'json', $realtime = true, $force_cached = false)
     {
         $checkin = null;
         $cabox = null;
@@ -89,7 +89,7 @@ class Exist
         }
 
           #TODO Временно отключил кеширование
-        if ($type === 'array') {
+        if ($type === 'array' && !$force_cached) {
             $cabox = new Cabox('rivercrs');
             $array_cache_key = "exist_array:$checkin_id";
             $cached_data = $cabox->get($array_cache_key, 900);
@@ -161,6 +161,10 @@ class Exist
         //$cached = true;
 
         if (isset($_GET['debug'])) {
+            $cached = true;
+        }
+
+        if ($force_cached) {
             $cached = true;
         }
 
@@ -306,7 +310,7 @@ class Exist
             return;
         }
 
-        if ($type === 'array') {
+        if ($type === 'array' && !$force_cached) {
             $cabox->put($array_cache_key, $mix_data);
             //Cache::add($array_cache_key, $mix_data, 900); // Сохраняю на 15 ч
         }

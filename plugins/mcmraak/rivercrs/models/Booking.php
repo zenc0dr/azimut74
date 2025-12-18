@@ -37,7 +37,7 @@ class Booking extends Model
         $checkin_id = $this->checkin_id;
 
         $exist = new Exist;
-        $exist_data = $exist->get($checkin_id, 'array');
+        $exist_data = $exist->get($checkin_id, 'array', false, true);
 
         $return = [];
 

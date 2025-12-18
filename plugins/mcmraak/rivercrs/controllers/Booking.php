@@ -41,6 +41,7 @@ class Booking extends Controller
 //        $inputData = request()->all();
 //        $jsonPath = base_path() . '/storage/booking_data.json';
 //        file_put_contents($jsonPath, json_encode($inputData, JSON_UNESCAPED_UNICODE | JSON_PRETTY_PRINT));
+//        return;
 
         /**
          * Для отладки: Метод, который достаёт ранее сохранённые данные и подставляет их в request.
