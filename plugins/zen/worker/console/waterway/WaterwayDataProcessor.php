@@ -18,6 +18,7 @@ class WaterwayDataProcessor
     private $allowedShipIds = null;
     private $command = null;
     private $progressEvery = 1;
+    private ?int $onlyCruiseId = null;
 
     public function __construct(
         $database,
@@ -61,6 +62,31 @@ class WaterwayDataProcessor
     {
         $this->progressEvery = max(1, $n);
         return $this;
+    }
+
+    /**
+     * Ограничить обработку одним круизом Waterway (по ID источника).
+     * Полезно для отладки/точечного перепарсинга.
+     */
+    public function setOnlyCruiseId(?int $cruiseId)
+    {
+        $this->onlyCruiseId = $cruiseId ? (int)$cruiseId : null;
+        return $this;
+    }
+
+    private function mapCruiseDetailToListItem(array $detail): array
+    {
+        return [
+            'name' => $detail['name'] ?? '',
+            'motorshipId' => (int)($detail['motorship']['id'] ?? 0),
+            'dateStart' => $detail['dateStart'] ?? null,
+            // В list API поле называется dateStop, в cruise API — dateEnd
+            'dateStop' => $detail['dateEnd'] ?? null,
+            // days (длительность) в API — duration
+            'days' => (int)($detail['duration'] ?? 0),
+            // В list API было classDescription — берем description если есть
+            'classDescription' => $detail['description'] ?? null,
+        ];
     }
 
     private function consoleLine(string $message)
@@ -132,7 +158,23 @@ class WaterwayDataProcessor
         $this->consoleLine('Получаем список круизов (может занять время)...');
         
         try {
-            $cruisesResponse = $this->apiClient->getCruises();
+            // Точечный режим: один круиз по ID (без загрузки всего списка)
+            if ($this->onlyCruiseId) {
+                $cruiseIdInt = (int)$this->onlyCruiseId;
+                $this->consoleLine("Точечный режим: круиз id=$cruiseIdInt");
+
+                $detail = $this->apiClient->getCruiseById($cruiseIdInt);
+                if (!$detail) {
+                    ProcessLog::add("⚠️  Не удалось получить круиз $cruiseIdInt через json.v3.cruise");
+                    $this->consoleLine("⚠️  Не удалось получить круиз id=$cruiseIdInt");
+                    return;
+                }
+                $cruisesResponse = [
+                    $cruiseIdInt => $this->mapCruiseDetailToListItem($detail)
+                ];
+            } else {
+                $cruisesResponse = $this->apiClient->getCruises();
+            }
             
             if (!is_array($cruisesResponse)) {
                 ProcessLog::add("API вернул некорректные данные о круизах");
@@ -551,17 +593,22 @@ class WaterwayDataProcessor
         $prices = [];
         $cabinCategories = []; // Собираем уникальные категории кают
         $decks = []; // Собираем уникальные палубы
+        $categoryMaxPlaces = []; // [categoryId => max places_qnt]
         
         if (!isset($pricesData['tariffs']) || !is_array($pricesData['tariffs'])) {
             return $prices;
         }
         
-        // Сначала собираем все уникальные категории кают и палубы
+        // Сначала собираем все уникальные категории кают и палубы (по обоим тарифам)
         foreach ($pricesData['tariffs'] as $tariff) {
             $tariffName = $tariff['tariff_name'] ?? '';
             
-            // Обрабатываем только "Тариф Взрослый"
-            if ($tariffName !== 'Тариф Взрослый') {
+            // Обрабатываем только 2 тарифа:
+            // - "Тариф Взрослый" (база)
+            // - "Тариф Взрослый расширенный" (будет записан как price_extra)
+            $isBase = ($tariffName === 'Тариф Взрослый' || $tariffName === 'Тариф взрослый');
+            $isExtended = ($tariffName === 'Тариф Взрослый расширенный');
+            if (!$isBase && !$isExtended) {
                 continue;
             }
             
@@ -572,6 +619,10 @@ class WaterwayDataProcessor
             foreach ($tariff['prices'] as $price) {
                 $categoryId = $price['rt_id'] ?? null;
                 $deckId = $price['deck_id'] ?? null;
+                $placesQnt = intval($price['places_qnt'] ?? 1);
+                if ($placesQnt <= 0) {
+                    $placesQnt = 1;
+                }
                 
                 // Если есть ID категории, добавляем в список для сохранения
                 if ($categoryId !== null && !isset($cabinCategories[$categoryId])) {
@@ -582,8 +633,13 @@ class WaterwayDataProcessor
                         'meta_id' => $price['rp_id'] ?? null,
                         'meta_name' => $price['rt_meta_name'] ?? null, // meta_name из roomClass
                         'ship_id' => $shipId,
-                        'deck_id' => null // Оставляем NULL, так как одна категория может быть на разных палубах
+                        'deck_id' => null, // Оставляем NULL, так как одна категория может быть на разных палубах
+                        // ВАЖНО: places будет дорассчитан по max places_qnt
                     ];
+                }
+
+                if ($categoryId !== null) {
+                    $categoryMaxPlaces[$categoryId] = max(intval($categoryMaxPlaces[$categoryId] ?? 1), $placesQnt);
                 }
                 
                 // Если есть ID палубы, добавляем в список для сохранения
@@ -599,6 +655,12 @@ class WaterwayDataProcessor
             }
         }
         
+        // Проставляем places для категорий (максимальное размещение по данным тарифов)
+        foreach ($cabinCategories as $categoryId => &$cat) {
+            $cat['places'] = intval($categoryMaxPlaces[$categoryId] ?? 1);
+        }
+        unset($cat);
+
         // Сохраняем палубы в базу данных
         if (!empty($decks)) {
             try {
@@ -617,12 +679,17 @@ class WaterwayDataProcessor
             }
         }
         
-        // Теперь обрабатываем цены с использованием ID категорий и палуб
+        // Теперь обрабатываем цены:
+        // - price_value = базовый взрослый
+        // - price_extra = расширенный взрослый
+        // - places_qnt = тип размещения (1/2/3/...)
+        $pricesMap = []; // key: "$categoryId:$deckId:$placesQnt"
         foreach ($pricesData['tariffs'] as $tariff) {
             $tariffName = $tariff['tariff_name'] ?? '';
             
-            // Обрабатываем только "Тариф Взрослый"
-            if ($tariffName !== 'Тариф Взрослый') {
+            $isBase = ($tariffName === 'Тариф Взрослый' || $tariffName === 'Тариф взрослый');
+            $isExtended = ($tariffName === 'Тариф Взрослый расширенный');
+            if (!$isBase && !$isExtended) {
                 continue;
             }
             
@@ -638,18 +705,46 @@ class WaterwayDataProcessor
                 
                 $categoryId = $price['rt_id'] ?? null;
                 $deckId = $price['deck_id'] ?? null;
-                
-                $prices[] = [
-                    'cruise_id' => $cruiseId,
-                    'cabin_category_id' => $categoryId,
-                    'cabin_category_name' => $price['rt_name'] ?? '', // Оставляем для совместимости
-                    'cabin_category_desc' => $price['rp_name'] ?? null,
-                    'deck_id' => $deckId,
-                    'deck_name' => $price['deck_name'] ?? null, // Оставляем для совместимости
-                    'price_value' => $priceValue,
-                    'tariff_name' => $tariffName
-                ];
+                $placesQnt = intval($price['places_qnt'] ?? 1);
+                if ($placesQnt <= 0) {
+                    $placesQnt = 1;
+                }
+
+                if ($categoryId === null) {
+                    continue;
+                }
+
+                $key = $categoryId . ':' . intval($deckId ?? 0) . ':' . $placesQnt;
+
+                if (!isset($pricesMap[$key])) {
+                    $pricesMap[$key] = [
+                        'cruise_id' => $cruiseId,
+                        'cabin_category_id' => $categoryId,
+                        'cabin_category_name' => $price['rt_name'] ?? '', // совместимость
+                        'cabin_category_desc' => $price['rp_name'] ?? null,
+                        'deck_id' => $deckId,
+                        'deck_name' => $price['deck_name'] ?? null, // совместимость
+                        'price_value' => null,
+                        'price_extra' => null,
+                        'places_qnt' => $placesQnt,
+                        'tariff_name' => 'Тариф Взрослый',
+                    ];
+                }
+
+                if ($isBase) {
+                    $pricesMap[$key]['price_value'] = $priceValue;
+                } elseif ($isExtended) {
+                    $pricesMap[$key]['price_extra'] = $priceValue;
+                }
             }
+        }
+
+        // Собираем итоговый массив цен: берем только записи, где есть базовая цена
+        foreach ($pricesMap as $row) {
+            if (!$row['price_value']) {
+                continue;
+            }
+            $prices[] = $row;
         }
         
         return $prices;

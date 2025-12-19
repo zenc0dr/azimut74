@@ -289,6 +289,17 @@ class UnifiedProcessor extends TransferProcessor
         
         $this->output("  💰 Импорт цен для заезда $checkinId: найдено " . count($prices) . " цен", 'line');
         
+        // Для некоторых источников (Waterway) places в cabin_categories может быть неточным.
+        // Надежнее вычислить максимальное размещение из самих цен (places_qnt).
+        $maxPlacesByCategory = []; // [source_category_id => max places_qnt]
+        foreach ($prices as $p) {
+            $cid = $p['cabin_category_id'] ?? null;
+            if ($cid === null) continue;
+            $pq = (int)($p['places_qnt'] ?? 1);
+            if ($pq <= 0) $pq = 1;
+            $maxPlacesByCategory[$cid] = max((int)($maxPlacesByCategory[$cid] ?? 1), $pq);
+        }
+
         // Создаем маппинг категорий кают и обрабатываем палубы
         $cabinMapping = [];
         $cabinDeckMapping = []; // Маппинг cabinId => deck_id из SQLite
@@ -296,7 +307,7 @@ class UnifiedProcessor extends TransferProcessor
         foreach ($prices as $price) {
             $cabinCategoryId = $price['cabin_category_id'] ?? null;
             $cabinCategoryName = $price['cabin_category_name'] ?? '';
-            $places = (int)($price['cabin_category_places'] ?? 1);
+            $places = (int)($maxPlacesByCategory[$cabinCategoryId] ?? ($price['cabin_category_places'] ?? 1));
             
             // Если уже обработали эту категорию, пропускаем
             if (isset($cabinMapping[$cabinCategoryId])) {

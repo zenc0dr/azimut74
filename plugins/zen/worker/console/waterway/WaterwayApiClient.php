@@ -471,7 +471,9 @@ class WaterwayApiClient
             return null;
         }
         
-        // Преобразуем в формат, ожидаемый парсером
+        // Преобразуем в формат, ожидаемый парсером (совместимость со старой структурой WaterwayDataProcessor)
+        // ВНИМАНИЕ: В актуальном API Waterway у объекта tariff часто нет name/meta_name,
+        // а фактическое имя тарифа лежит в accommodation.name.
         $result = [
             'tariffs' => []
         ];
@@ -488,35 +490,46 @@ class WaterwayApiClient
                     }
                     
                     foreach ($roomClass['tariffs'] as $tariff) {
-                        // Используем meta_name вместо name (структура API изменилась)
-                        $tariffName = $tariff['meta_name'] ?? $tariff['name'] ?? '';
-                        
-                        // Обрабатываем только "Тариф Взрослый"
-                        if (strpos($tariffName, 'Взрослый') === false && $tariffName !== 'Тариф взрослый') {
-                            continue;
-                        }
-                        
                         // Проверяем наличие accommodations
                         if (!isset($tariff['accommodations']) || !is_array($tariff['accommodations']) || empty($tariff['accommodations'])) {
                             continue;
                         }
-                        
-                        if (!isset($result['tariffs'][$tariffName])) {
-                            $result['tariffs'][$tariffName] = [
-                                'tariff_name' => $tariffName,
-                                'prices' => []
-                            ];
-                        }
-                        
+
                         foreach ($tariff['accommodations'] as $accommodation) {
+                            // Имя тарифа находится здесь
+                            $tariffName = $accommodation['name'] ?? '';
+                            if (!$tariffName) {
+                                continue;
+                            }
+
+                            // Оставляем только 2 ключевых тарифа:
+                            // - базовый взрослый
+                            // - расширенный взрослый (будет мёржиться в price_extra на фазе 1)
+                            $isBase = ($tariffName === 'Тариф Взрослый' || $tariffName === 'Тариф взрослый');
+                            $isExtended = ($tariffName === 'Тариф Взрослый расширенный');
+                            if (!$isBase && !$isExtended) {
+                                continue;
+                            }
+
                             // Проверяем наличие цены
                             if (!isset($accommodation['price'])) {
                                 continue;
                             }
                             
                             $priceValue = intval(($accommodation['price']['discountedValue'] ?? $accommodation['price']['value'] ?? 0) / 100);
+                            $placesQnt = intval($accommodation['id'] ?? 1); // 1/2/3/... местное размещение
+                            if ($placesQnt <= 0) {
+                                $placesQnt = 1;
+                            }
                             
                             if ($priceValue > 0) {
+                                if (!isset($result['tariffs'][$tariffName])) {
+                                    $result['tariffs'][$tariffName] = [
+                                        'tariff_name' => $tariffName,
+                                        'prices' => []
+                                    ];
+                                }
+
                                 $result['tariffs'][$tariffName]['prices'][] = [
                                     'rt_name' => $roomClass['name'] ?? '',
                                     'rt_id' => $roomClass['id'] ?? null,
@@ -527,7 +540,8 @@ class WaterwayApiClient
                                     'deck_name' => $deck['name'] ?? null,
                                     'deck_meta_id' => $deck['meta_id'] ?? null,
                                     'deck_meta_name' => $deck['meta_name'] ?? null,
-                                    'price_value' => $priceValue
+                                    'price_value' => $priceValue,
+                                    'places_qnt' => $placesQnt,
                                 ];
                             }
                         }
@@ -543,6 +557,17 @@ class WaterwayApiClient
         }
         
         return $result;
+    }
+
+    /**
+     * Получение полной карточки круиза по ID (json.v3.cruise?id=...)
+     */
+    public function getCruiseById(int $cruiseId): ?array
+    {
+        $cacheKey = "waterway_cruise_detail_{$cruiseId}";
+        $response = $this->wwQuery("json.v3.cruise?id=$cruiseId", null, $cacheKey);
+        $result = $response['result'] ?? null;
+        return is_array($result) ? $result : null;
     }
 
     /**

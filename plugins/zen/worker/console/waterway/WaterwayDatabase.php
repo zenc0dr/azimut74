@@ -509,7 +509,10 @@ class WaterwayDatabase extends UnifiedDatabase
                 'cruise_id' => $price['cruise_id'],
                 'cabin_category_id' => $price['cabin_category_id'],
                 'price_value' => $price['price_value'],
+                'price_extra' => $price['price_extra'] ?? null,
                 'deck_id' => $price['deck_id'] ?? null,
+                'places_qnt' => $price['places_qnt'] ?? 1,
+                'nofull' => $price['nofull'] ?? 0,
                 'tariff_name' => $price['tariff_name'] ?? null,
                 'extra_data' => !empty($extraData) ? $extraData : null
             ];

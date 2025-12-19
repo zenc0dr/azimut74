@@ -43,6 +43,7 @@ class WaterwayParse extends Command
         $limitCruises = $this->option('limit_cruises');
         $limitCruisesPerShip = $this->option('limit_cruises_per_ship');
         $progressEvery = $this->option('progress_every');
+        $onlyCruiseId = $this->option('only_cruise_id');
         
         $this->info('🚢 Начинаем парсинг круизов Waterway...');
         $this->info("⏱️  Таймаут: {$this->timeout} сек");
@@ -81,7 +82,10 @@ class WaterwayParse extends Command
                 $limitCruises,
                 $limitCruisesPerShip
             );
-            $dataProcessor->setCommand($this)->setProgressEvery((int)$progressEvery);
+            $dataProcessor
+                ->setCommand($this)
+                ->setProgressEvery((int)$progressEvery)
+                ->setOnlyCruiseId($onlyCruiseId ? (int)$onlyCruiseId : null);
             
             $this->showProgress('Обработка данных о теплоходах...', 25);
             $this->processMotorshipsData($dataProcessor);
@@ -209,6 +213,7 @@ class WaterwayParse extends Command
             ['limit_cruises', null, InputOption::VALUE_OPTIONAL, 'Ограничить количество круизов (для прогрева кеша/отладки)', null],
             ['limit_cruises_per_ship', null, InputOption::VALUE_OPTIONAL, 'Ограничить количество круизов на один теплоход', null],
             ['progress_every', null, InputOption::VALUE_OPTIONAL, 'Выводить прогресс каждые N круизов (1 = каждый круиз)', 1],
+            ['only_cruise_id', null, InputOption::VALUE_OPTIONAL, 'Обработать только один круиз по ID (точечный режим)', null],
         ];
     }
 }
