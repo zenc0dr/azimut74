@@ -13,3 +13,4 @@
 server_errors.log
 sync.ffs_gui
 .env.backup
+crs_extra_refresh
