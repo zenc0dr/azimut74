@@ -68,6 +68,17 @@ class Waterway extends Exist
         return $all;
     }
 
+    /**
+     * Получение тарифов/цен по палубам/категориям/размещению.
+     * Источник: json.v3.cruise.room-tariffs
+     */
+    private function fetchRoomTariffs(WaterwayPool $ww, int $ww_cruise_id, bool $realtime): array
+    {
+        $method = "json.v3.cruise.room-tariffs?id=$ww_cruise_id";
+        $cache_key = "waterway.roomtariffs.$ww_cruise_id";
+        return $ww->wwQuery($method, null, $cache_key, $realtime);
+    }
+
     public function getExist($checkin, $realtime)
     {
         $this->query_type = ($realtime) ? 'array_now' : 'array';
@@ -233,6 +244,108 @@ class Waterway extends Exist
             }
         }
 
+        // Карта цен из API room-tariffs (дек/категория/места -> цена)
+        // Используем её в realtime режиме, т.к. в Waterway цены зависят от палубы и размещения.
+        $ww_prices_map = []; // [deck_id][cabin_id][places_qnt] => ['price_value'=>int, 'price2_value'=>int|string]
+        if ($realtime) {
+            try {
+                $tariffs_resp = $this->fetchRoomTariffs($ww, (int)$ww_cruise_id, (bool)$realtime);
+                foreach (($tariffs_resp['result']['decks'] ?? []) as $ww_deck) {
+                    $ww_deck_name = $ww_deck['name'] ?? '';
+                    if (!$ww_deck_name) {
+                        continue;
+                    }
+
+                    // Находим deck_id (в БД имена обычно с "палуба", в API — короткие)
+                    $deck_id = $deck_name_to_id_map[$ww_deck_name] ?? null;
+                    if (!$deck_id) {
+                        $getter = new \Mcmraak\Rivercrs\Classes\Getter();
+                        $deck_obj = $getter->getDeck($ww_deck_name);
+                        if ($deck_obj) {
+                            $deck_id = $deck_obj->id;
+                            $deck_name_to_id_map[$ww_deck_name] = $deck_id;
+                        }
+                    }
+                    if (!$deck_id) {
+                        continue;
+                    }
+
+                    foreach (($ww_deck['roomClasses'] ?? []) as $roomClass) {
+                        $cabin_name = $roomClass['name'] ?? '';
+                        if (!$cabin_name) {
+                            continue;
+                        }
+
+                        $cabin_id = $cabin_name_to_id_map[$cabin_name] ?? null;
+                        if (!$cabin_id) {
+                            $cabin_obj = $this->getCabinCache($cabin_name);
+                            if ($cabin_obj) {
+                                $cabin_id = $cabin_obj->id;
+                                $cabin_name_to_id_map[$cabin_name] = $cabin_id;
+                            }
+                        }
+
+                        if (!$cabin_id) {
+                            continue;
+                        }
+
+                        foreach (($roomClass['tariffs'] ?? []) as $tariff) {
+                            foreach (($tariff['accommodations'] ?? []) as $acc) {
+                                $acc_name = $acc['name'] ?? '';
+                                if (!$acc_name) {
+                                    continue;
+                                }
+
+                                // Базовый тариф
+                                $is_base = ($acc_name === 'Тариф Взрослый' || $acc_name === 'Тариф взрослый');
+                                // Расширенный тариф
+                                $is_ext = ($acc_name === 'Тариф Взрослый расширенный');
+
+                                if (!$is_base && !$is_ext) {
+                                    continue;
+                                }
+
+                                $places_qnt = intval($acc['id'] ?? 0);
+                                if ($places_qnt <= 0) {
+                                    continue;
+                                }
+
+                                $price_raw = $acc['price']['discountedValue'] ?? ($acc['price']['value'] ?? null);
+                                if (!$price_raw) {
+                                    continue;
+                                }
+                                $price_value = intval(floor($price_raw / 100));
+
+                                if (!isset($ww_prices_map[$deck_id])) {
+                                    $ww_prices_map[$deck_id] = [];
+                                }
+                                if (!isset($ww_prices_map[$deck_id][$cabin_id])) {
+                                    $ww_prices_map[$deck_id][$cabin_id] = [];
+                                }
+                                if (!isset($ww_prices_map[$deck_id][$cabin_id][$places_qnt])) {
+                                    $ww_prices_map[$deck_id][$cabin_id][$places_qnt] = [
+                                        'price_value' => 0,
+                                        'price2_value' => '',
+                                    ];
+                                }
+
+                                if ($is_base) {
+                                    $ww_prices_map[$deck_id][$cabin_id][$places_qnt]['price_value'] = $price_value;
+                                } elseif ($is_ext) {
+                                    $ww_prices_map[$deck_id][$cabin_id][$places_qnt]['price2_value'] = $price_value;
+                                    $tariff_price2 = true;
+                                }
+                            }
+                        }
+                    }
+                }
+            } catch (\Throwable $e) {
+                // В realtime UI лучше показать хоть какие-то цены (fallback на pricing),
+                // чем сломать весь endpoint.
+                Log::error('Waterway room-tariffs error: ' . $e->getMessage());
+            }
+        }
+
         // Получаем данные из API Waterway только если realtime=true
         // При realtime=false показываем только данные из базы (все каюты как "под запрос")
         if ($realtime) {
@@ -353,37 +466,65 @@ class Waterway extends Exist
                     continue;
                 }
 
-                // Получаем цены из pricing или оставляем пустыми
-                $price_a = $pricing_map[$cabin_id]['price_a'] ?? 0;
-                $price_b = $pricing_map[$cabin_id]['price_b'] ?? '';
+                // В realtime режиме для Waterway предпочтительно брать цены из API room-tariffs
+                // (они учитывают палубу и варианты размещения).
+                $prices = [];
+                if ($realtime && isset($ww_prices_map[$deck_id][$cabin_id])) {
+                    $by_places = $ww_prices_map[$deck_id][$cabin_id];
+                    ksort($by_places);
+                    foreach ($by_places as $places_qnt => $p) {
+                        // Если базовая цена не пришла, пропускаем (иначе будет 0)
+                        $pv = intval($p['price_value'] ?? 0);
+                        if ($pv <= 0) {
+                            continue;
+                        }
+                        $prices[] = [
+                            'price_places' => intval($places_qnt),
+                            'price_value' => $pv,
+                            'price2_value' => $p['price2_value'] !== '' ? intval($p['price2_value']) : '',
+                        ];
+                    }
+                }
+
+                // Fallback: берем одну цену из pricing (legacy)
+                if (!$prices) {
+                    $price_a = $pricing_map[$cabin_id]['price_a'] ?? 0;
+                    $price_b = $pricing_map[$cabin_id]['price_b'] ?? '';
+                    $fallback_places = intval($cabin->places_main_count ?? 2);
+                    $prices = [
+                        [
+                            'price_places' => $fallback_places,
+                            'price_value' => $price_a,
+                            'price2_value' => $price_b,
+                        ]
+                    ];
+                }
+
+                // main_places: максимум из доступных размещений (иначе UI путается)
+                $main_places = 0;
+                foreach ($prices as $p) {
+                    $main_places = max($main_places, intval($p['price_places'] ?? 0));
+                }
+                if ($main_places <= 0) {
+                    $main_places = intval($cabin->places_main_count ?? 2);
+                }
 
                 $decks_map[$deck_id]['cabins'][$cabin_id] = [
                     'id' => $cabin_id,
                     'name' => $cabin->category ?? '',
-                    'main_places' => intval($cabin->places_main_count ?? 2),
+                    'main_places' => $main_places,
                     'extra_places' => intval($cabin->places_extra_count ?? 0),
-                    'prices' => [
-                        [
-                            'price_places' => intval($cabin->places_main_count ?? 2),
-                            'price_value' => $price_a,
-                            'price2_value' => $price_b,
-                        ]
-                    ],
+                    'prices' => $prices,
                 ];
             }
         }
 
-        // Если есть начальные данные из кеша, используем их структуру decks (с ценами)
-        if ($initial_data && isset($initial_data['decks'])) {
-            $decks = $initial_data['decks']; // Используем начальные данные с ценами
-        } else {
-            // Преобразуем decks_map в массив (сохраняем порядок кают по ID)
-            $decks = [];
-            foreach ($decks_map as $deck_id => $deck_data) {
-                // Преобразуем cabins из ассоциативного массива в обычный, сохраняя порядок
-                $deck_data['cabins'] = array_values($deck_data['cabins']);
-                $decks[] = $deck_data;
-            }
+        // Для Waterway всегда строим decks из базы + (realtime) room-tariffs,
+        // чтобы не подхватывать потенциально устаревшую структуру из кеша exist_array.
+        $decks = [];
+        foreach ($decks_map as $deck_id => $deck_data) {
+            $deck_data['cabins'] = array_values($deck_data['cabins']);
+            $decks[] = $deck_data;
         }
 
         // Формируем массив rooms: сопоставляем номера из базы с данными из API
