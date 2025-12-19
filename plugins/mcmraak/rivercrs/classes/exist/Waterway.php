@@ -90,6 +90,7 @@ class Waterway extends Exist
         $ww = new WaterwayPool();
         $ww_rooms = $this->fetchAllCabins($ww, (int)$ww_cruise_id, (bool)$realtime);
 
+        // В realtime для Waterway показываем только базовый тариф (без "Расширенного")
         $tariff_price2 = false;
         $rooms = [];
 
@@ -246,7 +247,7 @@ class Waterway extends Exist
 
         // Карта цен из API room-tariffs (дек/категория/места -> цена)
         // Используем её в realtime режиме, т.к. в Waterway цены зависят от палубы и размещения.
-        $ww_prices_map = []; // [deck_id][cabin_id][places_qnt] => ['price_value'=>int, 'price2_value'=>int|string]
+        $ww_prices_map = []; // [deck_id][cabin_id][places_qnt] => ['price_value'=>int]
         if ($realtime) {
             try {
                 $tariffs_resp = $this->fetchRoomTariffs($ww, (int)$ww_cruise_id, (bool)$realtime);
@@ -298,10 +299,7 @@ class Waterway extends Exist
 
                                 // Базовый тариф
                                 $is_base = ($acc_name === 'Тариф Взрослый' || $acc_name === 'Тариф взрослый');
-                                // Расширенный тариф
-                                $is_ext = ($acc_name === 'Тариф Взрослый расширенный');
-
-                                if (!$is_base && !$is_ext) {
+                                if (!$is_base) {
                                     continue;
                                 }
 
@@ -325,15 +323,11 @@ class Waterway extends Exist
                                 if (!isset($ww_prices_map[$deck_id][$cabin_id][$places_qnt])) {
                                     $ww_prices_map[$deck_id][$cabin_id][$places_qnt] = [
                                         'price_value' => 0,
-                                        'price2_value' => '',
                                     ];
                                 }
 
                                 if ($is_base) {
                                     $ww_prices_map[$deck_id][$cabin_id][$places_qnt]['price_value'] = $price_value;
-                                } elseif ($is_ext) {
-                                    $ww_prices_map[$deck_id][$cabin_id][$places_qnt]['price2_value'] = $price_value;
-                                    $tariff_price2 = true;
                                 }
                             }
                         }
@@ -481,7 +475,7 @@ class Waterway extends Exist
                         $prices[] = [
                             'price_places' => intval($places_qnt),
                             'price_value' => $pv,
-                            'price2_value' => $p['price2_value'] !== '' ? intval($p['price2_value']) : '',
+                            'price2_value' => '',
                         ];
                     }
                 }
@@ -643,7 +637,8 @@ class Waterway extends Exist
                 'name' => 'Базовый тариф<br>Руб. на 1 чел.',
                 'desc' => '<b>Тариф Базовый.</b><br>Организация питания: завтрак, обед и ужин-буфет организованы по системе «шведский стол», свободная рассадка'
             ],
-            'tariff_price2' => $tariff_price2 || ($initial_data['tariff_price2'] ?? false),
+            // В realtime для Waterway скрываем расширенный тариф
+            'tariff_price2' => false,
             'tariff_price2_title' => $initial_data['tariff_price2_title'] ?? [
                 'name' => 'Расширенный тариф<br>Руб. на 1 чел.',
                 'desc' => '<b>Тариф расширенный.</b><br>Организация питания:<br>▪ завтрак — буфет («шведский стол»);<br>▪ обед «Шеф-Меню» - заказная система (без включенных алкогольных напитков);<br>▪ ужин «Шеф-Меню» - заказная система с включенными напитками (вода, чай, кофе, на выбор: сок, вино красное/белое, пиво). Фиксированная рассадка, количество мест ограничено'

@@ -58,7 +58,7 @@
                                         Базовый тариф <img class="ms-1" src="{{'assets/images/question-icon.svg'|theme}}" alt="question-icon">
                                     </a>
                                 </th>
-                                <th class="bex-prices-col tariff-name">
+                                <th v-if="tariff_price2" class="bex-prices-col tariff-name">
                                     <a tabindex="0" class="d-inline-flex c-primary-200" role="button" data-bs-toggle="popover"
                                         data-bs-trigger="focus"
                                         data-bs-placement="bottom" :data-bs-content="tariff_price2_title.name" data-bs-original-title="" title="">
@@ -73,7 +73,7 @@
                                     <td class="bex-deck-title">${ deck.name }</td>
                                     <td></td>
                                     <td></td>
-                                    <td></td>
+                                    <td v-if="tariff_price2"></td>
                                     <td></td>
                                 </tr>
                                 <tr v-for="cabin in deck.cabins">
@@ -123,7 +123,7 @@
                                             </div>
                                         </div>
                                     </td>
-                                    <td>
+                                    <td v-if="tariff_price2">
                                         <div v-if="cabin.prices.filter(function (item) { return !!item.price2_value }).length" class="bex-prices">
                                             <div class="bex-title-mobile">Расширенный тариф</div>
                                             <div class="bex-title-dotted"></div>
