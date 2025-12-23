@@ -1,6 +1,7 @@
 <?php namespace Mcmraak\Rivercrs\Classes;
 
 use Carbon\Carbon;
+use DB;
 use Mcmraak\Rivercrs\Classes\CacheSettings as Settings;
 use Mcmraak\Rivercrs\Models\Checkins;
 
@@ -12,9 +13,10 @@ class RivercrsCheckin
         $checkin_prices = app('Mcmraak\Rivercrs\Classes\Exist')->get($checkin, 'array');
 
         $data = [
-            # 'meta_title' => $checkin->metatitle ?? $ship->metatitle,
+            #'meta_title' => $checkin->metatitle ?? $ship->metatitle,
             'meta_title' => self::generateSeoTitle($checkin), # Новый тип https://docs.os3.pro/stage/build/desktop/?r=wx9tahx
-            'meta_description' => $ship->metadesc,
+            #'meta_description' => $ship->metadesc,
+            'meta_description' => self::generateSeoDescription($checkin),
             'meta_keywords' => $ship->metakey,
             'checkin' => $checkin,
             'ship_id' => $ship->id,
@@ -56,6 +58,44 @@ class RivercrsCheckin
         $date_to = master()->carbon($checkin->dateb)->format("d.m.Y");
         $ship_name = $checkin->motorship->cleanSelfName();
         return "Речной круиз $date_of — $date_to — Теплоход $ship_name";
+    }
+
+    # Речной круиз (дата начала) — (дата окончания) по маршруту: (маршрут) на теплоходе (Название теплохода).
+    # Цена от (стоимость) руб. без учета скидок и акций. Онлайн-бронирование.
+    private static function generateSeoDescription(object $checkin)
+    {
+        # Дата от
+        $date_of = master()->carbon($checkin->date)->format("d.m.Y");
+        # Дата до
+        $date_to = master()->carbon($checkin->dateb)->format("d.m.Y");
+        # Чистое имя теплохода
+        $ship_name = $checkin->motorship->cleanSelfName();
+        $waybill = $checkin->getWaybillLine();
+        
+        # Получаем минимальную цену из mcmraak_rivercrs_pricing
+        $min_price = DB::table('mcmraak_rivercrs_pricing')
+            ->where('checkin_id', $checkin->id)
+            ->where('price_a', '>', 0)
+            ->min('price_a');
+        
+        # Если в pricing нет цены, берем из nprices
+        if (!$min_price || $min_price == 0) {
+            $min_price = DB::table('mcmraak_rivercrs_nprices')
+                ->where('checkin_id', $checkin->id)
+                ->where('price', '>', 0)
+                ->min('price');
+        }
+        
+        $min_price = $min_price ? intval($min_price) : 0;
+        
+        # Формируем описание согласно шаблону
+        $description = "Речной круиз $date_of — $date_to по маршруту: $waybill на теплоходе $ship_name.";
+        if ($min_price > 0) {
+            $description .= " Цена от $min_price руб. без учета скидок и акций.";
+        }
+        $description .= " Онлайн-бронирование.";
+
+        return $description;
     }
 
     # Получить расписание
