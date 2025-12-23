@@ -31,6 +31,15 @@ function onStart()
 <script src="{{ page_js }}"></script>
 {% endput %}
 <meta name="search-preset" content="{{ RiverCRS.searchPreset }}" />
+<h1 class="inner-h1">{{ RiverCRS.cruise.h1|mutator }}</h1>
+<style>
+    h1.inner-h1 {
+        text-align: center;
+        color: #6f6f6f;
+        font-size: 20px;
+        margin-top: 15px;
+    }
+</style>
 <section class="results my-4">
     <div class="container d-flex flex-column">
         <div class="d-flex flex-column flex-lg-row">
@@ -40,13 +49,12 @@ function onStart()
             </section>
             <meta name="widget-title" content="{{ RiverCRS.cruise.h1|mutator }}" />
 
-
             {# Квиз "Подберите мне круиз" #}
             <link rel="stylesheet" href="{{ quiz_css }}">
             <div id="QuizApp"></div>
             <script src="{{ quiz_js }}"></script>
 
-
+            
             <div id="search-widget-app"></div>
         </div>
         <section class="info-wrapper bg-primary-100  rounded  mt-4">
