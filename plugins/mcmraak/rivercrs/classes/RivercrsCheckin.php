@@ -1,5 +1,6 @@
 <?php namespace Mcmraak\Rivercrs\Classes;
 
+use Carbon\Carbon;
 use Mcmraak\Rivercrs\Classes\CacheSettings as Settings;
 use Mcmraak\Rivercrs\Models\Checkins;
 
@@ -10,9 +11,9 @@ class RivercrsCheckin
         $ship = $checkin->motorship;
         $checkin_prices = app('Mcmraak\Rivercrs\Classes\Exist')->get($checkin, 'array');
 
-
         $data = [
-            'meta_title' => $checkin->metatitle ?? $ship->metatitle,
+            # 'meta_title' => $checkin->metatitle ?? $ship->metatitle,
+            'meta_title' => self::generateSeoTitle($checkin), # Новый тип https://docs.os3.pro/stage/build/desktop/?r=wx9tahx
             'meta_description' => $ship->metadesc,
             'meta_keywords' => $ship->metakey,
             'checkin' => $checkin,
@@ -45,6 +46,16 @@ class RivercrsCheckin
         ];
 
         return $data;
+    }
+
+    # Метатег title основанный на задаче https://docs.os3.pro/stage/build/desktop/?r=wx9tahx
+    # Речной круиз (дата начала) — (дата окончания) — Теплоход (Название теплохода)
+    private static function generateSeoTitle(object $checkin)
+    {
+        $date_of = master()->carbon($checkin->date)->format("d.m.Y");
+        $date_to = master()->carbon($checkin->dateb)->format("d.m.Y");
+        $ship_name = $checkin->motorship->cleanSelfName();
+        return "Речной круиз $date_of — $date_to — Теплоход $ship_name";
     }
 
     # Получить расписание
