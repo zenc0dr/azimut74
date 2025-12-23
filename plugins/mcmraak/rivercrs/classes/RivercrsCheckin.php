@@ -44,7 +44,11 @@ class RivercrsCheckin
             'additionally_paid' => $ship->add_b,
             'statuses' => Settings::get('cabin_statuses'),
             'schedule' => self::getSchedule($checkin),
-            'checkin_prices' => json_encode($checkin_prices, 256)
+            'checkin_prices' => json_encode($checkin_prices, 256),
+            'breadcrumbs' => [
+                ['/', 'Главная'],
+                ['/russia-river-cruises', 'Речные круизы'],
+            ]
         ];
 
         return $data;

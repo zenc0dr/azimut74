@@ -1,3 +1,19 @@
+{% if RiverCRS.breadcrumbs %}
+<div class="breadcrumbs-wrapper w-100 py-3">
+	<div class="container">
+		<nav aria-label="breadcrumb">
+			<ol class="breadcrumb mb-0 justify-content-center">
+				{% for breadcrumb in RiverCRS.breadcrumbs %}
+					<li class="breadcrumb-item">
+						<a href="{{ breadcrumb[0] }}">{{ breadcrumb[1] }}</a>
+					</li>
+				{% endfor %}
+				<li class="breadcrumb-item active" aria-current="page">...</li>
+			</ol>
+		</nav>
+	</div>
+</div>
+{% endif %}
 <section class="cruise__top {{class}}">
 	<div class="container">
 		<div class="cruise__item d-flex flex-column flex-lg-row justify-content-between mb-4 rounded">
