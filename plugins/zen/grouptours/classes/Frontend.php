@@ -52,8 +52,14 @@ class Frontend extends Core
 
     private function isTourPage(&$cms_page): bool
     {
+        if (empty($this->segments[1])) {
+            return false;
+        }
 
         if (preg_match('/^tour-(\d+)$/', $this->segments[1], $match)) {
+
+            dd($match);
+
             $data = $this->store('TourPage', ['tour_id' => $match[1]]);
 
             if (!$data) {
