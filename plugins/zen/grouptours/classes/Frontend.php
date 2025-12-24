@@ -58,8 +58,6 @@ class Frontend extends Core
 
         if (preg_match('/^tour-(\d+)$/', $this->segments[1], $match)) {
 
-            dd($match);
-
             $data = $this->store('TourPage', ['tour_id' => $match[1]]);
 
             if (!$data) {
