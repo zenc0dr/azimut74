@@ -1,0 +1,52 @@
+[viewBag]
+==
+<?php
+function onStart()
+{
+    $currentPath = Request::path();
+    // Убираем начальный слэш если есть и сравниваем с нужным путем
+    $currentPath = ltrim($currentPath, '/');
+    $targetPath = 'sans-pages/gr_abhaziya';
+    
+    $this['showTelegramWidget'] = ($currentPath === $targetPath);
+}
+?>
+==
+{% if showTelegramWidget %}
+<div id="telegram-widget">
+    <a href="https://t.me/azimutcruise" target="_blank" rel="noopener noreferrer" aria-label="Перейти в Telegram группу Азимут-Тур">
+        <img src="/themes/azimut-tur-pro/assets/images/icons/Telegram_logo_green.svg" alt="Telegram">
+    </a>
+</div>
+<style>
+#telegram-widget {
+    position: fixed;
+    bottom: 20px;
+    left: 20px;
+    z-index: 1000;
+}
+
+#telegram-widget a {
+    display: block;
+    text-decoration: none;
+    transition: transform 0.3s ease, opacity 0.3s ease;
+}
+
+#telegram-widget img {
+    width: 70px;
+    height: 70px;
+    display: block;
+    border-radius: 50%;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
+}
+
+#telegram-widget a:hover {
+    transform: scale(1.1);
+    opacity: 0.9;
+}
+
+#telegram-widget a:active {
+    transform: scale(1.05);
+}
+</style>
+{% endif %}
