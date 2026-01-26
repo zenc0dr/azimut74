@@ -33,6 +33,7 @@ class Parser
         #Log::debug('Parse url:'.$url); # DEBUG
         #JLog::add('debug','Parser@get', $url, $url);
 
+        /*
         if(!$this->update_cache) {
             if($this->cache_on && $cache_time!=0) {
                 $cache = $this->getCache($url, $cache_time);
@@ -53,6 +54,7 @@ class Parser
         } else {
             $cache = false;
         }
+        */
 
         $curl = curl_init();
 
