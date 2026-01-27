@@ -226,7 +226,7 @@ php artisan worker:volga-parse [опции]
 | `--clear` | `-c` | Очистить SQLite перед парсингом | - |
 | `--clear_cache` | | Очистить XML кеш | - |
 | `--limit` | `-l` | Лимит записей для тестирования | - |
-| `--next-url` | `-u` | URL источника XML | `http://test.volgawolga.ru/xml/daily2024.xml` |
+| `--next-url` | `-u` | URL источника XML | `https://test.volgawolga.ru/xml/daily2026.xml` |
 
 ---
 

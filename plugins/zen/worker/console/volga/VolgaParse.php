@@ -15,7 +15,7 @@ class VolgaParse extends Command
     private $processed = 0;
     private $errors = 0;
     private $db;
-    private $nextUrl = 'http://test.volgawolga.ru/xml/daily2024.xml';
+    private $nextUrl = 'https://test.volgawolga.ru/xml/daily2026.xml';
 
     /**
      * Execute the console command.
@@ -180,7 +180,7 @@ class VolgaParse extends Command
             ['clear', 'c', InputOption::VALUE_NONE, 'Очистить существующие данные перед парсингом'],
             ['clear_cache', null, InputOption::VALUE_NONE, 'Очистить кеш XML Volga перед парсингом'],
             ['limit', 'l', InputOption::VALUE_OPTIONAL, 'Ограничить количество записей для тестирования', null],
-            ['next-url', 'u', InputOption::VALUE_OPTIONAL, 'URL источника XML данных', 'http://test.volgawolga.ru/xml/daily2024.xml'],
+            ['next-url', 'u', InputOption::VALUE_OPTIONAL, 'URL источника XML данных', 'https://test.volgawolga.ru/xml/daily2026.xml'],
         ];
     }
 }

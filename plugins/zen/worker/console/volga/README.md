@@ -29,7 +29,7 @@ docker exec azimut74 php app/artisan worker:volga-parse --clear
 docker exec azimut74 php app/artisan worker:volga-parse --clear --limit=10
 
 # С указанием URL источника данных
-docker exec azimut74 php app/artisan worker:volga-parse --clear --next-url=http://test.volgawolga.ru/xml/daily2024.xml
+docker exec azimut74 php app/artisan worker:volga-parse --clear --next-url=https://test.volgawolga.ru/xml/daily2026.xml
 ```
 
 ### Импорт в MySQL (Фаза 2):
@@ -43,7 +43,7 @@ docker exec azimut74 php app/artisan worker:volga-parse --clear --next-url=http:
 
 ### Фаза 1 (консольный парсер):
 
-1. **Скачивание XML файла** из источника (по умолчанию `http://test.volgawolga.ru/xml/daily2024.xml`)
+1. **Скачивание XML файла** из источника (по умолчанию `https://test.volgawolga.ru/xml/daily2026.xml`)
 2. **Парсинг XML** через `Convertor::xmlToArr()`
 3. **Сохранение в SQLite** с правильной схемой:
    - Теплоходы (ships)
@@ -73,7 +73,7 @@ docker exec azimut74 php app/artisan worker:volga-parse --clear --next-url=http:
 
 ### URL по умолчанию:
 
-`http://test.volgawolga.ru/xml/daily2024.xml`
+`https://test.volgawolga.ru/xml/daily2026.xml`
 
 ### Структура XML:
 
@@ -149,5 +149,5 @@ Mcmraak\Rivercrs\Models\Pricing::whereHas('checkin', function($q) { $q->where('e
 - `--clear` или `-c` - Очистить существующие данные перед парсингом
 - `--limit` или `-l` - Ограничить количество записей для тестирования
 - `--timeout` или `-t` - Таймаут для HTTP запросов в секундах (по умолчанию 30)
-- `--next-url` или `-u` - URL источника XML данных (по умолчанию `http://test.volgawolga.ru/xml/daily2024.xml`)
+- `--next-url` или `-u` - URL источника XML данных (по умолчанию `https://test.volgawolga.ru/xml/daily2026.xml`)
 

@@ -223,7 +223,7 @@ class VolgaSync extends Command
             ['clear', 'c', InputOption::VALUE_NONE, 'Очистить SQLite перед парсингом (фаза 1)'],
             ['clear_cache', null, InputOption::VALUE_NONE, 'Очистить кеш XML Volga (фаза 1)'],
             ['limit', 'l', InputOption::VALUE_OPTIONAL, 'Лимит круизов (для отладки/прогона) (фаза 1)', null],
-            ['next-url', 'u', InputOption::VALUE_OPTIONAL, 'URL источника XML данных (фаза 1)', 'http://test.volgawolga.ru/xml/daily2024.xml'],
+            ['next-url', 'u', InputOption::VALUE_OPTIONAL, 'URL источника XML данных (фаза 1)', 'https://test.volgawolga.ru/xml/daily2026.xml'],
 
             // phase 2 passthrough
             ['validate-only', null, InputOption::VALUE_NONE, 'Только валидация SQLite, без импорта (фаза 2)'],
