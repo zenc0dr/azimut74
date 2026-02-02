@@ -58,7 +58,7 @@
                 btn.style.top = Math.max(8, top - 50) + "px";
                 btn.style.left = (right - buttonSize - 24) + "px";
                 showTimer = null;
-            }, 1000);
+            }, 500);
             return;
         }
 
