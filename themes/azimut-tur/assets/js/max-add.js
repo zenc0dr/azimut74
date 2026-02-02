@@ -1,9 +1,12 @@
 (function () {
     var iframeId = "CalltouchWidgetFrame";
     var buttonId = "MaxMessengerOverlayButton";
+    var backdropId = "MaxMessengerOverlayBackdrop";
     var buttonSize = 64;
     var iframeOpenHeight = 256;
     var iframeClosedHeight = 112;
+    var mobileBackdropHeight = 228;
+    var mobileBackdropOffset = 228;
 
     function ensureButton() {
         var existing = document.getElementById(buttonId);
@@ -34,11 +37,63 @@
         return btn;
     }
 
+    function ensureBackdrop() {
+        var existing = document.getElementById(backdropId);
+        if (existing) return existing;
+
+        var backdrop = document.createElement("div");
+        backdrop.id = backdropId;
+        backdrop.style.position = "fixed";
+        backdrop.style.width = "100%";
+        backdrop.style.left = "0";
+        backdrop.style.bottom = mobileBackdropOffset + "px";
+        backdrop.style.height = mobileBackdropHeight + "px";
+        backdrop.style.borderRadius = "0";
+        backdrop.style.maxHeight = "100%";
+        backdrop.style.background = "linear-gradient(90deg, rgba(31, 40, 44, 0.5), rgba(31, 40, 44, 0.5))";
+        backdrop.style.display = "none";
+        backdrop.style.zIndex = "2147483646";
+
+        document.body.appendChild(backdrop);
+        return backdrop;
+    }
+
+    function isMobileMode() {
+        var ua = navigator.userAgent || "";
+        if (/Android|iPhone|iPad|iPod|Mobile/i.test(ua)) return true;
+        if (window.matchMedia && window.matchMedia("(pointer: coarse)").matches) return true;
+        return false;
+    }
+
     var showTimer = null;
+
+    function applyPosition(iframe, btn, mobile) {
+        var rect = iframe.getBoundingClientRect();
+        var top = rect.top;
+        var right = rect.right;
+
+        if (mobile) {
+            var backdrop = ensureBackdrop();
+            var overlayTop = window.innerHeight - mobileBackdropOffset - mobileBackdropHeight;
+            var desiredLeft = right - buttonSize - 24;
+            var clampedLeft = Math.min(window.innerWidth - buttonSize - 8, Math.max(8, desiredLeft));
+
+            backdrop.style.display = "block";
+            btn.style.display = "block";
+            btn.style.top = Math.max(8, overlayTop + 8) + "px";
+            btn.style.left = clampedLeft + "px";
+            return;
+        }
+
+        btn.style.display = "block";
+        btn.style.top = Math.max(8, top - 50) + "px";
+        btn.style.left = (right - buttonSize - 24) + "px";
+    }
 
     function positionButton(iframe, btn) {
         var rect = iframe.getBoundingClientRect();
         var isExpanded = rect.height >= iframeOpenHeight - 8;
+        var mobile = isMobileMode();
 
         if (!isExpanded) {
             if (showTimer) {
@@ -46,25 +101,21 @@
                 showTimer = null;
             }
             btn.style.display = "none";
+            var backdrop = document.getElementById(backdropId);
+            if (backdrop) backdrop.style.display = "none";
             return;
         }
 
-        var top = rect.top;
-        var right = rect.right;
-
         if (!showTimer && btn.style.display !== "block") {
             showTimer = setTimeout(function () {
-                btn.style.display = "block";
-                btn.style.top = Math.max(8, top - 50) + "px";
-                btn.style.left = (right - buttonSize - 24) + "px";
                 showTimer = null;
-            }, 500);
+                applyPosition(iframe, btn, mobile);
+            }, 1000);
             return;
         }
 
         if (btn.style.display === "block") {
-            btn.style.top = Math.max(8, top - 50) + "px";
-            btn.style.left = (right - buttonSize - 24) + "px";
+            applyPosition(iframe, btn, mobile);
         }
     }
 
