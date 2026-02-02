@@ -5,7 +5,7 @@
     var buttonSize = 64;
     var iframeOpenHeight = 256;
     var iframeClosedHeight = 112;
-    var mobileBackdropHeight = 228;
+    var mobileBackdropHeight = 74;
     var mobileBackdropOffset = 228;
 
     function ensureButton() {
@@ -74,14 +74,14 @@
 
         if (mobile) {
             var backdrop = ensureBackdrop();
-            var overlayTop = window.innerHeight - mobileBackdropOffset - mobileBackdropHeight;
-            var desiredLeft = right - buttonSize - 24;
+            var desiredLeft = right - buttonSize - 10;
             var clampedLeft = Math.min(window.innerWidth - buttonSize - 8, Math.max(8, desiredLeft));
 
             backdrop.style.display = "block";
             btn.style.display = "block";
-            btn.style.top = Math.max(8, overlayTop + 8) + "px";
             btn.style.left = clampedLeft + "px";
+            btn.style.top = "";
+            btn.style.bottom = mobileBackdropOffset + "px";
             return;
         }
 
