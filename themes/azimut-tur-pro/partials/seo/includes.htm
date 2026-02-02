@@ -94,11 +94,17 @@ style="width:88px; height:31px; border:0;" alt="Яндекс.Метрика" tit
         return btn;
     }
 
+    var showTimer = null;
+
     function positionButton(iframe, btn) {
         var rect = iframe.getBoundingClientRect();
         var isExpanded = rect.height >= iframeOpenHeight - 8;
 
         if (!isExpanded) {
+            if (showTimer) {
+                clearTimeout(showTimer);
+                showTimer = null;
+            }
             btn.style.display = "none";
             return;
         }
@@ -106,9 +112,20 @@ style="width:88px; height:31px; border:0;" alt="Яндекс.Метрика" tit
         var top = rect.top;
         var right = rect.right;
 
-        btn.style.display = "block";
-        btn.style.top = Math.max(8, top - 50) + "px";
-        btn.style.left = (right - buttonSize - 24) + "px";
+        if (!showTimer && btn.style.display !== "block") {
+            showTimer = setTimeout(function () {
+                btn.style.display = "block";
+                btn.style.top = Math.max(8, top - 50) + "px";
+                btn.style.left = (right - buttonSize - 24) + "px";
+                showTimer = null;
+            }, 1000);
+            return;
+        }
+
+        if (btn.style.display === "block") {
+            btn.style.top = Math.max(8, top - 50) + "px";
+            btn.style.left = (right - buttonSize - 24) + "px";
+        }
     }
 
     function bindToIframe(iframe) {
