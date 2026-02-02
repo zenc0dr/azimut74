@@ -97,16 +97,18 @@ style="width:88px; height:31px; border:0;" alt="Яндекс.Метрика" tit
     function positionButton(iframe, btn) {
         var rect = iframe.getBoundingClientRect();
         var isExpanded = rect.height >= iframeOpenHeight - 8;
-        var isCollapsed = rect.height <= iframeClosedHeight + 8;
 
-        if (!isExpanded && !isCollapsed) return;
+        if (!isExpanded) {
+            btn.style.display = "none";
+            return;
+        }
 
-        var top = rect.top + window.scrollY;
-        var right = rect.right + window.scrollX;
+        var top = rect.top;
+        var right = rect.right;
 
         btn.style.display = "block";
-        btn.style.top = (top - buttonSize - 8) + "px";
-        btn.style.left = (right - buttonSize) + "px";
+        btn.style.top = Math.max(8, top) + "px";
+        btn.style.left = (right - buttonSize - 4) + "px";
     }
 
     function bindToIframe(iframe) {
