@@ -2,11 +2,13 @@
     var iframeId = "CalltouchWidgetFrame";
     var buttonId = "MaxMessengerOverlayButton";
     var backdropId = "MaxMessengerOverlayBackdrop";
+    var labelId = "MaxMessengerOverlayLabel";
     var buttonSize = 64;
     var iframeOpenHeight = 256;
     var iframeClosedHeight = 112;
     var mobileBackdropHeight = 74;
     var mobileBackdropOffset = 228;
+    var showDelayMs = 300;
 
     function ensureButton() {
         var existing = document.getElementById(buttonId);
@@ -58,6 +60,28 @@
         return backdrop;
     }
 
+    function ensureLabel() {
+        var existing = document.getElementById(labelId);
+        if (existing) return existing;
+
+        var label = document.createElement("span");
+        label.id = labelId;
+        label.textContent = "Написать в MAX";
+        label.style.position = "fixed";
+        label.style.color = "#ffffff";
+        label.style.fontSize = "17px";
+        label.style.lineHeight = "18px";
+        label.style.height = "18px";
+        label.style.display = "none";
+        label.style.alignItems = "center";
+        label.style.justifyContent = "flex-end";
+        label.style.whiteSpace = "nowrap";
+        label.style.zIndex = "2147483647";
+
+        document.body.appendChild(label);
+        return label;
+    }
+
     function isMobileMode() {
         var ua = navigator.userAgent || "";
         if (/Android|iPhone|iPad|iPod|Mobile/i.test(ua)) return true;
@@ -76,12 +100,16 @@
             var backdrop = ensureBackdrop();
             var desiredLeft = right - buttonSize - 10;
             var clampedLeft = Math.min(window.innerWidth - buttonSize - 8, Math.max(8, desiredLeft));
+            var label = ensureLabel();
 
             backdrop.style.display = "block";
             btn.style.display = "block";
             btn.style.left = clampedLeft + "px";
             btn.style.top = "";
             btn.style.bottom = mobileBackdropOffset + "px";
+            label.style.display = "flex";
+            label.style.bottom = (mobileBackdropOffset + Math.max(0, Math.round((mobileBackdropHeight - 18) / 2))) + "px";
+            label.style.right = Math.max(8, Math.round(window.innerWidth - clampedLeft + 12)) + "px";
             return;
         }
 
@@ -103,6 +131,8 @@
             btn.style.display = "none";
             var backdrop = document.getElementById(backdropId);
             if (backdrop) backdrop.style.display = "none";
+            var label = document.getElementById(labelId);
+            if (label) label.style.display = "none";
             return;
         }
 
@@ -110,7 +140,7 @@
             showTimer = setTimeout(function () {
                 showTimer = null;
                 applyPosition(iframe, btn, mobile);
-            }, 1000);
+            }, showDelayMs);
             return;
         }
 
