@@ -241,7 +241,11 @@ class Cabins extends Model
     public function afterSave()
     {
         $this->saveIncabin($this->id);
-        $this->saveDecks($this->id);
+        // Не трогаем pivot по палубам, если decksDump не задан явно.
+        // Иначе при техническом save() (импорт/синк) связи будут удаляться.
+        if ($this->decksDump !== null) {
+            $this->saveDecks($this->id);
+        }
     }
 
     public function afterDelete()

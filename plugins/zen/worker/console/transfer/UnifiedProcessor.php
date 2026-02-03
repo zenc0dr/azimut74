@@ -455,12 +455,85 @@ class UnifiedProcessor extends TransferProcessor
             DB::table('mcmraak_rivercrs_pricing')
                 ->insert($insert_prices);
             
+            // Восстанавливаем связи кают с палубами для всех кают с ценами (fallback)
+            $this->restoreDeckLinksForCheckin($checkinId, $shipId, $cabinDeckMapping);
+            
             $this->output("  ✅ Цены импортированы: " . count($insert_prices) . " цен в pricing, $nprices_count цен с палубами в nprices", 'line');
             return true; // Цены успешно импортированы
         }
         
         $this->output("  ⚠️  Валидных цен для заезда $cruiseId не найдено", 'warn');
         return false; // Валидных цен не найдено
+    }
+    
+    /**
+     * Восстановление связей кают с палубами для заезда
+     * Приоритет 1: точные данные из SQLite (deck_name)
+     * Приоритет 2: эталонная палуба по теплоходу (fallback)
+     */
+    private function restoreDeckLinksForCheckin($checkinId, $shipId, array $cabinDeckMapping = [])
+    {
+        // Получаем все уникальные cabin_id из цен
+        $cabinIdsWithPrices = DB::table('mcmraak_rivercrs_pricing')
+            ->where('checkin_id', $checkinId)
+            ->distinct()
+            ->pluck('cabin_id')
+            ->toArray();
+        
+        if (empty($cabinIdsWithPrices)) {
+            return;
+        }
+        
+        // Эталонная палуба для теплохода (fallback)
+        $referenceDeck = DB::table('mcmraak_rivercrs_decks_pivot')
+            ->join('mcmraak_rivercrs_cabins', 'mcmraak_rivercrs_cabins.id', '=', 'mcmraak_rivercrs_decks_pivot.cabin_id')
+            ->where('mcmraak_rivercrs_cabins.motorship_id', $shipId)
+            ->select('mcmraak_rivercrs_decks_pivot.deck_id')
+            ->first();
+        
+        $referenceDeckId = $referenceDeck ? $referenceDeck->deck_id : null;
+        $restoredCount = 0;
+        
+        foreach ($cabinIdsWithPrices as $cabinId) {
+            // Приоритет 1: восстановление по точной палубе из SQLite
+            if (isset($cabinDeckMapping[$cabinId]) && !empty($cabinDeckMapping[$cabinId])) {
+                $deckName = $cabinDeckMapping[$cabinId];
+                $deck = $this->getDeck($deckName);
+                if ($deck) {
+                    $hasExactLink = DB::table('mcmraak_rivercrs_decks_pivot')
+                        ->where('cabin_id', $cabinId)
+                        ->where('deck_id', $deck->id)
+                        ->exists();
+                    
+                    if (!$hasExactLink) {
+                        $this->deckPivotCheck($cabinId, $deck->id);
+                        $restoredCount++;
+                        ProcessLog::add("Восстановлена связь каюты $cabinId с палубой {$deck->id} ({$deckName}) из SQLite");
+                    }
+                    continue;
+                }
+            }
+            
+            // Приоритет 2: fallback только если нет ни одной связи
+            $hasAnyLink = DB::table('mcmraak_rivercrs_decks_pivot')
+                ->where('cabin_id', $cabinId)
+                ->exists();
+            
+            if (!$hasAnyLink && $referenceDeckId) {
+                DB::table('mcmraak_rivercrs_decks_pivot')->insert([
+                    'cabin_id' => $cabinId,
+                    'deck_id' => $referenceDeckId
+                ]);
+                $restoredCount++;
+                ProcessLog::add("Восстановлена связь каюты $cabinId с эталонной палубой $referenceDeckId (fallback)");
+            } elseif (!$hasAnyLink) {
+                ProcessLog::add("Предупреждение: не удалось создать связь для cabin_id=$cabinId - нет доступных палуб для теплохода $shipId");
+            }
+        }
+        
+        if ($restoredCount > 0) {
+            ProcessLog::add("Восстановлено связей кают с палубами для заезда $checkinId: $restoredCount");
+        }
     }
     
     /**
