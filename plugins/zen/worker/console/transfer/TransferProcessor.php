@@ -81,10 +81,10 @@ abstract class TransferProcessor
      * @param int|null $categoryId ID категории из источника
      * @param string $categoryName Название категории
      * @param int $shipId ID теплохода в MySQL
-     * @param int $places Количество мест
+     * @param int|null $places Количество мест (null = не обновлять)
      * @return int ID категории кают в MySQL
      */
-    protected function getCabinCategory($categoryId, $categoryName, $shipId, $places = 1): int
+    protected function getCabinCategory($categoryId, $categoryName, $shipId, $places = null): int
     {
         // Используем обновленный метод getCabinCategoryId() с передачей ID
         return $this->riverCrs->getCabinCategoryId(

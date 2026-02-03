@@ -103,7 +103,7 @@ class RiverCrs
      * @param string $category_name
      * @param int $motorship_id
      * @param string $eds_code
-     * @param int $places
+     * @param int|null $places
      * @param int|null $sourceId ID категории из источника (gama_id, germes_id, etc.)
      * @return int
      */
@@ -111,7 +111,7 @@ class RiverCrs
         string $category_name,
         int $motorship_id,
         string $eds_code,
-        int $places = 1,
+        ?int $places = null,
         ?int $sourceId = null
     ): int {
         // Проверка исключений категорий кают (как в Volga, Gama, Germes Phase 1)
@@ -144,7 +144,7 @@ class RiverCrs
                         $cabin->category = $category_name;
                     }
                 }
-                if ($cabin->places_main_count !== $places) {
+                if ($places !== null && $places > 0 && $cabin->places_main_count !== $places) {
                     $cabin->places_main_count = $places;
                 }
                 // Обновляем имя источника, если изменилось
@@ -168,7 +168,7 @@ class RiverCrs
             if ($sourceId !== null && !$cabin->{$edsIdField}) {
                 $cabin->{$edsIdField} = $sourceId;
             }
-            if ($cabin->places_main_count !== $places) {
+            if ($places !== null && $places > 0 && $cabin->places_main_count !== $places) {
                 $cabin->places_main_count = $places;
             }
             if ($cabin->isDirty()) {
@@ -197,7 +197,7 @@ class RiverCrs
                         $cabin->category = $category_name;
                     }
                 }
-                if ($cabin->places_main_count !== $places) {
+                if ($places !== null && $places > 0 && $cabin->places_main_count !== $places) {
                     $cabin->places_main_count = $places;
                 }
                 if ($cabin->isDirty()) {
@@ -215,7 +215,7 @@ class RiverCrs
         if ($sourceId !== null) {
             $cabin->{$edsIdField} = $sourceId;
         }
-        $cabin->places_main_count = $places;
+        $cabin->places_main_count = ($places !== null && $places > 0) ? $places : 1;
         $cabin->desc = '';
         $cabin->save();
 
