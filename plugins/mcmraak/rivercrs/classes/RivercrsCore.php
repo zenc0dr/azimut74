@@ -104,6 +104,10 @@ class RivercrsCore
             return false;
         }
 
+        if (count($this->segments) !== 3) {
+            return false;
+        }
+
         $ship_id = $this->segments[2];
         $ship = Motorships::find($ship_id);
 
@@ -123,6 +127,10 @@ class RivercrsCore
 
     private function isCruisesPage(&$cms_page)
     {
+        if (count($this->segments) > 2) {
+            return false;
+        }
+
         $slug = $this->segments[1] ?? 'river-cruises';
 
         $is_transit_page = false;
