@@ -2,6 +2,7 @@
 
 use Illuminate\Console\Command;
 use Illuminate\Support\Facades\DB;
+use Mcmraak\Rivercrs\Classes\CheckinHtmlCleaner;
 
 class CheckData extends Command
 {
@@ -72,14 +73,6 @@ class CheckData extends Command
 
     private function clean_html(?string $desc): ?string
     {
-        if (is_null($desc)) {
-            return $desc;
-        }
-
-        $desc = preg_replace('/<a\b[^>]*>(.*?)<\/a>/i', '$1', $desc);
-        $desc = preg_replace('/<span\b[^>]*>(.*?)<\/span>/i', '$1', $desc);
-        $desc = preg_replace('/<u\b[^>]*>(.*?)<\/u>/i', '$1', $desc);
-
-        return $desc;
+        return CheckinHtmlCleaner::clean($desc);
     }
 }

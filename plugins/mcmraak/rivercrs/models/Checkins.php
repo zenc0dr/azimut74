@@ -9,6 +9,7 @@ use Mcmraak\Rivercrs\Classes\CacheSettings;
 use View;
 use Cache;
 use Zen\Cabox\Classes\Cabox;
+use Mcmraak\Rivercrs\Classes\CheckinHtmlCleaner;
 
 /**
  * Model
@@ -439,6 +440,11 @@ class Checkins extends Model
     # Check requred data in
     public function beforeSave()
     {
+        // Гарантируем очистку контента при любом сохранении заезда
+        // (парсеры, админка, ручные скрипты).
+        $this->desc_1 = CheckinHtmlCleaner::clean($this->desc_1);
+        $this->desc_2 = CheckinHtmlCleaner::clean($this->desc_2);
+        
         if (!$this->date) {
             throw new ApplicationException('Не указаны дата и время отправления!');
         }
