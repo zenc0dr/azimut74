@@ -36,14 +36,14 @@ class CheckData extends Command
 
                         $timestamp = date('Y-m-d H:i:s');
                         $log_message = "[$timestamp] [INFO] Запись id: {$record->id} - Очистка произведена" . PHP_EOL;
-                        file_put_contents($log_file, $log_message, FILE_APPEND);
+                        #file_put_contents($log_file, $log_message, FILE_APPEND);
                         $this->info("Запись id: {$record->id} - Очистка произведена");
 
                     } catch (\Exception $e) {
                         $timestamp = date('Y-m-d H:i:s');
                         $error_message = $e->getMessage();
                         $log_message = "[$timestamp] [ERROR] Ошибка записи id: {$record->id} - $error_message" . PHP_EOL;
-                        file_put_contents($log_file, $log_message, FILE_APPEND);
+                        #file_put_contents($log_file, $log_message, FILE_APPEND);
                         $this->error("Ошибка записи id: {$record->id} - $error_message");
                     }
                 }
