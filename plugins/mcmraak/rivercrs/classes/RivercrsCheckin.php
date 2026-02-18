@@ -48,7 +48,9 @@ class RivercrsCheckin
             'breadcrumbs' => [
                 ['/', 'Главная'],
                 ['/russia-river-cruises', 'Речные круизы'],
-            ]
+            ],
+            'date_start' => Carbon::parse($checkin->date)->format('d.m.Y H:i'),
+            'date_end' => Carbon::parse($checkin->date_b)->format('d.m.Y H:i'),
         ];
 
         return $data;
