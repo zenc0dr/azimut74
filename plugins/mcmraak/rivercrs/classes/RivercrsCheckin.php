@@ -22,6 +22,7 @@ class RivercrsCheckin
             'ship_id' => $ship->id,
             'ship_pic' => $ship->pic,
             'ship_name' => $ship->alt_name,
+            'ship_standard_name' => $ship->standard_name,
             'ship_images' => $ship->images->pluck('path')->toArray(),
             'ship_video' => $ship->youtube_link,
             'ship_desc' => $ship->desc,
