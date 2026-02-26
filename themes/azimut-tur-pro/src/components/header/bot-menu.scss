@@ -93,6 +93,23 @@
         justify-content: center;
     }
 
+    &__social {
+        margin-top: 0.25rem;
+        flex-wrap: wrap;
+    }
+    &__social-link {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        transition: transform 150ms;
+        &:hover {
+            transform: scale(1.15);
+        }
+        img {
+            display: block;
+        }
+    }
+
     // .header-bot__main-phone
     &__main-phone {
         display: flex;

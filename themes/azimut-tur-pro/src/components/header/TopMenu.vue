@@ -23,6 +23,18 @@
                         </a>
                     </div>
 
+                    <div class="col-auto d-flex align-items-center gap-1 top-menu_mobile-social">
+                        <a href="https://ok.ru/azimuttour" target="_blank" rel="noopener" class="top-menu_mobile-social-link" title="Одноклассники">
+                            <img src="/themes/azimut-tur-pro/assets/images/social_icons/ok.svg" alt="OK" width="24" height="24">
+                        </a>
+                        <a href="https://vk.com/azimut.tour" target="_blank" rel="noopener" class="top-menu_mobile-social-link" title="ВКонтакте">
+                            <img src="/themes/azimut-tur-pro/assets/images/social_icons/vk.svg" alt="VK" width="24" height="24">
+                        </a>
+                        <a href="https://www.youtube.com/@Азимут-Тур-п4г" target="_blank" rel="noopener" class="top-menu_mobile-social-link" title="YouTube">
+                            <img src="/themes/azimut-tur-pro/assets/images/social_icons/youtube.svg" alt="YouTube" width="24" height="24">
+                        </a>
+                    </div>
+
                     <div class="col-auto col-auto d-flex align-items-center justify-content-center">
                         <!--<div class="whats-app-btn kruiz_injector3 only-river-crs" onclick="window.open('https://wa.me/79271149850?text=Меня интересуют речные круизы')"></div>-->
                         <i class="bi bi-telephone-inbound fs-h1 text-white" @click="clickContacts()" style="cursor:pointer"></i>

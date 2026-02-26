@@ -49,6 +49,24 @@
 }
 }
 
+.top-menu_mobile-social {
+    margin-left: 0.25rem;
+    margin-right: 20px;
+    gap: 5px;
+}
+.top-menu_mobile-social-link {
+    display: flex;
+    align-items: center;
+    opacity: 0.9;
+    transition: opacity 150ms;
+    &:hover {
+        opacity: 1;
+    }
+    img {
+        display: block;
+    }
+}
+
 .top-menu_mobile-humburger {
     display: flex;
     align-items: center;
