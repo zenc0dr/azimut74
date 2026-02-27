@@ -13,17 +13,17 @@ $mobile_ver_2: 550px;
     right: 21%;
     margin-top: 20px;
     @include m('2490px') {
-        left: 11%;
+        right: 11%;
     }
     @include m('1840px') {
-        left: 5%;
+        right: 5%;
     }
     @include m('1600px') {
-        left: 1%;
+        right: 1%;
     }
     @include m('992px') {
         margin-top: 40px;
-        left: 1%;
+        right: 1%;
     }
     @include m($mobile_ver) {
         margin-top: 0;
