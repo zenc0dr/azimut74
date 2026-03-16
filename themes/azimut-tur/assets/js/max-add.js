@@ -27,7 +27,7 @@
         btn.style.borderRadius = "50%";
         btn.style.display = "none";
         btn.style.backgroundColor = "#ffffff";
-        btn.style.backgroundImage = "url(/themes/azimut-tur-pro/assets/images/icons/max-messenger-sign-logo.svg)";
+        btn.style.backgroundImage = "url(/themes/azimut-tur-pro/assets/images/social_icons/max.svg)";
         btn.style.backgroundRepeat = "no-repeat";
         btn.style.backgroundPosition = "center";
         btn.style.backgroundSize = "60%";
