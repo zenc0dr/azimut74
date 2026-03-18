@@ -11,6 +11,7 @@ description = "Секция Контакты в дне"
 				<div class="headText">
 					<span>Контакты</span>
 				</div>
+				<hr class="footer__title-sep" style="border-color: rgba(255,255,255,0.5); margin-bottom: 15px;">
 				<div class="all_phones">
                     <div class="footer__phones-2">
                         <div class="footer__phones-2__big">
@@ -71,54 +72,30 @@ description = "Секция Контакты в дне"
                     </a>
                 </div>
 
-				{% if this.theme.email %}
-				<div class="mail">
-					<a href="mailto:{{ this.theme.email|mutator }}">{{ this.theme.email|mutator }}</a>
-				</div>
-				{% endif %}
-
                 <style>
-                    .email-pill {
-                        display: flex;
-                        flex-direction: column;
-                        margin-top: 10px;
-                        margin-bottom: 10px;
-                    }
-                    .email-pill__title {
-                        color: #fff;
-                        font-weight: bold;
-                        margin-bottom: 4px;
-                    }
-                    .email-pill a {
-                        font-weight: bold;
-                        color: #09005f;
-                    }
+                    .email-pill { display: flex; flex-direction: column; margin-top: 10px; margin-bottom: 10px; }
+                    .email-pill__title { color: #fff; font-weight: bold; margin-bottom: 4px; }
+                    .email-pill a { font-weight: bold; color: #09005f; }
                 </style>
                 <div class="email-pill">
-                    <div class="email-pill__title">Отдел школьных и групповых туров</div>
-                    <a href="mailto:azimut.operator@yandex.ru">azimut.operator@yandex.ru
-                    </a>
+                    <div class="email-pill__title">Круизный отдел:</div>
+                    <a href="mailto:azimut-kruiz@yandex.ru">azimut-kruiz@yandex.ru</a>
                 </div>
-
-
-				{% if this.theme.graphic %}
-				<!-- <div class="workTime">
-					<div>Понедельник — <b>с 10:00 до 19:00</b></div>
-					<div>Суббота — <b>c 11:00 до 15:00</b></div>
-					<div>Воскресенье — выходной</div>
-				</div> -->
-				<div class="workTime">
-					{{ this.theme.graphic|raw|mutator }}
-				</div>
-				{% endif %}
-				{% if this.theme.address %}
+                <div class="email-pill">
+                    <div class="email-pill__title">Отдел школьных и групповых туров:</div>
+                    <a href="mailto:azimut.operator@yandex.ru">azimut.operator@yandex.ru</a>
+                </div>
 				<div class="address">
-					{{ this.theme.address|mutator }}
+					<div style="font-weight: bold; margin-bottom: 4px;">Офисы:</div>
+					<div>Саратов, ул. П.Н. Яблочкова, д.13</div>
+					<div>Москва, ул. Дмитрия Ульянова, д.31, помещение 55/4, офис 444</div>
 				</div>
-				{% endif %}
-				<div class="ros-reestr-block" onclick="window.open('https://www.russiatourism.ru/operators/show.php?id=107271')">
+				<div class="footer__bottom-block ros-reestr-block" onclick="window.open('https://tourism.gov.ru/operators/show.php?id=107271')">
 					<div>Мы в реестре туроператоров</div>
 					<div>ООО "Азимут" РТО 021653</div>
+					<div class="footer__policy-text pt-2" onclick="event.stopPropagation()">
+						<a href="/politika-konfidencialnosti" class="c-primary-100" style="color: #fff; text-decoration: none;" target="_blank">Политика обработки персональных данных</a>
+					</div>
 				</div>
                 {# https://8ber.kaiten.ru/space/45609/boards/card/48106455
 				<div class="conButtons">
@@ -131,13 +108,6 @@ description = "Секция Контакты в дне"
 					</div>
 				</div>
                 #}
-				<div class="footer__policy d-flex flex-column flex-sm-row align-items-center">
-
-					<div class="footer__policy-text d-flex flex-column c-primary-100 pt-3 fs-s">
-						<a href="/politika-konfidencialnosti" class="c-primary-100" target="_blank">Политика обработки персональных данных
-						</a>
-					</div>
-				</div>
 
 			</div>
 

@@ -3,7 +3,7 @@
         <div class="footer__top-wrapper container d-flex flex-column flex-xl-row ">
             <div class="footer__left col-12 col-lg-6 col-xxl-5 p-2 p-sm-3 p-xl-4 mb-4 mb-lg-0 mt-4 mt-sm-2 mt-lg-0">
                 <h2 class="fs-h2 fs-sm-h1 c-primary-100 fw-bolder text-uppercase mb-3">Контакты</h2>
-
+                <hr class="footer__title-sep mb-3" style="border-color: rgba(255,255,255,0.5);">
 
                 <div class="footer__phones-2">
                     {#
@@ -40,64 +40,40 @@
                         <img src="{{ 'assets/images/social_icons/youtube.svg'|theme }}" alt="YouTube" width="28" height="28">
                     </a>
                 </div>
-                <div class="footer__email d-flex mb-3">
+                <style>
+                    .email-pill { display: flex; flex-direction: column; }
+                    .email-pill__title { color: #fff; font-weight: bold; margin-bottom: 4px; }
+                </style>
+                <div class="footer__email email-pill d-flex mb-3">
+                    <div class="email-pill__title">Круизный отдел:</div>
                     <a href="mailto:azimut-kruiz@yandex.ru"
                         class="text-decoration-none fw-bolder c-blue-400">azimut-kruiz@yandex.ru
                     </a>
                 </div>
-                <style>
-                    .email-pill {
-                        display: flex;
-                        flex-direction: column;
-                    }
-                    .email-pill__title {
-                        color: #fff;
-                        font-weight: bold;
-                        margin-bottom: 4px;
-                    }
-                </style>
                 <div class="footer__email email-pill d-flex mb-3">
-                    <div class="email-pill__title">Отдел школьных и групповых туров</div>
+                    <div class="email-pill__title">Отдел школьных и групповых туров:</div>
                     <a href="mailto:azimut.operator@yandex.ru"
                        class="text-decoration-none fw-bolder c-blue-400">azimut.operator@yandex.ru
                     </a>
                 </div>
-                <div class="footer__work-time d-flex flex-column c-primary-100 fs-s mb-3">
-                    {#
-                    <div>Понедельник–пятница — <b>с 10:00 до 19:00</b></div>
-                    <div>Суббота — <b>с 11:00 до 15:00</b></div>
-                    <div>Воскресенье — <b>выходной</b></div>
-                    #}
-                    <span style="font-size:17px;font-weight:bold">
-                        Ежедневно с 10:00 до 19:00
-                    </span>
+                <div class="footer__offices fw-bolder c-primary-100 fs-def fs-sm-h3 mb-3">
+                    <div class="mb-1">Офисы:</div>
+                    <div>Саратов, ул. П.Н. Яблочкова, д.13</div>
+                    <div>Москва, ул. Дмитрия Ульянова, д.31, помещение 55/4, офис 444</div>
                 </div>
-                <div class="footer__address fw-bolder c-primary-100 fs-def fs-sm-h3 mb-2">
-                    Фактический адрес: 410012, г.Саратов, ул.Яблочкова 13
-                </div>
-                <a class="footer__reestor d-flex bg-blue-400 text-decoration-none align-items-center justify-content-between p-2 p-sm-3 rounded mb-3"
-                    href="https://tourism.gov.ru/operators/show.php?id=107271" target="_blank">
-                    <div class="footer__reestor-img me-2 me-sm-0">
-                        <img width="64px" src="{{ 'assets/images/components/footer/gerb.png'|theme }}" alt="gerb">
-                    </div>
-                    <div class="footer__reestor-text c-primary-100">
-                        <div class="fw-bolder pb-1 fs-s fs-sm-def">Мы в реестре туроператоров</div>
-                        <div class="fs-s fs-sm-def">ООО "Азимут" РТО 021653</div>
-                    </div>
-                </a>
-                {# https://8ber.kaiten.ru/space/45609/boards/card/48106455
-                <div class="footer__recall d-flex flex-column flex-sm-row align-items-center">
-                    <button onclick="CallBack.open()" class="btn footer__recall-btn fw-bolder text-uppercase mb-3 mb-sm-0">Заказать звонок</button>
-                    <div class="footer__recall-text d-flex flex-column c-primary-100 ps-4 fs-s">
-                        <span>Вам некогда?</span>
-                        <span>Мы перезвоним!</span>
-                    </div>
-                </div>
-                #}
-                <div class="footer__policy d-flex flex-column flex-sm-row align-items-center">
-
-                    <div class="footer__policy-text d-flex flex-column c-primary-100 pt-3 fs-s">
-                        <a href="/politika-konfidencialnosti" class="c-primary-100" target="_blank">Политика обработки персональных данных </a>
+                <div class="footer__bottom-block bg-blue-400 rounded p-2 p-sm-3">
+                    <a class="footer__reestor d-flex text-decoration-none align-items-center justify-content-between mb-2"
+                        href="https://tourism.gov.ru/operators/show.php?id=107271" target="_blank">
+                        <div class="footer__reestor-img me-2 me-sm-0">
+                            <img width="64px" src="{{ 'assets/images/components/footer/gerb.png'|theme }}" alt="gerb">
+                        </div>
+                        <div class="footer__reestor-text c-primary-100">
+                            <div class="fw-bolder pb-1 fs-s fs-sm-def">Мы в реестре туроператоров</div>
+                            <div class="fs-s fs-sm-def">ООО "Азимут" РТО 021653</div>
+                        </div>
+                    </a>
+                    <div class="footer__policy-text c-primary-100 fs-s">
+                        <a href="/politika-konfidencialnosti" class="c-primary-100 text-decoration-none" target="_blank">Политика обработки персональных данных</a>
                     </div>
                 </div>
             </div>
