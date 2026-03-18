@@ -13,154 +13,110 @@ force_show = 0
 {% endput %}
 
 <section class="contacts">
-
+	<style>
+		section.contacts .contactsData .contWrap { padding-top: 15px; }
+		section.contacts .contacts-phone .line a { font-size: 22px; }
+	</style>
 	<div class="headText">
 		<span>Контакты турфирмы азимут-тур</span>
 	</div>
 
 	<div class="contactsData">
 		<div class="c-r">
-			<div class="col-33 col-m-50 col-xs-100 offset-16 offset-m-none">
+			<div class="col-100">
+
+				<div class="contWrap contOrg contacts-phone">
+					<div class="contHead">
+						<span>Единый телефон:</span>
+					</div>
+					<div class="line">
+						<a href="tel:84958236536">8 (495) 823 65 36</a>
+					</div>
+				</div>
 
 				<div class="contWrap contOrg">
-					{% if this.theme.contname1 %}
 					<div class="contHead">
-						<span>{{ this.theme.contname1|mutator }}</span>
+						<span>Круизный отдел:</span>
 					</div>
-					{% endif %}
-					{% if this.theme.address %}
 					<div class="line">
-						<span>{{ this.theme.address|mutator }}</span>
+						<a href="mailto:azimut-kruiz@yandex.ru">azimut-kruiz@yandex.ru</a>
 					</div>
-					{% endif %}
-					{% if this.theme.graphic %}
+				</div>
+
+				<div class="contWrap contOrg">
+					<div class="contHead">
+						<span>Отдел школьных и групповых туров:</span>
+					</div>
 					<div class="line">
-						{{ this.theme.graphic|raw|mutator }}
+						<a href="mailto:azimut.operator@yandex.ru">azimut.operator@yandex.ru</a>
 					</div>
-					{% endif %}
-					{% if this.theme.email %}
-					<div class="line">
-						<a href="mailto:{{ this.theme.email|mutator }}">{{ this.theme.email|mutator }}</a>
-					</div>
-					{% endif %}
-                    <style>
-                        .contacts-email-pill {
-                            font-size: 14px;
-                            display: flex;
-                            flex-direction: column;
-                            margin-top: 10px;
-                            margin-bottom: 10px;
-                        }
-                        .contacts-email-pill__title {
-                            font-size: 14px;
-                            font-weight: bold;
-                            margin-bottom: 4px;
-                        }
-                        .contacts-email-pill a {
-                            font-weight: bold;
-                            color: #1e88e5;
-                        }
-                    </style>
-                    <div class="contacts-email-pill">
-                        <div class="contacts-email-pill__title">Отдел школьных и групповых туров</div>
-                        <a href="mailto:azimut.operator@yandex.ru">azimut.operator@yandex.ru
-                        </a>
-                    </div>
-					{% if this.theme.conttext1 %}
-					<div class="line line-data">
-						<div class="data">
-							<p>
-								{{ this.theme.conttext1|raw|mutator }}
-							</p>
-						</div>
-					</div>
-					{% endif %}
 				</div>
 
 				<div class="contWrap">
-                    <div class="contact-page-phones">
-                        <div class="contact-page-phones__label">
-                            Телефоны
-                        </div>
-                        <div class="contact-page-phones__phone">
-                            <a href="tel:88452990819">
-                                8 (8452) 99 08 19
-                            </a>
-                        </div>
-                        <div style="display:none" class="contact-page-phones__phone">
-                            <span>Круизный отдел</span>
-                            <a href="tel:88452990819">
-                                8 (8452) 99 08 19
-                            </a>
-                        </div>
-                        <div class="header-bot__social d-flex align-items-center gap-2 mt-3">
-                            <a href="https://ok.ru/azimuttour" target="_blank" rel="noopener" class="header-bot__social-link" title="Одноклассники">
-                                <img src="/themes/azimut-tur-pro/assets/images/social_icons/ok.svg" alt="OK" width="28" height="28">
-                            </a>
-                            <a href="https://vk.com/azimut.tour" target="_blank" rel="noopener" class="header-bot__social-link" title="ВКонтакте">
-                                <img src="/themes/azimut-tur-pro/assets/images/social_icons/vk.svg" alt="VK" width="28" height="28">
-                            </a>
-                            <a href="https://www.youtube.com/@Азимут-Тур-п4г" target="_blank" rel="noopener" class="header-bot__social-link" title="YouTube">
-                                <img src="/themes/azimut-tur-pro/assets/images/social_icons/youtube.svg" alt="YouTube" width="28" height="28">
-                            </a>
-                        </div>
-                    </div>
-                    <style>
-                        .contact-page-phones {
-
-                        }
-                        .contact-page-phones__label {
-                            color: #666;
-                            font-weight: bold;
-                            font-size: 19px;
-                        }
-                        .contact-page-phones__phone {
-                            display: flex;
-                            flex-direction: column;
-                            margin-bottom: 10px;
-                        }
-                        .contact-page-phones__phone a {
-                            font-size: 20px;
-                            color: #000;
-                            font-weight: bold;
-                        }
-                        .contact-page-phones__phone span {
-                            font-size: 12px;
-                        }
-                    </style>
-
+					<div class="header-bot__social d-flex align-items-center gap-2">
+						<a href="https://ok.ru/azimuttour" target="_blank" rel="noopener" class="header-bot__social-link" title="Одноклассники">
+							<img src="/themes/azimut-tur-pro/assets/images/social_icons/ok.svg" alt="OK" width="28" height="28">
+						</a>
+						<a href="https://vk.com/azimut.tour" target="_blank" rel="noopener" class="header-bot__social-link" title="ВКонтакте">
+							<img src="/themes/azimut-tur-pro/assets/images/social_icons/vk.svg" alt="VK" width="28" height="28">
+						</a>
+						<a href="https://www.youtube.com/@Азимут-Тур-п4г" target="_blank" rel="noopener" class="header-bot__social-link" title="YouTube">
+							<img src="/themes/azimut-tur-pro/assets/images/social_icons/youtube.svg" alt="YouTube" width="28" height="28">
+						</a>
+					</div>
 				</div>
-                <div class="contWrap">
-                    {% if this.theme.conttext2 %}
-                    <div class="line line-data">
-                        <div class="data">
-                            {{ this.theme.conttext2|raw|mutator }}
-                        </div>
-                    </div>
-                    {% endif %}
-                </div>
 
-			</div>
-			<div class="col-35 col-m-50 col-xs-100">
+				<div class="contWrap">
+					<div class="contHead">
+						<span>Офис в Саратове:</span>
+					</div>
+					<div class="line">
+						<span>П.Н. Яблочкова, д.13</span>
+					</div>
+					<div class="line">
+						<span>Ежедневно с 10:00 до 19:00 (местное время)</span>
+					</div>
+				</div>
+
+				<div class="contWrap">
+					<div class="contHead">
+						<span>Офис в Москве:</span>
+					</div>
+					<div class="line">
+						<span>ул. Дмитрия Ульянова, д.31, помещение 55/4, офис 444</span>
+					</div>
+					<div class="line">
+						<span>Станция метро «Академическая»</span>
+					</div>
+					<div class="line">
+						<span>Ежедневно с 10:00 до 19:00 (местное время)</span>
+					</div>
+					<div class="line">
+						<span>Посещение офиса по предварительной записи</span>
+					</div>
+				</div>
 
 				<div class="contWrap contDetails">
-
-					{% if this.theme.contname3 %}
 					<div class="contHead">
-						<span>{{ this.theme.contname3|mutator }}</span>
+						<span>Реквизиты</span>
 					</div>
-					{% endif %}
-					{% if this.theme.conttext3 %}
-					<div class="line">
-						{{ this.theme.conttext3|raw|mutator }}
+					<div class="line line-data">
+						<div class="data contacts-requisites">
+							<p><strong>ООО «Азимут»</strong></p>
+							<p>Юр. адрес / почтовый адрес: 410012, г. Саратов, ул. П.Н. Яблочкова, д.13</p>
+							<p><strong>ИНН:</strong> 6454120758</p>
+							<p><strong>КПП:</strong> 645301001</p>
+							<p><strong>ОГРН:</strong> 1126454000859</p>
+							<p><strong>Р/с:</strong> 40702810629010000424</p>
+							<p><strong>В банке:</strong> Филиал «Нижегородский» ОАО «АЛЬФА-БАНК»</p>
+							<p><strong>К/С:</strong> 30101810200000000824</p>
+							<p><strong>БИК:</strong> 042202824</p>
+							<p><strong>Р/с:</strong> 40702810114500008989</p>
+							<p><strong>В банке:</strong> ООО «Банк Точка»</p>
+							<p><strong>К/С:</strong> 30101810745374525104</p>
+							<p><strong>БИК:</strong> 044525104</p>
+						</div>
 					</div>
-					{% endif %}
-
-					<div style="display: none" class="conButton">
-						<div><span>Вам некогда? Мы перезвоним!</span></div>
-						<button onclick="CallBack.open()" class="hbtn mbtn">Заказать звонок</button>
-					</div>
-
 				</div>
 
 			</div>
