@@ -1,0 +1,41 @@
+title = "Подберите мне круиз"
+url = "/russia-river-cruises/quiz"
+layout = "master"
+description = "Отдельная страница квиза подбора круиза"
+is_hidden = 0
+robot_index = "index"
+robot_follow = "follow"
+contentType = "html"
+force_show = 0
+==
+<?php
+function onStart()
+{
+    $this['quiz_css'] = '/plugins/zen/quiz/frontend/assets/css/quiz.css';
+    $this['quiz_page_js'] = '/plugins/zen/quiz/frontend/assets/js/quiz-page.js';
+}
+?>
+==
+{% put page_style %}
+<link rel="stylesheet" href="{{ quiz_css }}">
+{% endput %}
+
+{% put page_script %}
+<script src="{{ quiz_page_js }}"></script>
+{% endput %}
+
+<h1 class="inner-h1">Подберите мне круиз</h1>
+<style>
+    h1.inner-h1 {
+        text-align: center;
+        color: #6f6f6f;
+        font-size: 20px;
+        margin-top: 15px;
+    }
+</style>
+
+<section class="results my-4">
+    <div class="container">
+        <div id="QuizPageApp"></div>
+    </div>
+</section>

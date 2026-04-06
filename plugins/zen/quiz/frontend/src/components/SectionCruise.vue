@@ -156,7 +156,7 @@
                 <div class="section-cruise__sended-text">
                     Спасибо за заявку, мы скоро с вами свяжемся!
                 </div>
-                <div class="section-cruise__sended-timer">
+                <div v-if="isModal" class="section-cruise__sended-timer">
                     <i class="bi bi-stopwatch-fill"></i> Автоматически закроется через {{ timer }} сек.
                 </div>
 
@@ -261,6 +261,21 @@ export default {
     },
 
     methods: {
+        callApi(opts, retry = 0) {
+            if (typeof window.APP !== 'undefined' && typeof window.APP.api === 'function') {
+                window.APP.api(opts);
+                return;
+            }
+
+            if (retry >= 25) {
+                console.error('Quiz: APP.api is not available');
+                return;
+            }
+
+            setTimeout(() => {
+                this.callApi(opts, retry + 1);
+            }, 200);
+        },
         nextStep(val, type, last) {
             this.alerts = {}
             let value = get(this, val);
@@ -359,7 +374,7 @@ export default {
             ym(13605125,'reachGoal','request_for_payment')
 
             this.process = true
-            APP.api({
+            this.callApi({
                 url: '/zen/quiz/api/Store:push',
                 data: {form: this.form},
                 no_preloader: true,
@@ -391,7 +406,7 @@ export default {
             }
         },
         getCities() {
-            APP.api({
+            this.callApi({
                 url: '/zen/quiz/api/Cities:getList',
                 no_preloader: true,
                 then: response => {

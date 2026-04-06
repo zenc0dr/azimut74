@@ -2,6 +2,7 @@ const mix = require('laravel-mix')
 const path = require('path');
 mix.sass('src/scss/quiz.scss', 'css')
 mix.js('src/js/quiz-app.js', 'js').vue()
+mix.js('src/js/quiz-page.js', 'js').vue()
 
 mix.setPublicPath('assets');
 
