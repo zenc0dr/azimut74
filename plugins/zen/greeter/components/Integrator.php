@@ -34,6 +34,12 @@ class Integrator extends ComponentBase
             $path = '/' . $path;
         }
 
+        // Точечное исключение: не показываем встречающий баннер
+        // на standalone-странице квиза.
+        if (rtrim($path, '/') === '/russia-river-cruises/quiz') {
+            return;
+        }
+
         $showcase_id = null;
 
         foreach ($showcases as $id => $url_entry) {
