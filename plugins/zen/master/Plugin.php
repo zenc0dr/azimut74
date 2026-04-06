@@ -4,6 +4,8 @@ use System\Classes\PluginBase;
 use Session;
 use Event;
 use Cache;
+use BackendAuth;
+use Redirect;
 use Illuminate\Contracts\Http\Kernel;
 use Zen\Master\Middleware\ReplaceStorageLinks;
 
@@ -31,6 +33,21 @@ class Plugin extends PluginBase
     {
 
         #$this->app[Kernel::class]->pushMiddleware(ReplaceStorageLinks::class);
+
+        Event::listen('backend.page.beforeDisplay', function () {
+            if (!BackendAuth::check()) {
+                return;
+            }
+
+            $backendUserId = intval(BackendAuth::getUser()->id);
+            $blockedIds = $this->getGuestBackendUserIds();
+            if (!$blockedIds || !in_array($backendUserId, $blockedIds, true)) {
+                return;
+            }
+
+            // Keep backend auth session for frontend-edit use-cases, block only backend UI.
+            return Redirect::to('/');
+        });
 
         Event::listen('cms.router.beforeRoute', function () {
             $session_id = Session::getId();
@@ -70,5 +87,23 @@ class Plugin extends PluginBase
     {
         $this->registerConsoleCommand('master:check', 'Zen\Master\Console\CheckSystem');
         $this->registerConsoleCommand('master:dbdump', 'Zen\Master\Console\DatabaseDump');
+    }
+
+    protected function getGuestBackendUserIds()
+    {
+        $rawIds = trim((string) env('GUEST_BACKEND_USERS', ''));
+        if ($rawIds === '') {
+            return [];
+        }
+
+        $result = [];
+        foreach (explode(',', $rawIds) as $rawId) {
+            $id = intval(trim($rawId));
+            if ($id > 0) {
+                $result[$id] = $id;
+            }
+        }
+
+        return array_values($result);
     }
 }
