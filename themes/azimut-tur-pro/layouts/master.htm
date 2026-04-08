@@ -1,4 +1,5 @@
 description = "Основной шаблон"
+[PromoPopup]
 ==
 <?php
 function onInit()
@@ -42,6 +43,7 @@ function onInit()
         <script src="/plugins/zen/history/assets/js/manifest.js"></script>
         <script src="/plugins/zen/history/assets/js/history.js"></script>
 
+        {% component 'PromoPopup' %}
         {% partial 'seo/includes' %}
         {% partial 'inspector' %}
     </body>

@@ -1,0 +1,27 @@
+<div id="promo-popup" class="promo-popup" aria-hidden="true">
+    <div class="promo-popup__overlay" data-promo-close></div>
+    <div class="promo-popup__dialog" role="dialog" aria-modal="true" aria-labelledby="promo-popup-title">
+        <button type="button" class="promo-popup__close" aria-label="Закрыть окно" data-promo-close>&times;</button>
+        <div class="promo-popup__content">
+            <div class="promo-popup__media">
+                <img src="{{ promoPopupImage }}" alt="Речной круиз" loading="lazy">
+            </div>
+            <div class="promo-popup__text">
+                <h3 id="promo-popup-title">Дарим круиз на двоих на 4-х палубном теплоходе! 🚢✨</h3>
+                <p>
+                    Хотите провести майские праздники на борту теплохода совершенно бесплатно?
+                    Мы запустили большой розыгрыш в нашей группе ВКонтакте!
+                </p>
+                <p>
+                    Ярославль, Кострома и Углич уже ждут вас. Переходите по ссылке, выполняйте простые
+                    условия и забирайте свое путешествие.
+                </p>
+                <p class="promo-popup__cta">
+                    Переходите по ссылке 👉
+                    <a href="{{ promoPopupLink }}" target="_blank" rel="noopener noreferrer">участвовать в розыгрыше</a>
+                </p>
+                <p>Удачи! Пусть повезет именно вам 😊</p>
+            </div>
+        </div>
+    </div>
+</div>

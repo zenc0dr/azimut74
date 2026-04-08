@@ -13,6 +13,9 @@ class Plugin extends PluginBase
 {
     public function registerComponents()
     {
+        return [
+            'Zen\Master\Components\PromoPopup' => 'PromoPopup',
+        ];
     }
 
     public function registerSettings()

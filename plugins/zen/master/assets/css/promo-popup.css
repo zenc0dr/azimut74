@@ -1,0 +1,138 @@
+.promo-popup {
+    position: fixed;
+    inset: 0;
+    z-index: 12000;
+    display: none;
+}
+
+.promo-popup.is-visible {
+    display: block;
+}
+
+.promo-popup__overlay {
+    position: absolute;
+    inset: 0;
+    background: rgba(0, 0, 0, 0.6);
+}
+
+.promo-popup__dialog {
+    position: relative;
+    width: min(960px, calc(100% - 24px));
+    max-height: calc(100vh - 24px);
+    margin: 12px auto;
+    background: #ffffff;
+    border-radius: 10px;
+    overflow: hidden;
+    box-shadow: 0 20px 40px rgba(0, 0, 0, 0.3);
+}
+
+.promo-popup__close {
+    position: absolute;
+    top: 8px;
+    right: 12px;
+    z-index: 2;
+    border: 0;
+    background: transparent;
+    color: #222;
+    font-size: 36px;
+    line-height: 1;
+    cursor: pointer;
+}
+
+.promo-popup__content {
+    display: flex;
+    min-height: 520px;
+}
+
+.promo-popup__media,
+.promo-popup__text {
+    width: 50%;
+}
+
+.promo-popup__media img {
+    width: 100%;
+    height: 100%;
+    display: block;
+    object-fit: cover;
+}
+
+.promo-popup__text {
+    padding: 28px 28px 24px;
+    overflow-y: auto;
+}
+
+.promo-popup__text h3 {
+    margin: 0 32px 16px 0;
+    font-size: 32px;
+    line-height: 1.2;
+}
+
+.promo-popup__text p {
+    margin: 0 0 14px;
+    font-size: 18px;
+    line-height: 1.45;
+}
+
+.promo-popup__cta {
+    font-weight: 600;
+}
+
+.promo-popup__cta a {
+    color: #005bc4;
+    text-decoration: underline;
+}
+
+html.promo-popup-lock,
+body.promo-popup-lock {
+    overflow: hidden !important;
+}
+
+@media (max-width: 991px) {
+    .promo-popup__text h3 {
+        font-size: 28px;
+    }
+
+    .promo-popup__text p {
+        font-size: 17px;
+    }
+}
+
+@media (max-width: 767px) {
+    .promo-popup__dialog {
+        width: calc(100% - 12px);
+        margin: 6px auto;
+        max-height: calc(100vh - 12px);
+    }
+
+    .promo-popup__content {
+        flex-direction: column;
+        min-height: auto;
+    }
+
+    .promo-popup__text,
+    .promo-popup__media {
+        width: 100%;
+    }
+
+    .promo-popup__text {
+        order: 1;
+        padding: 18px 16px 12px;
+        max-height: 56vh;
+    }
+
+    .promo-popup__media {
+        order: 2;
+        height: 32vh;
+        min-height: 180px;
+    }
+
+    .promo-popup__text h3 {
+        font-size: 24px;
+        margin-right: 36px;
+    }
+
+    .promo-popup__text p {
+        font-size: 16px;
+        margin-bottom: 12px;
+    }
+}

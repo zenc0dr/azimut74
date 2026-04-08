@@ -16,6 +16,8 @@ tools = "*"
 [staticPage]
 useContent = 0
 default = 1
+
+[PromoPopup]
 ==
 <!DOCTYPE html>
 <html lang="ru">
@@ -96,6 +98,7 @@ default = 1
 	{% partial 'temporary/meeting-window' %}
 
 	{% component 'Injector' %}
+	{% component 'PromoPopup' %}
 
 	{% placeholder additional_scripts %}
 	<link rel="stylesheet" href="/plugins/zen/history/assets/css/history.css">

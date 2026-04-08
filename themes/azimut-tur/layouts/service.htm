@@ -1,4 +1,6 @@
 description = "Сервисный шаблон"
+
+[PromoPopup]
 ==
 <!DOCTYPE html>
 <html lang="ru">
@@ -143,6 +145,7 @@ description = "Сервисный шаблон"
 	{% partial 'temporary/meeting-window' %}
 
 	{% component 'Injector' %}
+	{% component 'PromoPopup' %}
 
 	{% placeholder additional_scripts %}
     {% partial 'inspector' %}
