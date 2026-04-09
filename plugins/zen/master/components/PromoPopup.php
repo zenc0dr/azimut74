@@ -23,6 +23,6 @@ class PromoPopup extends ComponentBase
         $this->addJs('/plugins/zen/master/assets/js/promo-popup.js');
 
         $this->page['promoPopupImage'] = '/plugins/zen/master/assets/images/banner_ship.jpg';
-        $this->page['promoPopupLink'] = 'https://vk.ru';
+        $this->page['promoPopupLink'] = 'https://vk.com/club69811336?w=wall-69811336_6024';
     }
 }
