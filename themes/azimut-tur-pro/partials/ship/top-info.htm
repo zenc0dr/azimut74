@@ -38,6 +38,9 @@
 								</a>
                         {% endif %}
 					</div>
+					<div class="d-flex justify-content-end mt-2">
+						{% partial 'blocks/social' class='py-1' %}
+					</div>
 					<div class="ship__item-params">
                         {% for item in RiverCRS.ship.techs_arr %}
                             <p>{{ item.name }}: {{ item.value }}</p>
