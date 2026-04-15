@@ -59,17 +59,8 @@ description = "Секция Контакты в дне"
                         font-size: 23px;
                     }
                 </style>
-                <div class="header-bot__social d-flex align-items-center gap-2 mb-3">
-                    <a href="https://ok.ru/azimuttour" target="_blank" rel="noopener" class="header-bot__social-link" title="Одноклассники">
-                        <img src="/themes/azimut-tur-pro/assets/images/social_icons/ok.svg" alt="OK" width="28" height="28">
-                    </a>
-                    <a href="https://vk.com/azimut.tour" target="_blank" rel="noopener" class="header-bot__social-link" title="ВКонтакте">
-                        <img src="/themes/azimut-tur-pro/assets/images/social_icons/vk.svg" alt="VK" width="28" height="28">
-                    </a>
-                    <a href="https://www.youtube.com/@Азимут-Тур-п4г" target="_blank" rel="noopener" class="header-bot__social-link" title="YouTube">
-                        <img src="/themes/azimut-tur-pro/assets/images/social_icons/youtube.svg" alt="YouTube" width="28" height="28">
-                    </a>
-                </div>
+                <div class="email-pill__title" style="margin-top: 4px; margin-bottom: 6px;">Мы в соцсетях</div>
+                {% partial 'template/social-official-links' wrapper_class='header-bot__social d-flex align-items-center gap-2 flex-wrap mb-3' %}
 
                 <style>
                     .email-pill { display: flex; flex-direction: column; margin-top: 10px; margin-bottom: 10px; }

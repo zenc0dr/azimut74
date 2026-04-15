@@ -50,13 +50,16 @@
 }
 
 .top-menu_mobile-social {
-    margin-left: 0.25rem;
-    margin-right: 20px;
-    gap: 5px;
+    margin-left: 0.125rem;
+    margin-right: 8px;
+    gap: 4px;
+    flex-wrap: nowrap;
+    flex-shrink: 0;
 }
 .top-menu_mobile-social-link {
     display: flex;
     align-items: center;
+    flex-shrink: 0;
     opacity: 0.9;
     transition: opacity 150ms;
     &:hover {
@@ -64,6 +67,7 @@
     }
     img {
         display: block;
+        flex-shrink: 0;
     }
 }
 

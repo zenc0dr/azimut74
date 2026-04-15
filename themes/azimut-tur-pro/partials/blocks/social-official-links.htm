@@ -1,0 +1,19 @@
+description = "Официальные ссылки: OK, VK, YouTube, MAX"
+[viewBag]
+==
+{% set w = size|default(28) %}
+{% set wrap = wrapper_class|default('header-bot__social d-flex align-items-center gap-2 flex-wrap') %}
+<div class="{{ wrap }}">
+	<a href="https://ok.ru/azimuttour" target="_blank" rel="noopener noreferrer" class="header-bot__social-link" title="Одноклассники">
+		<img src="{{ 'assets/images/social_icons/ok.svg'|theme }}" alt="OK" width="{{ w }}" height="{{ w }}">
+	</a>
+	<a href="https://vk.com/azimut.tour" target="_blank" rel="noopener noreferrer" class="header-bot__social-link" title="ВКонтакте">
+		<img src="{{ 'assets/images/social_icons/vk.svg'|theme }}" alt="VK" width="{{ w }}" height="{{ w }}">
+	</a>
+	<a href="https://www.youtube.com/@Азимут-Тур-п4г" target="_blank" rel="noopener noreferrer" class="header-bot__social-link" title="YouTube">
+		<img src="{{ 'assets/images/social_icons/youtube.svg'|theme }}" alt="YouTube" width="{{ w }}" height="{{ w }}">
+	</a>
+	<a href="https://max.ru/join/TCT0dTPCGnHj_y4AjF58dFO8_3ZdV1QER_E9rMeLs7o" target="_blank" rel="noopener noreferrer" class="header-bot__social-link" title="MAX">
+		<img src="{{ 'assets/images/social_icons/max.svg'|theme }}" alt="MAX" width="{{ w }}" height="{{ w }}">
+	</a>
+</div>

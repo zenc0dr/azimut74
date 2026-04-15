@@ -23,15 +23,18 @@
                         </a>
                     </div>
 
-                    <div class="col-auto d-flex align-items-center gap-1 top-menu_mobile-social">
-                        <a href="https://ok.ru/azimuttour" target="_blank" rel="noopener" class="top-menu_mobile-social-link" title="Одноклассники">
-                            <img src="/themes/azimut-tur-pro/assets/images/social_icons/ok.svg" alt="OK" width="24" height="24">
+                    <div class="col-auto d-flex align-items-center top-menu_mobile-social">
+                        <a href="https://ok.ru/azimuttour" target="_blank" rel="noopener noreferrer" class="top-menu_mobile-social-link" title="Одноклассники">
+                            <img src="/themes/azimut-tur-pro/assets/images/social_icons/ok.svg" alt="OK" width="22" height="22">
                         </a>
-                        <a href="https://vk.com/azimut.tour" target="_blank" rel="noopener" class="top-menu_mobile-social-link" title="ВКонтакте">
-                            <img src="/themes/azimut-tur-pro/assets/images/social_icons/vk.svg" alt="VK" width="24" height="24">
+                        <a href="https://vk.com/azimut.tour" target="_blank" rel="noopener noreferrer" class="top-menu_mobile-social-link" title="ВКонтакте">
+                            <img src="/themes/azimut-tur-pro/assets/images/social_icons/vk.svg" alt="VK" width="22" height="22">
                         </a>
-                        <a href="https://www.youtube.com/@Азимут-Тур-п4г" target="_blank" rel="noopener" class="top-menu_mobile-social-link" title="YouTube">
-                            <img src="/themes/azimut-tur-pro/assets/images/social_icons/youtube.svg" alt="YouTube" width="24" height="24">
+                        <a href="https://www.youtube.com/@Азимут-Тур-п4г" target="_blank" rel="noopener noreferrer" class="top-menu_mobile-social-link" title="YouTube">
+                            <img src="/themes/azimut-tur-pro/assets/images/social_icons/youtube.svg" alt="YouTube" width="22" height="22">
+                        </a>
+                        <a href="https://max.ru/join/TCT0dTPCGnHj_y4AjF58dFO8_3ZdV1QER_E9rMeLs7o" target="_blank" rel="noopener noreferrer" class="top-menu_mobile-social-link" title="MAX">
+                            <img src="/themes/azimut-tur-pro/assets/images/social_icons/max.svg" alt="MAX" width="22" height="22">
                         </a>
                     </div>
 

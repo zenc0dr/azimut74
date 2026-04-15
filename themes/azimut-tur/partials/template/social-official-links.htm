@@ -1,0 +1,21 @@
+description = "Официальные ссылки: OK, VK, YouTube, MAX (иконки из темы azimut-tur-pro)"
+[viewBag]
+==
+{# Тот же набор, что в pro; пути к ассетам pro — как в contacts.htm #}
+{% set w = size|default(28) %}
+{% set wrap = wrapper_class|default('header-bot__social d-flex align-items-center gap-2 flex-wrap') %}
+{% set base = '/themes/azimut-tur-pro/assets/images/social_icons' %}
+<div class="{{ wrap }}">
+	<a href="https://ok.ru/azimuttour" target="_blank" rel="noopener noreferrer" class="header-bot__social-link" title="Одноклассники">
+		<img src="{{ base }}/ok.svg" alt="OK" width="{{ w }}" height="{{ w }}">
+	</a>
+	<a href="https://vk.com/azimut.tour" target="_blank" rel="noopener noreferrer" class="header-bot__social-link" title="ВКонтакте">
+		<img src="{{ base }}/vk.svg" alt="VK" width="{{ w }}" height="{{ w }}">
+	</a>
+	<a href="https://www.youtube.com/@Азимут-Тур-п4г" target="_blank" rel="noopener noreferrer" class="header-bot__social-link" title="YouTube">
+		<img src="{{ base }}/youtube.svg" alt="YouTube" width="{{ w }}" height="{{ w }}">
+	</a>
+	<a href="https://max.ru/join/TCT0dTPCGnHj_y4AjF58dFO8_3ZdV1QER_E9rMeLs7o" target="_blank" rel="noopener noreferrer" class="header-bot__social-link" title="MAX">
+		<img src="{{ base }}/max.svg" alt="MAX" width="{{ w }}" height="{{ w }}">
+	</a>
+</div>
