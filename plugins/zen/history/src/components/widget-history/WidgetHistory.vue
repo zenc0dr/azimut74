@@ -195,8 +195,9 @@ export default {
                     'visiterId': this.userId
                 },
                 then: resonse => {
-                    this.favoriteItems.items = resonse.items
-                    window.WidgetHistory.favoriteItems = resonse.items
+                    const list = Array.isArray(resonse.items) ? resonse.items : []
+                    this.favoriteItems.items = list
+                    window.WidgetHistory.favoriteItems = list
                 }
             })
         },
@@ -208,8 +209,9 @@ export default {
                     'visiterId': this.userId
                 },
                 then: resonse => {
-                    this.favoriteSearch.items = resonse.items
-                    window.WidgetHistory.favoriteSearch = resonse.items
+                    const list = Array.isArray(resonse.items) ? resonse.items : []
+                    this.favoriteSearch.items = list
+                    window.WidgetHistory.favoriteSearch = list
                 }
             })
         }

@@ -1,12 +1,11 @@
 <template>
    <div class="widget-content__item widget-contet__item-history"
          :class="{'widget-content__item-active':activeMenu==2}"
-         v-if="search.items"
+         v-if="search"
          >
             <div class="widget-content__item-button widget-content__item-button-last" title="История просмотра"  @click="switchMenu(2)">
-               <img v-if="mobile == false" src="/plugins/zen/history/assets/images/icons/clock-history.svg" alt="icon-clock-history">
-                <img v-else src="/plugins/zen/history/assets/images/icons/clock-history-white.svg" alt="icon-clock-history">
-               <div v-if="search.items.length" class="widget-content__item-button__unseen"></div>
+               <img src="/plugins/zen/history/assets/images/icons/clock-history.svg" alt="icon-clock-history">
+               <div v-if="search.items && search.items.length" class="widget-content__item-button__unseen"></div>
             </div>
             <div class="widget-content__item-content">
                <div class="widget-content__content-tab">
@@ -86,7 +85,7 @@
                 :max-width="600"
                 @close="search.showModal = false"
                 title="История просмотра"
-                v-if="search.items"
+                v-if="search && search.items"
             >
                 <div class="modal-content">
                     <div v-if="search.items.length" class="modal-content__items">
@@ -157,11 +156,6 @@ import Modal from "@components/modal/Modal";
 export default {
     name: 'SearchHistory',
     components: {Modal},
-    data() {
-        return {
-            mobile: false
-        }
-    },
     props: {
         search: {
             type: Object,
@@ -177,13 +171,6 @@ export default {
             required: true,
         },
 
-    },
-    created() {
-        if (window.innerWidth < 992) {
-            this.mobile = true
-        } else {
-            this.mobile = false
-        }
     },
     computed: {
       titleCountSearch() {

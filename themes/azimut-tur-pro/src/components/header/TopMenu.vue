@@ -1,5 +1,5 @@
 <template>
-    <div v-click-outside="closeDropdowns" class="top-menu" v-if="width">
+    <div v-click-outside="closeDropdowns" class="top-menu" v-if="width !== null">
         <MenuTree
             v-if="width > 993"
             :items="items"
@@ -17,7 +17,7 @@
                            style="cursor:pointer">
                         </i>
                     </div>
-                    <div class="col justify-content-center d-flex">
+                    <div class="col justify-content-center d-flex top-menu_mobile-logo-col">
                         <a href="/" class="top-menu_mobile-mini-logo">
                             <img src="/themes/azimut-tur-pro/assets/images/logo-mini-trans.png" width="50px" alt="Азимут-Тур">
                         </a>
@@ -101,7 +101,7 @@ export default {
             mobile_menu: false,
             contacts_menu: false,
             //mgo_phone: null,
-            width: null,
+            width: typeof window !== 'undefined' ? window.innerWidth : null,
             root_classes: [
                 'd-flex justify-content-left',
                 'top-menu__dropdown',

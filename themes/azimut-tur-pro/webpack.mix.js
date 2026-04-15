@@ -66,7 +66,6 @@ jsFileList.forEach((fileName) => {
 mix.js('src/components/header/pluggable-header.js', 'js')
 mix.sass('src/components/header/pluggable-header.scss', 'css')
 
-
 mix.setPublicPath('assets');
 
 if (mix.inProduction()) {

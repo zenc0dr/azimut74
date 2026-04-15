@@ -129,6 +129,11 @@
     right: 0;
     z-index: 100;
 }
+
+.top-menu_mobile-logo-col {
+    min-width: 0;
+}
+
 .top-menu__mobile-menu {
     overflow: hidden;
     animation-name: mobile-menu-fadein;

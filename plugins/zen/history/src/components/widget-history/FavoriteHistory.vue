@@ -4,8 +4,7 @@
       <div class="widget-content__item-button widget-content__item-button-first"
          title="Избранное"
           @click="switchMenu(1)">
-         <img v-if="mobile == false" src="/plugins/zen/history/assets/images/icons/heart.svg" alt="Избранное">
-         <img v-else src="/plugins/zen/history/assets/images/icons/heart-white.svg" alt="Избранное">
+         <img src="/plugins/zen/history/assets/images/icons/heart.svg" alt="Избранное">
          <div v-if="favorite.items && favorite.items.length" class="widget-content__item-button__unseen"></div>
       </div>
       <div class="widget-content__item-content">
@@ -125,11 +124,6 @@ import Modal from "@components/modal/Modal";
 export default {
    name: 'FavoriteHistory',
     components: {Modal},
-    data() {
-        return {
-            mobile: false
-        }
-    },
     props: {
         favorite: {
             type: Object,
@@ -145,13 +139,6 @@ export default {
             required: true,
         },
 
-    },
-    created() {
-        if (window.innerWidth < 992) {
-            this.mobile = true
-        } else {
-            this.mobile = false
-        }
     },
     computed: {
       titleCountFavorite() {
