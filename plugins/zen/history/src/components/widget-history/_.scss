@@ -14,6 +14,17 @@ $button_active_color: rgb(184 222 255);
     top: 5rem;
     margin-top: 0;
 
+    // Узкий экран: виджет не перекрывает контент, пока не наведёшь / не сфокусируешь
+    @include m('lg') {
+        opacity: 0.45;
+        transition: opacity 0.25s ease;
+
+        &:hover,
+        &:focus-within {
+            opacity: 1;
+        }
+    }
+
     .widget-content {
         &__items {
             background-color: color('primary-100');
