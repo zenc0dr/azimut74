@@ -1,4 +1,5 @@
-<div id="promo-popup" class="promo-popup" aria-hidden="true">
+{% if promoPopupEnabled %}
+<div id="promo-popup" class="promo-popup" aria-hidden="true" data-delay="{{ promoPopupDelayMs }}">
     <div class="promo-popup__overlay" data-promo-close></div>
     <div class="promo-popup__dialog" role="dialog" aria-modal="true" aria-labelledby="promo-popup-title">
         <button type="button" class="promo-popup__close" aria-label="Закрыть окно" data-promo-close>&times;</button>
@@ -25,3 +26,4 @@
         </div>
     </div>
 </div>
+{% endif %}

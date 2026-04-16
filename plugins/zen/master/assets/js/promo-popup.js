@@ -1,7 +1,6 @@
 (function () {
     var SESSION_KEY = 'promoPopupShown';
     var COOKIE_KEY = 'promo_popup_shown';
-    var SHOW_DELAY_MS = 60000;
     var initialized = false;
 
     function hasSessionFlag() {
@@ -67,9 +66,15 @@
             }
         });
 
+        var delayAttr = popup.getAttribute('data-delay');
+        var delayMs = parseInt(delayAttr, 10);
+        if (isNaN(delayMs) || delayMs < 0) {
+            delayMs = 60000;
+        }
+
         setTimeout(function () {
             openPopup(popup);
-        }, SHOW_DELAY_MS);
+        }, delayMs);
     }
 
     if (document.readyState === 'loading') {
