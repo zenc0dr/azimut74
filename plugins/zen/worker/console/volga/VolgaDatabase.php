@@ -754,8 +754,8 @@ class VolgaDatabase extends UnifiedDatabase
                 $price['price2_value'] = $price['price_extra'];
             }
             
-            // Добавляем поля категорий для обратной совместимости
-            if (isset($price['category_name'])) {
+            // Добавляем поля категорий для обратной совместимости (в выборке — cabin_category_name)
+            if (isset($price['cabin_category_name']) || isset($price['category_name'])) {
                 // Получаем дополнительные данные категории из единой структуры
                 $stmt = $this->getPdo()->prepare("
                     SELECT description, places, places_extra, extra_data 

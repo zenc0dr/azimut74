@@ -291,8 +291,11 @@ class UnifiedProcessor extends TransferProcessor
         
         // Для некоторых источников (Waterway) places в cabin_categories может быть неточным.
         // Надежнее вычислить максимальное размещение из самих цен (places_qnt).
+        // У Volga (и др.) в ценах часто places_qnt = 1 по умолчанию, зато в cabin_categories.places
+        // лежит m_count из XML — его нельзя игнорировать, если нет реальных places_qnt > 1.
         $maxPlacesByCategory = []; // [source_category_id => max places_qnt]
         $placesEvidenceByCategory = []; // [source_category_id => true] если есть явные места > 1
+        $placesQntEvidenceByCategory = []; // только places_qnt > 1 (не путать с дефолтом 1)
         foreach ($prices as $p) {
             $cid = $p['cabin_category_id'] ?? null;
             if ($cid === null) continue;
@@ -301,6 +304,7 @@ class UnifiedProcessor extends TransferProcessor
             $maxPlacesByCategory[$cid] = max((int)($maxPlacesByCategory[$cid] ?? 1), $pq);
             if ($pq > 1) {
                 $placesEvidenceByCategory[$cid] = true;
+                $placesQntEvidenceByCategory[$cid] = true;
             }
             $catPlaces = (int)($p['cabin_category_places'] ?? 0);
             if ($catPlaces > 1) {
@@ -315,7 +319,13 @@ class UnifiedProcessor extends TransferProcessor
         foreach ($prices as $price) {
             $cabinCategoryId = $price['cabin_category_id'] ?? null;
             $cabinCategoryName = $price['cabin_category_name'] ?? '';
-            $places = (int)($maxPlacesByCategory[$cabinCategoryId] ?? ($price['cabin_category_places'] ?? 0));
+            $qntMax = (int)($maxPlacesByCategory[$cabinCategoryId] ?? 1);
+            $catPlaces = (int)($price['cabin_category_places'] ?? 0);
+            if (!empty($placesQntEvidenceByCategory[$cabinCategoryId])) {
+                $places = $qntMax;
+            } else {
+                $places = max($qntMax, $catPlaces);
+            }
             $hasEvidence = !empty($placesEvidenceByCategory[$cabinCategoryId]);
             // Если нет явных данных о местах, не понижаем до 1
             if (!$hasEvidence && $places <= 1) {
