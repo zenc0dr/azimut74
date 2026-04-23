@@ -19,7 +19,7 @@ class Debug extends Core {
     # http://azimut74/zen/uon/api/debug:testConnection
     function testConnection()
     {
-        $query = 'https://api.u-on.ru/7hPDplm8q882V4K7pFbB/user/17677.json';
+        $query = 'https://api.u-on.ru/F3wgG39D0o9PQ3brIjYs1776930457/user/17677.json';
 
         $curl = curl_init();
         curl_setopt_array($curl, array(
@@ -52,12 +52,12 @@ class Debug extends Core {
     }
 }
 
-// https://api.u-on.ru/7hPDplm8q882V4K7pFbB/countries.json
-// https://api.u-on.ru/7hPDplm8q882V4K7pFbB/reminder/14973.json
+// https://api.u-on.ru/F3wgG39D0o9PQ3brIjYs1776930457/countries.json
+// https://api.u-on.ru/F3wgG39D0o9PQ3brIjYs1776930457/reminder/14973.json
 
-// Данные по заявке: https://api.u-on.ru/7hPDplm8q882V4K7pFbB/request/14973.json
-//Данные по туристу: https://api.u-on.ru/7hPDplm8q882V4K7pFbB/user/17677.json
+// Данные по заявке: https://api.u-on.ru/F3wgG39D0o9PQ3brIjYs1776930457/request/14973.json
+//Данные по туристу: https://api.u-on.ru/F3wgG39D0o9PQ3brIjYs1776930457/user/17677.json
 
 // https://api.u-on.ru/{key}/service_type.{_format}
 
-// https://api.u-on.ru/7hPDplm8q882V4K7pFbB/request-by-client/9656/1.json
+// https://api.u-on.ru/F3wgG39D0o9PQ3brIjYs1776930457/request-by-client/9656/1.json

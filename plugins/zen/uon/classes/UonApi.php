@@ -5,7 +5,7 @@ use Cache;
 class UonApi extends Core
 {
     private $api_url = 'https://api.u-on.ru/';
-    private $key = '7hPDplm8q882V4K7pFbB';
+    private $key = 'F3wgG39D0o9PQ3brIjYs1776930457';
     private $error = null;
     private $last_url = null;
 
