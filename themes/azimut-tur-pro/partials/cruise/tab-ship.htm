@@ -11,7 +11,9 @@
             {% endif %}
         </div>
 
-        {% partial 'sliders/slider-thumbs' images=RiverCRS.ship_images sliderClass='slider_1' class='mb-4'  %}
+        {% set ship_alt_base = RiverCRS.ship_name|trim %}
+        {% set ship_alt_base = ship_alt_base|slice(0, 8) == 'Теплоход' ? ship_alt_base : ('Теплоход ' ~ ship_alt_base) %}
+        {% partial 'sliders/slider-thumbs' images=RiverCRS.ship_images sliderClass='slider_1' class='mb-4' galleryAltBase=ship_alt_base %}
 
         {% if RiverCRS.ship_video %}
         <div class="tab-item open">

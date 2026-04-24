@@ -3,6 +3,14 @@
 {% endif %}
 {% set slider_class = slider_class ~ random('abcdefjiklmnoprstxyz') ~ random('abcdefjiklmnoprstxyz') ~ random(1,10000) %}
 
+{% if gallery_alt_base is defined and gallery_alt_base %}
+	{% set gal_alt_prefix = gallery_alt_base %}
+{% elseif galleryAltBase is defined and galleryAltBase %}
+	{% set gal_alt_prefix = galleryAltBase %}
+{% else %}
+	{% set gal_alt_prefix = null %}
+{% endif %}
+
 <section swiper="{{slider_class}}" class="slider-thumbs {{slider_class}} {{class}}"  style="--swiper-navigation-color: #fff; --swiper-pagination-color: #fff">
 	<div  class="swiper-container shipSlide">
 		<div class="swiper-wrapper">
@@ -12,14 +20,14 @@
                    data-fancybox="gallery-{{slider_class}}"
                    data-caption="{{ image.title }}"
                    href="{{ image.src }}">
-                    <img src="{{ image.src }}" />
+                    <img src="{{ image.src }}"{% if gal_alt_prefix %} alt="{{ gal_alt_prefix }} — Фото {{ loop.index }}"{% endif %} />
                 </a>
             {% else %}
 				<a class="swiper-slide fancybox ship-img-slide"
                    data-fancybox="gallery-{{slider_class}}"
                    data-caption="Заголовок картинки"
                    href="{{ image }}">
-					<img src="{{ image }}"/>
+					<img src="{{ image }}"{% if gal_alt_prefix %} alt="{{ gal_alt_prefix }} — Фото {{ loop.index }}"{% endif %} />
 				</a>
             {% endif %}
 			{% endfor %}
@@ -32,11 +40,11 @@
 			{% for image in images %}
             {% if image is iterable %}
                 <div class="swiper-slide ship-img-slide">
-                    <img src="{{ image.src }}"/>
+                    <img src="{{ image.src }}"{% if gal_alt_prefix %} alt="{{ gal_alt_prefix }} — Фото {{ loop.index }}"{% endif %} />
                 </div>
             {% else %}
 				<div class="swiper-slide ship-img-slide">
-					<img src="{{ image }}"/>
+					<img src="{{ image }}"{% if gal_alt_prefix %} alt="{{ gal_alt_prefix }} — Фото {{ loop.index }}"{% endif %} />
 				</div>
             {% endif %}
 			{% endfor %}
