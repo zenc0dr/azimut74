@@ -25,8 +25,8 @@ class InfoflotParse extends Command
     {
         // Убираем ограничение времени выполнения для консольного скрипта
         set_time_limit(0);
-        // API отдаёт крупные JSON (список круизов, каюты); json_decode пиковит память — 512M часто мало
-        ini_set('memory_limit', '1024M');
+        // Крупные JSON (круизы/каюты); +512M к запасу на проде при свободной RAM у ноды/контейнера
+        ini_set('memory_limit', '1536M');
         ini_set('max_execution_time', 0);
         ini_set('max_input_time', -1);
 

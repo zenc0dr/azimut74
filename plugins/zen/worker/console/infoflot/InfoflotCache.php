@@ -90,6 +90,37 @@ class InfoflotCache
     }
 
     /**
+     * Сохранение уже готовой JSON-строки (без json_encode — критично для ответов сотни MB).
+     */
+    public function putResponseBody($key, $jsonString)
+    {
+        if (!is_string($jsonString) || $jsonString === '') {
+            return false;
+        }
+        $filePath = $this->getCachePath($key);
+        $dir = dirname($filePath);
+        if (!is_dir($dir)) {
+            if (!mkdir($dir, 0775, true)) {
+                throw new Exception("Не удалось создать директорию: {$dir}");
+            }
+        }
+        $result = file_put_contents($filePath, $jsonString, LOCK_EX);
+        if ($result === false) {
+            throw new Exception("Не удалось записать файл кеша: {$filePath}");
+        }
+        @chmod($filePath, 0664);
+        if (function_exists('posix_geteuid') && posix_geteuid() === 0) {
+            $uid = posix_getpwnam('zen')['uid'] ?? null;
+            $gid = posix_getgrnam('zen')['gid'] ?? null;
+            if ($uid !== null && $gid !== null) {
+                @chown($filePath, $uid);
+                @chgrp($filePath, $gid);
+            }
+        }
+        return true;
+    }
+
+    /**
      * Сохранение данных в кеш
      * 
      * @param string $key Ключ кеша
@@ -109,15 +140,18 @@ class InfoflotCache
                 }
             }
             
-            $json = json_encode($data, JSON_UNESCAPED_UNICODE | JSON_PRETTY_PRINT);
+            // Без JSON_PRETTY_PRINT: меньше размер и пик памяти при json_encode
+            $json = json_encode($data, JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES);
             if ($json === false) {
                 throw new Exception("Ошибка кодирования JSON: " . json_last_error_msg());
             }
+            unset($data);
             
             $result = file_put_contents($filePath, $json, LOCK_EX);
             if ($result === false) {
                 throw new Exception("Не удалось записать файл кеша: {$filePath}");
             }
+            unset($json);
             
             // Устанавливаем права доступа
             chmod($filePath, 0664);

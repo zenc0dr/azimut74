@@ -14,7 +14,12 @@ class Http
         $error,
         $max_curl_time = 10,
         $response;
-
+    /**
+     * Сырое тело ответа до json_decode (только jsonFormat).
+     * Позволяет писать кеш без повторного json_encode (экономит сотни MB на крупных JSON).
+     * После использования обнулить, чтобы освободить строку.
+     */
+    public $rawResponseBody;
 
     function setTimout($seconds)
     {
@@ -42,6 +47,7 @@ class Http
 
     function query($url, $format = 'json')
     {
+        $this->rawResponseBody = null;
         $this->format = 'json';
         $this->url = $url;
         $this->curl();
@@ -55,9 +61,17 @@ class Http
 
     function jsonFormat()
     {
-        $raw = $this->response;
-        $this->response = json_decode($raw, true);
-        unset($raw);
+        if (!is_string($this->response)) {
+            $this->rawResponseBody = null;
+            return;
+        }
+        if ($this->response === '') {
+            $this->rawResponseBody = null;
+            $this->response = null;
+            return;
+        }
+        $this->rawResponseBody = $this->response;
+        $this->response = json_decode($this->rawResponseBody, true);
     }
 
     function xmlFormat()

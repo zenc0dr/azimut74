@@ -67,10 +67,9 @@ class InfoflotApiClient
             curl_close($ch);
             
             if ($code == 200 && $response) {
+                $this->cache->putResponseBody($cacheKey, $response);
                 $response = json_decode($response, true);
                 if ($response) {
-                    // Сохраняем в файловый кеш (вечный)
-                    $this->cache->put($cacheKey, $response);
                     return $response;
                 }
             }
@@ -82,12 +81,9 @@ class InfoflotApiClient
             throw new Exception("Ошибка получения списка судов (страница $page): " . $http_query->error);
         }
 
-        $response = $http_query->response;
+        $this->writeCacheFromHttp($cacheKey, $http_query, $http_query->response);
         
-        // Сохраняем в файловый кеш (вечный)
-        $this->cache->put($cacheKey, $response);
-        
-        return $response;
+        return $http_query->response;
     }
 
     /**
@@ -139,9 +135,9 @@ class InfoflotApiClient
             curl_close($ch);
             
             if ($code == 200 && $response) {
+                $this->cache->putResponseBody($cacheKey, $response);
                 $response = json_decode($response, true);
                 if ($response) {
-                    $this->cache->put($cacheKey, $response);
                     return $response;
                 }
             }
@@ -166,16 +162,17 @@ class InfoflotApiClient
         
         // Проверяем структуру ответа
         if (!is_array($response)) {
+            $http_query->rawResponseBody = null;
             return null;
         }
         
         // Если ответ содержит ошибку
         if (isset($response['status']) && $response['status'] == 404) {
+            $http_query->rawResponseBody = null;
             return null;
         }
         
-        // Сохраняем в файловый кеш (вечный)
-        $this->cache->put($cacheKey, $response);
+        $this->writeCacheFromHttp($cacheKey, $http_query, $response);
         
         return $response;
     }
@@ -221,9 +218,9 @@ class InfoflotApiClient
             curl_close($ch);
             
             if ($code == 200 && $response) {
+                $this->cache->putResponseBody($cacheKey, $response);
                 $response = json_decode($response, true);
                 if ($response) {
-                    $this->cache->put($cacheKey, $response);
                     return $response;
                 }
             }
@@ -246,10 +243,22 @@ class InfoflotApiClient
 
         $response = $http_query->response;
         
-        // Сохраняем в файловый кеш (вечный)
-        $this->cache->put($cacheKey, $response);
+        $this->writeCacheFromHttp($cacheKey, $http_query, $response);
         
         return $response;
+    }
+
+    /**
+     * Писать вечный кеш: сырой JSON из Http, без json_encode(массив) в памяти.
+     */
+    private function writeCacheFromHttp($cacheKey, $http, $arrayPayload)
+    {
+        if (is_string($http->rawResponseBody) && $http->rawResponseBody !== '') {
+            $this->cache->putResponseBody($cacheKey, $http->rawResponseBody);
+        } elseif (is_array($arrayPayload) || is_object($arrayPayload)) {
+            $this->cache->put($cacheKey, $arrayPayload);
+        }
+        $http->rawResponseBody = null;
     }
 }
 
