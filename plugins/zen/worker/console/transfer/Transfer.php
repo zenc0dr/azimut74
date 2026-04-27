@@ -81,7 +81,9 @@ class Transfer extends Command
     {
         // Убираем ограничение времени выполнения
         set_time_limit(0);
-        ini_set('memory_limit', '512M');
+        // Как в worker:*-parse: не ниже 1536M — иначе после фазы 1 в том же PHP-процессе (infoflot-sync)
+        // остаётся ~700MB+ и ini_set('512M') падает: «Failed to set memory limit... Current memory usage is ...»
+        ini_set('memory_limit', '1536M');
         ini_set('max_execution_time', 0);
         
         // Инициализируем логгер ошибок и очищаем лог при запуске
