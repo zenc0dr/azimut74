@@ -34,6 +34,9 @@ class Plugin extends PluginBase
 
     public function boot()
     {
+        if (!$this->app->runningInConsole() && !$this->app->runningUnitTests()) {
+            $this->app[Kernel::class]->prependMiddleware(Middleware\StripTrailingSlash::class);
+        }
 
         #$this->app[Kernel::class]->pushMiddleware(ReplaceStorageLinks::class);
 
