@@ -2,6 +2,7 @@
 
 use Input;
 use Zen\Worker\Classes\Convertor;
+use Zen\Worker\Classes\RocketBot;
 
 class Debug
 {
@@ -60,5 +61,12 @@ class Debug
         });
 
         return response()->json(['dumps' => $dumps, 'total' => count($dumps)], 200, [], JSON_UNESCAPED_UNICODE);
+    }
+
+    # http://azimut74/zen/worker/api/debug:testRocketBot
+    public function testRocketBot()
+    {
+        return;
+        RocketBot::send('Тестирую соединение');
     }
 }

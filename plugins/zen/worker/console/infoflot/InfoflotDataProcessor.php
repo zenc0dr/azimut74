@@ -179,7 +179,8 @@ class InfoflotDataProcessor
             ProcessLog::add("Обработка круизов для судна: $shipName (ID: $shipId) [$currentShipIndex/$totalShips]");
             
             $page = 1;
-            $limit = 500;
+            // Меньше записей на страницу — ниже пик памяти при json_decode в Http (было 500 и упор в 512M)
+            $limit = 100;
             $date = date('Y-m-d');
             
             while (true) {
@@ -325,6 +326,11 @@ class InfoflotDataProcessor
                                 ProcessLog::add("Ошибка сохранения цен для круиза $cruiseId: " . $e->getMessage());
                             }
                         }
+
+                        unset($prices, $pricesData, $cruise);
+                        if ($cruiseIndex % 25 === 0) {
+                            gc_collect_cycles();
+                        }
                     }
                     
                     if ($skippedPast > 0) {
@@ -357,6 +363,8 @@ class InfoflotDataProcessor
                         ProcessLog::add("Достигнут лимит страниц круизов (100) для судна $shipId");
                         break;
                     }
+
+                    unset($cruises, $cruisesResponse);
                     
                 } catch (Exception $e) {
                     // Если "Not found" или "Resource not found" - это нормально, значит нет круизов для этого судна

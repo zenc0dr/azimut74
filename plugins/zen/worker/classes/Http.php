@@ -55,7 +55,9 @@ class Http
 
     function jsonFormat()
     {
-        $this->response = json_decode($this->response,1);
+        $raw = $this->response;
+        $this->response = json_decode($raw, true);
+        unset($raw);
     }
 
     function xmlFormat()
