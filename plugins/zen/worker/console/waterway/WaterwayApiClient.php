@@ -592,12 +592,20 @@ class WaterwayApiClient
         $result = [];
         $day = 1;
         foreach ($routes as $route) {
+            $calendarDate = null;
+            if (!empty($route['in'])) {
+                $ts = strtotime($route['in']);
+                if ($ts !== false) {
+                    $calendarDate = date('Y-m-d', $ts);
+                }
+            }
             $result[] = [
                 'day' => $day++,
                 'portName' => $route['name'] ?? '',
                 'excursion' => $route['annotation'] ?? '',
                 'timeStart' => isset($route['in']) ? date('H:i:s', strtotime($route['in'])) : '00:00:00',
-                'timeStop' => isset($route['out']) ? date('H:i:s', strtotime($route['out'])) : '00:00:00'
+                'timeStop' => isset($route['out']) ? date('H:i:s', strtotime($route['out'])) : '00:00:00',
+                'calendarDate' => $calendarDate,
             ];
         }
         

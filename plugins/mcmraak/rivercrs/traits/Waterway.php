@@ -264,7 +264,7 @@ trait Waterway {
         $routes = $this->cacheWarmUp('waterway-route', 'array', ['id' => $id]);
 
         if($routes && !isset($routes['error'])) {
-            $desc_1 = $this->wwGraph($routes, $cruise['dateStart']);
+            $desc_1 = $this->wwGraph($routes, $cruise['dateStart'], $cruise['dateStop'] ?? $cruise['dateEnd'] ?? null);
             $dates = $this->wwDates($routes, $cruise['dateStart'], $cruise['dateStop']);
             $date = $dates['date'];
             $dateb = $dates['dateb'];
@@ -483,26 +483,35 @@ trait Waterway {
         return false;
     }
 
-    public function wwGraph($routes, $start)
+    public function wwGraph($routes, $start, $date_stop = null)
     {
         if(isset($routes['error'])) return;
         $days_of_week = ['вс', 'пн', 'вт', 'ср', 'чт', 'пт', 'сб'];
+        $endCap = $date_stop ? Carbon::parse($date_stop)->startOfDay() : null;
         $return = [];
         $return[] = '<table><tbody>';
         $return[] = "<tr><td>День</td><td>Стоянка</td><td>Программа дня</td></tr>";
         foreach ($routes as $route)
         {
-            $date = Carbon::parse($start);
             $day = $route['day'];
             $port = $route['portName'];
             $excursion = $route['excursion'];
             $time_start = $route['timeStart'];
             $time_stop = $route['timeStop'];
             $time = $this->wwGraphTimeFormat($time_start, $time_stop);
-            $ex_date = $date->addDays(intval($day)-1);
+
+            if (!empty($route['calendarDate'])) {
+                $ex_date = Carbon::parse($route['calendarDate'])->startOfDay();
+            } else {
+                $ex_date = Carbon::parse($start)->startOfDay()->addDays(intval($day) - 1);
+            }
+            if ($endCap && $ex_date->gt($endCap)) {
+                $ex_date = $endCap->copy();
+            }
+
             $day_of_week = $days_of_week[$ex_date->dayOfWeek];
-            $ex_date = $ex_date->format('d.m.Y');
-            $return[] = "<tr><td>$day <br>$ex_date<br>$time ($day_of_week)</td><td>$port</td><td>$excursion</td></tr>";
+            $ex_date_str = $ex_date->format('d.m.Y');
+            $return[] = "<tr><td>$day <br>$ex_date_str<br>$time ($day_of_week)</td><td>$port</td><td>$excursion</td></tr>";
         }
         $return[] = '</tbody></table>';
         $return = join("\n", $return);

@@ -314,7 +314,7 @@ class WaterwayDataProcessor
         
         $name = $cruise['name'] ?? '';
         $dateStart = $cruise['dateStart'] ?? null;
-        $dateStop = $cruise['dateStop'] ?? null;
+        $dateStop = $cruise['dateStop'] ?? $cruise['dateEnd'] ?? null;
         $days = (int)($cruise['days'] ?? 0);
         $description = $cruise['classDescription'] ?? null;
         
@@ -332,7 +332,7 @@ class WaterwayDataProcessor
         
         if ($hasValidRoutes) {
             // Формируем HTML расписание
-            $scheduleHtml = $this->processScheduleData($routes, $dateStart);
+            $scheduleHtml = $this->processScheduleData($routes, $dateStart, $dateStop);
             
             // Формируем waybill
             $waybillData = $this->processWaybillData($cruise, $routes);
@@ -382,15 +382,18 @@ class WaterwayDataProcessor
     }
 
     /**
-     * Формирование HTML расписания (аналог wwGraph)
+     * Формирование HTML расписания (аналог wwGraph).
+     * Календарная дата строки: приоритет calendarDate из точки маршрута API (in),
+     * иначе dateStart + (day − 1). Не позже официальной даты окончания круиза (dateStop).
      */
-    private function processScheduleData($routes, $dateStart)
+    private function processScheduleData($routes, $dateStart, $dateStop = null)
     {
         if (empty($routes) || !is_array($routes)) {
             return '';
         }
         
         $days_of_week = ['вс', 'пн', 'вт', 'ср', 'чт', 'пт', 'сб'];
+        $endCap = $dateStop ? Carbon::parse($dateStop)->startOfDay() : null;
         $return = [];
         $return[] = '<table><tbody>';
         $return[] = "<tr><td>День</td><td>Стоянка</td><td>Программа дня</td></tr>";
@@ -400,17 +403,25 @@ class WaterwayDataProcessor
                 continue;
             }
             
-            $date = Carbon::parse($dateStart);
             $day = $route['day'];
             $port = $route['portName'];
             $excursion = $route['excursion'] ?? '';
             $time_start = $route['timeStart'] ?? '00:00:00';
             $time_stop = $route['timeStop'] ?? '00:00:00';
             $time = $this->formatScheduleTime($time_start, $time_stop);
-            $ex_date = $date->addDays(intval($day) - 1);
+
+            if (!empty($route['calendarDate'])) {
+                $ex_date = Carbon::parse($route['calendarDate'])->startOfDay();
+            } else {
+                $ex_date = Carbon::parse($dateStart)->startOfDay()->addDays(intval($day) - 1);
+            }
+            if ($endCap && $ex_date->gt($endCap)) {
+                $ex_date = $endCap->copy();
+            }
+
             $day_of_week = $days_of_week[$ex_date->dayOfWeek];
-            $ex_date = $ex_date->format('d.m.Y');
-            $return[] = "<tr><td>$day <br>$ex_date<br>$time ($day_of_week)</td><td>$port</td><td>$excursion</td></tr>";
+            $ex_date_str = $ex_date->format('d.m.Y');
+            $return[] = "<tr><td>$day <br>$ex_date_str<br>$time ($day_of_week)</td><td>$port</td><td>$excursion</td></tr>";
         }
         
         $return[] = '</tbody></table>';
@@ -545,7 +556,7 @@ class WaterwayDataProcessor
     {
         $name = $cruise['name'] ?? '';
         $dateStart = $cruise['dateStart'] ?? null;
-        $dateStop = $cruise['dateStop'] ?? null;
+        $dateStop = $cruise['dateStop'] ?? $cruise['dateEnd'] ?? null;
         
         if (empty($name) || !$dateStart || !$dateStop) {
             return null;
