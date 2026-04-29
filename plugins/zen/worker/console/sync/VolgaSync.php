@@ -2,7 +2,7 @@
 
 use Illuminate\Console\Command;
 use Symfony\Component\Console\Input\InputOption;
-use Zen\Worker\Console\transfer\TelegramNotifier;
+use Zen\Worker\Classes\WorkerNotifier;
 
 /**
  * VolgaSync
@@ -22,14 +22,7 @@ class VolgaSync extends Command
 
     public function handle()
     {
-        $startedAt = time();
-        $tg = null;
-        try {
-            $tg = new TelegramNotifier();
-            $tg->reset();
-        } catch (\Throwable $e) {
-            $tg = null;
-        }
+        $label = 'Volga';
 
         $parseOnly = (bool)$this->option('parse-only');
         $transferOnly = (bool)$this->option('transfer-only');
@@ -79,51 +72,34 @@ class VolgaSync extends Command
         $this->info('━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━');
         $this->info('Важно: XML кеш Volga вечный (storage/parsers_cache/volga) и не очищается без --clear_cache');
 
-        $phase1Status = $transferOnly ? '⏭️' : '⏳';
-        $phase2Status = $parseOnly ? '⏭️' : '⏳';
-
-        if ($tg) {
-            $tg->updateMessage($this->buildTelegramMessage($phase1Status, $phase2Status, 'Старт', $startedAt));
-        }
+        WorkerNotifier::notify("🛶 {$label} sync: старт");
 
         // Phase 1
         if (!$transferOnly) {
             $this->line('');
             $this->info('🟦 Фаза 1: XML -> SQLite (worker:volga-parse)');
-            if ($tg) {
-                $tg->updateMessage($this->buildTelegramMessage('🔄', $phase2Status, 'Фаза 1: парсинг (SQLite)', $startedAt));
-            }
+            WorkerNotifier::notify("🛶 {$label}: фаза 1 (парсинг в SQLite) — начало");
 
             $code = $this->call('worker:volga-parse', $parseArgs);
             if ($code !== 0) {
                 $this->error("Фаза 1 завершилась с кодом $code. Останавливаемся.");
-                if ($tg) {
-                    $tg->updateMessage($this->buildTelegramMessage('❌', $phase2Status, "Ошибка фазы 1 (код $code)", $startedAt));
-                }
+                WorkerNotifier::notify("🛶 {$label}: фаза 1 — ошибка (код выхода $code)");
                 return $code;
             }
 
-            $phase1Status = '✅';
-            if ($tg) {
-                $tg->updateMessage($this->buildTelegramMessage($phase1Status, $phase2Status, 'Фаза 1 завершена', $startedAt));
-            }
+            WorkerNotifier::notify("🛶 {$label}: фаза 1 — завершена");
         }
 
         // Phase 2
         if (!$parseOnly) {
             $this->line('');
             $this->info('🟩 Фаза 2: SQLite -> MySQL (worker:transfer --source=volga)');
-            if ($tg) {
-                $tg->updateMessage($this->buildTelegramMessage($phase1Status, '🔄', 'Фаза 2: перенос (валидация/импорт)', $startedAt));
-            }
+            WorkerNotifier::notify("🛶 {$label}: фаза 2 (перенос в MySQL) — начало");
 
             $transferArgs['--no-telegram'] = true;
 
             if ($doImport && !$skipValidation) {
                 $this->info('🔍 Фаза 2.1: валидация SQLite (transfer --validate-only)');
-                if ($tg) {
-                    $tg->updateMessage($this->buildTelegramMessage($phase1Status, '🔄', 'Фаза 2.1: валидация', $startedAt));
-                }
 
                 $code = $this->call('worker:transfer', [
                     '--source' => 'volga',
@@ -132,21 +108,13 @@ class VolgaSync extends Command
                 ]);
                 if ($code !== 0) {
                     $this->error("Фаза 2.1 (валидация) завершилась с кодом $code.");
-                    if ($tg) {
-                        $tg->updateMessage($this->buildTelegramMessage($phase1Status, '❌', "Ошибка фазы 2.1 (код $code)", $startedAt));
-                    }
+                    WorkerNotifier::notify("🛶 {$label}: фаза 2 — ошибка на валидации (код $code)");
                     return $code;
                 }
 
                 $this->info('✅ Фаза 2.1: валидация пройдена, начинаю импорт');
-                if ($tg) {
-                    $tg->updateMessage($this->buildTelegramMessage($phase1Status, '🔄', 'Фаза 2.1: валидация пройдена', $startedAt));
-                }
 
                 $this->info('📥 Фаза 2.2: импорт (transfer --skip-validation)');
-                if ($tg) {
-                    $tg->updateMessage($this->buildTelegramMessage($phase1Status, '🔄', 'Фаза 2.2: импорт', $startedAt));
-                }
 
                 $code = $this->call('worker:transfer', [
                     '--source' => 'volga',
@@ -155,59 +123,26 @@ class VolgaSync extends Command
                 ]);
                 if ($code !== 0) {
                     $this->error("Фаза 2.2 (импорт) завершилась с кодом $code.");
-                    if ($tg) {
-                        $tg->updateMessage($this->buildTelegramMessage($phase1Status, '❌', "Ошибка фазы 2.2 (код $code)", $startedAt));
-                    }
+                    WorkerNotifier::notify("🛶 {$label}: фаза 2 — ошибка на импорте (код $code)");
                     return $code;
                 }
             } else {
                 $code = $this->call('worker:transfer', $transferArgs);
                 if ($code !== 0) {
                     $this->error("Фаза 2 завершилась с кодом $code.");
-                    if ($tg) {
-                        $tg->updateMessage($this->buildTelegramMessage($phase1Status, '❌', "Ошибка фазы 2 (код $code)", $startedAt));
-                    }
+                    WorkerNotifier::notify("🛶 {$label}: фаза 2 — ошибка (код $code)");
                     return $code;
                 }
             }
 
-            $phase2Status = '✅';
-            if ($tg) {
-                $tg->updateMessage($this->buildTelegramMessage($phase1Status, $phase2Status, 'Фаза 2 завершена', $startedAt));
-            }
+            WorkerNotifier::notify("🛶 {$label}: фаза 2 — завершена");
         }
 
         $this->line('');
         $this->info('✅ Volga sync завершён');
-        if ($tg) {
-            $tg->updateMessage($this->buildTelegramMessage($phase1Status, $phase2Status, 'Готово', $startedAt));
-        }
+        WorkerNotifier::notify("🛶 {$label} sync: готово");
 
         return 0;
-    }
-
-    private function buildTelegramMessage(string $phase1Icon, string $phase2Icon, string $stage, int $startedAt): string
-    {
-        $duration = time() - $startedAt;
-        $mins = floor($duration / 60);
-        $secs = $duration % 60;
-        $durationStr = sprintf('%dm %02ds', $mins, $secs);
-
-        $import = (bool)$this->option('import');
-        $mode = $import ? 'импорт' : 'валидация';
-
-        $lines = [];
-        $lines[] = "🛶 <b>Volga sync</b>";
-        $lines[] = "🕒 <b>Стадия:</b> " . htmlspecialchars($stage);
-        $lines[] = "⏱ <b>Длительность:</b> " . htmlspecialchars($durationStr);
-        $lines[] = "";
-        $lines[] = "{$phase1Icon} <b>Фаза 1</b>: XML → SQLite";
-        $lines[] = "{$phase2Icon} <b>Фаза 2</b>: SQLite → MySQL (" . htmlspecialchars($mode) . ")";
-        $lines[] = "";
-        $lines[] = "📁 Кеш: <code>storage/parsers_cache/volga</code>";
-        $lines[] = "💾 SQLite: <code>storage/parsers_db/volga_data.sqlite</code>";
-
-        return implode("\n", $lines);
     }
 
     protected function getOptions()

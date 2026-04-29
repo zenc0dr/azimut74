@@ -571,11 +571,37 @@ class WaterwayApiClient
     }
 
     /**
+     * Текст «Программа дня» для точки маршрута json.v3.cruise.result.route[].
+     * На практике у Водохода заполнено поле annotation (HTML); других текстовых полей в точке нет.
+     * Если API позже добавит description/note и т.д., они подмешиваются сюда без дублирования.
+     *
+     * @param array<string,mixed> $route
+     */
+    public static function mergeRoutePointExcursionHtml(array $route): string
+    {
+        $chunks = [];
+        foreach (['annotation', 'description', 'note', 'comment'] as $key) {
+            if (empty($route[$key]) || !is_string($route[$key])) {
+                continue;
+            }
+            $t = trim($route[$key]);
+            if ($t === '') {
+                continue;
+            }
+            $chunks[] = $t;
+        }
+        $chunks = array_values(array_unique($chunks));
+
+        return $chunks ? implode('<br><br>', $chunks) : '';
+    }
+
+    /**
      * Получение расписания круиза (cruise-days)
      */
     public function getCruiseRoute($cruiseId)
     {
-        $cacheKey = "waterway_route_{$cruiseId}";
+        // Версия кеша: исправлены номер дня из API и порядок точек по sort
+        $cacheKey = "waterway_route_v2_{$cruiseId}";
         
         // Сначала получаем данные круиза
         $cruiseResponse = $this->wwQuery("json.v3.cruise?id=$cruiseId", null, "waterway_cruise_{$cruiseId}");
@@ -587,11 +613,20 @@ class WaterwayApiClient
         }
         
         $routes = $cruiseResponse['result']['route'];
+        if (!is_array($routes)) {
+            $this->cache->put($cacheKey, null);
+            return null;
+        }
+
+        usort($routes, function ($a, $b) {
+            return ((int) ($a['sort'] ?? 0)) <=> ((int) ($b['sort'] ?? 0));
+        });
         
         // Преобразуем в формат, ожидаемый парсером
         $result = [];
-        $day = 1;
+        $rowIndex = 0;
         foreach ($routes as $route) {
+            $rowIndex++;
             $calendarDate = null;
             if (!empty($route['in'])) {
                 $ts = strtotime($route['in']);
@@ -599,10 +634,17 @@ class WaterwayApiClient
                     $calendarDate = date('Y-m-d', $ts);
                 }
             }
+
+            // Номер дня из API: несколько стоянок могут иметь один и тот же день (подряд в одну календарную дату).
+            // Раньше использовался счётчик строк — это ломало соответствие «День N» данным Водохода.
+            $dayNum = (isset($route['day']) && $route['day'] !== '' && $route['day'] !== null)
+                ? (int) $route['day']
+                : $rowIndex;
+
             $result[] = [
-                'day' => $day++,
+                'day' => $dayNum,
                 'portName' => $route['name'] ?? '',
-                'excursion' => $route['annotation'] ?? '',
+                'excursion' => self::mergeRoutePointExcursionHtml($route),
                 'timeStart' => isset($route['in']) ? date('H:i:s', strtotime($route['in'])) : '00:00:00',
                 'timeStop' => isset($route['out']) ? date('H:i:s', strtotime($route['out'])) : '00:00:00',
                 'calendarDate' => $calendarDate,

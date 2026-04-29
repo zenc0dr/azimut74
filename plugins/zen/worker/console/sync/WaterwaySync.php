@@ -2,7 +2,7 @@
 
 use Illuminate\Console\Command;
 use Symfony\Component\Console\Input\InputOption;
-use Zen\Worker\Console\transfer\TelegramNotifier;
+use Zen\Worker\Classes\WorkerNotifier;
 
 /**
  * WaterwaySync
@@ -20,15 +20,7 @@ class WaterwaySync extends Command
 
     public function handle()
     {
-        $startedAt = time();
-        $tg = null;
-        try {
-            $tg = new TelegramNotifier();
-            $tg->reset();
-        } catch (\Throwable $e) {
-            // Telegram не должен ломать выполнение команды
-            $tg = null;
-        }
+        $label = 'Waterway';
 
         $parseOnly = (bool)$this->option('parse-only');
         $transferOnly = (bool)$this->option('transfer-only');
@@ -99,51 +91,34 @@ class WaterwaySync extends Command
         $this->info('━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━');
         $this->info('Важно: кеш Waterway вечный (storage/parsers_cache/waterway) и не очищается без --clear_cache');
 
-        $phase1Status = $transferOnly ? '⏭️' : '⏳';
-        $phase2Status = $parseOnly ? '⏭️' : '⏳';
-
-        if ($tg) {
-            $tg->updateMessage($this->buildTelegramMessage($phase1Status, $phase2Status, 'Старт', $startedAt));
-        }
+        WorkerNotifier::notify("🚢 {$label} sync: старт");
 
         // Phase 1
         if (!$transferOnly) {
             $this->line('');
             $this->info('🟦 Фаза 1: API -> SQLite (worker:waterway-parse)');
-            if ($tg) {
-                $tg->updateMessage($this->buildTelegramMessage('🔄', $phase2Status, 'Фаза 1: парсинг (SQLite)', $startedAt));
-            }
+            WorkerNotifier::notify("🚢 {$label}: фаза 1 (парсинг в SQLite) — начало");
             $code = $this->call('worker:waterway-parse', $parseArgs);
             if ($code !== 0) {
                 $this->error("Фаза 1 завершилась с кодом $code. Останавливаемся.");
-                if ($tg) {
-                    $tg->updateMessage($this->buildTelegramMessage('❌', $phase2Status, "Ошибка фазы 1 (код $code)", $startedAt));
-                }
+                WorkerNotifier::notify("🚢 {$label}: фаза 1 — ошибка (код выхода $code)");
                 return $code;
             }
-            $phase1Status = '✅';
-            if ($tg) {
-                $tg->updateMessage($this->buildTelegramMessage($phase1Status, $phase2Status, 'Фаза 1 завершена', $startedAt));
-            }
+            WorkerNotifier::notify("🚢 {$label}: фаза 1 — завершена");
         }
 
         // Phase 2
         if (!$parseOnly) {
             $this->line('');
             $this->info('🟩 Фаза 2: SQLite -> MySQL (worker:transfer --source=waterway)');
-            if ($tg) {
-                $tg->updateMessage($this->buildTelegramMessage($phase1Status, '🔄', 'Фаза 2: перенос (валидация/импорт)', $startedAt));
-            }
+            WorkerNotifier::notify("🚢 {$label}: фаза 2 (перенос в MySQL) — начало");
 
-            // Отключаем Telegram внутри worker:transfer, чтобы не было второго сообщения.
+            // Без уведомлений внутри worker:transfer — их даёт эта sync-команда.
             $transferArgs['--no-telegram'] = true;
 
             if ($doImport && !$skipValidation) {
                 // 2-этапный режим: сначала валидация, затем импорт без повторной валидации.
                 $this->info('🔍 Фаза 2.1: валидация SQLite (transfer --validate-only)');
-                if ($tg) {
-                    $tg->updateMessage($this->buildTelegramMessage($phase1Status, '🔄', 'Фаза 2.1: валидация', $startedAt));
-                }
 
                 $phase21Args = [
                     '--source' => 'waterway',
@@ -156,21 +131,13 @@ class WaterwaySync extends Command
                 $code = $this->call('worker:transfer', $phase21Args);
                 if ($code !== 0) {
                     $this->error("Фаза 2.1 (валидация) завершилась с кодом $code.");
-                    if ($tg) {
-                        $tg->updateMessage($this->buildTelegramMessage($phase1Status, '❌', "Ошибка фазы 2.1 (код $code)", $startedAt));
-                    }
+                    WorkerNotifier::notify("🚢 {$label}: фаза 2 — ошибка на валидации (код $code)");
                     return $code;
                 }
 
                 $this->info('✅ Фаза 2.1: валидация пройдена, начинаю импорт');
-                if ($tg) {
-                    $tg->updateMessage($this->buildTelegramMessage($phase1Status, '🔄', 'Фаза 2.1: валидация пройдена', $startedAt));
-                }
 
                 $this->info('📥 Фаза 2.2: импорт (transfer --skip-validation)');
-                if ($tg) {
-                    $tg->updateMessage($this->buildTelegramMessage($phase1Status, '🔄', 'Фаза 2.2: импорт', $startedAt));
-                }
 
                 $phase22Args = [
                     '--source' => 'waterway',
@@ -183,9 +150,7 @@ class WaterwaySync extends Command
                 $code = $this->call('worker:transfer', $phase22Args);
                 if ($code !== 0) {
                     $this->error("Фаза 2.2 (импорт) завершилась с кодом $code.");
-                    if ($tg) {
-                        $tg->updateMessage($this->buildTelegramMessage($phase1Status, '❌', "Ошибка фазы 2.2 (код $code)", $startedAt));
-                    }
+                    WorkerNotifier::notify("🚢 {$label}: фаза 2 — ошибка на импорте (код $code)");
                     return $code;
                 }
             } else {
@@ -193,48 +158,17 @@ class WaterwaySync extends Command
                 $code = $this->call('worker:transfer', $transferArgs);
                 if ($code !== 0) {
                     $this->error("Фаза 2 завершилась с кодом $code.");
-                    if ($tg) {
-                        $tg->updateMessage($this->buildTelegramMessage($phase1Status, '❌', "Ошибка фазы 2 (код $code)", $startedAt));
-                    }
+                    WorkerNotifier::notify("🚢 {$label}: фаза 2 — ошибка (код $code)");
                     return $code;
                 }
             }
-            $phase2Status = '✅';
-            if ($tg) {
-                $tg->updateMessage($this->buildTelegramMessage($phase1Status, $phase2Status, 'Фаза 2 завершена', $startedAt));
-            }
+            WorkerNotifier::notify("🚢 {$label}: фаза 2 — завершена");
         }
 
         $this->line('');
         $this->info('✅ Waterway sync завершён');
-        if ($tg) {
-            $tg->updateMessage($this->buildTelegramMessage($phase1Status, $phase2Status, 'Готово', $startedAt));
-        }
+        WorkerNotifier::notify("🚢 {$label} sync: готово");
         return 0;
-    }
-
-    private function buildTelegramMessage(string $phase1Icon, string $phase2Icon, string $stage, int $startedAt): string
-    {
-        $duration = time() - $startedAt;
-        $mins = floor($duration / 60);
-        $secs = $duration % 60;
-        $durationStr = sprintf('%dm %02ds', $mins, $secs);
-
-        $import = (bool)$this->option('import');
-        $mode = $import ? 'импорт' : 'валидация';
-
-        $lines = [];
-        $lines[] = "🚢 <b>Waterway sync</b>";
-        $lines[] = "🕒 <b>Стадия:</b> " . htmlspecialchars($stage);
-        $lines[] = "⏱ <b>Длительность:</b> " . htmlspecialchars($durationStr);
-        $lines[] = "";
-        $lines[] = "{$phase1Icon} <b>Фаза 1</b>: API → SQLite";
-        $lines[] = "{$phase2Icon} <b>Фаза 2</b>: SQLite → MySQL (" . htmlspecialchars($mode) . ")";
-        $lines[] = "";
-        $lines[] = "📁 Кеш: <code>storage/parsers_cache/waterway</code>";
-        $lines[] = "💾 SQLite: <code>storage/parsers_db/waterway_data.sqlite</code>";
-
-        return implode("\n", $lines);
     }
 
     protected function getOptions()

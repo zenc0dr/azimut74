@@ -8,7 +8,7 @@ use Zen\Worker\Console\germes\GermesDatabase;
 use Zen\Worker\Console\infoflot\InfoflotDatabase;
 use Zen\Worker\Console\volga\VolgaDatabase;
 use Zen\Worker\Console\waterway\WaterwayDatabase;
-use Zen\Worker\Console\transfer\TelegramNotifier;
+use Zen\Worker\Classes\WorkerNotifier;
 use Zen\Worker\Console\transfer\TransferConfig;
 use Zen\Worker\Console\transfer\TransferErrorLogger;
 use Exception;
@@ -64,9 +64,9 @@ class Transfer extends Command
     protected $stats = [];
     
     /**
-     * Telegram уведомления
+     * Внешние уведомления (Rocket.Chat), если не отключены флагом --no-telegram
      */
-    protected $telegram;
+    protected $notifyEnabled = false;
     
     /**
      * Логгер ошибок валидации
@@ -91,15 +91,8 @@ class Transfer extends Command
         $this->errorLogger->clearLog();
         
         $noTelegram = (bool)$this->option('no-telegram');
+        $this->notifyEnabled = !$noTelegram;
 
-        // Инициализируем Telegram уведомления (если не отключены)
-        if (!$noTelegram) {
-            $this->telegram = new TelegramNotifier();
-            $this->telegram->reset();
-        } else {
-            $this->telegram = null;
-        }
-        
         $source = $this->option('source');
         $validateOnly = $this->option('validate-only');
         $skipValidation = $this->option('skip-validation');
@@ -111,6 +104,9 @@ class Transfer extends Command
         
         if (empty($sourcesToProcess)) {
             $this->error('❌ Не указаны источники для обработки');
+            if ($this->notifyEnabled) {
+                WorkerNotifier::notify('worker:transfer: ошибка — не указаны источники для обработки');
+            }
             return 1;
         }
         
@@ -141,11 +137,16 @@ class Transfer extends Command
         
         if (!empty($missingDatabases)) {
             $this->error('❌ Не найдены базы данных для следующих источников:');
+            $missingList = [];
             foreach ($missingDatabases as $missing) {
                 $this->error("  • {$missing['source']}: {$missing['path']}");
+                $missingList[] = $missing['source'] . ': ' . $missing['path'];
                 if (isset($missing['error'])) {
                     $this->error("    Ошибка: {$missing['error']}");
                 }
+            }
+            if ($this->notifyEnabled) {
+                WorkerNotifier::notify('worker:transfer: ошибка — не найдены SQLite: ' . implode('; ', $missingList));
             }
             return 1;
         }
@@ -159,32 +160,20 @@ class Transfer extends Command
         }
         
         $this->line('');
-        
-        // Инициализируем данные о всех источниках для Telegram
-        $sourcesData = [];
-        foreach ($sourcesToProcess as $sourceKey => $sourceConfig) {
-            $sourcesData[$sourceKey] = [
-                'name' => $sourceConfig['name'],
-                'status' => 'pending',
-                'stats' => []
-            ];
+
+        if ($this->notifyEnabled) {
+            $names = [];
+            foreach ($sourcesToProcess as $sourceKey => $sourceConfig) {
+                $names[] = $sourceConfig['name'];
+            }
+            WorkerNotifier::notify('worker:transfer: старт. Источники: ' . implode(', ', $names));
         }
-        
-        // Отправляем начальное сообщение в Telegram
-        if ($this->telegram) {
-            $this->telegram->updateProgress($sourcesData);
-        }
-        
+
         // Обрабатываем каждый источник
         foreach ($sourcesToProcess as $sourceKey => $sourceConfig) {
-            $this->processSource($sourceKey, $sourceConfig, $validateOnly, $skipValidation, $sourcesData);
+            $this->processSource($sourceKey, $sourceConfig, $validateOnly, $skipValidation);
         }
-        
-        // Финальное обновление сообщения
-        if ($this->telegram) {
-            $this->telegram->updateProgress($sourcesData);
-        }
-        
+
         // Выводим итоговую статистику
         $this->displaySummary();
         
@@ -212,7 +201,7 @@ class Transfer extends Command
     /**
      * Обработка одного источника
      */
-    protected function processSource($sourceKey, $sourceConfig, $validateOnly, $skipValidation, &$sourcesData = [])
+    protected function processSource($sourceKey, $sourceConfig, $validateOnly, $skipValidation)
     {
         $sourceName = $sourceConfig['name'];
         $edsCode = $sourceConfig['edsCode'];
@@ -220,15 +209,11 @@ class Transfer extends Command
         $this->info("━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━");
         $this->info("📦 Обработка источника: $sourceName");
         $this->info("━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━");
-        
-        // Обновляем статус источника в данных для Telegram
-        if (isset($sourcesData[$sourceKey])) {
-            $sourcesData[$sourceKey]['status'] = 'processing';
-            if ($this->telegram) {
-                $this->telegram->updateProgress($sourcesData, $sourceKey);
-            }
+
+        if ($this->notifyEnabled) {
+            WorkerNotifier::notify("{$sourceName}: начало обработки");
         }
-        
+
         try {
             // Создаем экземпляр Database класса
             $dbClass = $sourceConfig['class'];
@@ -296,14 +281,15 @@ class Transfer extends Command
                     'warnings' => 0,
                     'stats' => $stats
                 ];
-                
-                // Обновляем статус в Telegram
-                if (isset($sourcesData[$sourceKey])) {
-                    $sourcesData[$sourceKey]['status'] = 'success';
-                    $sourcesData[$sourceKey]['stats'] = $stats;
-                    if ($this->telegram) {
-                        $this->telegram->updateProgress($sourcesData);
-                    }
+
+                if ($this->notifyEnabled) {
+                    WorkerNotifier::notify(sprintf(
+                        '%s: обработка завершена. Теплоходы: %d, кат. кают: %d, круизы: %d',
+                        $sourceName,
+                        $stats['ships'],
+                        $stats['cabin_categories'],
+                        $stats['cruises']
+                    ));
                 }
             } else {
                 $this->info("✅ Валидация завершена для источника: $sourceName");
@@ -312,8 +298,11 @@ class Transfer extends Command
                     'errors' => 0,
                     'warnings' => 0
                 ];
+
+                if ($this->notifyEnabled) {
+                    WorkerNotifier::notify("{$sourceName}: валидация SQLite завершена (импорт не выполнялся)");
+                }
             }
-            
         } catch (Exception $e) {
             $this->error("❌ Ошибка обработки источника $sourceName: " . $e->getMessage());
             ProcessLog::add("Критическая ошибка обработки источника $sourceName: " . $e->getMessage());
@@ -322,14 +311,11 @@ class Transfer extends Command
                 'status' => 'error',
                 'error' => $e->getMessage()
             ];
-            
-            // Обновляем статус в Telegram
-            if (isset($sourcesData[$sourceKey])) {
-                $sourcesData[$sourceKey]['status'] = 'error';
-                $sourcesData[$sourceKey]['error'] = $e->getMessage();
-                if ($this->telegram) {
-                    $this->telegram->updateProgress($sourcesData);
-                }
+
+            if ($this->notifyEnabled) {
+                $msg = $e->getMessage();
+                $msg = function_exists('mb_substr') ? mb_substr($msg, 0, 800) : substr($msg, 0, 800);
+                WorkerNotifier::notify("{$sourceName}: ошибка — {$msg}");
             }
         }
         
@@ -448,7 +434,7 @@ class Transfer extends Command
             ['source', 's', InputOption::VALUE_OPTIONAL, 'Источник для обработки (gama, germes, infoflot, volga, waterway, all)', 'all'],
             ['validate-only', null, InputOption::VALUE_NONE, 'Только валидация без импорта'],
             ['skip-validation', null, InputOption::VALUE_NONE, 'Пропустить валидацию'],
-            ['no-telegram', null, InputOption::VALUE_NONE, 'Отключить Telegram-уведомления (для внешних оркестраторов)'],
+            ['no-telegram', null, InputOption::VALUE_NONE, 'Отключить уведомления в Rocket.Chat (для внешних оркестраторов)'],
             ['handle_only', null, InputOption::VALUE_OPTIONAL, 'Waterway: импортировать только круиз с этим id в SQLite (= eds_id)', null],
         ];
     }
