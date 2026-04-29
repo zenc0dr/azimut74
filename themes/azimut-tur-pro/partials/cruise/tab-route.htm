@@ -25,9 +25,60 @@
                                 <span>Дата</span>
                                 <strong>{{ day.date|date('d.m.Y') }}, {{ day.dof.f }}</strong>
                             </div>
-                            <i class="bi bi-chevron-down"/></i>
+                            <i class="bi bi-chevron-down"></i>
                         </div>
-                        <div class="tab-content">
+                        <div class="tab-content{% if day.segments is defined and day.segments|length > 1 %} route-day--segments{% endif %}">
+                            {% if day.segments is defined and day.segments|length > 1 %}
+                                {% for seg in day.segments %}
+                                <div class="route-segment border-bottom mb-3 pb-3">
+                                    <div class="ship-place-left">
+                                        <div class="day-time-route">
+                                            {% if day.day and loop.first %}
+                                                <div class="day-number-route">
+                                                    День {{ day.day }}
+                                                </div>
+                                            {% endif %}
+                                            <div>
+                                                {% if seg.time_arrive and seg.time_depart %}
+                                                    {{ seg.time_arrive }} – {{ seg.time_depart }}
+                                                {% elseif seg.time_arrive %}
+                                                    {{ seg.time_arrive }}
+                                                {% elseif seg.time_depart %}
+                                                    {{ seg.time_depart }}
+                                                {% endif %}
+                                                {% if seg.dof is defined and seg.dof and seg.dof.s is defined %}
+                                                    ({{ seg.dof.s }})
+                                                {% endif %}
+                                            </div>
+                                        </div>
+                                        {% if seg.time_arrive %}
+                                            <div class="time-in-ship">
+                                                <div>Прибытие:</div>
+                                                <div>{{ seg.time_arrive }}</div>
+                                            </div>
+                                        {% endif %}
+                                        {% if seg.time_diff %}
+                                            <div class="time-stop-ship">
+                                                <i class="bi bi-clock"></i>
+                                                <div>{{ seg.time_diff }} мин.</div>
+                                            </div>
+                                        {% endif %}
+                                        {% if seg.time_depart %}
+                                            <div class="time-out-ship">
+                                                <div>Отправление:</div>
+                                                <div>{{ seg.time_depart }}</div>
+                                            </div>
+                                        {% endif %}
+                                    </div>
+                                    <div class="ship-place-right">
+                                        <div class="ship-place">{{ seg.town }}</div>
+                                        <div class="place-descr">
+                                            {{ seg.desc|raw }}
+                                        </div>
+                                    </div>
+                                </div>
+                                {% endfor %}
+                            {% else %}
                             <div class="ship-place-left">
                                 <div class="day-time-route">
                                     {% if day.day %}
@@ -47,7 +98,7 @@
                                 {% endif %}
                                 {% if day.time_diff %}
                                     <div class="time-stop-ship">
-                                        <i class="bi bi-clock"/></i>
+                                        <i class="bi bi-clock"></i>
                                         <div>{{ day.time_diff }} мин.</div>
                                     </div>
                                 {% endif %}
@@ -64,6 +115,7 @@
                                     {{ day.desc|raw }}
                                 </div>
                             </div>
+                            {% endif %}
                         </div>
                     </div>
                 {% endfor %}

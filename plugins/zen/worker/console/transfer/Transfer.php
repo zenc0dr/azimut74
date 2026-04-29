@@ -273,7 +273,12 @@ class Transfer extends Command
                 
                 // Передаем команду для вывода в консоль
                 $processor->setCommand($this);
-                
+
+                $handleOnly = $this->option('handle_only');
+                if ($handleOnly !== null && $handleOnly !== '' && $sourceKey === 'waterway') {
+                    $processor->setHandleOnlyCruiseId((int) $handleOnly);
+                }
+
                 $processor->process();
                 
                 // Получаем статистику обработанных записей
@@ -444,6 +449,7 @@ class Transfer extends Command
             ['validate-only', null, InputOption::VALUE_NONE, 'Только валидация без импорта'],
             ['skip-validation', null, InputOption::VALUE_NONE, 'Пропустить валидацию'],
             ['no-telegram', null, InputOption::VALUE_NONE, 'Отключить Telegram-уведомления (для внешних оркестраторов)'],
+            ['handle_only', null, InputOption::VALUE_OPTIONAL, 'Waterway: импортировать только круиз с этим id в SQLite (= eds_id)', null],
         ];
     }
 }

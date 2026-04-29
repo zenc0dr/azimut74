@@ -98,8 +98,12 @@
             {{ checkin.germesSchelude|raw }}
         </div>
     {% elseif checkin.eds_code == 'waterway' %}
-        <div class="ww-table">
-            {{ checkin.desc_1|raw|mutator }}
+        <div class="ww-table ww-table--grouped">
+            {% if waterway_schedule_modal_html %}
+                {{ waterway_schedule_modal_html|raw }}
+            {% else %}
+                {{ checkin.desc_1|raw|mutator }}
+            {% endif %}
             {{ checkin.desc_2|raw|mutator }}
         </div>
     {% else %}

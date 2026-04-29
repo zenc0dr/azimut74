@@ -128,7 +128,7 @@ class RivercrsCheckin
 
         # http://azimut74/cruise/1
         if ($eds_code == 'waterway') {
-            return self::waterwaySchedule($checkin->desc_1);
+            return WaterwayScheduleGrouped::buildSchedule((string)$checkin->desc_1);
         }
 
         # http://azimut74/cruise/1681
@@ -153,75 +153,6 @@ class RivercrsCheckin
             $schedule->time_depart = $day['time_depart'];
             $schedule->town = $day['value'];
             $schedule->addDay();
-        }
-        return $schedule->getSchedule();
-    }
-
-    # Расписание водохода
-    private static function waterwaySchedule($table)
-    {
-        $table = str_replace('</tr>', '', $table);
-        $table = str_replace('</td>', '', $table);
-
-        $table_lines = explode("<tr>", $table);
-
-        $schedule = new ScheduleBuilder;
-        foreach ($table_lines as $table_line) {
-            if (strpos($table_line, '<td>') !== 0) {
-                continue;
-            }
-
-            if (strpos($table_line, '<td>День') === 0) {
-                continue;
-            }
-
-            $table_line = explode('<td>', $table_line);
-
-            preg_match('/^(\d+)[ |]<br>/m', @$table_line[1], $m);
-            $schedule->day = @$m[1];
-            preg_match('/<br>(\d+\.\d+\.\d+)<br>/', @$table_line[1], $m);
-            $date = @$m[1];
-            preg_match('/(\d+:\d+)/', @$table_line[1], $m);
-            $time = @$m[1];
-            preg_match('/\((\D+)\)/', @$table_line[1], $m);
-            $camping = true;
-
-            if (strpos(@$table_line[1], 'Отправление') !== false) {
-                $camping = false;
-                $schedule->date_depart = $date;
-                $schedule->time_depart = $time;
-            }
-            if (strpos(@$table_line[1], 'Прибытие') !== false) {
-                $camping = false;
-                $schedule->date_arrive = $date;
-                $schedule->time_arrive = $time;
-            }
-            # Стоянка
-            if ($camping) {
-                $schedule->date_arrive = $date;
-                preg_match('/(\d{2}:\d{2}) - (\d{2}:\d{2})/', @$table_line[1], $m);
-                $schedule->time_arrive = @$m[1];
-                $schedule->time_depart = @$m[2];
-            }
-            $schedule->town = @$table_line[2];
-
-            $desc = @$table_line[3];
-            if ($desc) {
-                $desc = preg_replace('/<\/{0,1}tbody>/', '', $desc);
-                $desc = preg_replace('/<\/{0,1}table>/', '', $desc);
-                $desc = preg_replace('/ {2,}/', ' ', $desc);
-                $desc = trim($desc);
-            }
-
-            # Вырезание ссылок из контента
-            $desc = preg_replace('/<a[^>]+>([^<]+)<\/a>/ui', '$1', $desc);
-            $desc = preg_replace('/([^ ]{0,1}Водоход[ъЪ]{0,1}[^ ]{0,1})/ui', ' ', $desc);
-            $desc = preg_replace('/ {2,}/ui', ' ', $desc);
-
-            $schedule->desc = $desc;
-
-            $schedule->addDay();
-
         }
         return $schedule->getSchedule();
     }

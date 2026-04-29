@@ -16,6 +16,21 @@ class UnifiedProcessor extends TransferProcessor
      * @var \Illuminate\Console\Command|null Команда для вывода в консоль
      */
     protected $command = null;
+
+    /**
+     * Waterway: обработать только круиз с данным id в SQLite (= eds_id источника).
+     *
+     * @var int|null
+     */
+    protected $handleOnlyCruiseId = null;
+
+    /**
+     * Режим отладки: один круиз Waterway по id из SQLite.
+     */
+    public function setHandleOnlyCruiseId(?int $cruiseId)
+    {
+        $this->handleOnlyCruiseId = $cruiseId ? (int) $cruiseId : null;
+    }
     
     /**
      * Установка команды для вывода в консоль
@@ -64,6 +79,25 @@ class UnifiedProcessor extends TransferProcessor
         $this->importDecks();
         
         $cruises = $this->db->getAllCruises();
+
+        if ($this->handleOnlyCruiseId !== null && $this->edsCode === 'waterway') {
+            $hid = (int) $this->handleOnlyCruiseId;
+            $before = count($cruises);
+            $cruises = array_values(array_filter($cruises, function ($c) use ($hid) {
+                return (int) ($c['id'] ?? 0) === $hid;
+            }));
+            $this->output(
+                '🧪 handle_only: в SQLite отобран круиз id=' . $hid . " (строк до фильтра: {$before}, после: " . count($cruises) . ')',
+                'info'
+            );
+            if (empty($cruises)) {
+                $this->output(
+                    '⚠️  Круиза с id=' . $hid . ' в SQLite нет — проверьте фазу 1 (--handle_only для того же id).',
+                    'warn'
+                );
+            }
+        }
+
         $totalCruises = count($cruises);
         
         $this->output("📋 Найдено заездов для обработки: $totalCruises", 'info');

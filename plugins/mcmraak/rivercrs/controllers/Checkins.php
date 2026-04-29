@@ -8,6 +8,7 @@ use Mcmraak\Rivercrs\Classes\CacheSettings as Settings;
 use Input;
 use Queue;
 use DB;
+use Mcmraak\Rivercrs\Classes\WaterwayScheduleGrouped;
 
 class Checkins extends Controller
 {
@@ -31,11 +32,17 @@ class Checkins extends Controller
     {
         $checkin = \Mcmraak\Rivercrs\Models\Checkins::find($checkin_id);
 
+        $waterwayScheduleModalHtml = '';
+        if ($checkin && $checkin->eds_code === 'waterway' && !empty($checkin->desc_1)) {
+            $waterwayScheduleModalHtml = WaterwayScheduleGrouped::toModalHtml((string) $checkin->desc_1);
+        }
+
         return \View::make(
             'mcmraak.rivercrs::graphic_modal',
             [
                 'checkin' => $checkin,
-                'to_print' => Input::get('to_print')
+                'to_print' => Input::get('to_print'),
+                'waterway_schedule_modal_html' => $waterwayScheduleModalHtml,
             ]
         );
     }

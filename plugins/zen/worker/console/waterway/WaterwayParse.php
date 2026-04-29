@@ -43,7 +43,8 @@ class WaterwayParse extends Command
         $limitCruises = $this->option('limit_cruises');
         $limitCruisesPerShip = $this->option('limit_cruises_per_ship');
         $progressEvery = $this->option('progress_every');
-        $onlyCruiseId = $this->option('only_cruise_id');
+        $handleOnly = $this->option('handle_only');
+        $onlyCruiseId = $handleOnly ?: $this->option('only_cruise_id');
         
         $this->info('🚢 Начинаем парсинг круизов Waterway...');
         $this->info("⏱️  Таймаут: {$this->timeout} сек");
@@ -52,6 +53,9 @@ class WaterwayParse extends Command
         if ($limitCruisesPerShip) $this->info("🧪 Лимит круизов на теплоход: {$limitCruisesPerShip}");
         if ($limitCruises) $this->info("🧪 Лимит круизов: {$limitCruises}");
         if ($limit) $this->info("🧪 Лимит круизов (legacy --limit): {$limit}");
+        if ($handleOnly) {
+            $this->info('🧪 handle_only: только круиз eds_id=' . (int) $handleOnly);
+        }
         
         try {
             // Фаза 1: разрешаем создать SQLite при отсутствии файла
@@ -94,7 +98,11 @@ class WaterwayParse extends Command
             $this->processCruisesData($dataProcessor);
             
             $this->showProgress('Очистка круизов без цен...', 90);
-            $this->cleanCruisesWithoutPrices();
+            if (!$onlyCruiseId) {
+                $this->cleanCruisesWithoutPrices();
+            } else {
+                $this->warn('⚠️  Точечный режим (handle_only / only_cruise_id): очистка круизов без цен пропущена.');
+            }
             
             $this->showProgress('Завершение обработки...', 100);
             $this->line('');
@@ -214,6 +222,7 @@ class WaterwayParse extends Command
             ['limit_cruises_per_ship', null, InputOption::VALUE_OPTIONAL, 'Ограничить количество круизов на один теплоход', null],
             ['progress_every', null, InputOption::VALUE_OPTIONAL, 'Выводить прогресс каждые N круизов (1 = каждый круиз)', 1],
             ['only_cruise_id', null, InputOption::VALUE_OPTIONAL, 'Обработать только один круиз по ID (точечный режим)', null],
+            ['handle_only', null, InputOption::VALUE_OPTIONAL, 'Только круиз по внутреннему eds_id Waterway (отладка; приоритет над only_cruise_id)', null],
         ];
     }
 }

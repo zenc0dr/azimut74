@@ -184,6 +184,51 @@
    }
 }
 
+// Несколько точек в один календарный день: общий .tab-content — flex-row по умолчанию
+// (см. blocks/tabs/_.scss). Прямыми потомками становятся несколько .route-segment,
+// их нельзя выстраивать в ряд — только столбцом; каждый сегмент — своя строка «время | текст».
+.tabs-vertical .tab-item.route-tab > .tab-content.route-day--segments {
+    flex-direction: column;
+}
+
+.route-segment {
+    display: flex;
+    flex-direction: row;
+    width: 100%;
+    align-items: stretch;
+    box-sizing: border-box;
+
+    // В одной карточке дня несколько сегментов: левая колонка — flex-элемент.
+    // Без flex-basis + min-width у разных строк min-content разной ширины, «серый» блок визуально пляшет.
+    .ship-place-left {
+        flex: 0 0 250px;
+        width: 250px;
+        min-width: 250px;
+        max-width: 250px;
+        @include m('lg') {
+            flex: 0 0 288px;
+            width: 288px;
+            min-width: 288px;
+            max-width: 288px;
+        }
+        @include m('md') {
+            flex: 1 1 auto;
+            width: 100%;
+            min-width: 0;
+            max-width: none;
+        }
+    }
+
+    .ship-place-right {
+        flex: 1 1 auto;
+        min-width: 0;
+    }
+
+    @include m('md') {
+        flex-direction: column;
+    }
+}
+
 
 .tabs-vertical .tab-item.route-tab:not(:last-child) {
    @include m('590px') {

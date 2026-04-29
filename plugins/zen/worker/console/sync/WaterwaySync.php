@@ -35,6 +35,7 @@ class WaterwaySync extends Command
         $doImport = (bool)$this->option('import');
         $validateOnly = (bool)$this->option('validate-only');
         $skipValidation = (bool)$this->option('skip-validation');
+        $handleOnly = $this->option('handle_only');
 
         if ($parseOnly && $transferOnly) {
             $this->error('Нельзя одновременно указать --parse-only и --transfer-only');
@@ -72,6 +73,9 @@ class WaterwaySync extends Command
         if ($this->option('progress_every')) {
             $parseArgs['--progress_every'] = $this->option('progress_every');
         }
+        if ($handleOnly !== null && $handleOnly !== '') {
+            $parseArgs['--handle_only'] = $handleOnly;
+        }
 
         // --- Phase 2 args (transfer) ---
         $transferArgs = [
@@ -84,6 +88,10 @@ class WaterwaySync extends Command
         } elseif ($skipValidation) {
             // Если пользователь явно просит пропустить валидацию, перенесём это в импортную фазу
             $transferArgs['--skip-validation'] = true;
+        }
+
+        if ($handleOnly !== null && $handleOnly !== '') {
+            $transferArgs['--handle_only'] = $handleOnly;
         }
 
         $this->info('━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━');
@@ -137,11 +145,15 @@ class WaterwaySync extends Command
                     $tg->updateMessage($this->buildTelegramMessage($phase1Status, '🔄', 'Фаза 2.1: валидация', $startedAt));
                 }
 
-                $code = $this->call('worker:transfer', [
+                $phase21Args = [
                     '--source' => 'waterway',
                     '--validate-only' => true,
                     '--no-telegram' => true,
-                ]);
+                ];
+                if ($handleOnly !== null && $handleOnly !== '') {
+                    $phase21Args['--handle_only'] = $handleOnly;
+                }
+                $code = $this->call('worker:transfer', $phase21Args);
                 if ($code !== 0) {
                     $this->error("Фаза 2.1 (валидация) завершилась с кодом $code.");
                     if ($tg) {
@@ -160,11 +172,15 @@ class WaterwaySync extends Command
                     $tg->updateMessage($this->buildTelegramMessage($phase1Status, '🔄', 'Фаза 2.2: импорт', $startedAt));
                 }
 
-                $code = $this->call('worker:transfer', [
+                $phase22Args = [
                     '--source' => 'waterway',
                     '--skip-validation' => true,
                     '--no-telegram' => true,
-                ]);
+                ];
+                if ($handleOnly !== null && $handleOnly !== '') {
+                    $phase22Args['--handle_only'] = $handleOnly;
+                }
+                $code = $this->call('worker:transfer', $phase22Args);
                 if ($code !== 0) {
                     $this->error("Фаза 2.2 (импорт) завершилась с кодом $code.");
                     if ($tg) {
@@ -238,6 +254,7 @@ class WaterwaySync extends Command
             ['limit_cruises', null, InputOption::VALUE_OPTIONAL, 'Лимит круизов (фаза 1)', null],
             ['limit_cruises_per_ship', null, InputOption::VALUE_OPTIONAL, 'Лимит круизов на теплоход (фаза 1)', null],
             ['progress_every', null, InputOption::VALUE_OPTIONAL, 'Прогресс в консоль каждые N круизов (фаза 1)', 1],
+            ['handle_only', null, InputOption::VALUE_OPTIONAL, 'Только круиз по eds_id Waterway (обе фазы)', null],
 
             // phase 2 passthrough
             ['validate-only', null, InputOption::VALUE_NONE, 'Только валидация SQLite, без импорта (фаза 2)'],
