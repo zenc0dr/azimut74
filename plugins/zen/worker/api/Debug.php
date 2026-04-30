@@ -66,7 +66,11 @@ class Debug
     # http://azimut74/zen/worker/api/debug:testRocketBot
     public function testRocketBot()
     {
-        #return;
-        RocketBot::send('Тестирую соединение, окружение: ' . env('APP_URL'));
+        $result = RocketBot::push('Тест worker/RocketBot, APP_URL: ' . (string) config('app.url', ''));
+
+        $status = !empty($result['ok']) ? 200 : 502;
+        $result['hint'] = 'Отправка через libcurl (как у рабочего curl), без October Http. ok=true — HTTP 2xx от webhook.';
+
+        return response()->json($result, $status, [], JSON_UNESCAPED_UNICODE);
     }
 }

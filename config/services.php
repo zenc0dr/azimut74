@@ -39,4 +39,17 @@ return [
         'secret' => '',
     ],
 
+    /*
+    | Rocket.Chat incoming webhook (worker-уведомления).
+    | URL и алиас читаются из .env, но доступ через config(), чтобы работало
+    | и при php artisan config:cache (env() вне config-файлов тогда даёт null).
+    |
+    | Дублируем имя переменной из Axis (chub): DEV_BOT_ROCKETCHAT_WEBHOOK_URL —
+    | можно задать один и тот же webhook в .env для обоих проектов.
+    */
+    'rocket_chat' => [
+        'support_bot_webhook' => trim((string) (env('ROCKET_CHAT_SUPPORT_BOT_WEBHOOK') ?: env('DEV_BOT_ROCKETCHAT_WEBHOOK_URL', ''))),
+        'webhook_alias' => env('ROCKET_CHAT_WEBHOOK_ALIAS'),
+    ],
+
 ];
