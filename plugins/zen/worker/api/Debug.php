@@ -66,7 +66,7 @@ class Debug
     # http://azimut74/zen/worker/api/debug:testRocketBot
     public function testRocketBot()
     {
-        return;
-        RocketBot::send('Тестирую соединение');
+        #return;
+        RocketBot::send('Тестирую соединение, окружение: ' . env('APP_URL'));
     }
 }
