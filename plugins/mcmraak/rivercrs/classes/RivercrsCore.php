@@ -10,6 +10,8 @@ use Carbon\Carbon;
 
 class RivercrsCore
 {
+    private const INDEX_CRUISE_ID = 2;
+
     private ?array $segments;
     private $cruise;
 
@@ -146,14 +148,22 @@ class RivercrsCore
             return false;
         }
 
-        $slug = $this->segments[1] ?? 'river-cruises';
+        $slug = $this->segments[1] ?? null;
+        $isIndexPage = !$slug;
 
         $is_transit_page = false;
 
+        if ($isIndexPage) {
+            $this->cruise = $cruise = Cruises::where('id', self::INDEX_CRUISE_ID)
+                ->where('active', 1)
+                ->first();
+        } else {
+            $this->cruise = $cruise = Cruises::where('slug', $slug)
+                ->where('active', 1)
+                ->first();
+        }
 
-        $this->cruise = $cruise = Cruises::where('slug', $slug)->where('active', 1)->first();
-
-        if (!$cruise) {
+        if (!$cruise && !$isIndexPage) {
             $is_transit_page = true;
             $this->cruise = $cruise =  Transit::where('slug', $slug)->where('active', 1)->first();
         }
