@@ -150,3 +150,8 @@ tabs:
             span: auto
             type: text
             tab: Метатеги
+        reviews_binding:
+            span: full
+            path: $/mcmraak/rivercrs/partials/reviews-binding.php
+            type: partial
+            tab: Отзывы

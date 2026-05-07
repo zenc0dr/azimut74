@@ -3,6 +3,7 @@
 use Model;
 use Mcmraak\Rivercrs\Models\Towns;
 use Mcmraak\Rivercrs\Models\Motorships;
+use Mcmraak\Rivercrs\Classes\ReviewsWidget;
 
 /**
  * Model
@@ -112,5 +113,15 @@ class Transit extends Model
     public function getShipIdOptions()
     {
         return [0 => ' -- '] + Motorships::lists('name', 'id');
+    }
+
+    public function getReviewEntityType()
+    {
+        return ReviewsWidget::ENTITY_TRANSIT;
+    }
+
+    public function getBoundReviews()
+    {
+        return ReviewsWidget::getBoundReviews($this->getReviewEntityType(), $this->id);
     }
 }

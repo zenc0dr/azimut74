@@ -23,6 +23,10 @@ class Review extends Model
         'photos' => \System\Models\File::class
     ];
 
+    public $hasOne = [
+        'binding' => [Binding::class, 'key' => 'review_id'],
+    ];
+
     public function setDataAttribute($value): void
     {
         $this->attributes['data'] = reviews()->toJson($value, true, true);

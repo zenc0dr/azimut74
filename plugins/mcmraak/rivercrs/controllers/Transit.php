@@ -2,9 +2,15 @@
 
 use Backend\Classes\Controller;
 use BackendMenu;
+use Mcmraak\Rivercrs\Classes\ReviewsWidget;
+use Mcmraak\Rivercrs\Controllers\Traits\HasReviewBindings;
 
 class Transit extends Controller
 {
+    use HasReviewBindings;
+
+    const REVIEW_ENTITY_TYPE = ReviewsWidget::ENTITY_TRANSIT;
+
     public $implement = ['Backend\Behaviors\ListController','Backend\Behaviors\FormController'];
     
     public $listConfig = 'config_list.yaml';

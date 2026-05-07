@@ -12,6 +12,7 @@ use Mcmraak\Rivercrs\Classes\CacheSettings;
 use ToughDeveloper\ImageResizer\Classes\Image;
 use Zen\Grinder\Classes\Grinder;
 use Config;
+use Mcmraak\Rivercrs\Classes\ReviewsWidget;
 
 /**
  * Model
@@ -235,6 +236,16 @@ class Motorships extends Model
     public function cleanSelfName()
     {
         return $this->extra_name ?: self::cleanQuotes($this->name);
+    }
+
+    public function getReviewEntityType()
+    {
+        return ReviewsWidget::ENTITY_MOTORSHIP;
+    }
+
+    public function getBoundReviews()
+    {
+        return ReviewsWidget::getBoundReviews($this->getReviewEntityType(), $this->id);
     }
 
     # get motorsip name without quotes

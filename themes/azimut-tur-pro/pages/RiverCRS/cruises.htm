@@ -48,15 +48,17 @@ function onStart()
             <section class="result-menu__categories col-12 col-lg-3 ">
                 {% partial 'search/left-menu' %}
             </section>
-            <meta name="widget-title" content="{{ RiverCRS.cruise.h1|mutator }}" />
+            <section class="col-12 col-lg-9">
+                <meta name="widget-title" content="{{ RiverCRS.cruise.h1|mutator }}" />
 
-            {# Квиз "Подберите мне круиз" #}
-            <link rel="stylesheet" href="{{ quiz_css }}">
-            <div id="QuizApp"></div>
-            <script src="{{ quiz_js }}"></script>
+                {# Квиз "Подберите мне круиз" #}
+                <link rel="stylesheet" href="{{ quiz_css }}">
+                <div id="QuizApp"></div>
+                <script src="{{ quiz_js }}"></script>
 
-            
-            <div id="search-widget-app"></div>
+                <div id="search-widget-app"></div>
+                {% partial 'reviews/widget' %}
+            </section>
         </div>
         <section class="info-wrapper bg-primary-100  rounded  mt-4">
             {% partial 'info/cruize-head' cruise=RiverCRS.cruise class="p-2 p-sm-3 p-xl-4 col-12 mb-3" %}

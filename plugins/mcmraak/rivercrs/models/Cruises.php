@@ -3,6 +3,7 @@
 use Model;
 use Mcmraak\Rivercrs\Models\Towns;
 use Mcmraak\Rivercrs\Models\Motorships;
+use Mcmraak\Rivercrs\Classes\ReviewsWidget;
 
 /**
  * Model
@@ -109,6 +110,16 @@ class Cruises extends Model
     public function getShipIdOptions()
     {
         return [0 => ' -- '] + Motorships::lists('name', 'id');
+    }
+
+    public function getReviewEntityType()
+    {
+        return ReviewsWidget::ENTITY_CRUISE;
+    }
+
+    public function getBoundReviews()
+    {
+        return ReviewsWidget::getBoundReviews($this->getReviewEntityType(), $this->id);
     }
 
 }

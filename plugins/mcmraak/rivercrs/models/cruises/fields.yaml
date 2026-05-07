@@ -167,3 +167,8 @@ tabs:
             span: full
             type: codeeditor
             tab: Фрейм-контент
+        reviews_binding:
+            span: full
+            path: $/mcmraak/rivercrs/partials/reviews-binding.php
+            type: partial
+            tab: Отзывы

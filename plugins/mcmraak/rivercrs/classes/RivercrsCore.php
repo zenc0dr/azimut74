@@ -5,6 +5,7 @@ use Mcmraak\Rivercrs\Models\Cruises;
 use Mcmraak\Rivercrs\Models\Transit;
 use Mcmraak\Rivercrs\Models\Motorships;
 use Mcmraak\Rivercrs\Models\Reference;
+use Mcmraak\Rivercrs\Classes\ReviewsWidget;
 use Carbon\Carbon;
 
 class RivercrsCore
@@ -116,6 +117,20 @@ class RivercrsCore
         }
 
         $data = RivercrsShip::getShip($ship);
+        $boundReviews = $ship->getBoundReviews()
+            ->map(function ($review) {
+                return ReviewsWidget::formatReview($review);
+            })
+            ->values()
+            ->toArray();
+
+        $data['reviewsWidget'] = [
+            'entityType' => ReviewsWidget::ENTITY_MOTORSHIP,
+            'entityId' => (int) $ship->id,
+            'items' => $boundReviews,
+            'excludeIds' => array_values(array_map('intval', array_column($boundReviews, 'id'))),
+            'ships' => ReviewsWidget::getShipOptions(),
+        ];
 
         if (isset($_GET['dump'])) {
             dd($data);
@@ -166,6 +181,22 @@ class RivercrsCore
             'leftMenu' => RivercrsLeftmenu::build($cruise, $is_transit_page),
             'articles' => RivercrsArticles::articles($this->cruise),
             'seoLinks' => RivercrsSeoLinks::getSeoLinks()
+        ];
+
+        $entityType = ReviewsWidget::detectEntityType($cruise);
+        $boundReviews = $cruise->getBoundReviews()
+            ->map(function ($review) {
+                return ReviewsWidget::formatReview($review);
+            })
+            ->values()
+            ->toArray();
+
+        $data['reviewsWidget'] = [
+            'entityType' => $entityType,
+            'entityId' => (int) $cruise->id,
+            'items' => $boundReviews,
+            'excludeIds' => array_values(array_map('intval', array_column($boundReviews, 'id'))),
+            'ships' => ReviewsWidget::getShipOptions(),
         ];
 
         if (isset($_GET['dump'])) {

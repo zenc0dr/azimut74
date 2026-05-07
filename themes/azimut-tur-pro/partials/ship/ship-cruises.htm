@@ -4,7 +4,10 @@ description = "Поиск по круизам теплохода"
 ==
 <div class="tab-container {{ class }}" tab="{{tab}}">
 	<div class="tabs-vertical open no-border no-padding">
-        <meta name="fixed-ship" content="{{ RiverCRS.ship.id }}">
-        <div id="search-widget-app"></div>
+        <div class="w-100 d-block">
+            <meta name="fixed-ship" content="{{ RiverCRS.ship.id }}">
+            <div id="search-widget-app"></div>
+            {% partial 'reviews/widget' %}
+        </div>
 	</div>
 </div>

@@ -3,6 +3,7 @@
 use Ramsey\Uuid\Uuid;
 use Cache;
 use Zen\Worker\Classes\SearchCacheVersion;
+use Mcmraak\Rivercrs\Classes\ReviewsWidget;
 
 class RivercrsApi
 {
@@ -81,6 +82,54 @@ class RivercrsApi
     {
         self::json([
             'html' => RivercrsCabin::openCabin()
+        ]);
+    }
+
+    # http://azimut74/rivercrs/api/reviewsInit
+    public function reviewsInit()
+    {
+        $entityType = request('entity_type');
+        $entityId = (int) request('entity_id');
+
+        if (!$entityType || !$entityId) {
+            self::json([
+                'items' => [],
+                'exclude_ids' => [],
+                'ships' => [],
+            ]);
+            return;
+        }
+
+        $items = ReviewsWidget::getBoundReviews($entityType, $entityId)
+            ->map(function ($review) {
+                return ReviewsWidget::formatReview($review);
+            })
+            ->values()
+            ->toArray();
+
+        self::json([
+            'items' => $items,
+            'exclude_ids' => array_values(array_map('intval', array_column($items, 'id'))),
+            'ships' => ReviewsWidget::getShipOptions(),
+        ]);
+    }
+
+    # http://azimut74/rivercrs/api/reviewsMore
+    public function reviewsMore()
+    {
+        $excludedIds = request('exclude_ids', []);
+        $shipId = request('ship_id');
+
+        $items = ReviewsWidget::getMoreReviews($excludedIds, $shipId, 5)
+            ->map(function ($review) {
+                return ReviewsWidget::formatReview($review);
+            })
+            ->values()
+            ->toArray();
+
+        self::json([
+            'items' => $items,
+            'exclude_ids' => array_values(array_map('intval', array_column($items, 'id'))),
         ]);
     }
 }

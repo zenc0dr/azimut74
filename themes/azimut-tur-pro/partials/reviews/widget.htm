@@ -1,0 +1,32 @@
+{% set reviewsWidget = RiverCRS.reviewsWidget ?? null %}
+{% if reviewsWidget %}
+<div
+    id="reviews-widget-app"
+    data-init="{{ reviewsWidget|json_encode|e('html_attr') }}">
+    <section class="reviews-widget mt-4">
+        <div class="reviews-widget__panel">
+            <select class="reviews-widget__select">
+                <option>Все теплоходы</option>
+            </select>
+            <button type="button" class="reviews-widget__btn">Показать</button>
+        </div>
+
+        <div class="reviews-widget__list">
+            {% for item in reviewsWidget.items %}
+                <article class="reviews-widget__item">
+                    <div class="reviews-widget__head">
+                        <strong>{{ item.name }}</strong>
+                        <span>{{ item.date }}</span>
+                    </div>
+                    {% if item.ship_name %}
+                        <div class="reviews-widget__ship">{{ item.ship_name }}</div>
+                    {% endif %}
+                    <div class="reviews-widget__text">{{ item.text }}</div>
+                </article>
+            {% endfor %}
+        </div>
+
+        <button type="button" class="reviews-widget__more">Подгрузить отзывы</button>
+    </section>
+</div>
+{% endif %}

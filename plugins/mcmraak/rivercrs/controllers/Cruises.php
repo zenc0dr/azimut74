@@ -2,9 +2,15 @@
 
 use Backend\Classes\Controller;
 use BackendMenu;
+use Mcmraak\Rivercrs\Classes\ReviewsWidget;
+use Mcmraak\Rivercrs\Controllers\Traits\HasReviewBindings;
 
 class Cruises extends Controller
 {
+    use HasReviewBindings;
+
+    const REVIEW_ENTITY_TYPE = ReviewsWidget::ENTITY_CRUISE;
+
     public $implement = ['Backend\Behaviors\ListController','Backend\Behaviors\FormController','Backend\Behaviors\ReorderController'];
     
     public $listConfig = 'config_list.yaml';

@@ -10,3 +10,6 @@
     - 'Убрали лишние окна https://8ber.kaiten.ru/26952566'
 1.0.5:
     - 'Добавил консольный скрипт для отчёта'
+1.0.6:
+    - 'Created table zen_reviews_bindings'
+    - builder_table_create_zen_reviews_bindings.php

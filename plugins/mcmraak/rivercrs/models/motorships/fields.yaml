@@ -207,3 +207,8 @@ tabs:
             path: $/mcmraak/rivercrs/controllers/motorships/not_exist_rooms.php
             type: partial
             tab: Схема
+        reviews_binding:
+            span: full
+            path: $/mcmraak/rivercrs/partials/reviews-binding.php
+            type: partial
+            tab: Отзывы
