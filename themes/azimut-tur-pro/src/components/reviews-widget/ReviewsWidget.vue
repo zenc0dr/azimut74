@@ -16,9 +16,34 @@
             <article class="reviews-widget__item" v-for="item in combinedItems" :key="item.id">
                 <div class="reviews-widget__head">
                     <strong>{{ item.name }}</strong>
-                    <span>{{ item.date }}</span>
+                    <span class="reviews-widget__date">{{ item.date }}</span>
                 </div>
                 <div class="reviews-widget__ship" v-if="item.ship_name">{{ item.ship_name }}</div>
+                <div
+                    v-if="item.trip_date || item.exp_rest"
+                    class="reviews-widget__meta"
+                >
+                    <span v-if="item.trip_date" class="reviews-widget__meta-part">{{ item.trip_date }}</span>
+                    <span v-if="item.trip_date && item.exp_rest" class="reviews-widget__meta-sep">·</span>
+                    <span v-if="item.exp_rest" class="reviews-widget__meta-part">{{ item.exp_rest }}</span>
+                </div>
+                <div v-if="item.ratings && item.ratings.length" class="reviews-widget__ratings">
+                    <div
+                        v-for="r in item.ratings"
+                        :key="r.key"
+                        class="reviews-widget__rating"
+                    >
+                        <span class="reviews-widget__rating-label">{{ r.label }}</span>
+                        <span class="reviews-widget__stars" :title="r.value + ' из 5'">
+                            <span
+                                v-for="i in 5"
+                                :key="i"
+                                class="reviews-widget__star"
+                                :class="{ 'reviews-widget__star--on': i <= r.value }"
+                            >★</span>
+                        </span>
+                    </div>
+                </div>
                 <div class="reviews-widget__text">{{ item.text }}</div>
             </article>
         </div>
@@ -146,6 +171,14 @@ export default {
         justify-content: space-between;
         gap: 8px;
         margin-bottom: 6px;
+        align-items: baseline;
+    }
+
+    &__date {
+        color: #6b7a8c;
+        font-size: 13px;
+        font-weight: 400;
+        white-space: nowrap;
     }
 
     &__ship {
@@ -154,8 +187,57 @@ export default {
         font-size: 13px;
     }
 
+    &__meta {
+        color: #6b7a8c;
+        font-size: 12px;
+        line-height: 1.45;
+        margin-bottom: 8px;
+    }
+
+    &__meta-sep {
+        margin: 0 0.35em;
+        opacity: 0.7;
+    }
+
+    &__ratings {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 8px 14px;
+        margin-bottom: 10px;
+    }
+
+    &__rating {
+        display: inline-flex;
+        align-items: center;
+        gap: 6px;
+        font-size: 12px;
+    }
+
+    &__rating-label {
+        color: #5a6a7d;
+    }
+
+    &__stars {
+        display: inline-flex;
+        letter-spacing: 0.02em;
+        user-select: none;
+    }
+
+    &__star {
+        color: #d3dde8;
+        font-size: 11px;
+        line-height: 1;
+
+        &--on {
+            color: #177bc0;
+        }
+    }
+
     &__text {
         white-space: pre-line;
+        font-size: 14px;
+        line-height: 1.5;
+        color: #222;
     }
 
     &__more {

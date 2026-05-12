@@ -13,6 +13,16 @@ class ReviewsWidget
     const ENTITY_TRANSIT = 'transit';
     const ENTITY_MOTORSHIP = 'motorship';
 
+    /** Порядок и подписи оценок для публичного виджета (без reviews.azimut). */
+    private const RATING_DEFINITIONS = [
+        'cabin' => 'Каюта',
+        'food' => 'Питание',
+        'service' => 'Сервис',
+        'tours' => 'Экскурсии',
+        'anim_on_board' => 'Анимация',
+        'cruise' => 'Отдых в целом',
+    ];
+
     public static function detectEntityType($model)
     {
         if ($model instanceof Cruises) {
@@ -54,7 +64,7 @@ class ReviewsWidget
         $form = self::extractForm($review);
         $text = trim((string) ($form['reviews_text'] ?? ''));
 
-        return [
+        $out = [
             'id' => (int) $review->id,
             'name' => (string) ($form['name'] ?? $review->name ?? 'Без имени'),
             'ship_id' => isset($form['ship_id']) ? (int) $form['ship_id'] : null,
@@ -62,6 +72,23 @@ class ReviewsWidget
             'text' => $text,
             'date' => $review->created_at ? Carbon::parse($review->created_at)->format('d.m.Y') : '',
         ];
+
+        $trip = self::formatTripDateForWidget($form['trip_date'] ?? null);
+        if ($trip !== null) {
+            $out['trip_date'] = $trip;
+        }
+
+        $expRest = trim((string) ($form['exp_rest'] ?? ''));
+        if ($expRest !== '') {
+            $out['exp_rest'] = $expRest;
+        }
+
+        $ratings = self::buildPublicRatings($form);
+        if ($ratings !== []) {
+            $out['ratings'] = $ratings;
+        }
+
+        return $out;
     }
 
     public static function getShipOptions()
@@ -98,5 +125,65 @@ class ReviewsWidget
         }
 
         return is_array($data) ? $data : [];
+    }
+
+    /**
+     * @param mixed $raw
+     */
+    private static function formatTripDateForWidget($raw): ?string
+    {
+        if ($raw === null || $raw === '') {
+            return null;
+        }
+
+        try {
+            return Carbon::parse($raw)->format('d.m.Y');
+        } catch (\Throwable $e) {
+            return null;
+        }
+    }
+
+    /**
+     * @param mixed $value
+     */
+    private static function normalizeRatingValue($value): ?int
+    {
+        if ($value === null || $value === '') {
+            return null;
+        }
+
+        if (!is_numeric($value)) {
+            return null;
+        }
+
+        $n = (int) round((float) $value);
+
+        if ($n < 1 || $n > 5) {
+            return null;
+        }
+
+        return $n;
+    }
+
+    private static function buildPublicRatings(array $form): array
+    {
+        $reviews = $form['reviews'] ?? [];
+        if (!is_array($reviews)) {
+            return [];
+        }
+
+        $out = [];
+        foreach (self::RATING_DEFINITIONS as $key => $label) {
+            $val = self::normalizeRatingValue($reviews[$key] ?? null);
+            if ($val !== null) {
+                $out[] = [
+                    'key' => $key,
+                    'label' => $label,
+                    'value' => $val,
+                ];
+            }
+        }
+
+        return $out;
     }
 }
