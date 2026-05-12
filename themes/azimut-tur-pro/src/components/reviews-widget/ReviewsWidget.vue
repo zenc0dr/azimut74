@@ -13,7 +13,7 @@
         </div>
 
         <div class="reviews-widget__list">
-            <article class="reviews-widget__item" v-for="item in combinedItems" :key="item.id">
+            <article class="reviews-widget__item" v-for="item in displayedItems" :key="item.id">
                 <div class="reviews-widget__head">
                     <strong>{{ item.name }}</strong>
                     <span class="reviews-widget__date">{{ item.date }}</span>
@@ -81,6 +81,14 @@ export default {
     computed: {
         combinedItems() {
             return [...this.initialItems, ...this.extraItems];
+        },
+        /** При выбранном теплоходе скрываем привязанные отзывы других судов (фильтр раньше действовал только на подгрузку). */
+        displayedItems() {
+            const sid = this.selectedShipId;
+            if (!sid) {
+                return this.combinedItems;
+            }
+            return this.combinedItems.filter((item) => String(item.ship_id) === String(sid));
         }
     },
     mounted() {

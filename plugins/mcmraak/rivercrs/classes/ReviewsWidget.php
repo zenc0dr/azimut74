@@ -107,9 +107,10 @@ class ReviewsWidget
 
         if ($shipId) {
             $shipId = (int) $shipId;
+            // Граница числа обязательна: иначе ship_id=1 совпадает с 12, 21, 101 и т.д.
             $regexp = '"ship_id"[[:space:]]*:[[:space:]]*"?'
                 . preg_quote((string) $shipId, '/')
-                . '"?';
+                . '"?([^0-9]|$)';
             $query->whereRaw('data REGEXP ?', [$regexp]);
         }
 
