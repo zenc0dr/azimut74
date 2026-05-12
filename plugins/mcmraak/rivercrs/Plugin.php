@@ -89,6 +89,8 @@ class Plugin extends PluginBase
         $this->registerConsoleCommand('rivercrs:service', 'Mcmraak\Rivercrs\Console\Check');
         $this->registerConsoleCommand('rivercrs:recache', 'Mcmraak\Rivercrs\Console\RecacheCheckins');
         $this->registerConsoleCommand('rivercrs:check_data', 'Mcmraak\Rivercrs\Console\CheckData');
+        $this->registerConsoleCommand('rivercrs:export-search-widget-urls', 'Mcmraak\Rivercrs\Console\ExportSearchWidgetUrls');
+        $this->registerConsoleCommand('rivercrs:distribute-reviews', 'Mcmraak\Rivercrs\Console\DistributeReviews');
     }
 
 
