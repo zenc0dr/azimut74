@@ -20,6 +20,9 @@ class Sms
 //            'text' => $text,
 //            'profile_code' => $profile_code
 //        ]);
+
+        return; # SMS отключены жёстко
+
         $sms = new self;
         $sms->sendSMS([
             'phone' => $phone,
