@@ -13,13 +13,13 @@ class ReviewsWidget
     const ENTITY_TRANSIT = 'transit';
     const ENTITY_MOTORSHIP = 'motorship';
 
-    /** Порядок и подписи оценок для публичного виджета (без reviews.azimut). */
+    /** Порядок и подписи оценок для публичного виджета (без reviews.azimut). Порядок как в макете заказчика. */
     private const RATING_DEFINITIONS = [
         'cabin' => 'Каюта',
         'food' => 'Питание',
-        'service' => 'Сервис',
         'tours' => 'Экскурсии',
-        'anim_on_board' => 'Анимация',
+        'anim_on_board' => 'Анимация на борту',
+        'service' => 'Обслуживание',
         'cruise' => 'Отдых в целом',
     ];
 
@@ -72,6 +72,12 @@ class ReviewsWidget
             'text' => $text,
             'date' => $review->created_at ? Carbon::parse($review->created_at)->format('d.m.Y') : '',
         ];
+
+        if ($review->created_at) {
+            $out['date_ru'] = self::formatRussianDate(Carbon::parse($review->created_at));
+        } else {
+            $out['date_ru'] = '';
+        }
 
         $trip = self::formatTripDateForWidget($form['trip_date'] ?? null);
         if ($trip !== null) {
@@ -151,6 +157,18 @@ class ReviewsWidget
         }
 
         return is_array($data) ? $data : [];
+    }
+
+    private static function formatRussianDate(Carbon $d): string
+    {
+        static $months = [
+            1 => 'января', 2 => 'февраля', 3 => 'марта', 4 => 'апреля',
+            5 => 'мая', 6 => 'июня', 7 => 'июля', 8 => 'августа',
+            9 => 'сентября', 10 => 'октября', 11 => 'ноября', 12 => 'декабря',
+        ];
+        $m = (int) $d->format('n');
+
+        return (int) $d->format('j') . ' ' . ($months[$m] ?? $d->format('m')) . ' ' . $d->format('Y');
     }
 
     /**
