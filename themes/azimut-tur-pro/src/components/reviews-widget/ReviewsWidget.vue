@@ -107,8 +107,8 @@
                                         >
                                             <defs>
                                                 <linearGradient :id="'h-' + item.id + '-' + n" x1="0" x2="1" y1="0" y2="0">
-                                                    <stop offset="50%" stop-color="#02542d"/>
-                                                    <stop offset="50%" stop-color="#02542d"/>
+                                                    <stop offset="50%" stop-color="#1a8f4a"/>
+                                                    <stop offset="50%" stop-color="#8aa89a"/>
                                                 </linearGradient>
                                             </defs>
                                             <path :fill="'url(#h-' + item.id + '-' + n + ')'" d="M10 1.5l2.6 5.3 5.9.9-4.3 4.2 1 5.9L10 15.9 4.8 17.8l1-5.9-4.3-4.2 5.9-.9L10 1.5z"/>
@@ -119,7 +119,7 @@
                                             viewBox="0 0 20 20"
                                             aria-hidden="true"
                                         >
-                                            <path fill="none" stroke="#02542d" stroke-width="1.4" d="M10 2.2l2.2 4.5 5 .8-3.6 3.5.9 5-4.5-2.4-4.5 2.4.9-5-3.6-3.5 5-.8 2.2-4.5z"/>
+                                            <path fill="none" stroke="#8aa89a" stroke-width="1.4" d="M10 2.2l2.2 4.5 5 .8-3.6 3.5.9 5-4.5-2.4-4.5 2.4.9-5-3.6-3.5 5-.8 2.2-4.5z"/>
                                         </svg>
                                     </span>
                                 </div>
@@ -191,8 +191,8 @@
                                     >
                                         <defs>
                                             <linearGradient :id="'hd-' + item.id + '-' + n" x1="0" x2="1" y1="0" y2="0">
-                                                <stop offset="50%" stop-color="#02542d"/>
-                                                <stop offset="50%" stop-color="#02542d"/>
+                                                <stop offset="50%" stop-color="#1a8f4a"/>
+                                                <stop offset="50%" stop-color="#8aa89a"/>
                                             </linearGradient>
                                         </defs>
                                         <path :fill="'url(#hd-' + item.id + '-' + n + ')'" d="M10 1.5l2.6 5.3 5.9.9-4.3 4.2 1 5.9L10 15.9 4.8 17.8l1-5.9-4.3-4.2 5.9-.9L10 1.5z"/>
@@ -203,7 +203,7 @@
                                         viewBox="0 0 20 20"
                                         aria-hidden="true"
                                     >
-                                        <path fill="none" stroke="#02542d" stroke-width="1.4" d="M10 2.2l2.2 4.5 5 .8-3.6 3.5.9 5-4.5-2.4-4.5 2.4.9-5-3.6-3.5 5-.8 2.2-4.5z"/>
+                                        <path fill="none" stroke="#8aa89a" stroke-width="1.4" d="M10 2.2l2.2 4.5 5 .8-3.6 3.5.9 5-4.5-2.4-4.5 2.4.9-5-3.6-3.5 5-.8 2.2-4.5z"/>
                                     </svg>
                                 </span>
                             </div>
@@ -471,12 +471,14 @@ export default {
     --rw-muted: #6b6f8a;
     --rw-body: #4a4d6b;
     --rw-link: #177bc0;
-    --rw-green: #02542d;
-    --rw-star-outline: #02542d;
-    --rw-green-bar: #ebffee;
-    --rw-red-bar: #fee9e7;
+    --rw-green: #1a8f4a;
+    --rw-star-outline: #8aa89a;
+    --rw-green-bar-start: #9fdfb4;
+    --rw-green-bar-end: #1a8f4a;
+    --rw-red-bar-start: #f5c4ce;
+    --rw-red-bar-end: #c84d63;
     --rw-red-fill: #c84d63;
-    --rw-track: #ffffff;
+    --rw-track: #ececf4;
     --rw-stat-label: var(--rw-title);
     --rw-stat-value: var(--rw-title);
 
@@ -674,6 +676,15 @@ export default {
         }
     }
 
+    /* Плоский блок оценок: белая «карточка» без теней */
+    .reviews-item-statistic {
+        background: #fff;
+        border-radius: 10px;
+        padding: 14px 18px 18px;
+        box-sizing: border-box;
+        box-shadow: none;
+    }
+
     .reviews-item-statistic-header {
         display: flex;
         align-items: center;
@@ -685,10 +696,10 @@ export default {
     @media only screen and (max-width: 766px) {
         .reviews-item-statistic-header {
             flex-direction: column;
-            padding: 14px 10px 6px;
+            padding: 0 0 6px;
             text-align: center;
-            border-radius: 4px;
-            box-shadow: 0 0 3.5px rgba(0, 0, 0, 0.25);
+            border-radius: 0;
+            box-shadow: none;
             gap: 12px;
             position: absolute;
             top: 20px;
@@ -744,18 +755,17 @@ export default {
     .reviews-item-statistic-list {
         display: flex;
         flex-direction: column;
-        gap: 4px;
+        gap: 10px;
     }
 
     .reviews-item-statistic-list-item-line {
         position: relative;
-        height: 6px;
-        border-radius: 16px;
+        height: 8px;
+        border-radius: 99px;
         background: var(--rw-track);
-        stroke-width: 6px;
-        stroke: var(--rw-green-bar);
         overflow: hidden;
-        filter: drop-shadow(0 4px 4px rgba(0, 0, 0, 0.25)) drop-shadow(0 4px 4px rgba(0, 0, 0, 0.25));
+        box-shadow: none;
+        filter: none;
 
         > span {
             position: absolute;
@@ -764,33 +774,21 @@ export default {
             display: block;
             height: 100%;
             box-sizing: border-box;
-            border-radius: 16px 0 0 16px;
+            border-radius: 99px;
             border-right: 0;
-            background: var(--rw-green-bar);
+            background: linear-gradient(90deg, var(--rw-green-bar-start) 0%, var(--rw-green-bar-end) 100%);
             box-shadow: none;
-
-            &::after {
-                position: absolute;
-                top: -1px;
-                right: 0;
-                width: 1px;
-                height: calc(100% + 2px);
-                content: '';
-                border-radius: 32px;
-                background: var(--rw-green);
-            }
         }
 
         &.__red > span {
-            background: var(--rw-red-bar);
+            background: linear-gradient(90deg, var(--rw-red-bar-start) 0%, var(--rw-red-bar-end) 100%);
             box-shadow: none;
         }
     }
 
     @media only screen and (min-width: 767px) {
         .reviews-item-statistic-list-item-line {
-            height: 12px;
-            stroke-width: 12px;
+            height: 10px;
         }
     }
 
@@ -799,7 +797,7 @@ export default {
         justify-content: space-between;
         align-items: baseline;
         margin-top: 0;
-        padding: 2px 3px 0;
+        padding: 4px 4px 0;
         gap: 12px;
         font-size: inherit;
         line-height: inherit;
@@ -825,7 +823,7 @@ export default {
         padding-top: 0;
     }
 
-    /* Референс: колонка оценок справа — точная геометрия из cruise_style */
+    /* Колонка оценок справа: геометрия из cruise_style, без обнуления внутренних отступов */
     .reviews-item-statistic.hide-L {
         display: none;
         flex-shrink: 0;
@@ -833,7 +831,6 @@ export default {
         margin-top: -125px;
         margin-bottom: 24px;
         margin-left: 64px;
-        padding-left: 0;
     }
 
     @media only screen and (max-width: 766px) {
