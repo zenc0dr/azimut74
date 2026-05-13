@@ -851,6 +851,27 @@ export default {
         align-items: flex-start;
         gap: 10px;
         margin-bottom: 16px;
+
+        .reviews-widget__btn:not(.reviews-widget__btn--link) {
+            background: #e12c2e;
+            color: #fff;
+            border: 0;
+
+            &:hover:not(:disabled) {
+                background: #c41e20;
+            }
+        }
+
+        .reviews-widget__btn--link {
+            background: #fff;
+            color: #e12c2e;
+            border: 1px solid #e12c2e;
+
+            &:hover {
+                background: #fff5f5;
+                color: #e12c2e;
+            }
+        }
     }
 
     &__dropdown {
@@ -884,14 +905,14 @@ export default {
         justify-content: center;
         text-decoration: none;
         background: #fff;
-        color: #177bc0;
-        border: 1px solid #177bc0;
+        color: #e12c2e;
+        border: 1px solid #e12c2e;
         box-sizing: border-box;
 
         &:hover {
-            background: #eef6fc;
+            background: #fff5f5;
             text-decoration: none;
-            color: #177bc0;
+            color: #e12c2e;
         }
     }
 
