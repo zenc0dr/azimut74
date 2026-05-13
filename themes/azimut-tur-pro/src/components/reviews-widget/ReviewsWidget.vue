@@ -1,7 +1,11 @@
 <template>
     <section class="reviews-widget mt-4" v-if="ready">
         <div class="reviews-widget__panel">
-            <select v-model="selectedShipId" class="reviews-widget__select">
+            <select
+                v-model="selectedShipId"
+                class="reviews-widget__select"
+                @change="onShipFilterChange"
+            >
                 <option value="">Все теплоходы</option>
                 <option v-for="(name, id) in ships" :key="id" :value="String(id)">
                     {{ name }}
@@ -23,9 +27,14 @@
                     v-if="item.trip_date || item.exp_rest"
                     class="reviews-widget__meta"
                 >
-                    <span v-if="item.trip_date" class="reviews-widget__meta-part">{{ item.trip_date }}</span>
-                    <span v-if="item.trip_date && item.exp_rest" class="reviews-widget__meta-sep">·</span>
-                    <span v-if="item.exp_rest" class="reviews-widget__meta-part">{{ item.exp_rest }}</span>
+                    <span v-if="item.trip_date" class="reviews-widget__pill">
+                        <span class="reviews-widget__pill-label">Дата рейса</span>
+                        <span class="reviews-widget__pill-value">{{ item.trip_date }}</span>
+                    </span>
+                    <span v-if="item.exp_rest" class="reviews-widget__pill">
+                        <span class="reviews-widget__pill-label">Ранее на теплоходах</span>
+                        <span class="reviews-widget__pill-value">{{ item.exp_rest }}</span>
+                    </span>
                 </div>
                 <div v-if="item.ratings && item.ratings.length" class="reviews-widget__ratings">
                     <div
@@ -48,8 +57,20 @@
             </article>
         </div>
 
-        <button type="button" class="reviews-widget__more" @click="loadMore">
-            {{ moreButtonText }}
+        <button
+            type="button"
+            class="reviews-widget__more"
+            :disabled="moreRemaining <= 0"
+            @click="loadMore"
+        >
+            <span class="reviews-widget__more-inner">
+                <span class="reviews-widget__more-label">{{ moreButtonLabel }}</span>
+                <span
+                    v-if="moreRemaining > 0"
+                    class="reviews-widget__more-badge"
+                    aria-hidden="true"
+                >{{ moreRemaining }}</span>
+            </span>
         </button>
     </section>
 </template>
@@ -75,10 +96,19 @@ export default {
             loadedIds: [],
             ships: {},
             selectedShipId: '',
-            moreButtonText: 'Подгрузить отзывы',
+            moreRemaining: 0,
+            moreFirstTime: true,
         };
     },
     computed: {
+        moreButtonLabel() {
+            if (this.moreRemaining <= 0) {
+                return this.moreFirstTime && !this.extraItems.length
+                    ? 'Нет дополнительных отзывов'
+                    : 'Все отзывы загружены';
+            }
+            return this.moreFirstTime ? 'Подгрузить отзывы' : 'ещё';
+        },
         combinedItems() {
             return [...this.initialItems, ...this.extraItems];
         },
@@ -104,12 +134,28 @@ export default {
             ? init.excludeIds.map(id => Number(id))
             : this.initialItems.map(item => Number(item.id));
         this.ships = init.ships || {};
+        const mr = Number(init.moreRemaining);
+        this.moreRemaining = Number.isFinite(mr) && mr >= 0 ? mr : 0;
         this.ready = true;
     },
     methods: {
+        onShipFilterChange() {
+            this.fetchRemaining();
+        },
+        fetchRemaining() {
+            axios.post('/rivercrs/api/reviewsCount', {
+                exclude_ids: this.loadedIds,
+                ship_id: this.selectedShipId || null,
+            }).then(({ data }) => {
+                if (typeof data.remaining === 'number') {
+                    this.moreRemaining = data.remaining;
+                }
+            });
+        },
         onShowClick() {
             this.extraItems = [];
             this.loadedIds = this.initialItems.map(item => Number(item.id));
+            this.moreFirstTime = true;
             this.loadMore();
         },
         loadMore() {
@@ -118,13 +164,14 @@ export default {
                 ship_id: this.selectedShipId || null,
             }).then(({ data }) => {
                 const items = Array.isArray(data.items) ? data.items : [];
-                if (!items.length) {
-                    return;
+                if (typeof data.remaining === 'number') {
+                    this.moreRemaining = data.remaining;
                 }
-
-                this.extraItems = [...this.extraItems, ...items];
-                this.loadedIds = [...this.loadedIds, ...items.map(item => Number(item.id))];
-                this.moreButtonText = 'ещё';
+                if (items.length) {
+                    this.extraItems = [...this.extraItems, ...items];
+                    this.loadedIds = [...this.loadedIds, ...items.map(item => Number(item.id))];
+                    this.moreFirstTime = false;
+                }
             });
         }
     }
@@ -160,6 +207,11 @@ export default {
         color: #fff;
         padding: 0 14px;
         cursor: pointer;
+
+        &:disabled {
+            opacity: 0.55;
+            cursor: not-allowed;
+        }
     }
 
     &__list {
@@ -196,15 +248,40 @@ export default {
     }
 
     &__meta {
-        color: #6b7a8c;
-        font-size: 12px;
-        line-height: 1.45;
-        margin-bottom: 8px;
+        display: flex;
+        flex-wrap: wrap;
+        gap: 8px;
+        align-items: stretch;
+        margin-bottom: 10px;
     }
 
-    &__meta-sep {
-        margin: 0 0.35em;
-        opacity: 0.7;
+    &__pill {
+        display: inline-flex;
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 2px;
+        padding: 6px 12px 7px;
+        border-radius: 10px;
+        background: linear-gradient(180deg, #fbfcfe 0%, #eef4fb 100%);
+        border: 1px solid #dfe8f2;
+        box-shadow: 0 1px 2px rgba(23, 123, 192, 0.07);
+        max-width: 100%;
+    }
+
+    &__pill-label {
+        font-size: 10px;
+        font-weight: 600;
+        letter-spacing: 0.05em;
+        text-transform: uppercase;
+        color: #6b7a8c;
+        line-height: 1.2;
+    }
+
+    &__pill-value {
+        font-size: 13px;
+        font-weight: 600;
+        color: #1e3a52;
+        line-height: 1.35;
     }
 
     &__ratings {
@@ -250,6 +327,29 @@ export default {
 
     &__more {
         margin-top: 14px;
+
+        &-inner {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+        }
+
+        &-label {
+            line-height: 1.25;
+        }
+
+        &-badge {
+            min-width: 1.6em;
+            padding: 2px 9px;
+            border-radius: 999px;
+            background: rgba(255, 255, 255, 0.22);
+            box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.35);
+            font-weight: 700;
+            font-size: 13px;
+            line-height: 1.35;
+            letter-spacing: 0.02em;
+        }
     }
 }
 </style>

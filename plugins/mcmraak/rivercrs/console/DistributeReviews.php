@@ -59,6 +59,12 @@ class DistributeReviews extends Command
         [$resolvedRows, $resolveErrors] = $this->resolveTargets($rows);
         $this->info('Успешно резолвлено строк: ' . count($resolvedRows));
 
+        [$resolvedRows, $mergeWarnings] = $this->mergeResolvedRowsByTarget($resolvedRows);
+        if ($mergeWarnings) {
+            $this->warn('Слияние строк CSV с одинаковой целью (см. отчёт): ' . count($mergeWarnings) . ' групп');
+        }
+        $this->info('Уникальных целей после слияния: ' . count($resolvedRows));
+
         if ($resolveErrors) {
             $this->warn('Строк с ошибками резолва: ' . count($resolveErrors));
         }
@@ -79,8 +85,56 @@ class DistributeReviews extends Command
             $this->info('Планируемых привязок: ' . count($allocations));
         }
 
-        $this->printReport($resolveErrors, $shortages, $usageStats, count($allocations), $dryRun);
+        $this->printReport($resolveErrors, $mergeWarnings, $shortages, $usageStats, count($allocations), $dryRun);
         return 0;
+    }
+
+    /**
+     * Несколько строк CSV могут резолвиться в одну и ту же сущность (например index → cruise id 2
+     * и cruise_menu,kruizy-iz-saratova → тот же cruise id 2). Привязки в БД общие — суммировать count нельзя.
+     * Объединяем в одну строку с count = max(...) по каждой уникальной цели, порядок — как первое вхождение.
+     *
+     * @return array
+     */
+    private function mergeResolvedRowsByTarget(array $resolvedRows): array
+    {
+        $merged = [];
+        $keyToIndex = [];
+        $warnings = [];
+
+        foreach ($resolvedRows as $row) {
+            $entityType = $row['target']['entity_type'];
+            $entityId = (int) $row['target']['entity_id'];
+            $key = $entityType . ':' . $entityId;
+
+            if (!isset($keyToIndex[$key])) {
+                $keyToIndex[$key] = count($merged);
+                $row['_merge_source_lines'] = [$row['line']];
+                $merged[] = $row;
+                continue;
+            }
+
+            $idx = $keyToIndex[$key];
+            $merged[$idx]['_merge_source_lines'][] = $row['line'];
+            if ((int) $row['count'] > (int) $merged[$idx]['count']) {
+                $merged[$idx]['count'] = (int) $row['count'];
+            }
+        }
+
+        foreach ($merged as $idx => $row) {
+            $lines = $row['_merge_source_lines'];
+            unset($merged[$idx]['_merge_source_lines']);
+            if (count($lines) > 1) {
+                $warnings[] = [
+                    'entity_type' => $row['target']['entity_type'],
+                    'entity_id' => (int) $row['target']['entity_id'],
+                    'lines' => $lines,
+                    'count' => (int) $row['count'],
+                ];
+            }
+        }
+
+        return [$merged, $warnings];
     }
 
     private function resolveCsvPath($path)
@@ -353,8 +407,14 @@ class DistributeReviews extends Command
         }
     }
 
-    private function printReport(array $resolveErrors, array $shortages, array $usageStats, int $allocationCount, bool $dryRun)
-    {
+    private function printReport(
+        array $resolveErrors,
+        array $mergeWarnings,
+        array $shortages,
+        array $usageStats,
+        int $allocationCount,
+        bool $dryRun
+    ) {
         $this->info('--- Итоговый отчет ---');
         $this->line('Режим: ' . ($dryRun ? 'dry-run' : 'apply'));
         $this->line('Запрошено отзывов: ' . $usageStats['requested']);
@@ -363,6 +423,19 @@ class DistributeReviews extends Command
         $this->line('Назначено cruise: ' . (int) $usageStats['by_type'][ReviewsWidget::ENTITY_CRUISE]);
         $this->line('Назначено transit: ' . (int) $usageStats['by_type'][ReviewsWidget::ENTITY_TRANSIT]);
         $this->line('Назначено motorship: ' . (int) $usageStats['by_type'][ReviewsWidget::ENTITY_MOTORSHIP]);
+
+        if ($mergeWarnings) {
+            $this->warn('Слияние дубликатов цели (count = max по строкам): ' . count($mergeWarnings));
+            foreach ($mergeWarnings as $mw) {
+                $this->line(sprintf(
+                    '  %s:%d → итого %d отзывов (строки CSV %s)',
+                    $mw['entity_type'],
+                    $mw['entity_id'],
+                    $mw['count'],
+                    implode(', ', $mw['lines'])
+                ));
+            }
+        }
 
         if ($resolveErrors) {
             $this->warn('Ошибки резолва (' . count($resolveErrors) . '):');

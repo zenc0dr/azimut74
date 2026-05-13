@@ -78,9 +78,9 @@ class ReviewsWidget
             $out['trip_date'] = $trip;
         }
 
-        $expRest = trim((string) ($form['exp_rest'] ?? ''));
-        if ($expRest !== '') {
-            $out['exp_rest'] = $expRest;
+        $expRestLabel = self::formatExpRestForWidget($form['exp_rest'] ?? null);
+        if ($expRestLabel !== null) {
+            $out['exp_rest'] = $expRestLabel;
         }
 
         $ratings = self::buildPublicRatings($form);
@@ -96,7 +96,14 @@ class ReviewsWidget
         return Motorships::orderBy('sort_order')->lists('name', 'id');
     }
 
-    public static function getMoreReviews($excludedIds = [], $shipId = null, $limit = 5)
+    /**
+     * Базовый запрос отзывов для подгрузки (исключённые id + опционально теплоход).
+     *
+     * @param mixed $excludedIds
+     * @param mixed $shipId
+     * @return \Illuminate\Database\Eloquent\Builder
+     */
+    public static function moreReviewsQuery($excludedIds = [], $shipId = null)
     {
         $query = Review::query()->orderBy('created_at', 'desc');
 
@@ -114,7 +121,25 @@ class ReviewsWidget
             $query->whereRaw('data REGEXP ?', [$regexp]);
         }
 
-        return $query->take((int) $limit)->get();
+        return $query;
+    }
+
+    /**
+     * Сколько отзывов ещё доступно для подгрузки с учётом исключений и фильтра по судну.
+     *
+     * @param mixed $excludedIds
+     * @param mixed $shipId
+     */
+    public static function countMoreReviews($excludedIds = [], $shipId = null): int
+    {
+        return (int) self::moreReviewsQuery($excludedIds, $shipId)->count();
+    }
+
+    public static function getMoreReviews($excludedIds = [], $shipId = null, $limit = 5)
+    {
+        return self::moreReviewsQuery($excludedIds, $shipId)
+            ->take((int) $limit)
+            ->get();
     }
 
     public static function extractForm(Review $review)
@@ -142,6 +167,35 @@ class ReviewsWidget
         } catch (\Throwable $e) {
             return null;
         }
+    }
+
+    /**
+     * Текст для поля «сколько раз отдыхали на теплоходе» (как в zen/reviews форме).
+     *
+     * @param mixed $raw
+     */
+    private static function formatExpRestForWidget($raw): ?string
+    {
+        if ($raw === null || $raw === '') {
+            return null;
+        }
+
+        if (is_numeric($raw)) {
+            $n = (int) $raw;
+            if ($n === 1) {
+                return 'Первый раз';
+            }
+            if ($n === 2) {
+                return 'Второй раз';
+            }
+            if ($n === 3) {
+                return 'Три и более раз';
+            }
+        }
+
+        $s = trim((string) $raw);
+
+        return $s !== '' ? $s : null;
     }
 
     /**

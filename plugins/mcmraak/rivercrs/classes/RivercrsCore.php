@@ -126,12 +126,14 @@ class RivercrsCore
             ->values()
             ->toArray();
 
+        $shipExcludeIds = array_values(array_map('intval', array_column($boundReviews, 'id')));
         $data['reviewsWidget'] = [
             'entityType' => ReviewsWidget::ENTITY_MOTORSHIP,
             'entityId' => (int) $ship->id,
             'items' => $boundReviews,
-            'excludeIds' => array_values(array_map('intval', array_column($boundReviews, 'id'))),
+            'excludeIds' => $shipExcludeIds,
             'ships' => ReviewsWidget::getShipOptions(),
+            'moreRemaining' => ReviewsWidget::countMoreReviews($shipExcludeIds, null),
         ];
 
         if (isset($_GET['dump'])) {
@@ -201,12 +203,14 @@ class RivercrsCore
             ->values()
             ->toArray();
 
+        $cruiseExcludeIds = array_values(array_map('intval', array_column($boundReviews, 'id')));
         $data['reviewsWidget'] = [
             'entityType' => $entityType,
             'entityId' => (int) $cruise->id,
             'items' => $boundReviews,
-            'excludeIds' => array_values(array_map('intval', array_column($boundReviews, 'id'))),
+            'excludeIds' => $cruiseExcludeIds,
             'ships' => ReviewsWidget::getShipOptions(),
+            'moreRemaining' => ReviewsWidget::countMoreReviews($cruiseExcludeIds, null),
         ];
 
         if (isset($_GET['dump'])) {

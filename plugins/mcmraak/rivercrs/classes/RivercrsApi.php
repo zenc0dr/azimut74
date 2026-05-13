@@ -96,6 +96,7 @@ class RivercrsApi
                 'items' => [],
                 'exclude_ids' => [],
                 'ships' => [],
+                'remaining' => 0,
             ]);
             return;
         }
@@ -107,10 +108,13 @@ class RivercrsApi
             ->values()
             ->toArray();
 
+        $excludeIds = array_values(array_map('intval', array_column($items, 'id')));
+
         self::json([
             'items' => $items,
-            'exclude_ids' => array_values(array_map('intval', array_column($items, 'id'))),
+            'exclude_ids' => $excludeIds,
             'ships' => ReviewsWidget::getShipOptions(),
+            'remaining' => ReviewsWidget::countMoreReviews($excludeIds, null),
         ]);
     }
 
@@ -120,6 +124,7 @@ class RivercrsApi
         $excludedIds = request('exclude_ids', []);
         $shipId = request('ship_id');
 
+        $total = ReviewsWidget::countMoreReviews($excludedIds, $shipId);
         $items = ReviewsWidget::getMoreReviews($excludedIds, $shipId, 5)
             ->map(function ($review) {
                 return ReviewsWidget::formatReview($review);
@@ -127,9 +132,23 @@ class RivercrsApi
             ->values()
             ->toArray();
 
+        $remaining = max(0, $total - count($items));
+
         self::json([
             'items' => $items,
             'exclude_ids' => array_values(array_map('intval', array_column($items, 'id'))),
+            'remaining' => $remaining,
+        ]);
+    }
+
+    # http://azimut74/rivercrs/api/reviewsCount
+    public function reviewsCount()
+    {
+        $excludedIds = request('exclude_ids', []);
+        $shipId = request('ship_id');
+
+        self::json([
+            'remaining' => ReviewsWidget::countMoreReviews($excludedIds, $shipId),
         ]);
     }
 }
