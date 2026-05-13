@@ -1,19 +1,27 @@
 <template>
     <section class="reviews-widget mt-4" v-if="ready">
         <div class="reviews-widget__panel">
-            <select
-                v-model="selectedShipId"
-                class="reviews-widget__select"
-                @change="onShipFilterChange"
-            >
-                <option value="">Все теплоходы</option>
-                <option v-for="(name, id) in ships" :key="id" :value="String(id)">
-                    {{ name }}
-                </option>
-            </select>
+            <div class="reviews-widget__dropdown">
+                <Dropdown
+                    v-model="selectedShipId"
+                    class="reviews-widget__ship-dropdown"
+                    :options="shipOptions"
+                    option-label="label"
+                    option-value="id"
+                    placeholder="Все теплоходы"
+                    :filter="true"
+                    filter-placeholder="Поиск теплохода…"
+                    empty-filter-message="Ничего не найдено"
+                    :show-clear="true"
+                    @change="onShipFilterChange"
+                />
+            </div>
             <button type="button" class="reviews-widget__btn" @click="onShowClick">
                 Показать
             </button>
+            <a href="/reviews" class="reviews-widget__btn reviews-widget__btn--link">
+                Оставить отзыв
+            </a>
         </div>
 
         <div class="reviews-widget__list">
@@ -243,11 +251,15 @@
 
 <script>
 import axios from "axios";
+import Dropdown from "primevue/dropdown";
 
 const COMMENT_CLAMP_CHARS = 320;
 
 export default {
     name: "ReviewsWidget",
+    components: {
+        Dropdown,
+    },
     props: {
         initData: {
             type: Object,
@@ -262,8 +274,9 @@ export default {
             initialItems: [],
             extraItems: [],
             loadedIds: [],
-            ships: {},
-            selectedShipId: '',
+            /** @type {Array<{id:number,label:string}>} */
+            shipOptions: [],
+            selectedShipId: null,
             moreRemaining: 0,
             moreFirstTime: true,
             expanded: {},
@@ -283,11 +296,11 @@ export default {
         },
         displayedItems() {
             const sid = this.selectedShipId;
-            if (!sid) {
+            if (sid == null || sid === "") {
                 return this.combinedItems;
             }
             return this.combinedItems.filter((item) => String(item.ship_id) === String(sid));
-        }
+        },
     },
     mounted() {
         const init = this.initData;
@@ -301,12 +314,45 @@ export default {
         this.loadedIds = Array.isArray(init.excludeIds)
             ? init.excludeIds.map(id => Number(id))
             : this.initialItems.map(item => Number(item.id));
-        this.ships = init.ships || {};
+        this.shipOptions = this.normalizeShipOptions(init.ships);
         const mr = Number(init.moreRemaining);
         this.moreRemaining = Number.isFinite(mr) && mr >= 0 ? mr : 0;
         this.ready = true;
     },
     methods: {
+        /**
+         * API: массив { id, label } или устаревший объект { id: name }.
+         * @param {Array|Object|null} raw
+         * @returns {Array<{id:number,label:string}>}
+         */
+        normalizeShipOptions(raw) {
+            if (!raw) {
+                return [];
+            }
+            if (Array.isArray(raw)) {
+                return raw
+                    .map((row) => ({
+                        id: Number(row.id),
+                        label: String(row.label != null ? row.label : "").trim() || String(row.id),
+                    }))
+                    .filter((row) => Number.isFinite(row.id));
+            }
+            return Object.keys(raw)
+                .map((k) => ({
+                    id: Number(k),
+                    label: String(raw[k] || "").trim() || k,
+                }))
+                .filter((row) => Number.isFinite(row.id))
+                .sort((a, b) => a.label.localeCompare(b.label, "ru", { sensitivity: "base" }));
+        },
+        shipPayloadId() {
+            const sid = this.selectedShipId;
+            if (sid == null || sid === "") {
+                return null;
+            }
+            const n = Number(sid);
+            return Number.isFinite(n) ? n : null;
+        },
         shipHref(item) {
             if (!item.ship_id) {
                 return null;
@@ -382,7 +428,7 @@ export default {
         fetchRemaining() {
             axios.post('/rivercrs/api/reviewsCount', {
                 exclude_ids: this.loadedIds,
-                ship_id: this.selectedShipId || null,
+                ship_id: this.shipPayloadId(),
             }).then(({ data }) => {
                 if (typeof data.remaining === 'number') {
                     this.moreRemaining = data.remaining;
@@ -398,7 +444,7 @@ export default {
         loadMore() {
             axios.post('/rivercrs/api/reviewsMore', {
                 exclude_ids: this.loadedIds,
-                ship_id: this.selectedShipId || null,
+                ship_id: this.shipPayloadId(),
             }).then(({ data }) => {
                 const items = Array.isArray(data.items) ? data.items : [];
                 if (typeof data.remaining === 'number') {
@@ -804,17 +850,19 @@ export default {
 
     &__panel {
         display: flex;
+        flex-wrap: wrap;
+        align-items: flex-start;
         gap: 10px;
         margin-bottom: 16px;
     }
 
-    &__select {
-        flex: 1 1 auto;
-        min-height: 38px;
-        border: 1px solid #d3dde8;
-        border-radius: 8px;
-        padding: 0 10px;
-        background: #fff;
+    &__dropdown {
+        flex: 1 1 220px;
+        min-width: 0;
+    }
+
+    &__ship-dropdown {
+        width: 100%;
     }
 
     &__btn,
@@ -830,6 +878,23 @@ export default {
         &:disabled {
             opacity: 0.55;
             cursor: not-allowed;
+        }
+    }
+
+    &__btn--link {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        text-decoration: none;
+        background: #fff;
+        color: #177bc0;
+        border: 1px solid #177bc0;
+        box-sizing: border-box;
+
+        &:hover {
+            background: #eef6fc;
+            text-decoration: none;
+            color: #177bc0;
         }
     }
 

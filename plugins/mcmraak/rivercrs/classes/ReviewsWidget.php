@@ -97,9 +97,33 @@ class ReviewsWidget
         return $out;
     }
 
+    /**
+     * Список теплоходов для фильтра виджета: короткое имя (аксессор standard_name), по алфавиту.
+     *
+     * @return array<int, array{id:int,label:string}>
+     */
     public static function getShipOptions()
     {
-        return Motorships::orderBy('sort_order')->lists('name', 'id');
+        $rows = Motorships::query()->get(['id', 'name']);
+
+        $out = $rows->map(function (Motorships $m) {
+            $label = trim((string) $m->standard_name);
+            if ($label === '') {
+                $label = trim((string) $m->name);
+            }
+
+            return [
+                'id' => (int) $m->id,
+                'label' => $label,
+            ];
+        });
+
+        return $out
+            ->sortBy(function ($row) {
+                return mb_strtolower($row['label'], 'UTF-8');
+            })
+            ->values()
+            ->all();
     }
 
     /**
