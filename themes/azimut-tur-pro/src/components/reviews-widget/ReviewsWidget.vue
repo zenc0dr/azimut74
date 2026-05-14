@@ -295,6 +295,9 @@ import Dropdown from "primevue/dropdown";
 
 const COMMENT_CLAMP_CHARS = 320;
 
+/** Префикс логов модалки в консоли (фильтр DevTools: ReviewsWidget:modal). Отключить: localStorage.setItem('REVIEWS_MODAL_DEBUG', '0') */
+const REVIEWS_MODAL_LOG_PREFIX = "[ReviewsWidget:modal]";
+
 export default {
     name: "ReviewsWidget",
     components: {
@@ -337,6 +340,8 @@ export default {
             reviewIframeHeightDebounceTimer: null,
             /** @type {number|null} */
             reviewIframePollInterval: null,
+            /** @type {number|null} */
+            _reviewModalLastMeasuredH: null,
         };
     },
     computed: {
@@ -400,6 +405,29 @@ export default {
         },
     },
     methods: {
+        /**
+         * Логи отладки модалки отзыва / iframe. По умолчанию включены.
+         * Отключить: localStorage.setItem('REVIEWS_MODAL_DEBUG', '0')
+         * @param {string} step
+         * @param {Record<string, unknown>} [extra]
+         */
+        reviewModalLog(step, extra) {
+            try {
+                if (typeof localStorage !== "undefined" && localStorage.getItem("REVIEWS_MODAL_DEBUG") === "0") {
+                    return;
+                }
+            } catch (e) {
+                /* private mode */
+            }
+            if (typeof console === "undefined" || !console.info) {
+                return;
+            }
+            if (extra && Object.keys(extra).length) {
+                console.info(REVIEWS_MODAL_LOG_PREFIX, step, extra);
+            } else {
+                console.info(REVIEWS_MODAL_LOG_PREFIX, step);
+            }
+        },
         /**
          * API: массив { id, label } или устаревший объект { id: name }.
          * @param {Array|Object|null} raw
@@ -498,6 +526,18 @@ export default {
             this.reviewModalIframeKey += 1;
             this.reviewModalOpen = true;
             document.body.style.overflow = "hidden";
+            let iframeSrc = "";
+            try {
+                iframeSrc = this.reviewIframeSrc;
+            } catch (e) {
+                iframeSrc = "(computed error)";
+            }
+            this.reviewModalLog("openReviewModal", {
+                parentOrigin: window.location.origin,
+                parentHref: window.location.href,
+                iframeKey: this.reviewModalIframeKey,
+                iframeSrcComputed: iframeSrc,
+            });
             this.$nextTick(() => {
                 const bd = this.$refs.reviewModalBackdrop;
                 if (bd) {
@@ -506,11 +546,13 @@ export default {
             });
         },
         closeReviewModal() {
+            this.reviewModalLog("closeReviewModal");
             this.clearReviewIframeHeightSync();
             const iframe = this.$refs.reviewIframe;
             if (iframe) {
                 iframe.style.height = "";
             }
+            this._reviewModalLastMeasuredH = null;
             this.reviewModalOpen = false;
             document.body.style.overflow = "";
         },
@@ -559,6 +601,11 @@ export default {
          * Отложенные замеры и MutationObserver — из-за позднего монтажа Vue внутри iframe на проде.
          */
         onReviewIframeLoad() {
+            const iframe = this.$refs.reviewIframe;
+            this.reviewModalLog("iframe load event", {
+                iframeSrcAttr: iframe ? iframe.getAttribute("src") : null,
+                iframeActualSrc: iframe ? iframe.src : null,
+            });
             this.$nextTick(() => {
                 this.setupReviewIframeHeightSync();
             });
@@ -567,6 +614,10 @@ export default {
             this.clearReviewIframeHeightSync();
             const iframe = this.$refs.reviewIframe;
             if (!iframe || !this.reviewModalOpen) {
+                this.reviewModalLog("setupReviewIframeHeightSync aborted", {
+                    hasIframe: !!iframe,
+                    reviewModalOpen: this.reviewModalOpen,
+                });
                 return;
             }
 
@@ -582,9 +633,19 @@ export default {
 
             window.addEventListener("message", this._reviewIframePostMessageBound);
 
+            let doc = null;
+            let docAccessError = null;
             try {
-                const doc = iframe.contentDocument || iframe.contentWindow?.document;
-                if (doc && typeof ResizeObserver !== "undefined") {
+                doc = iframe.contentDocument || iframe.contentWindow?.document;
+            } catch (e) {
+                docAccessError = e && e.message ? String(e.message) : String(e);
+            }
+
+            const hasResizeObserver = typeof ResizeObserver !== "undefined";
+            const hasMutationObserver = typeof MutationObserver !== "undefined";
+
+            try {
+                if (doc && hasResizeObserver) {
                     const ro = new ResizeObserver(() => scheduleMeasure());
                     ro.observe(doc.documentElement);
                     if (doc.body) {
@@ -592,7 +653,7 @@ export default {
                     }
                     this.reviewIframeResizeObserver = ro;
                 }
-                if (doc && typeof MutationObserver !== "undefined") {
+                if (doc && hasMutationObserver) {
                     const mo = new MutationObserver(() => scheduleMeasure());
                     mo.observe(doc.documentElement, {
                         subtree: true,
@@ -605,8 +666,20 @@ export default {
             } catch (e) {
                 this.reviewIframeResizeObserver = null;
                 this.reviewIframeMutationObserver = null;
+                this.reviewModalLog("setup observers threw", {
+                    message: e && e.message ? e.message : String(e),
+                });
             }
 
+            this.reviewModalLog("setupReviewIframeHeightSync", {
+                iframeSrc: iframe.src,
+                contentDocumentAccessible: !!doc,
+                docAccessError,
+                resizeObserverAttached: !!this.reviewIframeResizeObserver,
+                mutationObserverAttached: !!this.reviewIframeMutationObserver,
+                hasResizeObserver,
+                hasMutationObserver,
+            });
             this.reviewIframeOnWindowResize = () => scheduleMeasure();
             window.addEventListener("resize", this.reviewIframeOnWindowResize);
 
@@ -632,11 +705,15 @@ export default {
             }
             const el = this.$refs.reviewIframe;
             if (!el) {
+                this.reviewModalLog("measure skip: no iframe ref");
                 return;
             }
             try {
                 const doc = el.contentDocument || el.contentWindow?.document;
                 if (!doc || !doc.documentElement) {
+                    this.reviewModalLog("measure skip: no contentDocument (cross-origin или ещё не готов)", {
+                        hasDoc: !!doc,
+                    });
                     return;
                 }
                 const body = doc.body;
@@ -648,10 +725,29 @@ export default {
                     html ? html.offsetHeight : 0,
                 );
                 if (innerH > 0) {
+                    const prevH = this._reviewModalLastMeasuredH;
                     el.style.height = `${innerH}px`;
+                    if (prevH !== innerH) {
+                        this._reviewModalLastMeasuredH = innerH;
+                        this.reviewModalLog("measure apply from document", {
+                            innerH,
+                            prevH,
+                            inlineHeightSet: el.style.height,
+                            bodyScrollHeight: body ? body.scrollHeight : null,
+                            htmlScrollHeight: html ? html.scrollHeight : null,
+                        });
+                    }
+                } else {
+                    this.reviewModalLog("measure: innerH is 0", {
+                        bodyExists: !!body,
+                        htmlExists: !!html,
+                    });
                 }
             } catch (e) {
-                /* cross-origin */
+                this.reviewModalLog("measure SecurityError / read failed", {
+                    message: e && e.message ? e.message : String(e),
+                    name: e && e.name ? e.name : undefined,
+                });
             }
         },
         onReviewIframePostMessage(event) {
@@ -663,6 +759,10 @@ export default {
                 return;
             }
             if (!this.isTrustedReviewIframeOrigin(event.origin)) {
+                this.reviewModalLog("postMessage ignored: origin not trusted", {
+                    eventOrigin: event.origin,
+                    parentOrigin: window.location.origin,
+                });
                 return;
             }
             if (!event.data || event.data.type !== "reviews-iframe-resize") {
@@ -670,9 +770,14 @@ export default {
             }
             const h = Number(event.data.height);
             if (!Number.isFinite(h) || h < 80) {
+                this.reviewModalLog("postMessage ignored: bad height", { height: event.data.height });
                 return;
             }
             iframe.style.height = `${Math.ceil(h)}px`;
+            this.reviewModalLog("postMessage height applied", {
+                height: Math.ceil(h),
+                inlineHeight: iframe.style.height,
+            });
         },
         isTrustedReviewIframeOrigin(origin) {
             try {
