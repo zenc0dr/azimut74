@@ -13,12 +13,9 @@
                     filter-placeholder="Поиск теплохода…"
                     empty-filter-message="Ничего не найдено"
                     :show-clear="true"
-                    @change="onShipFilterChange"
+                    @input="onShipSelect"
                 />
             </div>
-            <button type="button" class="reviews-widget__btn" @click="onShowClick">
-                Показать
-            </button>
             <a href="/reviews" class="reviews-widget__btn reviews-widget__btn--link">
                 Оставить отзыв
             </a>
@@ -219,21 +216,26 @@
             </article>
         </div>
 
-        <button
-            type="button"
-            class="reviews-widget__more"
-            :disabled="moreRemaining <= 0"
-            @click="loadMore"
-        >
-            <span class="reviews-widget__more-inner">
-                <span class="reviews-widget__more-label">{{ moreButtonLabel }}</span>
-                <span
-                    v-if="moreRemaining > 0"
-                    class="reviews-widget__more-badge"
-                    aria-hidden="true"
-                >{{ moreRemaining }}</span>
-            </span>
-        </button>
+        <div class="reviews-widget__footer">
+            <button
+                type="button"
+                class="reviews-widget__more"
+                :disabled="moreRemaining <= 0"
+                @click="loadMore"
+            >
+                <span class="reviews-widget__more-inner">
+                    <span class="reviews-widget__more-label">{{ moreButtonLabel }}</span>
+                    <span
+                        v-if="moreRemaining > 0"
+                        class="reviews-widget__more-badge"
+                        aria-hidden="true"
+                    >{{ moreRemaining }}</span>
+                </span>
+            </button>
+            <a href="/reviews" class="reviews-widget__btn reviews-widget__btn--link reviews-widget__footer-review-link">
+                Оставить отзыв
+            </a>
+        </div>
     </section>
 </template>
 
@@ -402,24 +404,29 @@ export default {
         toggleExpand(id) {
             this.$set(this.expanded, id, !this.expanded[id]);
         },
-        onShipFilterChange() {
+        /**
+         * Значение из emit Dropdown (до/после v-model) — явно синхронизируем, чтобы ship_id в запросах совпадал с фильтром.
+         * @param {number|string|null} shipId
+         */
+        onShipSelect(shipId) {
+            this.selectedShipId = shipId;
+            this.extraItems = [];
+            this.loadedIds = this.initialItems.map((item) => Number(item.id));
+            this.moreFirstTime = true;
             this.fetchRemaining();
+            this.loadMore();
         },
         fetchRemaining() {
-            axios.post('/rivercrs/api/reviewsCount', {
-                exclude_ids: this.loadedIds,
-                ship_id: this.shipPayloadId(),
-            }).then(({ data }) => {
-                if (typeof data.remaining === 'number') {
-                    this.moreRemaining = data.remaining;
-                }
-            });
-        },
-        onShowClick() {
-            this.extraItems = [];
-            this.loadedIds = this.initialItems.map(item => Number(item.id));
-            this.moreFirstTime = true;
-            this.loadMore();
+            return axios
+                .post("/rivercrs/api/reviewsCount", {
+                    exclude_ids: this.loadedIds,
+                    ship_id: this.shipPayloadId(),
+                })
+                .then(({ data }) => {
+                    if (typeof data.remaining === "number") {
+                        this.moreRemaining = data.remaining;
+                    }
+                });
         },
         loadMore() {
             axios.post('/rivercrs/api/reviewsMore', {
@@ -792,24 +799,14 @@ export default {
         gap: 10px;
         margin-bottom: 16px;
 
-        .reviews-widget__btn:not(.reviews-widget__btn--link) {
-            background: #e12c2e;
-            color: #fff;
-            border: 0;
-
-            &:hover:not(:disabled) {
-                background: #c41e20;
-            }
-        }
-
         .reviews-widget__btn--link {
             background: #fff;
-            color: #e12c2e;
-            border: 1px solid #e12c2e;
+            color: #1e88e5;
+            border: 1px solid #1e88e5;
 
             &:hover {
-                background: #fff5f5;
-                color: #e12c2e;
+                background: #e3f2fd;
+                color: #1e88e5;
             }
         }
     }
@@ -845,15 +842,31 @@ export default {
         justify-content: center;
         text-decoration: none;
         background: #fff;
-        color: #e12c2e;
-        border: 1px solid #e12c2e;
+        color: #1e88e5;
+        border: 1px solid #1e88e5;
         box-sizing: border-box;
 
         &:hover {
-            background: #fff5f5;
+            background: #e3f2fd;
             text-decoration: none;
-            color: #e12c2e;
+            color: #1e88e5;
         }
+    }
+
+    &__footer {
+        display: flex;
+        flex-wrap: wrap;
+        align-items: center;
+        gap: 10px;
+        margin-top: 14px;
+    }
+
+    &__footer .reviews-widget__more {
+        margin-top: 0;
+    }
+
+    &__footer-review-link {
+        margin-left: auto;
     }
 
     &__list {
@@ -863,8 +876,6 @@ export default {
     }
 
     &__more {
-        margin-top: 14px;
-
         &-inner {
             display: inline-flex;
             align-items: center;
