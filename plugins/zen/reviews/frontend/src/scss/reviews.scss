@@ -148,6 +148,23 @@ $reviews-second-color: #e0e0e0;
             }
         }
 
+        &__button {
+            button {
+                background-color: #e0292c !important;
+                border-color: #e0292c !important;
+                color: #fff !important;
+
+                &:hover:not(:disabled):not(.active) {
+                    box-shadow: 0 4px 14px rgba(224, 41, 44, 0.35);
+                }
+
+                &:focus-visible {
+                    outline: 2px solid #e0292c;
+                    outline-offset: 2px;
+                }
+            }
+        }
+
         &__input {
             display: flex;
             flex-direction: column;

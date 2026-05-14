@@ -1,5 +1,6 @@
 <template>
     <section class="reviews-widget mt-4" v-if="ready">
+        <h2 class="reviews-widget__heading">Отзывы</h2>
         <div class="reviews-widget__panel">
             <div class="reviews-widget__dropdown">
                 <Dropdown
@@ -16,9 +17,13 @@
                     @input="onShipSelect"
                 />
             </div>
-            <a href="/reviews" class="reviews-widget__btn reviews-widget__btn--link">
+            <button
+                type="button"
+                class="reviews-widget__btn reviews-widget__btn--link"
+                @click="openReviewModal"
+            >
                 Оставить отзыв
-            </a>
+            </button>
         </div>
 
         <div class="reviews-widget__list">
@@ -44,7 +49,12 @@
                         <div v-if="item.ship_name" class="reviews-item-person-text">
                             <b>Теплоход:</b>
                             <span>
-                                <a v-if="shipHref(item)" :href="shipHref(item)">{{ item.ship_name }}</a>
+                                <a
+                                    v-if="shipHref(item)"
+                                    :href="shipHref(item)"
+                                    target="_blank"
+                                    rel="noopener noreferrer"
+                                >{{ item.ship_name }}</a>
                                 <template v-else> {{ item.ship_name }}</template>
                             </span>
                         </div>
@@ -232,9 +242,49 @@
                     >{{ moreRemaining }}</span>
                 </span>
             </button>
-            <a href="/reviews" class="reviews-widget__btn reviews-widget__btn--link reviews-widget__footer-review-link">
+            <button
+                type="button"
+                class="reviews-widget__btn reviews-widget__btn--link reviews-widget__footer-review-link"
+                @click="openReviewModal"
+            >
                 Оставить отзыв
-            </a>
+            </button>
+        </div>
+
+        <div
+            v-if="reviewModalOpen"
+            class="reviews-widget__modal-backdrop"
+            tabindex="-1"
+            ref="reviewModalBackdrop"
+            role="dialog"
+            aria-modal="true"
+            aria-labelledby="reviews-widget-review-modal-title"
+            @click.self="closeReviewModal"
+            @keyup.esc="closeReviewModal"
+        >
+            <div class="reviews-widget__modal" @click.stop>
+                <div class="reviews-widget__modal-head" ref="reviewModalHead">
+                    <h3 id="reviews-widget-review-modal-title" class="reviews-widget__modal-title">
+                        Оставить отзыв
+                    </h3>
+                    <button
+                        type="button"
+                        class="reviews-widget__modal-close"
+                        aria-label="Закрыть"
+                        @click="closeReviewModal"
+                    >
+                        ×
+                    </button>
+                </div>
+                <iframe
+                    ref="reviewIframe"
+                    :key="reviewModalIframeKey"
+                    class="reviews-widget__modal-iframe"
+                    src="/reviews-modal"
+                    title="Форма отзыва"
+                    @load="onReviewIframeLoad"
+                />
+            </div>
         </div>
     </section>
 </template>
@@ -270,6 +320,11 @@ export default {
             moreRemaining: 0,
             moreFirstTime: true,
             expanded: {},
+            reviewModalOpen: false,
+            reviewModalIframeKey: 0,
+            /** @type {ResizeObserver|null} */
+            reviewIframeResizeObserver: null,
+            reviewIframeOnWindowResize: null,
         };
     },
     computed: {
@@ -308,6 +363,21 @@ export default {
         const mr = Number(init.moreRemaining);
         this.moreRemaining = Number.isFinite(mr) && mr >= 0 ? mr : 0;
         this.ready = true;
+    },
+    beforeDestroy() {
+        this.clearReviewIframeHeightSync();
+        if (this.reviewModalOpen) {
+            document.body.style.overflow = "";
+        }
+    },
+    watch: {
+        reviewModalOpen(open) {
+            this.$nextTick(() => {
+                if (open && this.$refs.reviewModalBackdrop) {
+                    this.$refs.reviewModalBackdrop.focus();
+                }
+            });
+        },
     },
     methods: {
         /**
@@ -404,6 +474,26 @@ export default {
         toggleExpand(id) {
             this.$set(this.expanded, id, !this.expanded[id]);
         },
+        openReviewModal() {
+            this.reviewModalIframeKey += 1;
+            this.reviewModalOpen = true;
+            document.body.style.overflow = "hidden";
+            this.$nextTick(() => {
+                const bd = this.$refs.reviewModalBackdrop;
+                if (bd) {
+                    bd.scrollTop = 0;
+                }
+            });
+        },
+        closeReviewModal() {
+            this.clearReviewIframeHeightSync();
+            const iframe = this.$refs.reviewIframe;
+            if (iframe) {
+                iframe.style.height = "";
+            }
+            this.reviewModalOpen = false;
+            document.body.style.overflow = "";
+        },
         /**
          * Значение из emit Dropdown (до/после v-model) — явно синхронизируем, чтобы ship_id в запросах совпадал с фильтром.
          * @param {number|string|null} shipId
@@ -443,7 +533,82 @@ export default {
                     this.moreFirstTime = false;
                 }
             });
-        }
+        },
+        /**
+         * Высота iframe = высота документа внутри (только same-origin), без внутреннего скролла iframe —
+         * прокрутка на подложке модалки. Без доступа к document остаётся min-height из CSS.
+         */
+        onReviewIframeLoad() {
+            this.$nextTick(() => {
+                this.setupReviewIframeHeightSync();
+            });
+        },
+        setupReviewIframeHeightSync() {
+            this.clearReviewIframeHeightSync();
+            const iframe = this.$refs.reviewIframe;
+            if (!iframe || !this.reviewModalOpen) {
+                return;
+            }
+
+            const run = () => {
+                if (!this.reviewModalOpen) {
+                    return;
+                }
+                const el = this.$refs.reviewIframe;
+                if (!el) {
+                    return;
+                }
+
+                try {
+                    const doc = el.contentDocument || el.contentWindow?.document;
+                    if (!doc || !doc.documentElement) {
+                        el.style.height = "";
+                        return;
+                    }
+                    const body = doc.body;
+                    const html = doc.documentElement;
+                    const innerH = Math.max(
+                        body ? body.scrollHeight : 0,
+                        html ? html.scrollHeight : 0,
+                        body ? body.offsetHeight : 0,
+                        html ? html.offsetHeight : 0,
+                    );
+                    if (innerH > 0) {
+                        el.style.height = `${innerH}px`;
+                    }
+                } catch (e) {
+                    el.style.height = "";
+                }
+            };
+
+            try {
+                const doc = iframe.contentDocument || iframe.contentWindow?.document;
+                if (doc && typeof ResizeObserver !== "undefined") {
+                    const ro = new ResizeObserver(() => run());
+                    ro.observe(doc.documentElement);
+                    if (doc.body) {
+                        ro.observe(doc.body);
+                    }
+                    this.reviewIframeResizeObserver = ro;
+                }
+            } catch (e) {
+                this.reviewIframeResizeObserver = null;
+            }
+
+            this.reviewIframeOnWindowResize = () => run();
+            window.addEventListener("resize", this.reviewIframeOnWindowResize);
+            run();
+        },
+        clearReviewIframeHeightSync() {
+            if (this.reviewIframeResizeObserver) {
+                this.reviewIframeResizeObserver.disconnect();
+                this.reviewIframeResizeObserver = null;
+            }
+            if (this.reviewIframeOnWindowResize) {
+                window.removeEventListener("resize", this.reviewIframeOnWindowResize);
+                this.reviewIframeOnWindowResize = null;
+            }
+        },
     }
 }
 </script>
@@ -466,6 +631,14 @@ export default {
     background: var(--rw-page-bg);
     border-radius: 12px;
     padding: 16px;
+
+    &__heading {
+        margin: 0 0 14px;
+        font-size: 22px;
+        font-weight: 700;
+        line-height: 1.2;
+        color: var(--rw-title);
+    }
 
     .reviews-item {
         position: relative;
@@ -801,12 +974,12 @@ export default {
 
         .reviews-widget__btn--link {
             background: #fff;
-            color: #1e88e5;
-            border: 1px solid #1e88e5;
+            color: #e12c2e;
+            border: 1px solid #e12c2e;
 
             &:hover {
-                background: #e3f2fd;
-                color: #1e88e5;
+                background: #fce8e8;
+                color: #e12c2e;
             }
         }
     }
@@ -829,6 +1002,7 @@ export default {
         color: #fff;
         padding: 0 14px;
         cursor: pointer;
+        font-family: inherit;
 
         &:disabled {
             opacity: 0.55;
@@ -842,14 +1016,15 @@ export default {
         justify-content: center;
         text-decoration: none;
         background: #fff;
-        color: #1e88e5;
-        border: 1px solid #1e88e5;
+        color: #e12c2e;
+        border: 1px solid #e12c2e;
         box-sizing: border-box;
+        font-family: inherit;
 
         &:hover {
-            background: #e3f2fd;
+            background: #fce8e8;
             text-decoration: none;
-            color: #1e88e5;
+            color: #e12c2e;
         }
     }
 
@@ -867,6 +1042,84 @@ export default {
 
     &__footer-review-link {
         margin-left: auto;
+    }
+
+    &__modal-backdrop {
+        position: fixed;
+        inset: 0;
+        z-index: 10050;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: flex-start;
+        overflow-x: hidden;
+        overflow-y: auto;
+        -webkit-overflow-scrolling: touch;
+        overscroll-behavior: contain;
+        padding: 16px 12px 32px;
+        box-sizing: border-box;
+        background: rgba(45, 45, 90, 0.45);
+        outline: none;
+    }
+
+    &__modal {
+        display: flex;
+        flex-direction: column;
+        flex-shrink: 0;
+        width: min(920px, 100%);
+        background: #fff;
+        border-radius: 0;
+        overflow: visible;
+        box-shadow: none;
+
+        @media only screen and (min-width: 921px) {
+            border-radius: 12px;
+            box-shadow: 0 12px 40px rgba(0, 0, 0, 0.2);
+            width: min(920px, calc(100% - 24px));
+        }
+    }
+
+    &__modal-head {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 12px;
+        padding: 12px 16px;
+        border-bottom: 1px solid #e0e4f0;
+        flex-shrink: 0;
+    }
+
+    &__modal-title {
+        margin: 0;
+        font-size: 18px;
+        font-weight: 700;
+        color: var(--rw-title);
+    }
+
+    &__modal-close {
+        flex-shrink: 0;
+        width: 40px;
+        height: 40px;
+        padding: 0;
+        border: 0;
+        border-radius: 8px;
+        background: transparent;
+        color: var(--rw-muted);
+        font-size: 28px;
+        line-height: 1;
+        cursor: pointer;
+
+        &:hover {
+            background: var(--rw-page-bg);
+            color: var(--rw-title);
+        }
+    }
+
+    &__modal-iframe {
+        display: block;
+        width: 100%;
+        min-height: 55vh;
+        border: 0;
     }
 
     &__list {
