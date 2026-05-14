@@ -280,7 +280,7 @@
                     ref="reviewIframe"
                     :key="reviewModalIframeKey"
                     class="reviews-widget__modal-iframe"
-                    src="/reviews-modal"
+                    :src="reviewIframeSrc"
                     title="Форма отзыва"
                     @load="onReviewIframeLoad"
                 />
@@ -299,6 +299,11 @@ export default {
     name: "ReviewsWidget",
     components: {
         Dropdown,
+    },
+    created() {
+        this._reviewIframePostMessageBound = (e) => {
+            this.onReviewIframePostMessage(e);
+        };
     },
     props: {
         initData: {
@@ -324,10 +329,25 @@ export default {
             reviewModalIframeKey: 0,
             /** @type {ResizeObserver|null} */
             reviewIframeResizeObserver: null,
+            /** @type {MutationObserver|null} */
+            reviewIframeMutationObserver: null,
             reviewIframeOnWindowResize: null,
+            /** @type {number[]} */
+            reviewIframeRetryTimers: [],
+            reviewIframeHeightDebounceTimer: null,
+            /** @type {number|null} */
+            reviewIframePollInterval: null,
         };
     },
     computed: {
+        /** Абсолютный URL: на проде иногда мешает <base href> или редиректы при относительном пути. */
+        reviewIframeSrc() {
+            try {
+                return new URL("/reviews-modal", window.location.origin).href;
+            } catch (e) {
+                return "/reviews-modal";
+            }
+        },
         moreButtonLabel() {
             if (this.moreRemaining <= 0) {
                 return this.moreFirstTime && !this.extraItems.length
@@ -535,8 +555,8 @@ export default {
             });
         },
         /**
-         * Высота iframe = высота документа внутри (только same-origin), без внутреннего скролла iframe —
-         * прокрутка на подложке модалки. Без доступа к document остаётся min-height из CSS.
+         * Высота iframe: same-origin — читаем document; плюс postMessage со страницы /reviews-modal (см. reviews_empty.htm).
+         * Отложенные замеры и MutationObserver — из-за позднего монтажа Vue внутри iframe на проде.
          */
         onReviewIframeLoad() {
             this.$nextTick(() => {
@@ -550,63 +570,148 @@ export default {
                 return;
             }
 
-            const run = () => {
-                if (!this.reviewModalOpen) {
-                    return;
+            const scheduleMeasure = () => {
+                if (this.reviewIframeHeightDebounceTimer) {
+                    clearTimeout(this.reviewIframeHeightDebounceTimer);
                 }
-                const el = this.$refs.reviewIframe;
-                if (!el) {
-                    return;
-                }
-
-                try {
-                    const doc = el.contentDocument || el.contentWindow?.document;
-                    if (!doc || !doc.documentElement) {
-                        el.style.height = "";
-                        return;
-                    }
-                    const body = doc.body;
-                    const html = doc.documentElement;
-                    const innerH = Math.max(
-                        body ? body.scrollHeight : 0,
-                        html ? html.scrollHeight : 0,
-                        body ? body.offsetHeight : 0,
-                        html ? html.offsetHeight : 0,
-                    );
-                    if (innerH > 0) {
-                        el.style.height = `${innerH}px`;
-                    }
-                } catch (e) {
-                    el.style.height = "";
-                }
+                this.reviewIframeHeightDebounceTimer = window.setTimeout(() => {
+                    this.reviewIframeHeightDebounceTimer = null;
+                    this.measureAndApplyIframeFromDocument();
+                }, 50);
             };
+
+            window.addEventListener("message", this._reviewIframePostMessageBound);
 
             try {
                 const doc = iframe.contentDocument || iframe.contentWindow?.document;
                 if (doc && typeof ResizeObserver !== "undefined") {
-                    const ro = new ResizeObserver(() => run());
+                    const ro = new ResizeObserver(() => scheduleMeasure());
                     ro.observe(doc.documentElement);
                     if (doc.body) {
                         ro.observe(doc.body);
                     }
                     this.reviewIframeResizeObserver = ro;
                 }
+                if (doc && typeof MutationObserver !== "undefined") {
+                    const mo = new MutationObserver(() => scheduleMeasure());
+                    mo.observe(doc.documentElement, {
+                        subtree: true,
+                        childList: true,
+                        attributes: true,
+                        characterData: true,
+                    });
+                    this.reviewIframeMutationObserver = mo;
+                }
             } catch (e) {
                 this.reviewIframeResizeObserver = null;
+                this.reviewIframeMutationObserver = null;
             }
 
-            this.reviewIframeOnWindowResize = () => run();
+            this.reviewIframeOnWindowResize = () => scheduleMeasure();
             window.addEventListener("resize", this.reviewIframeOnWindowResize);
-            run();
+
+            [0, 100, 300, 700, 1500, 3500].forEach((delay) => {
+                this.reviewIframeRetryTimers.push(
+                    window.setTimeout(() => scheduleMeasure(), delay),
+                );
+            });
+
+            this.reviewIframePollInterval = window.setInterval(() => scheduleMeasure(), 350);
+            window.setTimeout(() => {
+                if (this.reviewIframePollInterval != null) {
+                    clearInterval(this.reviewIframePollInterval);
+                    this.reviewIframePollInterval = null;
+                }
+            }, 8000);
+
+            scheduleMeasure();
+        },
+        measureAndApplyIframeFromDocument() {
+            if (!this.reviewModalOpen) {
+                return;
+            }
+            const el = this.$refs.reviewIframe;
+            if (!el) {
+                return;
+            }
+            try {
+                const doc = el.contentDocument || el.contentWindow?.document;
+                if (!doc || !doc.documentElement) {
+                    return;
+                }
+                const body = doc.body;
+                const html = doc.documentElement;
+                const innerH = Math.max(
+                    body ? body.scrollHeight : 0,
+                    html ? html.scrollHeight : 0,
+                    body ? body.offsetHeight : 0,
+                    html ? html.offsetHeight : 0,
+                );
+                if (innerH > 0) {
+                    el.style.height = `${innerH}px`;
+                }
+            } catch (e) {
+                /* cross-origin */
+            }
+        },
+        onReviewIframePostMessage(event) {
+            if (!this.reviewModalOpen) {
+                return;
+            }
+            const iframe = this.$refs.reviewIframe;
+            if (!iframe || iframe.contentWindow !== event.source) {
+                return;
+            }
+            if (!this.isTrustedReviewIframeOrigin(event.origin)) {
+                return;
+            }
+            if (!event.data || event.data.type !== "reviews-iframe-resize") {
+                return;
+            }
+            const h = Number(event.data.height);
+            if (!Number.isFinite(h) || h < 80) {
+                return;
+            }
+            iframe.style.height = `${Math.ceil(h)}px`;
+        },
+        isTrustedReviewIframeOrigin(origin) {
+            try {
+                const cur = new URL(window.location.href);
+                const o = new URL(origin);
+                if (cur.protocol !== o.protocol) {
+                    return false;
+                }
+                const norm = (h) => (h.startsWith("www.") ? h.slice(4) : h);
+                return cur.hostname === o.hostname || norm(cur.hostname) === norm(o.hostname);
+            } catch (e) {
+                return false;
+            }
         },
         clearReviewIframeHeightSync() {
             if (this.reviewIframeResizeObserver) {
                 this.reviewIframeResizeObserver.disconnect();
                 this.reviewIframeResizeObserver = null;
             }
+            if (this.reviewIframeMutationObserver) {
+                this.reviewIframeMutationObserver.disconnect();
+                this.reviewIframeMutationObserver = null;
+            }
             if (this.reviewIframeOnWindowResize) {
                 window.removeEventListener("resize", this.reviewIframeOnWindowResize);
                 this.reviewIframeOnWindowResize = null;
+            }
+            if (this._reviewIframePostMessageBound) {
+                window.removeEventListener("message", this._reviewIframePostMessageBound);
+            }
+            this.reviewIframeRetryTimers.forEach((id) => clearTimeout(id));
+            this.reviewIframeRetryTimers = [];
+            if (this.reviewIframeHeightDebounceTimer) {
+                clearTimeout(this.reviewIframeHeightDebounceTimer);
+                this.reviewIframeHeightDebounceTimer = null;
+            }
+            if (this.reviewIframePollInterval != null) {
+                clearInterval(this.reviewIframePollInterval);
+                this.reviewIframePollInterval = null;
             }
         },
     }

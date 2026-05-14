@@ -12,3 +12,47 @@ force_show = 0
 ==
 
 {% component 'Reviews' %}
+
+{# Сообщаем родителю (модалка виджета отзывов) фактическую высоту документа — на проде Vue в iframe монтируется позже события load. #}
+<script>
+(function () {
+    if (window.parent === window) {
+        return;
+    }
+    var scheduled = null;
+    function postHeight() {
+        if (scheduled) {
+            return;
+        }
+        scheduled = setTimeout(function () {
+            scheduled = null;
+            var d = document.documentElement;
+            var b = document.body;
+            if (!b) {
+                return;
+            }
+            var h = Math.max(
+                d.scrollHeight, d.offsetHeight, d.clientHeight,
+                b.scrollHeight, b.offsetHeight, b.clientHeight
+            );
+            window.parent.postMessage({ type: 'reviews-iframe-resize', height: h }, '*');
+        }, 60);
+    }
+    window.addEventListener('load', postHeight);
+    window.addEventListener('resize', postHeight);
+    document.addEventListener('DOMContentLoaded', postHeight);
+    if (window.ResizeObserver) {
+        var ro = new ResizeObserver(postHeight);
+        ro.observe(document.documentElement);
+        ro.observe(document.body);
+    }
+    var n = 0;
+    var iv = setInterval(function () {
+        postHeight();
+        n += 1;
+        if (n >= 40) {
+            clearInterval(iv);
+        }
+    }, 400);
+})();
+</script>
