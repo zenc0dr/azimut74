@@ -130,12 +130,6 @@
                                     :key="'ml-' + item.id + '-' + r.key"
                                     class="reviews-item-statistic-list-item"
                                 >
-                                    <div
-                                        class="reviews-item-statistic-list-item-line"
-                                        :class="{ '__red': ratingLineRed(r) }"
-                                    >
-                                        <span :style="{ width: barWidth(r.value) }"></span>
-                                    </div>
                                     <div class="reviews-item-statistic-list-item-text">
                                         <span>{{ ratingRowLabel(r) }}</span>
                                         <span>{{ formatRatingDecimal(r.value) }}</span>
@@ -214,12 +208,6 @@
                                 :key="'dl-' + item.id + '-' + r.key"
                                 class="reviews-item-statistic-list-item"
                             >
-                                <div
-                                    class="reviews-item-statistic-list-item-line"
-                                    :class="{ '__red': ratingLineRed(r) }"
-                                >
-                                    <span :style="{ width: barWidth(r.value) }"></span>
-                                </div>
                                 <div class="reviews-item-statistic-list-item-text">
                                     <span>{{ ratingRowLabel(r) }}</span>
                                     <span>{{ formatRatingDecimal(r.value) }}</span>
@@ -382,10 +370,6 @@ export default {
         formatRatingDecimal(value) {
             return String(value).replace('.', ',');
         },
-        barWidth(value) {
-            const v = Math.max(0, Math.min(5, Number(value) || 0));
-            return `${(v / 5) * 100}%`;
-        },
         /** 'fill' | 'half' | 'outline' — как на референсе (звёзды SVG). */
         starKind(avg, n) {
             if (avg == null) {
@@ -404,10 +388,6 @@ export default {
         /** Подпись строки шкалы: последняя — «Теплоход» как в макете заказчика. */
         ratingRowLabel(r) {
             return r.key === 'cruise' ? 'Теплоход' : r.label;
-        },
-        /** Красная дорожка для строки «Теплоход» (класс __red в референсе). */
-        ratingLineRed(r) {
-            return r.key === 'cruise';
         },
         needsExpandToggle(item) {
             const t = String(item.text || '');
@@ -473,12 +453,6 @@ export default {
     --rw-link: #177bc0;
     --rw-green: #1a8f4a;
     --rw-star-outline: #8aa89a;
-    --rw-green-bar-start: #9fdfb4;
-    --rw-green-bar-end: #1a8f4a;
-    --rw-red-bar-start: #f5c4ce;
-    --rw-red-bar-end: #c84d63;
-    --rw-red-fill: #c84d63;
-    --rw-track: #ececf4;
     --rw-stat-label: var(--rw-title);
     --rw-stat-value: var(--rw-title);
 
@@ -755,41 +729,7 @@ export default {
     .reviews-item-statistic-list {
         display: flex;
         flex-direction: column;
-        gap: 10px;
-    }
-
-    .reviews-item-statistic-list-item-line {
-        position: relative;
-        height: 8px;
-        border-radius: 99px;
-        background: var(--rw-track);
-        overflow: hidden;
-        box-shadow: none;
-        filter: none;
-
-        > span {
-            position: absolute;
-            top: 0;
-            left: 0;
-            display: block;
-            height: 100%;
-            box-sizing: border-box;
-            border-radius: 99px;
-            border-right: 0;
-            background: linear-gradient(90deg, var(--rw-green-bar-start) 0%, var(--rw-green-bar-end) 100%);
-            box-shadow: none;
-        }
-
-        &.__red > span {
-            background: linear-gradient(90deg, var(--rw-red-bar-start) 0%, var(--rw-red-bar-end) 100%);
-            box-shadow: none;
-        }
-    }
-
-    @media only screen and (min-width: 767px) {
-        .reviews-item-statistic-list-item-line {
-            height: 10px;
-        }
+        gap: 8px;
     }
 
     .reviews-item-statistic-list-item-text {
@@ -797,10 +737,10 @@ export default {
         justify-content: space-between;
         align-items: baseline;
         margin-top: 0;
-        padding: 4px 4px 0;
+        padding: 2px 0;
         gap: 12px;
-        font-size: inherit;
-        line-height: inherit;
+        font-size: 14px;
+        line-height: 1.4;
 
         span:first-child {
             font-weight: inherit;
