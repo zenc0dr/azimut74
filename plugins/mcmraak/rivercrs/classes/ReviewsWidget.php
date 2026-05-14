@@ -172,6 +172,31 @@ class ReviewsWidget
             ->get();
     }
 
+    /**
+     * Случайные опубликованные отзывы, у которых в форме указан теплоход (ship_id в JSON data).
+     * Для блока на странице бронирования: первые карточки только по судну круиза.
+     *
+     * @return \Illuminate\Support\Collection<int, Review>
+     */
+    public static function getRandomReviewsForShip(int $shipId, int $limit = 3)
+    {
+        $shipId = (int) $shipId;
+        $limit = (int) $limit;
+        if ($shipId < 1 || $limit < 1) {
+            return collect();
+        }
+
+        $regexp = '"ship_id"[[:space:]]*:[[:space:]]*"?'
+            . preg_quote((string) $shipId, '/')
+            . '"?([^0-9]|$)';
+
+        return Review::query()
+            ->whereRaw('data REGEXP ?', [$regexp])
+            ->inRandomOrder()
+            ->limit($limit)
+            ->get();
+    }
+
     public static function extractForm(Review $review)
     {
         $data = $review->data ?: [];

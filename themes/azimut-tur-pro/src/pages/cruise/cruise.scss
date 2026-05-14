@@ -9,6 +9,22 @@
 
 @import "@src/components/cruise/top-info";
 
+.cruise-reviews-jump {
+    margin-bottom: 12px;
+
+    &__inner {
+        box-sizing: border-box;
+        width: 100%;
+        border: 1px solid #dcdcdc;
+        border-radius: 5px;
+        padding: 8px 12px;
+        background-color: color('primary-100');
+        display: flex;
+        justify-content: flex-start;
+        align-items: center;
+    }
+}
+
 @import '@src/components/blocks/tabs/_';
 
 //@import "@src/components/cruise/tab-booking-2";

@@ -33,6 +33,16 @@ function onStart()
 
 {% partial 'cruise/top-info' class='mt-5' %}
 
+{% if RiverCRS.reviewsWidget %}
+<div class="cruise-reviews-jump w-100">
+    <div class="container">
+        <div class="cruise-reviews-jump__inner">
+            <a href="#page-reviews-widget" class="btn red cruise-reviews-jump__link">Отзывы о теплоходе</a>
+        </div>
+    </div>
+</div>
+{% endif %}
+
 <section class="tabs-group">
    <div class="container">
       <div class="tabs">

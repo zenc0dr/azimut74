@@ -242,6 +242,28 @@ class RivercrsCore
 
         $data = RivercrsCheckin::checkin($checkin);
 
+        $shipId = isset($data['ship_id']) ? (int) $data['ship_id'] : 0;
+        if ($shipId > 0) {
+            $randomShipReviews = ReviewsWidget::getRandomReviewsForShip($shipId, 3)
+                ->map(function ($review) {
+                    return ReviewsWidget::formatReview($review);
+                })
+                ->values()
+                ->toArray();
+            if ($randomShipReviews !== []) {
+                $excludeIds = array_values(array_map('intval', array_column($randomShipReviews, 'id')));
+                $data['reviewsWidget'] = [
+                    'entityType' => ReviewsWidget::ENTITY_MOTORSHIP,
+                    'entityId' => $shipId,
+                    'items' => $randomShipReviews,
+                    'excludeIds' => $excludeIds,
+                    'ships' => ReviewsWidget::getShipOptions(),
+                    'moreRemaining' => ReviewsWidget::countMoreReviews($excludeIds, null),
+                    'loadMoreFromGlobalPool' => true,
+                ];
+            }
+        }
+
         if (isset($_GET['dump'])) {
             dd($data);
         }

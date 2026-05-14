@@ -344,6 +344,8 @@ export default {
             _reviewModalLastMeasuredH: null,
             /** Защита от двойного setup (ранний sync при interactive + @load). */
             _reviewIframeSetupForOpenKey: null,
+            /** Страница бронирования: подгрузка счётчика и «ещё» из общей базы, без фильтра по теплоходу. */
+            loadMoreFromGlobalPool: false,
         };
     },
     computed: {
@@ -389,6 +391,7 @@ export default {
         this.shipOptions = this.normalizeShipOptions(init.ships);
         const mr = Number(init.moreRemaining);
         this.moreRemaining = Number.isFinite(mr) && mr >= 0 ? mr : 0;
+        this.loadMoreFromGlobalPool = !!(init && init.loadMoreFromGlobalPool);
         this.ready = true;
     },
     beforeDestroy() {
@@ -604,11 +607,15 @@ export default {
             this.fetchRemaining();
             this.loadMore();
         },
+        /** ship_id для API подгрузки: на странице бронирования всегда общий пул. */
+        reviewsMoreShipId() {
+            return this.loadMoreFromGlobalPool ? null : this.shipPayloadId();
+        },
         fetchRemaining() {
             return axios
                 .post("/rivercrs/api/reviewsCount", {
                     exclude_ids: this.loadedIds,
-                    ship_id: this.shipPayloadId(),
+                    ship_id: this.reviewsMoreShipId(),
                 })
                 .then(({ data }) => {
                     if (typeof data.remaining === "number") {
@@ -619,7 +626,7 @@ export default {
         loadMore() {
             axios.post('/rivercrs/api/reviewsMore', {
                 exclude_ids: this.loadedIds,
-                ship_id: this.shipPayloadId(),
+                ship_id: this.reviewsMoreShipId(),
             }).then(({ data }) => {
                 const items = Array.isArray(data.items) ? data.items : [];
                 if (typeof data.remaining === 'number') {

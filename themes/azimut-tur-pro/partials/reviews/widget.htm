@@ -1,5 +1,6 @@
 {% set reviewsWidget = RiverCRS.reviewsWidget ?? null %}
 {% if reviewsWidget %}
+<div id="page-reviews-widget" class="page-reviews-widget-wrap">
 <div
     id="reviews-widget-app"
     data-init="{{ reviewsWidget|json_encode|e('html_attr') }}">
@@ -28,5 +29,6 @@
 
         <button type="button" class="reviews-widget__more">Подгрузить отзывы</button>
     </section>
+</div>
 </div>
 {% endif %}
