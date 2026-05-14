@@ -519,7 +519,11 @@ class Exist
             $this->addPrice($cabins[$update_key]['prices']);
             $cabins[$update_key]['eds'] = $this->vals['eds'];
         } else {
-            if (!count($cabins[$update_key]['prices'])) {
+            // Для Gama всегда совмещаем realtime-цены с данными из БД.
+            // addPrice() сам отсекает дубликаты пар places/value.
+            if ($this->checkin && strtolower((string)$this->checkin->eds_code) === 'gama') {
+                $this->addPrice($cabins[$update_key]['prices']);
+            } elseif (!count($cabins[$update_key]['prices'])) {
                 $this->addPrice($cabins[$update_key]['prices']);
             }
         }

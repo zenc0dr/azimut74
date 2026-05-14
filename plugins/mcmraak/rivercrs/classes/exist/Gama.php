@@ -13,6 +13,7 @@ class Gama extends Exist
     {
         $gama = new GamaV2();
         $gama_route_data = $gama->getGamaRouteData($checkin->eds_id);
+        $rooms = [];
 
         if (!$gama_route_data) {
             return null;
@@ -23,32 +24,40 @@ class Gama extends Exist
 
         $gama_ship_id = $cruise_data['Navigation']['@attributes']['ship_id'];
 
-        if (isset($gama_route_data['Route']['CabinList']['Cabin']['@attributes'])) {
-            $gama_route_data['Route']['CabinList']['Cabin'] = [
-                $gama_route_data['Route']['CabinList']['Cabin']
-            ];
+        $cabins = $gama_route_data['Route']['CabinList']['Cabin'] ?? [];
+        if (isset($cabins['@attributes'])) {
+            $cabins = [$cabins];
         }
 
-        foreach ($gama_route_data['Route']['CabinList']['Cabin'] as $cabin) {
+        foreach ($cabins as $cabin) {
             $gama_cabin_id = $cabin['@attributes']['id'];
             $gama_cabin_num = $cabin['@attributes']['name'];
-            $places = $cabin['@attributes']['places'];
+            $places = intval($cabin['@attributes']['places']);
 
-            foreach ($cabin['Cost'] as $cost) {
+            $costs = $cabin['Cost'] ?? [];
+            if (isset($costs['@attributes'])) {
+                $costs = [$costs];
+            }
+
+            foreach ($costs as $cost) {
                 if (isset($cost['@attributes'])) {
                     $cost = $cost['@attributes'];
                 }
 
-                if ($cost['persons'] !== $places) {
+                if (intval($cost['persons'] ?? 0) !== $places) {
                     continue;
                 }
 
                 $category_data = $gama->getGamaCategory($gama_cabin_id, $gama_ship_id);
+                if (!$category_data) {
+                    continue;
+                }
+
                 $record = $this->addRecord([
                     'deck_name' => $category_data['deck_name'],
                     'cabin_name' => $category_data['name'],
-                    'price_places' => intval($places),
-                    'price_value' => $cost['std_3'],
+                    'price_places' => $places,
+                    'price_value' => intval($cost['std_3'] ?? 0),
                     'eds' => true
                 ]);
 
