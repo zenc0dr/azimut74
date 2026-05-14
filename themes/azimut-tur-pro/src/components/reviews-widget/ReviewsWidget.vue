@@ -342,6 +342,8 @@ export default {
             reviewIframePollInterval: null,
             /** @type {number|null} */
             _reviewModalLastMeasuredH: null,
+            /** Защита от двойного setup (ранний sync при interactive + @load). */
+            _reviewIframeSetupForOpenKey: null,
         };
     },
     computed: {
@@ -543,11 +545,45 @@ export default {
                 if (bd) {
                     bd.scrollTop = 0;
                 }
+                this.syncReviewIframeIfDocumentAlreadyComplete();
             });
+        },
+        /**
+         * Событие load у iframe не всегда доходит до Vue @load:
+         * кэш — документ уже complete до привязки слушателя;
+         * или документ в interactive (разметка/приложение уже дают высоту), а load ещё впереди.
+         * Тогда setupReviewIframeHeightSync не стартует — остаётся только min-height (~55vh).
+         */
+        syncReviewIframeIfDocumentAlreadyComplete() {
+            if (!this.reviewModalOpen) {
+                return;
+            }
+            const iframe = this.$refs.reviewIframe;
+            if (!iframe) {
+                return;
+            }
+            try {
+                const doc = iframe.contentDocument || iframe.contentWindow?.document;
+                const rs = doc && doc.readyState;
+                if (doc && doc.body && rs && rs !== "loading") {
+                    this.reviewModalLog(
+                        "iframe document ready before load handler; starting height sync",
+                        { iframeSrc: iframe.src, readyState: rs },
+                    );
+                    this.$nextTick(() => {
+                        if (this.reviewModalOpen && this.$refs.reviewIframe === iframe) {
+                            this.setupReviewIframeHeightSync();
+                        }
+                    });
+                }
+            } catch (e) {
+                /* cross-origin */
+            }
         },
         closeReviewModal() {
             this.reviewModalLog("closeReviewModal");
             this.clearReviewIframeHeightSync();
+            this._reviewIframeSetupForOpenKey = null;
             const iframe = this.$refs.reviewIframe;
             if (iframe) {
                 iframe.style.height = "";
@@ -611,7 +647,6 @@ export default {
             });
         },
         setupReviewIframeHeightSync() {
-            this.clearReviewIframeHeightSync();
             const iframe = this.$refs.reviewIframe;
             if (!iframe || !this.reviewModalOpen) {
                 this.reviewModalLog("setupReviewIframeHeightSync aborted", {
@@ -620,6 +655,11 @@ export default {
                 });
                 return;
             }
+            if (this._reviewIframeSetupForOpenKey === this.reviewModalIframeKey) {
+                this.reviewModalLog("setupReviewIframeHeightSync skipped (already ran for this open)");
+                return;
+            }
+            this.clearReviewIframeHeightSync();
 
             const scheduleMeasure = () => {
                 if (this.reviewIframeHeightDebounceTimer) {
@@ -698,6 +738,7 @@ export default {
             }, 8000);
 
             scheduleMeasure();
+            this._reviewIframeSetupForOpenKey = this.reviewModalIframeKey;
         },
         measureAndApplyIframeFromDocument() {
             if (!this.reviewModalOpen) {
