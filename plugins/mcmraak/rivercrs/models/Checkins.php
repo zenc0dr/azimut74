@@ -410,6 +410,7 @@ class Checkins extends Model
 
         $result = [
             'id' => $checkin->id,
+            'eds_code' => $checkin->eds_code,
             'image' => $ship->pic,
             'youtube' => $ship->youtube_link,
             'motorship_id' => $ship->id,

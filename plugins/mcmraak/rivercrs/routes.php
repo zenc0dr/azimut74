@@ -115,6 +115,12 @@ Route::group(['middleware' => 'web'], function () {
         ]);
     });
 
+    Route::get('/rivercrs/api/v2/exist/min-price/{checkin_id}', function ($checkin_id){
+        App::call('Mcmraak\Rivercrs\Classes\Exist@getMinPrice', [
+            'checkin_id' => $checkin_id,
+        ]);
+    });
+
     Route::post('/rivercrs/api/v2/cabin/open', 'Mcmraak\Rivercrs\Classes\Exist@getCabin');
 
     ### AZIMUT-TUR-PRO ###

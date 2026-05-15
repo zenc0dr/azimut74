@@ -2,6 +2,8 @@
     <div id="Result" :class="{preloader}">
         <template v-for="record in items">
             <section v-if="!record.injection"
+                     :ref="`record-${record.id}`"
+                     :data-checkin-id="record.id"
                      class="result-item d-flex flex-column flex-md-row bg-primary-100 mb-4 rounded">
                 <div class="result-item__left col-12 col-md-4 position-relative">
                     <img class="result-item__img h-100 rounded-top rounded-md-left" :src="record.image" alt="item">
@@ -96,9 +98,15 @@
                         <div
                             class="result-item__right-bottom d-flex flex-column flex-md-row align-items-center justify-content-end">
                             <div class="text-center me-0 me-md-3 mb-3 mb-md-0 fs-def fs-md-s fs-xxl-def">
-                                <div>от <span class="fs-h2 fs-sm-h1 fs-md-h2 fs-xxl-h1 fw-bolder">{{
-                                        record.price_start
-                                    }}</span> р./чел
+                                <div>от <span class="fs-h2 fs-sm-h1 fs-md-h2 fs-xxl-h1 fw-bolder">
+                                        <template v-if="isGamaRecord(record)">
+                                            <span v-if="getGamaPriceState(record.id).status === 'loading'" class="price-loader" aria-label="Загрузка цены"></span>
+                                            <template v-else-if="getGamaPriceState(record.id).status === 'error'">Ошибка</template>
+                                            <template v-else-if="getGamaPriceState(record.id).status === 'success'">{{ formatPrice(getGamaPriceState(record.id).value) }}</template>
+                                            <span v-else class="price-loader" aria-label="Загрузка цены"></span>
+                                        </template>
+                                        <template v-else>{{ record.price_start }}</template>
+                                    </span> р./чел
                                 </div>
                                 <div class="fs-ss">без учёта скидок</div>
                             </div>
@@ -122,9 +130,15 @@
                                 <i class="bi bi-caret-down-fill"></i>
                             </div>
                             <div class="text-center me-0 me-md-3 mb-3 mb-md-0 fs-def fs-md-s fs-xxl-def">
-                                <div>от <span class="fs-h2 fs-sm-h1 fs-md-h2 fs-xxl-h1 fw-bolder">{{
-                                        record.price_start
-                                    }}</span> р./чел
+                                <div>от <span class="fs-h2 fs-sm-h1 fs-md-h2 fs-xxl-h1 fw-bolder">
+                                        <template v-if="isGamaRecord(record)">
+                                            <span v-if="getGamaPriceState(record.id).status === 'loading'" class="price-loader" aria-label="Загрузка цены"></span>
+                                            <template v-else-if="getGamaPriceState(record.id).status === 'error'">Ошибка</template>
+                                            <template v-else-if="getGamaPriceState(record.id).status === 'success'">{{ formatPrice(getGamaPriceState(record.id).value) }}</template>
+                                            <span v-else class="price-loader" aria-label="Загрузка цены"></span>
+                                        </template>
+                                        <template v-else>{{ record.price_start }}</template>
+                                    </span> р./чел
                                 </div>
                                 <div class="fs-ss">без учёта скидок</div>
                             </div>
@@ -156,6 +170,7 @@
 </template>
 
 <script>
+import axios from "axios";
 import DiscountsModal from "./DiscountsModal";
 import StatusModal from "./StatusModal";
 import SelfInjection from "../../vue-components/SelfInjection";
@@ -169,7 +184,10 @@ export default {
     data() {
         return {
             record_with_discounts: null,
-            record_with_status: null
+            record_with_status: null,
+            gamaPriceObserver: null,
+            gamaPriceStates: {},
+            viewportHandler: null,
         }
     },
     props: {
@@ -186,7 +204,148 @@ export default {
             default: null
         }
     },
+    watch: {
+        items() {
+            this.$nextTick(() => {
+                this.setupGamaPriceObserver();
+            });
+        }
+    },
+    mounted() {
+        this.viewportHandler = () => {
+            this.fetchVisibleGamaPrices();
+        };
+        window.addEventListener('scroll', this.viewportHandler, {passive: true});
+        window.addEventListener('resize', this.viewportHandler);
+        this.$nextTick(() => {
+            this.setupGamaPriceObserver();
+            this.fetchVisibleGamaPrices();
+        });
+    },
+    beforeDestroy() {
+        if (this.viewportHandler) {
+            window.removeEventListener('scroll', this.viewportHandler);
+            window.removeEventListener('resize', this.viewportHandler);
+            this.viewportHandler = null;
+        }
+        this.teardownGamaPriceObserver();
+    },
     methods: {
+        isGamaRecord(record) {
+            return !!record && record.eds_code === 'gama';
+        },
+        getGamaPriceState(checkinId) {
+            return this.gamaPriceStates[checkinId] || {status: 'idle', value: null};
+        },
+        formatPrice(value) {
+            const numericValue = parseInt(value, 10);
+            if (!numericValue) {
+                return 'Ошибка';
+            }
+            return new Intl.NumberFormat('ru-RU').format(numericValue);
+        },
+        setupGamaPriceObserver() {
+            this.teardownGamaPriceObserver();
+            if (typeof IntersectionObserver !== 'function') {
+                this.fetchVisibleGamaPrices();
+                return;
+            }
+
+            this.gamaPriceObserver = new IntersectionObserver((entries) => {
+                entries.forEach((entry) => {
+                    if (!entry.isIntersecting) {
+                        return;
+                    }
+
+                    const checkinId = parseInt(entry.target.dataset.checkinId, 10);
+                    if (!checkinId) {
+                        return;
+                    }
+
+                    this.fetchGamaMinPrice(checkinId);
+                    this.gamaPriceObserver.unobserve(entry.target);
+                });
+            }, {rootMargin: '100px 0px'});
+
+            (this.items || []).forEach((record) => {
+                if (!this.isGamaRecord(record)) {
+                    return;
+                }
+
+                const state = this.getGamaPriceState(record.id);
+                if (state.status === 'success' || state.status === 'error') {
+                    return;
+                }
+
+                const refs = this.$refs[`record-${record.id}`];
+                const target = Array.isArray(refs) ? refs[0] : refs;
+                if (target) {
+                    this.gamaPriceObserver.observe(target);
+                }
+            });
+
+            this.fetchVisibleGamaPrices();
+        },
+        teardownGamaPriceObserver() {
+            if (this.gamaPriceObserver) {
+                this.gamaPriceObserver.disconnect();
+                this.gamaPriceObserver = null;
+            }
+        },
+        fetchGamaMinPrice(checkinId) {
+            const currentState = this.getGamaPriceState(checkinId);
+            if (currentState.status === 'loading' || currentState.status === 'success') {
+                return;
+            }
+
+            this.$set(this.gamaPriceStates, checkinId, {status: 'loading', value: null});
+            axios.get(`/rivercrs/api/v2/exist/min-price/${checkinId}`)
+                .then((response) => {
+                    const data = response.data || {};
+                    const minPrice = parseInt(data.min_price, 10);
+
+                    if (!data.success || !minPrice) {
+                        throw new Error('invalid_response');
+                    }
+
+                    this.$set(this.gamaPriceStates, checkinId, {
+                        status: 'success',
+                        value: minPrice
+                    });
+                })
+                .catch(() => {
+                    this.$set(this.gamaPriceStates, checkinId, {status: 'error', value: null});
+                });
+        },
+        isElementInViewport(element) {
+            if (!element) {
+                return false;
+            }
+            if (element.offsetParent === null) {
+                return false;
+            }
+            const rect = element.getBoundingClientRect();
+            if (rect.width <= 0 || rect.height <= 0) {
+                return false;
+            }
+            const viewHeight = window.innerHeight || document.documentElement.clientHeight;
+            return rect.bottom > 0 && rect.top < viewHeight;
+        },
+        fetchVisibleGamaPrices() {
+            const cards = this.$el ? this.$el.querySelectorAll('[data-checkin-id]') : [];
+            cards.forEach((card) => {
+                if (!this.isElementInViewport(card)) {
+                    return;
+                }
+
+                const checkinId = parseInt(card.getAttribute('data-checkin-id'), 10);
+                if (!checkinId) {
+                    return;
+                }
+
+                this.fetchGamaMinPrice(checkinId);
+            });
+        },
         getDays(item) {
             if (!item.date || item.date.d1 === undefined) {
                 console.log('getDays вернул null')
@@ -217,3 +376,25 @@ export default {
     }
 }
 </script>
+
+<style scoped>
+.price-loader {
+    width: 1.1em;
+    height: 1.1em;
+    display: inline-block;
+    border: 2px solid currentColor;
+    border-bottom-color: transparent;
+    border-radius: 50%;
+    animation: price-loader-spin .8s linear infinite;
+    vertical-align: middle;
+}
+
+@keyframes price-loader-spin {
+    from {
+        transform: rotate(0deg);
+    }
+    to {
+        transform: rotate(360deg);
+    }
+}
+</style>

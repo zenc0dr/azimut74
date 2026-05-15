@@ -318,6 +318,121 @@ class Exist
         return $mix_data;
     }
 
+    public function getMinPrice($checkin_id)
+    {
+        $checkin_id = intval($checkin_id);
+        $cache_ttl = intval(env('EXISTS_TTL', 10));
+        if ($cache_ttl <= 0) {
+            $cache_ttl = 10;
+        }
+
+        $cache_key = "exist_min_price:gama:$checkin_id";
+        if (Cache::has($cache_key)) {
+            $payload = Cache::get($cache_key);
+            $payload['cached'] = true;
+            $this->json($payload);
+            return;
+        }
+
+        $checkin = Checkin::find($checkin_id);
+        if (!$checkin || strtolower((string)$checkin->eds_code) !== 'gama') {
+            $this->json([
+                'success' => false,
+                'error' => 'unsupported_source',
+                'checkin_id' => $checkin_id,
+                'min_price' => null,
+                'cached' => false,
+            ]);
+            return;
+        }
+
+        try {
+            // force_cached=true отключает "array" кеш на 15 минут и инициирует
+            // запрос в "live" слой для актуализации данных источника.
+            $exist_data = $this->get($checkin, 'array', true, true);
+        } catch (\Throwable $exception) {
+            Log::error('Exist getMinPrice error: ' . $exception->getMessage());
+            $this->json([
+                'success' => false,
+                'error' => 'source_unavailable',
+                'checkin_id' => $checkin_id,
+                'min_price' => null,
+                'cached' => false,
+            ]);
+            return;
+        }
+
+        if (!is_array($exist_data)) {
+            $this->json([
+                'success' => false,
+                'error' => 'source_unavailable',
+                'checkin_id' => $checkin_id,
+                'min_price' => null,
+                'cached' => false,
+            ]);
+            return;
+        }
+
+        $min_price = $this->extractMinPrice($exist_data);
+        if (!$min_price) {
+            $this->json([
+                'success' => false,
+                'error' => 'price_not_found',
+                'checkin_id' => $checkin_id,
+                'min_price' => null,
+                'cached' => false,
+            ]);
+            return;
+        }
+
+        $payload = [
+            'success' => true,
+            'checkin_id' => $checkin_id,
+            'min_price' => $min_price,
+            'min_price_formatted' => number_format($min_price, 0, '', ' '),
+            'currency' => 'RUB',
+            'cached' => false,
+        ];
+
+        Cache::put($cache_key, $payload, $cache_ttl);
+        $this->json($payload);
+    }
+
+    private function extractMinPrice(array $exist_data): ?int
+    {
+        if (!isset($exist_data['decks']) || !is_array($exist_data['decks'])) {
+            return null;
+        }
+
+        $min_price = null;
+        foreach ($exist_data['decks'] as $deck) {
+            $cabins = $deck['cabins'] ?? [];
+            if (!is_array($cabins)) {
+                continue;
+            }
+
+            foreach ($cabins as $cabin) {
+                $prices = $cabin['prices'] ?? [];
+                if (!is_array($prices)) {
+                    continue;
+                }
+
+                foreach ($prices as $price) {
+                    $price_value = intval($price['price_value'] ?? 0);
+                    if ($price_value <= 0) {
+                        continue;
+                    }
+
+                    if ($min_price === null || $price_value < $min_price) {
+                        $min_price = $price_value;
+                    }
+                }
+            }
+        }
+
+        return $min_price;
+    }
+
     private function patchPrices(&$mix_data)
     {
         foreach ($mix_data['decks'] as &$deck) {
