@@ -86,6 +86,7 @@ class Exist
         if (is_object($checkin_id)) {
             $checkin = $checkin_id;
             $checkin_id = $checkin->id;
+            $this->checkin = self::$static_checkin = $checkin;
         }
 
           #TODO Временно отключил кеширование
@@ -259,6 +260,37 @@ class Exist
             return $final_data;
         }
 
+        // Для Gama в realtime-режиме (cached=1) используем только данные источника,
+        // без подмешивания старых цен из локальной БД.
+        if (strtolower($checkin->eds_code) === 'gama' && $cached) {
+            $this->checkin = $checkin;
+            $this->exist_data = $exist_data;
+            $this->records = $this->exist_data['decks'] ?? [];
+
+            $source_data = $this->reorderDescks($this->records);
+
+            $source_data = [
+                'decks' => $source_data,
+                'rooms' => $this->roomsHandler($source_data),
+                'eds' => $checkin->eds_code,
+                'tariff_price1_title' => (isset($exist_data['tariff_price1_title'])) ? $exist_data['tariff_price1_title'] : ['name' => 'Руб.на 1 чел.', 'desc' => null],
+                'tariff_price2' => (isset($exist_data['tariff_price2'])) ? $exist_data['tariff_price2'] : false,
+                'tariff_price2_title' => (isset($exist_data['tariff_price2_title'])) ? $exist_data['tariff_price2_title'] : ['name' => 'Руб.на 1 чел.', 'desc' => null],
+            ];
+
+            $this->addQQ($source_data);
+
+            if ($type == 'json') {
+                $source_data['cached'] = true;
+                Cache::add($cache_key, $source_data, 120); // Сохраняю на 2 часа
+                ob_end_clean();
+                $this->json($source_data);
+                return;
+            }
+
+            return $source_data;
+        }
+
         $this->checkin = $checkin;
         $this->exist_data = $exist_data;
         $this->records = $this->exist_data['decks'];
@@ -373,18 +405,7 @@ class Exist
             return;
         }
 
-        $exist_min_price = $this->extractMinPrice($exist_data);
-        $db_min_price = $this->extractMinPriceFromDb($checkin_id);
-
-        $min_candidates = [];
-        if ($exist_min_price && $exist_min_price > 0) {
-            $min_candidates[] = $exist_min_price;
-        }
-        if ($db_min_price && $db_min_price > 0) {
-            $min_candidates[] = $db_min_price;
-        }
-
-        $min_price = $min_candidates ? min($min_candidates) : null;
+        $min_price = $this->extractMinPrice($exist_data);
         if (!$min_price) {
             $this->json([
                 'success' => false,
@@ -429,56 +450,19 @@ class Exist
                 }
 
                 foreach ($prices as $price) {
-                    $values = [
-                        intval($price['price_value'] ?? 0),
-                        intval($price['price2_value'] ?? 0),
-                    ];
+                    $value = intval($price['price_value'] ?? 0);
+                    if ($value <= 0) {
+                        continue;
+                    }
 
-                    foreach ($values as $value) {
-                        if ($value <= 0) {
-                            continue;
-                        }
-
-                        if ($min_price === null || $value < $min_price) {
-                            $min_price = $value;
-                        }
+                    if ($min_price === null || $value < $min_price) {
+                        $min_price = $value;
                     }
                 }
             }
         }
 
         return $min_price;
-    }
-
-    private function extractMinPriceFromDb(int $checkin_id): ?int
-    {
-        $candidates = [];
-
-        $min_price_a = DB::table('mcmraak_rivercrs_pricing')
-            ->where('checkin_id', $checkin_id)
-            ->where('price_a', '>', 0)
-            ->min('price_a');
-        if ($min_price_a) {
-            $candidates[] = intval($min_price_a);
-        }
-
-        $min_price_b = DB::table('mcmraak_rivercrs_pricing')
-            ->where('checkin_id', $checkin_id)
-            ->where('price_b', '>', 0)
-            ->min('price_b');
-        if ($min_price_b) {
-            $candidates[] = intval($min_price_b);
-        }
-
-        $min_nprice = DB::table('mcmraak_rivercrs_nprices')
-            ->where('checkin_id', $checkin_id)
-            ->where('price', '>', 0)
-            ->min('price');
-        if ($min_nprice) {
-            $candidates[] = intval($min_nprice);
-        }
-
-        return $candidates ? min($candidates) : null;
     }
 
     private function patchPrices(&$mix_data)

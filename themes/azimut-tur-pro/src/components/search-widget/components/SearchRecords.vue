@@ -4,7 +4,8 @@
             <section v-if="!record.injection"
                      :ref="`record-${record.id}`"
                      :data-checkin-id="record.id"
-                     class="result-item d-flex flex-column flex-md-row bg-primary-100 mb-4 rounded">
+                     class="result-item d-flex flex-column flex-md-row bg-primary-100 mb-4 rounded"
+                     :class="{ 'result-item--hide': shouldHideGamaPrice(record) }">
                 <div class="result-item__left col-12 col-md-4 position-relative">
                     <img class="result-item__img h-100 rounded-top rounded-md-left" :src="record.image" alt="item">
                     <template v-if="record.motorship_status">
@@ -97,13 +98,15 @@
                         </div>
                         <div
                             class="result-item__right-bottom d-flex flex-column flex-md-row align-items-center justify-content-end">
-                            <div class="text-center me-0 me-md-3 mb-3 mb-md-0 fs-def fs-md-s fs-xxl-def">
+                            <div
+                                class="text-center me-0 me-md-3 mb-3 mb-md-0 fs-def fs-md-s fs-xxl-def price-from-block"
+                                :class="{ 'price-from-block--hide': shouldHideGamaPrice(record) }"
+                            >
                                 <div>от <span class="fs-h2 fs-sm-h1 fs-md-h2 fs-xxl-h1 fw-bolder">
                                         <template v-if="isGamaRecord(record)">
                                             <span v-if="getGamaPriceState(record.id).status === 'loading'" class="price-loader" aria-label="Загрузка цены"></span>
-                                            <template v-else-if="getGamaPriceState(record.id).status === 'error'">Ошибка</template>
                                             <template v-else-if="getGamaPriceState(record.id).status === 'success'">{{ formatPrice(getGamaPriceState(record.id).value) }}</template>
-                                            <span v-else class="price-loader" aria-label="Загрузка цены"></span>
+                                            <span v-else-if="getGamaPriceState(record.id).status !== 'error'" class="price-loader" aria-label="Загрузка цены"></span>
                                         </template>
                                         <template v-else>{{ formatPrice(record.price_start) }}</template>
                                     </span> р./чел
@@ -129,13 +132,15 @@
                                 Акции
                                 <i class="bi bi-caret-down-fill"></i>
                             </div>
-                            <div class="text-center me-0 me-md-3 mb-3 mb-md-0 fs-def fs-md-s fs-xxl-def">
+                            <div
+                                class="text-center me-0 me-md-3 mb-3 mb-md-0 fs-def fs-md-s fs-xxl-def price-from-block"
+                                :class="{ 'price-from-block--hide': shouldHideGamaPrice(record) }"
+                            >
                                 <div>от <span class="fs-h2 fs-sm-h1 fs-md-h2 fs-xxl-h1 fw-bolder">
                                         <template v-if="isGamaRecord(record)">
                                             <span v-if="getGamaPriceState(record.id).status === 'loading'" class="price-loader" aria-label="Загрузка цены"></span>
-                                            <template v-else-if="getGamaPriceState(record.id).status === 'error'">Ошибка</template>
                                             <template v-else-if="getGamaPriceState(record.id).status === 'success'">{{ formatPrice(getGamaPriceState(record.id).value) }}</template>
-                                            <span v-else class="price-loader" aria-label="Загрузка цены"></span>
+                                            <span v-else-if="getGamaPriceState(record.id).status !== 'error'" class="price-loader" aria-label="Загрузка цены"></span>
                                         </template>
                                         <template v-else>{{ formatPrice(record.price_start) }}</template>
                                     </span> р./чел
@@ -233,6 +238,9 @@ export default {
     methods: {
         isGamaRecord(record) {
             return !!record && record.eds_code === 'gama';
+        },
+        shouldHideGamaPrice(record) {
+            return this.isGamaRecord(record) && this.getGamaPriceState(record.id).status === 'error';
         },
         getGamaPriceState(checkinId) {
             return this.gamaPriceStates[checkinId] || {status: 'idle', value: null};
@@ -390,6 +398,44 @@ export default {
     border-radius: 50%;
     animation: price-loader-spin .8s linear infinite;
     vertical-align: middle;
+}
+
+.price-from-block {
+    transform: scale(1);
+    opacity: 1;
+    max-width: 420px;
+    max-height: 160px;
+    transition: transform .28s ease, opacity .28s ease, max-width .28s ease, max-height .28s ease, margin .28s ease;
+    transform-origin: right center;
+    overflow: hidden;
+}
+
+.price-from-block--hide {
+    transform: scale(.85);
+    opacity: 0;
+    max-width: 0;
+    max-height: 0;
+    margin: 0 !important;
+    pointer-events: none;
+}
+
+.result-item {
+    max-height: 1200px;
+    overflow: hidden;
+    transform: scale(1);
+    opacity: 1;
+    transform-origin: center top;
+    transition: transform .32s ease, opacity .32s ease, max-height .32s ease, margin .32s ease, padding .32s ease;
+}
+
+.result-item--hide {
+    transform: scale(.96);
+    opacity: 0;
+    max-height: 0;
+    margin: 0 !important;
+    padding-top: 0 !important;
+    padding-bottom: 0 !important;
+    pointer-events: none;
 }
 
 @keyframes price-loader-spin {
