@@ -59,8 +59,7 @@ function updateTopBookingPriceFromCache() {
                 return;
             }
 
-            // Для этой доработки цена на кнопке выводится без разделителя разрядов.
-            priceNode.textContent = String(minPrice);
+            priceNode.textContent = (payload.min_price_formatted || String(minPrice)).replace(/\u00A0/g, ' ');
         })
         .catch(() => {
             // Оставляем серверное fallback-значение без изменений.

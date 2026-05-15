@@ -105,7 +105,7 @@
                                             <template v-else-if="getGamaPriceState(record.id).status === 'success'">{{ formatPrice(getGamaPriceState(record.id).value) }}</template>
                                             <span v-else class="price-loader" aria-label="Загрузка цены"></span>
                                         </template>
-                                        <template v-else>{{ record.price_start }}</template>
+                                        <template v-else>{{ formatPrice(record.price_start) }}</template>
                                     </span> р./чел
                                 </div>
                                 <div class="fs-ss">без учёта скидок</div>
@@ -137,7 +137,7 @@
                                             <template v-else-if="getGamaPriceState(record.id).status === 'success'">{{ formatPrice(getGamaPriceState(record.id).value) }}</template>
                                             <span v-else class="price-loader" aria-label="Загрузка цены"></span>
                                         </template>
-                                        <template v-else>{{ record.price_start }}</template>
+                                        <template v-else>{{ formatPrice(record.price_start) }}</template>
                                     </span> р./чел
                                 </div>
                                 <div class="fs-ss">без учёта скидок</div>
@@ -238,11 +238,14 @@ export default {
             return this.gamaPriceStates[checkinId] || {status: 'idle', value: null};
         },
         formatPrice(value) {
-            const numericValue = parseInt(value, 10);
+            const normalizedValue = String(value ?? '').replace(/\s+/g, '');
+            const numericValue = parseInt(normalizedValue, 10);
             if (!numericValue) {
-                return 'Ошибка';
+                return value ?? 'Ошибка';
             }
-            return String(numericValue);
+            return new Intl.NumberFormat('ru-RU')
+                .format(numericValue)
+                .replace(/\u00A0/g, ' ');
         },
         setupGamaPriceObserver() {
             this.teardownGamaPriceObserver();
