@@ -373,7 +373,18 @@ class Exist
             return;
         }
 
-        $min_price = $this->extractMinPrice($exist_data);
+        $exist_min_price = $this->extractMinPrice($exist_data);
+        $db_min_price = $this->extractMinPriceFromDb($checkin_id);
+
+        $min_candidates = [];
+        if ($exist_min_price && $exist_min_price > 0) {
+            $min_candidates[] = $exist_min_price;
+        }
+        if ($db_min_price && $db_min_price > 0) {
+            $min_candidates[] = $db_min_price;
+        }
+
+        $min_price = $min_candidates ? min($min_candidates) : null;
         if (!$min_price) {
             $this->json([
                 'success' => false,
@@ -418,19 +429,56 @@ class Exist
                 }
 
                 foreach ($prices as $price) {
-                    $price_value = intval($price['price_value'] ?? 0);
-                    if ($price_value <= 0) {
-                        continue;
-                    }
+                    $values = [
+                        intval($price['price_value'] ?? 0),
+                        intval($price['price2_value'] ?? 0),
+                    ];
 
-                    if ($min_price === null || $price_value < $min_price) {
-                        $min_price = $price_value;
+                    foreach ($values as $value) {
+                        if ($value <= 0) {
+                            continue;
+                        }
+
+                        if ($min_price === null || $value < $min_price) {
+                            $min_price = $value;
+                        }
                     }
                 }
             }
         }
 
         return $min_price;
+    }
+
+    private function extractMinPriceFromDb(int $checkin_id): ?int
+    {
+        $candidates = [];
+
+        $min_price_a = DB::table('mcmraak_rivercrs_pricing')
+            ->where('checkin_id', $checkin_id)
+            ->where('price_a', '>', 0)
+            ->min('price_a');
+        if ($min_price_a) {
+            $candidates[] = intval($min_price_a);
+        }
+
+        $min_price_b = DB::table('mcmraak_rivercrs_pricing')
+            ->where('checkin_id', $checkin_id)
+            ->where('price_b', '>', 0)
+            ->min('price_b');
+        if ($min_price_b) {
+            $candidates[] = intval($min_price_b);
+        }
+
+        $min_nprice = DB::table('mcmraak_rivercrs_nprices')
+            ->where('checkin_id', $checkin_id)
+            ->where('price', '>', 0)
+            ->min('price');
+        if ($min_nprice) {
+            $candidates[] = intval($min_nprice);
+        }
+
+        return $candidates ? min($candidates) : null;
     }
 
     private function patchPrices(&$mix_data)
