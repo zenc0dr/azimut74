@@ -45,3 +45,9 @@ function onStart()
 		</div>
 	</div>
 </section>
+
+{% if RiverCRS.reviewsWidget %}
+<div class="container">
+    {% partial 'reviews/widget' %}
+</div>
+{% endif %}

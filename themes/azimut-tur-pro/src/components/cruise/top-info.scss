@@ -59,11 +59,32 @@
          height: 240px;
       }
    }
-   // .cruise__item-left_youtube
-   &__item-left_youtube {
+   // .cruise__item-left_actions — угол фото: YouTube + «Смотреть отзывы»
+   &__item-left_actions {
       position: absolute;
       bottom: 15px;
       left: 15px;
+      right: 15px;
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      gap: 10px;
+      z-index: 2;
+   }
+   // .cruise__item-left_youtube
+   &__item-left_youtube {
+      display: inline-flex;
+      flex-shrink: 0;
+   }
+   &__item-left_reviews-link {
+      white-space: nowrap;
+      font-size: fs('s');
+      padding: 0.35em 0.75em;
+      @include m('390px') {
+         font-size: fs('ss');
+         white-space: normal;
+         text-align: center;
+      }
    }
    // .cruise__item-right
    &__item-right {

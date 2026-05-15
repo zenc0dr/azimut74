@@ -20,9 +20,14 @@
 		<div class="cruise__item d-flex flex-column flex-lg-row justify-content-between mb-4 rounded">
 			<div class="cruise__item-left">
 				<div class="cruise__item-left_img" style="background-image: url({{ RiverCRS.ship_pic }})"></div>
-				<a class="cruise__item-left_youtube" href="{{ RiverCRS.ship_video }}" modal=".youtube-content">
-					<img src="{{'assets/images/components/cruise/youtube.svg'|theme}}" alt="youtube"/>
-				</a>
+				<div class="cruise__item-left_actions">
+					<a class="cruise__item-left_youtube" href="{{ RiverCRS.ship_video }}" modal=".youtube-content">
+						<img src="{{'assets/images/components/cruise/youtube.svg'|theme}}" alt="youtube"/>
+					</a>
+					{% if RiverCRS.reviewsWidget %}
+					<a href="#page-reviews-widget" class="btn red cruise__item-left_reviews-link">Смотреть отзывы</a>
+					{% endif %}
+				</div>
 				<div class="youtube-content" style="display: none">
 					<iframe loading="lazy" src="{{ RiverCRS.ship_video }}" frameborder="0" allowfullscreen=""></iframe>
 

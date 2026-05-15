@@ -15,7 +15,7 @@ function scrollToCruiseReviews() {
 }
 
 document.addEventListener('click', (e) => {
-    const a = e.target.closest('a.cruise-reviews-jump__link');
+    const a = e.target.closest('a.cruise__item-left_reviews-link');
     if (!a || a.getAttribute('href') !== REVIEWS_ANCHOR) {
         return;
     }

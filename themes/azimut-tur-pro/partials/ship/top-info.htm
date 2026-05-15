@@ -5,14 +5,18 @@
 		<div class="ship__item d-flex flex-column flex-lg-row justify-content-between mb-4 rounded">
 			<div class="ship__item-left">
 				<div class="ship__item-left_img" style="background-image: url({{ RiverCRS.ship_pic }})"></div>
-<a class="ship__item-left_youtube" modal=".youtube-content">
-
-	<img src="/themes/azimut-tur-pro/assets/images/components/cruise/youtube.svg" alt="youtube"/>
-</a>
-<div class="youtube-content" style="display: none">
+				<div class="ship__item-left_actions">
+					<a class="ship__item-left_youtube" modal=".youtube-content">
+						<img src="/themes/azimut-tur-pro/assets/images/components/cruise/youtube.svg" alt="youtube"/>
+					</a>
+					{% if RiverCRS.reviewsWidget %}
+					<a href="#page-reviews-widget" class="btn red ship__item-left_reviews-link">Смотреть отзывы</a>
+					{% endif %}
+				</div>
+				<div class="youtube-content" style="display: none">
 <iframe loading="lazy" src="{{ RiverCRS.ship_video }}" frameborder="0" allowfullscreen=""></iframe>
 
-</div>
+				</div>
 
                 {% if RiverCRS.ship_status %}
 
