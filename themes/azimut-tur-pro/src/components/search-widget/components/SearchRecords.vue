@@ -242,7 +242,7 @@ export default {
             if (!numericValue) {
                 return 'Ошибка';
             }
-            return new Intl.NumberFormat('ru-RU').format(numericValue);
+            return String(numericValue);
         },
         setupGamaPriceObserver() {
             this.teardownGamaPriceObserver();
