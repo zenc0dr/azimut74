@@ -104,7 +104,12 @@
 					<div class="cruise__item-right_end-bottom d-flex flex-column align-items-center justify-content-end">
 						<div class="booking-price">
 						</div>
-						<a class="booking-btn btn red" href="#">
+						<a
+                            class="booking-btn btn red"
+                            href="#"
+                            data-checkin-id="{{ RiverCRS.checkin.id }}"
+                            data-eds-code="{{ RiverCRS.checkin.eds_code }}"
+                        >
 							<div>от
 								<span>{{ RiverCRS.price_start|price_format }}</span>
 								р./чел</div>

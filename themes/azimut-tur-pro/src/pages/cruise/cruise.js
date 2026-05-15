@@ -4,6 +4,7 @@ import '@components/blocks/tabs/_';
 import '@components/cruise/tab-booking-2';
 import '@components/zen-gallery/zen-gallery.js';
 import '@src/components/reviews-widget/_.js';
+import axios from "axios";
 
 const REVIEWS_ANCHOR = '#page-reviews-widget';
 
@@ -28,3 +29,42 @@ document.addEventListener('click', (e) => {
         scrollToCruiseReviews();
     }
 });
+
+function updateTopBookingPriceFromCache() {
+    const bookingBtn = document.querySelector('.booking-btn.btn.red[data-checkin-id][data-eds-code]');
+    if (!bookingBtn) {
+        return;
+    }
+
+    const edsCode = (bookingBtn.dataset.edsCode || '').toLowerCase();
+    if (edsCode !== 'gama') {
+        return;
+    }
+
+    const checkinId = parseInt(bookingBtn.dataset.checkinId, 10);
+    if (!checkinId) {
+        return;
+    }
+
+    const priceNode = bookingBtn.querySelector('span');
+    if (!priceNode) {
+        return;
+    }
+
+    axios.get(`/rivercrs/api/v2/exist/min-price/${checkinId}`)
+        .then((response) => {
+            const payload = response?.data || {};
+            const minPrice = parseInt(payload.min_price, 10);
+            if (!payload.success || !minPrice) {
+                return;
+            }
+
+            // Для этой доработки цена на кнопке выводится без разделителя разрядов.
+            priceNode.textContent = String(minPrice);
+        })
+        .catch(() => {
+            // Оставляем серверное fallback-значение без изменений.
+        });
+}
+
+updateTopBookingPriceFromCache();
