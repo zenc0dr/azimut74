@@ -1,5 +1,6 @@
 <?php namespace Zen\Reviews\Models;
 
+use Mcmraak\Rivercrs\Models\Motorships;
 use Model;
 
 /**
@@ -38,5 +39,80 @@ class Review extends Model
             return null;
         }
         return reviews()->fromJson($value);
+    }
+
+    /**
+     * Данные формы из JSON (для списка в бэкенде).
+     *
+     * @return array<string, mixed>
+     */
+    protected function reviewFormData(): array
+    {
+        $d = $this->data;
+
+        return is_array($d) ? $d : [];
+    }
+
+    /**
+     * Имя теплохода без слова «Теплоход» и без скобок проекта — как standard_name у судна в RiverCRS.
+     */
+    public function getShipShortNameAttribute(): string
+    {
+        $data = $this->reviewFormData();
+        $shipId = isset($data['ship_id']) ? (int) $data['ship_id'] : 0;
+        if ($shipId > 0 && class_exists(Motorships::class)) {
+            $ship = Motorships::find($shipId);
+            if ($ship) {
+                return trim((string) $ship->standard_name);
+            }
+        }
+
+        $raw = isset($data['ship_name']) ? (string) $data['ship_name'] : '';
+
+        return self::normalizeShipNameString($raw);
+    }
+
+    /** «Как бы Вы оценили свой отдых в целом?» — form.reviews.cruise */
+    public function getRatingVacationAttribute(): string
+    {
+        return $this->formatRatingFromForm('cruise');
+    }
+
+    /** «Как бы Вы оценили работу компании Азимут?» — form.reviews.azimut */
+    public function getRatingAzimutAttribute(): string
+    {
+        return $this->formatRatingFromForm('azimut');
+    }
+
+    private function formatRatingFromForm(string $key): string
+    {
+        $data = $this->reviewFormData();
+        $reviews = $data['reviews'] ?? null;
+        if (!is_array($reviews) || !array_key_exists($key, $reviews)) {
+            return '—';
+        }
+        $v = $reviews[$key];
+        if ($v === null || $v === '') {
+            return '—';
+        }
+        if (!is_numeric($v)) {
+            return '—';
+        }
+        $n = (int) round((float) $v);
+
+        return (string) $n;
+    }
+
+    private static function normalizeShipNameString(string $name): string
+    {
+        $name = trim($name);
+        if ($name === '') {
+            return '';
+        }
+        $name = preg_replace('/\([^(]+\)/', '', $name);
+        $name = str_replace('"', '', $name);
+        $name = str_replace('Теплоход', '', $name);
+
+        return trim($name);
     }
 }

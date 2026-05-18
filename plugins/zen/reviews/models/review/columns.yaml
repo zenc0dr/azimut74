@@ -8,16 +8,21 @@ columns:
         type: text
         searchable: true
         sortable: true
-    email:
-        label: email
+    ship_short_name:
+        label: Имя теплохода
         type: text
-        searchable: true
-        sortable: true
-    phone:
-        label: Телефон
+        searchable: false
+        sortable: false
+    rating_vacation:
+        label: Оценка отдыха в целом
         type: text
-        searchable: true
-        sortable: true
+        searchable: false
+        sortable: false
+    rating_azimut:
+        label: Оценка работы Азимут
+        type: text
+        searchable: false
+        sortable: false
     created_at:
         label: Создано
         type: datetime
