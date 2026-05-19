@@ -11,6 +11,47 @@ class ReviewsDistributionCsv
 {
     public const INDEX_CRUISE_ID = 2;
 
+    /** Публичный экспорт Google Sheets (задача 0050). */
+    public const DEFAULT_PUBLISH_URL = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vTq_FP7ttGw_JcVbAyHW-DY7Td5SflpXRIjaxCZ2PUmDU-0NeHMXYXiH3PgJhpfSD9nd5nUAy_JdM3V/pub?gid=1323221536&single=true&output=csv';
+
+    public const DEFAULT_STORAGE_RELATIVE = 'storage/app/distribution_of_reviews.csv';
+
+    /**
+     * Скачать CSV по URL и сохранить в storage/app.
+     */
+    public function downloadToStorage($url = null, $relativePath = null): ?string
+    {
+        $url = $url ?: self::DEFAULT_PUBLISH_URL;
+        $relativePath = $relativePath ?: self::DEFAULT_STORAGE_RELATIVE;
+
+        $fullPath = strpos($relativePath, '/') === 0
+            ? $relativePath
+            : base_path($relativePath);
+
+        $dir = dirname($fullPath);
+        if (!is_dir($dir)) {
+            mkdir($dir, 0755, true);
+        }
+
+        $context = stream_context_create([
+            'http' => [
+                'timeout' => 60,
+                'user_agent' => 'azimut74-rivercrs-distribute-reviews/1.0',
+            ],
+        ]);
+
+        $content = @file_get_contents($url, false, $context);
+        if ($content === false || $content === '') {
+            return null;
+        }
+
+        if (file_put_contents($fullPath, $content) === false) {
+            return null;
+        }
+
+        return $fullPath;
+    }
+
     public function resolveCsvPath($path): ?string
     {
         if (!$path) {

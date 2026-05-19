@@ -227,13 +227,7 @@ class RivercrsCore
 
         $data = RivercrsCheckin::checkin($checkin);
 
-        $shipId = isset($data['ship_id']) ? (int) $data['ship_id'] : 0;
-        if ($shipId > 0) {
-            $ship = Motorships::find($shipId);
-            if ($ship) {
-                $data['reviewsWidget'] = $this->buildMotorshipReviewsWidgetData($ship, true);
-            }
-        }
+        $data['reviewsWidget'] = ReviewsWidget::buildCheckinReviewsWidgetData((int) $checkin->id);
 
         if (isset($_GET['dump'])) {
             dd($data);

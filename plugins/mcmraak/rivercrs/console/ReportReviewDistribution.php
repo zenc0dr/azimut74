@@ -3,6 +3,7 @@
 use Illuminate\Console\Command;
 use Mcmraak\Rivercrs\Classes\ReviewsDistributionAudit;
 use Mcmraak\Rivercrs\Classes\ReviewsDistributionCsv;
+use Mcmraak\Rivercrs\Classes\ReviewsWidget;
 use Symfony\Component\Console\Input\InputOption;
 
 /**
@@ -21,11 +22,18 @@ class ReportReviewDistribution extends Command
     {
         return [
             [
+                'csv-url',
+                null,
+                InputOption::VALUE_OPTIONAL,
+                'URL публичного CSV.',
+                ReviewsDistributionCsv::DEFAULT_PUBLISH_URL,
+            ],
+            [
                 'csv',
                 null,
                 InputOption::VALUE_OPTIONAL,
-                'Эталонный CSV (как у rivercrs:distribute-reviews)',
-                'storage/app/distribution_of_reviews.csv',
+                'Локальный CSV (без скачивания).',
+                null,
             ],
             [
                 'output',
@@ -40,10 +48,10 @@ class ReportReviewDistribution extends Command
     public function handle()
     {
         $this->csv = new ReviewsDistributionCsv();
-        $csvPath = $this->csv->resolveCsvPath((string) $this->option('csv'));
+        $csvPath = $this->resolveDistributionCsvPath();
 
         if (!$csvPath) {
-            $this->error('CSV не найден. Укажите --csv или скопируйте файл в storage/app/distribution_of_reviews.csv');
+            $this->error('CSV не найден. Укажите --csv или проверьте скачивание по --csv-url.');
             return 1;
         }
 
@@ -54,10 +62,37 @@ class ReportReviewDistribution extends Command
         }
 
         [$resolvedRows, $resolveErrors] = $this->csv->resolveTargets($rows);
-        [$mergedRows, $mergeWarnings] = $this->csv->mergeResolvedRowsByTarget($resolvedRows);
+        $landingResolved = [];
+        $landingErrors = [];
+        foreach ($resolvedRows as $row) {
+            if (($row['target']['entity_type'] ?? '') === ReviewsWidget::ENTITY_MOTORSHIP) {
+                continue;
+            }
+            $landingResolved[] = $row;
+        }
+        foreach ($resolveErrors as $error) {
+            if (($error['page_type'] ?? '') === 'motorship') {
+                continue;
+            }
+            $landingErrors[] = $error;
+        }
+
+        [$mergedRows, $mergeWarnings] = $this->csv->mergeResolvedRowsByTarget($landingResolved);
+
+        $motorshipRows = [];
+        foreach ($resolvedRows as $row) {
+            if (($row['target']['entity_type'] ?? '') === ReviewsWidget::ENTITY_MOTORSHIP) {
+                $motorshipRows[] = $row;
+            }
+        }
+        [$mergedMotorship] = $this->csv->mergeResolvedRowsByTarget($motorshipRows);
+        foreach ($mergedMotorship as $row) {
+            $row['count'] = DistributeReviews::MOTORSHIP_BINDINGS_LIMIT;
+            $mergedRows[] = $row;
+        }
 
         $audit = new ReviewsDistributionAudit();
-        $result = $audit->buildReport($mergedRows, $resolveErrors);
+        $result = $audit->buildReport($mergedRows, $landingErrors);
         $summaryRows = $audit->buildSummaryRows($result['summary']);
 
         $outputRelative = ltrim(str_replace(['\\', '..'], ['/', ''], (string) $this->option('output')), '/');
@@ -77,6 +112,21 @@ class ReportReviewDistribution extends Command
         return ((int) $result['summary']['targets_problem'] === 0 && (int) $result['summary']['resolve_errors'] === 0)
             ? 0
             : 2;
+    }
+
+    private function resolveDistributionCsvPath(): ?string
+    {
+        $local = $this->csv->resolveCsvPath((string) $this->option('csv'));
+        if ($local) {
+            return $local;
+        }
+
+        $path = $this->csv->downloadToStorage((string) $this->option('csv-url'));
+        if ($path) {
+            return $path;
+        }
+
+        return $this->csv->resolveCsvPath(ReviewsDistributionCsv::DEFAULT_STORAGE_RELATIVE);
     }
 
     /**

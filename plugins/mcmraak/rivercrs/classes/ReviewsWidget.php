@@ -12,6 +12,7 @@ class ReviewsWidget
     const ENTITY_CRUISE = 'cruise';
     const ENTITY_TRANSIT = 'transit';
     const ENTITY_MOTORSHIP = 'motorship';
+    const ENTITY_CHECKIN = 'checkin';
 
     /** Порядок и подписи оценок для публичного виджета (без reviews.azimut). Порядок как в макете заказчика. */
     private const RATING_DEFINITIONS = [
@@ -222,10 +223,99 @@ class ReviewsWidget
         return $out;
     }
 
-    /** @deprecated Используйте getLatestReviewsForShip */
+    /**
+     * Случайные отзывы судна (ship_id в форме).
+     *
+     * @return \Illuminate\Support\Collection<int, Review>
+     */
     public static function getRandomReviewsForShip(int $shipId, int $limit = 3)
     {
-        return self::getLatestReviewsForShip($shipId, $limit);
+        $shipId = (int) $shipId;
+        $limit = (int) $limit;
+        if ($shipId < 1 || $limit < 1) {
+            return collect();
+        }
+
+        return Review::query()
+            ->tap(function ($query) use ($shipId) {
+                self::applyShipIdFilterToQuery($query, $shipId);
+            })
+            ->inRandomOrder()
+            ->limit($limit)
+            ->get();
+    }
+
+    /**
+     * @param array<int, bool> $blockedReviewIds
+     * @return \Illuminate\Support\Collection<int, Review>
+     */
+    public static function pickRandomReviewsForShipUnblocked(int $shipId, int $limit, array $blockedReviewIds = [])
+    {
+        $shipId = (int) $shipId;
+        $limit = (int) $limit;
+        if ($shipId < 1 || $limit < 1) {
+            return collect();
+        }
+
+        $scanLimit = max($limit * 30, 60);
+        $candidates = Review::query()
+            ->tap(function ($query) use ($shipId) {
+                self::applyShipIdFilterToQuery($query, $shipId);
+            })
+            ->inRandomOrder()
+            ->limit($scanLimit)
+            ->get();
+
+        $out = collect();
+        foreach ($candidates as $review) {
+            $reviewId = (int) $review->id;
+            if (isset($blockedReviewIds[$reviewId])) {
+                continue;
+            }
+            $out->push($review);
+            if ($out->count() >= $limit) {
+                break;
+            }
+        }
+
+        return $out;
+    }
+
+    /**
+     * Виджет для /cruise/:checkin_id — отзывы из cruise_review_assignments.json.
+     *
+     * @return array<string, mixed>|null
+     */
+    public static function buildCheckinReviewsWidgetData(int $checkinId): ?array
+    {
+        $checkinId = (int) $checkinId;
+        if ($checkinId < 1) {
+            return null;
+        }
+
+        $items = [];
+        foreach (CruiseReviewAssignments::getReviewIdsForCheckin($checkinId) as $reviewId) {
+            $review = Review::find($reviewId);
+            if ($review) {
+                $items[] = self::formatReview($review);
+            }
+        }
+
+        if ($items === []) {
+            return null;
+        }
+
+        $excludeIds = array_values(array_map('intval', array_column($items, 'id')));
+
+        return [
+            'entityType' => self::ENTITY_CHECKIN,
+            'entityId' => $checkinId,
+            'items' => $items,
+            'excludeIds' => $excludeIds,
+            'ships' => self::getShipOptions(),
+            'moreRemaining' => self::countMoreReviews($excludeIds, null),
+            'loadMoreFromGlobalPool' => true,
+        ];
     }
 
     public static function extractForm(Review $review)
