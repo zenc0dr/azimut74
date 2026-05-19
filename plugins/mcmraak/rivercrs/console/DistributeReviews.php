@@ -3,19 +3,23 @@
 use Carbon\Carbon;
 use DB;
 use Illuminate\Console\Command;
+use Mcmraak\Rivercrs\Classes\ReviewsDistributionCsv;
 use Mcmraak\Rivercrs\Classes\ReviewsWidget;
-use Mcmraak\Rivercrs\Models\Cruises;
 use Mcmraak\Rivercrs\Models\Motorships;
-use Mcmraak\Rivercrs\Models\Transit;
 use Symfony\Component\Console\Input\InputOption;
 use Zen\Reviews\Models\Review as ZenReview;
 
 class DistributeReviews extends Command
 {
     protected $name = 'rivercrs:distribute-reviews';
-    protected $description = 'Автоматическое распределение отзывов по CSV (index/cruise_menu/transit/motorship)';
 
-    private const INDEX_CRUISE_ID = 2;
+    protected $description = 'Обновляет привязки отзывов только для теплоходов (N свежих на судно). Cruise/transit/index не изменяет.';
+
+    /** Сколько свежих отзывов класть на карточку теплохода. */
+    public const MOTORSHIP_BINDINGS_LIMIT = 3;
+
+    /** @var ReviewsDistributionCsv */
+    private $distributionCsv;
 
     protected function getOptions()
     {
@@ -24,8 +28,15 @@ class DistributeReviews extends Command
                 'csv',
                 null,
                 InputOption::VALUE_OPTIONAL,
-                'Путь к CSV (абсолютный или относительно base_path). По умолчанию — файл в storage (см. docker-compose: ./storage → контейнер).',
-                'storage/app/distribution_of_reviews.csv',
+                'Опционально: только теплоходы из motorship-строк CSV. Без файла — все суда из БД.',
+                null,
+            ],
+            [
+                'limit',
+                null,
+                InputOption::VALUE_OPTIONAL,
+                'Максимум свежих отзывов на теплоход (по умолчанию ' . self::MOTORSHIP_BINDINGS_LIMIT . ').',
+                (string) self::MOTORSHIP_BINDINGS_LIMIT,
             ],
             [
                 'dry-run',
@@ -39,438 +50,198 @@ class DistributeReviews extends Command
 
     public function handle()
     {
+        $this->distributionCsv = new ReviewsDistributionCsv();
         $dryRun = (bool) $this->option('dry-run');
-        $csvPath = $this->resolveCsvPath((string) $this->option('csv'));
+        $limit = max(1, (int) $this->option('limit'));
 
-        if (!$csvPath) {
-            $this->error('CSV файл не найден. Проверьте опцию --csv.');
+        $shipIds = $this->resolveMotorshipIds();
+        if ($shipIds === []) {
+            $this->error('Не найдено ни одного теплохода для обработки.');
             return 1;
         }
 
-        $rows = $this->parseCsv($csvPath);
-        if (empty($rows)) {
-            $this->error('В CSV не найдено валидных строк для распределения.');
-            return 1;
+        $blockedReviewIds = $this->loadBlockedReviewIdsForOtherEntities();
+
+        $this->info('Режим: только motorship, cruise/transit/index не затрагиваются.');
+        $this->info('Теплоходов к обработке: ' . count($shipIds));
+        $this->info('Лимит свежих отзывов на судно: ' . $limit);
+        $this->info('Отзывов, занятых на cruise/transit (нельзя переназначить): ' . count($blockedReviewIds));
+
+        $deletedTotal = 0;
+        $insertedTotal = 0;
+        $shortages = [];
+
+        foreach ($shipIds as $shipId) {
+            $shipId = (int) $shipId;
+            $reviews = ReviewsWidget::getLatestReviewsForShipUnblocked(
+                $shipId,
+                $limit,
+                $blockedReviewIds
+            );
+
+            $pickedIds = $reviews->pluck('id')->map(function ($id) {
+                return (int) $id;
+            })->values()->all();
+
+            if (!$dryRun) {
+                $deleted = DB::table('zen_reviews_bindings')
+                    ->where('entity_type', ReviewsWidget::ENTITY_MOTORSHIP)
+                    ->where('entity_id', $shipId)
+                    ->delete();
+                $deletedTotal += $deleted;
+
+                if ($pickedIds !== []) {
+                    $this->insertMotorshipBindings($shipId, $pickedIds);
+                    $insertedTotal += count($pickedIds);
+                }
+            }
+
+            if (count($pickedIds) < $limit) {
+                $eligible = $this->countEligibleReviewsForShip($shipId, $blockedReviewIds);
+                $shortages[] = [
+                    'ship_id' => $shipId,
+                    'requested' => $limit,
+                    'assigned' => count($pickedIds),
+                    'missing' => $limit - count($pickedIds),
+                    'eligible_in_db' => $eligible,
+                    'review_ids' => implode(',', $pickedIds),
+                ];
+            }
         }
 
-        $this->info('CSV: ' . $csvPath);
-        $this->info('Строк для обработки: ' . count($rows));
-
-        [$resolvedRows, $resolveErrors] = $this->resolveTargets($rows);
-        $this->info('Успешно резолвлено строк: ' . count($resolvedRows));
-
-        [$resolvedRows, $mergeWarnings] = $this->mergeResolvedRowsByTarget($resolvedRows);
-        if ($mergeWarnings) {
-            $this->warn('Слияние строк CSV с одинаковой целью (см. отчёт): ' . count($mergeWarnings) . ' групп');
-        }
-        $this->info('Уникальных целей после слияния: ' . count($resolvedRows));
-
-        if ($resolveErrors) {
-            $this->warn('Строк с ошибками резолва: ' . count($resolveErrors));
-        }
-
-        [$generalPool, $shipPools] = $this->buildReviewPools();
-        $this->info('Отзывы в общем пуле: ' . count($generalPool));
-        $this->info('Теплоходов с отдельным пулом: ' . count($shipPools));
-
-        [$allocations, $shortages, $usageStats] = $this->buildAllocations($resolvedRows, $generalPool, $shipPools);
-
-        if (!$dryRun) {
-            $this->info('Очищаю zen_reviews_bindings...');
-            DB::table('zen_reviews_bindings')->truncate();
-            $this->persistAllocations($allocations);
-            $this->info('Новые привязки записаны: ' . count($allocations));
-        } else {
+        if ($dryRun) {
             $this->info('DRY-RUN: изменения в БД не выполнялись.');
-            $this->info('Планируемых привязок: ' . count($allocations));
+            $wouldInsert = 0;
+            foreach ($shipIds as $shipId) {
+                $reviews = ReviewsWidget::getLatestReviewsForShipUnblocked(
+                    (int) $shipId,
+                    $limit,
+                    $blockedReviewIds
+                );
+                $wouldInsert += $reviews->count();
+            }
+            $this->info('Планируется привязок (всего): ' . $wouldInsert);
+        } else {
+            $this->info('Удалено старых motorship-привязок: ' . $deletedTotal);
+            $this->info('Добавлено новых motorship-привязок: ' . $insertedTotal);
+            $this->info('Всего привязок в БД: ' . (int) DB::table('zen_reviews_bindings')->count());
         }
 
-        $this->printReport($resolveErrors, $mergeWarnings, $shortages, $usageStats, count($allocations), $dryRun);
+        $this->printReport($shortages, $dryRun);
+
         return 0;
     }
 
     /**
-     * Несколько строк CSV могут резолвиться в одну и ту же сущность (например index → cruise id 2
-     * и cruise_menu,kruizy-iz-saratova → тот же cruise id 2). Привязки в БД общие — суммировать count нельзя.
-     * Объединяем в одну строку с count = max(...) по каждой уникальной цели, порядок — как первое вхождение.
+     * Отзывы, уже привязанные к cruise/transit/index — для motorship не используем.
      *
-     * @return array
+     * @return array<int, bool> review_id => true
      */
-    private function mergeResolvedRowsByTarget(array $resolvedRows): array
+    private function loadBlockedReviewIdsForOtherEntities(): array
     {
-        $merged = [];
-        $keyToIndex = [];
-        $warnings = [];
+        $blocked = [];
+        $rows = DB::table('zen_reviews_bindings')
+            ->where('entity_type', '!=', ReviewsWidget::ENTITY_MOTORSHIP)
+            ->pluck('review_id');
 
-        foreach ($resolvedRows as $row) {
-            $entityType = $row['target']['entity_type'];
-            $entityId = (int) $row['target']['entity_id'];
-            $key = $entityType . ':' . $entityId;
-
-            if (!isset($keyToIndex[$key])) {
-                $keyToIndex[$key] = count($merged);
-                $row['_merge_source_lines'] = [$row['line']];
-                $merged[] = $row;
-                continue;
-            }
-
-            $idx = $keyToIndex[$key];
-            $merged[$idx]['_merge_source_lines'][] = $row['line'];
-            if ((int) $row['count'] > (int) $merged[$idx]['count']) {
-                $merged[$idx]['count'] = (int) $row['count'];
-            }
+        foreach ($rows as $reviewId) {
+            $blocked[(int) $reviewId] = true;
         }
 
-        foreach ($merged as $idx => $row) {
-            $lines = $row['_merge_source_lines'];
-            unset($merged[$idx]['_merge_source_lines']);
-            if (count($lines) > 1) {
-                $warnings[] = [
-                    'entity_type' => $row['target']['entity_type'],
-                    'entity_id' => (int) $row['target']['entity_id'],
-                    'lines' => $lines,
-                    'count' => (int) $row['count'],
-                ];
-            }
-        }
-
-        return [$merged, $warnings];
+        return $blocked;
     }
 
-    private function resolveCsvPath($path)
+    /**
+     * @return array<int, int>
+     */
+    private function resolveMotorshipIds(): array
     {
-        if (!$path) {
-            return null;
+        $csvPath = $this->distributionCsv->resolveCsvPath((string) $this->option('csv'));
+        if ($csvPath) {
+            $this->info('CSV (фильтр теплоходов): ' . $csvPath);
+            $rows = $this->distributionCsv->parseCsv($csvPath);
+            [$resolved] = $this->distributionCsv->resolveTargets($rows);
+            $ids = [];
+            foreach ($resolved as $row) {
+                if (($row['target']['entity_type'] ?? '') !== ReviewsWidget::ENTITY_MOTORSHIP) {
+                    continue;
+                }
+                $ids[] = (int) $row['target']['entity_id'];
+            }
+
+            return array_values(array_unique($ids));
         }
 
-        $candidates = [];
+        return Motorships::query()
+            ->orderBy('id')
+            ->pluck('id')
+            ->map(function ($id) {
+                return (int) $id;
+            })
+            ->values()
+            ->all();
+    }
 
-        if (strpos($path, '/') === 0) {
-            $candidates[] = $path;
-        } else {
-            $candidates[] = base_path($path);
-            $candidates[] = base_path('../' . ltrim($path, '/'));
-        }
-
-        foreach ($candidates as $candidate) {
-            if (is_file($candidate)) {
-                return $candidate;
+    /**
+     * @param array<int, bool> $blockedReviewIds
+     */
+    private function countEligibleReviewsForShip(int $shipId, array $blockedReviewIds): int
+    {
+        $count = 0;
+        $chunk = ReviewsWidget::getLatestReviewsForShip($shipId, 500);
+        foreach ($chunk as $review) {
+            $id = (int) $review->id;
+            if (!isset($blockedReviewIds[$id])) {
+                $count++;
             }
         }
 
-        return null;
+        return $count;
     }
 
-    private function parseCsv($csvPath)
+    /**
+     * @param array<int, int> $reviewIds
+     */
+    private function insertMotorshipBindings(int $shipId, array $reviewIds): void
     {
-        $handle = fopen($csvPath, 'rb');
-        if ($handle === false) {
-            return [];
-        }
-
-        $header = fgetcsv($handle);
-        if (!$header || count($header) < 4) {
-            fclose($handle);
-            return [];
-        }
-
+        $now = Carbon::now()->toDateTimeString();
         $rows = [];
-        $line = 1;
-        while (($data = fgetcsv($handle)) !== false) {
-            $line++;
-            if (count($data) < 4) {
-                continue;
-            }
-
-            $pageType = trim((string) ($data[0] ?? ''));
-            $slugOrId = trim((string) ($data[1] ?? ''));
-            $title = trim((string) ($data[2] ?? ''));
-            $count = (int) trim((string) ($data[3] ?? '0'));
-            $url = trim((string) ($data[4] ?? ''));
-
-            if (!$pageType || $count <= 0) {
-                continue;
-            }
-
+        foreach ($reviewIds as $reviewId) {
             $rows[] = [
-                'line' => $line,
-                'page_type' => $pageType,
-                'slug_or_id' => $slugOrId,
-                'title' => $title,
-                'count' => $count,
-                'url' => $url,
+                'review_id' => (int) $reviewId,
+                'entity_type' => ReviewsWidget::ENTITY_MOTORSHIP,
+                'entity_id' => $shipId,
+                'created_at' => $now,
+                'updated_at' => $now,
             ];
         }
 
-        fclose($handle);
-        return $rows;
+        DB::table('zen_reviews_bindings')->insert($rows);
     }
 
-    private function resolveTargets(array $rows)
+    private function printReport(array $shortages, bool $dryRun): void
     {
-        $resolved = [];
-        $errors = [];
-        $indexCruiseExists = Cruises::where('id', self::INDEX_CRUISE_ID)->exists();
+        $this->info('--- Итоговый отчёт ---');
+        $this->line('Режим: ' . ($dryRun ? 'dry-run' : 'apply'));
 
-        foreach ($rows as $row) {
-            $pageType = $row['page_type'];
-            $slugOrId = $row['slug_or_id'];
-            $target = null;
-
-            if ($pageType === 'index') {
-                if ($indexCruiseExists) {
-                    $target = [
-                        'entity_type' => ReviewsWidget::ENTITY_CRUISE,
-                        'entity_id' => self::INDEX_CRUISE_ID,
-                        'resolved_by' => 'index-fixed-id',
-                    ];
-                }
-            } elseif ($pageType === 'cruise_menu') {
-                $cruise = Cruises::where('slug', $slugOrId)->first();
-                if ($cruise) {
-                    $target = [
-                        'entity_type' => ReviewsWidget::ENTITY_CRUISE,
-                        'entity_id' => (int) $cruise->id,
-                        'resolved_by' => 'cruise.slug',
-                    ];
-                }
-            } elseif ($pageType === 'transit') {
-                $transit = Transit::where('slug', $slugOrId)->first();
-                if ($transit) {
-                    $target = [
-                        'entity_type' => ReviewsWidget::ENTITY_TRANSIT,
-                        'entity_id' => (int) $transit->id,
-                        'resolved_by' => 'transit.slug',
-                    ];
-                }
-            } elseif ($pageType === 'motorship') {
-                $motorshipId = (int) $slugOrId;
-                if ($motorshipId > 0 && Motorships::where('id', $motorshipId)->exists()) {
-                    $target = [
-                        'entity_type' => ReviewsWidget::ENTITY_MOTORSHIP,
-                        'entity_id' => $motorshipId,
-                        'resolved_by' => 'motorship.id',
-                    ];
-                }
-            }
-
-            if ($target) {
-                $row['target'] = $target;
-                $resolved[] = $row;
-            } else {
-                $errors[] = [
-                    'line' => $row['line'],
-                    'page_type' => $pageType,
-                    'slug_or_id' => $slugOrId,
-                    'title' => $row['title'],
-                    'reason' => 'target-not-found',
-                ];
-            }
-        }
-
-        return [$resolved, $errors];
-    }
-
-    private function buildReviewPools()
-    {
-        $reviews = ZenReview::query()
-            ->orderBy('created_at', 'desc')
-            ->orderBy('id', 'desc')
-            ->get();
-
-        $generalPool = [];
-        $shipPools = [];
-
-        foreach ($reviews as $review) {
-            $reviewId = (int) $review->id;
-            $generalPool[] = $reviewId;
-
-            $form = ReviewsWidget::extractForm($review);
-            $shipId = isset($form['ship_id']) ? (int) $form['ship_id'] : 0;
-            if ($shipId > 0) {
-                if (!isset($shipPools[$shipId])) {
-                    $shipPools[$shipId] = [];
-                }
-                $shipPools[$shipId][] = $reviewId;
-            }
-        }
-
-        return [$generalPool, $shipPools];
-    }
-
-    private function buildAllocations(array $resolvedRows, array $generalPool, array $shipPools)
-    {
-        $allocations = [];
-        $shortages = [];
-        $usedReviewIds = [];
-        $usageStats = [
-            'requested' => 0,
-            'assigned' => 0,
-            'by_type' => [
-                ReviewsWidget::ENTITY_CRUISE => 0,
-                ReviewsWidget::ENTITY_TRANSIT => 0,
-                ReviewsWidget::ENTITY_MOTORSHIP => 0,
-            ],
-        ];
-
-        $generalIndex = 0;
-        $shipIndex = [];
-
-        foreach ($resolvedRows as $row) {
-            $entityType = $row['target']['entity_type'];
-            $entityId = (int) $row['target']['entity_id'];
-            $need = (int) $row['count'];
-            $assigned = 0;
-            $usageStats['requested'] += $need;
-
-            if ($entityType === ReviewsWidget::ENTITY_MOTORSHIP) {
-                $pool = $shipPools[$entityId] ?? [];
-                if (!isset($shipIndex[$entityId])) {
-                    $shipIndex[$entityId] = 0;
-                }
-
-                while ($assigned < $need && $shipIndex[$entityId] < count($pool)) {
-                    $reviewId = (int) $pool[$shipIndex[$entityId]];
-                    $shipIndex[$entityId]++;
-                    if (isset($usedReviewIds[$reviewId])) {
-                        continue;
-                    }
-
-                    $usedReviewIds[$reviewId] = true;
-                    $allocations[] = [
-                        'review_id' => $reviewId,
-                        'entity_type' => $entityType,
-                        'entity_id' => $entityId,
-                    ];
-                    $assigned++;
-                    $usageStats['assigned']++;
-                    $usageStats['by_type'][$entityType]++;
-                }
-            } else {
-                while ($assigned < $need && $generalIndex < count($generalPool)) {
-                    $reviewId = (int) $generalPool[$generalIndex];
-                    $generalIndex++;
-                    if (isset($usedReviewIds[$reviewId])) {
-                        continue;
-                    }
-
-                    $usedReviewIds[$reviewId] = true;
-                    $allocations[] = [
-                        'review_id' => $reviewId,
-                        'entity_type' => $entityType,
-                        'entity_id' => $entityId,
-                    ];
-                    $assigned++;
-                    $usageStats['assigned']++;
-                    $usageStats['by_type'][$entityType]++;
-                }
-            }
-
-            if ($assigned < $need) {
-                $shortages[] = [
-                    'line' => $row['line'],
-                    'page_type' => $row['page_type'],
-                    'slug_or_id' => $row['slug_or_id'],
-                    'entity_type' => $entityType,
-                    'entity_id' => $entityId,
-                    'title' => $row['title'],
-                    'requested' => $need,
-                    'assigned' => $assigned,
-                    'missing' => $need - $assigned,
-                ];
-            }
-        }
-
-        return [$allocations, $shortages, $usageStats];
-    }
-
-    private function persistAllocations(array $allocations)
-    {
-        if (empty($allocations)) {
+        if ($shortages === []) {
+            $this->info('На всех обработанных теплоходах набрано по ' . (int) $this->option('limit') . ' отзывов (или меньше нет в БД).');
             return;
         }
 
-        $now = Carbon::now()->toDateTimeString();
-        $chunks = array_chunk($allocations, 500);
-        foreach ($chunks as $chunk) {
-            $rows = [];
-            foreach ($chunk as $item) {
-                $rows[] = [
-                    'review_id' => (int) $item['review_id'],
-                    'entity_type' => $item['entity_type'],
-                    'entity_id' => (int) $item['entity_id'],
-                    'created_at' => $now,
-                    'updated_at' => $now,
-                ];
-            }
-            DB::table('zen_reviews_bindings')->insert($rows);
+        $this->warn('Теплоходов с недобором: ' . count($shortages));
+        foreach (array_slice($shortages, 0, 25) as $item) {
+            $this->line(sprintf(
+                '  motorship:%d need=%d assigned=%d eligible=%d ids=[%s]',
+                $item['ship_id'],
+                $item['requested'],
+                $item['assigned'],
+                $item['eligible_in_db'],
+                $item['review_ids'] ?: '-'
+            ));
         }
-    }
-
-    private function printReport(
-        array $resolveErrors,
-        array $mergeWarnings,
-        array $shortages,
-        array $usageStats,
-        int $allocationCount,
-        bool $dryRun
-    ) {
-        $this->info('--- Итоговый отчет ---');
-        $this->line('Режим: ' . ($dryRun ? 'dry-run' : 'apply'));
-        $this->line('Запрошено отзывов: ' . $usageStats['requested']);
-        $this->line('Назначено отзывов: ' . $usageStats['assigned']);
-        $this->line('Фактических привязок: ' . $allocationCount);
-        $this->line('Назначено cruise: ' . (int) $usageStats['by_type'][ReviewsWidget::ENTITY_CRUISE]);
-        $this->line('Назначено transit: ' . (int) $usageStats['by_type'][ReviewsWidget::ENTITY_TRANSIT]);
-        $this->line('Назначено motorship: ' . (int) $usageStats['by_type'][ReviewsWidget::ENTITY_MOTORSHIP]);
-
-        if ($mergeWarnings) {
-            $this->warn('Слияние дубликатов цели (count = max по строкам): ' . count($mergeWarnings));
-            foreach ($mergeWarnings as $mw) {
-                $this->line(sprintf(
-                    '  %s:%d → итого %d отзывов (строки CSV %s)',
-                    $mw['entity_type'],
-                    $mw['entity_id'],
-                    $mw['count'],
-                    implode(', ', $mw['lines'])
-                ));
-            }
-        }
-
-        if ($resolveErrors) {
-            $this->warn('Ошибки резолва (' . count($resolveErrors) . '):');
-            foreach (array_slice($resolveErrors, 0, 20) as $error) {
-                $this->line(sprintf(
-                    '  line=%d type=%s key=%s reason=%s',
-                    $error['line'],
-                    $error['page_type'],
-                    $error['slug_or_id'] ?: '-',
-                    $error['reason']
-                ));
-            }
-            if (count($resolveErrors) > 20) {
-                $this->line('  ... и еще ' . (count($resolveErrors) - 20) . ' строк');
-            }
-        }
-
-        if ($shortages) {
-            $this->warn('Страницы с недобором (' . count($shortages) . '):');
-            foreach (array_slice($shortages, 0, 30) as $item) {
-                $this->line(sprintf(
-                    '  line=%d %s:%s need=%d assigned=%d missing=%d',
-                    $item['line'],
-                    $item['entity_type'],
-                    $item['entity_id'],
-                    $item['requested'],
-                    $item['assigned'],
-                    $item['missing']
-                ));
-            }
-            if (count($shortages) > 30) {
-                $this->line('  ... и еще ' . (count($shortages) - 30) . ' строк');
-            }
-        } else {
-            $this->info('Недоборов нет.');
+        if (count($shortages) > 25) {
+            $this->line('  ... и ещё ' . (count($shortages) - 25));
         }
     }
 }

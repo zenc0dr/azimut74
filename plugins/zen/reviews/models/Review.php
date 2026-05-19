@@ -1,5 +1,6 @@
 <?php namespace Zen\Reviews\Models;
 
+use Mcmraak\Rivercrs\Classes\ReviewsWidget;
 use Mcmraak\Rivercrs\Models\Motorships;
 use Model;
 
@@ -58,8 +59,8 @@ class Review extends Model
      */
     public function getShipShortNameAttribute(): string
     {
-        $data = $this->reviewFormData();
-        $shipId = isset($data['ship_id']) ? (int) $data['ship_id'] : 0;
+        $form = ReviewsWidget::extractForm($this);
+        $shipId = ReviewsWidget::normalizeShipId($form['ship_id'] ?? null);
         if ($shipId > 0 && class_exists(Motorships::class)) {
             $ship = Motorships::find($shipId);
             if ($ship) {
@@ -67,7 +68,7 @@ class Review extends Model
             }
         }
 
-        $raw = isset($data['ship_name']) ? (string) $data['ship_name'] : '';
+        $raw = isset($form['ship_name']) ? (string) $form['ship_name'] : '';
 
         return self::normalizeShipNameString($raw);
     }

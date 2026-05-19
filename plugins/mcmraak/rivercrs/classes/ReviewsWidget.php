@@ -67,7 +67,7 @@ class ReviewsWidget
         $out = [
             'id' => (int) $review->id,
             'name' => (string) ($form['name'] ?? $review->name ?? 'Без имени'),
-            'ship_id' => isset($form['ship_id']) ? (int) $form['ship_id'] : null,
+            'ship_id' => self::normalizeShipId($form['ship_id'] ?? null) ?: null,
             'ship_name' => (string) ($form['ship_name'] ?? ''),
             'text' => $text,
             'date' => $review->created_at ? Carbon::parse($review->created_at)->format('d.m.Y') : '',
@@ -143,12 +143,7 @@ class ReviewsWidget
         }
 
         if ($shipId) {
-            $shipId = (int) $shipId;
-            // Граница числа обязательна: иначе ship_id=1 совпадает с 12, 21, 101 и т.д.
-            $regexp = '"ship_id"[[:space:]]*:[[:space:]]*"?'
-                . preg_quote((string) $shipId, '/')
-                . '"?([^0-9]|$)';
-            $query->whereRaw('data REGEXP ?', [$regexp]);
+            self::applyShipIdFilterToQuery($query, $shipId);
         }
 
         return $query;
@@ -173,12 +168,11 @@ class ReviewsWidget
     }
 
     /**
-     * Случайные опубликованные отзывы, у которых в форме указан теплоход (ship_id в JSON data).
-     * Для блока на странице бронирования: первые карточки только по судну круиза.
+     * Последние по дате отзывы с указанным ship_id в JSON (для SEO и fallback без bindings).
      *
      * @return \Illuminate\Support\Collection<int, Review>
      */
-    public static function getRandomReviewsForShip(int $shipId, int $limit = 3)
+    public static function getLatestReviewsForShip(int $shipId, int $limit = 3)
     {
         $shipId = (int) $shipId;
         $limit = (int) $limit;
@@ -186,15 +180,52 @@ class ReviewsWidget
             return collect();
         }
 
-        $regexp = '"ship_id"[[:space:]]*:[[:space:]]*"?'
-            . preg_quote((string) $shipId, '/')
-            . '"?([^0-9]|$)';
-
         return Review::query()
-            ->whereRaw('data REGEXP ?', [$regexp])
-            ->inRandomOrder()
+            ->tap(function ($query) use ($shipId) {
+                self::applyShipIdFilterToQuery($query, $shipId);
+            })
+            ->orderBy('created_at', 'desc')
+            ->orderBy('id', 'desc')
             ->limit($limit)
             ->get();
+    }
+
+    /**
+     * Свежие отзывы судна, пропуская review_id, уже привязанные к cruise/transit (и др. не-motorship).
+     *
+     * @param array<int, bool> $blockedReviewIds review_id => true
+     * @return \Illuminate\Support\Collection<int, Review>
+     */
+    public static function getLatestReviewsForShipUnblocked(int $shipId, int $limit = 3, array $blockedReviewIds = [])
+    {
+        $shipId = (int) $shipId;
+        $limit = (int) $limit;
+        if ($shipId < 1 || $limit < 1) {
+            return collect();
+        }
+
+        $scanLimit = max($limit * 20, 50);
+        $candidates = self::getLatestReviewsForShip($shipId, $scanLimit);
+        $out = collect();
+
+        foreach ($candidates as $review) {
+            $reviewId = (int) $review->id;
+            if (isset($blockedReviewIds[$reviewId])) {
+                continue;
+            }
+            $out->push($review);
+            if ($out->count() >= $limit) {
+                break;
+            }
+        }
+
+        return $out;
+    }
+
+    /** @deprecated Используйте getLatestReviewsForShip */
+    public static function getRandomReviewsForShip(int $shipId, int $limit = 3)
+    {
+        return self::getLatestReviewsForShip($shipId, $limit);
     }
 
     public static function extractForm(Review $review)
@@ -202,10 +233,88 @@ class ReviewsWidget
         $data = $review->data ?: [];
 
         if (isset($data['form']) && is_array($data['form'])) {
-            return $data['form'];
+            $form = $data['form'];
+        } else {
+            $form = is_array($data) ? $data : [];
         }
 
-        return is_array($data) ? $data : [];
+        if (array_key_exists('ship_id', $form)) {
+            $normalized = self::normalizeShipId($form['ship_id']);
+            $form['ship_id'] = $normalized > 0 ? $normalized : $form['ship_id'];
+        }
+
+        return $form;
+    }
+
+    /**
+     * Приводит ship_id из JSON к int: в data встречается и "99", и 135 без кавычек.
+     *
+     * @param mixed $value
+     */
+    public static function normalizeShipId($value): int
+    {
+        if ($value === null || $value === '') {
+            return 0;
+        }
+        if (is_bool($value)) {
+            return 0;
+        }
+        if (is_int($value)) {
+            return $value > 0 ? $value : 0;
+        }
+        if (is_float($value)) {
+            return $value > 0 ? (int) $value : 0;
+        }
+        if (is_string($value)) {
+            $value = trim($value);
+            if ($value === '' || !is_numeric($value)) {
+                return 0;
+            }
+
+            return (int) $value > 0 ? (int) $value : 0;
+        }
+        if (is_numeric($value)) {
+            return (int) $value > 0 ? (int) $value : 0;
+        }
+
+        return 0;
+    }
+
+    /**
+     * REGEXP для ship_id в сыром JSON: "ship_id": 135 и "ship_id": "135".
+     */
+    private static function shipIdRegexpPattern(int $shipId): string
+    {
+        $id = preg_quote((string) $shipId, '/');
+
+        return '"ship_id"[[:space:]]*:[[:space:]]*"?'
+            . $id
+            . '"?(?![0-9])';
+    }
+
+    /**
+     * Фильтр по ship_id в колонке data (корень и $.form.ship_id + REGEXP для старых записей).
+     *
+     * @param \Illuminate\Database\Eloquent\Builder $query
+     * @param mixed $shipId
+     */
+    private static function applyShipIdFilterToQuery($query, $shipId): void
+    {
+        $shipId = self::normalizeShipId($shipId);
+        if ($shipId < 1) {
+            return;
+        }
+
+        $regexp = self::shipIdRegexpPattern($shipId);
+        $query->where(function ($q) use ($shipId, $regexp) {
+            $q->whereRaw(
+                'CAST(COALESCE(
+                    JSON_UNQUOTE(JSON_EXTRACT(data, "$.ship_id")),
+                    JSON_UNQUOTE(JSON_EXTRACT(data, "$.form.ship_id"))
+                ) AS UNSIGNED) = ?',
+                [$shipId]
+            )->orWhereRaw('data REGEXP ?', [$regexp]);
+        });
     }
 
     private static function formatRussianDate(Carbon $d): string

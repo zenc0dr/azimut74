@@ -246,7 +246,7 @@ class RivercrsCore
 
     /**
      * Данные виджета отзывов для страницы теплохода (карточка / бронирование).
-     * Сначала привязки zen_reviews_bindings (motorship); если пусто — до 3 случайных по ship_id в форме отзыва.
+     * Сначала привязки zen_reviews_bindings (motorship); если пусто — до 3 последних по дате по ship_id в форме отзыва.
      *
      * @param Motorships $ship
      * @param bool $preferShipIdPool Сразу брать выборку по ship_id (страница бронирования круиза)
@@ -268,7 +268,7 @@ class RivercrsCore
         }
 
         if ($items === []) {
-            $items = ReviewsWidget::getRandomReviewsForShip($shipId, 3)
+            $items = ReviewsWidget::getLatestReviewsForShip($shipId, 3)
                 ->map(function ($review) {
                     return ReviewsWidget::formatReview($review);
                 })

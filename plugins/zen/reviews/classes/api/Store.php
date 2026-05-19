@@ -5,6 +5,7 @@ namespace Zen\Reviews\Classes\Api;
 use Zen\Cli\Classes\Cli;
 use Zen\Reviews\Classes\Services\ValidatorHelper;
 use Zen\Reviews\Classes\Services\Images\Image;
+use Mcmraak\Rivercrs\Classes\ReviewsWidget;
 use Zen\Reviews\Models\Review;
 use Zen\Uongate\Classes\Lead;
 use Zen\Reviews\Models\Email as EmailModel;
@@ -22,6 +23,12 @@ class Store
 //        );
         //$form = reviews()->files()->arrayFromFile()['form'];
         $form = request('form');
+        if (is_array($form) && array_key_exists('ship_id', $form)) {
+            $normalizedShipId = ReviewsWidget::normalizeShipId($form['ship_id']);
+            if ($normalizedShipId > 0) {
+                $form['ship_id'] = $normalizedShipId;
+            }
+        }
 
         # Предварительная обработка
         $validator = new ValidatorHelper();
