@@ -119,22 +119,7 @@ class RivercrsCore
         }
 
         $data = RivercrsShip::getShip($ship);
-        $boundReviews = $ship->getBoundReviews()
-            ->map(function ($review) {
-                return ReviewsWidget::formatReview($review);
-            })
-            ->values()
-            ->toArray();
-
-        $shipExcludeIds = array_values(array_map('intval', array_column($boundReviews, 'id')));
-        $data['reviewsWidget'] = [
-            'entityType' => ReviewsWidget::ENTITY_MOTORSHIP,
-            'entityId' => (int) $ship->id,
-            'items' => $boundReviews,
-            'excludeIds' => $shipExcludeIds,
-            'ships' => ReviewsWidget::getShipOptions(),
-            'moreRemaining' => ReviewsWidget::countMoreReviews($shipExcludeIds, null),
-        ];
+        $data['reviewsWidget'] = $this->buildMotorshipReviewsWidgetData($ship);
 
         if (isset($_GET['dump'])) {
             dd($data);
@@ -244,23 +229,9 @@ class RivercrsCore
 
         $shipId = isset($data['ship_id']) ? (int) $data['ship_id'] : 0;
         if ($shipId > 0) {
-            $randomShipReviews = ReviewsWidget::getRandomReviewsForShip($shipId, 3)
-                ->map(function ($review) {
-                    return ReviewsWidget::formatReview($review);
-                })
-                ->values()
-                ->toArray();
-            if ($randomShipReviews !== []) {
-                $excludeIds = array_values(array_map('intval', array_column($randomShipReviews, 'id')));
-                $data['reviewsWidget'] = [
-                    'entityType' => ReviewsWidget::ENTITY_MOTORSHIP,
-                    'entityId' => $shipId,
-                    'items' => $randomShipReviews,
-                    'excludeIds' => $excludeIds,
-                    'ships' => ReviewsWidget::getShipOptions(),
-                    'moreRemaining' => ReviewsWidget::countMoreReviews($excludeIds, null),
-                    'loadMoreFromGlobalPool' => true,
-                ];
+            $ship = Motorships::find($shipId);
+            if ($ship) {
+                $data['reviewsWidget'] = $this->buildMotorshipReviewsWidgetData($ship, true);
             }
         }
 
@@ -271,6 +242,60 @@ class RivercrsCore
         $cms_page['RiverCRS'] = $data;
 
         return true;
+    }
+
+    /**
+     * Данные виджета отзывов для страницы теплохода (карточка / бронирование).
+     * Сначала привязки zen_reviews_bindings (motorship); если пусто — до 3 случайных по ship_id в форме отзыва.
+     *
+     * @param Motorships $ship
+     * @param bool $preferShipIdPool Сразу брать выборку по ship_id (страница бронирования круиза)
+     * @return array<string, mixed>|null
+     */
+    private function buildMotorshipReviewsWidgetData(Motorships $ship, bool $preferShipIdPool = false): ?array
+    {
+        $shipId = (int) $ship->id;
+        $usedShipIdFallback = false;
+        $items = [];
+
+        if (!$preferShipIdPool) {
+            $items = $ship->getBoundReviews()
+                ->map(function ($review) {
+                    return ReviewsWidget::formatReview($review);
+                })
+                ->values()
+                ->toArray();
+        }
+
+        if ($items === []) {
+            $items = ReviewsWidget::getRandomReviewsForShip($shipId, 3)
+                ->map(function ($review) {
+                    return ReviewsWidget::formatReview($review);
+                })
+                ->values()
+                ->toArray();
+            $usedShipIdFallback = $items !== [];
+        }
+
+        if ($items === []) {
+            return null;
+        }
+
+        $excludeIds = array_values(array_map('intval', array_column($items, 'id')));
+        $widget = [
+            'entityType' => ReviewsWidget::ENTITY_MOTORSHIP,
+            'entityId' => $shipId,
+            'items' => $items,
+            'excludeIds' => $excludeIds,
+            'ships' => ReviewsWidget::getShipOptions(),
+            'moreRemaining' => ReviewsWidget::countMoreReviews($excludeIds, null),
+        ];
+
+        if ($usedShipIdFallback || $preferShipIdPool) {
+            $widget['loadMoreFromGlobalPool'] = true;
+        }
+
+        return $widget;
     }
 
     public function searchPreset()
