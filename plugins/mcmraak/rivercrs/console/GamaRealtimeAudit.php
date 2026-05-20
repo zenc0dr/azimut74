@@ -1,6 +1,7 @@
 <?php namespace Mcmraak\Rivercrs\Console;
 
 use Illuminate\Console\Command;
+use DB;
 use Mcmraak\Rivercrs\Models\Checkins as Checkin;
 use Symfony\Component\Console\Input\InputOption;
 
@@ -143,8 +144,11 @@ class GamaRealtimeAudit extends Command
 
             // По требованиям задачи: при FAIL заезд деактивируется.
             if ($item['status'] === 'fail' && intval($checkin->active) === 1) {
-                $checkin->active = 0;
-                $checkin->save();
+                // ВАЖНО: деактивируем через Query Builder, чтобы не запускать model events
+                // (у модели есть валидации маршрута/waybill, не относящиеся к этой команде).
+                DB::table('mcmraak_rivercrs_checkins')
+                    ->where('id', $checkin->id)
+                    ->update(['active' => 0]);
                 $item['deactivated'] = true;
                 $stats['deactivated']++;
             }
