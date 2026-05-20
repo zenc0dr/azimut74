@@ -71,9 +71,7 @@ class ReviewsDistributionAudit
         $stats['bindings_total'] = (int) DB::table('zen_reviews_bindings')->count();
         $stats['general_pool_reviews'] = $this->generalPoolSize['count'];
         $stats['ship_pool_ships'] = count($this->shipPoolCounts);
-        $cruiseFile = \Mcmraak\Rivercrs\Classes\CruiseReviewAssignments::load();
-        $stats['cruise_checkins_in_file'] = count($cruiseFile);
-        $stats['cruise_review_slots'] = array_sum(array_map('count', $cruiseFile));
+        $stats['cruise_global_reviews'] = count(\Mcmraak\Rivercrs\Classes\CruiseReviewAssignments::getGlobalReviewIds());
 
         return [
             'rows' => $reportRows,
@@ -387,13 +385,12 @@ class ReviewsDistributionAudit
                     ? 'Сводка: OK'
                     : 'Сводка: есть проблемы',
                 'issues' => sprintf(
-                    'целей с проблемами: %d из %d; ошибок резолва: %d; привязок в БД: %d; круизы в файле: %d заездов / %d слотов; теплоходов в пулах: %d; дубликаты review_id: %s',
+                    'целей с проблемами: %d из %d; ошибок резолва: %d; привязок в БД: %d; глобальных отзывов для /cruise/*: %d; теплоходов в пулах: %d; дубликаты review_id: %s',
                     (int) ($summary['targets_problem'] ?? 0),
                     (int) ($summary['targets_total'] ?? 0),
                     (int) ($summary['resolve_errors'] ?? 0),
                     (int) ($summary['bindings_total'] ?? 0),
-                    (int) ($summary['cruise_checkins_in_file'] ?? 0),
-                    (int) ($summary['cruise_review_slots'] ?? 0),
+                    (int) ($summary['cruise_global_reviews'] ?? 0),
                     (int) ($summary['ship_pool_ships'] ?? 0),
                     $dupText
                 ),

@@ -294,7 +294,7 @@ class ReviewsWidget
         }
 
         $items = [];
-        foreach (CruiseReviewAssignments::getReviewIdsForCheckin($checkinId) as $reviewId) {
+        foreach (CruiseReviewAssignments::getGlobalReviewIds() as $reviewId) {
             $review = Review::find($reviewId);
             if ($review) {
                 $items[] = self::formatReview($review);

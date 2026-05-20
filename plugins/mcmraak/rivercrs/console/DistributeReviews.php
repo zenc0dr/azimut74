@@ -6,7 +6,6 @@ use Illuminate\Console\Command;
 use Mcmraak\Rivercrs\Classes\CruiseReviewAssignments;
 use Mcmraak\Rivercrs\Classes\ReviewsDistributionCsv;
 use Mcmraak\Rivercrs\Classes\ReviewsWidget;
-use Mcmraak\Rivercrs\Models\Checkins;
 use Mcmraak\Rivercrs\Models\Motorships;
 use Symfony\Component\Console\Input\InputOption;
 use Zen\Reviews\Models\Review as ZenReview;
@@ -77,18 +76,17 @@ class DistributeReviews extends Command
             DB::table('zen_reviews_bindings')->truncate();
         }
 
-        $shipPools = $this->buildReviewIdsByShipId();
-
-        // Фаза 1: круизы → файл
-        [$cruiseAssignments, $cruiseStats] = $this->runPhaseCruiseAssignments($dryRun, $shipPools);
-        $excludedFromCruiseFile = CruiseReviewAssignments::excludedReviewIdMap($cruiseAssignments);
+        // Фаза 1: три глобальных отзыва для всех /cruise/* → файл
+        [$cruiseReviewIds, $cruiseStats] = $this->runPhaseCruiseGlobalReviews($dryRun);
+        $excludedFromCruiseFile = CruiseReviewAssignments::excludedReviewIdMap($cruiseReviewIds);
 
         $this->info(sprintf(
-            'Фаза 1 (круизы → файл): заездов=%d, слотов=%d, уникальных review_id=%d',
-            $cruiseStats['checkins'],
-            $cruiseStats['slots'],
+            'Фаза 1 (круизы → файл): review_ids=[%s], исключено из пула=%d',
+            implode(',', $cruiseReviewIds),
             count($excludedFromCruiseFile)
         ));
+
+        $shipPools = $this->buildReviewIdsByShipId();
 
         // Фаза 2: теплоходы → bindings
         [$motorshipBindings, $motorshipStats] = $this->runPhaseMotorship(
@@ -177,57 +175,28 @@ class DistributeReviews extends Command
     }
 
     /**
-     * @return array{0: array<string, array<int, int>>, 1: array<string, int>}
+     * @return array{0: array<int, int>, 1: array<string, int>}
      */
-    /**
-     * @param array<int, array<int, int>> $shipPools
-     * @return array{0: array<string, array<int, int>>, 1: array<string, int>}
-     */
-    private function runPhaseCruiseAssignments(bool $dryRun, array $shipPools): array
+    private function runPhaseCruiseGlobalReviews(bool $dryRun): array
     {
-        $assignments = [];
-        $stats = ['checkins' => 0, 'slots' => 0, 'short_checkins' => 0];
-        $limit = CruiseReviewAssignments::REVIEWS_PER_CHECKIN;
-
-        Checkins::query()
-            ->where('active', 1)
-            ->where('motorship_id', '>', 0)
+        $limit = CruiseReviewAssignments::GLOBAL_REVIEW_COUNT;
+        $allIds = ZenReview::query()
             ->orderBy('id')
-            ->select(['id', 'motorship_id'])
-            ->chunk(500, function ($checkins) use (&$assignments, &$stats, $shipPools, $limit) {
-                foreach ($checkins as $checkin) {
-                    $checkinId = (int) $checkin->id;
-                    $shipId = (int) $checkin->motorship_id;
-                    if ($checkinId < 1 || $shipId < 1) {
-                        continue;
-                    }
+            ->pluck('id')
+            ->map(function ($id) {
+                return (int) $id;
+            })
+            ->values()
+            ->all();
 
-                    $pool = $shipPools[$shipId] ?? [];
-                    if ($pool === []) {
-                        $assignments[(string) $checkinId] = [];
-                        $stats['checkins']++;
-                        $stats['short_checkins']++;
-                        continue;
-                    }
-
-                    $picked = $pool;
-                    shuffle($picked);
-                    $picked = array_slice($picked, 0, min($limit, count($picked)));
-
-                    $assignments[(string) $checkinId] = $picked;
-                    $stats['checkins']++;
-                    $stats['slots'] += count($picked);
-                    if (count($picked) < $limit) {
-                        $stats['short_checkins']++;
-                    }
-                }
-            });
+        shuffle($allIds);
+        $picked = array_slice($allIds, 0, min($limit, count($allIds)));
 
         if (!$dryRun) {
-            CruiseReviewAssignments::save($assignments);
+            CruiseReviewAssignments::saveReviewIds($picked);
         }
 
-        return [$assignments, $stats];
+        return [$picked, ['count' => count($picked)]];
     }
 
     /**
@@ -428,11 +397,6 @@ class DistributeReviews extends Command
 
         if ($resolveErrors) {
             $this->warn('Ошибки резолва посадочных: ' . count($resolveErrors));
-        }
-
-        if ($cruiseStats['short_checkins'] > 0) {
-            $this->warn('Заездов с менее чем ' . CruiseReviewAssignments::REVIEWS_PER_CHECKIN . ' отзывами: '
-                . $cruiseStats['short_checkins']);
         }
 
         if ($motorshipStats['shortages'] > 0) {

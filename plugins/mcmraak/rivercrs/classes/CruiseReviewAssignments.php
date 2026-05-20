@@ -1,14 +1,14 @@
 <?php namespace Mcmraak\Rivercrs\Classes;
 
 /**
- * Фиксированные 3 случайных отзыва на карточку бронирования (/cruise/:checkin_id).
- * Хранятся в storage, не в zen_reviews_bindings.
+ * Три случайных отзыва для всех карточек бронирования (/cruise/:checkin_id).
+ * Один набор на весь сайт, хранится в storage (не zen_reviews_bindings).
  */
 class CruiseReviewAssignments
 {
     public const STORAGE_FILE = 'cruise_review_assignments.json';
 
-    public const REVIEWS_PER_CHECKIN = 3;
+    public const GLOBAL_REVIEW_COUNT = 3;
 
     public static function storagePath(): string
     {
@@ -16,9 +16,9 @@ class CruiseReviewAssignments
     }
 
     /**
-     * @return array<string, array<int, int>> checkin_id => [review_id, ...]
+     * @return array<int, int>
      */
-    public static function load(): array
+    public static function getGlobalReviewIds(): array
     {
         $path = self::storagePath();
         if (!is_file($path)) {
@@ -31,19 +31,36 @@ class CruiseReviewAssignments
         }
 
         $data = json_decode($raw, true);
+        if (!is_array($data)) {
+            return [];
+        }
 
-        return is_array($data) ? $data : [];
+        if (isset($data['review_ids']) && is_array($data['review_ids'])) {
+            return self::normalizeIdList($data['review_ids']);
+        }
+
+        // Старый формат: checkin_id => [ids] — берём первый непустой набор (все страницы показывали один пул)
+        $first = null;
+        foreach ($data as $value) {
+            if (is_array($value) && $value !== []) {
+                $first = self::normalizeIdList($value);
+                break;
+            }
+        }
+
+        return $first ?? [];
     }
 
     /**
-     * @param array<string|int, array<int, int>> $assignments
+     * @param array<int, int> $reviewIds
      */
-    public static function save(array $assignments): void
+    public static function saveReviewIds(array $reviewIds): void
     {
-        $normalized = [];
-        foreach ($assignments as $checkinId => $reviewIds) {
-            $normalized[(string) (int) $checkinId] = array_values(array_map('intval', (array) $reviewIds));
-        }
+        $reviewIds = self::normalizeIdList($reviewIds);
+        $payload = [
+            'review_ids' => $reviewIds,
+            'generated_at' => date('c'),
+        ];
 
         $dir = dirname(self::storagePath());
         if (!is_dir($dir)) {
@@ -52,43 +69,50 @@ class CruiseReviewAssignments
 
         file_put_contents(
             self::storagePath(),
-            json_encode($normalized, JSON_UNESCAPED_UNICODE | JSON_PRETTY_PRINT)
+            json_encode($payload, JSON_UNESCAPED_UNICODE | JSON_PRETTY_PRINT)
         );
     }
 
     /**
+     * @deprecated Используйте getGlobalReviewIds()
      * @return array<int, int>
      */
     public static function getReviewIdsForCheckin(int $checkinId): array
     {
-        $data = self::load();
-        $key = (string) $checkinId;
-        if (!isset($data[$key]) || !is_array($data[$key])) {
-            return [];
-        }
-
-        return array_values(array_filter(array_map('intval', $data[$key])));
+        return self::getGlobalReviewIds();
     }
 
     /**
-     * Все review_id из файла (для исключения из фаз теплоходов и посадочных).
-     *
-     * @param array<string, array<int, int>>|null $assignments
+     * @param array<int, int>|null $reviewIds
      * @return array<int, bool>
      */
-    public static function excludedReviewIdMap($assignments = null): array
+    public static function excludedReviewIdMap($reviewIds = null): array
     {
-        $assignments = $assignments ?? self::load();
+        $reviewIds = $reviewIds ?? self::getGlobalReviewIds();
         $out = [];
-        foreach ($assignments as $reviewIds) {
-            foreach ((array) $reviewIds as $reviewId) {
-                $reviewId = (int) $reviewId;
-                if ($reviewId > 0) {
-                    $out[$reviewId] = true;
-                }
+        foreach ($reviewIds as $reviewId) {
+            if ($reviewId > 0) {
+                $out[$reviewId] = true;
             }
         }
 
         return $out;
+    }
+
+    /**
+     * @param mixed $list
+     * @return array<int, int>
+     */
+    private static function normalizeIdList($list): array
+    {
+        $out = [];
+        foreach ((array) $list as $id) {
+            $id = (int) $id;
+            if ($id > 0) {
+                $out[] = $id;
+            }
+        }
+
+        return array_values(array_unique($out));
     }
 }
