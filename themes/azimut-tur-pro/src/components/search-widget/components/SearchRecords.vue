@@ -4,7 +4,8 @@
             <section v-if="!record.injection"
                      :ref="`record-${record.id}`"
                      :data-checkin-id="record.id"
-                     class="result-item d-flex flex-column flex-md-row bg-primary-100 mb-4 rounded">
+                     class="result-item d-flex flex-column flex-md-row bg-primary-100 mb-4 rounded"
+                     :class="{ 'result-item--hide': shouldHideGamaRecord(record) }">
                 <div class="result-item__left col-12 col-md-4 position-relative">
                     <img class="result-item__img h-100 rounded-top rounded-md-left" :src="record.image" alt="item">
                     <template v-if="record.motorship_status">
@@ -238,8 +239,11 @@ export default {
         isGamaRecord(record) {
             return !!record && record.eds_code === 'gama';
         },
-        shouldHideGamaPrice(record) {
+        shouldHideGamaRecord(record) {
             return this.isGamaRecord(record) && this.getGamaPriceState(record.id).status === 'error';
+        },
+        shouldHideGamaPrice(record) {
+            return this.shouldHideGamaRecord(record);
         },
         getGamaPriceState(checkinId) {
             return this.gamaPriceStates[checkinId] || {status: 'idle', value: null};
@@ -304,7 +308,7 @@ export default {
         },
         fetchGamaMinPrice(checkinId) {
             const currentState = this.getGamaPriceState(checkinId);
-            if (currentState.status === 'loading' || currentState.status === 'success') {
+            if (currentState.status === 'loading' || currentState.status === 'success' || currentState.status === 'error') {
                 return;
             }
 
@@ -415,6 +419,25 @@ export default {
     max-width: 0;
     max-height: 0;
     margin: 0 !important;
+    pointer-events: none;
+}
+
+.result-item {
+    max-height: 1200px;
+    overflow: hidden;
+    transform: scale(1);
+    opacity: 1;
+    transform-origin: center top;
+    transition: transform .32s ease, opacity .32s ease, max-height .32s ease, margin .32s ease, padding .32s ease;
+}
+
+.result-item--hide {
+    transform: scale(.96);
+    opacity: 0;
+    max-height: 0;
+    margin: 0 !important;
+    padding-top: 0 !important;
+    padding-bottom: 0 !important;
     pointer-events: none;
 }
 

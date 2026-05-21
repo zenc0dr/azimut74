@@ -407,12 +407,14 @@ class Exist
 
         $min_price = $this->extractMinPrice($exist_data);
         if (!$min_price) {
+            $deactivated = $this->deactivateGamaCheckin($checkin_id);
             $this->json([
                 'success' => false,
                 'error' => 'price_not_found',
                 'checkin_id' => $checkin_id,
                 'min_price' => null,
                 'cached' => false,
+                'deactivated' => $deactivated,
             ]);
             return;
         }
@@ -428,6 +430,18 @@ class Exist
 
         Cache::put($cache_key, $payload, $cache_ttl);
         $this->json($payload);
+    }
+
+    /**
+     * Деактивирует gama-заезд без model events (как в GamaRealtimeAudit).
+     */
+    private function deactivateGamaCheckin(int $checkin_id): bool
+    {
+        return DB::table('mcmraak_rivercrs_checkins')
+                ->where('id', $checkin_id)
+                ->where('eds_code', 'gama')
+                ->where('active', 1)
+                ->update(['active' => 0]) > 0;
     }
 
     private function extractMinPrice(array $exist_data): ?int
