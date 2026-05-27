@@ -7,7 +7,8 @@ const themeName = 'azimut-tur-pro';
 require('laravel-mix-versionhash')
 require('laravel-mix-purgecss')
 
-mix.setResourceRoot('../')
+// Абсолютные URL: шрифты/картинки отдаются статикой темы, без прокси /fonts/ (fonts.htm).
+mix.setResourceRoot(`/themes/${themeName}/assets/`)
 
 
 
