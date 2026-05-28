@@ -135,8 +135,17 @@ class Waterway extends RiverCrs
 
         $response = $this->httpQuery($opts);
 
+        $body_code = intval(@$response->body['code']);
+
+        // Бизнес-ошибки API (круиз в архиве и т.п.) — не ретраим, отдаём тело ответа вызывающему коду.
+        if ($body_code === 400) {
+            $message = $response->body['message'] ?? 'unknown';
+            ProcessLog::add("Waterway API 400: {$message} ({$method})");
+            return $response->body;
+        }
+
         # Не прошла аутентификация
-        if ($response->code == 403 || $response->code != 200 || intval(@$response->body['code']) != 200) {
+        if ($response->code == 403 || $response->code != 200 || $body_code != 200) {
             if ($response->code == 403) $this->accessToken = null; // Сбрасываем accessToken
             $this->query_attempts--;
             if ($this->query_attempts < 0) {

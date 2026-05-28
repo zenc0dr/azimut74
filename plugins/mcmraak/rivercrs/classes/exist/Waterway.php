@@ -9,6 +9,9 @@ class Waterway extends Exist
 {
     public $query_type;
 
+    /** API вернул «круиз в архиве» / недоступен для бронирования */
+    public $cruiseArchived = false;
+
     /**
      * Waterway API json.v3.cabins по умолчанию пагинируется (limit=10),
      * поэтому обязательно собираем все страницы, иначе видим “3 свободных каюты”.
@@ -37,6 +40,10 @@ class Waterway extends Exist
 
             // Передаем $realtime как параметр для обхода кеша при запросах в реальном времени
             $resp = $ww->wwQuery($method, null, $cache_key, $realtime);
+            if (intval($resp['code'] ?? 0) === 400) {
+                $this->cruiseArchived = true;
+                break;
+            }
             $result = $resp['result'] ?? [];
             $data = $result['data'] ?? [];
 
@@ -76,7 +83,11 @@ class Waterway extends Exist
     {
         $method = "json.v3.cruise.room-tariffs?id=$ww_cruise_id";
         $cache_key = "waterway.roomtariffs.$ww_cruise_id";
-        return $ww->wwQuery($method, null, $cache_key, $realtime);
+        $resp = $ww->wwQuery($method, null, $cache_key, $realtime);
+        if (intval($resp['code'] ?? 0) === 400) {
+            $this->cruiseArchived = true;
+        }
+        return $resp;
     }
 
     public function getExist($checkin, $realtime)
@@ -196,6 +207,8 @@ class Waterway extends Exist
      */
     public function getSimpleExist($checkin, $realtime)
     {
+        $this->cruiseArchived = false;
+
         // Устанавливаем checkin для использования в getCabinCache()
         $this->checkin = $checkin;
 
@@ -628,6 +641,36 @@ class Waterway extends Exist
             }
         }
         unset($deck, $cabin); // Сбрасываем ссылки
+
+        // Realtime без данных источника (архивный/снятый круиз) — сигнал для деактивации заезда.
+        $waterway_source_empty = false;
+        if ($realtime) {
+            if ($this->cruiseArchived) {
+                $waterway_source_empty = true;
+            } else {
+                $has_api_prices = !empty($ww_prices_map);
+                $has_api_cabins = !empty($available_rooms_by_number);
+                $waterway_source_empty = !$has_api_prices && !$has_api_cabins;
+            }
+        }
+
+        if ($waterway_source_empty) {
+            return [
+                'decks' => [],
+                'rooms' => [],
+                'eds' => 'waterway',
+                'waterway_source_empty' => true,
+                'tariff_price1_title' => $initial_data['tariff_price1_title'] ?? [
+                    'name' => 'Базовый тариф<br>Руб. на 1 чел.',
+                    'desc' => null,
+                ],
+                'tariff_price2' => false,
+                'tariff_price2_title' => $initial_data['tariff_price2_title'] ?? [
+                    'name' => 'Расширенный тариф<br>Руб. на 1 чел.',
+                    'desc' => null,
+                ],
+            ];
+        }
 
         return [
             'decks' => $decks,

@@ -180,11 +180,22 @@ class Exist
                 $exist_data = $waterway->getSimpleExist($checkin, $realtime_for_waterway);
             } catch (Exception $exception) {
                 Log::error('Exist getSimpleExist error: ' . $exception->getMessage());
-                // Очищаем буфер при ошибке
                 if ($type == 'json') {
                     ob_end_clean();
                 }
-                $this->error('waterway_error');
+
+                // Realtime (cached=1): источник недоступен — деактивируем заезд, как для Gama.
+                if ($cached) {
+                    $deactivated = $this->deactivateWaterwayCheckin((int) $checkin->id);
+                    if ($type == 'json') {
+                        $this->json($this->waterwayRealtimeUnavailablePayload($deactivated, 'waterway_api_error'));
+                    }
+                    return $this->waterwayRealtimeUnavailablePayload($deactivated, 'waterway_api_error');
+                }
+
+                if ($type == 'json') {
+                    $this->error('waterway_error');
+                }
                 return;
             }
         } elseif ($cached) {
@@ -243,6 +254,17 @@ class Exist
                 'tariff_price2' => $exist_data['tariff_price2'] ?? false,
                 'tariff_price2_title' => $exist_data['tariff_price2_title'] ?? ['name' => 'Руб.на 1 чел.', 'desc' => null],
             ];
+
+            if ($cached) {
+                $source_empty = !empty($exist_data['waterway_source_empty']);
+                $no_realtime_prices = $this->extractMinPrice($final_data) === null;
+
+                if ($source_empty || $no_realtime_prices) {
+                    $reason = $source_empty ? 'waterway_source_empty' : 'no_realtime_prices';
+                    $deactivated = $this->deactivateWaterwayCheckin((int) $checkin->id);
+                    $final_data = $this->waterwayRealtimeUnavailablePayload($deactivated, $reason);
+                }
+            }
 
             if ($type == 'json') {
                 // Добавляем 'cached' => true если запрос был с cached=1 (как в старой логике)
@@ -442,6 +464,37 @@ class Exist
                 ->where('eds_code', 'gama')
                 ->where('active', 1)
                 ->update(['active' => 0]) > 0;
+    }
+
+    /**
+     * Деактивирует waterway-заезд без model events.
+     */
+    private function deactivateWaterwayCheckin(int $checkin_id): bool
+    {
+        return DB::table('mcmraak_rivercrs_checkins')
+                ->where('id', $checkin_id)
+                ->where('eds_code', 'waterway')
+                ->where('active', 1)
+                ->update(['active' => 0]) > 0;
+    }
+
+    /**
+     * Пустой realtime-ответ Waterway после деактивации неактуального заезда.
+     */
+    private function waterwayRealtimeUnavailablePayload(bool $deactivated, string $reason): array
+    {
+        return [
+            'decks' => [],
+            'rooms' => [],
+            'eds' => 'waterway',
+            'cached' => true,
+            'deactivated' => $deactivated,
+            'realtime_unavailable' => true,
+            'reason' => $reason,
+            'tariff_price1_title' => ['name' => 'Руб.на 1 чел.', 'desc' => null],
+            'tariff_price2' => false,
+            'tariff_price2_title' => ['name' => 'Руб.на 1 чел.', 'desc' => null],
+        ];
     }
 
     private function extractMinPrice(array $exist_data): ?int
