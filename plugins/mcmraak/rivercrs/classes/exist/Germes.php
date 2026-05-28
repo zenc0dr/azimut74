@@ -9,12 +9,30 @@ class Germes extends Exist
 {
 
     public $prices, $pivot, $cabins, $decks;
+
+    /** Тур отсутствует в exportTur.php (germes-cruises) */
+    public $tourInCatalog = true;
+
+    /** Ошибка или пустой ответ germes-status */
+    public $sourceEmpty = false;
+
     public function loadCache()
     {
-        $this->prices = $this->parser->cacheWarmUp(
+        $status = $this->parser->cacheWarmUp(
             'germes-status',
             $this->query_type,
-            ['id' => $this->checkin->eds_id])['Каюта'];
+            ['id' => $this->checkin->eds_id]
+        );
+
+        if (isset($status['error'])) {
+            $this->sourceEmpty = true;
+            $this->prices = [];
+        } else {
+            $this->prices = $status['Каюта'] ?? [];
+            if (isset($this->prices['id'])) {
+                $this->prices = [$this->prices];
+            }
+        }
         ## dd($this->prices); // Cписок
         # "id" => "559"
         # "Статус" => "занята"  ||  "свободна"
@@ -55,6 +73,11 @@ class Germes extends Exist
         #DEBUG $this->query_type = 'array';
 
         $this->checkin = $checkin;
+
+        if ($realtime) {
+            $this->tourInCatalog = $this->isTourInCatalog((int) $checkin->eds_id);
+        }
+
         $this->loadCache();
 
         $rooms = [];
@@ -95,8 +118,31 @@ class Germes extends Exist
 
         return [
             'decks' => $this->records,
-            'rooms' => $rooms
+            'rooms' => $rooms,
+            'germes_catalog_missing' => $realtime && !$this->tourInCatalog,
+            'germes_source_empty' => $this->sourceEmpty,
         ];
+    }
+
+    /**
+     * Проверяет, что тур есть в актуальном каталоге exportTur.php.
+     */
+    protected function isTourInCatalog(int $edsId): bool
+    {
+        $cruises = $this->parser->cacheWarmUp('germes-cruises', 'array_now');
+
+        if (isset($cruises['error'])) {
+            // При сбое каталога не считаем тур снятым — избегаем ложных деактиваций.
+            return true;
+        }
+
+        foreach (($cruises['тур'] ?? []) as $tour) {
+            if (intval($tour['@attributes']['id'] ?? 0) === $edsId) {
+                return true;
+            }
+        }
+
+        return false;
     }
 
     public function getGermesDeck($desc_test)

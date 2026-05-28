@@ -94,6 +94,7 @@ class Plugin extends PluginBase
         $this->registerConsoleCommand('rivercrs:report-review-distribution', 'Mcmraak\Rivercrs\Console\ReportReviewDistribution');
         $this->registerConsoleCommand('rivercrs:gama-realtime-audit', 'Mcmraak\Rivercrs\Console\GamaRealtimeAudit');
         $this->registerConsoleCommand('rivercrs:waterway-realtime-audit', 'Mcmraak\Rivercrs\Console\WaterwayRealtimeAudit');
+        $this->registerConsoleCommand('rivercrs:germes-realtime-audit', 'Mcmraak\Rivercrs\Console\GermesRealtimeAudit');
     }
 
 

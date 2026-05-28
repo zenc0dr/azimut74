@@ -313,6 +313,53 @@ class Exist
             return $source_data;
         }
 
+        // Germes realtime (cached=1): только данные источника, без подмешивания цен из БД.
+        if (strtolower($checkin->eds_code) === 'germes' && $cached) {
+            $this->checkin = $checkin;
+            $this->exist_data = $exist_data;
+            $this->records = $this->exist_data['decks'] ?? [];
+
+            $source_data = $this->reorderDescks($this->records);
+
+            $source_data = [
+                'decks' => $source_data,
+                'rooms' => $this->roomsHandler($source_data),
+                'eds' => $checkin->eds_code,
+                'tariff_price1_title' => (isset($exist_data['tariff_price1_title'])) ? $exist_data['tariff_price1_title'] : ['name' => 'Руб.на 1 чел.', 'desc' => null],
+                'tariff_price2' => (isset($exist_data['tariff_price2'])) ? $exist_data['tariff_price2'] : false,
+                'tariff_price2_title' => (isset($exist_data['tariff_price2_title'])) ? $exist_data['tariff_price2_title'] : ['name' => 'Руб.на 1 чел.', 'desc' => null],
+            ];
+
+            $this->addQQ($source_data);
+
+            $catalog_missing = !empty($exist_data['germes_catalog_missing']);
+            $source_empty = !empty($exist_data['germes_source_empty']);
+            $no_realtime_prices = $this->extractMinPrice($source_data) === null;
+
+            if ($catalog_missing || $source_empty || $no_realtime_prices) {
+                if ($catalog_missing) {
+                    $reason = 'germes_catalog_missing';
+                } elseif ($source_empty) {
+                    $reason = 'germes_source_empty';
+                } else {
+                    $reason = 'no_realtime_prices';
+                }
+
+                $deactivated = $this->deactivateGermesCheckin((int) $checkin->id);
+                $source_data = $this->germesRealtimeUnavailablePayload($deactivated, $reason);
+            }
+
+            if ($type == 'json') {
+                $source_data['cached'] = true;
+                Cache::add($cache_key, $source_data, 120);
+                ob_end_clean();
+                $this->json($source_data);
+                return;
+            }
+
+            return $source_data;
+        }
+
         $this->checkin = $checkin;
         $this->exist_data = $exist_data;
         $this->records = $this->exist_data['decks'];
@@ -479,6 +526,18 @@ class Exist
     }
 
     /**
+     * Деактивирует germes-заезд без model events.
+     */
+    private function deactivateGermesCheckin(int $checkin_id): bool
+    {
+        return DB::table('mcmraak_rivercrs_checkins')
+                ->where('id', $checkin_id)
+                ->where('eds_code', 'germes')
+                ->where('active', 1)
+                ->update(['active' => 0]) > 0;
+    }
+
+    /**
      * Пустой realtime-ответ Waterway после деактивации неактуального заезда.
      */
     private function waterwayRealtimeUnavailablePayload(bool $deactivated, string $reason): array
@@ -487,6 +546,25 @@ class Exist
             'decks' => [],
             'rooms' => [],
             'eds' => 'waterway',
+            'cached' => true,
+            'deactivated' => $deactivated,
+            'realtime_unavailable' => true,
+            'reason' => $reason,
+            'tariff_price1_title' => ['name' => 'Руб.на 1 чел.', 'desc' => null],
+            'tariff_price2' => false,
+            'tariff_price2_title' => ['name' => 'Руб.на 1 чел.', 'desc' => null],
+        ];
+    }
+
+    /**
+     * Пустой realtime-ответ Germes после деактивации неактуального заезда.
+     */
+    private function germesRealtimeUnavailablePayload(bool $deactivated, string $reason): array
+    {
+        return [
+            'decks' => [],
+            'rooms' => [],
+            'eds' => 'germes',
             'cached' => true,
             'deactivated' => $deactivated,
             'realtime_unavailable' => true,
