@@ -420,6 +420,8 @@ class ReviewsWidget
     }
 
     /**
+     * «Время отдыха» для виджета: «июнь 2025» (как в форме отзыва), не «01.06.2025».
+     *
      * @param mixed $raw
      */
     private static function formatTripDateForWidget($raw): ?string
@@ -428,10 +430,49 @@ class ReviewsWidget
             return null;
         }
 
-        try {
-            return Carbon::parse($raw)->format('d.m.Y');
-        } catch (\Throwable $e) {
+        static $monthsNominative = [
+            1 => 'январь', 2 => 'февраль', 3 => 'март', 4 => 'апрель',
+            5 => 'май', 6 => 'июнь', 7 => 'июль', 8 => 'август',
+            9 => 'сентябрь', 10 => 'октябрь', 11 => 'ноябрь', 12 => 'декабрь',
+        ];
+
+        $raw = trim((string) $raw);
+        if ($raw === '') {
             return null;
+        }
+
+        if (preg_match('/^(\d{4})-(\d{2})$/', $raw, $m)) {
+            $month = (int) $m[2];
+            $year = (int) $m[1];
+            if ($month >= 1 && $month <= 12 && $year > 0) {
+                return $monthsNominative[$month] . ' ' . $year;
+            }
+        }
+
+        if (preg_match('/^(\d{4})-(\d{2})-\d{2}$/', $raw, $m)) {
+            $month = (int) $m[2];
+            $year = (int) $m[1];
+            if ($month >= 1 && $month <= 12 && $year > 0) {
+                return $monthsNominative[$month] . ' ' . $year;
+            }
+        }
+
+        if (preg_match('/^\d{2}\.(\d{2})\.(\d{4})$/', $raw, $m)) {
+            $month = (int) $m[1];
+            $year = (int) $m[2];
+            if ($month >= 1 && $month <= 12 && $year > 0) {
+                return $monthsNominative[$month] . ' ' . $year;
+            }
+        }
+
+        try {
+            $d = Carbon::parse($raw);
+            $month = (int) $d->format('n');
+            $year = (int) $d->format('Y');
+
+            return ($monthsNominative[$month] ?? $d->format('m')) . ' ' . $year;
+        } catch (\Throwable $e) {
+            return $raw;
         }
     }
 
