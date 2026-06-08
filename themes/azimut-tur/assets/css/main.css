@@ -712,6 +712,8 @@ section.footerDown {
 
 /*Блок с росреестром*/
 .ros-reestr-block {
+    display: block;
+    box-sizing: border-box;
     background-image: url(/themes/azimut-tur/assets/images/gerb.png);
     background-color: #0e4c85;
     background-repeat: no-repeat;
@@ -723,6 +725,13 @@ section.footerDown {
     width: 353px;
     height: 64px;
     cursor: pointer;
+    color: #fff;
+    text-decoration: none;
+}
+.ros-reestr-block:hover,
+.ros-reestr-block:visited {
+    color: #fff;
+    text-decoration: none;
 }
 .ros-reestr-block div {
 
