@@ -1,4 +1,9 @@
 fields:
+    is_published:
+        label: Опубликован
+        span: left
+        default: 1
+        type: switch
     name:
         label: Имя
         span: auto
@@ -13,7 +18,27 @@ fields:
         type: text
 tabs:
     fields:
-        data:
+        admin_rating_cruise:
+            label: Оценка отдыха в целом
+            span: left
+            min: 1
+            max: 5
+            type: number
+            tab: Данные
+        admin_rating_azimut:
+            label: Оценка работы Азимут
+            span: right
+            min: 1
+            max: 5
+            type: number
+            tab: Данные
+        reviews_text:
+            label: Текст отзыва
+            size: giant
+            span: full
+            type: textarea
+            tab: Данные
+        review_meta:
             span: full
             path: $/zen/reviews/models/review/review.php
             type: partial

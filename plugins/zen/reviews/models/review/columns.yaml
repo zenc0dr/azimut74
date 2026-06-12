@@ -23,6 +23,11 @@ columns:
         type: text
         searchable: false
         sortable: false
+    is_published:
+        label: Публикация
+        type: partial
+        sortable: true
+        clickable: false
     created_at:
         label: Создано
         type: datetime

@@ -13,3 +13,6 @@
 1.0.6:
     - 'Created table zen_reviews_bindings'
     - builder_table_create_zen_reviews_bindings.php
+1.0.7:
+    - 'Модерация отзывов: is_published'
+    - add_is_published_to_zen_reviews_reviews.php

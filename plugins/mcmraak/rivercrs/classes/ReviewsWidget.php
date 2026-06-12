@@ -55,7 +55,7 @@ class ReviewsWidget
         return self::getBindings($entityType, $entityId)
             ->pluck('review')
             ->filter(function ($review) {
-                return $review !== null;
+                return $review !== null && $review->is_published;
             })
             ->values();
     }
@@ -136,7 +136,7 @@ class ReviewsWidget
      */
     public static function moreReviewsQuery($excludedIds = [], $shipId = null)
     {
-        $query = Review::query()->orderBy('created_at', 'desc');
+        $query = Review::query()->published()->orderBy('created_at', 'desc');
 
         $excludedIds = array_values(array_filter(array_map('intval', (array) $excludedIds)));
         if ($excludedIds) {
@@ -182,6 +182,7 @@ class ReviewsWidget
         }
 
         return Review::query()
+            ->published()
             ->tap(function ($query) use ($shipId) {
                 self::applyShipIdFilterToQuery($query, $shipId);
             })
@@ -237,6 +238,7 @@ class ReviewsWidget
         }
 
         return Review::query()
+            ->published()
             ->tap(function ($query) use ($shipId) {
                 self::applyShipIdFilterToQuery($query, $shipId);
             })
@@ -259,6 +261,7 @@ class ReviewsWidget
 
         $scanLimit = max($limit * 30, 60);
         $candidates = Review::query()
+            ->published()
             ->tap(function ($query) use ($shipId) {
                 self::applyShipIdFilterToQuery($query, $shipId);
             })
@@ -295,7 +298,7 @@ class ReviewsWidget
 
         $items = [];
         foreach (CruiseReviewAssignments::getGlobalReviewIds() as $reviewId) {
-            $review = Review::find($reviewId);
+            $review = Review::query()->published()->find($reviewId);
             if ($review) {
                 $items[] = self::formatReview($review);
             }
