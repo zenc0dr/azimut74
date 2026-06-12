@@ -1,0 +1,19 @@
+<?php if ($record->is_published): ?>
+    <a href="javascript:;"
+        class="btn btn-sm btn-success"
+        data-request="onTogglePublished"
+        data-request-data="id: <?= (int) $record->id ?>"
+        data-stripe-load-indicator
+        title="Снять с публикации">
+        <i class="oc-icon-check"></i> Опубликован
+    </a>
+<?php else: ?>
+    <a href="javascript:;"
+        class="btn btn-sm btn-danger"
+        data-request="onTogglePublished"
+        data-request-data="id: <?= (int) $record->id ?>"
+        data-stripe-load-indicator
+        title="Опубликовать">
+        <i class="oc-icon-eye-slash"></i> Скрыт
+    </a>
+<?php endif ?>

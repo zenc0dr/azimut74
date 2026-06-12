@@ -181,6 +181,7 @@ class DistributeReviews extends Command
     {
         $limit = CruiseReviewAssignments::GLOBAL_REVIEW_COUNT;
         $allIds = ZenReview::query()
+            ->published()
             ->orderBy('id')
             ->pluck('id')
             ->map(function ($id) {
@@ -205,7 +206,7 @@ class DistributeReviews extends Command
     private function buildReviewIdsByShipId(): array
     {
         $pools = [];
-        foreach (ZenReview::query()->select(['id', 'data'])->cursor() as $review) {
+        foreach (ZenReview::query()->published()->select(['id', 'data'])->cursor() as $review) {
             $form = ReviewsWidget::extractForm($review);
             $shipId = ReviewsWidget::normalizeShipId($form['ship_id'] ?? null);
             if ($shipId < 1) {
@@ -365,6 +366,7 @@ class DistributeReviews extends Command
     {
         $pool = [];
         $reviews = ZenReview::query()
+            ->published()
             ->orderBy('created_at', 'desc')
             ->orderBy('id', 'desc')
             ->pluck('id');

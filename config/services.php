@@ -49,6 +49,7 @@ return [
     */
     'rocket_chat' => [
         'support_bot_webhook' => trim((string) (env('ROCKET_CHAT_SUPPORT_BOT_WEBHOOK') ?: env('DEV_BOT_ROCKETCHAT_WEBHOOK_URL', ''))),
+        'azimut_general_webhook' => trim((string) env('ROCKET_CHAT_AZIMUT_GENERAL_WEBHOOK', '')),
         'webhook_alias' => env('ROCKET_CHAT_WEBHOOK_ALIAS'),
     ],
 

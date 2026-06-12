@@ -6,6 +6,7 @@ use Zen\Cli\Classes\Cli;
 use Zen\Reviews\Classes\Services\ValidatorHelper;
 use Zen\Reviews\Classes\Services\Images\Image;
 use Mcmraak\Rivercrs\Classes\ReviewsWidget;
+use Zen\Reviews\Classes\RocketNotifier;
 use Zen\Reviews\Models\Review;
 use Zen\Uongate\Classes\Lead;
 use Zen\Reviews\Models\Email as EmailModel;
@@ -64,10 +65,17 @@ class Store
         $photos = $form['photos'];
         unset($form['photos']);
 
+        $autoUnpublish = Review::shouldAutoUnpublish($form);
+
         $review = new Review();
         $review->name = $form['name'];
         $review->data = $form;
+        $review->is_published = !$autoUnpublish;
         $review->save();
+
+        if ($autoUnpublish) {
+            RocketNotifier::notifyBadReview(RocketNotifier::buildBadReviewMessage($review));
+        }
 
         $this->sendReport($form);
         $this->whSend($form, $review);
