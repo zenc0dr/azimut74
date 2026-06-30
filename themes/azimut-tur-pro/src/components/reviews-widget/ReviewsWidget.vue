@@ -607,9 +607,18 @@ export default {
             this.fetchRemaining();
             this.loadMore();
         },
-        /** ship_id для API подгрузки: на странице бронирования всегда общий пул. */
+        /**
+         * ship_id для API подгрузки.
+         * Без выбранного теплохода на странице круиза — общий пул (loadMoreFromGlobalPool).
+         * При выборе теплохода в дропдауне — всегда фильтр по ship_id, иначе клиентский фильтр
+         * обнуляет список (глобальные 3 отзыва редко совпадают с выбранным судном).
+         */
         reviewsMoreShipId() {
-            return this.loadMoreFromGlobalPool ? null : this.shipPayloadId();
+            const shipId = this.shipPayloadId();
+            if (shipId != null) {
+                return shipId;
+            }
+            return null;
         },
         fetchRemaining() {
             return axios
