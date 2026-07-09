@@ -377,10 +377,13 @@ export default {
                 this.toTable(this.DB.ways[i])
             }
 
-            // Collect days
+            // Collect days (только сегодня и будущие даты для календаря)
+            let todayStart = parseInt(new Date().setHours(0, 0, 0, 0) / 1000)
             for (let i in this.DB.checkins) {
                 days_obj[this.DB.checkins[i].days] = this.DB.checkins[i].days+''
-                this.available_dates.push(this.secToDate(this.DB.checkins[i].date))
+                if (this.DB.checkins[i].date >= todayStart) {
+                    this.available_dates.push(this.secToDate(this.DB.checkins[i].date))
+                }
             }
 
             // Оставить уникальные даты

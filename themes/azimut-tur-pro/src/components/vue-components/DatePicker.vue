@@ -5,7 +5,8 @@
             type="date"
             valueType="format"
             format="DD.MM.YYYY"
-            :disabled-date="isDataAllow(date)"
+            :disabled-date="isDateDisabled"
+            :disabled-calendar-changer="isCalendarChangerDisabled"
             lang="ru"
             :confirm="false"
             @change="change"
@@ -44,18 +45,31 @@ export default {
         {
             this.$emit('change', date)
         },
-        isDataAllow(date)
-        {
-            if(!this.allowedDates) {
-                return ()=>false
-            }
-
-            return (date) => {
-                if (this.allowedDates.indexOf(this.formattedDate(date)) !== -1) {
-                    return false
-                }
+        startOfToday() {
+            const today = new Date()
+            today.setHours(0, 0, 0, 0)
+            return today
+        },
+        startOfCurrentMonth() {
+            const today = this.startOfToday()
+            return new Date(today.getFullYear(), today.getMonth(), 1)
+        },
+        // true = дата заблокирована
+        isDateDisabled(date) {
+            if (date.getTime() < this.startOfToday().getTime()) {
                 return true
             }
+            if (!this.allowedDates) {
+                return false
+            }
+            return this.allowedDates.indexOf(this.formattedDate(date)) === -1
+        },
+        // true = кнопка навигации заблокирована
+        isCalendarChangerDisabled(date, type) {
+            if (type !== 'last-month' && type !== 'last-year') {
+                return false
+            }
+            return date.getTime() < this.startOfCurrentMonth().getTime()
         },
         formattedDate(date) {
             let dd = date.getDate()
