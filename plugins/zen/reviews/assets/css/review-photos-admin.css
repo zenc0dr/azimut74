@@ -69,6 +69,64 @@
 
 .review-photos-pagination {
     margin-top: 20px;
+    padding-top: 8px;
+    text-align: center;
+}
+
+.review-photos-pagination .pagination {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    align-items: center;
+    gap: 6px;
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+
+.review-photos-pagination .pagination > li {
+    display: inline-block;
+    list-style: none;
+    margin: 0;
+    padding: 0;
+}
+
+.review-photos-pagination .pagination > li > a,
+.review-photos-pagination .pagination > li > span {
+    display: inline-block;
+    min-width: 34px;
+    padding: 6px 11px;
+    border: 1px solid #d7d7d7;
+    border-radius: 4px;
+    background: #fff;
+    color: #444;
+    font-size: 13px;
+    line-height: 1.4;
+    text-decoration: none;
+    transition: background-color 0.15s ease, border-color 0.15s ease, color 0.15s ease;
+}
+
+.review-photos-pagination .pagination > li > a:hover {
+    background: #f0f0f0;
+    border-color: #c7c7c7;
+    color: #222;
+    text-decoration: none;
+}
+
+.review-photos-pagination .pagination > li.active > span {
+    background: #666c8c;
+    border-color: #666c8c;
+    color: #fff;
+    font-weight: 600;
+}
+
+.review-photos-pagination .pagination > li.disabled > span,
+.review-photos-pagination .pagination > li.disabled > a {
+    background: #f8f8f8;
+    border-color: #e3e3e3;
+    color: #aaa;
+    cursor: not-allowed;
+    pointer-events: none;
 }
 
 .review-photos-manage {
