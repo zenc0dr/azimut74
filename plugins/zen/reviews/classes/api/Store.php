@@ -7,6 +7,7 @@ use Zen\Reviews\Classes\Services\ValidatorHelper;
 use Zen\Reviews\Classes\Services\Images\Image;
 use Mcmraak\Rivercrs\Classes\ReviewsWidget;
 use Zen\Reviews\Classes\RocketNotifier;
+use Zen\Reviews\Classes\ReviewPhotoService;
 use Zen\Reviews\Models\Review;
 use Zen\Uongate\Classes\Lead;
 use Zen\Reviews\Models\Email as EmailModel;
@@ -102,7 +103,25 @@ class Store
                 'updated_at' => now()
             ];
         }
-        reviews()->db('system_files')->insert($files_insert);
+
+        if ($files_insert !== []) {
+            reviews()->db('system_files')->insert($files_insert);
+
+            $photoService = new ReviewPhotoService();
+            $insertedFiles = reviews()->db('system_files')
+                ->where('attachment_type', Review::class)
+                ->where('field', 'photos')
+                ->where('attachment_id', $review->id)
+                ->orderBy('id')
+                ->get();
+
+            foreach ($insertedFiles as $fileRow) {
+                $file = \System\Models\File::find($fileRow->id);
+                if ($file) {
+                    $photoService->ensureMeta($file, $review, false);
+                }
+            }
+        }
         return reviews()->toJson([
             'success' => true,
             'review_id' => $review->id,

@@ -18,3 +18,7 @@ navigation:
                 label: Email
                 url: zen/reviews/emails
                 icon: icon-envelope
+            reviews-photos:
+                label: Фото
+                url: zen/reviews/photos
+                icon: icon-picture-o

@@ -1,0 +1,5 @@
+<?php if (!empty($photos) && $photos->hasPages()): ?>
+    <div class="review-photos-pagination" id="photos-pagination">
+        <?= $photos->render() ?>
+    </div>
+<?php endif ?>

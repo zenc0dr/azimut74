@@ -1,0 +1,22 @@
+<div class="layout review-photos-page">
+    <div class="layout-row">
+        <div class="layout-cell">
+            <div class="control-breadcrumb">
+                <ul>
+                    <li><a href="<?= Backend::url('zen/reviews/reviews') ?>">Отзывы</a></li>
+                    <li>Фото</li>
+                </ul>
+            </div>
+
+            <div class="padded-container">
+                <h1 class="review-photos-page__title">Фото отзывов</h1>
+                <p class="review-photos-page__hint">
+                    Все фотографии из отзывов. Новые фото по умолчанию скрыты до публикации модератором.
+                </p>
+
+                <?= $this->makePartial('photo_grid') ?>
+                <?= $this->makePartial('pagination') ?>
+            </div>
+        </div>
+    </div>
+</div>

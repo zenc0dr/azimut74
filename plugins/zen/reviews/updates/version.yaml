@@ -16,3 +16,7 @@
 1.0.7:
     - 'Модерация отзывов: is_published'
     - add_is_published_to_zen_reviews_reviews.php
+1.0.8:
+    - 'Модерация фото отзывов: zen_reviews_photos'
+    - create_zen_reviews_photos_table.php
+    - backfill_zen_reviews_photos.php

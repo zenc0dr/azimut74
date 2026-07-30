@@ -1,0 +1,50 @@
+<?php
+$service = new \Zen\Reviews\Classes\ReviewPhotoService();
+?>
+<?php foreach ($items as $meta): ?>
+    <?php $tile = $service->buildTileData($meta); ?>
+    <div class="review-photo-tile" id="photo-tile-<?= (int) $tile['file_id'] ?>">
+        <a href="<?= e($tile['full_url']) ?>" class="review-photo-tile__image" target="_blank" rel="noopener">
+            <img src="<?= e($tile['thumb_url']) ?>" alt="<?= e($tile['file_name']) ?>">
+        </a>
+        <div class="review-photo-tile__meta">
+            <div class="review-photo-tile__author"><?= e($tile['author_name']) ?></div>
+            <div class="review-photo-tile__ship"><?= e($tile['ship_name'] ?: '—') ?></div>
+            <div class="review-photo-tile__date"><?= e($tile['review_date']) ?></div>
+            <div class="review-photo-tile__size"><?= e($tile['file_size']) ?></div>
+            <a href="<?= e($tile['review_url']) ?>" class="review-photo-tile__review-link" target="_blank" rel="noopener">
+                Отзыв #<?= (int) $tile['review_id'] ?>
+            </a>
+        </div>
+        <div class="review-photo-tile__actions">
+            <?php if ($tile['is_published']): ?>
+                <a href="javascript:;"
+                    class="btn btn-sm btn-success"
+                    data-request="onTogglePhotoPublished"
+                    data-request-data="file_id: <?= (int) $tile['file_id'] ?>"
+                    data-stripe-load-indicator
+                    title="Снять с публикации">
+                    <i class="oc-icon-check"></i> Опубликовано
+                </a>
+            <?php else: ?>
+                <a href="javascript:;"
+                    class="btn btn-sm btn-default"
+                    data-request="onTogglePhotoPublished"
+                    data-request-data="file_id: <?= (int) $tile['file_id'] ?>"
+                    data-stripe-load-indicator
+                    title="Опубликовать">
+                    <i class="oc-icon-eye-slash"></i> Скрыто
+                </a>
+            <?php endif ?>
+            <a href="javascript:;"
+                class="btn btn-sm btn-danger"
+                data-request="onDeletePhoto"
+                data-request-data="file_id: <?= (int) $tile['file_id'] ?>"
+                data-request-confirm="Удалить фото без возможности восстановления?"
+                data-stripe-load-indicator
+                title="Удалить">
+                <i class="oc-icon-trash-o"></i>
+            </a>
+        </div>
+    </div>
+<?php endforeach ?>

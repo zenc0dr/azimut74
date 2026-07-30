@@ -1,0 +1,9 @@
+<?php if (!empty($photos) && $photos->count()): ?>
+    <div class="review-photos-grid" id="photos-grid">
+        <?= $this->makePartial('photo_tile', ['items' => $photos]) ?>
+    </div>
+<?php else: ?>
+    <div class="callout callout-info" id="photos-grid">
+        Фотографии отзывов пока не загружены.
+    </div>
+<?php endif ?>

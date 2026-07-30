@@ -53,3 +53,8 @@ tabs:
             span: full
             type: fileupload
             tab: Фото
+        photos_manage:
+            span: full
+            path: $/zen/reviews/models/review/photos_manage.php
+            type: partial
+            tab: Фото

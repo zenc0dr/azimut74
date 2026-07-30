@@ -3,10 +3,13 @@
 use Backend\Classes\Controller;
 use BackendMenu;
 use Flash;
+use Zen\Reviews\Controllers\Traits\ManagesReviewPhotos;
 use Zen\Reviews\Models\Review;
 
 class Reviews extends Controller
 {
+    use ManagesReviewPhotos;
+
     public $implement = ['Backend\Behaviors\ListController', 'Backend\Behaviors\FormController'];
 
     public $listConfig = 'config_list.yaml';
@@ -16,6 +19,14 @@ class Reviews extends Controller
     {
         parent::__construct();
         BackendMenu::setContext('Zen.Reviews', 'reviews-main', 'reviews-reviews');
+        $this->addCss('/plugins/zen/reviews/assets/css/review-photos-admin.css');
+    }
+
+    public function formAfterSave($model)
+    {
+        if ($model instanceof Review) {
+            $this->photoService()->syncReviewPhotos($model, false);
+        }
     }
 
     public function onTogglePublished()

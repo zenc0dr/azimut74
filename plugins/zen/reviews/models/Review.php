@@ -33,9 +33,29 @@ class Review extends Model
         'binding' => [Binding::class, 'key' => 'review_id'],
     ];
 
+    public $hasMany = [
+        'reviewPhotos' => [ReviewPhoto::class, 'key' => 'review_id'],
+    ];
+
     public function scopePublished($query)
     {
         return $query->where('is_published', true);
+    }
+
+    public function scopeWithPhotoMeta($query)
+    {
+        return $query->with(['reviewPhotos', 'photos']);
+    }
+
+    public function getPhotoMeta(int $fileId): ?ReviewPhoto
+    {
+        if ($this->relationLoaded('reviewPhotos')) {
+            return $this->reviewPhotos->firstWhere('system_file_id', $fileId);
+        }
+
+        return $this->reviewPhotos()
+            ->where('system_file_id', $fileId)
+            ->first();
     }
 
     public function setDataAttribute($value): void

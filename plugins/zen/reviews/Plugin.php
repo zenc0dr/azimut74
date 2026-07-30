@@ -19,5 +19,6 @@ class Plugin extends PluginBase
     public function register()
     {
         $this->registerConsoleCommand('reviews:report', 'Zen\Reviews\Console\Report');
+        $this->registerConsoleCommand('reviews:export-csv', 'Zen\Reviews\Console\ExportCsv');
     }
 }
