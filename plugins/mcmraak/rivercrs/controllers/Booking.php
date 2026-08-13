@@ -103,29 +103,6 @@ class Booking extends Controller
 
         deprecator()->save();
 
-        #Send Email
-        $settings = Settings::find(1);
-        $emails = $settings->bookingemails;
-
-        $emailsToSend = [];
-        foreach ($emails as $admin_email) {
-            $emailsToSend[] = $admin_email['bemail'];
-        }
-
-        $to = 'Администраторам';
-
-        $subj = NotifySettings::get($prok ? 'pk_subject' : 'rc_subject');
-        $subj = str_replace('$id', $booking->id, $subj);
-
-        Mail::send([
-            'text' => "",
-            'html' => \View::make('mcmraak.rivercrs::booking_report', ['booking' => $booking]),
-            'raw' => true
-        ], [null], function ($message) use ($emailsToSend, $to, $subj) {
-            $message->to($emailsToSend, $to);
-            $message->subject($subj);
-        });
-
         $note = "Название формы: Форма бронирования;\n" .
             "Имя: $name;\n" .
             "Телефон: $phone;\n" .
@@ -216,6 +193,29 @@ class Booking extends Controller
         ];
 
         Lead::push($push_data);
+
+        try {
+            $settings = Settings::find(1);
+            $emails = $settings->bookingemails;
+            $emailsToSend = [];
+            foreach ($emails as $admin_email) {
+                $emailsToSend[] = $admin_email['bemail'];
+            }
+
+            $subj = NotifySettings::get($prok ? 'pk_subject' : 'rc_subject');
+            $subj = str_replace('$id', $booking->id, $subj);
+
+            Mail::send([
+                'text' => "",
+                'html' => \View::make('mcmraak.rivercrs::booking_report', ['booking' => $booking]),
+                'raw' => true
+            ], [null], function ($message) use ($emailsToSend, $subj) {
+                $message->to($emailsToSend, 'Администраторам');
+                $message->subject($subj);
+            });
+        } catch (\Exception $e) {
+            \Log::error('RiverCRS booking mail failed (booking #' . $booking->id . '): ' . $e->getMessage());
+        }
 
         if (NotifySettings::get('sms')) {
             Sms::send($phone, $notify_text, NotifySettings::get('sms_profile'));
