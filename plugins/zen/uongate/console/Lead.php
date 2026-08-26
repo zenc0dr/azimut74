@@ -4,6 +4,7 @@ use Illuminate\Console\Command;
 use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Input\InputArgument;
 use Zen\Uongate\Classes\Lead as LeadClass;
+use Zen\Uongate\Classes\AmoFailAlert;
 
 class Lead extends Command
 {
@@ -20,8 +21,22 @@ class Lead extends Command
         }
 
         $data = json_decode(file_get_contents($path), true);
-        LeadClass::query($data);
-        unlink($path);
+        try {
+            LeadClass::query($data);
+        } catch (\Exception $e) {
+            $amo = isset($data['Amo.Integration']) && is_array($data['Amo.Integration'])
+                ? $data['Amo.Integration']
+                : (is_array($data) ? $data : []);
+            master()->outboundHttp()->logException([
+                'url' => 'https://tglk.ru/in/4PVwZs6rrSd6QRB5',
+                'source' => isset($amo['source']) ? $amo['source'] : null,
+                'payload' => $amo,
+            ], $e);
+            AmoFailAlert::send($amo);
+        }
+        if (file_exists($path)) {
+            unlink($path);
+        }
     }
 
     protected function getOptions()

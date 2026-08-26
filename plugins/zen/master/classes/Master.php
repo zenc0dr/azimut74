@@ -114,4 +114,9 @@ class Master
     {
         return \Zen\Master\Classes\Services\Telegram::getInstance();
     }
+
+    public function outboundHttp(): \Zen\Master\Classes\Services\OutboundHttp
+    {
+        return \Zen\Master\Classes\Services\OutboundHttp::getInstance();
+    }
 }

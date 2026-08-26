@@ -89,10 +89,14 @@ class Lead extends Core
             $amo_integration
         );
 
-        # Дополнительно посылаем данные в AMO
-        \Http::post('https://tglk.ru/in/4PVwZs6rrSd6QRB5', function ($http) use ($amo_integration) {
-            $http->data($amo_integration);
-        });
+        $delivered = master()->outboundHttp()->post(
+            'https://tglk.ru/in/4PVwZs6rrSd6QRB5',
+            $amo_integration
+        );
+
+        if (!$delivered) {
+            AmoFailAlert::send($amo_integration);
+        }
 
         # Отправляем данные в Calltouch
         if (isset($data['Calltouch.Integration'])) {
