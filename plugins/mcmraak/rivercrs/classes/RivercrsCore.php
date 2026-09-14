@@ -11,6 +11,9 @@ use Carbon\Carbon;
 class RivercrsCore
 {
     private const INDEX_CRUISE_ID = 2;
+    private const ARTICLE_DATE_FALLBACK = '2018-01-01T00:00:00+03:00';
+    private const ARTICLE_PUBLISHER_NAME = 'Турагентство "Азимут-тур"';
+    private const ARTICLE_LOGO_PATH = '/themes/azimut-tur-pro/assets/images/logo.png';
 
     private ?array $segments;
     private $cruise;
@@ -77,6 +80,7 @@ class RivercrsCore
             'meta_keywords' => $reference->metakey,
             'html' => $reference->text,
             'leftMenu' => RivercrsLeftmenu::build($cruise, null),
+            'article_schema' => self::buildArticleSchema($reference),
         ];
 
         if (isset($_GET['dump'])) {
@@ -85,6 +89,78 @@ class RivercrsCore
 
         $cms_page['RiverCRS'] = $data;
         return true;
+    }
+
+    public static function buildArticleSchema(Reference $reference): string
+    {
+        $logoUrl = self::absoluteUrl(self::ARTICLE_LOGO_PATH);
+        $imageUrl = self::firstImageUrl((string) $reference->text) ?: $logoUrl;
+        $headline = trim((string) ($reference->metatitle ?: $reference->name));
+        $description = trim((string) $reference->metadesc);
+        if ($description === '') {
+            $description = self::excerptFromHtml((string) $reference->text);
+        }
+
+        $payload = [
+            '@context' => 'https://schema.org',
+            '@type' => 'Article',
+            'headline' => $headline,
+            'image' => $imageUrl,
+            'datePublished' => self::ARTICLE_DATE_FALLBACK,
+            'dateModified' => self::ARTICLE_DATE_FALLBACK,
+            'publisher' => [
+                '@type' => 'Organization',
+                'name' => self::ARTICLE_PUBLISHER_NAME,
+                'logo' => [
+                    '@type' => 'ImageObject',
+                    'url' => $logoUrl,
+                ],
+            ],
+            'description' => $description,
+            'mainEntityOfPage' => request()->url(),
+        ];
+
+        return json_encode($payload, JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES);
+    }
+
+    private static function firstImageUrl(string $html): ?string
+    {
+        if (!preg_match('/<img[^>]+src=["\']([^"\']+)["\']/i', $html, $matches)) {
+            return null;
+        }
+
+        $src = trim($matches[1]);
+        if ($src === '') {
+            return null;
+        }
+
+        return self::absoluteUrl($src);
+    }
+
+    private static function excerptFromHtml(string $html): string
+    {
+        $text = trim(preg_replace('/\s+/u', ' ', strip_tags($html)));
+        if ($text === '') {
+            return '';
+        }
+        if (function_exists('mb_substr')) {
+            return mb_substr($text, 0, 300);
+        }
+        return substr($text, 0, 300);
+    }
+
+    private static function absoluteUrl(string $path): string
+    {
+        if (preg_match('#^https?://#i', $path)) {
+            return $path;
+        }
+        if (strpos($path, '//') === 0) {
+            return 'https:' . $path;
+        }
+        if ($path === '' || $path[0] !== '/') {
+            $path = '/' . ltrim($path, '/');
+        }
+        return url($path);
     }
 
     private function isShipsPage(): bool

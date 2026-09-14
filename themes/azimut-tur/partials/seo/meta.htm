@@ -95,3 +95,6 @@ function onInit()
 {% elseif this.page.seo_keywords %}
     <meta name="keywords" content="{{ this.page.seo_keywords|mutator }}">
 {% endif %}
+{% if RiverCRS.article_schema %}
+<script type="application/ld+json">{{ RiverCRS.article_schema|raw }}</script>
+{% endif %}

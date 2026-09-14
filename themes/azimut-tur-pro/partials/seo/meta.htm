@@ -70,3 +70,6 @@ description = "Метатеги"
 {% elseif RiverCRS.meta_keywords %}
 <meta name="keywords" content="{{ RiverCRS.meta_keywords|mutator }}">
 {% endif %}
+{% if RiverCRS.article_schema %}
+<script type="application/ld+json">{{ RiverCRS.article_schema|raw }}</script>
+{% endif %}
