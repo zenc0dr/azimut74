@@ -4,6 +4,7 @@ use Illuminate\Console\Command;
 use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Input\InputArgument;
 use Zen\Worker\Classes\ProcessLog;
+use Zen\Worker\Classes\IdList;
 use Exception;
 
 class VolgaParse extends Command
@@ -78,10 +79,19 @@ class VolgaParse extends Command
             
             $this->showProgress('Обработка данных...', 30);
             $dataProcessor = new VolgaDataProcessor($this->db, $this->timeout, $limit);
+            $dataProcessor->setTargetFilters(
+                IdList::parse($this->option('cruise_ids') ?: $this->option('handle_only')),
+                IdList::parse($this->option('ship_ids'))
+            );
+            $targeted = $dataProcessor->isTargeted();
             $dataProcessor->processAllData($dump);
             
             $this->showProgress('Очистка круизов без цен...', 90);
-            $this->cleanCruisesWithoutPrices();
+            if (!$targeted) {
+                $this->cleanCruisesWithoutPrices();
+            } else {
+                $this->warn('⚠️  Точечный режим: очистка круизов без цен пропущена.');
+            }
             
             $this->showProgress('Завершение обработки...', 100);
             $this->line('');
@@ -181,6 +191,9 @@ class VolgaParse extends Command
             ['clear_cache', null, InputOption::VALUE_NONE, 'Очистить кеш XML Volga перед парсингом'],
             ['limit', 'l', InputOption::VALUE_OPTIONAL, 'Ограничить количество записей для тестирования', null],
             ['next-url', 'u', InputOption::VALUE_OPTIONAL, 'URL источника XML данных', 'https://test.volgawolga.ru/xml/daily2026.xml'],
+            ['cruise_ids', null, InputOption::VALUE_OPTIONAL, 'Список eds_id круизов через запятую', null],
+            ['ship_ids', null, InputOption::VALUE_OPTIONAL, 'Список id теплоходов источника через запятую', null],
+            ['handle_only', null, InputOption::VALUE_OPTIONAL, 'Алиас cruise_ids', null],
         ];
     }
 }

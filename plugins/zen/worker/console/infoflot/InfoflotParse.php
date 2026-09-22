@@ -4,6 +4,7 @@ use Illuminate\Console\Command;
 use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Input\InputArgument;
 use Zen\Worker\Classes\ProcessLog;
+use Zen\Worker\Classes\IdList;
 use Exception;
 
 class InfoflotParse extends Command
@@ -76,6 +77,10 @@ class InfoflotParse extends Command
             $this->showProgress('Обработка данных о судах...', 25);
 
             $dataProcessor = new InfoflotDataProcessor($this->db, $this->apiKey, $this->timeout, $limit);
+            $cruiseIds = IdList::parse($this->option('cruise_ids') ?: $this->option('handle_only'));
+            $shipIds = IdList::parse($this->option('ship_ids'));
+            $dataProcessor->setTargetFilters($cruiseIds, $shipIds);
+            $targeted = $dataProcessor->isTargeted();
 
             $this->showProgress('Обработка данных о судах...', 25);
             $this->processShipsData($dataProcessor);
@@ -84,7 +89,11 @@ class InfoflotParse extends Command
             $this->processCruisesData($dataProcessor);
 
             $this->showProgress('Очистка круизов без цен...', 90);
-            $this->cleanCruisesWithoutPrices();
+            if (!$targeted) {
+                $this->cleanCruisesWithoutPrices();
+            } else {
+                $this->warn('⚠️  Точечный режим: очистка круизов без цен пропущена.');
+            }
 
             $this->showProgress('Завершение обработки...', 100);
             $this->line('');
@@ -201,6 +210,9 @@ class InfoflotParse extends Command
             ['clear_cache', null, InputOption::VALUE_NONE, 'Очистить кеш API перед парсингом'],
             ['limit', 'l', InputOption::VALUE_OPTIONAL, 'Ограничить количество записей для тестирования', null],
             ['api-key', 'k', InputOption::VALUE_REQUIRED, 'API ключ Infoflot'],
+            ['cruise_ids', null, InputOption::VALUE_OPTIONAL, 'Список eds_id круизов через запятую', null],
+            ['ship_ids', null, InputOption::VALUE_OPTIONAL, 'Список id теплоходов источника через запятую', null],
+            ['handle_only', null, InputOption::VALUE_OPTIONAL, 'Алиас cruise_ids', null],
         ];
     }
 }

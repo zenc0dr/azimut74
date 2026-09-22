@@ -4,9 +4,12 @@ use Carbon\Carbon;
 use Exception;
 use Mcmraak\Rivercrs\Classes\Getter;
 use Zen\Worker\Classes\ProcessLog;
+use Zen\Worker\Classes\TargetedParseFilter;
 
 class WaterwayDataProcessor
 {
+    use TargetedParseFilter;
+
     private $db;
     private $apiClient;
     private $timeout;
@@ -71,6 +74,9 @@ class WaterwayDataProcessor
     public function setOnlyCruiseId(?int $cruiseId)
     {
         $this->onlyCruiseId = $cruiseId ? (int)$cruiseId : null;
+        if ($this->onlyCruiseId && !$this->onlyCruiseIds) {
+            $this->onlyCruiseIds = [$this->onlyCruiseId];
+        }
         return $this;
     }
 
@@ -123,8 +129,10 @@ class WaterwayDataProcessor
                 ];
             }
 
-            // Ограничение по теплоходам (для безопасной отладки / прогрева кеша)
-            if ($this->limitShips) {
+            if ($this->onlyShipIds) {
+                $this->allowedShipIds = $this->onlyShipIds;
+                ProcessLog::add('Точечный режим: теплоходы ' . implode(',', $this->onlyShipIds));
+            } elseif ($this->limitShips) {
                 $ships = array_slice($ships, 0, $this->limitShips);
                 $this->allowedShipIds = array_map(function ($s) {
                     return (int)$s['id'];
@@ -158,20 +166,22 @@ class WaterwayDataProcessor
         $this->consoleLine('Получаем список круизов (может занять время)...');
         
         try {
-            // Точечный режим: один круиз по ID (без загрузки всего списка)
-            if ($this->onlyCruiseId) {
-                $cruiseIdInt = (int)$this->onlyCruiseId;
-                $this->consoleLine("Точечный режим: круиз id=$cruiseIdInt");
-
-                $detail = $this->apiClient->getCruiseById($cruiseIdInt);
-                if (!$detail) {
-                    ProcessLog::add("⚠️  Не удалось получить круиз $cruiseIdInt через json.v3.cruise");
-                    $this->consoleLine("⚠️  Не удалось получить круиз id=$cruiseIdInt");
+            $targetCruiseIds = $this->onlyCruiseIds ?: ($this->onlyCruiseId ? [(int)$this->onlyCruiseId] : []);
+            if ($targetCruiseIds) {
+                $this->consoleLine('Точечный режим: круизы id=' . implode(',', $targetCruiseIds));
+                $cruisesResponse = [];
+                foreach ($targetCruiseIds as $cruiseIdInt) {
+                    $detail = $this->apiClient->getCruiseById($cruiseIdInt);
+                    if (!$detail) {
+                        ProcessLog::add("⚠️  Не удалось получить круиз $cruiseIdInt через json.v3.cruise");
+                        $this->consoleLine("⚠️  Не удалось получить круиз id=$cruiseIdInt");
+                        continue;
+                    }
+                    $cruisesResponse[$cruiseIdInt] = $this->mapCruiseDetailToListItem($detail);
+                }
+                if (!$cruisesResponse) {
                     return;
                 }
-                $cruisesResponse = [
-                    $cruiseIdInt => $this->mapCruiseDetailToListItem($detail)
-                ];
             } else {
                 $cruisesResponse = $this->apiClient->getCruises();
             }
@@ -242,6 +252,9 @@ class WaterwayDataProcessor
                 $cruiseIndex++;
                 $cruiseIdInt = (int)$cruiseId;
                 $shipId = (int)($cruise['motorshipId'] ?? 0);
+                if (!$this->allowsCruise($cruiseIdInt, $shipId ?: null)) {
+                    continue;
+                }
                 
                 // Прогресс в консоль (по умолчанию — каждый круиз)
                 if ($cruiseIndex === 1 || $cruiseIndex === $totalCruises || ($cruiseIndex % $this->progressEvery) === 0) {
@@ -614,11 +627,9 @@ class WaterwayDataProcessor
         foreach ($pricesData['tariffs'] as $tariff) {
             $tariffName = $tariff['tariff_name'] ?? '';
             
-            // Обрабатываем только 2 тарифа:
-            // - "Тариф Взрослый" (база)
-            // - "Тариф Взрослый расширенный" (будет записан как price_extra)
-            $isBase = ($tariffName === 'Тариф Взрослый' || $tariffName === 'Тариф взрослый');
-            $isExtended = ($tariffName === 'Тариф Взрослый расширенный');
+            $kind = WaterwayApiClient::classifyAdultTariff($tariffName);
+            $isBase = ($kind === 'base');
+            $isExtended = ($kind === 'extended');
             if (!$isBase && !$isExtended) {
                 continue;
             }
@@ -698,8 +709,9 @@ class WaterwayDataProcessor
         foreach ($pricesData['tariffs'] as $tariff) {
             $tariffName = $tariff['tariff_name'] ?? '';
             
-            $isBase = ($tariffName === 'Тариф Взрослый' || $tariffName === 'Тариф взрослый');
-            $isExtended = ($tariffName === 'Тариф Взрослый расширенный');
+            $kind = WaterwayApiClient::classifyAdultTariff($tariffName);
+            $isBase = ($kind === 'base');
+            $isExtended = ($kind === 'extended');
             if (!$isBase && !$isExtended) {
                 continue;
             }
@@ -743,7 +755,12 @@ class WaterwayDataProcessor
                 }
 
                 if ($isBase) {
-                    $pricesMap[$key]['price_value'] = $priceValue;
+                    $rank = WaterwayApiClient::adultBaseTariffRank($tariffName);
+                    $prevRank = isset($pricesMap[$key]['_rank']) ? (int) $pricesMap[$key]['_rank'] : -1;
+                    if ($pricesMap[$key]['price_value'] === null || $rank >= $prevRank) {
+                        $pricesMap[$key]['price_value'] = $priceValue;
+                        $pricesMap[$key]['_rank'] = $rank;
+                    }
                 } elseif ($isExtended) {
                     $pricesMap[$key]['price_extra'] = $priceValue;
                 }
@@ -755,6 +772,7 @@ class WaterwayDataProcessor
             if (!$row['price_value']) {
                 continue;
             }
+            unset($row['_rank']);
             $prices[] = $row;
         }
         

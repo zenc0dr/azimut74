@@ -2,10 +2,13 @@
 
 use Mcmraak\Rivercrs\Classes\Getter;
 use Zen\Worker\Classes\ProcessLog;
+use Zen\Worker\Classes\TargetedParseFilter;
 use Exception;
 
 class VolgaDataProcessor
 {
+    use TargetedParseFilter;
+
     private $db;
     private $getter;
     private $timeout;
@@ -245,6 +248,9 @@ class VolgaDataProcessor
             }
 
             $shipId = (int)($data['ship_id'] ?? 0);
+            if (!$this->allowsCruise($cruiseId, $shipId ?: null)) {
+                continue;
+            }
             
             // Собираем информацию о каютах для этого круиза (если есть в XML)
             if (isset($item['cabin']) && is_array($item['cabin'])) {
@@ -403,10 +409,73 @@ class VolgaDataProcessor
             ];
         }
 
+        $prices = $this->dropOrphanPrices($prices);
+
         if (!empty($prices)) {
             $this->db->savePricesBatch($prices);
             ProcessLog::add("Сохранено цен: " . count($prices));
         }
+    }
+
+    /**
+     * XML Volga иногда содержит цены на круизы/классы, которых нет в справочниках.
+     * Без отсева SQLite FOREIGN KEY валит весь батч (фаза 1 падает после --clear).
+     *
+     * @param array $prices
+     * @return array
+     */
+    private function dropOrphanPrices(array $prices)
+    {
+        if (empty($prices)) {
+            return $prices;
+        }
+
+        $knownCruises = $this->loadIdSet('SELECT id FROM cruises');
+        $knownClasses = $this->loadIdSet('SELECT id FROM cabin_categories');
+        $kept = [];
+        $skippedCruise = 0;
+        $skippedClass = 0;
+
+        foreach ($prices as $price) {
+            $cruiseId = (int)($price['cruise_id'] ?? 0);
+            $classId = (int)($price['cabin_category_id'] ?? 0);
+            if (!isset($knownCruises[$cruiseId])) {
+                $skippedCruise++;
+                continue;
+            }
+            if (!isset($knownClasses[$classId])) {
+                $skippedClass++;
+                continue;
+            }
+            $kept[] = $price;
+        }
+
+        if ($skippedCruise || $skippedClass) {
+            ProcessLog::add(sprintf(
+                'Пропущены цены без FK: cruise_id=%d, class_id=%d (оставлено %d)',
+                $skippedCruise,
+                $skippedClass,
+                count($kept)
+            ));
+        }
+
+        return $kept;
+    }
+
+    /**
+     * @return array<int, true>
+     */
+    private function loadIdSet($sql)
+    {
+        $ids = [];
+        $stmt = $this->db->getPdo()->query($sql);
+        if (!$stmt) {
+            return $ids;
+        }
+        while ($row = $stmt->fetch(\PDO::FETCH_NUM)) {
+            $ids[(int)$row[0]] = true;
+        }
+        return $ids;
     }
 
     /**

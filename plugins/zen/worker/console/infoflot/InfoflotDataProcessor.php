@@ -4,9 +4,12 @@ use Carbon\Carbon;
 use Exception;
 use PDO;
 use Zen\Worker\Classes\ProcessLog;
+use Zen\Worker\Classes\TargetedParseFilter;
 
 class InfoflotDataProcessor
 {
+    use TargetedParseFilter;
+
     private $db;
     private $apiClient;
     private $timeout;
@@ -81,7 +84,11 @@ class InfoflotDataProcessor
                         ProcessLog::add("Пропуск морского судна при загрузке: $shipName (ID: {$ship['id']}, тип: $shipType)");
                         continue;
                     }
-                    
+
+                    if ($this->onlyShipIds && !in_array((int)$ship['id'], $this->onlyShipIds, true)) {
+                        continue;
+                    }
+
                     $ships[] = [
                         'id' => (int)$ship['id'],
                         'name' => $shipName,
@@ -175,6 +182,9 @@ class InfoflotDataProcessor
             }
             
             $shipId = $ship['id'];
+            if ($this->onlyShipIds && !in_array((int)$shipId, $this->onlyShipIds, true)) {
+                continue;
+            }
             
             ProcessLog::add("Обработка круизов для судна: $shipName (ID: $shipId) [$currentShipIndex/$totalShips]");
             
@@ -259,6 +269,9 @@ class InfoflotDataProcessor
                         
                         // Получаем цены для круиза
                         $cruiseId = $cruise['id'];
+                        if (!$this->allowsCruise($cruiseId, $shipId)) {
+                            continue;
+                        }
                         // Убираем слишком детальное логирование для скорости
                         // ProcessLog::add("Получение цен для круиза ID: $cruiseId");
                         $pricesData = $this->apiClient->getCruiseCabins($cruiseId);

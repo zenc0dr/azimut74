@@ -12,3 +12,6 @@
 1.0.5:
     - 'Created table zen_worker_events'
     - builder_table_create_zen_worker_events.php
+1.0.6:
+    - 'Очередь актуализации заездов (checkin probes)'
+    - builder_table_create_mcmraak_rivercrs_checkin_probes.php

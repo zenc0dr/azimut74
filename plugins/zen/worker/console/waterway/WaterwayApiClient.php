@@ -502,12 +502,8 @@ class WaterwayApiClient
                                 continue;
                             }
 
-                            // Оставляем только 2 ключевых тарифа:
-                            // - базовый взрослый
-                            // - расширенный взрослый (будет мёржиться в price_extra на фазе 1)
-                            $isBase = ($tariffName === 'Тариф Взрослый' || $tariffName === 'Тариф взрослый');
-                            $isExtended = ($tariffName === 'Тариф Взрослый расширенный');
-                            if (!$isBase && !$isExtended) {
+                            $kind = self::classifyAdultTariff($tariffName);
+                            if ($kind === null) {
                                 continue;
                             }
 
@@ -557,6 +553,60 @@ class WaterwayApiClient
         }
         
         return $result;
+    }
+
+    /**
+     * Классификация взрослого тарифа Водохода.
+     * Лайт («Тариф Лайт Взрослый (завтрак)») — база, иначе суда вроде Федина/Кронштадта
+     * отбрасываются как «нет цен».
+     *
+     * @return string|null base|extended|null
+     */
+    public static function classifyAdultTariff($tariffName)
+    {
+        $n = trim((string) $tariffName);
+        if ($n === '') {
+            return null;
+        }
+        if ($n === 'Тариф Взрослый расширенный') {
+            return 'extended';
+        }
+        if ($n === 'Тариф Взрослый' || $n === 'Тариф взрослый') {
+            return 'base';
+        }
+        $l = function_exists('mb_strtolower') ? mb_strtolower($n, 'UTF-8') : strtolower($n);
+        $has = function ($haystack, $needle) {
+            return (function_exists('mb_strpos') ? mb_strpos($haystack, $needle) : strpos($haystack, $needle)) !== false;
+        };
+        if ($has($l, 'лайт') && $has($l, 'взросл') && !$has($l, 'детск') && !$has($l, 'иностран')) {
+            return 'base';
+        }
+        return null;
+    }
+
+    /**
+     * Чем выше ранг, тем предпочтительнее база при нескольких вариантах питания Лайт.
+     */
+    public static function adultBaseTariffRank($tariffName)
+    {
+        $n = trim((string) $tariffName);
+        if ($n === 'Тариф Взрослый' || $n === 'Тариф взрослый') {
+            return 50;
+        }
+        $l = function_exists('mb_strtolower') ? mb_strtolower($n, 'UTF-8') : strtolower($n);
+        $has = function ($haystack, $needle) {
+            return (function_exists('mb_strpos') ? mb_strpos($haystack, $needle) : strpos($haystack, $needle)) !== false;
+        };
+        if ($has($l, '3-разов')) {
+            return 30;
+        }
+        if ($has($l, 'ужин')) {
+            return 20;
+        }
+        if ($has($l, 'завтрак')) {
+            return 10;
+        }
+        return 5;
     }
 
     /**

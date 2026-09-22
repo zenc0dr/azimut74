@@ -1,6 +1,7 @@
 <?php namespace Zen\Worker\Console\transfer;
 
 use Illuminate\Console\Command;
+use Zen\Worker\Classes\IdList;
 use Symfony\Component\Console\Input\InputOption;
 use Zen\Worker\Classes\ProcessLog;
 use Zen\Worker\Console\gama\GamaDatabase;
@@ -260,8 +261,9 @@ class Transfer extends Command
                 $processor->setCommand($this);
 
                 $handleOnly = $this->option('handle_only');
-                if ($handleOnly !== null && $handleOnly !== '' && $sourceKey === 'waterway') {
-                    $processor->setHandleOnlyCruiseId((int) $handleOnly);
+                $cruiseIds = IdList::parse($handleOnly);
+                if ($cruiseIds) {
+                    $processor->setHandleOnlyCruiseIds($cruiseIds);
                 }
 
                 $processor->process();
@@ -435,7 +437,7 @@ class Transfer extends Command
             ['validate-only', null, InputOption::VALUE_NONE, 'Только валидация без импорта'],
             ['skip-validation', null, InputOption::VALUE_NONE, 'Пропустить валидацию'],
             ['no-telegram', null, InputOption::VALUE_NONE, 'Отключить уведомления в Rocket.Chat (для внешних оркестраторов)'],
-            ['handle_only', null, InputOption::VALUE_OPTIONAL, 'Waterway: импортировать только круиз с этим id в SQLite (= eds_id)', null],
+            ['handle_only', null, InputOption::VALUE_OPTIONAL, 'Импортировать только круизы с этими id в SQLite (= eds_id), через запятую', null],
         ];
     }
 }

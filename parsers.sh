@@ -44,6 +44,13 @@ log_file()  { echo "${STORAGE_DIR}/$1.log"; }
 
 now() { date '+%Y-%m-%d %H:%M:%S'; }
 
+write_run_stamp() {
+  date '+%Y-%m-%d %H:%M:%S' > "${STORAGE_DIR}/parsers_run_started_at"
+}
+
+WAIT_POLL_SECONDS="${WAIT_POLL_SECONDS:-15}"
+WAIT_MAX_SECONDS="${WAIT_MAX_SECONDS:-86400}"
+
 file_size_bytes() {
   f="$1"
   if [ ! -f "$f" ]; then
@@ -87,6 +94,7 @@ LOCK_DIR="${STORAGE_DIR}/.lockdir"
 acquire_lock() {
   if mkdir "$LOCK_DIR" 2>/dev/null; then
     echo $$ > "${LOCK_DIR}/pid"
+    LOCK_HELD=1
     return 0
   fi
 
@@ -99,6 +107,7 @@ acquire_lock() {
         exit 1
       }
       echo $$ > "${LOCK_DIR}/pid"
+      LOCK_HELD=1
       return 0
     fi
   fi
@@ -108,7 +117,10 @@ acquire_lock() {
 }
 
 release_lock() {
-  rm -rf "$LOCK_DIR"
+  if [ "${LOCK_HELD:-0}" = "1" ]; then
+    rm -rf "$LOCK_DIR"
+    LOCK_HELD=0
+  fi
 }
 
 trap 'release_lock' INT TERM EXIT
@@ -332,6 +344,38 @@ $SOURCES
 EOF
 }
 
+wait_all() {
+  echo "⏳ Жду завершения синков..."
+  elapsed=0
+  while [ "$elapsed" -lt "$WAIT_MAX_SECONDS" ]; do
+    running=0
+    while IFS='|' read -r code cmd; do
+      pf="$(pid_file "$code")"
+      pid=""
+      [ -f "$pf" ] && pid="$(cat "$pf" 2>/dev/null)"
+      if is_our_process "$pid" "$cmd"; then
+        running=$((running + 1))
+      fi
+    done <<EOF
+$SOURCES
+EOF
+    if [ "$running" -eq 0 ]; then
+      echo "✅ Все синки завершены"
+      return 0
+    fi
+    echo "  ещё запущено: $running (ждали ${elapsed}s)"
+    sleep "$WAIT_POLL_SECONDS"
+    elapsed=$((elapsed + WAIT_POLL_SECONDS))
+  done
+  echo "❌ Таймаут ожидания синков (${WAIT_MAX_SECONDS}s)"
+  return 1
+}
+
+run_actualize() {
+  echo "🧹 worker:actualize-checkins $*"
+  "$PHP_BIN" "$ARTISAN" worker:actualize-checkins "$@"
+}
+
 clean_stale_pids() {
   echo "🧹 Очистка зависших PID-файлов..."
   cleaned=0
@@ -359,10 +403,15 @@ EOF
 # main
 # ---------------------------
 require_deps
-acquire_lock
 
 action="${1:-}"
 target="${2:-}"
+
+case "$action" in
+  start|stop|restart|clean)
+    acquire_lock
+    ;;
+esac
 
 case "$action" in
   start)
@@ -372,6 +421,7 @@ case "$action" in
       start_one "$target" "$cmd"
     else
       echo "🚀 Запускаю синки..."
+      write_run_stamp
       while IFS='|' read -r code cmd; do
         start_one "$code" "$cmd"
       done <<EOF
@@ -411,8 +461,40 @@ EOF
   clean)
     clean_stale_pids
     ;;
+  wait)
+    wait_all
+    ;;
+  after-sync)
+    wait_all || exit 1
+    # Первый прод-запуск: ACTUALIZE_ARGS='--dry-run' (по умолчанию).
+    # После проверки: ACTUALIZE_ARGS='' или ACTUALIZE_LIVE=1
+    actualize_flags="--once"
+    if [ "${ACTUALIZE_LIVE:-0}" != "1" ]; then
+      actualize_flags="$actualize_flags --dry-run"
+    fi
+    # shellcheck disable=SC2086
+    run_actualize $actualize_flags
+    if [ "${ACTUALIZE_FOLLOWUP:-1}" = "1" ]; then
+      echo "⏸ Пауза 1 час до probe #2"
+      sleep 3600
+      follow="--probe"
+      if [ "${ACTUALIZE_LIVE:-0}" != "1" ]; then
+        follow="$follow --dry-run"
+      fi
+      # shellcheck disable=SC2086
+      run_actualize $follow
+      echo "⏸ Пауза 1 час до probe #3 + withdraw"
+      sleep 3600
+      follow="--probe --withdraw"
+      if [ "${ACTUALIZE_LIVE:-0}" != "1" ]; then
+        follow="$follow --dry-run"
+      fi
+      # shellcheck disable=SC2086
+      run_actualize $follow
+    fi
+    ;;
   *)
-    echo "Использование: $0 {start|stop|restart|status|clean} [service]"
+    echo "Использование: $0 {start|stop|restart|status|clean|wait|after-sync} [service]"
     echo ""
     echo "Примеры:"
     echo "  $0 start"
@@ -421,6 +503,8 @@ EOF
     echo "  $0 restart"
     echo "  $0 status"
     echo "  $0 clean"
+    echo "  $0 wait"
+    echo "  $0 after-sync   # ждать синки + актуализация (по умолчанию --dry-run)"
     exit 1
     ;;
 esac

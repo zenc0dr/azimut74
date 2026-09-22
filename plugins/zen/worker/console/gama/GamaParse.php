@@ -4,6 +4,7 @@ use Illuminate\Console\Command;
 use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Input\InputArgument;
 use Zen\Worker\Classes\ProcessLog;
+use Zen\Worker\Classes\IdList;
 use Exception;
 
 class GamaParse extends Command
@@ -69,6 +70,11 @@ class GamaParse extends Command
             $this->info('✅ Архив скачан и распакован');
             
             $dataProcessor = new GamaDataProcessor($this->db, $this->timeout, $limit);
+            $dataProcessor->setTargetFilters(
+                IdList::parse($this->option('cruise_ids') ?: $this->option('handle_only')),
+                IdList::parse($this->option('ship_ids'))
+            );
+            $targeted = $dataProcessor->isTargeted();
             
             $this->showProgress('Обработка навигационных данных...', 25);
             $this->processNavigationData($dataProcessor);
@@ -80,7 +86,11 @@ class GamaParse extends Command
             $this->processCruisesData($dataProcessor);
             
             $this->showProgress('Очистка круизов без цен...', 90);
-            $this->cleanCruisesWithoutPrices();
+            if (!$targeted) {
+                $this->cleanCruisesWithoutPrices();
+            } else {
+                $this->warn('⚠️  Точечный режим: очистка круизов без цен пропущена.');
+            }
             
             $this->showProgress('Завершение обработки...', 100);
             $this->line('');
@@ -208,6 +218,9 @@ class GamaParse extends Command
             ['clear', 'c', InputOption::VALUE_NONE, 'Очистить существующие данные перед парсингом'],
             ['clear_cache', null, InputOption::VALUE_NONE, 'Очистить кеш API перед парсингом'],
             ['limit', 'l', InputOption::VALUE_OPTIONAL, 'Ограничить количество записей для тестирования', null],
+            ['cruise_ids', null, InputOption::VALUE_OPTIONAL, 'Список eds_id круизов через запятую', null],
+            ['ship_ids', null, InputOption::VALUE_OPTIONAL, 'Список id теплоходов источника через запятую', null],
+            ['handle_only', null, InputOption::VALUE_OPTIONAL, 'Алиас cruise_ids', null],
         ];
     }
 }

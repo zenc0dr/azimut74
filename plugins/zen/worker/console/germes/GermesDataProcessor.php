@@ -2,10 +2,13 @@
 
 use Mcmraak\Rivercrs\Classes\Getter;
 use Zen\Worker\Classes\ProcessLog;
+use Zen\Worker\Classes\TargetedParseFilter;
 use Exception;
 
 class GermesDataProcessor
 {
+    use TargetedParseFilter;
+
     private $db;
     private $apiClient;
     private $getter;
@@ -191,7 +194,7 @@ class GermesDataProcessor
         
         foreach ($items as $item) {
             $cruiseData = $this->prepareCruiseData($item);
-            if ($cruiseData) {
+            if ($cruiseData && $this->allowsCruise($cruiseData['germes_cruise_id'], $cruiseData['germes_ship_id'])) {
                 $cruises[] = $cruiseData;
             }
         }
@@ -203,7 +206,10 @@ class GermesDataProcessor
         
         // Обрабатываем цены для каждого круиза
         $this->processCruisesPrices($cruises);
-        
+
+        if ($this->isTargeted()) {
+            return;
+        }
         // Обновляем ship_id в cabin_categories на основе данных из круизов и цен (для тех, у кого не было id_teplohod)
         ProcessLog::add('Обновление связей категорий кают с теплоходами...');
         $updated = $this->db->updateCabinCategoriesShipId();

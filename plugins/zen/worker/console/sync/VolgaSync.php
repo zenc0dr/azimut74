@@ -3,6 +3,7 @@
 use Illuminate\Console\Command;
 use Symfony\Component\Console\Input\InputOption;
 use Zen\Worker\Classes\WorkerNotifier;
+use Zen\Worker\Classes\TargetedSyncArgs;
 
 /**
  * VolgaSync
@@ -67,6 +68,8 @@ class VolgaSync extends Command
             $transferArgs['--skip-validation'] = true;
         }
 
+        $handleOnly = TargetedSyncArgs::apply($this, $parseArgs, $transferArgs);
+
         $this->info('━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━');
         $this->info('🛶 Volga sync');
         $this->info('━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━');
@@ -101,11 +104,11 @@ class VolgaSync extends Command
             if ($doImport && !$skipValidation) {
                 $this->info('🔍 Фаза 2.1: валидация SQLite (transfer --validate-only)');
 
-                $code = $this->call('worker:transfer', [
+                $code = $this->call('worker:transfer', array_merge([
                     '--source' => 'volga',
                     '--validate-only' => true,
                     '--no-telegram' => true,
-                ]);
+                ], TargetedSyncArgs::transferHandleArgs($handleOnly)));
                 if ($code !== 0) {
                     $this->error("Фаза 2.1 (валидация) завершилась с кодом $code.");
                     WorkerNotifier::notify("🛶 {$label}: фаза 2 — ошибка на валидации (код $code)");
@@ -116,11 +119,11 @@ class VolgaSync extends Command
 
                 $this->info('📥 Фаза 2.2: импорт (transfer --skip-validation)');
 
-                $code = $this->call('worker:transfer', [
+                $code = $this->call('worker:transfer', array_merge([
                     '--source' => 'volga',
                     '--skip-validation' => true,
                     '--no-telegram' => true,
-                ]);
+                ], TargetedSyncArgs::transferHandleArgs($handleOnly)));
                 if ($code !== 0) {
                     $this->error("Фаза 2.2 (импорт) завершилась с кодом $code.");
                     WorkerNotifier::notify("🛶 {$label}: фаза 2 — ошибка на импорте (код $code)");
@@ -159,6 +162,9 @@ class VolgaSync extends Command
             ['clear_cache', null, InputOption::VALUE_NONE, 'Очистить кеш XML Volga (фаза 1)'],
             ['limit', 'l', InputOption::VALUE_OPTIONAL, 'Лимит круизов (для отладки/прогона) (фаза 1)', null],
             ['next-url', 'u', InputOption::VALUE_OPTIONAL, 'URL источника XML данных (фаза 1)', 'https://test.volgawolga.ru/xml/daily2026.xml'],
+            ['cruise_ids', null, InputOption::VALUE_OPTIONAL, 'Только круизы eds_id через запятую', null],
+            ['ship_ids', null, InputOption::VALUE_OPTIONAL, 'Только теплоходы источника через запятую', null],
+            ['handle_only', null, InputOption::VALUE_OPTIONAL, 'Алиас cruise_ids', null],
 
             // phase 2 passthrough
             ['validate-only', null, InputOption::VALUE_NONE, 'Только валидация SQLite, без импорта (фаза 2)'],

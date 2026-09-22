@@ -194,7 +194,18 @@ class CacheSettings extends Model
         $bad_ships = self::getBadShips("names:$eds_code");
         if(!$bad_ships) return false;
         foreach ($bad_ships as $bad_ship_name) {
-            if(strpos(strtolower($bad_ship_name), $lower_name) !== false) {
+            $needle = function_exists('mb_strtolower')
+                ? mb_strtolower(trim((string) $bad_ship_name), 'UTF-8')
+                : strtolower(trim((string) $bad_ship_name));
+            if ($needle === '') {
+                continue;
+            }
+            // Имя судна содержит строку исключения («Спутник» → «Прогулочный т/х Спутник»).
+            // Не наоборот: иначе «Нижний Новгород (2026)» вырезает весь «Нижний Новгород».
+            $haystack = function_exists('mb_strtolower')
+                ? mb_strtolower($name, 'UTF-8')
+                : $lower_name;
+            if ($haystack === $needle || (function_exists('mb_strpos') ? mb_strpos($haystack, $needle) : strpos($haystack, $needle)) !== false) {
                 return true;
             }
         }

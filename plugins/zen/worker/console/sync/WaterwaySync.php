@@ -3,6 +3,7 @@
 use Illuminate\Console\Command;
 use Symfony\Component\Console\Input\InputOption;
 use Zen\Worker\Classes\WorkerNotifier;
+use Zen\Worker\Classes\TargetedSyncArgs;
 
 /**
  * WaterwaySync
@@ -27,7 +28,6 @@ class WaterwaySync extends Command
         $doImport = (bool)$this->option('import');
         $validateOnly = (bool)$this->option('validate-only');
         $skipValidation = (bool)$this->option('skip-validation');
-        $handleOnly = $this->option('handle_only');
 
         if ($parseOnly && $transferOnly) {
             $this->error('Нельзя одновременно указать --parse-only и --transfer-only');
@@ -65,9 +65,6 @@ class WaterwaySync extends Command
         if ($this->option('progress_every')) {
             $parseArgs['--progress_every'] = $this->option('progress_every');
         }
-        if ($handleOnly !== null && $handleOnly !== '') {
-            $parseArgs['--handle_only'] = $handleOnly;
-        }
 
         // --- Phase 2 args (transfer) ---
         $transferArgs = [
@@ -82,9 +79,7 @@ class WaterwaySync extends Command
             $transferArgs['--skip-validation'] = true;
         }
 
-        if ($handleOnly !== null && $handleOnly !== '') {
-            $transferArgs['--handle_only'] = $handleOnly;
-        }
+        $handleOnly = TargetedSyncArgs::apply($this, $parseArgs, $transferArgs);
 
         $this->info('━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━');
         $this->info('🚢 Waterway sync');
@@ -189,6 +184,8 @@ class WaterwaySync extends Command
             ['limit_cruises_per_ship', null, InputOption::VALUE_OPTIONAL, 'Лимит круизов на теплоход (фаза 1)', null],
             ['progress_every', null, InputOption::VALUE_OPTIONAL, 'Прогресс в консоль каждые N круизов (фаза 1)', 1],
             ['handle_only', null, InputOption::VALUE_OPTIONAL, 'Только круиз по eds_id Waterway (обе фазы)', null],
+            ['cruise_ids', null, InputOption::VALUE_OPTIONAL, 'Только круизы eds_id через запятую', null],
+            ['ship_ids', null, InputOption::VALUE_OPTIONAL, 'Только теплоходы источника через запятую', null],
 
             // phase 2 passthrough
             ['validate-only', null, InputOption::VALUE_NONE, 'Только валидация SQLite, без импорта (фаза 2)'],

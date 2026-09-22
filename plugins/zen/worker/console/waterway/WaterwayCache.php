@@ -120,6 +120,14 @@ class WaterwayCache
         return file_exists($filePath) && is_readable($filePath);
     }
 
+    public function forget($key)
+    {
+        $filePath = $this->getCachePath($key);
+        if (is_file($filePath)) {
+            @unlink($filePath);
+        }
+    }
+
     /**
      * Очистка всего кеша
      * 

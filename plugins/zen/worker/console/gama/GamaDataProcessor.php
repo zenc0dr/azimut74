@@ -5,9 +5,12 @@ use Carbon\Carbon;
 use View;
 use Exception;
 use Zen\Worker\Classes\ProcessLog;
+use Zen\Worker\Classes\TargetedParseFilter;
 
 class GamaDataProcessor
 {
+    use TargetedParseFilter;
+
     private $db;
     private $getter;
     private $apiClient;
@@ -69,7 +72,7 @@ class GamaDataProcessor
                 
                 foreach ($routes as $route) {
                     $cruiseData = $this->prepareCruiseData($navigation, $route, $gamaShipId, $navigationId);
-                    if ($cruiseData) {
+                    if ($cruiseData && $this->allowsCruise($cruiseData['gama_cruise_id'], $cruiseData['gama_ship_id'])) {
                         $cruises[] = $cruiseData;
                     }
                 }
@@ -262,6 +265,13 @@ class GamaDataProcessor
         
         // Получаем все круизы из базы
         $cruises = $this->db->getAllCruises();
+        if ($this->isTargeted()) {
+            $cruises = array_values(array_filter($cruises, function ($cruise) {
+                $id = $cruise['gama_cruise_id'] ?? $cruise['id'] ?? 0;
+                $ship = $cruise['gama_ship_id'] ?? $cruise['ship_id'] ?? null;
+                return $this->allowsCruise($id, $ship);
+            }));
+        }
         
         // Применяем лимит если указан
         if ($this->limit) {

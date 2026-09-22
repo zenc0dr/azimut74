@@ -4,6 +4,7 @@ use Illuminate\Console\Command;
 use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Input\InputArgument;
 use Zen\Worker\Classes\ProcessLog;
+use Zen\Worker\Classes\IdList;
 use Exception;
 
 class WaterwayParse extends Command
@@ -45,6 +46,8 @@ class WaterwayParse extends Command
         $progressEvery = $this->option('progress_every');
         $handleOnly = $this->option('handle_only');
         $onlyCruiseId = $handleOnly ?: $this->option('only_cruise_id');
+        $cruiseIds = IdList::parse($this->option('cruise_ids') ?: $onlyCruiseId);
+        $shipIds = IdList::parse($this->option('ship_ids'));
         
         $this->info('🚢 Начинаем парсинг круизов Waterway...');
         $this->info("⏱️  Таймаут: {$this->timeout} сек");
@@ -55,6 +58,12 @@ class WaterwayParse extends Command
         if ($limit) $this->info("🧪 Лимит круизов (legacy --limit): {$limit}");
         if ($handleOnly) {
             $this->info('🧪 handle_only: только круиз eds_id=' . (int) $handleOnly);
+        }
+        if ($cruiseIds) {
+            $this->info('🧪 cruise_ids: ' . implode(',', $cruiseIds));
+        }
+        if ($shipIds) {
+            $this->info('🧪 ship_ids: ' . implode(',', $shipIds));
         }
         
         try {
@@ -89,7 +98,8 @@ class WaterwayParse extends Command
             $dataProcessor
                 ->setCommand($this)
                 ->setProgressEvery((int)$progressEvery)
-                ->setOnlyCruiseId($onlyCruiseId ? (int)$onlyCruiseId : null);
+                ->setTargetFilters($cruiseIds, $shipIds)
+                ->setOnlyCruiseId(count($cruiseIds) === 1 ? $cruiseIds[0] : null);
             
             $this->showProgress('Обработка данных о теплоходах...', 25);
             $this->processMotorshipsData($dataProcessor);
@@ -98,10 +108,10 @@ class WaterwayParse extends Command
             $this->processCruisesData($dataProcessor);
             
             $this->showProgress('Очистка круизов без цен...', 90);
-            if (!$onlyCruiseId) {
+            if (!$dataProcessor->isTargeted()) {
                 $this->cleanCruisesWithoutPrices();
             } else {
-                $this->warn('⚠️  Точечный режим (handle_only / only_cruise_id): очистка круизов без цен пропущена.');
+                $this->warn('⚠️  Точечный режим: очистка круизов без цен пропущена.');
             }
             
             $this->showProgress('Завершение обработки...', 100);
@@ -223,6 +233,8 @@ class WaterwayParse extends Command
             ['progress_every', null, InputOption::VALUE_OPTIONAL, 'Выводить прогресс каждые N круизов (1 = каждый круиз)', 1],
             ['only_cruise_id', null, InputOption::VALUE_OPTIONAL, 'Обработать только один круиз по ID (точечный режим)', null],
             ['handle_only', null, InputOption::VALUE_OPTIONAL, 'Только круиз по внутреннему eds_id Waterway (отладка; приоритет над only_cruise_id)', null],
+            ['cruise_ids', null, InputOption::VALUE_OPTIONAL, 'Список eds_id круизов через запятую', null],
+            ['ship_ids', null, InputOption::VALUE_OPTIONAL, 'Список id теплоходов источника через запятую', null],
         ];
     }
 }

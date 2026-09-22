@@ -18,18 +18,18 @@ class UnifiedProcessor extends TransferProcessor
     protected $command = null;
 
     /**
-     * Waterway: обработать только круиз с данным id в SQLite (= eds_id источника).
-     *
-     * @var int|null
+     * @var int[]
      */
-    protected $handleOnlyCruiseId = null;
+    protected $handleOnlyCruiseIds = [];
 
-    /**
-     * Режим отладки: один круиз Waterway по id из SQLite.
-     */
     public function setHandleOnlyCruiseId(?int $cruiseId)
     {
-        $this->handleOnlyCruiseId = $cruiseId ? (int) $cruiseId : null;
+        $this->handleOnlyCruiseIds = $cruiseId ? [(int) $cruiseId] : [];
+    }
+
+    public function setHandleOnlyCruiseIds(array $ids)
+    {
+        $this->handleOnlyCruiseIds = array_values(array_unique(array_map('intval', $ids)));
     }
     
     /**
@@ -80,19 +80,19 @@ class UnifiedProcessor extends TransferProcessor
         
         $cruises = $this->db->getAllCruises();
 
-        if ($this->handleOnlyCruiseId !== null && $this->edsCode === 'waterway') {
-            $hid = (int) $this->handleOnlyCruiseId;
+        if ($this->handleOnlyCruiseIds) {
             $before = count($cruises);
-            $cruises = array_values(array_filter($cruises, function ($c) use ($hid) {
-                return (int) ($c['id'] ?? 0) === $hid;
+            $allow = $this->handleOnlyCruiseIds;
+            $cruises = array_values(array_filter($cruises, function ($c) use ($allow) {
+                return in_array((int) ($c['id'] ?? 0), $allow, true);
             }));
             $this->output(
-                '🧪 handle_only: в SQLite отобран круиз id=' . $hid . " (строк до фильтра: {$before}, после: " . count($cruises) . ')',
+                '🧪 handle_only: в SQLite отобрано круизов ' . count($cruises) . " (было {$before})",
                 'info'
             );
             if (empty($cruises)) {
                 $this->output(
-                    '⚠️  Круиза с id=' . $hid . ' в SQLite нет — проверьте фазу 1 (--handle_only для того же id).',
+                    '⚠️  Указанных круизов нет в SQLite — проверьте фазу 1 (--cruise_ids / --handle_only).',
                     'warn'
                 );
             }

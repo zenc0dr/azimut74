@@ -329,7 +329,7 @@ class RiverCrs
     {
         $t = 'mcmraak_rivercrs_checkins_memory';
         $checkin = DB::table($t)->where('checkin_id', $checkin_id)->first();
-        $now = date('Y-m-d h:i:s');
+        $now = date('Y-m-d H:i:s');
         if (!$checkin) {
             DB::table($t)->insert([
                 'checkin_id' => $checkin_id,
