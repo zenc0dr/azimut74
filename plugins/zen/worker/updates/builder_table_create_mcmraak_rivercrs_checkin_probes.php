@@ -7,6 +7,9 @@ class BuilderTableCreateMcmraakRivercrsCheckinProbes extends Migration
 {
     public function up()
     {
+        if (Schema::hasTable('mcmraak_rivercrs_checkin_probes')) {
+            return;
+        }
         Schema::create('mcmraak_rivercrs_checkin_probes', function ($table) {
             $table->engine = 'InnoDB';
             $table->increments('id');
