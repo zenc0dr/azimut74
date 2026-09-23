@@ -10,7 +10,7 @@ use Carbon\Carbon;
 
 class RivercrsCore
 {
-    private const INDEX_CRUISE_ID = 2;
+    private const INDEX_CRUISE_ID = 1;
     private const ARTICLE_DATE_FALLBACK = '2018-01-01T00:00:00+03:00';
     private const ARTICLE_PUBLISHER_NAME = 'Турагентство "Азимут-тур"';
     private const ARTICLE_LOGO_PATH = '/themes/azimut-tur-pro/assets/images/logo.png';

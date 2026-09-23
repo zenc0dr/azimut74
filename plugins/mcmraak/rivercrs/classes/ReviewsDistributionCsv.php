@@ -9,7 +9,7 @@ use Mcmraak\Rivercrs\Models\Transit;
  */
 class ReviewsDistributionCsv
 {
-    public const INDEX_CRUISE_ID = 2;
+    public const INDEX_CRUISE_ID = 1;
 
     /** Публичный экспорт Google Sheets (задача 0050). */
     public const DEFAULT_PUBLISH_URL = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vTq_FP7ttGw_JcVbAyHW-DY7Td5SflpXRIjaxCZ2PUmDU-0NeHMXYXiH3PgJhpfSD9nd5nUAy_JdM3V/pub?gid=1323221536&single=true&output=csv';
