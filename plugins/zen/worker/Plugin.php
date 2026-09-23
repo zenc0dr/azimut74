@@ -35,6 +35,7 @@ class Plugin extends PluginBase
         $this->registerConsoleCommand('worker:test-unified-databases', 'Zen\Worker\Console\unified\TestUnifiedDatabases');
         $this->registerConsoleCommand('worker:transfer', 'Zen\Worker\Console\transfer\Transfer');
         $this->registerConsoleCommand('worker:actualize-checkins', 'Zen\Worker\Console\ActualizeCheckins');
+        $this->registerConsoleCommand('worker:purge-oneday-checkins', 'Zen\Worker\Console\PurgeOnedayCheckins');
     }
 
     public function boot()

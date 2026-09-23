@@ -1,6 +1,7 @@
 <?php namespace Zen\Worker\Console\transfer;
 
 use Zen\Worker\Classes\ProcessLog;
+use Mcmraak\Rivercrs\Classes\CacheSettings;
 use Mcmraak\Rivercrs\Models\Checkins as Checkin;
 use DB;
 use Carbon\Carbon;
@@ -168,9 +169,6 @@ class UnifiedProcessor extends TransferProcessor
             return null;
         }
         
-        // Получаем или создаем заезд
-        $checkin = $this->getOrCreateCheckin($cruiseId);
-        
         // Обработка дат
         $dateStart = null;
         $dateEnd = null;
@@ -230,6 +228,18 @@ class UnifiedProcessor extends TransferProcessor
             );
             return null;
         }
+
+        $days = $this->inclusiveDays($dateStart, $dateEnd);
+        $minDays = $this->minCheckinDays();
+        if ($days < $minDays) {
+            $this->output(
+                "  ⚠️  Круиз $cruiseId: пропущен, однодневный (days=$days, порог=$minDays)",
+                'warn'
+            );
+            return null;
+        }
+
+        $checkin = $this->getOrCreateCheckin($cruiseId);
         
         // Обработка маршрута
         $waybill = $this->processWaybillData($cruise['waybill_data'] ?? '');
@@ -285,6 +295,24 @@ class UnifiedProcessor extends TransferProcessor
         }
         
         return $checkin->id;
+    }
+
+    /**
+     * Календарные дни заезда, как в Checkins::beforeSave: diffInDays + 1.
+     */
+    private function inclusiveDays($dateStart, $dateEnd): int
+    {
+        $start = Carbon::parse(date('Y-m-d', strtotime($dateStart)));
+        $end = Carbon::parse(date('Y-m-d', strtotime($dateEnd)));
+        return $end->diffInDays($start) + 1;
+    }
+
+    /**
+     * Минимум дней. days_diff по умолчанию 1, и тогда 1 < 1 не отсекает однодневные.
+     */
+    private function minCheckinDays(): int
+    {
+        return max(2, (int) CacheSettings::get('days_diff'));
     }
 
     /**
