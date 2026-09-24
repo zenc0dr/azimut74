@@ -21,3 +21,7 @@ columns:
         label: Порядок
         type: number
         sortable: true
+    published_at:
+        label: Дата публикации
+        type: date
+        sortable: true

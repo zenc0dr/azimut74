@@ -162,3 +162,6 @@
 1.1.54:
     - 'Updated table mcmraak_rivercrs_cabins'
     - builder_table_update_mcmraak_rivercrs_cabins3.php
+1.1.55:
+    - 'Дата публикации справки для schema.org'
+    - builder_table_update_mcmraak_rivercrs_reference_published_at.php

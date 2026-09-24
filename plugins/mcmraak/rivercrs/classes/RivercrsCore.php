@@ -11,7 +11,6 @@ use Carbon\Carbon;
 class RivercrsCore
 {
     private const INDEX_CRUISE_ID = 1;
-    private const ARTICLE_DATE_FALLBACK = '2018-01-01T00:00:00+03:00';
     private const ARTICLE_PUBLISHER_NAME = 'Турагентство "Азимут-тур"';
     private const ARTICLE_LOGO_PATH = '/themes/azimut-tur-pro/assets/images/logo.png';
 
@@ -106,8 +105,6 @@ class RivercrsCore
             '@type' => 'Article',
             'headline' => $headline,
             'image' => $imageUrl,
-            'datePublished' => self::ARTICLE_DATE_FALLBACK,
-            'dateModified' => self::ARTICLE_DATE_FALLBACK,
             'publisher' => [
                 '@type' => 'Organization',
                 'name' => self::ARTICLE_PUBLISHER_NAME,
@@ -120,7 +117,28 @@ class RivercrsCore
             'mainEntityOfPage' => request()->url(),
         ];
 
+        $publishedAt = self::articleDate($reference->published_at);
+        if ($publishedAt !== null) {
+            $payload['datePublished'] = $publishedAt;
+            $payload['dateModified'] = $publishedAt;
+        }
+
         return json_encode($payload, JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES);
+    }
+
+    private static function articleDate($value): ?string
+    {
+        if ($value instanceof Carbon) {
+            $day = $value->format('Y-m-d');
+        } else {
+            $day = substr(trim((string) $value), 0, 10);
+        }
+
+        if (!preg_match('/^\d{4}-\d{2}-\d{2}$/', $day) || $day === '0000-00-00') {
+            return null;
+        }
+
+        return $day . 'T00:00:00+03:00';
     }
 
     private static function firstImageUrl(string $html): ?string

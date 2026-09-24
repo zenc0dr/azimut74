@@ -15,6 +15,8 @@ class Reference extends Model
      */
     public $timestamps = false;
 
+    public $dates = ['published_at'];
+
     /*
      * Validation
      */

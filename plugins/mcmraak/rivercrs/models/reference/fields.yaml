@@ -12,6 +12,13 @@ tabs:
             span: auto
             type: text
             tab: Описание
+        published_at:
+            label: 'Дата публикации'
+            mode: date
+            span: auto
+            type: datepicker
+            comment: 'Попадает в schema.org как дата публикации и дата изменения. Если поле пустое, даты в разметку не выводятся.'
+            tab: Описание
         slug:
             label: Ссылка
             span: auto
