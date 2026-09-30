@@ -24,13 +24,12 @@
 					<a class="cruise__item-left_youtube" href="{{ RiverCRS.ship_video }}" modal=".youtube-content">
 						<img src="{{'assets/images/components/cruise/youtube.svg'|theme}}" alt="youtube"/>
 					</a>
+					<div class="youtube-content" style="display: none">
+						<iframe loading="lazy" src="{{ RiverCRS.ship_video }}" frameborder="0" allowfullscreen=""></iframe>
+					</div>
 					{% if RiverCRS.reviewsWidget %}
 					<a href="#page-reviews-widget" class="btn red cruise__item-left_reviews-link">Смотреть отзывы</a>
 					{% endif %}
-				</div>
-				<div class="youtube-content" style="display: none">
-					<iframe loading="lazy" src="{{ RiverCRS.ship_video }}" frameborder="0" allowfullscreen=""></iframe>
-
 				</div>
 
                 {% if RiverCRS.ship_status %}

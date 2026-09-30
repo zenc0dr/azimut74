@@ -75,6 +75,13 @@
       display: inline-flex;
       flex-shrink: 0;
    }
+   // Каталог теплоходов: ссылка — прямой потомок колонки фото, не внутри _actions
+   &__item-left > &__item-left_youtube {
+      position: absolute;
+      left: 15px;
+      bottom: 15px;
+      z-index: 2;
+   }
    &__item-left_reviews-link {
       white-space: nowrap;
       font-size: fs('s');

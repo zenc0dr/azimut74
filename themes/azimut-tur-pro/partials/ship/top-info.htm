@@ -9,13 +9,12 @@
 					<a class="ship__item-left_youtube" modal=".youtube-content">
 						<img src="/themes/azimut-tur-pro/assets/images/components/cruise/youtube.svg" alt="youtube"/>
 					</a>
+					<div class="youtube-content" style="display: none">
+						<iframe loading="lazy" src="{{ RiverCRS.ship_video }}" frameborder="0" allowfullscreen=""></iframe>
+					</div>
 					{% if RiverCRS.reviewsWidget %}
 					<a href="#page-reviews-widget" class="btn red ship__item-left_reviews-link">Смотреть отзывы</a>
 					{% endif %}
-				</div>
-				<div class="youtube-content" style="display: none">
-<iframe loading="lazy" src="{{ RiverCRS.ship_video }}" frameborder="0" allowfullscreen=""></iframe>
-
 				</div>
 
                 {% if RiverCRS.ship_status %}
