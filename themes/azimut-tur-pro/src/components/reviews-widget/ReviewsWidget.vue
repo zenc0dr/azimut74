@@ -79,6 +79,20 @@
                 <div class="reviews-item-split">
                     <div class="reviews-item-col">
                         <div
+                            v-if="item.photos && item.photos.length"
+                            class="reviews-item-photos"
+                        >
+                            <button
+                                v-for="(photo, photoIndex) in item.photos"
+                                :key="item.id + '-photo-' + photoIndex"
+                                type="button"
+                                class="reviews-item-photos__btn"
+                                @click="photoPreview = photo.full"
+                            >
+                                <img :src="photo.thumb" alt="">
+                            </button>
+                        </div>
+                        <div
                             class="reviews-item-text"
                             :class="{ 'reviews-item-text--clamped': commentClamped(item) }"
                         >
@@ -252,6 +266,19 @@
         </div>
 
         <div
+            v-if="photoPreview"
+            class="reviews-widget__photo-preview"
+            @click.self="photoPreview = null"
+        >
+            <button
+                type="button"
+                class="reviews-widget__photo-preview-close"
+                @click="photoPreview = null"
+            >×</button>
+            <img :src="photoPreview" alt="">
+        </div>
+
+        <div
             v-if="reviewModalOpen"
             class="reviews-widget__modal-backdrop"
             tabindex="-1"
@@ -329,6 +356,7 @@ export default {
             moreFirstTime: true,
             expanded: {},
             reviewModalOpen: false,
+            photoPreview: null,
             reviewModalIframeKey: 0,
             /** @type {ResizeObserver|null} */
             reviewIframeResizeObserver: null,
@@ -1014,6 +1042,58 @@ export default {
         .reviews-item-col {
             width: calc(100% - 289px);
         }
+    }
+
+    .reviews-item-photos {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 8px;
+        margin-bottom: 12px;
+    }
+
+    .reviews-item-photos__btn {
+        padding: 0;
+        border: 0;
+        background: none;
+        cursor: pointer;
+        border-radius: 6px;
+        overflow: hidden;
+
+        img {
+            display: block;
+            width: 96px;
+            height: 72px;
+            object-fit: cover;
+        }
+    }
+
+    .reviews-widget__photo-preview {
+        position: fixed;
+        inset: 0;
+        z-index: 10060;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        background: rgba(0, 0, 0, 0.82);
+        padding: 24px;
+
+        img {
+            max-width: 100%;
+            max-height: 100%;
+            object-fit: contain;
+        }
+    }
+
+    .reviews-widget__photo-preview-close {
+        position: absolute;
+        top: 12px;
+        right: 16px;
+        border: 0;
+        background: none;
+        color: #fff;
+        font-size: 36px;
+        line-height: 1;
+        cursor: pointer;
     }
 
     .reviews-item-text {

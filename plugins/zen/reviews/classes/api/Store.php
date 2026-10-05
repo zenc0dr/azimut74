@@ -44,6 +44,7 @@ class Store
         ];
 
         $validator->validate($input_data);
+        $this->validateRatings($validator, is_array($form) ? $form : []);
 
         $alerts = $validator->alerts();
 
@@ -297,5 +298,44 @@ class Store
             'alert' => $alert,
             'auth' => $auth
         ]);
+    }
+
+    /**
+     * Все восемь оценок обязательны и должны быть целым числом от 1 до 5.
+     *
+     * @param array<string, mixed> $form
+     */
+    private function validateRatings(ValidatorHelper $validator, array $form)
+    {
+        $labels = [
+            'cabin' => 'Каюта',
+            'food' => 'Питание',
+            'tours' => 'Экскурсии',
+            'anim_on_board' => 'Анимация на борту',
+            'service' => 'Обслуживание',
+            'ship' => 'Теплоход',
+            'cruise' => 'Отдых в целом',
+            'azimut' => 'Работа компании Азимут',
+        ];
+
+        $reviews = isset($form['reviews']) && is_array($form['reviews']) ? $form['reviews'] : [];
+        $missing = false;
+
+        foreach ($labels as $key => $label) {
+            $value = $reviews[$key] ?? null;
+            $ok = is_numeric($value) && (int) $value >= 1 && (int) $value <= 5 && (string) (int) $value === (string) $value;
+            if (!$ok && is_numeric($value)) {
+                $number = (float) $value;
+                $ok = $number >= 1 && $number <= 5 && abs($number - round($number)) < 0.001;
+            }
+            if (!$ok) {
+                $missing = true;
+                $validator->addAlert('Поставьте оценку: ' . $label, 'danger', 'reviews.' . $key);
+            }
+        }
+
+        if ($missing) {
+            $validator->addAlert('Поставьте оценку по всем пунктам', 'danger', 'reviews');
+        }
     }
 }

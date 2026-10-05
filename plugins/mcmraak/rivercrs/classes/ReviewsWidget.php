@@ -95,6 +95,11 @@ class ReviewsWidget
             $out['ratings'] = $ratings;
         }
 
+        $photos = self::publicPhotos($review);
+        if ($photos !== []) {
+            $out['photos'] = $photos;
+        }
+
         return $out;
     }
 
@@ -528,6 +533,49 @@ class ReviewsWidget
         }
 
         return $n;
+    }
+
+    /**
+     * Опубликованные фото отзыва для карточки виджета.
+     *
+     * @return array<int, array{thumb:string,full:string}>
+     */
+    private static function publicPhotos(Review $review): array
+    {
+        try {
+            $review->loadMissing(['photos', 'reviewPhotos']);
+        } catch (\Throwable $e) {
+            return [];
+        }
+
+        $published = [];
+        foreach ($review->reviewPhotos as $meta) {
+            if ($meta->is_published) {
+                $published[(int) $meta->system_file_id] = true;
+            }
+        }
+
+        $out = [];
+        foreach ($review->photos as $file) {
+            if (empty($published[(int) $file->id])) {
+                continue;
+            }
+            try {
+                $thumb = (string) $file->getThumb(320, 240, ['mode' => 'crop']);
+                $full = (string) $file->getPath();
+            } catch (\Throwable $e) {
+                continue;
+            }
+            if ($thumb === '' || $full === '') {
+                continue;
+            }
+            $out[] = [
+                'thumb' => $thumb,
+                'full' => $full,
+            ];
+        }
+
+        return $out;
     }
 
     private static function buildPublicRatings(array $form): array

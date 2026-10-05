@@ -29,10 +29,11 @@
                         <button :class="{ active: form.exp_rest === 3 }" @click="form.exp_rest = 3">Три и более</button>
                     </div>
                 </div>
-                <div class="reviews-form__input reviews-form__input-group">
+                <div class="reviews-form__input reviews-form__input-group" :class="{ bad: alerts.reviews }">
                     <label for="reviews">Как бы Вы оценили?</label>
+                    <span v-if="alerts.reviews" class="bad-text">{{ alerts.reviews.text }}</span>
                     <div class="reviews-form__input-group--wrap"
-                         :class="{ 'blur': window_help.activeElement && window_help.activeElement !== $refs.cabin }"
+                         :class="{ 'blur': window_help.activeElement && window_help.activeElement !== $refs.cabin, bad: alerts['reviews.cabin'] }"
                          ref="cabin">
                         <div class="reviews-from__custom-name">Каюту <span @click="showHelp($event);">
                                 <img src="/plugins/zen/reviews/frontend/assets/images/question-icon.svg" alt="question">
@@ -51,7 +52,7 @@
                         </div>
                     </div>
                     <div class="reviews-form__input-group--wrap"
-                         :class="{ 'blur': window_help.activeElement && window_help.activeElement !== $refs.food }"
+                         :class="{ 'blur': window_help.activeElement && window_help.activeElement !== $refs.food, bad: alerts['reviews.food'] }"
                          ref="food">
                         <div class="reviews-from__custom-name">Питание <span @click="showHelp($event);">
                             <img src="/plugins/zen/reviews/frontend/assets/images/question-icon.svg" alt="question">
@@ -70,7 +71,7 @@
                         </div>
                     </div>
                     <div class="reviews-form__input-group--wrap"
-                         :class="{ 'blur': window_help.activeElement && window_help.activeElement !== $refs.service }"
+                         :class="{ 'blur': window_help.activeElement && window_help.activeElement !== $refs.service, bad: alerts['reviews.service'] }"
                          ref="service">
                         <div class="reviews-from__custom-name">Обслуживание <span @click="showHelp($event);">
                             <img src="/plugins/zen/reviews/frontend/assets/images/question-icon.svg" alt="question">
@@ -90,7 +91,7 @@
                         </div>
                     </div>
                     <div class="reviews-form__input-group--wrap"
-                         :class="{ 'blur': window_help.activeElement && window_help.activeElement !== $refs.tours }"
+                         :class="{ 'blur': window_help.activeElement && window_help.activeElement !== $refs.tours, bad: alerts['reviews.tours'] }"
                          ref="tours">
                         <div class="reviews-from__custom-name">Экскурсии <span @click="showHelp($event);">
                             <img src="/plugins/zen/reviews/frontend/assets/images/question-icon.svg" alt="question">
@@ -109,7 +110,7 @@
                         </div>
                     </div>
                     <div class="reviews-form__input-group--wrap"
-                         :class="{ 'blur': window_help.activeElement && window_help.activeElement !== $refs.animate }"
+                         :class="{ 'blur': window_help.activeElement && window_help.activeElement !== $refs.animate, bad: alerts['reviews.anim_on_board'] }"
                          ref="animate">
                         <div class="reviews-from__custom-name">Анимацию на борту <span
                             @click="showHelp($event);">
@@ -129,7 +130,7 @@
                         </div>
                     </div>
                     <div class="reviews-form__input-group--wrap"
-                         :class="{ 'blur': window_help.activeElement && window_help.activeElement !== $refs.ship }"
+                         :class="{ 'blur': window_help.activeElement && window_help.activeElement !== $refs.ship, bad: alerts['reviews.ship'] }"
                          ref="ship">
                         <div class="reviews-from__custom-name">Теплоход <span @click="showHelp($event);">
                             <img src="/plugins/zen/reviews/frontend/assets/images/question-icon.svg" alt="question">
@@ -231,13 +232,13 @@
                         </div>
                     </div>
                 </div>
-                <div class="reviews-form__input reviews-form__input-group">
+                <div class="reviews-form__input reviews-form__input-group" :class="{ bad: alerts['reviews.cruise'] }">
                     <label>Как бы Вы оценили свой отдых в целом?</label>
                     <div class="reviews-form__input-group--wrap">
                         <CircleRating :max-rating="5" v-model="form.reviews.cruise"></CircleRating>
                     </div>
                 </div>
-                <div class="reviews-form__input reviews-form__input-group">
+                <div class="reviews-form__input reviews-form__input-group" :class="{ bad: alerts['reviews.azimut'] }">
                     <label>Как бы Вы оценили работу компании Азимут?</label>
                     <div class="reviews-form__input-group--wrap">
                         <CircleRating :max-rating="5" v-model="form.reviews.azimut"></CircleRating>
@@ -349,14 +350,14 @@ export default {
                 trip_date: '', // дата поездки
                 exp_rest: 1, // сколько ранее отдыхали
                 reviews: {
-                    cabin: 3,         // оценка каюты
-                    food: 3,          // оценка питания
-                    service: 3,       // оценка обслуживания
-                    tours: 3,         // оценка экскурсии
-                    anim_on_board: 3, // оценка анимации на борту
-                    ship: 3,          // оценка теплохода
-                    azimut: 3,        // оценка Азимута
-                    cruise: 3,        // оценка отдыха в целом
+                    cabin: null,
+                    food: null,
+                    service: null,
+                    tours: null,
+                    anim_on_board: null,
+                    ship: null,
+                    azimut: null,
+                    cruise: null,
                 },
                 reviews_text: '',
                 photos: []
@@ -434,9 +435,45 @@ export default {
                 }
             }
         },
+        isRatingSet(key) {
+            const value = Number(this.form.reviews[key]);
+            return Number.isInteger(value) && value >= 1 && value <= 5;
+        },
+        missingRatingKeys() {
+            return [
+                'cabin',
+                'food',
+                'service',
+                'tours',
+                'anim_on_board',
+                'ship',
+                'cruise',
+                'azimut',
+            ].filter((key) => !this.isRatingSet(key));
+        },
         send() {
             if (this.upload_images_process) {
                 return
+            }
+
+            this.alerts = {};
+            const missingRatings = this.missingRatingKeys();
+            if (missingRatings.length) {
+                this.alerts.reviews = {
+                    type: 'danger',
+                    text: 'Поставьте оценку по всем пунктам',
+                };
+                missingRatings.forEach((key) => {
+                    this.alerts['reviews.' + key] = { type: 'danger', text: '' };
+                });
+                this.$nextTick(() => {
+                    const reviewsWrapper = document.querySelector('.reviews-wrapper .bad');
+                    if (!reviewsWrapper) {
+                        return;
+                    }
+                    reviewsWrapper.scrollIntoView({ behavior: 'smooth' });
+                });
+                return;
             }
 
             const lead_id = localStorage.getItem('reviews_lead_id')

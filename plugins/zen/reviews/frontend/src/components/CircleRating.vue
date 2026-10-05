@@ -30,7 +30,7 @@ export default {
         },
         modelValue: {
             type: Number,
-            required: true
+            default: null
         }
     },
     setup(props, {emit}) {
@@ -48,11 +48,11 @@ export default {
         );
 
         const getRatingDescription = () => {
-            if (hoverRating.value > 0) {
-                return ratings[hoverRating.value - 1];
-            } else {
-                return ratings[currentRating.value - 1];
+            const value = hoverRating.value > 0 ? hoverRating.value : currentRating.value;
+            if (!value) {
+                return '';
             }
+            return ratings[value - 1] || '';
         };
 
         const ratings = [
