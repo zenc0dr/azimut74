@@ -274,6 +274,7 @@ class CheckSingleShip extends Command
                         'beautiful_name' => $cruise['beautifulName'] ?? null,
                         'route' => $route ?? '',
                         'route_short' => $cruise['routeShort'] ?? null,
+                        'points_in_route' => $cruise['pointsInRoute'] ?? [],
                         'date_start' => $dateStart,
                         'date_end' => $dateEnd,
                         'date_start_timestamp' => isset($cruise['dateStartTimestamp']) && is_numeric($cruise['dateStartTimestamp']) ? (int)$cruise['dateStartTimestamp'] : null,

@@ -232,10 +232,7 @@ class InfoflotDatabase extends UnifiedDatabase
             $cruiseData = $idOrData;
             
             $routeText = $cruiseData['route'] ?? '';
-
-            // Создаем waybill_data из route (если есть).
-            // Важно: waybill_data должен содержать >=2 точек, иначе UnifiedProcessor пропускает заезд.
-            $waybillData = $this->createWaybillDataFromRoute($routeText);
+            [$waybillData, $waybillSource] = $this->createCruiseWaybillData($cruiseData);
             
             // Формируем extra_data из дополнительных полей
             $extraData = [];
@@ -244,6 +241,10 @@ class InfoflotDatabase extends UnifiedDatabase
             }
             if (isset($cruiseData['route_short'])) {
                 $extraData['route_short'] = $cruiseData['route_short'];
+            }
+            $extraData['waybill_source'] = $waybillSource;
+            if (!empty($cruiseData['points_in_route']) && is_array($cruiseData['points_in_route'])) {
+                $extraData['points_in_route'] = $cruiseData['points_in_route'];
             }
             if (isset($cruiseData['date_start_timestamp'])) {
                 $extraData['date_start_timestamp'] = $cruiseData['date_start_timestamp'];
@@ -277,6 +278,134 @@ class InfoflotDatabase extends UnifiedDatabase
     }
     
     /**
+     * Приоритет: структурированные точки Infoflot, затем текстовый route как fallback.
+     */
+    private function createCruiseWaybillData(array $cruiseData): array
+    {
+        $points = $cruiseData['points_in_route'] ?? [];
+        if (is_array($points)) {
+            $waybill = $this->createWaybillDataFromPointsInRoute(
+                $points,
+                $cruiseData['route_short'] ?? '',
+                $cruiseData['route'] ?? ''
+            );
+            if (count($waybill) >= 2) {
+                return [$waybill, 'points_in_route'];
+            }
+        }
+
+        return [
+            $this->createWaybillDataFromRoute($cruiseData['route'] ?? ''),
+            'route_fallback'
+        ];
+    }
+
+    /**
+     * Структурированные точки уже приходят в GET /cruises и пригодны для фильтра.
+     * Внешний ID сохраняется только как метаданные; поле town зарезервировано
+     * для внутреннего ID mcmraak_rivercrs_towns.
+     */
+    private function createWaybillDataFromPointsInRoute(
+        array $points,
+        $routeShort = '',
+        $route = ''
+    ): array
+    {
+        $canonicalPoints = [];
+        foreach ($points as $point) {
+            if (!is_array($point)) {
+                continue;
+            }
+
+            $townName = trim((string) ($point['name'] ?? ''));
+            if ($townName === '') {
+                continue;
+            }
+
+            $canonicalPoints[] = [
+                'town' => null,
+                'town_name' => $townName,
+                'infoflot_point_id' => isset($point['id']) ? (int) $point['id'] : null,
+                'infoflot_ref' => 'points-in-routes',
+                'excursion' => '',
+                'bold' => $this->routeContainsTown($routeShort, $townName) ? 1 : 0
+            ];
+        }
+
+        if (empty($canonicalPoints)) {
+            return [];
+        }
+
+        // pointsInRoute — набор для фильтра: порядок может отличаться, повторы удалены.
+        // Восстанавливаем порядок и повторные заходы по display-строке route, используя
+        // только канонические имена из структурированного справочника.
+        $waybill = $this->orderCanonicalPointsByRoute($canonicalPoints, $route);
+        if (count($waybill) < 2) {
+            if (count($canonicalPoints) < 2) {
+                return [];
+            }
+            $waybill = $canonicalPoints;
+        }
+
+        $waybill[0]['bold'] = 1;
+        $waybill[count($waybill) - 1]['bold'] = 1;
+
+        return $waybill;
+    }
+
+    private function orderCanonicalPointsByRoute(array $points, $route): array
+    {
+        $ordered = [];
+
+        foreach ($this->splitRouteText($route) as $segment) {
+            $matches = [];
+            foreach ($points as $point) {
+                $townName = $point['town_name'];
+                $pattern = '/(?<![\p{L}\p{N}])' . preg_quote($townName, '/') .
+                    '(?![\p{L}\p{N}])/ui';
+
+                if (preg_match($pattern, $segment, $match, PREG_OFFSET_CAPTURE)) {
+                    $matches[] = [
+                        'offset' => $match[0][1],
+                        'length' => strlen($match[0][0]),
+                        'point' => $point
+                    ];
+                }
+            }
+
+            usort($matches, function ($left, $right) {
+                if ($left['offset'] === $right['offset']) {
+                    return $right['length'] <=> $left['length'];
+                }
+                return $left['offset'] <=> $right['offset'];
+            });
+
+            $coveredUntil = -1;
+            foreach ($matches as $match) {
+                if ($match['offset'] < $coveredUntil) {
+                    continue;
+                }
+                $ordered[] = $match['point'];
+                $coveredUntil = $match['offset'] + $match['length'];
+            }
+        }
+
+        return $ordered;
+    }
+
+    private function routeContainsTown($route, string $townName): bool
+    {
+        if (!$route) {
+            return false;
+        }
+
+        return (bool) preg_match(
+            '/(?<![\p{L}\p{N}])' . preg_quote($townName, '/') . '(?![\p{L}\p{N}])/ui',
+            (string) $route
+        );
+    }
+
+    /**
      * Создание waybill_data из route (текстовое описание маршрута)
      * Infoflot часто отдаёт маршрут строкой, разделённой " — " / " – " / " - ".
      * Здесь мы пытаемся преобразовать её в массив точек, понятный UnifiedProcessor::processWaybillData().
@@ -292,20 +421,7 @@ class InfoflotDatabase extends UnifiedDatabase
             return [];
         }
 
-        // Пробуем аккуратно разбить маршрут на города.
-        // ВАЖНО: не делаем split по дефису без пробелов, чтобы не ломать "Ростов-на-Дону".
-        $parts = [];
-        if (strpos($route, ' — ') !== false) {
-            $parts = explode(' — ', $route);
-        } elseif (strpos($route, ' – ') !== false) { // en dash
-            $parts = explode(' – ', $route);
-        } elseif (strpos($route, ' - ') !== false) {
-            $parts = explode(' - ', $route);
-        } else {
-            // Fallback: пытаемся split по " —/– " с пробелами (регэксп),
-            // но всё равно оставляем только случаи с пробелами вокруг.
-            $parts = preg_split('/\s[—–]\s/u', $route) ?: [];
-        }
+        $parts = $this->splitRouteText($route);
 
         $waybill = [];
         foreach ($parts as $i => $raw) {
@@ -343,6 +459,17 @@ class InfoflotDatabase extends UnifiedDatabase
         return $waybill;
     }
 
+    private function splitRouteText($route): array
+    {
+        $route = trim((string) $route);
+        if ($route === '') {
+            return [];
+        }
+
+        // Пробелы обязательны: дефисы внутри Ростова-на-Дону не являются разделителем.
+        return preg_split('/\s+[—–-]\s+/u', $route) ?: [];
+    }
+
     /**
      * Batch сохранение круизов
      * Адаптирован для единого интерфейса UnifiedDatabase
@@ -356,8 +483,7 @@ class InfoflotDatabase extends UnifiedDatabase
         // Конвертируем круизы в единый формат
         $convertedCruises = [];
         foreach ($cruises as $cruise) {
-            // Создаем waybill_data из route
-            $waybillData = $this->createWaybillDataFromRoute($cruise['route'] ?? '');
+            [$waybillData, $waybillSource] = $this->createCruiseWaybillData($cruise);
             
             // Формируем extra_data из дополнительных полей
             $extraData = [];
@@ -366,6 +492,10 @@ class InfoflotDatabase extends UnifiedDatabase
             }
             if (isset($cruise['route_short'])) {
                 $extraData['route_short'] = $cruise['route_short'];
+            }
+            $extraData['waybill_source'] = $waybillSource;
+            if (!empty($cruise['points_in_route']) && is_array($cruise['points_in_route'])) {
+                $extraData['points_in_route'] = $cruise['points_in_route'];
             }
             if (isset($cruise['date_start_timestamp'])) {
                 $extraData['date_start_timestamp'] = $cruise['date_start_timestamp'];
@@ -380,6 +510,7 @@ class InfoflotDatabase extends UnifiedDatabase
                 'name' => $cruise['name'] ?? '',
                 'date_start' => $cruise['date_start'] ?? '',
                 'date_end' => $cruise['date_end'] ?? '',
+                'route' => $cruise['route'] ?? null,
                 'days' => $cruise['days'] ?? null,
                 'nights' => $cruise['nights'] ?? null,
                 'description' => $cruise['description'] ?? null,

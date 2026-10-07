@@ -1,8 +1,11 @@
 <?php namespace Zen\Worker\Console\transfer;
 
 use Zen\Worker\Classes\ProcessLog;
+use Zen\Worker\Console\volga\VolgaTownNormalizer;
 use Mcmraak\Rivercrs\Classes\CacheSettings;
+use Mcmraak\Rivercrs\Classes\Getter;
 use Mcmraak\Rivercrs\Models\Checkins as Checkin;
+use Mcmraak\Rivercrs\Models\Towns;
 use DB;
 use Carbon\Carbon;
 use PDO;
@@ -22,6 +25,9 @@ class UnifiedProcessor extends TransferProcessor
      * @var int[]
      */
     protected $handleOnlyCruiseIds = [];
+
+    /** @var VolgaTownNormalizer|null */
+    protected $volgaTownNormalizer;
 
     public function setHandleOnlyCruiseId(?int $cruiseId)
     {
@@ -688,6 +694,35 @@ class UnifiedProcessor extends TransferProcessor
             if (!is_array($point)) {
                 continue;
             }
+
+            $excursion = $point['excursion'] ?? '';
+            $bold = $point['bold'] ?? 0;
+
+            // Volga SQLite раньше содержал уже разрешённый, но иногда мусорный
+            // MySQL town ID. Для Volga всегда пересчитываем связь по имени.
+            if ($this->edsCode === 'volga') {
+                $townName = $point['town_name'] ?? $point['portName'] ?? '';
+                $townNames = $this->getVolgaTownNormalizer()->resolveSegment((string) $townName);
+
+                if (empty($townNames)) {
+                    ProcessLog::add(
+                        "Volga transfer: неоднозначная точка пропущена без создания города: {$townName}"
+                    );
+                    continue;
+                }
+
+                foreach ($townNames as $resolvedTownName) {
+                    $townId = $this->getTownId($resolvedTownName);
+                    if ($townId) {
+                        $result[] = [
+                            'town' => $townId,
+                            'excursion' => $excursion,
+                            'bold' => $bold
+                        ];
+                    }
+                }
+                continue;
+            }
             
             $townId = null;
             
@@ -714,9 +749,6 @@ class UnifiedProcessor extends TransferProcessor
             if (!$townId) {
                 continue;
             }
-            
-            $excursion = $point['excursion'] ?? '';
-            $bold = $point['bold'] ?? 0;
             
             // Если bold не указан, делаем первый и последний элемент bold
             if (!isset($point['bold']) && ($index === 0 || $index === count($waybill) - 1)) {
@@ -751,6 +783,10 @@ class UnifiedProcessor extends TransferProcessor
             return [];
         }
         
+        if ($this->edsCode === 'volga') {
+            return $this->createVolgaWaybillFromRoute($routeString);
+        }
+
         // Разбиваем маршрут по разделителям:
         // - " — " (em dash)
         // - " – " (en dash)
@@ -790,6 +826,43 @@ class UnifiedProcessor extends TransferProcessor
         }
         
         return count($waybill) >= 2 ? $waybill : [];
+    }
+
+    private function createVolgaWaybillFromRoute(string $route): array
+    {
+        $getter = new Getter();
+        $segments = preg_split(
+            '/\s*(?:-|\/)\s*/u',
+            $getter->checkSeparator($route)
+        ) ?: [];
+        $waybill = [];
+
+        foreach ($segments as $index => $segment) {
+            $townNames = $this->getVolgaTownNormalizer()->resolveSegment(trim($segment));
+            foreach ($townNames as $townName) {
+                $townId = $this->getTownId($townName);
+                if (!$townId) {
+                    continue;
+                }
+
+                $waybill[] = [
+                    'town' => $townId,
+                    'excursion' => '',
+                    'bold' => ($index === 0 || $index === count($segments) - 1) ? 1 : 0
+                ];
+            }
+        }
+
+        return count($waybill) >= 2 ? $waybill : [];
+    }
+
+    private function getVolgaTownNormalizer(): VolgaTownNormalizer
+    {
+        if ($this->volgaTownNormalizer === null) {
+            $this->volgaTownNormalizer = new VolgaTownNormalizer((array) Towns::lists('name'));
+        }
+
+        return $this->volgaTownNormalizer;
     }
 }
 

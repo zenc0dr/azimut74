@@ -296,6 +296,7 @@ class InfoflotDataProcessor
                             'beautiful_name' => $cruise['beautifulName'] ?? null,
                             'route' => $cruise['route'] ?? '',
                             'route_short' => $cruise['routeShort'] ?? null,
+                            'points_in_route' => $cruise['pointsInRoute'] ?? [],
                             'date_start' => $cruise['dateStart'],
                             'date_end' => $cruise['dateEnd'] ?? null,
                             'date_start_timestamp' => $cruise['dateStartTimestamp'] ?? null,

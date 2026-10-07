@@ -1,6 +1,7 @@
 <?php namespace Zen\Worker\Console\volga;
 
 use Mcmraak\Rivercrs\Classes\Getter;
+use Mcmraak\Rivercrs\Models\Towns;
 use Zen\Worker\Classes\ProcessLog;
 use Zen\Worker\Classes\TargetedParseFilter;
 use Exception;
@@ -11,6 +12,7 @@ class VolgaDataProcessor
 
     private $db;
     private $getter;
+    private $townNormalizer;
     private $timeout;
     private $limit;
 
@@ -23,6 +25,7 @@ class VolgaDataProcessor
         
         $this->db = $database;
         $this->getter = new Getter();
+        $this->townNormalizer = new VolgaTownNormalizer((array) Towns::lists('name'));
         $this->timeout = $timeout;
         $this->limit = $limit;
     }
@@ -588,7 +591,10 @@ class VolgaDataProcessor
         }
 
         $way = $this->getter->checkSeparator($waybillString);
-        $way = explode(' - ', $way);
+        // После checkSeparator дефисы внутри известных названий защищены символом ⏹.
+        // Источник встречается как с пробелами вокруг разделителя, так и без них,
+        // а также использует "/" между точками.
+        $way = preg_split('/\s*(?:-|\/)\s*/u', $way) ?: [];
         $waybill = [];
         
         foreach ($way as $route) {
@@ -596,56 +602,29 @@ class VolgaDataProcessor
             if (empty($route)) {
                 continue;
             }
-            
-            // Очищаем название города от мусора перед сохранением
-            $cleanTownName = $this->cleanTownName($route);
-            
-            $townId = $this->getter->getTownId($route, 'volga');
-            $waybill[] = [
-                'town' => $townId,
-                'town_name' => $cleanTownName, // Сохраняем очищенное название
-                'excursion' => '',
-                'bold' => 0,
-            ];
+
+            $townNames = $this->townNormalizer->resolveSegment($route);
+            if (empty($townNames)) {
+                ProcessLog::add(
+                    "Volga: неоднозначный сегмент маршрута пропущен без создания города: {$route}"
+                );
+                continue;
+            }
+
+            foreach ($townNames as $townName) {
+                $waybill[] = [
+                    // ID MySQL нельзя фиксировать в SQLite: transfer должен разрешить
+                    // каноническое имя заново и не доверять старым мусорным связям.
+                    'town' => null,
+                    'town_name' => $townName,
+                    'excursion' => '',
+                    'bold' => 0,
+                ];
+            }
         }
         
         return $waybill;
     }
 
-    /**
-     * Очистка названия города от мусора (скобки, кавычки, дополнительные описания)
-     * 
-     * Источник Volga предоставляет маршруты в поле route, где могут быть описания в скобках и кавычках.
-     * Примеры из реальных данных:
-     * - "Пермь - Вытегра + «Онежское кольцо» (с ночёвкой на базе отдыха) – Петрозаводск - Пермь"
-     * - "Пермь - «Русский Север» (Череповец + Вологда, Сизьма) - Весьегонск (р.Молога) - Пермь"
-     * 
-     * Метод извлекает чистое название города, убирая описания.
-     * Примеры:
-     * "«Онежское кольцо» ⏴с ночёвкой на базе отдыха⏵" → "Онежское кольцо"
-     * "Пенза, Лермонтово, Белинский ⏴2 дня⏵" → "Пенза, Лермонтово, Белинский"
-     * "Весьегонск (р.Молога)" → "Весьегонск"
-     */
-    private function cleanTownName($route)
-    {
-        // Заменяем специальные символы Volga на обычные (как в getTownId)
-        $clean = str_replace('⏹', '-', $route);
-        $clean = str_replace('⏴', '(', $clean);
-        $clean = str_replace('⏵', ')', $clean);
-        
-        // Убираем текст в скобках (включая сами скобки)
-        // Это уберёт описания типа "(с ночёвкой на базе отдыха)", "(р.Молога)", "(1 день)" и т.д.
-        $clean = preg_replace('/\([^)]*\)/u', '', $clean);
-        
-        // Убираем кавычки разных типов (русские и английские)
-        $clean = str_replace(['«', '»', '"', '"', "'", "'"], '', $clean);
-        
-        // Убираем лишние пробелы и знаки + (которые используются для объединения городов)
-        $clean = preg_replace('/\s*\+\s*/u', ' ', $clean);
-        $clean = preg_replace('/ {2,}/u', ' ', $clean);
-        $clean = trim($clean);
-        
-        return $clean;
-    }
 }
 
