@@ -274,7 +274,7 @@ class UnifiedProcessor extends TransferProcessor
         // Заполняем поля Checkin
         $checkin->date = $dateStart;
         $checkin->dateb = $dateEnd;
-        $checkin->desc_1 = $cruise['schedule_html'] ?? '';
+        $checkin->desc_1 = $this->limitScheduleHtml($cruise['schedule_html'] ?? '');
         $checkin->motorship_id = $ship->id;
         $checkin->active = 1;
         $checkin->eds_code = $this->edsCode;
@@ -854,6 +854,18 @@ class UnifiedProcessor extends TransferProcessor
         }
 
         return count($waybill) >= 2 ? $waybill : [];
+    }
+
+    private function limitScheduleHtml($html): string
+    {
+        $html = (string) $html;
+        if (strlen($html) <= 60000) {
+            return $html;
+        }
+
+        $html = preg_replace('/(<td>)([^<]{500})[^<]*/u', '$1$2', $html);
+
+        return strlen($html) > 60000 ? substr($html, 0, 60000) : $html;
     }
 
     private function getVolgaTownNormalizer(): VolgaTownNormalizer

@@ -83,7 +83,8 @@ class RouteScheduleHtml
         $parts = [];
         $description = trim(html_entity_decode(strip_tags((string) ($point['description'] ?? '')), ENT_QUOTES, 'UTF-8'));
         if ($description !== '') {
-            $parts[] = preg_replace('/\s+/u', ' ', $description);
+            $description = preg_replace('/\s+/u', ' ', $description);
+            $parts[] = mb_substr($description, 0, 500, 'UTF-8');
         }
 
         $excursions = $point['excursions'] ?? [];
