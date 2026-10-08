@@ -66,9 +66,11 @@ class VolgaParse extends Command
             $this->showProgress('Скачивание XML...', 10);
             
             $apiClient = new VolgaApiClient($this->nextUrl, $this->timeout);
+            $routeClient = new VolgaRouteClient($this->timeout);
             if ($clearCache) {
                 $this->info('🧹 Очистка XML кеша...');
                 $apiClient->clearCache();
+                $routeClient->clearCache();
                 $this->info('✅ XML кеш очищен');
             }
             // Кеш по умолчанию: если XML уже есть, скачивание пропускается
@@ -76,9 +78,24 @@ class VolgaParse extends Command
             
             $this->showProgress('Парсинг XML...', 20);
             $dump = $apiClient->getXmlData();
+
+            $structuredRoutes = [];
+            try {
+                $this->info('📍 Получение структурированных стоянок Volga...');
+                $structuredRoutes = $routeClient->getRoutes((bool) $clearCache);
+                $this->info('✅ Структурированных маршрутов: ' . count($structuredRoutes));
+            } catch (Exception $e) {
+                // Основная выгрузка остаётся работоспособной: volgaWay применит
+                // консервативный текстовый fallback и не создаст подозрительный город.
+                $this->warn('⚠️  Структурированные стоянки недоступны: ' . $e->getMessage());
+                ProcessLog::add(
+                    'Volga routes fallback: ' . $e->getMessage()
+                );
+            }
             
             $this->showProgress('Обработка данных...', 30);
             $dataProcessor = new VolgaDataProcessor($this->db, $this->timeout, $limit);
+            $dataProcessor->setStructuredRoutes($structuredRoutes);
             $dataProcessor->setTargetFilters(
                 IdList::parse($this->option('cruise_ids') ?: $this->option('handle_only')),
                 IdList::parse($this->option('ship_ids'))

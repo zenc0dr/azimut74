@@ -64,6 +64,7 @@ class VolgaTownNormalizer
         $name = preg_replace('/\([^)]*\)/u', ' ', $name);
         $name = str_replace(['«', '»', '"', "'", '„', '“'], '', $name);
         $name = preg_replace('/(?:^|\s)трансфер(?:\s|$)/ui', ' ', $name);
+        $name = preg_replace('/,\s*экскурси.*$/ui', '', $name);
         $name = preg_replace('/\s+Уикэнд[!.]*\s*$/ui', '', $name);
 
         return $this->normalizeWhitespace($name);

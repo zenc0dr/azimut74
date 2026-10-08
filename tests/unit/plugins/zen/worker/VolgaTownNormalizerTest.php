@@ -83,4 +83,28 @@ class VolgaTownNormalizerTest extends TestCase
             $this->normalizer()->resolveSegment('Новый Порт')
         );
     }
+
+    public function testCleansTechnicalAndExcursionLabels()
+    {
+        $normalizer = $this->normalizer();
+
+        $this->assertSame(
+            ['Казань'],
+            $normalizer->resolveSegment('Казань (техн.)')
+        );
+        $this->assertSame(
+            ['Сарапул'],
+            $normalizer->resolveSegment('Сарапул, экскурсия в Ижевск')
+        );
+    }
+
+    public function testRejectsExcursionProgramPoint()
+    {
+        $this->assertSame(
+            [],
+            $this->normalizer()->resolveSegment(
+                'Экскурсионный тур Ярославль + Архангельск, Северодвинск, день 1'
+            )
+        );
+    }
 }

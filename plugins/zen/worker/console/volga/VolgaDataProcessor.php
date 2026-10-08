@@ -13,6 +13,7 @@ class VolgaDataProcessor
     private $db;
     private $getter;
     private $townNormalizer;
+    private $structuredRoutes = [];
     private $timeout;
     private $limit;
 
@@ -28,6 +29,11 @@ class VolgaDataProcessor
         $this->townNormalizer = new VolgaTownNormalizer((array) Towns::lists('name'));
         $this->timeout = $timeout;
         $this->limit = $limit;
+    }
+
+    public function setStructuredRoutes(array $routes): void
+    {
+        $this->structuredRoutes = $routes;
     }
 
     /**
@@ -584,6 +590,20 @@ class VolgaDataProcessor
      */
     private function volgaWay($volgaCruise)
     {
+        $cruiseId = (int) ($volgaCruise['id'] ?? 0);
+        if ($cruiseId && !empty($this->structuredRoutes[$cruiseId])) {
+            $structuredWaybill = $this->structuredVolgaWay(
+                $this->structuredRoutes[$cruiseId]
+            );
+            if (count($structuredWaybill) >= 2) {
+                return $structuredWaybill;
+            }
+
+            ProcessLog::add(
+                "Volga {$cruiseId}: структурированный маршрут дал менее двух городов, используется fallback"
+            );
+        }
+
         $waybillString = $volgaCruise['route'] ?? '';
         
         if (empty($waybillString)) {
@@ -623,6 +643,47 @@ class VolgaDataProcessor
             }
         }
         
+        return $waybill;
+    }
+
+    private function structuredVolgaWay(array $routePoints): array
+    {
+        $waybill = [];
+
+        foreach ($routePoints as $routePoint) {
+            $rawName = trim((string) ($routePoint['point'] ?? ''));
+            if ($rawName === '') {
+                continue;
+            }
+
+            $townNames = $this->townNormalizer->resolveSegment($rawName);
+            if (empty($townNames)) {
+                ProcessLog::add(
+                    "Volga routes: программная/неоднозначная точка исключена из городов: {$rawName}"
+                );
+                continue;
+            }
+
+            foreach ($townNames as $townName) {
+                $waybill[] = [
+                    'town' => null,
+                    'town_name' => $townName,
+                    'track_id' => $routePoint['track_id'] ?? null,
+                    'tracking_type' => $routePoint['tracking_type'] ?? null,
+                    'arrival' => $routePoint['arrival'] ?? '',
+                    'departure' => $routePoint['departure'] ?? '',
+                    'stay_time' => $routePoint['stay_time'] ?? '',
+                    'excursion' => '',
+                    'bold' => 0,
+                ];
+            }
+        }
+
+        if (count($waybill) >= 2) {
+            $waybill[0]['bold'] = 1;
+            $waybill[count($waybill) - 1]['bold'] = 1;
+        }
+
         return $waybill;
     }
 
