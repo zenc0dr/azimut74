@@ -110,10 +110,8 @@ class RivercrsCheckin
     {
         $eds_code = $checkin->eds_code;
 
-        if ($eds_code == 'volga') {
-            # TODO: Расписание Волги делается из XLS-файла, на данный момент его давно не обновляли
-            //$data = \Mcmraak\Rivercrs\Controllers\VolgaSettings::getVolgaExcursion($checkin);
-            return null;
+        if ($eds_code == 'volga' || $eds_code == 'infoflot') {
+            return self::sheduleStandartTableToArray($checkin->desc_1);
         }
 
         # http://azimut74/cruise/2449
@@ -183,6 +181,7 @@ class RivercrsCheckin
             $schedule->time_arrive = @$row[2];
             $schedule->time_diff = @$row[3];
             $schedule->time_depart = @$row[4];
+            $schedule->desc = @$row[5];
             $schedule->addDay();
         }
 

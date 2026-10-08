@@ -556,6 +556,7 @@ class VolgaDatabase extends UnifiedDatabase
                 'date_end' => $dateEnd ?? '',
                 'route' => $cruise['route'] ?? null,
                 'waybill_data' => $waybillData,
+                'schedule_html' => $cruise['schedule_html'] ?? null,
                 'extra_data' => !empty($extraData) ? $extraData : null
             ];
         }

@@ -3,6 +3,7 @@
 use Mcmraak\Rivercrs\Classes\Getter;
 use Mcmraak\Rivercrs\Models\Towns;
 use Zen\Worker\Classes\ProcessLog;
+use Zen\Worker\Console\RouteScheduleHtml;
 use Zen\Worker\Classes\TargetedParseFilter;
 use Exception;
 
@@ -293,12 +294,14 @@ class VolgaDataProcessor
             // Формируем путевой лист
             $waybill = null;
             $waybillData = null;
+            $scheduleHtml = null;
             
             if (!empty($data['route'])) {
                 try {
                     $waybill = $this->volgaWay($data);
                     if (is_array($waybill) && count($waybill) >= 2) {
                         $waybillData = json_encode($waybill, JSON_UNESCAPED_UNICODE);
+                        $scheduleHtml = $this->scheduleHtml($waybill);
                         
                         // Сохраняем путевой лист для batch сохранения
                         foreach ($waybill as $index => $point) {
@@ -328,7 +331,8 @@ class VolgaDataProcessor
                 'end_time' => $endTime,
                 'date_start' => $dateStart,
                 'date_end' => $dateEnd,
-                'waybill_data' => $waybillData
+                'waybill_data' => $waybillData,
+                'schedule_html' => $scheduleHtml
             ];
             
             $processed++;
@@ -644,6 +648,19 @@ class VolgaDataProcessor
         }
         
         return $waybill;
+    }
+
+    private function scheduleHtml(array $waybill): string
+    {
+        $rows = [];
+        foreach ($waybill as $point) {
+            $row = RouteScheduleHtml::fromVolgaPoint($point);
+            if ($row) {
+                $rows[] = $row;
+            }
+        }
+
+        return RouteScheduleHtml::render($rows);
     }
 
     private function structuredVolgaWay(array $routePoints): array

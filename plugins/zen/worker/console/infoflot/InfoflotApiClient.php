@@ -178,6 +178,34 @@ class InfoflotApiClient
     }
 
     /**
+     * Подробный круиз, включая timetable маршрута.
+     * Список /cruises это расписание не содержит.
+     */
+    public function getCruise($cruiseId)
+    {
+        $cacheKey = "infoflot_cruise_{$cruiseId}_details";
+        $cachedData = $this->cache->get($cacheKey);
+        if ($cachedData !== null) {
+            return $cachedData;
+        }
+
+        $url = $this->baseUrl . '/cruises/' . rawurlencode((string) $cruiseId) . '?' . http_build_query([
+            'key' => $this->apiKey
+        ]);
+        $http = new Http();
+        $httpQuery = $http->setTimout($this->timeout)->query($url, 'json');
+
+        if ($httpQuery->error || !is_array($httpQuery->response)) {
+            ProcessLog::add("Infoflot: подробный маршрут круиза {$cruiseId} недоступен");
+            return null;
+        }
+
+        $this->writeCacheFromHttp($cacheKey, $httpQuery, $httpQuery->response);
+
+        return $httpQuery->response;
+    }
+
+    /**
      * Получение цен кают для круиза
      */
     public function getCruiseCabins($cruiseId)

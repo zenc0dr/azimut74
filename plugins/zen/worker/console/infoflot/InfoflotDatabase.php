@@ -267,6 +267,7 @@ class InfoflotDatabase extends UnifiedDatabase
                     'days' => $cruiseData['days'] ?? null,
                     'nights' => $cruiseData['nights'] ?? null,
                     'description' => $cruiseData['description'] ?? null,
+                    'schedule_html' => $cruiseData['schedule_html'] ?? null,
                     'waybill_data' => $waybillData,
                     'extra_data' => !empty($extraData) ? $extraData : null
                 ]

@@ -5,6 +5,7 @@ use Exception;
 use PDO;
 use Zen\Worker\Classes\ProcessLog;
 use Zen\Worker\Classes\TargetedParseFilter;
+use Zen\Worker\Console\RouteScheduleHtml;
 
 class InfoflotDataProcessor
 {
@@ -303,7 +304,8 @@ class InfoflotDataProcessor
                             'date_end_timestamp' => $cruise['dateEndTimestamp'] ?? null,
                             'days' => $cruise['days'] ?? null,
                             'nights' => $cruise['nights'] ?? null,
-                            'description' => $cruise['description'] ?? null
+                            'description' => $cruise['description'] ?? null,
+                            'schedule_html' => $this->scheduleHtml($cruiseId)
                         ];
                         
                         try {
@@ -750,6 +752,22 @@ class InfoflotDataProcessor
         }
         
         return false;
+    }
+
+    private function scheduleHtml($cruiseId): string
+    {
+        try {
+            $details = $this->apiClient->getCruise($cruiseId);
+        } catch (\Exception $e) {
+            ProcessLog::add("Infoflot {$cruiseId}: ошибка маршрута: " . $e->getMessage());
+            return '';
+        }
+
+        if (!is_array($details) || empty($details['timetable']) || !is_array($details['timetable'])) {
+            return '';
+        }
+
+        return RouteScheduleHtml::fromInfoflotTimetable($details['timetable']);
     }
 
 }
