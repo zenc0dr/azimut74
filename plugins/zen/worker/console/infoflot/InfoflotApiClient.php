@@ -206,6 +206,79 @@ class InfoflotApiClient
     }
 
     /**
+     * Параллельная загрузка подробных круизов. Уже закешированные ответы не запрашиваются.
+     */
+    public function getCruiseDetailsBatch(array $cruiseIds): array
+    {
+        $details = [];
+        $pending = [];
+
+        foreach ($cruiseIds as $cruiseId) {
+            $cruiseId = (int) $cruiseId;
+            $cached = $this->cache->get("infoflot_cruise_{$cruiseId}_details");
+            if (is_array($cached)) {
+                $details[$cruiseId] = $cached;
+            } else {
+                $pending[] = $cruiseId;
+            }
+        }
+
+        foreach (array_chunk($pending, 12) as $chunk) {
+            foreach ($this->fetchCruiseDetailsChunk($chunk) as $cruiseId => $cruise) {
+                $details[$cruiseId] = $cruise;
+            }
+        }
+
+        return $details;
+    }
+
+    private function fetchCruiseDetailsChunk(array $cruiseIds): array
+    {
+        $multi = curl_multi_init();
+        $handles = [];
+
+        foreach ($cruiseIds as $cruiseId) {
+            $url = $this->baseUrl . '/cruises/' . $cruiseId . '?' . http_build_query([
+                'key' => $this->apiKey
+            ]);
+            $ch = curl_init($url);
+            curl_setopt_array($ch, [
+                CURLOPT_RETURNTRANSFER => true,
+                CURLOPT_TIMEOUT => $this->timeout,
+                CURLOPT_CONNECTTIMEOUT => 10,
+                CURLOPT_SSL_VERIFYPEER => false,
+                CURLOPT_SSL_VERIFYHOST => false,
+                CURLOPT_RESOLVE => ['restapi.infoflot.com:443:178.248.239.118'],
+            ]);
+            curl_multi_add_handle($multi, $ch);
+            $handles[$cruiseId] = $ch;
+        }
+
+        do {
+            $status = curl_multi_exec($multi, $running);
+            if ($running) {
+                curl_multi_select($multi, 1.0);
+            }
+        } while ($running && $status === CURLM_OK);
+
+        $details = [];
+        foreach ($handles as $cruiseId => $ch) {
+            $body = curl_multi_getcontent($ch);
+            $code = curl_getinfo($ch, CURLINFO_HTTP_CODE);
+            $decoded = is_string($body) ? json_decode($body, true) : null;
+            if ($code === 200 && is_array($decoded)) {
+                $this->cache->putResponseBody("infoflot_cruise_{$cruiseId}_details", $body);
+                $details[$cruiseId] = $decoded;
+            }
+            curl_multi_remove_handle($multi, $ch);
+            curl_close($ch);
+        }
+        curl_multi_close($multi);
+
+        return $details;
+    }
+
+    /**
      * Получение цен кают для круиза
      */
     public function getCruiseCabins($cruiseId)

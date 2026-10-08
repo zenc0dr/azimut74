@@ -524,6 +524,22 @@ class InfoflotDatabase extends UnifiedDatabase
         parent::saveCruisesBatch($convertedCruises);
     }
 
+    public function getCruiseIds(): array
+    {
+        $stmt = $this->getPdo()->query('SELECT id FROM cruises ORDER BY id');
+
+        return $stmt ? $stmt->fetchAll(PDO::FETCH_COLUMN) : [];
+    }
+
+    public function saveScheduleHtml($cruiseId, string $html): bool
+    {
+        $stmt = $this->getPdo()->prepare(
+            'UPDATE cruises SET schedule_html = ? WHERE id = ?'
+        );
+
+        return $stmt->execute([$html, (int) $cruiseId]);
+    }
+
     /**
      * Сохранение цены
      * Адаптирован для единого интерфейса UnifiedDatabase

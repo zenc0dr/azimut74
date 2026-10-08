@@ -88,6 +88,10 @@ class InfoflotParse extends Command
             $this->showProgress('Обработка круизов и цен...', 75);
             $this->processCruisesData($dataProcessor);
 
+            $this->info('🗺️  Загрузка подробных маршрутов Infoflot...');
+            $schedules = $dataProcessor->loadRouteSchedules();
+            $this->info("✅ Подробных маршрутов: {$schedules}");
+
             $this->showProgress('Очистка круизов без цен...', 90);
             if (!$targeted) {
                 $this->cleanCruisesWithoutPrices();

@@ -304,8 +304,7 @@ class InfoflotDataProcessor
                             'date_end_timestamp' => $cruise['dateEndTimestamp'] ?? null,
                             'days' => $cruise['days'] ?? null,
                             'nights' => $cruise['nights'] ?? null,
-                            'description' => $cruise['description'] ?? null,
-                            'schedule_html' => $this->scheduleHtml($cruiseId)
+                            'description' => $cruise['description'] ?? null
                         ];
                         
                         try {
@@ -754,20 +753,27 @@ class InfoflotDataProcessor
         return false;
     }
 
-    private function scheduleHtml($cruiseId): string
+    public function loadRouteSchedules(): int
     {
-        try {
-            $details = $this->apiClient->getCruise($cruiseId);
-        } catch (\Exception $e) {
-            ProcessLog::add("Infoflot {$cruiseId}: ошибка маршрута: " . $e->getMessage());
-            return '';
+        $ids = $this->onlyCruiseIds ?: $this->db->getCruiseIds();
+        $saved = 0;
+
+        foreach (array_chunk($ids, 100) as $chunk) {
+            $details = $this->apiClient->getCruiseDetailsBatch($chunk);
+            foreach ($chunk as $cruiseId) {
+                $timetable = $details[$cruiseId]['timetable'] ?? [];
+                if (!is_array($timetable) || !$timetable) {
+                    continue;
+                }
+                $html = RouteScheduleHtml::fromInfoflotTimetable($timetable);
+                if ($html !== '' && $this->db->saveScheduleHtml($cruiseId, $html)) {
+                    $saved++;
+                }
+            }
+            ProcessLog::add("Infoflot: расписания сохранены для {$saved} круизов");
         }
 
-        if (!is_array($details) || empty($details['timetable']) || !is_array($details['timetable'])) {
-            return '';
-        }
-
-        return RouteScheduleHtml::fromInfoflotTimetable($details['timetable']);
+        return $saved;
     }
 
 }
