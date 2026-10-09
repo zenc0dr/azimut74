@@ -87,7 +87,7 @@
                                 :key="item.id + '-photo-' + photoIndex"
                                 type="button"
                                 class="reviews-item-photos__btn"
-                                @click="photoPreview = photo.full"
+                                @click="openPhotoGallery(item.photos, photoIndex)"
                             >
                                 <img :src="photo.thumb" alt="">
                             </button>
@@ -268,14 +268,33 @@
         <div
             v-if="photoPreview"
             class="reviews-widget__photo-preview"
+            tabindex="0"
+            ref="photoPreviewEl"
             @click.self="photoPreview = null"
+            @keydown.esc="photoPreview = null"
+            @keydown.left.prevent="shiftPhoto(-1)"
+            @keydown.right.prevent="shiftPhoto(1)"
         >
             <button
                 type="button"
                 class="reviews-widget__photo-preview-close"
                 @click="photoPreview = null"
             >×</button>
-            <img :src="photoPreview" alt="">
+            <button
+                v-if="photoPreview.photos.length > 1"
+                type="button"
+                class="reviews-widget__photo-preview-nav reviews-widget__photo-preview-nav--prev"
+                aria-label="Предыдущее фото"
+                @click="shiftPhoto(-1)"
+            >‹</button>
+            <img :src="photoPreview.photos[photoPreview.index].full" alt="">
+            <button
+                v-if="photoPreview.photos.length > 1"
+                type="button"
+                class="reviews-widget__photo-preview-nav reviews-widget__photo-preview-nav--next"
+                aria-label="Следующее фото"
+                @click="shiftPhoto(1)"
+            >›</button>
         </div>
 
         <div
@@ -611,6 +630,28 @@ export default {
                 /* cross-origin */
             }
         },
+        openPhotoGallery(photos, index) {
+            this.photoPreview = {
+                photos: photos,
+                index: index,
+            };
+            this.$nextTick(() => {
+                if (this.$refs.photoPreviewEl) {
+                    this.$refs.photoPreviewEl.focus();
+                }
+            });
+        },
+        shiftPhoto(delta) {
+            if (!this.photoPreview || this.photoPreview.photos.length < 2) {
+                return;
+            }
+            const count = this.photoPreview.photos.length;
+            const index = (this.photoPreview.index + delta + count) % count;
+            this.photoPreview = {
+                photos: this.photoPreview.photos,
+                index: index,
+            };
+        },
         closeReviewModal() {
             this.reviewModalLog("closeReviewModal");
             this.clearReviewIframeHeightSync();
@@ -850,7 +891,14 @@ export default {
                 });
                 return;
             }
-            if (!event.data || event.data.type !== "reviews-iframe-resize") {
+            if (!event.data || !event.data.type) {
+                return;
+            }
+            if (event.data.type === "reviews-modal-close") {
+                this.closeReviewModal();
+                return;
+            }
+            if (event.data.type !== "reviews-iframe-resize") {
                 return;
             }
             const h = Number(event.data.height);
@@ -1094,6 +1142,29 @@ export default {
         font-size: 36px;
         line-height: 1;
         cursor: pointer;
+    }
+
+    .reviews-widget__photo-preview-nav {
+        position: absolute;
+        top: 50%;
+        transform: translateY(-50%);
+        width: 48px;
+        height: 48px;
+        border: 0;
+        border-radius: 50%;
+        background: rgba(255, 255, 255, 0.9);
+        color: #1a1a1a;
+        font-size: 32px;
+        line-height: 1;
+        cursor: pointer;
+    }
+
+    .reviews-widget__photo-preview-nav--prev {
+        left: 16px;
+    }
+
+    .reviews-widget__photo-preview-nav--next {
+        right: 16px;
     }
 
     .reviews-item-text {

@@ -114,6 +114,66 @@ class Review extends Model
         $this->mutateFormField('reviews_text', (string) $value);
     }
 
+    public function getAdminRatingCabinAttribute(): ?int
+    {
+        return $this->ratingFromForm('cabin');
+    }
+
+    public function setAdminRatingCabinAttribute($value): void
+    {
+        $this->mutateReviewsField('cabin', $value);
+    }
+
+    public function getAdminRatingFoodAttribute(): ?int
+    {
+        return $this->ratingFromForm('food');
+    }
+
+    public function setAdminRatingFoodAttribute($value): void
+    {
+        $this->mutateReviewsField('food', $value);
+    }
+
+    public function getAdminRatingToursAttribute(): ?int
+    {
+        return $this->ratingFromForm('tours');
+    }
+
+    public function setAdminRatingToursAttribute($value): void
+    {
+        $this->mutateReviewsField('tours', $value);
+    }
+
+    public function getAdminRatingAnimOnBoardAttribute(): ?int
+    {
+        return $this->ratingFromForm('anim_on_board');
+    }
+
+    public function setAdminRatingAnimOnBoardAttribute($value): void
+    {
+        $this->mutateReviewsField('anim_on_board', $value);
+    }
+
+    public function getAdminRatingServiceAttribute(): ?int
+    {
+        return $this->ratingFromForm('service');
+    }
+
+    public function setAdminRatingServiceAttribute($value): void
+    {
+        $this->mutateReviewsField('service', $value);
+    }
+
+    public function getAdminRatingShipAttribute(): ?int
+    {
+        return $this->ratingFromForm('ship');
+    }
+
+    public function setAdminRatingShipAttribute($value): void
+    {
+        $this->mutateReviewsField('ship', $value);
+    }
+
     public function getAdminRatingCruiseAttribute(): ?int
     {
         return $this->ratingFromForm('cruise');

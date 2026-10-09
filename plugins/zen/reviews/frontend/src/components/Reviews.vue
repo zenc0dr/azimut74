@@ -264,7 +264,7 @@
                     <br>
                     <span>Спасибо за Ваш отзыв!</span>
                     <br>
-                    <a href="/russia-river-cruises">Перейти к расписанию круизов</a>
+                    <a href="#" @click.prevent="returnToPage">Вернуться на страницу</a>
                 </div>
             </div>
 
@@ -450,6 +450,17 @@ export default {
                 'cruise',
                 'azimut',
             ].filter((key) => !this.isRatingSet(key));
+        },
+        returnToPage() {
+            if (window.parent && window.parent !== window) {
+                window.parent.postMessage({ type: 'reviews-modal-close' }, window.location.origin);
+                return;
+            }
+            if (window.history.length > 1) {
+                window.history.back();
+                return;
+            }
+            window.location.href = '/';
         },
         send() {
             if (this.upload_images_process) {

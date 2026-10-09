@@ -18,6 +18,48 @@ fields:
         type: text
 tabs:
     fields:
+        admin_rating_cabin:
+            label: Каюта
+            span: left
+            min: 1
+            max: 5
+            type: number
+            tab: Данные
+        admin_rating_food:
+            label: Питание
+            span: right
+            min: 1
+            max: 5
+            type: number
+            tab: Данные
+        admin_rating_tours:
+            label: Экскурсии
+            span: left
+            min: 1
+            max: 5
+            type: number
+            tab: Данные
+        admin_rating_anim_on_board:
+            label: Анимация на борту
+            span: right
+            min: 1
+            max: 5
+            type: number
+            tab: Данные
+        admin_rating_service:
+            label: Обслуживание
+            span: left
+            min: 1
+            max: 5
+            type: number
+            tab: Данные
+        admin_rating_ship:
+            label: Теплоход
+            span: right
+            min: 1
+            max: 5
+            type: number
+            tab: Данные
         admin_rating_cruise:
             label: Оценка отдыха в целом
             span: left
