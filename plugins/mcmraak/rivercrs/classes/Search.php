@@ -21,8 +21,9 @@ class Search
     {
         # Кеширование
         $filter_cache = Settings::get('filter_cache');
-        if ($filter_cache && Cache::has('rivercrs.FilterDATA')) {
-            return Cache::get('rivercrs.FilterDATA');
+        $cacheKey = RussiaPlaces::FILTER_CACHE_KEY;
+        if ($filter_cache && Cache::has($cacheKey)) {
+            return Cache::get($cacheKey);
         }
 
         # Города (checkins=3147)
@@ -66,8 +67,20 @@ class Search
         get();
 
         $result = [];
+        $outsideCheckins = [];
 
         foreach ($data as $item) {
+            $townName = empty($item->town_alt_name) ? $item->town_name : $item->town_alt_name;
+            if (RussiaPlaces::isOutsideRussia($townName)) {
+                $outsideCheckins[$item->checkin_id] = true;
+            }
+        }
+
+        foreach ($data as $item) {
+            if (isset($outsideCheckins[$item->checkin_id])) {
+                continue;
+            }
+
             $result['checkins'][$item->checkin_id] = [
                 'ship_id' => $item->ship_id,
                 'date' => $this->dateFormatter($item->date),
@@ -115,7 +128,7 @@ class Search
         $json = json_encode($result, JSON_UNESCAPED_UNICODE);
 
         if ($filter_cache) {
-            Cache::add('rivercrs.FilterDATA', $json, CacheSettings::get('filter_cache'));
+            Cache::add($cacheKey, $json, CacheSettings::get('filter_cache'));
         }
         return $json;
     }

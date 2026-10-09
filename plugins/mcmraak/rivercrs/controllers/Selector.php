@@ -19,8 +19,9 @@ class Selector
     {
         $filter_cache = CacheSettings::get('filter_cache');
 
-        if ($filter_cache && Cache::has('rivercrs.FilterDATA')) {
-            return Cache::get('rivercrs.FilterDATA');
+        $cacheKey = \Mcmraak\Rivercrs\Classes\RussiaPlaces::FILTER_CACHE_KEY . '.v1';
+        if ($filter_cache && Cache::has($cacheKey)) {
+            return Cache::get($cacheKey);
         }
 
         # Города
@@ -62,7 +63,16 @@ class Selector
 
         $result = [];
         $parent = 0;
+        $outsideCheckins = [];
         foreach ($data as $v) {
+            if (\Mcmraak\Rivercrs\Classes\RussiaPlaces::isOutsideRussia($v->town_name)) {
+                $outsideCheckins[$v->checkin_id] = true;
+            }
+        }
+        foreach ($data as $v) {
+            if (isset($outsideCheckins[$v->checkin_id])) {
+                continue;
+            }
             $town = trim($v->town_name);
             if($town == self::$startTownName){
                 $result['start_id'] = $v->town_id;
@@ -103,7 +113,7 @@ class Selector
 
         $json = json_encode ($result, JSON_UNESCAPED_UNICODE);
 
-        if($filter_cache) Cache::add('rivercrs.FilterDATA', $json, CacheSettings::get('filter_cache'));
+        if($filter_cache) Cache::add($cacheKey, $json, CacheSettings::get('filter_cache'));
         return $json;
     }
 

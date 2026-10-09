@@ -93,6 +93,8 @@ class Towns extends Model
     public function afterSave()
     {
         Cache::forget('rivercrs.FilterDATA');
+        Cache::forget(\Mcmraak\Rivercrs\Classes\RussiaPlaces::FILTER_CACHE_KEY);
+        Cache::forget(\Mcmraak\Rivercrs\Classes\RussiaPlaces::FILTER_CACHE_KEY . '.v1');
     }
 
     public function afterDelete()
