@@ -6,6 +6,7 @@
         <th>Прибытие</th>
         <th>Стоянка</th>
         <th>Отправление</th>
+        <th>Описание</th>
     </tr>
     {% for item in table %}
         <tr>
@@ -14,6 +15,7 @@
             <td>{{ item.arrival }}</td>
             <td>{{ item.stay }}</td>
             <td>{{ item.departure }}</td>
+            <td>{{ item.description|default('') }}</td>
         </tr>
     {% endfor %}
     </tbody>

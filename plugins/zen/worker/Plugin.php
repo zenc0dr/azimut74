@@ -30,6 +30,7 @@ class Plugin extends PluginBase
         $this->registerConsoleCommand('worker:volga-sync', 'Zen\Worker\Console\sync\VolgaSync');
         $this->registerConsoleCommand('worker:germes-sync', 'Zen\Worker\Console\sync\GermesSync');
         $this->registerConsoleCommand('worker:gama-sync', 'Zen\Worker\Console\sync\GamaSync');
+        $this->registerConsoleCommand('worker:gama-refresh-route', 'Zen\Worker\Console\gama\GamaRefreshRoute');
         $this->registerConsoleCommand('worker:clear-cache', 'Zen\Worker\Console\ClearCache');
         $this->registerConsoleCommand('worker:clear-cruises', 'Zen\Worker\Console\ClearCruises');
         $this->registerConsoleCommand('worker:test-unified-databases', 'Zen\Worker\Console\unified\TestUnifiedDatabases');

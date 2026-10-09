@@ -16,6 +16,7 @@ class GamaDataProcessor
     private $apiClient;
     private $timeout;
     private $limit;
+    private $excursions;
 
     public function __construct($database, $timeout = 30, $limit = null)
     {
@@ -29,6 +30,48 @@ class GamaDataProcessor
         $this->apiClient = new GamaApiClient($timeout);
         $this->timeout = $timeout;
         $this->limit = $limit;
+    }
+
+    /**
+     * HTML расписания по id круиза Гамы. В MySQL и SQLite ничего не пишет.
+     */
+    public function scheduleHtmlByCruiseId()
+    {
+        $navigationData = $this->apiClient->getNavigationData();
+        if (!isset($navigationData['NavigationList']['Navigation'])) {
+            return [];
+        }
+
+        $navigations = $navigationData['NavigationList']['Navigation'];
+        if (isset($navigations['@attributes'])) {
+            $navigations = [$navigations];
+        }
+
+        $schedules = [];
+        foreach ($navigations as $navigation) {
+            if (!isset($navigation['RouteList']['Route'])) {
+                continue;
+            }
+            $navigationId = $navigation['@attributes']['id'];
+            $routes = $navigation['RouteList']['Route'];
+            if (isset($routes['@attributes'])) {
+                $routes = [$routes];
+            }
+            foreach ($routes as $route) {
+                $cruiseId = $route['@attributes']['id'] ?? null;
+                if (!$cruiseId) {
+                    continue;
+                }
+                $schedules[(string) $cruiseId] = $this->gamaDesignScheduleV2(
+                    $navigation['PathList']['Path'],
+                    $route['@attributes']['path_s_id'],
+                    $route['@attributes']['path_f_id'],
+                    $navigationId
+                );
+            }
+        }
+
+        return $schedules;
     }
 
     /**
@@ -120,14 +163,16 @@ class GamaDataProcessor
             $navigation['PathList']['Path'],
             $pathSId,
             $pathFId,
-            $this->getShortWaybillIds($routeName)
+            $this->getShortWaybillIds($routeName),
+            $navigationId
         );
         
         // Получаем расписание
         $scheduleHtml = $this->gamaDesignScheduleV2(
             $navigation['PathList']['Path'],
             $pathSId,
-            $pathFId
+            $pathFId,
+            $navigationId
         );
         
         return [
@@ -606,7 +651,7 @@ class GamaDataProcessor
     /**
      * Получение маршрута Gama
      */
-    private function getGammaWaybill($pathList, $pathSId, $pathFId, $shortPathIds)
+    private function getGammaWaybill($pathList, $pathSId, $pathFId, $shortPathIds, $navigationId = null)
     {
         $shortPathIds = array_unique($shortPathIds);
         $items = [];
@@ -630,7 +675,7 @@ class GamaDataProcessor
                 $items[] = [
                     'town' => $townId,
                     'town_name' => $gamaTownName,
-                    'excursion' => '',
+                    'excursion' => $this->excursionText($navigationId, $pathId),
                     'bold' => in_array($townId, $shortPathIds),
                     'arrival_time' => $item['@attributes']['s'] ?? null,
                     'departure_time' => $item['@attributes']['f'] ?? null
@@ -647,7 +692,7 @@ class GamaDataProcessor
     /**
      * Создание расписания Gama V2
      */
-    private function gamaDesignScheduleV2($pathList, $pathSId, $pathFId)
+    private function gamaDesignScheduleV2($pathList, $pathSId, $pathFId, $navigationId = null)
     {
         $gamaCruiseRoute = [];
         
@@ -676,6 +721,7 @@ class GamaDataProcessor
                 'town' => $townName,
                 'start' => date('d.m.Y H:i:s', strtotime($startTime)),
                 'end' => date('d.m.Y H:i:s', strtotime($endTime)),
+                'description' => $this->excursionText($navigationId, $pathId),
             ];
         }
         
@@ -689,29 +735,24 @@ class GamaDataProcessor
             $stay = $fullDate2->diffInSeconds($fullDate1);
             $stay = gmdate('H:i', $stay);
             
-            if ($diffInDays === 0) {
-                $tableData[] = [
-                    'date' => $fullDate1->format('d.m.Y'),
-                    'town' => $town,
-                    'arrival' => $fullDate1->format('H:i'),
-                    'stay' => $stay,
-                    'departure' => $fullDate2->format('H:i'),
-                ];
-            } else {
-                $tableData[] = [
-                    'date' => $fullDate1->format('d.m.Y'),
-                    'town' => $town,
-                    'arrival' => $fullDate1->format('H:i'),
-                    'stay' => $stay,
-                    'departure' => '',
-                ];
-                
+            $row = [
+                'date' => $fullDate1->format('d.m.Y'),
+                'town' => $town,
+                'arrival' => $fullDate1->format('H:i'),
+                'stay' => $stay,
+                'departure' => $diffInDays === 0 ? $fullDate2->format('H:i') : '',
+                'description' => $item['description'] ?? '',
+            ];
+            $tableData[] = $row;
+
+            if ($diffInDays !== 0) {
                 $tableData[] = [
                     'date' => $fullDate2->format('d.m.Y'),
                     'town' => $town,
                     'arrival' => '',
                     'stay' => '',
                     'departure' => $fullDate2->format('H:i'),
+                    'description' => '',
                 ];
             }
         }
@@ -727,5 +768,23 @@ class GamaDataProcessor
         // Простая реализация для получения коротких ID
         // В оригинале это более сложная логика
         return [];
+    }
+
+    private function excursionText($navigationId, $pathId)
+    {
+        if ($navigationId === null || $navigationId === '') {
+            return '';
+        }
+
+        return $this->excursionIndex()->textForPath($navigationId, $pathId);
+    }
+
+    private function excursionIndex()
+    {
+        if ($this->excursions === null) {
+            $this->excursions = GamaExcursionIndex::fromDirectory(base_path('storage/gama_arc'));
+        }
+
+        return $this->excursions;
     }
 }

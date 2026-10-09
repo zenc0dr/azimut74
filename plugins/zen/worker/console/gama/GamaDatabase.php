@@ -282,6 +282,14 @@ class GamaDatabase extends UnifiedDatabase
      * Обновление waybill_data для круиза (исправление экранирования кириллицы)
      * Адаптирован для единой структуры
      */
+    public function updateScheduleHtml($cruiseId, $html)
+    {
+        $stmt = $this->pdo->prepare('UPDATE cruises SET schedule_html = ?, updated_at = CURRENT_TIMESTAMP WHERE id = ?');
+        $stmt->execute([$html, $cruiseId]);
+
+        return $stmt->rowCount();
+    }
+
     public function updateWaybillData($cruiseId, $waybillData)
     {
         try {
