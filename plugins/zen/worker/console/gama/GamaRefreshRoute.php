@@ -34,6 +34,7 @@ class GamaRefreshRoute extends Command
             $missing = 0;
 
             foreach ($schedules as $cruiseId => $html) {
+                $html = $this->limitHtml($html);
                 if (strpos($html, 'Описание') !== false && preg_match('/<td>[^<]{20,}<\/td>\s*<\/tr>/u', $html)) {
                     $withExcursions++;
                 }
@@ -76,5 +77,26 @@ class GamaRefreshRoute extends Command
             ['timeout', 't', InputOption::VALUE_OPTIONAL, 'Таймаут HTTP, секунды', 60],
             ['no-download', null, InputOption::VALUE_NONE, 'Не скачивать архив, взять уже распакованный storage/gama_arc'],
         ];
+    }
+
+    /**
+     * desc_1 — TEXT, лимит 65535 байт. Длинный круиз с несколькими экскурсиями на стоянку его превышает.
+     */
+    private function limitHtml($html)
+    {
+        $limit = 60000;
+        if (strlen($html) <= $limit) {
+            return $html;
+        }
+
+        $original = $html;
+        foreach ([400, 220, 120, 60] as $size) {
+            $html = preg_replace('/(<td>)([^<]{' . $size . '})[^<]*/u', '$1$2…', $original);
+            if (is_string($html) && strlen($html) <= $limit) {
+                return $html;
+            }
+        }
+
+        return is_string($html) ? $html : $original;
     }
 }

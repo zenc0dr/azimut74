@@ -859,13 +859,23 @@ class UnifiedProcessor extends TransferProcessor
     private function limitScheduleHtml($html): string
     {
         $html = (string) $html;
-        if (strlen($html) <= 60000) {
+        $limit = 60000;
+        if (strlen($html) <= $limit) {
             return $html;
         }
 
-        $html = preg_replace('/(<td>)([^<]{500})[^<]*/u', '$1$2', $html);
+        $original = $html;
+        foreach ([500, 220, 120, 60] as $size) {
+            $trimmed = preg_replace('/(<td>)([^<]{' . $size . '})[^<]*/u', '$1$2', $original);
+            if (is_string($trimmed) && strlen($trimmed) <= $limit) {
+                return $trimmed;
+            }
+            if (is_string($trimmed)) {
+                $html = $trimmed;
+            }
+        }
 
-        return strlen($html) > 60000 ? substr($html, 0, 60000) : $html;
+        return strlen($html) > $limit ? substr($html, 0, $limit) : $html;
     }
 
     private function getVolgaTownNormalizer(): VolgaTownNormalizer
