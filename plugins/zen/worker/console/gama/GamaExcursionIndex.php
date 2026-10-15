@@ -6,8 +6,6 @@
  */
 class GamaExcursionIndex
 {
-    const MAX_TEXT = 800;
-
     private $trips = [];
     private $byPath = [];
 
@@ -49,7 +47,7 @@ class GamaExcursionIndex
             }
         }
 
-        return $this->limit(implode(' | ', $chunks));
+        return implode(' | ', $chunks);
     }
 
     private function loadCatalog($file)
@@ -106,9 +104,6 @@ class GamaExcursionIndex
         if ($body === '') {
             return $head;
         }
-        if (mb_strlen($body, 'UTF-8') > 350) {
-            $body = rtrim(mb_substr($body, 0, 347, 'UTF-8')) . '…';
-        }
 
         if ($head === '') {
             return $body;
@@ -121,20 +116,11 @@ class GamaExcursionIndex
     private function plain($value)
     {
         $text = html_entity_decode(strip_tags((string) $value), ENT_QUOTES, 'UTF-8');
+        $text = preg_replace('/[\x{10000}-\x{10FFFF}]/u', '', $text);
         $text = str_replace(["\xc2\xa0", "\r", "\n", "\t"], ' ', $text);
         $text = str_replace(['<', '>'], '', $text);
         $text = preg_replace('/\s+/u', ' ', $text);
 
         return trim($text);
-    }
-
-    private function limit($text)
-    {
-        $text = trim($text);
-        if ($text === '' || mb_strlen($text, 'UTF-8') <= self::MAX_TEXT) {
-            return $text;
-        }
-
-        return rtrim(mb_substr($text, 0, self::MAX_TEXT - 1, 'UTF-8')) . '…';
     }
 }

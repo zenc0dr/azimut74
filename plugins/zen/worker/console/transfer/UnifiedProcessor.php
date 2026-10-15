@@ -1,6 +1,7 @@
 <?php namespace Zen\Worker\Console\transfer;
 
 use Zen\Worker\Classes\ProcessLog;
+use Zen\Worker\Console\ScheduleHtmlLimit;
 use Zen\Worker\Console\volga\VolgaTownNormalizer;
 use Mcmraak\Rivercrs\Classes\CacheSettings;
 use Mcmraak\Rivercrs\Classes\Getter;
@@ -858,24 +859,7 @@ class UnifiedProcessor extends TransferProcessor
 
     private function limitScheduleHtml($html): string
     {
-        $html = (string) $html;
-        $limit = 60000;
-        if (strlen($html) <= $limit) {
-            return $html;
-        }
-
-        $original = $html;
-        foreach ([500, 220, 120, 60] as $size) {
-            $trimmed = preg_replace('/(<td>)([^<]{' . $size . '})[^<]*/u', '$1$2', $original);
-            if (is_string($trimmed) && strlen($trimmed) <= $limit) {
-                return $trimmed;
-            }
-            if (is_string($trimmed)) {
-                $html = $trimmed;
-            }
-        }
-
-        return strlen($html) > $limit ? substr($html, 0, $limit) : $html;
+        return ScheduleHtmlLimit::fit($html);
     }
 
     private function getVolgaTownNormalizer(): VolgaTownNormalizer
