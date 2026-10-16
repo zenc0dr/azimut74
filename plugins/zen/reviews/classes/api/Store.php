@@ -6,6 +6,7 @@ use Zen\Cli\Classes\Cli;
 use Zen\Reviews\Classes\Services\ValidatorHelper;
 use Zen\Reviews\Classes\Services\Images\Image;
 use Mcmraak\Rivercrs\Classes\ReviewsWidget;
+use Zen\Reviews\Classes\AxisReviewNotifier;
 use Zen\Reviews\Classes\RocketNotifier;
 use Zen\Reviews\Classes\ReviewPhotoService;
 use Zen\Reviews\Models\Review;
@@ -123,6 +124,9 @@ class Store
                 }
             }
         }
+
+        AxisReviewNotifier::notifyNewReview((int) $review->id);
+
         return reviews()->toJson([
             'success' => true,
             'review_id' => $review->id,

@@ -3,6 +3,7 @@
 use Backend\Classes\Controller;
 use BackendMenu;
 use Flash;
+use Zen\Reviews\Classes\AxisReviewNotifier;
 use Zen\Reviews\Controllers\Traits\ManagesReviewPhotos;
 use Zen\Reviews\Models\Review;
 
@@ -26,6 +27,13 @@ class Reviews extends Controller
     {
         if ($model instanceof Review) {
             $this->photoService()->syncReviewPhotos($model, false);
+        }
+    }
+
+    public function formAfterCreate($model)
+    {
+        if ($model instanceof Review) {
+            AxisReviewNotifier::notifyNewReview((int) $model->id);
         }
     }
 

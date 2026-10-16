@@ -53,4 +53,16 @@ return [
         'webhook_alias' => env('ROCKET_CHAT_WEBHOOK_ALIAS'),
     ],
 
+    /*
+    | Сигнал на AXIS prod: появился новый отзыв, AXIS сам забирает его из этой базы.
+    | Пустой URL или токен — запрос не отправляется, сохранение отзыва не зависит от AXIS.
+    */
+    'axis' => [
+        'reviews_notify_url' => trim((string) env(
+            'AXIS_REVIEWS_NOTIFY_URL',
+            'https://axis-prod.os3.pro/chub.api/ReviewApi:legacyNotify'
+        )),
+        'reviews_notify_token' => trim((string) env('AXIS_REVIEWS_NOTIFY_TOKEN', '')),
+    ],
+
 ];
