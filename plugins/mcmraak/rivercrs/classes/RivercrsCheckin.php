@@ -131,7 +131,7 @@ class RivercrsCheckin
 
         # http://azimut74/cruise/1681
         if ($eds_code == 'gama') {
-            return self::sheduleStandartTableToArray($checkin->desc_1);
+            return GamaExcursionText::formatSchedule(self::sheduleStandartTableToArray($checkin->desc_1));
         }
 
         return self::sheduleStandartTableToArray($checkin->desc_1);

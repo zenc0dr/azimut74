@@ -447,7 +447,7 @@ class Prok
 
         # http://azimut74/cruise/1681
         if($eds_code == 'gama') {
-            return $this->sheduleStandartTableToArray($checkin->desc_1);
+            return GamaExcursionText::formatSchedule($this->sheduleStandartTableToArray($checkin->desc_1));
         }
 
         return $this->sheduleStandartTableToArray($checkin->desc_1);
